@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from 'react-i18next';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,6 +33,7 @@ const createTaskSchema = insertTaskSchema.extend({
 type CreateTaskFormData = z.infer<typeof createTaskSchema>;
 
 export default function CreateTask() {
+  const { t } = useTranslation();
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();

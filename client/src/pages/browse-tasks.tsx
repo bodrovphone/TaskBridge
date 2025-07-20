@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from 'react-i18next';
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import TaskCard from "@/components/task-card";
@@ -11,6 +12,7 @@ import { Search, Filter, MapPin, DollarSign } from "lucide-react";
 import { TASK_CATEGORIES } from "@shared/schema";
 
 export default function BrowseTasks() {
+  const { t } = useTranslation();
   const [filters, setFilters] = useState({
     search: "",
     category: "",
@@ -67,7 +69,7 @@ export default function BrowseTasks() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Намери задача
+            {t('tasks.title')}
           </h1>
           <p className="text-gray-600">
             Разгледайте налични задачи и кандидатствайте за тези, които ви интересуват

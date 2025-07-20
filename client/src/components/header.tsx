@@ -1,6 +1,8 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useTranslation } from 'react-i18next';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +17,10 @@ export default function Header() {
   const { user, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   const navigation = [
-    { name: "Намери задача", href: "/browse-tasks" },
+    { name: t('nav.browseTasks'), href: "/browse-tasks" },
     { name: "Как работи", href: "/#how-it-works" },
     { name: "Категории", href: "/#categories" },
     { name: "За специалисти", href: "/#for-professionals" },
@@ -60,7 +63,7 @@ export default function Header() {
                 <Link href="/create-task">
                   <Button className="bg-primary-500 hover:bg-primary-600">
                     <Plus size={16} className="mr-2" />
-                    Публикувай задача
+                    {t('nav.createTask')}
                   </Button>
                 </Link>
                 
@@ -79,12 +82,12 @@ export default function Header() {
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="flex items-center">
                         <User className="mr-2 h-4 w-4" />
-                        Моят профил
+                        {t('nav.profile')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <a href="/api/logout" className="flex items-center w-full">
-                        Изход
+                        {t('logout')}
                       </a>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -92,14 +95,16 @@ export default function Header() {
               </>
             ) : (
               <>
+                <LanguageSwitcher />
                 <Button variant="ghost" asChild>
-                  <a href="/api/login">Вход</a>
+                  <a href="/api/login">{t('login')}</a>
                 </Button>
                 <Button className="bg-primary-500 hover:bg-primary-600" asChild>
-                  <a href="/api/login">Регистрация</a>
+                  <a href="/api/login">{t('signup')}</a>
                 </Button>
               </>
             )}
+            {isAuthenticated && <LanguageSwitcher />}
           </div>
 
           {/* Mobile menu button */}

@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import CategoryCard from "@/components/category-card";
 import TaskCard from "@/components/task-card";
+import { useTranslation } from 'react-i18next';
 import { 
   Home, 
   Truck, 
@@ -21,6 +22,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 export default function Landing() {
+  const { t } = useTranslation();
+  
   // Fetch featured tasks for display
   const { data: featuredTasks = [] } = useQuery({
     queryKey: ["/api/tasks?limit=3&status=open"],
@@ -28,7 +31,7 @@ export default function Landing() {
 
   const categories = [
     {
-      title: "Дом и ремонти",
+      title: t('landing.categories.home'),
       description: "Електричество, водопровод, почистване, поддръжка",
       count: 150,
       icon: Home,
@@ -36,7 +39,7 @@ export default function Landing() {
       category: "home_repair"
     },
     {
-      title: "Доставки и транспорт", 
+      title: t('landing.categories.tech'), 
       description: "Куриери, шофьори, преместване",
       count: 85,
       icon: Truck,
@@ -44,7 +47,7 @@ export default function Landing() {
       category: "delivery_transport"
     },
     {
-      title: "Лична грижа",
+      title: t('landing.categories.personal'),
       description: "Грижа за домашни любимци, деца, възрастни",
       count: 65,
       icon: Heart,
@@ -52,7 +55,7 @@ export default function Landing() {
       category: "personal_care"
     },
     {
-      title: "Личен асистент",
+      title: t('landing.categories.business'),
       description: "Поръчки, административни задачи, събития", 
       count: 45,
       icon: UserCheck,
@@ -139,10 +142,10 @@ export default function Landing() {
             <div className="space-y-8">
               <div className="space-y-4">
                 <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                  Свържете се с <span className="text-primary-600">проверени специалисти</span> в Балканите
+                  {t('landing.hero.title')}
                 </h1>
                 <p className="text-xl text-gray-600 leading-relaxed">
-                  От ремонти в дома до доставки и лична помощ - намерете надеждни местни професионалисти за всяка задача.
+                  {t('landing.hero.subtitle')}
                 </p>
               </div>
 
@@ -154,7 +157,7 @@ export default function Landing() {
                 >
                   <a href="/api/login">
                     <Plus className="mr-2" size={20} />
-                    Публикувай задача
+                    {t('landing.hero.getStarted')}
                   </a>
                 </Button>
                 <Button 
@@ -165,7 +168,7 @@ export default function Landing() {
                 >
                   <a href="/browse-tasks">  
                     <Search className="mr-2" size={20} />
-                    Търси задачи
+                    {t('landing.hero.browseServices')}
                   </a>
                 </Button>
               </div>
