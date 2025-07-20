@@ -36,8 +36,8 @@ const resources = {
       "nav.profile": "Profile",
       
       // Landing Page
-      "landing.hero.title": "Find Trusted Local Professionals in the Balkans",
-      "landing.hero.subtitle": "Connect with verified service providers for all your needs across Bulgaria, Serbia, Macedonia, and beyond",
+      "landing.hero.title": "Find Trusted Local Professionals",
+      "landing.hero.subtitle": "Connect with verified service providers for all your needs in your area",
       "landing.hero.getStarted": "Get Started",
       "landing.hero.browseServices": "Browse Services",
       
@@ -171,8 +171,8 @@ const resources = {
       "nav.profile": "Профил",
       
       // Landing Page
-      "landing.hero.title": "Намерете доверени местни професионалисти в Балканите",
-      "landing.hero.subtitle": "Свържете се с верифицирани доставчици на услуги за всичките ви нужди в България, Сърбия, Македония и другаде",
+      "landing.hero.title": "Намерете доверени местни професионалисти",
+      "landing.hero.subtitle": "Свържете се с верифицирани доставчици на услуги за всичките ви нужди във вашия район",
       "landing.hero.getStarted": "Започнете",
       "landing.hero.browseServices": "Разгледайте услугите",
       
@@ -306,8 +306,8 @@ const resources = {
       "nav.profile": "Профиль",
       
       // Landing Page
-      "landing.hero.title": "Найдите проверенных местных специалистов на Балканах",
-      "landing.hero.subtitle": "Свяжитесь с верифицированными поставщиками услуг для всех ваших потребностей в Болгарии, Сербии, Македонии и других странах",
+      "landing.hero.title": "Найдите проверенных местных специалистов",
+      "landing.hero.subtitle": "Свяжитесь с верифицированными поставщиками услуг для всех ваших потребностей в вашем районе",
       "landing.hero.getStarted": "Начать",
       "landing.hero.browseServices": "Обзор услуг",
       

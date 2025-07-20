@@ -515,7 +515,7 @@ export default function Profile() {
                               name="vatNumber"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>ЕИК/БУЛСТАТ номер</FormLabel>
+                                  <FormLabel>ДДС/VAT номер</FormLabel>
                                   <FormControl>
                                     <Input placeholder="123456789" {...field} />
                                   </FormControl>
@@ -599,7 +599,7 @@ export default function Profile() {
                           <div>
                             <h4 className="font-semibold">ДДС/Фирмена верификация</h4>
                             <p className="text-sm text-gray-600">
-                              Потвърдете фирмената си регистрация в България
+                              Потвърдете фирмената си регистрация
                             </p>
                           </div>
                         </div>
@@ -616,7 +616,7 @@ export default function Profile() {
                             </Badge>
                           ) : (
                             <Button variant="outline" size="sm" disabled>
-                              Добавете ЕИК номер
+                              Добавете ДДС номер
                             </Button>
                           )}
                         </div>

@@ -36,7 +36,7 @@ export const users = pgTable("users", {
   userType: varchar("user_type", { enum: ["customer", "professional"] }).default("customer"),
   phoneNumber: varchar("phone_number"),
   city: varchar("city"),
-  country: varchar("country").default("Bulgaria"),
+  country: varchar("country"),
   isPhoneVerified: boolean("is_phone_verified").default(false),
   vatNumber: varchar("vat_number"),
   isVatVerified: boolean("is_vat_verified").default(false),

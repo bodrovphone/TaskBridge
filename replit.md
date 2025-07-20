@@ -2,7 +2,7 @@
 
 ## Overview
 
-TaskBridge Balkans is a full-stack web application that connects people with verified local professionals across the Balkans for various services. Built as a modern task marketplace platform, it enables customers to post tasks and professionals to apply for them, with integrated payment, review, and verification systems.
+TaskBridge is a full-stack web application that connects people with verified local professionals for various services. Built as a modern task marketplace platform, it enables customers to post tasks and professionals to apply for them, with integrated payment, review, and verification systems.
 
 ## System Architecture
 
@@ -130,6 +130,7 @@ TaskBridge Balkans is a full-stack web application that connects people with ver
 ## Changelog
 
 Changelog:
+- July 20, 2025. Added multi-language localization (EN, BG, RU) and removed region-specific references for gradual scaling
 - June 23, 2025. Initial setup
 
 ## User Preferences
