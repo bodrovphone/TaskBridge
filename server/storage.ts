@@ -11,7 +11,7 @@ import {
   type InsertApplication,
   type Review,
   type InsertReview,
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq, and, desc, like, gte, lte, inArray, sql } from "drizzle-orm";
 
@@ -96,25 +96,29 @@ export class DatabaseStorage implements IStorage {
     limit?: number;
     offset?: number;
   } = {}): Promise<Task[]> {
-    let query = db.select().from(tasks).where(eq(tasks.isActive, true));
+    const conditions: any[] = [eq(tasks.isActive, true)];
 
     if (filters.category) {
-      query = query.where(eq(tasks.category, filters.category));
+      conditions.push(eq(tasks.category, filters.category));
     }
     if (filters.city) {
-      query = query.where(like(tasks.city, `%${filters.city}%`));
+      conditions.push(like(tasks.city, `%${filters.city}%`));
     }
     if (filters.budgetMin) {
-      query = query.where(gte(tasks.budgetMin, filters.budgetMin.toString()));
+      conditions.push(gte(tasks.budgetMin, filters.budgetMin.toString()));
     }
     if (filters.budgetMax) {
-      query = query.where(lte(tasks.budgetMax, filters.budgetMax.toString()));
+      conditions.push(lte(tasks.budgetMax, filters.budgetMax.toString()));
     }
     if (filters.status) {
-      query = query.where(eq(tasks.status, filters.status));
+      conditions.push(eq(tasks.status, filters.status as any));
     }
 
-    query = query.orderBy(desc(tasks.createdAt));
+    let query = db
+      .select()
+      .from(tasks)
+      .where(and(...conditions))
+      .orderBy(desc(tasks.createdAt));
 
     if (filters.limit) {
       query = query.limit(filters.limit);
