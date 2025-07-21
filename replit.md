@@ -7,19 +7,21 @@ Trudify is a full-stack web application that connects people with verified local
 ## System Architecture
 
 ### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **Routing**: Wouter (lightweight client-side routing)
+- **Framework**: Next.js 15 with App Router and React 18
+- **Authentication**: NextAuth.js with Replit OIDC provider
+- **Routing**: Next.js App Router for file-based routing
 - **State Management**: TanStack Query (React Query) for server state
 - **Styling**: Tailwind CSS with shadcn/ui component library
-- **Build Tool**: Vite with custom configuration for development and production
 - **UI Components**: Radix UI primitives with custom styling
+- **Localization**: React i18next with multi-language support (EN/BG/RU)
 
 ### Backend Architecture
-- **Runtime**: Node.js with Express.js server
+- **Framework**: Next.js API Routes (App Router)
+- **Runtime**: Node.js with Next.js serverless functions
 - **Language**: TypeScript with ES modules
-- **API Pattern**: RESTful endpoints with structured error handling
-- **Session Management**: Express sessions with PostgreSQL storage
-- **File Serving**: Vite development server integration with static file serving
+- **API Pattern**: RESTful API routes with Next.js Route Handlers
+- **Authentication**: NextAuth.js with JWT sessions and database user management
+- **File Serving**: Next.js built-in static file serving
 
 ### Database Architecture
 - **Database**: PostgreSQL (configured for Neon serverless)
@@ -30,10 +32,10 @@ Trudify is a full-stack web application that connects people with verified local
 ## Key Components
 
 ### Authentication System
-- **Provider**: Replit OIDC authentication
-- **Session Storage**: PostgreSQL-backed sessions using connect-pg-simple
-- **User Management**: Automatic user creation/update on authentication
-- **Security**: HTTP-only cookies, CSRF protection, secure session handling
+- **Provider**: NextAuth.js with Replit OIDC authentication
+- **Session Management**: JWT-based sessions with automatic token refresh
+- **User Management**: Automatic user upsert in PostgreSQL on authentication
+- **Security**: NextAuth.js built-in CSRF protection, secure JWT handling
 
 ### Data Models
 - **Users**: Comprehensive user profiles supporting both customers and professionals
@@ -130,6 +132,7 @@ Trudify is a full-stack web application that connects people with verified local
 ## Changelog
 
 Changelog:
+- January 21, 2025. Major architectural change: Converted entire application from React/Express to Next.js 15 with App Router
 - January 21, 2025. Renamed application from TaskBridge to Trudify across all files and components
 - July 20, 2025. Added multi-language localization (EN, BG, RU) and removed region-specific references for gradual scaling
 - June 23, 2025. Initial setup

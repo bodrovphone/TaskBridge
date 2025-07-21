@@ -1,0 +1,489 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+// Translation resources
+const resources = {
+  en: {
+    translation: {
+      // Common
+      "welcome": "Welcome",
+      "login": "Log In",
+      "logout": "Log Out",
+      "signup": "Sign Up",
+      "search": "Search",
+      "browse": "Browse",
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "submit": "Submit",
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "back": "Back",
+      "next": "Next",
+      "previous": "Previous",
+      "home": "Home",
+      "profile": "Profile",
+      "settings": "Settings",
+      
+      // Navigation
+      "nav.home": "Home",
+      "nav.browseTasks": "Browse Tasks",
+      "nav.createTask": "Post a Task",
+      "nav.profile": "Profile",
+      "nav.howItWorks": "How It Works",
+      "nav.categories": "Categories",
+      "nav.forProfessionals": "For Professionals",
+      
+      // Landing Page
+      "landing.hero.title": "Find Trusted Local Professionals",
+      "landing.hero.subtitle": "Connect with verified service providers for all your needs in your area",
+      "landing.hero.getStarted": "Get Started",
+      "landing.hero.browseServices": "Browse Services",
+      
+      "landing.trustIndicators.verified": "Verified Professionals",
+      "landing.trustIndicators.securePayments": "Secure Payments", 
+      "landing.trustIndicators.support": "24/7 Support",
+      
+      "landing.stats.averageRating": "average rating",
+      "landing.stats.completedTasks": "completed tasks",
+      
+      "landing.categories.title": "Popular Categories",
+      "landing.categories.subtitle": "Find specialists for every task - from home repairs to personal assistance",
+      "landing.categories.viewAll": "View All Categories",
+      "landing.categories.home": "Home & Garden",
+      "landing.categories.home.description": "Electrical, plumbing, cleaning, maintenance",
+      "landing.categories.tech": "Technology",
+      "landing.categories.tech.description": "IT support, web design, software development",
+      "landing.categories.business": "Business Services",
+      "landing.categories.business.description": "Administrative tasks, events, consulting",
+      "landing.categories.personal": "Personal Services",
+      "landing.categories.personal.description": "Pet care, childcare, eldercare",
+      "landing.categories.education": "Education & Training",
+      "landing.categories.creative": "Creative Services",
+      
+      "landing.featured.title": "Featured Tasks",
+      "landing.featured.viewAll": "View All Tasks",
+      
+      "landing.howItWorks.title": "How It Works",
+      "landing.howItWorks.subtitle": "Easy process for finding and completing tasks with verified specialists",
+      "landing.howItWorks.forCustomers": "For Customers",
+      "landing.howItWorks.forProfessionals": "For Professionals",
+      "landing.howItWorks.step1.title": "Post Your Task",
+      "landing.howItWorks.step1.description": "Describe what you need done and set your budget",
+      "landing.howItWorks.step2.title": "Get Proposals",
+      "landing.howItWorks.step2.description": "Receive applications from verified professionals",
+      "landing.howItWorks.step3.title": "Choose & Complete",
+      "landing.howItWorks.step3.description": "Select the best professional and get your task done",
+      
+      // Tasks
+      "tasks.title": "Browse Tasks",
+      "tasks.searchPlaceholder": "Search tasks...",
+      "tasks.filters.category": "Category",
+      "tasks.filters.location": "Location",
+      "tasks.filters.budget": "Budget",
+      "tasks.filters.status": "Status",
+      "tasks.filters.all": "All",
+      "tasks.filters.open": "Open",
+      "tasks.filters.inProgress": "In Progress",
+      "tasks.filters.completed": "Completed",
+      
+      "task.budget": "Budget",
+      "task.location": "Location",
+      "task.category": "Category",
+      "task.applications": "Applications",
+      "task.viewDetails": "View Details",
+      "task.apply": "Apply Now",
+      "task.created": "Created",
+      "task.deadline": "Deadline",
+      
+      // Create Task
+      "createTask.title": "Post a New Task",
+      "createTask.form.title": "Task Title",
+      "createTask.form.titlePlaceholder": "What do you need done?",
+      "createTask.form.description": "Description",
+      "createTask.form.descriptionPlaceholder": "Describe your task in detail...",
+      "createTask.form.category": "Category",
+      "createTask.form.selectCategory": "Select a category",
+      "createTask.form.budget": "Budget (BGN)",
+      "createTask.form.budgetPlaceholder": "Enter your budget",
+      "createTask.form.location": "Location",
+      "createTask.form.locationPlaceholder": "Enter location",
+      "createTask.form.deadline": "Deadline",
+      "createTask.form.selectDeadline": "Select deadline",
+      "createTask.form.images": "Images (optional)",
+      "createTask.form.imagesDescription": "Upload images to help describe your task",
+      "createTask.form.postTask": "Post Task",
+      
+      // Profile
+      "profile.title": "My Profile",
+      "profile.personalInfo": "Personal Information",
+      "profile.professionalInfo": "Professional Information",
+      "profile.verification": "Verification",
+      "profile.reviews": "Reviews",
+      "profile.stats": "Statistics",
+      
+      "profile.form.firstName": "First Name",
+      "profile.form.lastName": "Last Name",
+      "profile.form.email": "Email",
+      "profile.form.phone": "Phone",
+      "profile.form.location": "Location",
+      "profile.form.bio": "Bio",
+      "profile.form.skills": "Skills",
+      "profile.form.experience": "Years of Experience",
+      "profile.form.hourlyRate": "Hourly Rate (BGN)",
+      "profile.form.vatNumber": "VAT Number",
+      "profile.form.businessName": "Business Name",
+      "profile.form.website": "Website",
+      
+      "profile.verification.identity": "Identity Verified",
+      "profile.verification.business": "Business Verified",
+      "profile.verification.phone": "Phone Verified",
+      "profile.verification.email": "Email Verified",
+      
+      // Languages
+      "language.en": "English",
+      "language.bg": "Български",
+      "language.ru": "Русский",
+      
+      // Messages and feedback
+      "message.taskCreated": "Task created successfully!",
+      "message.profileUpdated": "Profile updated successfully!",
+      "message.applicationSubmitted": "Application submitted successfully!",
+      "error.generic": "Something went wrong. Please try again.",
+      "error.network": "Network error. Please check your connection.",
+      "error.unauthorized": "You need to log in to access this page.",
+    }
+  },
+  bg: {
+    translation: {
+      // Common
+      "welcome": "Добре дошли",
+      "login": "Вход",
+      "logout": "Изход",
+      "signup": "Регистрация",
+      "search": "Търсене",
+      "browse": "Разглеждане",
+      "create": "Създаване",
+      "edit": "Редактиране",
+      "delete": "Изтриване",
+      "cancel": "Отказ",
+      "save": "Запазване",
+      "submit": "Изпращане",
+      "loading": "Зареждане...",
+      "error": "Грешка",
+      "success": "Успех",
+      "back": "Назад",
+      "next": "Напред",
+      "previous": "Предишна",
+      "home": "Начало",
+      "profile": "Профил",
+      "settings": "Настройки",
+      
+      // Navigation
+      "nav.home": "Начало",
+      "nav.browseTasks": "Разглеждане на задачи",
+      "nav.createTask": "Публикуване на задача",
+      "nav.profile": "Профил",
+      "nav.howItWorks": "Как работи",
+      "nav.categories": "Категории",
+      "nav.forProfessionals": "За специалисти",
+      
+      // Landing Page
+      "landing.hero.title": "Намерете доверени местни професионалисти",
+      "landing.hero.subtitle": "Свържете се с верифицирани доставчици на услуги за всичките ви нужди във вашия район",
+      "landing.hero.getStarted": "Започнете",
+      "landing.hero.browseServices": "Разгледайте услугите",
+      
+      "landing.trustIndicators.verified": "Проверени специалисти",
+      "landing.trustIndicators.securePayments": "Сигурни плащания",
+      "landing.trustIndicators.support": "24/7 поддръжка",
+      
+      "landing.stats.averageRating": "средна оценка",
+      "landing.stats.completedTasks": "завършени задачи",
+      
+      "landing.categories.title": "Популярни категории",
+      "landing.categories.subtitle": "Намерете специалисти за всяка задача - от ремонти в дома до лична помощ",
+      "landing.categories.viewAll": "Виж всички категории",
+      "landing.categories.home": "Дом и градина",
+      "landing.categories.home.description": "Електричество, водопровод, почистване, поддръжка",
+      "landing.categories.tech": "Технологии",
+      "landing.categories.tech.description": "IT поддръжка, уеб дизайн, софтуерно разработване",
+      "landing.categories.business": "Бизнес услуги",
+      "landing.categories.business.description": "Административни задачи, събития, консултации",
+      "landing.categories.personal": "Лични услуги",
+      "landing.categories.personal.description": "Грижа за домашни любимци, деца, възрастни",
+      "landing.categories.education": "Образование и обучение",
+      "landing.categories.creative": "Творчески услуги",
+      
+      "landing.featured.title": "Препоръчани задачи",
+      "landing.featured.viewAll": "Вижте всички задачи",
+      
+      "landing.howItWorks.title": "Как работи платформата",
+      "landing.howItWorks.subtitle": "Лесен процес за намиране и завършване на задачи с проверени специалисти",
+      "landing.howItWorks.forCustomers": "За клиенти",
+      "landing.howItWorks.forProfessionals": "За специалисти",
+      "landing.howItWorks.step1.title": "Публикувайте задачата си",
+      "landing.howItWorks.step1.description": "Опишете какво трябва да бъде направено и определете бюджета си",
+      "landing.howItWorks.step2.title": "Получете предложения",
+      "landing.howItWorks.step2.description": "Получавайте заявления от верифицирани професионалисти",
+      "landing.howItWorks.step3.title": "Изберете и завършете",
+      "landing.howItWorks.step3.description": "Изберете най-добрия професионалист и приключете задачата си",
+      
+      // Tasks
+      "tasks.title": "Разглеждане на задачи",
+      "tasks.searchPlaceholder": "Търсене на задачи...",
+      "tasks.filters.category": "Категория",
+      "tasks.filters.location": "Местоположение",
+      "tasks.filters.budget": "Бюджет",
+      "tasks.filters.status": "Статус",
+      "tasks.filters.all": "Всички",
+      "tasks.filters.open": "Отворени",
+      "tasks.filters.inProgress": "В ход",
+      "tasks.filters.completed": "Завършени",
+      
+      "task.budget": "Бюджет",
+      "task.location": "Местоположение",
+      "task.category": "Категория",
+      "task.applications": "Заявления",
+      "task.viewDetails": "Вижте детайли",
+      "task.apply": "Кандидатствайте сега",
+      "task.created": "Създадена",
+      "task.deadline": "Краен срок",
+      
+      // Create Task
+      "createTask.title": "Публикувайте нова задача",
+      "createTask.form.title": "Заглавие на задачата",
+      "createTask.form.titlePlaceholder": "Какво трябва да бъде направено?",
+      "createTask.form.description": "Описание",
+      "createTask.form.descriptionPlaceholder": "Опишете задачата си подробно...",
+      "createTask.form.category": "Категория",
+      "createTask.form.selectCategory": "Изберете категория",
+      "createTask.form.budget": "Бюджет (лв.)",
+      "createTask.form.budgetPlaceholder": "Въведете вашия бюджет",
+      "createTask.form.location": "Местоположение",
+      "createTask.form.locationPlaceholder": "Въведете местоположение",
+      "createTask.form.deadline": "Краен срок",
+      "createTask.form.selectDeadline": "Изберете краен срок",
+      "createTask.form.images": "Изображения (по желание)",
+      "createTask.form.imagesDescription": "Качете изображения, за да помогнете при описанието на задачата",
+      "createTask.form.postTask": "Публикувайте задача",
+      
+      // Profile
+      "profile.title": "Моят профил",
+      "profile.personalInfo": "Лична информация",
+      "profile.professionalInfo": "Професионална информация",
+      "profile.verification": "Верификация",
+      "profile.reviews": "Отзиви",
+      "profile.stats": "Статистика",
+      
+      "profile.form.firstName": "Име",
+      "profile.form.lastName": "Фамилия",
+      "profile.form.email": "Имейл",
+      "profile.form.phone": "Телефон",
+      "profile.form.location": "Местоположение",
+      "profile.form.bio": "Биография",
+      "profile.form.skills": "Умения",
+      "profile.form.experience": "Години опит",
+      "profile.form.hourlyRate": "Часова ставка (лв.)",
+      "profile.form.vatNumber": "ДДС номер",
+      "profile.form.businessName": "Име на фирмата",
+      "profile.form.website": "Уебсайт",
+      
+      "profile.verification.identity": "Верифицирана самоличност",
+      "profile.verification.business": "Верифициран бизнес",
+      "profile.verification.phone": "Верифициран телефон",
+      "profile.verification.email": "Верифициран имейл",
+      
+      // Languages
+      "language.en": "English",
+      "language.bg": "Български",
+      "language.ru": "Русский",
+      
+      // Messages and feedback
+      "message.taskCreated": "Задачата е създадена успешно!",
+      "message.profileUpdated": "Профилът е актуализиран успешно!",
+      "message.applicationSubmitted": "Заявлението е подадено успешно!",
+      "error.generic": "Нещо се обърка. Моля, опитайте отново.",
+      "error.network": "Грешка в мрежата. Моля, проверете връзката си.",
+      "error.unauthorized": "Трябва да влезете в профила си, за да достъпите тази страница.",
+    }
+  },
+  ru: {
+    translation: {
+      // Common
+      "welcome": "Добро пожаловать",
+      "login": "Войти",
+      "logout": "Выйти",
+      "signup": "Регистрация",
+      "search": "Поиск",
+      "browse": "Обзор",
+      "create": "Создать",
+      "edit": "Редактировать",
+      "delete": "Удалить",
+      "cancel": "Отмена",
+      "save": "Сохранить",
+      "submit": "Отправить",
+      "loading": "Загрузка...",
+      "error": "Ошибка",
+      "success": "Успех",
+      "back": "Назад",
+      "next": "Далее",
+      "previous": "Предыдущая",
+      "home": "Главная",
+      "profile": "Профиль",
+      "settings": "Настройки",
+      
+      // Navigation
+      "nav.home": "Главная",
+      "nav.browseTasks": "Обзор задач",
+      "nav.createTask": "Создать задачу",
+      "nav.profile": "Профиль",
+      "nav.howItWorks": "Как это работает",
+      "nav.categories": "Категории",
+      "nav.forProfessionals": "Для специалистов",
+      
+      // Landing Page
+      "landing.hero.title": "Найдите проверенных местных специалистов",
+      "landing.hero.subtitle": "Свяжитесь с верифицированными поставщиками услуг для всех ваших потребностей в вашем районе",
+      "landing.hero.getStarted": "Начать",
+      "landing.hero.browseServices": "Обзор услуг",
+      
+      "landing.trustIndicators.verified": "Проверенные специалисты",
+      "landing.trustIndicators.securePayments": "Безопасные платежи",
+      "landing.trustIndicators.support": "Поддержка 24/7",
+      
+      "landing.stats.averageRating": "средний рейтинг",
+      "landing.stats.completedTasks": "выполненных задач",
+      
+      "landing.categories.title": "Популярные категории",
+      "landing.categories.subtitle": "Найдите специалистов для любой задачи - от ремонта дома до персональной помощи",
+      "landing.categories.viewAll": "Посмотреть все категории",
+      "landing.categories.home": "Дом и сад",
+      "landing.categories.home.description": "Электричество, сантехника, уборка, техобслуживание",
+      "landing.categories.tech": "Технологии", 
+      "landing.categories.tech.description": "IT поддержка, веб-дизайн, разработка ПО",
+      "landing.categories.business": "Бизнес-услуги",
+      "landing.categories.business.description": "Административные задачи, мероприятия, консультации",
+      "landing.categories.personal": "Личные услуги",
+      "landing.categories.personal.description": "Уход за питомцами, детьми, пожилыми",
+      "landing.categories.education": "Образование и обучение",
+      "landing.categories.creative": "Творческие услуги",
+      
+      "landing.featured.title": "Рекомендуемые задачи",
+      "landing.featured.viewAll": "Посмотреть все задачи",
+      
+      "landing.howItWorks.title": "Как это работает",
+      "landing.howItWorks.subtitle": "Простой процесс поиска и выполнения задач с проверенными специалистами",
+      "landing.howItWorks.forCustomers": "Для клиентов",
+      "landing.howItWorks.forProfessionals": "Для специалистов",
+      "landing.howItWorks.step1.title": "Опубликуйте вашу задачу",
+      "landing.howItWorks.step1.description": "Опишите, что нужно сделать, и установите ваш бюджет",
+      "landing.howItWorks.step2.title": "Получите предложения",
+      "landing.howItWorks.step2.description": "Получайте заявки от верифицированных специалистов",
+      "landing.howItWorks.step3.title": "Выберите и завершите",
+      "landing.howItWorks.step3.description": "Выберите лучшего специалиста и выполните вашу задачу",
+      
+      // Tasks
+      "tasks.title": "Обзор задач",
+      "tasks.searchPlaceholder": "Поиск задач...",
+      "tasks.filters.category": "Категория",
+      "tasks.filters.location": "Местоположение",
+      "tasks.filters.budget": "Бюджет",
+      "tasks.filters.status": "Статус",
+      "tasks.filters.all": "Все",
+      "tasks.filters.open": "Открытые",
+      "tasks.filters.inProgress": "В процессе",
+      "tasks.filters.completed": "Завершенные",
+      
+      "task.budget": "Бюджет",
+      "task.location": "Местоположение",
+      "task.category": "Категория",
+      "task.applications": "Заявки",
+      "task.viewDetails": "Посмотреть детали",
+      "task.apply": "Подать заявку",
+      "task.created": "Создана",
+      "task.deadline": "Срок",
+      
+      // Create Task
+      "createTask.title": "Создать новую задачу",
+      "createTask.form.title": "Название задачи",
+      "createTask.form.titlePlaceholder": "Что нужно сделать?",
+      "createTask.form.description": "Описание",
+      "createTask.form.descriptionPlaceholder": "Опишите вашу задачу подробно...",
+      "createTask.form.category": "Категория",
+      "createTask.form.selectCategory": "Выберите категорию",
+      "createTask.form.budget": "Бюджет (лв.)",
+      "createTask.form.budgetPlaceholder": "Введите ваш бюджет",
+      "createTask.form.location": "Местоположение",
+      "createTask.form.locationPlaceholder": "Введите местоположение",
+      "createTask.form.deadline": "Срок",
+      "createTask.form.selectDeadline": "Выберите срок",
+      "createTask.form.images": "Изображения (необязательно)",
+      "createTask.form.imagesDescription": "Загрузите изображения, чтобы помочь описать вашу задачу",
+      "createTask.form.postTask": "Опубликовать задачу",
+      
+      // Profile
+      "profile.title": "Мой профиль",
+      "profile.personalInfo": "Личная информация",
+      "profile.professionalInfo": "Профессиональная информация",
+      "profile.verification": "Верификация",
+      "profile.reviews": "Отзывы",
+      "profile.stats": "Статистика",
+      
+      "profile.form.firstName": "Имя",
+      "profile.form.lastName": "Фамилия",
+      "profile.form.email": "Email",
+      "profile.form.phone": "Телефон",
+      "profile.form.location": "Местоположение",
+      "profile.form.bio": "Биография",
+      "profile.form.skills": "Навыки",
+      "profile.form.experience": "Лет опыта",
+      "profile.form.hourlyRate": "Почасовая ставка (лв.)",
+      "profile.form.vatNumber": "НДС номер",
+      "profile.form.businessName": "Название компании",
+      "profile.form.website": "Веб-сайт",
+      
+      "profile.verification.identity": "Личность верифицирована",
+      "profile.verification.business": "Бизнес верифицирован",
+      "profile.verification.phone": "Телефон верифицирован",
+      "profile.verification.email": "Email верифицирован",
+      
+      // Languages
+      "language.en": "English",
+      "language.bg": "Български",
+      "language.ru": "Русский",
+      
+      // Messages and feedback
+      "message.taskCreated": "Задача успешно создана!",
+      "message.profileUpdated": "Профиль успешно обновлен!",
+      "message.applicationSubmitted": "Заявка успешно отправлена!",
+      "error.generic": "Что-то пошло не так. Пожалуйста, попробуйте еще раз.",
+      "error.network": "Ошибка сети. Пожалуйста, проверьте ваше соединение.",
+      "error.unauthorized": "Вам нужно войти в систему, чтобы получить доступ к этой странице.",
+    }
+  }
+};
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'bg', // Bulgarian as default
+    debug: false,
+    
+    interpolation: {
+      escapeValue: false,
+    },
+    
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      caches: ['localStorage'],
+    },
+  });
+
+export default i18n;
