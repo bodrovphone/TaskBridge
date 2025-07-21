@@ -2,7 +2,7 @@
 
 ## Overview
 
-TaskBridge is a full-stack web application that connects people with verified local professionals for various services. Built as a modern task marketplace platform, it enables customers to post tasks and professionals to apply for them, with integrated payment, review, and verification systems.
+Trudify is a full-stack web application that connects people with verified local professionals for various services. Built as a modern task marketplace platform, it enables customers to post tasks and professionals to apply for them, with integrated payment, review, and verification systems.
 
 ## System Architecture
 
@@ -130,6 +130,7 @@ TaskBridge is a full-stack web application that connects people with verified lo
 ## Changelog
 
 Changelog:
+- January 21, 2025. Renamed application from TaskBridge to Trudify across all files and components
 - July 20, 2025. Added multi-language localization (EN, BG, RU) and removed region-specific references for gradual scaling
 - June 23, 2025. Initial setup
 

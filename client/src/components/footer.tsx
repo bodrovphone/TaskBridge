@@ -36,7 +36,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
                 <Handshake className="text-white" size={16} />
               </div>
-              <span className="ml-2 text-xl font-bold">TaskBridge</span>
+              <span className="ml-2 text-xl font-bold">Trudify</span>
               <span className="ml-1 text-sm font-medium text-primary-400">Balkans</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -96,7 +96,7 @@ export default function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center space-x-3">
                 <i className="fas fa-envelope text-gray-400"></i>
-                <span className="text-gray-400">support@taskbridge.com</span>
+                <span className="text-gray-400">support@trudify.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <i className="fas fa-phone text-gray-400"></i>
@@ -124,7 +124,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © 2024 TaskBridge. Всички права запазени.
+              © 2024 Trudify. Всички права запазени.
             </p>
           </div>
         </div>

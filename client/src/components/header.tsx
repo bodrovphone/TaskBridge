@@ -36,7 +36,7 @@ export default function Header() {
               <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
                 <Handshake className="text-white" size={16} />
               </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">TaskBridge</span>
+              <span className="ml-2 text-xl font-bold text-gray-900">Trudify</span>
             </Link>
           </div>
 
