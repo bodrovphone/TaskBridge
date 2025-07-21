@@ -43,9 +43,13 @@ const resources = {
       
       "landing.categories.title": "Popular Categories",
       "landing.categories.home": "Home & Garden",
+      "landing.categories.home.description": "Electrical, plumbing, cleaning, maintenance",
       "landing.categories.tech": "Technology",
+      "landing.categories.tech.description": "IT support, web design, software development",
       "landing.categories.business": "Business Services",
+      "landing.categories.business.description": "Administrative tasks, events, consulting",
       "landing.categories.personal": "Personal Services",
+      "landing.categories.personal.description": "Pet care, childcare, eldercare",
       "landing.categories.education": "Education & Training",
       "landing.categories.creative": "Creative Services",
       
@@ -178,9 +182,13 @@ const resources = {
       
       "landing.categories.title": "Популярни категории",
       "landing.categories.home": "Дом и градина",
+      "landing.categories.home.description": "Електричество, водопровод, почистване, поддръжка",
       "landing.categories.tech": "Технологии",
+      "landing.categories.tech.description": "IT поддръжка, уеб дизайн, софтуерно разработване",
       "landing.categories.business": "Бизнес услуги",
+      "landing.categories.business.description": "Административни задачи, събития, консултации",
       "landing.categories.personal": "Лични услуги",
+      "landing.categories.personal.description": "Грижа за домашни любимци, деца, възрастни",
       "landing.categories.education": "Образование и обучение",
       "landing.categories.creative": "Творчески услуги",
       
@@ -313,9 +321,13 @@ const resources = {
       
       "landing.categories.title": "Популярные категории",
       "landing.categories.home": "Дом и сад",
-      "landing.categories.tech": "Технологии",
+      "landing.categories.home.description": "Электричество, сантехника, уборка, техобслуживание",
+      "landing.categories.tech": "Технологии", 
+      "landing.categories.tech.description": "IT поддержка, веб-дизайн, разработка ПО",
       "landing.categories.business": "Бизнес-услуги",
+      "landing.categories.business.description": "Административные задачи, мероприятия, консультации",
       "landing.categories.personal": "Личные услуги",
+      "landing.categories.personal.description": "Уход за питомцами, детьми, пожилыми",
       "landing.categories.education": "Образование и обучение",
       "landing.categories.creative": "Творческие услуги",
       

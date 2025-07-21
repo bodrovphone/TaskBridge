@@ -32,7 +32,7 @@ export default function Landing() {
   const categories = [
     {
       title: t('landing.categories.home'),
-      description: "Електричество, водопровод, почистване, поддръжка",
+      description: t('landing.categories.home.description'),
       count: 150,
       icon: Home,
       color: "blue",
@@ -40,7 +40,7 @@ export default function Landing() {
     },
     {
       title: t('landing.categories.tech'), 
-      description: "Куриери, шофьори, преместване",
+      description: t('landing.categories.tech.description'),
       count: 85,
       icon: Truck,
       color: "green", 
@@ -48,7 +48,7 @@ export default function Landing() {
     },
     {
       title: t('landing.categories.personal'),
-      description: "Грижа за домашни любимци, деца, възрастни",
+      description: t('landing.categories.personal.description'),
       count: 65,
       icon: Heart,
       color: "purple",
@@ -56,7 +56,7 @@ export default function Landing() {
     },
     {
       title: t('landing.categories.business'),
-      description: "Поръчки, административни задачи, събития", 
+      description: t('landing.categories.business.description'), 
       count: 45,
       icon: UserCheck,
       color: "orange",
@@ -231,7 +231,7 @@ export default function Landing() {
       <section id="categories" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Популярни категории</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.categories.title')}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Намерете специалисти за всяка задача - от ремонти в дома до лична помощ
             </p>
