@@ -106,7 +106,16 @@ export default function Header() {
             {isAuthenticated && <LanguageSwitcher />}
           </div>
 
-          
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu size={20} />
+            </Button>
+          </div>
         </div>
 
         {/* Mobile menu */}
