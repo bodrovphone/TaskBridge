@@ -154,6 +154,13 @@ export default function Header() {
                   </Button>
                 </>
               )}
+              
+              {/* Language Switcher for Mobile */}
+              <div className="pt-4 border-t border-gray-200">
+                <div className="px-3">
+                  <LanguageSwitcher />
+                </div>
+              </div>
             </div>
           </div>
         )}
