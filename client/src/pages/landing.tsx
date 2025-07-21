@@ -193,8 +193,8 @@ export default function Landing() {
             <div className="relative">
               {/* Hero Image */}
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                alt="Professional handyman working on home repairs" 
+                src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                alt="Professional plumber working on home repairs" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
               />
               
