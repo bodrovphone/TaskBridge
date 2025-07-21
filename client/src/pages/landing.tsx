@@ -177,15 +177,15 @@ export default function Landing() {
               <div className="flex flex-wrap items-center gap-8 pt-4">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-secondary-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-700">Проверени специалисти</span>
+                  <span className="text-sm font-medium text-gray-700">{t('landing.trustIndicators.verified')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-secondary-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-700">Сигурни плащания</span>
+                  <span className="text-sm font-medium text-gray-700">{t('landing.trustIndicators.securePayments')}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-secondary-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-700">24/7 поддръжка</span>
+                  <span className="text-sm font-medium text-gray-700">{t('landing.trustIndicators.support')}</span>
                 </div>
               </div>
             </div>
@@ -206,7 +206,7 @@ export default function Landing() {
                   </div>
                   <div>
                     <div className="text-lg font-bold text-gray-900">4.8</div>
-                    <div className="text-xs text-gray-500">средна оценка</div>
+                    <div className="text-xs text-gray-500">{t('landing.stats.averageRating')}</div>
                   </div>
                 </div>
               </div>
@@ -218,7 +218,7 @@ export default function Landing() {
                   </div>
                   <div>
                     <div className="text-lg font-bold text-gray-900">2,500+</div>
-                    <div className="text-xs text-gray-500">завършени задачи</div>
+                    <div className="text-xs text-gray-500">{t('landing.stats.completedTasks')}</div>
                   </div>
                 </div>
               </div>
@@ -233,7 +233,7 @@ export default function Landing() {
           <div className="text-center space-y-4 mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.categories.title')}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Намерете специалисти за всяка задача - от ремонти в дома до лична помощ
+              {t('landing.categories.subtitle')}
             </p>
           </div>
 
@@ -253,7 +253,7 @@ export default function Landing() {
 
           <div className="text-center mt-8">
             <Button variant="ghost" className="text-primary-600 hover:text-primary-700 font-semibold text-lg">
-              Виж всички категории <ArrowRight className="ml-2" size={16} />
+              {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />
             </Button>
           </div>
         </div>
@@ -263,15 +263,15 @@ export default function Landing() {
       <section id="how-it-works" className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Как работи платформата</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.howItWorks.title')}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Лесен процес за намиране и завършване на задачи с проверени специалисти
+              {t('landing.howItWorks.subtitle')}
             </p>
           </div>
 
           {/* For Customers */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold text-center text-gray-900 mb-12">За клиенти</h3>
+            <h3 className="text-2xl font-bold text-center text-gray-900 mb-12">{t('landing.howItWorks.forCustomers')}</h3>
             <div className="grid md:grid-cols-3 gap-8">
               {customerSteps.map((step) => (
                 <div key={step.step} className="text-center">
@@ -287,7 +287,7 @@ export default function Landing() {
 
           {/* For Professionals */}
           <div>
-            <h3 className="text-2xl font-bold text-center text-gray-900 mb-12">За специалисти</h3>
+            <h3 className="text-2xl font-bold text-center text-gray-900 mb-12">{t('landing.howItWorks.forProfessionals')}</h3>
             <div className="grid md:grid-cols-3 gap-8">
               {professionalSteps.map((step) => (
                 <div key={step.step} className="text-center">

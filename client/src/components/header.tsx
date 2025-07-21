@@ -21,9 +21,9 @@ export default function Header() {
 
   const navigation = [
     { name: t('nav.browseTasks'), href: "/browse-tasks" },
-    { name: "Как работи", href: "/#how-it-works" },
-    { name: "Категории", href: "/#categories" },
-    { name: "За специалисти", href: "/#for-professionals" },
+    { name: t('nav.howItWorks'), href: "/#how-it-works" },
+    { name: t('nav.categories'), href: "/#categories" },
+    { name: t('nav.forProfessionals'), href: "/#for-professionals" },
   ];
 
   return (
@@ -137,20 +137,20 @@ export default function Header() {
                 <>
                   <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">
-                      Моят профил
+                      {t('nav.profile')}
                     </Button>
                   </Link>
                   <Button variant="ghost" className="w-full justify-start" asChild>
-                    <a href="/api/logout">Изход</a>
+                    <a href="/api/logout">{t('logout')}</a>
                   </Button>
                 </>
               ) : (
                 <>
                   <Button variant="ghost" className="w-full justify-start" asChild>
-                    <a href="/api/login">Вход</a>
+                    <a href="/api/login">{t('login')}</a>
                   </Button>
                   <Button className="bg-primary-500 hover:bg-primary-600 w-full" asChild>
-                    <a href="/api/login">Регистрация</a>
+                    <a href="/api/login">{t('signup')}</a>
                   </Button>
                 </>
               )}

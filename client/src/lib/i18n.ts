@@ -34,6 +34,9 @@ const resources = {
       "nav.browseTasks": "Browse Tasks",
       "nav.createTask": "Post a Task",
       "nav.profile": "Profile",
+      "nav.howItWorks": "How It Works",
+      "nav.categories": "Categories",
+      "nav.forProfessionals": "For Professionals",
       
       // Landing Page
       "landing.hero.title": "Find Trusted Local Professionals",
@@ -41,7 +44,16 @@ const resources = {
       "landing.hero.getStarted": "Get Started",
       "landing.hero.browseServices": "Browse Services",
       
+      "landing.trustIndicators.verified": "Verified Professionals",
+      "landing.trustIndicators.securePayments": "Secure Payments", 
+      "landing.trustIndicators.support": "24/7 Support",
+      
+      "landing.stats.averageRating": "average rating",
+      "landing.stats.completedTasks": "completed tasks",
+      
       "landing.categories.title": "Popular Categories",
+      "landing.categories.subtitle": "Find specialists for every task - from home repairs to personal assistance",
+      "landing.categories.viewAll": "View All Categories",
       "landing.categories.home": "Home & Garden",
       "landing.categories.home.description": "Electrical, plumbing, cleaning, maintenance",
       "landing.categories.tech": "Technology",
@@ -57,6 +69,9 @@ const resources = {
       "landing.featured.viewAll": "View All Tasks",
       
       "landing.howItWorks.title": "How It Works",
+      "landing.howItWorks.subtitle": "Easy process for finding and completing tasks with verified specialists",
+      "landing.howItWorks.forCustomers": "For Customers",
+      "landing.howItWorks.forProfessionals": "For Professionals",
       "landing.howItWorks.step1.title": "Post Your Task",
       "landing.howItWorks.step1.description": "Describe what you need done and set your budget",
       "landing.howItWorks.step2.title": "Get Proposals",
@@ -173,6 +188,9 @@ const resources = {
       "nav.browseTasks": "Разглеждане на задачи",
       "nav.createTask": "Публикуване на задача",
       "nav.profile": "Профил",
+      "nav.howItWorks": "Как работи",
+      "nav.categories": "Категории",
+      "nav.forProfessionals": "За специалисти",
       
       // Landing Page
       "landing.hero.title": "Намерете доверени местни професионалисти",
@@ -180,7 +198,16 @@ const resources = {
       "landing.hero.getStarted": "Започнете",
       "landing.hero.browseServices": "Разгледайте услугите",
       
+      "landing.trustIndicators.verified": "Проверени специалисти",
+      "landing.trustIndicators.securePayments": "Сигурни плащания",
+      "landing.trustIndicators.support": "24/7 поддръжка",
+      
+      "landing.stats.averageRating": "средна оценка",
+      "landing.stats.completedTasks": "завършени задачи",
+      
       "landing.categories.title": "Популярни категории",
+      "landing.categories.subtitle": "Намерете специалисти за всяка задача - от ремонти в дома до лична помощ",
+      "landing.categories.viewAll": "Виж всички категории",
       "landing.categories.home": "Дом и градина",
       "landing.categories.home.description": "Електричество, водопровод, почистване, поддръжка",
       "landing.categories.tech": "Технологии",
@@ -195,7 +222,10 @@ const resources = {
       "landing.featured.title": "Препоръчани задачи",
       "landing.featured.viewAll": "Вижте всички задачи",
       
-      "landing.howItWorks.title": "Как работи",
+      "landing.howItWorks.title": "Как работи платформата",
+      "landing.howItWorks.subtitle": "Лесен процес за намиране и завършване на задачи с проверени специалисти",
+      "landing.howItWorks.forCustomers": "За клиенти",
+      "landing.howItWorks.forProfessionals": "За специалисти",
       "landing.howItWorks.step1.title": "Публикувайте задачата си",
       "landing.howItWorks.step1.description": "Опишете какво трябва да бъде направено и определете бюджета си",
       "landing.howItWorks.step2.title": "Получете предложения",
@@ -312,6 +342,9 @@ const resources = {
       "nav.browseTasks": "Обзор задач",
       "nav.createTask": "Создать задачу",
       "nav.profile": "Профиль",
+      "nav.howItWorks": "Как это работает",
+      "nav.categories": "Категории",
+      "nav.forProfessionals": "Для специалистов",
       
       // Landing Page
       "landing.hero.title": "Найдите проверенных местных специалистов",
@@ -319,7 +352,16 @@ const resources = {
       "landing.hero.getStarted": "Начать",
       "landing.hero.browseServices": "Обзор услуг",
       
+      "landing.trustIndicators.verified": "Проверенные специалисты",
+      "landing.trustIndicators.securePayments": "Безопасные платежи",
+      "landing.trustIndicators.support": "Поддержка 24/7",
+      
+      "landing.stats.averageRating": "средний рейтинг",
+      "landing.stats.completedTasks": "выполненных задач",
+      
       "landing.categories.title": "Популярные категории",
+      "landing.categories.subtitle": "Найдите специалистов для любой задачи - от ремонта дома до персональной помощи",
+      "landing.categories.viewAll": "Посмотреть все категории",
       "landing.categories.home": "Дом и сад",
       "landing.categories.home.description": "Электричество, сантехника, уборка, техобслуживание",
       "landing.categories.tech": "Технологии", 
@@ -335,6 +377,9 @@ const resources = {
       "landing.featured.viewAll": "Посмотреть все задачи",
       
       "landing.howItWorks.title": "Как это работает",
+      "landing.howItWorks.subtitle": "Простой процесс поиска и выполнения задач с проверенными специалистами",
+      "landing.howItWorks.forCustomers": "Для клиентов",
+      "landing.howItWorks.forProfessionals": "Для специалистов",
       "landing.howItWorks.step1.title": "Опубликуйте вашу задачу",
       "landing.howItWorks.step1.description": "Опишите, что нужно сделать, и установите ваш бюджет",
       "landing.howItWorks.step2.title": "Получите предложения",
