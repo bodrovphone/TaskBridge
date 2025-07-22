@@ -50,6 +50,7 @@ const resources = {
       
       "landing.stats.averageRating": "average rating",
       "landing.stats.completedTasks": "completed tasks",
+      "landing.categories.activeSpecialists": "active specialists",
       
       "landing.categories.title": "Popular Categories",
       "landing.categories.subtitle": "Find specialists for every task - from home repairs to personal assistance",
@@ -204,6 +205,7 @@ const resources = {
       
       "landing.stats.averageRating": "средна оценка",
       "landing.stats.completedTasks": "завършени задачи",
+      "landing.categories.activeSpecialists": "активни специалисти",
       
       "landing.categories.title": "Популярни категории",
       "landing.categories.subtitle": "Намерете специалисти за всяка задача - от ремонти в дома до лична помощ",
@@ -358,6 +360,7 @@ const resources = {
       
       "landing.stats.averageRating": "средний рейтинг",
       "landing.stats.completedTasks": "выполненных задач",
+      "landing.categories.activeSpecialists": "активных специалистов",
       
       "landing.categories.title": "Популярные категории",
       "landing.categories.subtitle": "Найдите специалистов для любой задачи - от ремонта дома до персональной помощи",

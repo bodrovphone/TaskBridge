@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface CategoryCardProps {
   title: string;
@@ -18,6 +19,7 @@ export default function CategoryCard({
   color,
   onClick 
 }: CategoryCardProps) {
+  const { t } = useTranslation();
   const colorClasses = {
     blue: "bg-blue-100 text-blue-600 group-hover:bg-primary-100 group-hover:text-primary-600",
     green: "bg-green-100 text-green-600 group-hover:bg-primary-100 group-hover:text-primary-600",
@@ -37,7 +39,7 @@ export default function CategoryCard({
         <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
         <p className="text-gray-600 text-sm mb-4">{description}</p>
         <div className="text-sm text-primary-600 font-medium">
-          {count}+ активни специалисти
+          {count}+ {t('landing.categories.activeSpecialists')}
         </div>
       </CardContent>
     </Card>
