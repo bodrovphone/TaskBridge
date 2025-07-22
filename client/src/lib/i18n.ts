@@ -101,6 +101,12 @@ const resources = {
       "landing.howItWorks.professionals.step3.description": "Complete the task with quality and build your reputation",
       
       "landing.forProfessionals.subtitle": "Join thousands of verified specialists and increase your income",
+      "landing.forProfessionals.title": "Get Started with Trudify",
+      "landing.forProfessionals.description": "Whether you need help with a task or want to offer your professional services, we've got you covered",
+      "landing.forProfessionals.postTask": "Post a Task",
+      "landing.forProfessionals.postTaskDesc": "Need something done? Find the right professional",
+      "landing.forProfessionals.becomePro": "Become a Professional", 
+      "landing.forProfessionals.becomeProDesc": "Offer your services and earn money",
       
       // Footer
       "footer.contact.title": "Got Questions?",
@@ -282,6 +288,12 @@ const resources = {
       "landing.howItWorks.professionals.step3.description": "Изпълнете задачата качествено и изградете своята репутация",
       
       "landing.forProfessionals.subtitle": "Присъединете се към хиляди верифицирани специалисти и увеличете доходите си",
+      "landing.forProfessionals.title": "Започнете с Trudify",
+      "landing.forProfessionals.description": "Независимо дали се нуждаете от помощ или искате да предлагате професионални услуги, ние сме тук за вас",
+      "landing.forProfessionals.postTask": "Публикувай задача",
+      "landing.forProfessionals.postTaskDesc": "Трябва ви нещо? Намерете подходящия професионалист",
+      "landing.forProfessionals.becomePro": "Станете професионалист", 
+      "landing.forProfessionals.becomeProDesc": "Предлагайте своите услуги и печелете пари",
       
       // Footer
       "footer.contact.title": "Имате въпроси?",
@@ -463,6 +475,12 @@ const resources = {
       "landing.howItWorks.professionals.step3.description": "Выполняйте задачи качественно и создавайте свою репутацию",
       
       "landing.forProfessionals.subtitle": "Присоединяйтесь к тысячам верифицированных специалистов и увеличивайте свой доход",
+      "landing.forProfessionals.title": "Начните с Trudify",
+      "landing.forProfessionals.description": "Нужна ли вам помощь с задачей или вы хотите предлагать свои профессиональные услуги, мы поможем",
+      "landing.forProfessionals.postTask": "Разместить задачу",
+      "landing.forProfessionals.postTaskDesc": "Нужна помощь? Найдите подходящего специалиста",
+      "landing.forProfessionals.becomePro": "Стать специалистом", 
+      "landing.forProfessionals.becomeProDesc": "Предлагайте свои услуги и зарабатывайте",
       
       // Footer
       "footer.contact.title": "Есть вопросы?",

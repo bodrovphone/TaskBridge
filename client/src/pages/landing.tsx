@@ -368,67 +368,49 @@ export default function Landing() {
       <section id="for-professionals" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-8 lg:p-12 text-white">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div className="space-y-6">
+            <div className="text-center space-y-8">
+              <div className="space-y-4">
                 <h2 className="text-3xl lg:text-4xl font-bold">
-                  Започнете работа като професионалист
+                  {t('landing.forProfessionals.title')}
                 </h2>
-                <p className="text-xl text-primary-100 leading-relaxed">
-                  {t('landing.forProfessionals.subtitle')}
+                <p className="text-xl text-primary-100 leading-relaxed max-w-3xl mx-auto">
+                  {t('landing.forProfessionals.description')}
                 </p>
-                <ul className="space-y-3">
-                  <li className="flex items-center space-x-3">
-                    <div className="w-5 h-5 bg-secondary-400 rounded-full flex items-center justify-center">
-                      <CheckCircle className="text-white" size={16} />
-                    </div>
-                    <span>Безплатна регистрация и създаване на профил</span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <div className="w-5 h-5 bg-secondary-400 rounded-full flex items-center justify-center">
-                      <CheckCircle className="text-white" size={16} />
-                    </div>
-                    <span>Достъп до хиляди задачи в региона</span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <div className="w-5 h-5 bg-secondary-400 rounded-full flex items-center justify-center">
-                      <CheckCircle className="text-white" size={16} />
-                    </div>
-                    <span>Изграждане на репутация чрез рейтинги</span>
-                  </li>
-                </ul>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button 
-                    size="lg"
-                    className="bg-white text-primary-600 hover:bg-gray-50 px-8 py-4 h-auto"
-                    asChild
-                  >
-                    <a href="/api/login">Регистрирай се безплатно</a>
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    className="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-4 h-auto"
-                  >
-                    Научи повече
-                  </Button>
-                </div>
               </div>
-
-              <div className="relative">
+              
+              <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 <div className="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-white bg-opacity-20 rounded-lg">
-                      <span className="font-semibold">Средна печалба</span>
-                      <span className="text-2xl font-bold">1,200 лв/месец</span>
+                  <div className="space-y-4 text-center">
+                    <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto">
+                      <Plus className="text-white" size={32} />
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-white bg-opacity-20 rounded-lg">
-                      <span className="font-semibold">Активни специалисти</span>
-                      <span className="text-2xl font-bold">2,500+</span>
+                    <h3 className="text-2xl font-bold">{t('landing.forProfessionals.postTask')}</h3>
+                    <p className="text-primary-100">{t('landing.forProfessionals.postTaskDesc')}</p>
+                    <Button 
+                      size="lg"
+                      className="bg-white text-primary-600 hover:bg-gray-50 px-8 py-3 h-auto w-full"
+                      asChild
+                    >
+                      <a href="/create-task">{t('landing.forProfessionals.postTask')}</a>
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
+                  <div className="space-y-4 text-center">
+                    <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto">
+                      <UserCheck className="text-white" size={32} />
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-white bg-opacity-20 rounded-lg">
-                      <span className="font-semibold">Средна оценка</span>
-                      <span className="text-2xl font-bold">4.8/5</span>
-                    </div>
+                    <h3 className="text-2xl font-bold">{t('landing.forProfessionals.becomePro')}</h3>
+                    <p className="text-primary-100">{t('landing.forProfessionals.becomeProDesc')}</p>
+                    <Button 
+                      size="lg"
+                      variant="outline"
+                      className="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-3 h-auto w-full"
+                      asChild
+                    >
+                      <a href="/api/login">{t('landing.forProfessionals.becomePro')}</a>
+                    </Button>
                   </div>
                 </div>
               </div>
