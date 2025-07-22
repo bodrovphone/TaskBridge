@@ -24,10 +24,66 @@ import { useQuery } from "@tanstack/react-query";
 export default function Landing() {
   const { t } = useTranslation();
   
-  // Fetch featured tasks for display
-  const { data: featuredTasks = [] } = useQuery({
-    queryKey: ["/api/tasks?limit=3&status=open"],
-  });
+  // Mock featured tasks for display
+  const featuredTasks = [
+    {
+      id: "1",
+      title: "Нужна помощ за разхождане на куче",
+      description: "Търся някой да разходи кучето ми всеки ден от 17:00 до 18:00 часа. Кучето е средно по размер и много приятелски настроено.",
+      category: "personal_care",
+      budgetMin: 15,
+      budgetMax: 20,
+      budgetType: "fixed",
+      city: "София",
+      neighborhood: "Лозенец", 
+      deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23e5f3ff'/%3E%3Cpath d='M150 120c-15 0-25 10-25 25 0 8 4 15 10 20l-5 15h40l-5-15c6-5 10-12 10-20 0-15-10-25-25-25zm50 80c-25 0-45-20-45-45s20-45 45-45 45 20 45 45-20 45-45 45z' fill='%234a90e2'/%3E%3C/svg%3E",
+      customer: {
+        firstName: "Мария",
+        lastName: "Петрова",
+        averageRating: "4.8"
+      }
+    },
+    {
+      id: "2", 
+      title: "Ремонт на балкон - замяна на плочки",
+      description: "Балконът има нужда от ремонт. Плочките са се счупили на няколко места и трябва да се заменят. Размерът е около 6 квадратни метра.",
+      category: "home_repair",
+      budgetMin: 300,
+      budgetMax: 500,
+      budgetType: "negotiable",
+      city: "Пловдив", 
+      neighborhood: "Център",
+      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f0f8f0'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23d4edda' stroke='%23155724' stroke-width='2'/%3E%3Cpath d='M70 70h60v60H70zm80 0h60v60h-60zm80 0h60v60h-60zM70 150h60v60H70zm80 0h60v60h-60zm80 0h60v60h-60z' fill='%23c3e6cb' stroke='%23155724'/%3E%3C/svg%3E",
+      customer: {
+        firstName: "Георги",
+        lastName: "Иванов", 
+        averageRating: "4.5"
+      }
+    },
+    {
+      id: "3",
+      title: "Чистене на апартамент след ремонт",  
+      description: "След завършване на ремонт апартаментът има нужда от задълбочено почистване. 3 стаи, кухня, баня. Около 80 кв.м.",
+      category: "personal_assistant",
+      budgetMin: 120,
+      budgetMax: 180,
+      budgetType: "fixed",
+      city: "Варна",
+      neighborhood: "Морска градина",
+      deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), 
+      createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23fff3cd'/%3E%3Crect x='80' y='80' width='240' height='140' fill='%23ffeaa7' stroke='%23856404' stroke-width='2'/%3E%3Ccircle cx='150' cy='150' r='20' fill='%23fdcb6e'/%3E%3Ccircle cx='250' cy='150' r='20' fill='%23fdcb6e'/%3E%3Cpath d='M120 180h160v20H120z' fill='%23e17055'/%3E%3C/svg%3E",
+      customer: {
+        firstName: "Анна",
+        lastName: "Стоянова",
+        averageRating: "4.9"
+      }
+    }
+  ];
 
   const categories = [
     {

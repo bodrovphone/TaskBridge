@@ -75,7 +75,16 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer">
+    <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden">
+      {task.imageUrl && (
+        <div className="w-full h-48 bg-gray-200 overflow-hidden">
+          <img 
+            src={task.imageUrl} 
+            alt={task.title}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      )}
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-4">
           <Badge className={categoryColor}>
