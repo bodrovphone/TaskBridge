@@ -45,11 +45,18 @@ const resources = {
       "landing.hero.browseServices": "Browse Services",
       
       "landing.trustIndicators.verified": "Verified Professionals",
+      "landing.trustIndicators.verifiedDescription": "All professionals undergo document and reference checks",
+      "landing.trustIndicators.ratingSystem": "Rating System", 
+      "landing.trustIndicators.ratingSystemDescription": "Transparent reviews and ratings for trust", 
+      "landing.trustIndicators.dataProtection": "Data Protection",
+      "landing.trustIndicators.dataProtectionDescription": "GDPR compliant and secure personal information storage",
       "landing.trustIndicators.securePayments": "Secure Payments", 
       "landing.trustIndicators.support": "24/7 Support",
+      "landing.trustIndicators.supportDescription": "Always available to help and resolve issues",
       
       "landing.stats.averageRating": "average rating",
       "landing.stats.completedTasks": "completed tasks",
+      "landing.categories.activeSpecialists": "active specialists",
       
       "landing.categories.title": "Popular Categories",
       "landing.categories.subtitle": "Find specialists for every task - from home repairs to personal assistance",
@@ -76,8 +83,24 @@ const resources = {
       "landing.howItWorks.step1.description": "Describe what you need done and set your budget",
       "landing.howItWorks.step2.title": "Get Proposals",
       "landing.howItWorks.step2.description": "Receive applications from verified professionals",
-      "landing.howItWorks.step3.title": "Choose & Complete",
+      "landing.howItWorks.step3.title": "Choose & Complete", 
       "landing.howItWorks.step3.description": "Select the best professional and get your task done",
+      
+      "landing.howItWorks.customers.step1.title": "Post Your Task",
+      "landing.howItWorks.customers.step1.description": "Describe the task, upload photos, set budget and deadline",
+      "landing.howItWorks.customers.step2.title": "Get Proposals",
+      "landing.howItWorks.customers.step2.description": "Verified specialists will apply with prices and timelines for your task",
+      "landing.howItWorks.customers.step3.title": "Choose & Rate",
+      "landing.howItWorks.customers.step3.description": "Connect directly with the specialist and rate the work after completion",
+      
+      "landing.howItWorks.professionals.step1.title": "Register",
+      "landing.howItWorks.professionals.step1.description": "Create profile, get verified and select service categories",
+      "landing.howItWorks.professionals.step2.title": "Apply",
+      "landing.howItWorks.professionals.step2.description": "Browse tasks, send proposals with prices and timelines",
+      "landing.howItWorks.professionals.step3.title": "Work & Earn",
+      "landing.howItWorks.professionals.step3.description": "Complete the task with quality and build your reputation",
+      
+      "landing.forProfessionals.subtitle": "Join thousands of verified specialists and increase your income",
       
       // Tasks
       "tasks.title": "Browse Tasks",
@@ -199,11 +222,18 @@ const resources = {
       "landing.hero.browseServices": "Разгледайте услугите",
       
       "landing.trustIndicators.verified": "Проверени специалисти",
+      "landing.trustIndicators.verifiedDescription": "Всички професионалисти преминават проверка на документи и препоръки",
+      "landing.trustIndicators.ratingSystem": "Система за оценки", 
+      "landing.trustIndicators.ratingSystemDescription": "Двустранни отзиви и рейтинги за прозрачност и доверие", 
+      "landing.trustIndicators.dataProtection": "Защита на данни",
+      "landing.trustIndicators.dataProtectionDescription": "GDPR съответствие и сигурно съхранение на лична информация",
       "landing.trustIndicators.securePayments": "Сигурни плащания",
       "landing.trustIndicators.support": "24/7 поддръжка",
+      "landing.trustIndicators.supportDescription": "Винаги на разположение за помощ и решаване на проблеми",
       
       "landing.stats.averageRating": "средна оценка",
       "landing.stats.completedTasks": "завършени задачи",
+      "landing.categories.activeSpecialists": "активни специалисти",
       
       "landing.categories.title": "Популярни категории",
       "landing.categories.subtitle": "Намерете специалисти за всяка задача - от ремонти в дома до лична помощ",
@@ -232,6 +262,22 @@ const resources = {
       "landing.howItWorks.step2.description": "Получавайте заявления от верифицирани професионалисти",
       "landing.howItWorks.step3.title": "Изберете и завършете",
       "landing.howItWorks.step3.description": "Изберете най-добрия професионалист и приключете задачата си",
+      
+      "landing.howItWorks.customers.step1.title": "Публикувайте задача",
+      "landing.howItWorks.customers.step1.description": "Опишете задачата, качете снимки, определете бюджет и срок за изпълнение",
+      "landing.howItWorks.customers.step2.title": "Получете предложения",
+      "landing.howItWorks.customers.step2.description": "Проверени специалисти ще кандидатстват с цени и срокове за вашата задача",
+      "landing.howItWorks.customers.step3.title": "Изберете и оценете",
+      "landing.howItWorks.customers.step3.description": "Свържете се директно със специалиста и оценете работата след завършване",
+      
+      "landing.howItWorks.professionals.step1.title": "Регистрирайте се",
+      "landing.howItWorks.professionals.step1.description": "Създайте профил, верифицирайте се и изберете категории услуги",
+      "landing.howItWorks.professionals.step2.title": "Кандидатствайте",
+      "landing.howItWorks.professionals.step2.description": "Разгледайте задачи, изпратете предложения с цени и срокове",
+      "landing.howItWorks.professionals.step3.title": "Работете и печелете",
+      "landing.howItWorks.professionals.step3.description": "Изпълнете задачата качествено и изградете своята репутация",
+      
+      "landing.forProfessionals.subtitle": "Присъединете се към хиляди верифицирани специалисти и увеличете доходите си",
       
       // Tasks
       "tasks.title": "Разглеждане на задачи",
@@ -353,11 +399,18 @@ const resources = {
       "landing.hero.browseServices": "Обзор услуг",
       
       "landing.trustIndicators.verified": "Проверенные специалисты",
+      "landing.trustIndicators.verifiedDescription": "Все специалисты проходят проверку документов и рекомендаций",
+      "landing.trustIndicators.ratingSystem": "Система рейтингов", 
+      "landing.trustIndicators.ratingSystemDescription": "Двусторонние отзывы и рейтинги для прозрачности и доверия", 
+      "landing.trustIndicators.dataProtection": "Защита данных",
+      "landing.trustIndicators.dataProtectionDescription": "Соответствие GDPR и безопасное хранение личной информации",
       "landing.trustIndicators.securePayments": "Безопасные платежи",
       "landing.trustIndicators.support": "Поддержка 24/7",
+      "landing.trustIndicators.supportDescription": "Всегда доступны для помощи и решения проблем",
       
       "landing.stats.averageRating": "средний рейтинг",
-      "landing.stats.completedTasks": "выполненных задач",
+      "landing.stats.completedTasks": "выполненных задач", 
+      "landing.categories.activeSpecialists": "активных специалистов",
       
       "landing.categories.title": "Популярные категории",
       "landing.categories.subtitle": "Найдите специалистов для любой задачи - от ремонта дома до персональной помощи",
@@ -386,6 +439,22 @@ const resources = {
       "landing.howItWorks.step2.description": "Получайте заявки от верифицированных специалистов",
       "landing.howItWorks.step3.title": "Выберите и завершите",
       "landing.howItWorks.step3.description": "Выберите лучшего специалиста и выполните вашу задачу",
+      
+      "landing.howItWorks.customers.step1.title": "Опубликуйте задачу",
+      "landing.howItWorks.customers.step1.description": "Опишите задачу, загрузите фотографии, установите бюджет и срок выполнения",
+      "landing.howItWorks.customers.step2.title": "Получите предложения",
+      "landing.howItWorks.customers.step2.description": "Проверенные специалисты будут подавать заявки с ценами и сроками для вашей задачи",
+      "landing.howItWorks.customers.step3.title": "Выберите и оцените",
+      "landing.howItWorks.customers.step3.description": "Свяжитесь напрямую со специалистом и оцените работу после завершения",
+      
+      "landing.howItWorks.professionals.step1.title": "Зарегистрируйтесь",
+      "landing.howItWorks.professionals.step1.description": "Создайте профиль, пройдите верификацию и выберите категории услуг",
+      "landing.howItWorks.professionals.step2.title": "Подавайте заявки",
+      "landing.howItWorks.professionals.step2.description": "Просматривайте задачи, отправляйте предложения с ценами и сроками",
+      "landing.howItWorks.professionals.step3.title": "Работайте и зарабатывайте",
+      "landing.howItWorks.professionals.step3.description": "Выполняйте задачи качественно и создавайте свою репутацию",
+      
+      "landing.forProfessionals.subtitle": "Присоединяйтесь к тысячам верифицированных специалистов и увеличивайте свой доход",
       
       // Tasks
       "tasks.title": "Обзор задач",

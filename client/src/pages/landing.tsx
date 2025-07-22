@@ -374,7 +374,7 @@ export default function Landing() {
                   Започнете работа като професионалист
                 </h2>
                 <p className="text-xl text-primary-100 leading-relaxed">
-                  Присъединете се към хиляди верифицирани специалисти в Балканите и увеличете доходите си.
+                  {t('landing.forProfessionals.subtitle')}
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center space-x-3">

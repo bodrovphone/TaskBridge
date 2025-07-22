@@ -37,10 +37,9 @@ export default function Footer() {
                 <Handshake className="text-white" size={16} />
               </div>
               <span className="ml-2 text-xl font-bold">Trudify</span>
-              <span className="ml-1 text-sm font-medium text-primary-400">Balkans</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Свързваме хора със специалисти в цяла Балканска Европа за всякакви задачи и услуги.
+              Свързваме хора със специалисти за всякакви задачи и услуги.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
