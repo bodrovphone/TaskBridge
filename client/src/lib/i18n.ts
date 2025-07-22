@@ -102,6 +102,10 @@ const resources = {
       
       "landing.forProfessionals.subtitle": "Join thousands of verified specialists and increase your income",
       
+      // Footer
+      "footer.contact.title": "Got Questions?",
+      "footer.contact.subtitle": "Please contact us",
+      
       // Tasks
       "tasks.title": "Browse Tasks",
       "tasks.searchPlaceholder": "Search tasks...",
@@ -279,6 +283,10 @@ const resources = {
       
       "landing.forProfessionals.subtitle": "Присъединете се към хиляди верифицирани специалисти и увеличете доходите си",
       
+      // Footer
+      "footer.contact.title": "Имате въпроси?",
+      "footer.contact.subtitle": "Свържете се с нас",
+      
       // Tasks
       "tasks.title": "Разглеждане на задачи",
       "tasks.searchPlaceholder": "Търсене на задачи...",
@@ -455,6 +463,10 @@ const resources = {
       "landing.howItWorks.professionals.step3.description": "Выполняйте задачи качественно и создавайте свою репутацию",
       
       "landing.forProfessionals.subtitle": "Присоединяйтесь к тысячам верифицированных специалистов и увеличивайте свой доход",
+      
+      // Footer
+      "footer.contact.title": "Есть вопросы?",
+      "footer.contact.subtitle": "Свяжитесь с нами",
       
       // Tasks
       "tasks.title": "Обзор задач",

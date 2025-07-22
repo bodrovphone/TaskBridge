@@ -8,8 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+  
   const quickLinks = [
     { name: "Как работи", href: "/#how-it-works" },
     { name: "Категории услуги", href: "/#categories" },
@@ -91,15 +94,14 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Контакти</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.contact.title')}</h3>
             <div className="space-y-3 text-sm">
+              <p className="text-gray-400 mb-3">{t('footer.contact.subtitle')}</p>
               <div className="flex items-center space-x-3">
                 <i className="fas fa-envelope text-gray-400"></i>
-                <span className="text-gray-400">support@trudify.com</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <i className="fas fa-phone text-gray-400"></i>
-                <span className="text-gray-400">+XXX XXX XXXX</span>
+                <a href="mailto:alex@obodsoft.com" className="text-gray-400 hover:text-white transition-colors">
+                  alex@obodsoft.com
+                </a>
               </div>
             </div>
             
