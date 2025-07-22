@@ -72,8 +72,11 @@ const resources = {
       "landing.categories.education": "Education & Training",
       "landing.categories.creative": "Creative Services",
       
-      "landing.featured.title": "Featured Tasks",
+      "landing.featured.title": "Recent Tasks",
+      "landing.featured.subtitle": "Start working today",
       "landing.featured.viewAll": "View All Tasks",
+      "landing.featured.professionalDesc": "Tasks that might interest you",
+      "landing.featured.customerDesc": "Recently published tasks",
       
       "landing.howItWorks.title": "How It Works",
       "landing.howItWorks.subtitle": "Easy process for finding and completing tasks with verified specialists",
@@ -259,8 +262,11 @@ const resources = {
       "landing.categories.education": "Образование и обучение",
       "landing.categories.creative": "Творчески услуги",
       
-      "landing.featured.title": "Препоръчани задачи",
+      "landing.featured.title": "Актуални задачи",
+      "landing.featured.subtitle": "Започнете работа още днес",
       "landing.featured.viewAll": "Вижте всички задачи",
+      "landing.featured.professionalDesc": "Задачи, които може да ви интересуват",
+      "landing.featured.customerDesc": "Последно публикувани задачи",
       
       "landing.howItWorks.title": "Как работи платформата",
       "landing.howItWorks.subtitle": "Лесен процес за намиране и завършване на задачи с проверени специалисти",
@@ -446,8 +452,11 @@ const resources = {
       "landing.categories.education": "Образование и обучение",
       "landing.categories.creative": "Творческие услуги",
       
-      "landing.featured.title": "Рекомендуемые задачи",
+      "landing.featured.title": "Актуальные задачи",
+      "landing.featured.subtitle": "Начните работать сегодня",
       "landing.featured.viewAll": "Посмотреть все задачи",
+      "landing.featured.professionalDesc": "Задачи, которые могут вас заинтересовать",
+      "landing.featured.customerDesc": "Недавно опубликованные задачи",
       
       "landing.howItWorks.title": "Как это работает",
       "landing.howItWorks.subtitle": "Простой процесс поиска и выполнения задач с проверенными специалистами",

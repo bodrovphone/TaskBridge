@@ -175,11 +175,11 @@ export default function Home() {
           <CardHeader>
             <div className="flex justify-between items-center">
               <div>
-                <CardTitle>Актуални задачи</CardTitle>
+                <CardTitle>{t('landing.featured.title')}</CardTitle>
                 <CardDescription>
                   {isProfessional 
-                    ? "Задачи, които може да ви интересуват"
-                    : "Последно публикувани задачи"
+                    ? t('landing.featured.professionalDesc')
+                    : t('landing.featured.customerDesc')
                   }
                 </CardDescription>
               </div>

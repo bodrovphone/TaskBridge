@@ -38,7 +38,7 @@ export default function Landing() {
       neighborhood: "Лозенец", 
       deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
       createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23e5f3ff'/%3E%3Cpath d='M150 120c-15 0-25 10-25 25 0 8 4 15 10 20l-5 15h40l-5-15c6-5 10-12 10-20 0-15-10-25-25-25zm50 80c-25 0-45-20-45-45s20-45 45-45 45 20 45 45-20 45-45 45z' fill='%234a90e2'/%3E%3C/svg%3E",
+      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3Cfilter id='blur' x='0' y='0'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='1'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='400' height='300' fill='%23e8f5e8'/%3E%3Cg filter='url(%23blur)'%3E%3Cellipse cx='200' cy='180' rx='80' ry='40' fill='%2345a049'/%3E%3Cellipse cx='200' cy='150' rx='60' ry='30' fill='%234CAF50'/%3E%3Cellipse cx='180' cy='130' rx='15' ry='8' fill='%23388E3C'/%3E%3Cellipse cx='220' cy='135' rx='12' ry='6' fill='%23388E3C'/%3E%3Cpath d='M190 140 Q200 120 210 140' stroke='%23795548' stroke-width='3' fill='none'/%3E%3C/g%3E%3C/svg%3E",
       customer: {
         firstName: "Мария",
         lastName: "Петрова",
@@ -57,7 +57,7 @@ export default function Landing() {
       neighborhood: "Център",
       deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f0f8f0'/%3E%3Crect x='50' y='50' width='300' height='200' fill='%23d4edda' stroke='%23155724' stroke-width='2'/%3E%3Cpath d='M70 70h60v60H70zm80 0h60v60h-60zm80 0h60v60h-60zM70 150h60v60H70zm80 0h60v60h-60zm80 0h60v60h-60z' fill='%23c3e6cb' stroke='%23155724'/%3E%3C/svg%3E",
+      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3Cfilter id='blur' x='0' y='0'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='1.5'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='400' height='300' fill='%23f5f5f5'/%3E%3Cg filter='url(%23blur)'%3E%3Crect x='50' y='80' width='300' height='150' fill='%23ECEFF1' stroke='%23607D8B' stroke-width='2'/%3E%3Crect x='70' y='100' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3Crect x='140' y='100' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3Crect x='210' y='100' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3Crect x='280' y='100' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3Crect x='70' y='170' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3Crect x='140' y='170' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3Crect x='210' y='170' width='50' height='50' fill='%23B0BEC5' stroke='%23455A64'/%3E%3Crect x='280' y='170' width='50' height='50' fill='%23CFD8DC' stroke='%23455A64'/%3E%3C/g%3E%3C/svg%3E",
       customer: {
         firstName: "Георги",
         lastName: "Иванов", 
@@ -76,7 +76,7 @@ export default function Landing() {
       neighborhood: "Морска градина",
       deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), 
       createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23fff3cd'/%3E%3Crect x='80' y='80' width='240' height='140' fill='%23ffeaa7' stroke='%23856404' stroke-width='2'/%3E%3Ccircle cx='150' cy='150' r='20' fill='%23fdcb6e'/%3E%3Ccircle cx='250' cy='150' r='20' fill='%23fdcb6e'/%3E%3Cpath d='M120 180h160v20H120z' fill='%23e17055'/%3E%3C/svg%3E",
+      imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cdefs%3E%3Cfilter id='blur' x='0' y='0'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='1.2'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='400' height='300' fill='%23fff8e1'/%3E%3Cg filter='url(%23blur)'%3E%3Crect x='100' y='100' width='200' height='120' fill='%23FFF3E0' stroke='%23E65100' stroke-width='2'/%3E%3Ccircle cx='150' cy='130' r='8' fill='%23FF9800'/%3E%3Ccircle cx='250' cy='130' r='8' fill='%23FF9800'/%3E%3Crect x='130' y='150' width='140' height='40' fill='%23FFE0B2' stroke='%23E65100'/%3E%3Cpath d='M120 190 Q200 180 280 190' stroke='%2364B5F6' stroke-width='3' fill='none'/%3E%3Ccircle cx='160' cy='180' r='6' fill='%232196F3'/%3E%3Ccircle cx='240' cy='180' r='6' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E",
       customer: {
         firstName: "Анна",
         lastName: "Стоянова",
@@ -364,8 +364,8 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Актуални задачи</h2>
-              <p className="text-xl text-gray-600">Започнете работа още днес</p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{t('landing.featured.title')}</h2>
+              <p className="text-xl text-gray-600">{t('landing.featured.subtitle')}</p>
             </div>
             <Button 
               className="bg-primary-500 hover:bg-primary-600"
