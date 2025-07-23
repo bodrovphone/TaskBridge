@@ -78,6 +78,20 @@ const resources = {
       "landing.featured.professionalDesc": "Tasks that might interest you",
       "landing.featured.customerDesc": "Recently published tasks",
       
+      // Task Categories in TaskCard
+      "taskCard.category.personal_care": "Personal Care",
+      "taskCard.category.home_repair": "Home Repair",
+      "taskCard.category.personal_assistant": "Personal Assistant",
+      "taskCard.category.delivery_transport": "Delivery & Transport",
+      
+      // Sample Task Data for Demo
+      "mockTask.dogWalking.title": "Need help walking my dog",
+      "mockTask.dogWalking.description": "Looking for someone to walk my dog daily from 5:00 PM to 6:00 PM. The dog is medium-sized and very friendly.",
+      "mockTask.balconyRepair.title": "Balcony repair - tile replacement",
+      "mockTask.balconyRepair.description": "The balcony needs repair. The tiles are broken in several places and need to be replaced. Size is about 6 square meters.",
+      "mockTask.apartmentCleaning.title": "Apartment cleaning after renovation",
+      "mockTask.apartmentCleaning.description": "After renovation completion, the apartment needs deep cleaning. 3 rooms, kitchen, bathroom. About 80 sq.m.",
+      
       "landing.howItWorks.title": "How It Works",
       "landing.howItWorks.subtitle": "Easy process for finding and completing tasks with verified specialists",
       "landing.howItWorks.forCustomers": "For Customers",
@@ -268,6 +282,20 @@ const resources = {
       "landing.featured.professionalDesc": "Задачи, които може да ви интересуват",
       "landing.featured.customerDesc": "Последно публикувани задачи",
       
+      // Task Categories in TaskCard
+      "taskCard.category.personal_care": "Лична грижа",
+      "taskCard.category.home_repair": "Ремонт на дом",
+      "taskCard.category.personal_assistant": "Личен асистент",
+      "taskCard.category.delivery_transport": "Доставка и транспорт",
+      
+      // Sample Task Data for Demo
+      "mockTask.dogWalking.title": "Нужна помощ за разхождане на куче",
+      "mockTask.dogWalking.description": "Търся някой да разходи кучето ми всеки ден от 17:00 до 18:00 часа. Кучето е средно по размер и много приятелски настроено.",
+      "mockTask.balconyRepair.title": "Ремонт на балкон - замяна на плочки",
+      "mockTask.balconyRepair.description": "Балконът има нужда от ремонт. Плочките са се счупили на няколко места и трябва да се заменят. Размерът е около 6 квадратни метра.",
+      "mockTask.apartmentCleaning.title": "Чистене на апартамент след ремонт",
+      "mockTask.apartmentCleaning.description": "След завършване на ремонт апартаментът има нужда от задълбочено почистване. 3 стаи, кухня, баня. Около 80 кв.м.",
+      
       "landing.howItWorks.title": "Как работи платформата",
       "landing.howItWorks.subtitle": "Лесен процес за намиране и завършване на задачи с проверени специалисти",
       "landing.howItWorks.forCustomers": "За клиенти",
@@ -457,6 +485,20 @@ const resources = {
       "landing.featured.viewAll": "Посмотреть все задачи",
       "landing.featured.professionalDesc": "Задачи, которые могут вас заинтересовать",
       "landing.featured.customerDesc": "Недавно опубликованные задачи",
+      
+      // Task Categories in TaskCard
+      "taskCard.category.personal_care": "Личный уход",
+      "taskCard.category.home_repair": "Ремонт дома",
+      "taskCard.category.personal_assistant": "Личный помощник",
+      "taskCard.category.delivery_transport": "Доставка и транспорт",
+      
+      // Sample Task Data for Demo
+      "mockTask.dogWalking.title": "Нужна помощь с выгулом собаки",
+      "mockTask.dogWalking.description": "Ищу кого-то, кто будет выгуливать мою собаку каждый день с 17:00 до 18:00. Собака среднего размера и очень дружелюбная.",
+      "mockTask.balconyRepair.title": "Ремонт балкона - замена плитки",
+      "mockTask.balconyRepair.description": "Балкон нуждается в ремонте. Плитка разбита в нескольких местах и требует замены. Размер около 6 квадратных метров.",
+      "mockTask.apartmentCleaning.title": "Уборка квартиры после ремонта",
+      "mockTask.apartmentCleaning.description": "После завершения ремонта квартира нуждается в глубокой уборке. 3 комнаты, кухня, ванная. Около 80 кв.м.",
       
       "landing.howItWorks.title": "Как это работает",
       "landing.howItWorks.subtitle": "Простой процесс поиска и выполнения задач с проверенными специалистами",

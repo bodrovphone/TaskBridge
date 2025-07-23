@@ -6,6 +6,7 @@ import { MapPin, Clock, Wallet, Star } from "lucide-react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import { bg } from "date-fns/locale";
+import { useTranslation } from 'react-i18next';
 import type { Task } from "@shared/schema";
 
 interface TaskCardProps {
@@ -31,23 +32,20 @@ const categoryColors = {
   "other": "bg-gray-100 text-gray-800"
 };
 
-const categoryNames = {
-  "home_repair": "Дом и ремонти",
-  "delivery_transport": "Доставки и транспорт",
-  "personal_care": "Лична грижа", 
-  "personal_assistant": "Личен асистент",
-  "learning_fitness": "Обучение и фитнес",
-  "other": "Други"
-};
-
 export default function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
+  const { t } = useTranslation();
+  
+  const getCategoryName = (category: string) => {
+    const categoryKey = `taskCard.category.${category}`;
+    return t(categoryKey, category); // fallback to category if translation not found
+  };
   const timeAgo = formatDistanceToNow(new Date(task.createdAt), {
     addSuffix: true,
     locale: bg,
   });
 
   const categoryColor = categoryColors[task.category as keyof typeof categoryColors] || categoryColors.other;
-  const categoryName = categoryNames[task.category as keyof typeof categoryNames] || "Други";
+  const categoryName = getCategoryName(task.category);
 
   const formatBudget = () => {
     if (task.budgetType === "fixed" && task.budgetMax) {

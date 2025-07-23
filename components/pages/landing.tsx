@@ -28,8 +28,8 @@ export default function Landing() {
   const featuredTasks = [
     {
       id: "1",
-      title: "Нужна помощ за разхождане на куче",
-      description: "Търся някой да разходи кучето ми всеки ден от 17:00 до 18:00 часа. Кучето е средно по размер и много приятелски настроено.",
+      title: t('mockTask.dogWalking.title'),
+      description: t('mockTask.dogWalking.description'),
       category: "personal_care",
       budgetMin: 15,
       budgetMax: 20,
@@ -47,8 +47,8 @@ export default function Landing() {
     },
     {
       id: "2", 
-      title: "Ремонт на балкон - замяна на плочки",
-      description: "Балконът има нужда от ремонт. Плочките са се счупили на няколко места и трябва да се заменят. Размерът е около 6 квадратни метра.",
+      title: t('mockTask.balconyRepair.title'),
+      description: t('mockTask.balconyRepair.description'),
       category: "home_repair",
       budgetMin: 300,
       budgetMax: 500,
@@ -66,8 +66,8 @@ export default function Landing() {
     },
     {
       id: "3",
-      title: "Чистене на апартамент след ремонт",  
-      description: "След завършване на ремонт апартаментът има нужда от задълбочено почистване. 3 стаи, кухня, баня. Около 80 кв.м.",
+      title: t('mockTask.apartmentCleaning.title'),  
+      description: t('mockTask.apartmentCleaning.description'),
       category: "personal_assistant",
       budgetMin: 120,
       budgetMax: 180,
