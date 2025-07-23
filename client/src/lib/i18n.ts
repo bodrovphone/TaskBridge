@@ -91,6 +91,15 @@ const resources = {
       "mockTask.balconyRepair.description": "The balcony needs repair. The tiles are broken in several places and need to be replaced. Size is about 6 square meters.",
       "mockTask.apartmentCleaning.title": "Apartment cleaning after renovation",
       "mockTask.apartmentCleaning.description": "After renovation completion, the apartment needs deep cleaning. 3 rooms, kitchen, bathroom. About 80 sq.m.",
+
+      // Task Card Labels
+      "taskCard.budget.from": "from",
+      "taskCard.budget.to": "up to", 
+      "taskCard.budget.negotiable": "Negotiable",
+      "taskCard.deadline.today": "Today",
+      "taskCard.deadline.tomorrow": "Tomorrow",
+      "taskCard.deadline.days": "days",
+      "taskCard.deadline.flexible": "Flexible deadline",
       
       "landing.howItWorks.title": "How It Works",
       "landing.howItWorks.subtitle": "Easy process for finding and completing tasks with verified specialists",
@@ -295,6 +304,15 @@ const resources = {
       "mockTask.balconyRepair.description": "Балконът има нужда от ремонт. Плочките са се счупили на няколко места и трябва да се заменят. Размерът е около 6 квадратни метра.",
       "mockTask.apartmentCleaning.title": "Чистене на апартамент след ремонт",
       "mockTask.apartmentCleaning.description": "След завършване на ремонт апартаментът има нужда от задълбочено почистване. 3 стаи, кухня, баня. Около 80 кв.м.",
+
+      // Task Card Labels
+      "taskCard.budget.from": "от",
+      "taskCard.budget.to": "до", 
+      "taskCard.budget.negotiable": "По договаряне",
+      "taskCard.deadline.today": "Днес",
+      "taskCard.deadline.tomorrow": "Утре",
+      "taskCard.deadline.days": "дни",
+      "taskCard.deadline.flexible": "Гъвкав срок",
       
       "landing.howItWorks.title": "Как работи платформата",
       "landing.howItWorks.subtitle": "Лесен процес за намиране и завършване на задачи с проверени специалисти",
@@ -499,6 +517,15 @@ const resources = {
       "mockTask.balconyRepair.description": "Балкон нуждается в ремонте. Плитка разбита в нескольких местах и требует замены. Размер около 6 квадратных метров.",
       "mockTask.apartmentCleaning.title": "Уборка квартиры после ремонта",
       "mockTask.apartmentCleaning.description": "После завершения ремонта квартира нуждается в глубокой уборке. 3 комнаты, кухня, ванная. Около 80 кв.м.",
+
+      // Task Card Labels
+      "taskCard.budget.from": "от",
+      "taskCard.budget.to": "до", 
+      "taskCard.budget.negotiable": "Договорная",
+      "taskCard.deadline.today": "Сегодня",
+      "taskCard.deadline.tomorrow": "Завтра",
+      "taskCard.deadline.days": "дней",
+      "taskCard.deadline.flexible": "Гибкий срок",
       
       "landing.howItWorks.title": "Как это работает",
       "landing.howItWorks.subtitle": "Простой процесс поиска и выполнения задач с проверенными специалистами",

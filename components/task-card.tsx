@@ -53,23 +53,23 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     } else if (task.budgetMin && task.budgetMax) {
       return `${task.budgetMin}-${task.budgetMax} лв`;
     } else if (task.budgetMin) {
-      return `от ${task.budgetMin} лв`;
+      return `${t('taskCard.budget.from')} ${task.budgetMin} лв`;
     } else if (task.budgetMax) {
-      return `до ${task.budgetMax} лв`;
+      return `${t('taskCard.budget.to')} ${task.budgetMax} лв`;
     }
-    return "По договаряне";
+    return t('taskCard.budget.negotiable');
   };
 
   const formatDeadline = () => {
-    if (!task.deadline) return "Гъвкав срок";
+    if (!task.deadline) return t('taskCard.deadline.flexible');
     const deadline = new Date(task.deadline);
     const now = new Date();
     const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return "Днес";
-    if (diffDays === 1) return "Утре";  
-    if (diffDays <= 7) return `До ${diffDays} дни`;
-    return deadline.toLocaleDateString("bg-BG");
+    if (diffDays === 0) return t('taskCard.deadline.today');
+    if (diffDays === 1) return t('taskCard.deadline.tomorrow');  
+    if (diffDays <= 7) return `${diffDays} ${t('taskCard.deadline.days')}`;
+    return deadline.toLocaleDateString();
   };
 
   return (
