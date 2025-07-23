@@ -140,6 +140,23 @@ const resources = {
       "footer.contact.title": "Got Questions?",
       "footer.contact.subtitle": "Please contact us",
       
+      // Footer sections  
+      "footer.company.description": "Connecting people with specialists for all kinds of tasks and services.",
+      "footer.quickLinks.title": "Quick Links",
+      "footer.quickLinks.howItWorks": "How It Works",
+      "footer.quickLinks.categories": "Service Categories", 
+      "footer.quickLinks.forProfessionals": "For Professionals",
+      "footer.quickLinks.security": "Security",
+      "footer.quickLinks.help": "Help",
+      "footer.legal.title": "Legal Information",
+      "footer.legal.terms": "Terms of Use",
+      "footer.legal.privacy": "Privacy Policy",
+      "footer.legal.gdpr": "GDPR", 
+      "footer.legal.cookies": "Cookies",
+      "footer.legal.complaints": "Complaints",
+      "footer.language.label": "Language",
+      "footer.copyright": "© 2024 Trudify. All rights reserved.",
+      
       // Tasks
       "tasks.title": "Browse Tasks",
       "tasks.searchPlaceholder": "Search tasks...",
@@ -355,6 +372,23 @@ const resources = {
       "footer.contact.title": "Имате въпроси?",
       "footer.contact.subtitle": "Свържете се с нас",
       
+      // Footer sections  
+      "footer.company.description": "Свързваме хора със специалисти за всякакви задачи и услуги.",
+      "footer.quickLinks.title": "Бързи връзки",
+      "footer.quickLinks.howItWorks": "Как работи",
+      "footer.quickLinks.categories": "Категории услуги", 
+      "footer.quickLinks.forProfessionals": "За специалисти",
+      "footer.quickLinks.security": "Сигурност",
+      "footer.quickLinks.help": "Помощ",
+      "footer.legal.title": "Правна информация",
+      "footer.legal.terms": "Условия за ползване",
+      "footer.legal.privacy": "Политика за поверителност",
+      "footer.legal.gdpr": "GDPR", 
+      "footer.legal.cookies": "Cookies",
+      "footer.legal.complaints": "Жалби",
+      "footer.language.label": "Език",
+      "footer.copyright": "© 2024 Trudify. Всички права запазени.",
+      
       // Tasks
       "tasks.title": "Разглеждане на задачи",
       "tasks.searchPlaceholder": "Търсене на задачи...",
@@ -569,6 +603,23 @@ const resources = {
       // Footer
       "footer.contact.title": "Есть вопросы?",
       "footer.contact.subtitle": "Свяжитесь с нами",
+      
+      // Footer sections  
+      "footer.company.description": "Соединяем людей со специалистами для всех видов задач и услуг.",
+      "footer.quickLinks.title": "Быстрые ссылки",
+      "footer.quickLinks.howItWorks": "Как это работает",
+      "footer.quickLinks.categories": "Категории услуг", 
+      "footer.quickLinks.forProfessionals": "Для специалистов",
+      "footer.quickLinks.security": "Безопасность",
+      "footer.quickLinks.help": "Помощь",
+      "footer.legal.title": "Правовая информация", 
+      "footer.legal.terms": "Условия использования",
+      "footer.legal.privacy": "Политика конфиденциальности",
+      "footer.legal.gdpr": "GDPR", 
+      "footer.legal.cookies": "Cookies",
+      "footer.legal.complaints": "Жалобы",
+      "footer.language.label": "Язык",
+      "footer.copyright": "© 2024 Trudify. Все права защищены.",
       
       // Tasks
       "tasks.title": "Обзор задач",

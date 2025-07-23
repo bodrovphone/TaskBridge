@@ -14,19 +14,19 @@ export default function Footer() {
   const { t } = useTranslation();
   
   const quickLinks = [
-    { name: "Как работи", href: "/#how-it-works" },
-    { name: "Категории услуги", href: "/#categories" },
-    { name: "За специалисти", href: "/#for-professionals" },
-    { name: "Сигурност", href: "/security" },
-    { name: "Помощ", href: "/help" },
+    { name: t('footer.quickLinks.howItWorks'), href: "/#how-it-works" },
+    { name: t('footer.quickLinks.categories'), href: "/#categories" },
+    { name: t('footer.quickLinks.forProfessionals'), href: "/#for-professionals" },
+    { name: t('footer.quickLinks.security'), href: "/security" },
+    { name: t('footer.quickLinks.help'), href: "/help" },
   ];
 
   const legalLinks = [
-    { name: "Условия за ползване", href: "/terms" },
-    { name: "Политика за поверителност", href: "/privacy" },
-    { name: "GDPR", href: "/gdpr" },
-    { name: "Cookies", href: "/cookies" },
-    { name: "Жалби", href: "/complaints" },
+    { name: t('footer.legal.terms'), href: "/terms" },
+    { name: t('footer.legal.privacy'), href: "/privacy" },
+    { name: t('footer.legal.gdpr'), href: "/gdpr" },
+    { name: t('footer.legal.cookies'), href: "/cookies" },
+    { name: t('footer.legal.complaints'), href: "/complaints" },
   ];
 
   return (
@@ -42,7 +42,7 @@ export default function Footer() {
               <span className="ml-2 text-xl font-bold">Trudify</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Свързваме хора със специалисти за всякакви задачи и услуги.
+              {t('footer.company.description')}
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -62,7 +62,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Бързи връзки</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks.title')}</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -78,7 +78,7 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Правна информация</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.legal.title')}</h3>
             <ul className="space-y-2">
               {legalLinks.map((link) => (
                 <li key={link.name}>
@@ -107,7 +107,7 @@ export default function Footer() {
             
             {/* Language Selector */}
             <div className="mt-6">
-              <label className="block text-sm font-medium mb-2">Език</label>
+              <label className="block text-sm font-medium mb-2">{t('footer.language.label')}</label>
               <Select defaultValue="bg">
                 <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
                   <SelectValue />
@@ -125,7 +125,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © 2024 Trudify. Всички права запазени.
+              {t('footer.copyright')}
             </p>
           </div>
         </div>
