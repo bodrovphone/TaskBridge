@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Clock, Wallet, Star } from "lucide-react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { bg } from "date-fns/locale";
+import { bg, enUS, ru } from "date-fns/locale";
 import { useTranslation } from 'react-i18next';
 import type { Task } from "@shared/schema";
 
@@ -33,15 +33,25 @@ const categoryColors = {
 };
 
 export default function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const getCategoryName = (category: string) => {
     const categoryKey = `taskCard.category.${category}`;
     return t(categoryKey, category); // fallback to category if translation not found
   };
+
+  const getDateLocale = () => {
+    switch (i18n.language) {
+      case 'bg': return bg;
+      case 'ru': return ru;
+      case 'en': 
+      default: return enUS;
+    }
+  };
+
   const timeAgo = formatDistanceToNow(new Date(task.createdAt), {
     addSuffix: true,
-    locale: bg,
+    locale: getDateLocale(),
   });
 
   const categoryColor = categoryColors[task.category as keyof typeof categoryColors] || categoryColors.other;
