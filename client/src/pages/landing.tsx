@@ -123,26 +123,26 @@ export default function Landing() {
   const trustFeatures = [
     {
       icon: Shield,
-      title: "Верифицирани специалисти",
-      description: "Всички професионалисти преминават проверка на документи и препоръки",
+      title: t('landing.trustIndicators.verified'),
+      description: t('landing.trustIndicators.verifiedDescription'),
       color: "bg-secondary-100 text-secondary-600"
     },
     {
       icon: Star,
-      title: "Система за оценки", 
-      description: "Двустранни отзиви и рейтинги за прозрачност и доверие",
+      title: t('landing.trustIndicators.ratingSystem'), 
+      description: t('landing.trustIndicators.ratingSystemDescription'),
       color: "bg-blue-100 text-blue-600"
     },
     {
       icon: Lock,
-      title: "Защита на данни",
-      description: "GDPR съответствие и сигурно съхранение на лична информация",
+      title: t('landing.trustIndicators.dataProtection'),
+      description: t('landing.trustIndicators.dataProtectionDescription'),
       color: "bg-green-100 text-green-600"
     },
     {
       icon: Headphones,
-      title: "24/7 Поддръжка",
-      description: "Винаги на разположение за помощ и решаване на проблеми", 
+      title: t('landing.trustIndicators.support'),
+      description: t('landing.trustIndicators.supportDescription'), 
       color: "bg-orange-100 text-orange-600"
     },
   ];
@@ -150,36 +150,36 @@ export default function Landing() {
   const customerSteps = [
     {
       step: "1",
-      title: "Публикувайте задача",
-      description: "Опишете задачата, качете снимки, определете бюджет и срок за изпълнение"
+      title: t('landing.howItWorks.customers.step1.title'),
+      description: t('landing.howItWorks.customers.step1.description')
     },
     {
       step: "2", 
-      title: "Получете предложения",
-      description: "Проверени специалисти ще кандидатстват с цени и срокове за вашата задача"
+      title: t('landing.howItWorks.customers.step2.title'),
+      description: t('landing.howItWorks.customers.step2.description')
     },
     {
       step: "3",
-      title: "Изберете и оценете", 
-      description: "Свържете се директно със специалиста и оценете работата след завършване"
+      title: t('landing.howItWorks.customers.step3.title'), 
+      description: t('landing.howItWorks.customers.step3.description')
     },
   ];
 
   const professionalSteps = [
     {
       step: "1",
-      title: "Регистрирайте се",
-      description: "Създайте профил, верифицирайте се и изберете категории услуги"
+      title: t('landing.howItWorks.professionals.step1.title'),
+      description: t('landing.howItWorks.professionals.step1.description')
     },
     {
       step: "2",
-      title: "Кандидатствайте", 
-      description: "Разгледайте задачи, изпратете предложения с цени и срокове"
+      title: t('landing.howItWorks.professionals.step2.title'), 
+      description: t('landing.howItWorks.professionals.step2.description')
     },
     {
       step: "3",
-      title: "Работете и печелете",
-      description: "Изпълнете задачата качествено и изградете своята репутация"
+      title: t('landing.howItWorks.professionals.step3.title'),
+      description: t('landing.howItWorks.professionals.step3.description')
     },
   ];
 
