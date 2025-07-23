@@ -53,6 +53,8 @@ const resources = {
       "landing.trustIndicators.securePayments": "Secure Payments", 
       "landing.trustIndicators.support": "24/7 Support",
       "landing.trustIndicators.supportDescription": "Always available to help and resolve issues",
+      "landing.trustSection.title": "Security and Trust",
+      "landing.trustSection.subtitle": "The platform provides a secure environment for all users",
       
       "landing.stats.averageRating": "average rating",
       "landing.stats.completedTasks": "completed tasks",
@@ -266,6 +268,8 @@ const resources = {
       "landing.trustIndicators.securePayments": "Сигурни плащания",
       "landing.trustIndicators.support": "24/7 поддръжка",
       "landing.trustIndicators.supportDescription": "Винаги на разположение за помощ и решаване на проблеми",
+      "landing.trustSection.title": "Сигурност и доверие",
+      "landing.trustSection.subtitle": "Платформата осигурява безопасна среда за всички потребители",
       
       "landing.stats.averageRating": "средна оценка",
       "landing.stats.completedTasks": "завършени задачи",
@@ -479,6 +483,8 @@ const resources = {
       "landing.trustIndicators.securePayments": "Безопасные платежи",
       "landing.trustIndicators.support": "Поддержка 24/7",
       "landing.trustIndicators.supportDescription": "Всегда доступны для помощи и решения проблем",
+      "landing.trustSection.title": "Безопасность и доверие", 
+      "landing.trustSection.subtitle": "Платформа обеспечивает безопасную среду для всех пользователей",
       
       "landing.stats.averageRating": "средний рейтинг",
       "landing.stats.completedTasks": "выполненных задач", 

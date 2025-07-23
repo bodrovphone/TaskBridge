@@ -400,9 +400,9 @@ export default function Landing() {
       <section className="py-16 bg-primary-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Сигурност и доверие</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.trustSection.title')}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Платформата осигурява безопасна среда за всички потребители
+              {t('landing.trustSection.subtitle')}
             </p>
           </div>
 
