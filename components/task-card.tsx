@@ -49,6 +49,18 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     }
   };
 
+  const getCategoryImage = (category: string) => {
+    const imageMap = {
+      'home_repair': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400&h=300&fit=crop&crop=center', // Tools and repair work
+      'delivery_transport': 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop&crop=center', // Delivery person with packages
+      'personal_care': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop&crop=center', // Beauty/care services
+      'personal_assistant': 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center', // Office/administrative work
+      'learning_fitness': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center', // Fitness training
+      'other': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop&crop=center' // General services/business
+    };
+    return imageMap[category as keyof typeof imageMap] || imageMap.other;
+  };
+
   const timeAgo = formatDistanceToNow(new Date(task.createdAt), {
     addSuffix: true,
     locale: getDateLocale(),
@@ -84,15 +96,14 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
 
   return (
     <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden">
-      {task.imageUrl && (
-        <div className="w-full h-48 bg-gray-200 overflow-hidden">
-          <img 
-            src={task.imageUrl} 
-            alt={task.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      )}
+      <div className="w-full h-48 bg-gray-200 overflow-hidden">
+        <img 
+          src={task.imageUrl || getCategoryImage(task.category)} 
+          alt={task.title}
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+      </div>
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-4">
           <Badge className={categoryColor}>
