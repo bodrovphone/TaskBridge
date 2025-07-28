@@ -49,12 +49,27 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     }
   };
 
-  const getCategoryImage = (category: string) => {
+  const getCategoryImage = (category: string, taskId?: string) => {
+    // Specific images for mock tasks based on task ID and content
+    if (taskId === "1") {
+      // Dog walking task
+      return 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop&crop=center'; // Person walking dog
+    }
+    if (taskId === "2") {
+      // Balcony repair task
+      return 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=300&fit=crop&crop=center'; // Home construction/repair
+    }
+    if (taskId === "3") {
+      // Apartment cleaning task
+      return 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center'; // Professional cleaning
+    }
+    
+    // Default category-based images
     const imageMap = {
       'home_repair': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400&h=300&fit=crop&crop=center', // Tools and repair work
       'delivery_transport': 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop&crop=center', // Delivery person with packages
-      'personal_care': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop&crop=center', // Beauty/care services
-      'personal_assistant': 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center', // Office/administrative work
+      'personal_care': 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop&crop=center', // Dog walking/pet care
+      'personal_assistant': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center', // Cleaning services
       'learning_fitness': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center', // Fitness training
       'other': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop&crop=center' // General services/business
     };
@@ -98,7 +113,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden">
       <div className="w-full h-48 bg-gray-200 overflow-hidden">
         <img 
-          src={task.imageUrl || getCategoryImage(task.category)} 
+          src={task.imageUrl || getCategoryImage(task.category, task.id)} 
           alt={task.title}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           loading="lazy"
