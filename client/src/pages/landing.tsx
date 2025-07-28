@@ -451,56 +451,172 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* For Professionals CTA */}
-      <section id="for-professionals" className="py-16 bg-white">
+      {/* Testimonials */}
+      <section id="testimonials" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-8 lg:p-12 text-white">
-            <div className="text-center space-y-8">
-              <div className="space-y-4">
-                <h2 className="text-3xl lg:text-4xl font-bold">
-                  {t('landing.forProfessionals.title')}
-                </h2>
-                <p className="text-xl text-primary-100 leading-relaxed max-w-3xl mx-auto">
-                  {t('landing.forProfessionals.description')}
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                <div className="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
-                  <div className="space-y-4 text-center">
-                    <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto">
-                      <Plus className="text-white" size={32} />
-                    </div>
-                    <h3 className="text-2xl font-bold">{t('landing.forProfessionals.postTask')}</h3>
-                    <p className="text-primary-100">{t('landing.forProfessionals.postTaskDesc')}</p>
-                    <Button 
-                      size="lg"
-                      className="bg-white text-primary-600 hover:bg-gray-50 px-8 py-3 h-auto w-full"
-                      asChild
-                    >
-                      <a href="/create-task">{t('landing.forProfessionals.postTask')}</a>
-                    </Button>
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">{t('landing.testimonials.title')}</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              {t('landing.testimonials.subtitle')}
+            </p>
+          </div>
+
+          {/* Customer Testimonials */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.customers.title')}</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    alt="Happy customer"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer1.name')}</div>
+                    <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer1.location')}</div>
                   </div>
                 </div>
-                
-                <div className="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
-                  <div className="space-y-4 text-center">
-                    <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto">
-                      <UserCheck className="text-white" size={32} />
-                    </div>
-                    <h3 className="text-2xl font-bold">{t('landing.forProfessionals.becomePro')}</h3>
-                    <p className="text-primary-100">{t('landing.forProfessionals.becomeProDesc')}</p>
-                    <Button 
-                      size="lg"
-                      variant="outline"
-                      className="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-3 h-auto w-full"
-                      asChild
-                    >
-                      <a href="/api/login">{t('landing.forProfessionals.becomePro')}</a>
-                    </Button>
-                  </div>
+                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.customers.customer1.quote')}"</p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
                 </div>
               </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    alt="Happy customer"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer2.name')}</div>
+                    <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer2.location')}</div>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.customers.customer2.quote')}"</p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    alt="Happy customer"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer3.name')}</div>
+                    <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer3.location')}</div>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.customers.customer3.quote')}"</p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Professional Testimonials */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.professionals.title')}</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    alt="Happy professional"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro1.name')}</div>
+                    <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro1.profession')}</div>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.professionals.pro1.quote')}"</p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    alt="Happy professional"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro2.name')}</div>
+                    <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro2.profession')}</div>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.professionals.pro2.quote')}"</p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    alt="Happy professional"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro3.name')}</div>
+                    <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro3.profession')}</div>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.professionals.pro3.quote')}"</p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-8 lg:p-12 text-white text-center">
+            <h3 className="text-3xl lg:text-4xl font-bold mb-4">
+              {t('landing.forProfessionals.title')}
+            </h3>
+            <p className="text-xl text-primary-100 mb-8 max-w-3xl mx-auto">
+              {t('landing.forProfessionals.description')}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg"
+                className="bg-white text-primary-600 hover:bg-gray-50 px-8 py-3"
+                asChild
+              >
+                <a href="/create-task">{t('landing.forProfessionals.postTask')}</a>
+              </Button>
+              <Button 
+                size="lg"
+                variant="outline"
+                className="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-3"
+                asChild
+              >
+                <a href="/api/login">{t('landing.forProfessionals.becomePro')}</a>
+              </Button>
             </div>
           </div>
         </div>
