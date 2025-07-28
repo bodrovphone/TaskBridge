@@ -465,7 +465,7 @@ export default function Landing() {
           <div className="mb-16">
             <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.customers.title')}</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <img 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -477,18 +477,18 @@ export default function Landing() {
                     <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer1.location')}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.customers.customer1.quote')}"</p>
-                <div className="flex text-yellow-400">
+                <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer1.quote')}"</p>
+                <div className="flex text-yellow-400 mt-auto">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={16} fill="currentColor" />
                   ))}
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <img 
-                    src="https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy customer"
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
@@ -497,15 +497,16 @@ export default function Landing() {
                     <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer2.location')}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.customers.customer2.quote')}"</p>
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
+                <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer2.quote')}"</p>
+                <div className="flex text-yellow-400 mt-auto">
+                  {[...Array(4)].map((_, i) => (
                     <Star key={i} size={16} fill="currentColor" />
                   ))}
+                  <Star size={16} fill="currentColor" className="opacity-50" />
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <img 
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -517,11 +518,12 @@ export default function Landing() {
                     <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer3.location')}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.customers.customer3.quote')}"</p>
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
+                <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer3.quote')}"</p>
+                <div className="flex text-yellow-400 mt-auto">
+                  {[...Array(4)].map((_, i) => (
                     <Star key={i} size={16} fill="currentColor" />
                   ))}
+                  <Star size={16} fill="currentColor" className="opacity-75" />
                 </div>
               </div>
             </div>
@@ -531,7 +533,7 @@ export default function Landing() {
           <div className="mb-16">
             <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.professionals.title')}</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <img 
                     src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -543,15 +545,16 @@ export default function Landing() {
                     <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro1.profession')}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.professionals.pro1.quote')}"</p>
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
+                <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro1.quote')}"</p>
+                <div className="flex text-yellow-400 mt-auto">
+                  {[...Array(4)].map((_, i) => (
                     <Star key={i} size={16} fill="currentColor" />
                   ))}
+                  <Star size={16} fill="currentColor" className="opacity-60" />
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <img 
                     src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -563,15 +566,15 @@ export default function Landing() {
                     <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro2.profession')}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.professionals.pro2.quote')}"</p>
-                <div className="flex text-yellow-400">
+                <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro2.quote')}"</p>
+                <div className="flex text-yellow-400 mt-auto">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={16} fill="currentColor" />
                   ))}
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <img 
                     src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -583,11 +586,12 @@ export default function Landing() {
                     <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro3.profession')}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic mb-4">"{t('landing.testimonials.professionals.pro3.quote')}"</p>
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
+                <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro3.quote')}"</p>
+                <div className="flex text-yellow-400 mt-auto">
+                  {[...Array(4)].map((_, i) => (
                     <Star key={i} size={16} fill="currentColor" />
                   ))}
+                  <Star size={16} fill="currentColor" className="opacity-40" />
                 </div>
               </div>
             </div>
