@@ -56,8 +56,9 @@ const resources = {
       "landing.trustSection.title": "Security and Trust", 
       "landing.trustSection.subtitle": "The platform provides a secure environment for all users",
       "landing.trustStats.securityUptime": "Security Uptime",
-      "landing.trustStats.encryption": "SSL Encryption",
+      "landing.trustStats.encryption": "SSL Encryption", 
       "landing.trustStats.compliance": "Compliant",
+      "landing.trustStats.avgRating": "Average Rating",
       
       "landing.stats.averageRating": "average rating",
       "landing.stats.completedTasks": "completed tasks",
@@ -293,6 +294,7 @@ const resources = {
       "landing.trustStats.securityUptime": "Сигурност",
       "landing.trustStats.encryption": "SSL Шифроване", 
       "landing.trustStats.compliance": "Съответствие",
+      "landing.trustStats.avgRating": "Средна оценка",
       
       "landing.stats.averageRating": "средна оценка",
       "landing.stats.completedTasks": "завършени задачи",
@@ -528,6 +530,7 @@ const resources = {
       "landing.trustStats.securityUptime": "Безопасность",  
       "landing.trustStats.encryption": "SSL Шифрование",
       "landing.trustStats.compliance": "Соответствие",
+      "landing.trustStats.avgRating": "Средний рейтинг",
       
       "landing.stats.averageRating": "средний рейтинг",
       "landing.stats.completedTasks": "выполненных задач", 

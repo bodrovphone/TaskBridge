@@ -125,25 +125,33 @@ export default function Landing() {
       icon: Shield,
       title: t('landing.trustIndicators.verified'),
       description: t('landing.trustIndicators.verifiedDescription'),
-      color: "bg-secondary-100 text-secondary-600"
+      color: "bg-secondary-100 text-secondary-600",
+      stat: "99.9%",
+      statLabel: t('landing.trustStats.securityUptime')
     },
     {
       icon: Star,
       title: t('landing.trustIndicators.ratingSystem'),
       description: t('landing.trustIndicators.ratingSystemDescription'),
-      color: "bg-blue-100 text-blue-600"
+      color: "bg-blue-100 text-blue-600",
+      stat: "4.8/5",
+      statLabel: t('landing.trustStats.avgRating')
     },
     {
       icon: Lock,
       title: t('landing.trustIndicators.dataProtection'),
       description: t('landing.trustIndicators.dataProtectionDescription'),
-      color: "bg-green-100 text-green-600"
+      color: "bg-green-100 text-green-600",
+      stat: "256-bit",
+      statLabel: t('landing.trustStats.encryption')
     },
     {
       icon: FileText,
       title: t('landing.trustIndicators.contracts'),
       description: t('landing.trustIndicators.contractsDescription'), 
-      color: "bg-orange-100 text-orange-600"
+      color: "bg-orange-100 text-orange-600",
+      stat: "GDPR",
+      statLabel: t('landing.trustStats.compliance')
     },
   ];
 
@@ -418,13 +426,19 @@ export default function Landing() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {trustFeatures.map((feature, index) => (
-              <div key={feature.title} className="group">
-                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 backdrop-blur-sm">
+              <div key={feature.title} className="group relative">
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 backdrop-blur-sm h-full flex flex-col">
                   <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 ${feature.color} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <feature.icon size={36} />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{feature.title}</h3>
-                  <p className="text-gray-600 text-center leading-relaxed">{feature.description}</p>
+                  <p className="text-gray-600 text-center leading-relaxed flex-grow mb-6">{feature.description}</p>
+                  
+                  {/* Individual stat for each card */}
+                  <div className="text-center mt-auto">
+                    <div className="text-2xl font-bold text-primary-600">{feature.stat}</div>
+                    <div className="text-sm text-gray-500">{feature.statLabel}</div>
+                  </div>
                   
                   {/* Feature number badge */}
                   <div className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center shadow-lg">
@@ -433,22 +447,6 @@ export default function Landing() {
                 </div>
               </div>
             ))}
-          </div>
-          
-          {/* Trust stats */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600">99.9%</div>
-              <div className="text-gray-600">{t('landing.trustStats.securityUptime')}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-secondary-600">256-bit</div>
-              <div className="text-gray-600">{t('landing.trustStats.encryption')}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">GDPR</div>
-              <div className="text-gray-600">{t('landing.trustStats.compliance')}</div>
-            </div>
           </div>
         </div>
       </section>
