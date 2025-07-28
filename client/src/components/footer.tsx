@@ -99,8 +99,8 @@ export default function Footer() {
               <p className="text-gray-400 mb-3">{t('footer.contact.subtitle')}</p>
               <div className="flex items-center space-x-3">
                 <i className="fas fa-envelope text-gray-400"></i>
-                <a href="mailto:alex@obodsoft.com" className="text-gray-400 hover:text-white transition-colors">
-                  alex@obodsoft.com
+                <a href="mailto:support@trudify.com" className="text-gray-400 hover:text-white transition-colors">
+                  support@trudify.com
                 </a>
               </div>
             </div>

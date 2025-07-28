@@ -137,6 +137,7 @@ Changelog:
 - July 20, 2025. Added multi-language localization (EN, BG, RU) and removed region-specific references for gradual scaling
 - July 28, 2025. Updated to community-driven support model: replaced "24/7 Support" with "50+ Contract Templates" and "Community Reviews" to align with non-profit organization structure
 - July 28, 2025. Removed all payment and monetization references: replaced "Secure Payments" with "Free to Use", updated CTA messaging to emphasize community-driven approach, changed "earn money" to "help others" across all languages
+- July 28, 2025. Updated contact information: replaced alex@obodsoft.com with support@trudify.com across all footer components
 - June 23, 2025. Initial setup
 
 ## User Preferences
