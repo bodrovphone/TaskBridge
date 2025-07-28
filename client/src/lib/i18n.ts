@@ -171,6 +171,17 @@ const resources = {
       "landing.forProfessionals.becomePro": "Become a Professional", 
       "landing.forProfessionals.becomeProDesc": "Offer your services and earn money",
       
+      // Final CTA Section
+      "landing.cta.title": "Ready to Transform Your Tasks?",
+      "landing.cta.subtitle": "Join Bulgaria's most trusted platform connecting customers with verified local professionals for all your needs",
+      "landing.cta.postTask": "Post Your Task",
+      "landing.cta.joinProfessionals": "Join as Professional",
+      "landing.cta.freeToJoin": "Free to join • No hidden fees • Secure payments",
+      "landing.cta.stats.completedTasks": "Completed Tasks",
+      "landing.cta.stats.activeSpecialists": "Active Specialists",
+      "landing.cta.stats.averageRating": "Average Rating",
+      "landing.cta.stats.support": "Support",
+      
       // Footer
       "footer.contact.title": "Got Questions?",
       "footer.contact.subtitle": "Please contact us",
@@ -429,6 +440,17 @@ const resources = {
       "landing.forProfessionals.postTaskDesc": "Трябва ви нещо? Намерете подходящия професионалист",
       "landing.forProfessionals.becomePro": "Станете професионалист", 
       "landing.forProfessionals.becomeProDesc": "Предлагайте своите услуги и печелете пари",
+      
+      // Final CTA Section
+      "landing.cta.title": "Готови да трансформирате задачите си?",
+      "landing.cta.subtitle": "Присъединете се към най-доверената платформа в България, свързваща клиенти с верифицирани местни специалисти за всички ваши нужди",
+      "landing.cta.postTask": "Публикувайте задача",
+      "landing.cta.joinProfessionals": "Присъединете се като специалист",
+      "landing.cta.freeToJoin": "Безплатна регистрация • Без скрити такси • Сигурни плащания",
+      "landing.cta.stats.completedTasks": "Завършени задачи",
+      "landing.cta.stats.activeSpecialists": "Активни специалисти",
+      "landing.cta.stats.averageRating": "Средна оценка",
+      "landing.cta.stats.support": "Поддръжка",
       
       // Footer
       "footer.contact.title": "Имате въпроси?",
