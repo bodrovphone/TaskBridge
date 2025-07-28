@@ -135,6 +135,7 @@ Changelog:
 - January 21, 2025. Major architectural change: Converted entire application from React/Express to Next.js 15 with App Router
 - January 21, 2025. Renamed application from TaskBridge to Trudify across all files and components
 - July 20, 2025. Added multi-language localization (EN, BG, RU) and removed region-specific references for gradual scaling
+- July 28, 2025. Updated to community-driven support model: replaced "24/7 Support" with "50+ Contract Templates" and "Community Reviews" to align with non-profit organization structure
 - June 23, 2025. Initial setup
 
 ## User Preferences

@@ -249,7 +249,7 @@ export default function Landing() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-secondary-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-700">{t('landing.trustIndicators.support')}</span>
+                  <span className="text-sm font-medium text-gray-700">{t('landing.trustIndicators.communityReviews')}</span>
                 </div>
               </div>
             </div>
