@@ -610,7 +610,7 @@ export default function Landing() {
             
             <div className="relative text-center">
               <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-2xl mb-6 shadow-lg">
-                <Plus className="text-white" size={32} />
+                <Handshake className="text-white" size={32} />
               </div>
               
               <h3 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight text-white">
