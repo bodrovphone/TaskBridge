@@ -712,8 +712,8 @@ export default function Landing() {
                   <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.averageRating')}</div>
                 </div>
                 <div className="text-center bg-gray-800 rounded-xl p-4 border border-gray-700">
-                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-green-400">24/7</div>
-                  <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.support')}</div>
+                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-blue-400">50+</div>
+                  <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.contractTemplates')}</div>
                 </div>
               </div>
               

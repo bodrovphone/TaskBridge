@@ -180,7 +180,7 @@ const resources = {
       "landing.cta.stats.completedTasks": "Completed Tasks",
       "landing.cta.stats.activeSpecialists": "Active Specialists",
       "landing.cta.stats.averageRating": "Average Rating",
-      "landing.cta.stats.support": "Support",
+      "landing.cta.stats.contractTemplates": "Contract Templates",
       
       // Footer
       "footer.contact.title": "Got Questions?",
@@ -450,7 +450,7 @@ const resources = {
       "landing.cta.stats.completedTasks": "Завършени задачи",
       "landing.cta.stats.activeSpecialists": "Активни специалисти",
       "landing.cta.stats.averageRating": "Средна оценка",
-      "landing.cta.stats.support": "Поддръжка",
+      "landing.cta.stats.contractTemplates": "Шаблони за договори",
       
       // Footer
       "footer.contact.title": "Имате въпроси?",
