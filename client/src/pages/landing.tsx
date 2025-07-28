@@ -13,7 +13,7 @@ import {
   Shield, 
   Star, 
   Lock, 
-  Headphones,
+  FileText,
   CheckCircle,
   Plus,
   Search,
@@ -140,9 +140,9 @@ export default function Landing() {
       color: "bg-green-100 text-green-600"
     },
     {
-      icon: Headphones,
-      title: t('landing.trustIndicators.support'),
-      description: t('landing.trustIndicators.supportDescription'), 
+      icon: FileText,
+      title: t('landing.trustIndicators.contracts'),
+      description: t('landing.trustIndicators.contractsDescription'), 
       color: "bg-orange-100 text-orange-600"
     },
   ];
@@ -397,25 +397,58 @@ export default function Landing() {
       </section>
 
       {/* Trust & Verification */}
-      <section className="py-16 bg-primary-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.trustSection.title')}</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+      <section className="py-20 bg-gradient-to-br from-primary-50 via-white to-secondary-50 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-primary-200 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-secondary-200 rounded-full blur-xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center space-y-4 mb-16">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
+              <Shield size={32} className="text-primary-600" />
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{t('landing.trustSection.title')}</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               {t('landing.trustSection.subtitle')}
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {trustFeatures.map((feature) => (
-              <div key={feature.title} className="text-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${feature.color}`}>
-                  <feature.icon size={32} />
+            {trustFeatures.map((feature, index) => (
+              <div key={feature.title} className="group relative">
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 backdrop-blur-sm">
+                  <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 ${feature.color} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <feature.icon size={36} />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{feature.title}</h3>
+                  <p className="text-gray-600 text-center leading-relaxed">{feature.description}</p>
+                  
+                  {/* Feature number badge */}
+                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-white text-sm font-bold">{index + 1}</span>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
               </div>
             ))}
+          </div>
+          
+          {/* Trust stats */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary-600">99.9%</div>
+              <div className="text-gray-600">{t('landing.trustStats.securityUptime')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-secondary-600">256-bit</div>
+              <div className="text-gray-600">{t('landing.trustStats.encryption')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-600">GDPR</div>
+              <div className="text-gray-600">{t('landing.trustStats.compliance')}</div>
+            </div>
           </div>
         </div>
       </section>
