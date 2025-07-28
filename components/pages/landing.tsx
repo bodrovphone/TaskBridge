@@ -601,50 +601,49 @@ export default function Landing() {
           </div>
 
           {/* Final CTA Section */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 p-8 lg:p-16">
-            {/* Background pattern - reduced opacity */}
+          <div className="relative overflow-hidden rounded-3xl bg-gray-900 p-8 lg:p-16 border border-gray-700">
+            {/* Subtle background pattern */}
             <div className="absolute inset-0 opacity-5">
-              <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl"></div>
-              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-white rounded-full blur-2xl"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white rounded-full blur-3xl opacity-30"></div>
+              <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary-500 rounded-full blur-3xl"></div>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-secondary-500 rounded-full blur-2xl"></div>
             </div>
             
             <div className="relative text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/15 backdrop-blur-sm rounded-2xl mb-6 border border-white/20">
-                <Plus className="text-white drop-shadow-sm" size={32} />
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-2xl mb-6 shadow-lg">
+                <Plus className="text-white" size={32} />
               </div>
               
-              <h3 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight text-white drop-shadow-sm">
+              <h3 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight text-white">
                 {t('landing.cta.title')}
               </h3>
-              <p className="text-xl lg:text-2xl text-white/95 mb-8 max-w-4xl mx-auto leading-relaxed drop-shadow-sm">
+              <p className="text-xl lg:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed">
                 {t('landing.cta.subtitle')}
               </p>
               
               {/* Stats Row */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 max-w-4xl mx-auto">
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-white drop-shadow-sm">2,500+</div>
-                  <div className="text-white/90 text-sm lg:text-base font-medium">{t('landing.cta.stats.completedTasks')}</div>
+                <div className="text-center bg-gray-800 rounded-xl p-4 border border-gray-700">
+                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-white">2,500+</div>
+                  <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.completedTasks')}</div>
                 </div>
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-white drop-shadow-sm">850+</div>
-                  <div className="text-white/90 text-sm lg:text-base font-medium">{t('landing.cta.stats.activeSpecialists')}</div>
+                <div className="text-center bg-gray-800 rounded-xl p-4 border border-gray-700">
+                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-white">850+</div>
+                  <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.activeSpecialists')}</div>
                 </div>
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-white drop-shadow-sm">4.8★</div>
-                  <div className="text-white/90 text-sm lg:text-base font-medium">{t('landing.cta.stats.averageRating')}</div>
+                <div className="text-center bg-gray-800 rounded-xl p-4 border border-gray-700">
+                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-yellow-400">4.8★</div>
+                  <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.averageRating')}</div>
                 </div>
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-white drop-shadow-sm">24/7</div>
-                  <div className="text-white/90 text-sm lg:text-base font-medium">{t('landing.cta.stats.support')}</div>
+                <div className="text-center bg-gray-800 rounded-xl p-4 border border-gray-700">
+                  <div className="text-3xl lg:text-4xl font-bold mb-2 text-green-400">24/7</div>
+                  <div className="text-gray-300 text-sm lg:text-base font-medium">{t('landing.cta.stats.support')}</div>
                 </div>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Button 
                   size="lg"
-                  className="bg-white text-primary-700 hover:bg-gray-50 hover:scale-105 transition-all duration-200 px-8 py-4 text-lg font-semibold shadow-xl border-2 border-white"
+                  className="bg-primary-600 text-white hover:bg-primary-700 hover:scale-105 transition-all duration-200 px-8 py-4 text-lg font-semibold shadow-xl"
                   asChild
                 >
                   <a href="/create-task" className="flex items-center gap-2">
@@ -655,7 +654,7 @@ export default function Landing() {
                 <Button 
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-primary-700 hover:scale-105 transition-all duration-200 px-8 py-4 text-lg font-semibold"
+                  className="border-2 border-gray-600 text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-white hover:scale-105 transition-all duration-200 px-8 py-4 text-lg font-semibold"
                   asChild
                 >
                   <a href="/api/login" className="flex items-center gap-2">
@@ -665,7 +664,7 @@ export default function Landing() {
                 </Button>
               </div>
               
-              <p className="text-white/85 text-sm mt-6 font-medium drop-shadow-sm">
+              <p className="text-gray-400 text-sm mt-6 font-medium">
                 {t('landing.cta.freeToJoin')}
               </p>
             </div>
