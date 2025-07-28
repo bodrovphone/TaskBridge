@@ -110,8 +110,8 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden">
-      <div className="w-full h-48 bg-gray-200 overflow-hidden">
+    <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden h-full flex flex-col">
+      <div className="w-full h-48 bg-gray-200 overflow-hidden flex-shrink-0">
         <img 
           src={task.imageUrl || getCategoryImage(task.category, task.id)} 
           alt={task.title}
@@ -119,7 +119,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
           loading="lazy"
         />
       </div>
-      <CardContent className="p-6">
+      <CardContent className="p-6 flex-grow flex flex-col">
         <div className="flex justify-between items-start mb-4">
           <Badge className={categoryColor}>
             {categoryName}
@@ -128,16 +128,16 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
         </div>
         
         <Link href={`/tasks/${task.id}`}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 line-clamp-2">
             {task.title}
           </h3>
         </Link>
         
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
           {task.description}
         </p>
 
-        <div className="space-y-2 mb-4">
+        <div className="space-y-2 mb-4 mt-auto">
           <div className="flex items-center text-sm text-gray-600">
             <MapPin size={16} className="mr-2" />
             <span>{task.city}{task.neighborhood && `, ${task.neighborhood}`}</span>
@@ -152,7 +152,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
           </div>
         </div>
 
-        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+        <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-auto">
           <div className="flex items-center space-x-2">
             <Avatar className="w-6 h-6">
               <AvatarImage src={task.customer?.profileImageUrl || ""} />

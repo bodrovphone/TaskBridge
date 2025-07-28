@@ -74,6 +74,22 @@
 }
 
 @layer utilities {
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@layer utilities {
   .text-primary-50 { color: hsl(212, 100%, 95%); }
   .text-primary-100 { color: hsl(212, 100%, 87%); }
   .text-primary-500 { color: hsl(207, 90%, 54%); }
