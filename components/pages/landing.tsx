@@ -384,14 +384,17 @@ export default function Landing() {
           </div>
 
           {featuredTasks.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredTasks.slice(0, 3).map((task: any) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
-                  showApplyButton={false}
-                />
-              ))}
+            <div className="overflow-x-auto">
+              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                {featuredTasks.map((task: any) => (
+                  <div key={task.id} className="flex-shrink-0 w-80">
+                    <TaskCard 
+                      task={task} 
+                      showApplyButton={false}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="text-center py-12">

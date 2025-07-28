@@ -71,7 +71,7 @@ export default function Landing() {
       category: "personal_assistant",
       budgetMin: 120,
       budgetMax: 180,
-      budgetType: "fixed",
+      budgetType: "fixed",  
       city: "Варна",
       neighborhood: "Морска градина",
       deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), 
@@ -80,6 +80,82 @@ export default function Landing() {
       customer: {
         firstName: "Анна",
         lastName: "Стоянова",
+        averageRating: "4.9"
+      }
+    },
+    {
+      id: "4",
+      title: t('mockTask.webDesign.title'),
+      description: t('mockTask.webDesign.description'),
+      category: "delivery_transport",
+      budgetMin: 300,
+      budgetMax: 600,
+      budgetType: "negotiable",
+      city: "Бургас",
+      neighborhood: "Център",
+      deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+
+      customer: {
+        firstName: "Петър",
+        lastName: "Николов",
+        averageRating: "4.7"
+      }
+    },
+    {
+      id: "5",
+      title: t('mockTask.gardenWork.title'),
+      description: t('mockTask.gardenWork.description'),
+      category: "home_repair",
+      budgetMin: 50,
+      budgetMax: 100,
+      budgetType: "fixed",
+      city: "Стара Загора",
+      neighborhood: "Самара",
+      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+
+      customer: {
+        firstName: "Елена",
+        lastName: "Христова",
+        averageRating: "4.6"
+      }
+    },
+    {
+      id: "6",
+      title: t('mockTask.tutoring.title'),
+      description: t('mockTask.tutoring.description'),
+      category: "personal_care",
+      budgetMin: 20,
+      budgetMax: 35,
+      budgetType: "fixed",
+      city: "Русе",
+      neighborhood: "Център",
+      deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+
+      customer: {
+        firstName: "Димитър",
+        lastName: "Тодоров",
+        averageRating: "4.8"
+      }
+    },
+    {
+      id: "7",
+      title: t('mockTask.eventPlanning.title'),
+      description: t('mockTask.eventPlanning.description'),
+      category: "personal_assistant",
+      budgetMin: 500,
+      budgetMax: 1000,
+      budgetType: "negotiable",
+      city: "София",
+      neighborhood: "Витоша",
+      deadline: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+
+      customer: {
+        firstName: "Красимира",
+        lastName: "Василева",
         averageRating: "4.9"
       }
     }
@@ -384,14 +460,17 @@ export default function Landing() {
           </div>
 
           {featuredTasks.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredTasks.slice(0, 3).map((task: any) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task} 
-                  showApplyButton={false}
-                />
-              ))}
+            <div className="overflow-x-auto">
+              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                {featuredTasks.map((task: any) => (
+                  <div key={task.id} className="flex-shrink-0 w-80">
+                    <TaskCard 
+                      task={task} 
+                      showApplyButton={false}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="text-center py-12">

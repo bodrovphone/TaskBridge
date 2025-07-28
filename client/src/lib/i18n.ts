@@ -120,6 +120,14 @@ const resources = {
       "mockTask.balconyRepair.description": "The balcony needs repair. The tiles are broken in several places and need to be replaced. Size is about 6 square meters.",
       "mockTask.apartmentCleaning.title": "Apartment cleaning after renovation",
       "mockTask.apartmentCleaning.description": "After renovation completion, the apartment needs deep cleaning. 3 rooms, kitchen, bathroom. About 80 sq.m.",
+      "mockTask.webDesign.title": "Website design for small business",
+      "mockTask.webDesign.description": "Need a modern responsive website for my restaurant. Should include menu, contact info, and online reservation system.",
+      "mockTask.gardenWork.title": "Garden maintenance and landscaping",
+      "mockTask.gardenWork.description": "Looking for help with garden cleanup, hedge trimming, and planting new flowers. Medium-sized backyard.",
+      "mockTask.tutoring.title": "Math tutoring for high school student",
+      "mockTask.tutoring.description": "Need experienced math tutor for my daughter preparing for university entrance exams. 2-3 sessions per week.",
+      "mockTask.eventPlanning.title": "Birthday party event planning",
+      "mockTask.eventPlanning.description": "Planning 30th birthday celebration for 40 guests. Need help with venue, catering, decorations, and coordination.",
 
       // Task Card Labels
       "taskCard.budget.from": "from",
@@ -638,6 +646,14 @@ const resources = {
       "mockTask.balconyRepair.description": "Балкон нуждается в ремонте. Плитка разбита в нескольких местах и требует замены. Размер около 6 квадратных метров.",
       "mockTask.apartmentCleaning.title": "Уборка квартиры после ремонта",
       "mockTask.apartmentCleaning.description": "После завершения ремонта квартира нуждается в глубокой уборке. 3 комнаты, кухня, ванная. Около 80 кв.м.",
+      "mockTask.webDesign.title": "Дизайн сайта для малого бизнеса",
+      "mockTask.webDesign.description": "Нужен современный адаптивный сайт для моего ресторана. Должен включать меню, контакты и систему онлайн-бронирования.",
+      "mockTask.gardenWork.title": "Уход за садом и ландшафтный дизайн",
+      "mockTask.gardenWork.description": "Нужна помощь с уборкой сада, обрезкой живой изгороди и посадкой новых цветов. Задний двор среднего размера.",
+      "mockTask.tutoring.title": "Репетиторство по математике для старшеклассника",
+      "mockTask.tutoring.description": "Нужен опытный репетитор по математике для моей дочери, готовящейся к вступительным экзаменам в университет. 2-3 занятия в неделю.",
+      "mockTask.eventPlanning.title": "Организация дня рождения",
+      "mockTask.eventPlanning.description": "Планирую празднование 30-летия на 40 гостей. Нужна помощь с местом проведения, кейтерингом, декором и координацией.",
 
       // Task Card Labels
       "taskCard.budget.from": "от",
