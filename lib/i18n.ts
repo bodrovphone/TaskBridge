@@ -186,12 +186,12 @@ const resources = {
       
       // Navigation
       "nav.home": "Начало",
-      "nav.browseTasks": "Разглеждане на задачи",
-      "nav.createTask": "Публикуване на задача",
+      "nav.browseTasks": "Задачи",
+      "nav.createTask": "Създай",
       "nav.profile": "Профил",
       "nav.howItWorks": "Как работи",
       "nav.categories": "Категории",
-      "nav.forProfessionals": "За специалисти",
+      "nav.forProfessionals": "Специалисти",
       
       // Landing Page
       "landing.hero.title": "Намерете доверени местни професионалисти",
@@ -341,12 +341,12 @@ const resources = {
       
       // Navigation
       "nav.home": "Главная",
-      "nav.browseTasks": "Обзор задач",
-      "nav.createTask": "Создать задачу",
+      "nav.browseTasks": "Задачи",
+      "nav.createTask": "Создать",
       "nav.profile": "Профиль",
-      "nav.howItWorks": "Как это работает",
+      "nav.howItWorks": "Как работает",
       "nav.categories": "Категории",
-      "nav.forProfessionals": "Для специалистов",
+      "nav.forProfessionals": "Специалисты",
       
       // Landing Page
       "landing.hero.title": "Найдите проверенных местных специалистов",
