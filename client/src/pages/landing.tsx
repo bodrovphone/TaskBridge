@@ -412,40 +412,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Popular Categories */}
-      <section id="categories" className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.categories.title')}</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {t('landing.categories.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories.map((category) => (
-              <CategoryCard
-                key={category.category}
-                title={category.title}
-                description={category.description}
-                count={category.count}
-                icon={category.icon}
-                color={category.color}
-                onClick={() => handleCategoryClick(category.category)}
-              />
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Button variant="ghost" className="text-primary-600 hover:text-primary-700 font-semibold text-lg">
-              {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Featured Tasks */}
-      <section id="browse-tasks" className="py-16 bg-white">
+      <section id="browse-tasks" className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
             <div>
@@ -481,6 +449,38 @@ export default function Landing() {
               </Button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Popular Categories */}
+      <section id="categories" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-4 mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.categories.title')}</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              {t('landing.categories.subtitle')}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((category) => (
+              <CategoryCard
+                key={category.category}
+                title={category.title}
+                description={category.description}
+                count={category.count}
+                icon={category.icon}
+                color={category.color}
+                onClick={() => handleCategoryClick(category.category)}
+              />
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Button variant="ghost" className="text-primary-600 hover:text-primary-700 font-semibold text-lg">
+              {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />
+            </Button>
+          </div>
         </div>
       </section>
 
