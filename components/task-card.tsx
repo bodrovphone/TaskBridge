@@ -78,7 +78,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     return imageMap[category as keyof typeof imageMap] || imageMap.other;
   };
 
-  const timeAgo = formatDistanceToNow(new Date(task.createdAt), {
+  const timeAgo = formatDistanceToNow(new Date(task.createdAt || new Date()), {
     addSuffix: true,
     locale: getDateLocale(),
   });
@@ -115,7 +115,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden h-full flex flex-col">
       <div className="w-full h-48 bg-gray-200 overflow-hidden flex-shrink-0">
         <img 
-          src={task.imageUrl || getCategoryImage(task.category, task.id)} 
+          src={(task as any).imageUrl || getCategoryImage(task.category, task.id)} 
           alt={task.title}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           loading="lazy"

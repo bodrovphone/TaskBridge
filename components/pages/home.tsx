@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from 'react-i18next';
 import TaskCard from "@/components/task-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import { isUnauthorizedError } from "@/lib/authUtils";
 export default function Home() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -36,8 +38,8 @@ export default function Home() {
 
   // Fetch user stats
   const { data: userStats, isLoading: statsLoading } = useQuery({
-    queryKey: [`/api/users/${user?.id}/stats`],
-    enabled: isAuthenticated && !!user?.id,
+    queryKey: [`/api/users/${(user as any)?.id}/stats`],
+    enabled: isAuthenticated && !!(user as any)?.id,
   });
 
   if (isLoading) {
@@ -52,8 +54,8 @@ export default function Home() {
     return null; // Will redirect
   }
 
-  const isProfessional = user?.userType === "professional";
-  const isNewUser = !user?.userType || (!user?.city && !user?.serviceCategories?.length);
+  const isProfessional = (user as any)?.userType === "professional";
+  const isNewUser = !(user as any)?.userType || (!(user as any)?.city && !(user as any)?.serviceCategories?.length);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -62,7 +64,7 @@ export default function Home() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Добре дошли, {user?.firstName || "потребител"}!
+            Добре дошли, {(user as any)?.firstName || "потребител"}!
           </h1>
           <p className="text-gray-600">
             {isProfessional 
@@ -142,7 +144,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">
-                    {statsLoading ? "..." : userStats?.completedTasks || 0}
+                    {statsLoading ? "..." : (userStats as any)?.completedTasks || 0}
                   </h3>
                   <p className="text-sm text-gray-600">Завършени задачи</p>
                 </div>
@@ -158,7 +160,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">
-                    {statsLoading ? "..." : userStats?.averageRating?.toFixed(1) || "N/A"}
+                    {statsLoading ? "..." : (userStats as any)?.averageRating?.toFixed(1) || "N/A"}
                   </h3>
                   <p className="text-sm text-gray-600">Средна оценка</p>
                 </div>
@@ -194,9 +196,9 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-            ) : recentTasks.length > 0 ? (
+            ) : (recentTasks as any[]).length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recentTasks.map((task: any) => (
+                {(recentTasks as any[]).map((task: any) => (
                   <TaskCard 
                     key={task.id} 
                     task={task}

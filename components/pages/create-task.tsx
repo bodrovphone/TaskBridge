@@ -65,7 +65,7 @@ export default function CreateTask() {
       budgetType: "range",
       budgetMin: "",
       budgetMax: "",
-      city: user?.city || "",
+      city: (user as any)?.city || "",
       neighborhood: "",
       exactAddress: "",
       urgency: "flexible",
@@ -201,7 +201,7 @@ export default function CreateTask() {
                     <FormItem>
                       <FormLabel>Заглавие на задачата *</FormLabel>
                       <FormControl>
-                        <Input placeholder="напр. Ремонт на кухненски кран" {...field} />
+                        <Input placeholder="напр. Ремонт на кухненски кран" {...field} value={field.value || ""} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -219,6 +219,7 @@ export default function CreateTask() {
                           placeholder="Опишете подробно какво трябва да бъде направено, какви материали са необходими, специални изисквания и др."
                           className="min-h-[100px]"
                           {...field}
+                          value={field.value || ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -233,7 +234,7 @@ export default function CreateTask() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Категория *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Изберете категория" />
@@ -257,7 +258,7 @@ export default function CreateTask() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Подкатегория</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Изберете подкатегория" />
@@ -349,7 +350,7 @@ export default function CreateTask() {
                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          defaultValue={field.value || undefined}
                           className="flex flex-col space-y-2"
                         >
                           <div className="flex items-center space-x-2">
@@ -386,6 +387,7 @@ export default function CreateTask() {
                                   placeholder="50"
                                   className="pl-10"
                                   {...field}
+                                  value={field.value || ""}
                                 />
                               </div>
                             </FormControl>
@@ -409,6 +411,7 @@ export default function CreateTask() {
                                   placeholder="100"
                                   className="pl-10"
                                   {...field}
+                                  value={field.value || ""}
                                 />
                               </div>
                             </FormControl>
@@ -434,6 +437,7 @@ export default function CreateTask() {
                                 placeholder="75"
                                 className="pl-10"
                                 {...field}
+                                value={field.value || ""}
                               />
                             </div>
                           </FormControl>
@@ -465,7 +469,7 @@ export default function CreateTask() {
                         <FormControl>
                           <div className="relative">
                             <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                            <Input placeholder="София" className="pl-10" {...field} />
+                            <Input placeholder="София" className="pl-10" {...field} value={field.value || ""} />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -480,7 +484,7 @@ export default function CreateTask() {
                       <FormItem>
                         <FormLabel>Квартал/Район</FormLabel>
                         <FormControl>
-                          <Input placeholder="кв. Център" {...field} />
+                          <Input placeholder="кв. Център" {...field} value={field.value || ""} />
                         </FormControl>
                         <FormDescription>
                           Ще бъде видим на кандидатите
@@ -498,7 +502,7 @@ export default function CreateTask() {
                     <FormItem>
                       <FormLabel>Точен адрес</FormLabel>
                       <FormControl>
-                        <Input placeholder="ул. Витоша 1, ет. 2, ап. 5" {...field} />
+                        <Input placeholder="ул. Витоша 1, ет. 2, ап. 5" {...field} value={field.value || ""} />
                       </FormControl>
                       <FormDescription>
                         Ще бъде споделен само с избрания специалист
@@ -525,7 +529,7 @@ export default function CreateTask() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Спешност</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue />
@@ -606,6 +610,7 @@ export default function CreateTask() {
                           placeholder="напр. Трябва да има собствени инструменти, опит с определена марка техника, наличност в уикендите и др."
                           className="min-h-[80px]"
                           {...field}
+                          value={field.value || ""}
                         />
                       </FormControl>
                       <FormMessage />

@@ -73,7 +73,7 @@ export default function BrowseTasks() {
   const getActiveFilters = () => {
     const active = [];
     if (filters.search) active.push({ key: 'search', label: `"${filters.search}"`, value: filters.search });
-    if (filters.category) active.push({ key: 'category', label: TASK_CATEGORIES[filters.category] || filters.category, value: filters.category });
+    if (filters.category) active.push({ key: 'category', label: TASK_CATEGORIES[filters.category as keyof typeof TASK_CATEGORIES] || filters.category, value: filters.category });
     if (filters.city) active.push({ key: 'city', label: filters.city, value: filters.city });
     if (filters.budgetMin || filters.budgetMax) {
       const budgetLabel = filters.budgetMin && filters.budgetMax 
@@ -251,7 +251,7 @@ export default function BrowseTasks() {
                   </Button>
                 )}
                 <span className="text-sm text-gray-600">
-                  {isLoading ? t('loading') : `${tasks.length} ${t('tasks.results')}`}
+                  {isLoading ? t('loading') : `${(tasks as any[]).length} ${t('tasks.results')}`}
                 </span>
               </div>
 
@@ -307,10 +307,10 @@ export default function BrowseTasks() {
               </Card>
             ))}
           </div>
-        ) : tasks.length > 0 ? (
+        ) : (tasks as any[]).length > 0 ? (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tasks.map((task: any) => (
+              {(tasks as any[]).map((task: any) => (
                 <TaskCard 
                   key={task.id} 
                   task={task}
@@ -320,7 +320,7 @@ export default function BrowseTasks() {
             </div>
 
             {/* Pagination */}
-            {tasks.length === pageSize && (
+            {(tasks as any[]).length === pageSize && (
               <div className="flex justify-center mt-8">
                 <div className="flex space-x-2">
                   <Button
@@ -333,7 +333,7 @@ export default function BrowseTasks() {
                   <Button
                     variant="outline"
                     onClick={() => setCurrentPage(prev => prev + 1)}
-                    disabled={tasks.length < pageSize}
+                    disabled={(tasks as any[]).length < pageSize}
                   >
                     Следваща
                   </Button>
