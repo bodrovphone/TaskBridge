@@ -11,11 +11,16 @@ TaskBridge (branded as "Trudify") is a Bulgarian freelance platform that connect
 - **Frontend**: Next.js 15 with App Router
 - **Backend**: Next.js API Routes
 - **Database**: PostgreSQL with Drizzle ORM
-- **UI**: Radix UI components with Tailwind CSS
+- **UI Components**: 
+  - **Radix UI** (via shadcn/ui) - Headless, accessible components
+  - **NextUI** - Modern React UI library with beautiful components
+  - Both libraries work together, use NextUI for new components and keep Radix for existing ones
+- **Styling**: Tailwind CSS
 - **Routing**: Next.js App Router
 - **State Management**: TanStack Query (React Query)
 - **Authentication**: Currently disabled (no auth required)
 - **Internationalization**: i18next
+- **Animations**: Framer Motion (included with NextUI)
 - **Deployment**: Configured for Vercel deployment
 
 ## Key Commands
@@ -72,9 +77,38 @@ Key features include:
 - Run `npm run db:push` after schema changes
 
 ### Component Development
-- UI components use Radix UI with Tailwind styling
-- All components are now in `/components/` directory
-- Follow existing patterns for consistent styling and behavior
+- **UI components use both Radix UI and NextUI**:
+  - **Radix UI** (via shadcn/ui): Existing components like Dialog, Select, Form fields
+  - **NextUI**: New components like Card, Button, Input - modern and beautiful out-of-box
+  - Both work together seamlessly with Tailwind CSS
+- All components are in `/components/` directory
+- **NextUI theming**: Configured in `tailwind.config.ts` with custom primary/secondary colors
+- **Animation**: NextUI includes Framer Motion for smooth animations
+
+### NextUI Integration
+- **Provider**: Wrapped in `NextUIProvider` in `/app/providers.tsx`
+- **Theme colors**: 
+  - Primary: `#0066CC` (blue)
+  - Secondary: `#00A86B` (green)
+- **Available components**: Card, Button, Input, Modal, Navbar, etc.
+- **Usage pattern**: Import from `@nextui-org/react`
+
+### Component Migration Strategy
+**✅ Migrated to NextUI:**
+- **Header/Navbar** - Uses NextUI Navbar with responsive mobile menu
+- **TaskCard** - Uses NextUI Card, Image, Chip, Avatar, and Button components
+- **CategoryCard** - Uses NextUI Card with press interactions
+- **LanguageSwitcher** - Uses NextUI Dropdown with selection states
+
+**⚠️ Keep with Radix UI:**
+- **Form components** in `/components/pages/create-task.tsx` - Complex validation
+- **Browse/filter components** in `/components/pages/browse-tasks.tsx` - Complex interactions  
+- **All `/components/ui/` shadcn components** - Form fields, dialogs, sheets, etc.
+
+**📋 Migration Guidelines:**
+- **Use NextUI for**: Cards, Buttons, Navigation, Simple Dropdowns, Images, Avatars, Chips
+- **Keep Radix UI for**: Forms, Complex Dialogs, Data Tables, Advanced Interactions
+- Both libraries work together seamlessly in the same project
 
 ### Internationalization
 - Uses i18next for Bulgarian/English translations

@@ -1,15 +1,19 @@
 'use client'
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Clock, Wallet, Star } from "lucide-react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";
 import { useTranslation } from 'react-i18next';
 import type { Task } from "@/shared/schema";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Button,
+  Chip,
+  Avatar
+} from "@nextui-org/react";
 
 interface TaskCardProps {
   task: Task & {
@@ -26,13 +30,13 @@ interface TaskCardProps {
 }
 
 const categoryColors = {
-  "home_repair": "bg-blue-100 text-blue-800",
-  "delivery_transport": "bg-green-100 text-green-800", 
-  "personal_care": "bg-purple-100 text-purple-800",
-  "personal_assistant": "bg-orange-100 text-orange-800",
-  "learning_fitness": "bg-pink-100 text-pink-800",
-  "other": "bg-gray-100 text-gray-800"
-};
+  "home_repair": "primary",
+  "delivery_transport": "success", 
+  "personal_care": "secondary",
+  "personal_assistant": "warning",
+  "learning_fitness": "danger",
+  "other": "default"
+} as const;
 
 export default function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const { t, i18n } = useTranslation();
@@ -112,75 +116,94 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all hover:border-primary-200 cursor-pointer overflow-hidden h-full flex flex-col">
-      <div className="w-full h-48 bg-gray-200 overflow-hidden flex-shrink-0">
-        <img 
-          src={(task as any).imageUrl || getCategoryImage(task.category, task.id)} 
-          alt={task.title}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-      </div>
-      <CardContent className="p-6 flex-grow flex flex-col">
-        <div className="flex justify-between items-start mb-4">
-          <Badge className={categoryColor}>
-            {categoryName}
-          </Badge>
-          <span className="text-sm text-gray-500">{timeAgo}</span>
+    <Card 
+      isPressable
+      className="h-full"
+      shadow="sm"
+      radius="lg"
+    >
+      <CardBody className="p-0">
+        <div className="w-full h-48 overflow-hidden">
+          <img
+            src={(task as any).imageUrl || getCategoryImage(task.category, task.id)}
+            alt={task.title}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
         </div>
         
-        <Link href={`/tasks/${task.id}`} className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 line-clamp-2 block">
-          {task.title}
-        </Link>
-        
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-          {task.description}
-        </p>
+        <div className="p-4 space-y-3">
+          <div className="flex justify-between items-start">
+            <Chip 
+              color={categoryColor}
+              size="sm"
+              variant="flat"
+            >
+              {categoryName}
+            </Chip>
+            <span className="text-xs text-default-500">{timeAgo}</span>
+          </div>
+          
+          <Link 
+            href={`/tasks/${task.id}`} 
+            className="text-lg font-semibold text-foreground hover:text-primary line-clamp-2 block"
+          >
+            {task.title}
+          </Link>
+          
+          <p className="text-sm text-default-600 line-clamp-3">
+            {task.description}
+          </p>
 
-        <div className="space-y-2 mb-4 mt-auto">
-          <div className="flex items-center text-sm text-gray-600">
-            <MapPin size={16} className="mr-2" />
-            <span>{task.city}{task.neighborhood && `, ${task.neighborhood}`}</span>
-          </div>
-          <div className="flex items-center text-sm text-gray-600">
-            <Clock size={16} className="mr-2" />
-            <span>{formatDeadline()}</span>
-          </div>
-          <div className="flex items-center text-sm text-gray-600">
-            <Wallet size={16} className="mr-2" />
-            <span>{formatBudget()}</span>
+          <div className="space-y-2">
+            <div className="flex items-center text-sm text-default-600">
+              <MapPin size={14} className="mr-2 flex-shrink-0" />
+              <span className="truncate">{task.city}{task.neighborhood && `, ${task.neighborhood}`}</span>
+            </div>
+            <div className="flex items-center text-sm text-default-600">
+              <Clock size={14} className="mr-2 flex-shrink-0" />
+              <span>{formatDeadline()}</span>
+            </div>
+            <div className="flex items-center text-sm text-default-600">
+              <Wallet size={14} className="mr-2 flex-shrink-0" />
+              <span>{formatBudget()}</span>
+            </div>
           </div>
         </div>
+      </CardBody>
 
-        <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-auto">
-          <div className="flex items-center space-x-2">
-            <Avatar className="w-6 h-6">
-              <AvatarImage src={task.customer?.profileImageUrl || ""} />
-              <AvatarFallback className="text-xs">
-                {task.customer?.firstName?.[0] || "?"}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm text-gray-600">
-              {task.customer?.firstName ? 
-                `${task.customer.firstName} ${task.customer.lastName?.[0] || ""}.` : 
-                t('taskCard.anonymous')
-              }
-            </span>
-            {task.customer?.averageRating && Number(task.customer.averageRating) > 0 && (
-              <div className="flex items-center">
-                <Star size={12} className="text-yellow-400 fill-current" />
-                <span className="text-xs text-gray-600 ml-1">
-                  {Number(task.customer.averageRating).toFixed(1)}
-                </span>
-              </div>
-            )}
+      <CardFooter className="px-4 pb-4 pt-2 border-t border-divider">
+        <div className="flex justify-between items-center w-full">
+          <div className="flex items-center gap-2">
+            <Avatar 
+              src={task.customer?.profileImageUrl || ""}
+              name={task.customer?.firstName?.[0] || "?"}
+              size="sm"
+              className="w-6 h-6"
+            />
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-default-600">
+                {task.customer?.firstName ? 
+                  `${task.customer.firstName} ${task.customer.lastName?.[0] || ""}.` : 
+                  t('taskCard.anonymous')
+                }
+              </span>
+              {task.customer?.averageRating && Number(task.customer.averageRating) > 0 && (
+                <div className="flex items-center">
+                  <Star size={12} className="text-warning fill-current" />
+                  <span className="text-xs text-default-600 ml-1">
+                    {Number(task.customer.averageRating).toFixed(1)}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
           
           {showApplyButton && onApply && (
             <Button
-              variant="ghost"
+              color="primary"
+              variant="light"
               size="sm"
-              className="text-primary-600 hover:text-primary-700"
               onClick={(e) => {
                 e.preventDefault();
                 onApply(task.id);
@@ -190,7 +213,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
             </Button>
           )}
         </div>
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 }

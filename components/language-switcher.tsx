@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 import {
+  Dropdown,
+  DropdownTrigger,
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
+  DropdownItem,
+  Button
+} from '@nextui-org/react';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -19,36 +18,42 @@ const languages = [
 
 export function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[1]; // Default to Bulgarian
 
-  const handleLanguageChange = (languageCode: string) => {
+  const handleLanguageChange = (key: any) => {
+    const languageCode = key as string;
     i18n.changeLanguage(languageCode);
-    setIsOpen(false);
   };
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 px-2">
-          <Globe className="h-4 w-4 mr-1" />
-          <span className="mr-1">{currentLanguage.flag}</span>
-          <span className="text-sm">{currentLanguage.name}</span>
+    <Dropdown>
+      <DropdownTrigger>
+        <Button 
+          variant="light" 
+          size="sm"
+          startContent={<Globe size={16} />}
+          className="h-8 px-2 gap-1"
+        >
+          <span>{currentLanguage.flag}</span>
+          <span className="text-sm hidden sm:inline">{currentLanguage.name}</span>
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
+      </DropdownTrigger>
+      <DropdownMenu 
+        aria-label="Language selection"
+        onAction={handleLanguageChange}
+        selectedKeys={new Set([i18n.language])}
+        selectionMode="single"
+      >
         {languages.map((language) => (
-          <DropdownMenuItem
+          <DropdownItem
             key={language.code}
-            onClick={() => handleLanguageChange(language.code)}
-            className="cursor-pointer"
+            startContent={<span className="text-lg">{language.flag}</span>}
           >
-            <span className="mr-2">{language.flag}</span>
-            <span>{language.name}</span>
-          </DropdownMenuItem>
+            {language.name}
+          </DropdownItem>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+    </Dropdown>
   );
 }
