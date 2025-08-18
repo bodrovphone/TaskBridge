@@ -1,8 +1,8 @@
+'use client'
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import TaskCard from "@/components/task-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -109,7 +109,6 @@ export default function BrowseTasks() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
@@ -362,7 +361,6 @@ export default function BrowseTasks() {
         )}
       </main>
 
-      <Footer />
     </div>
   );
 }

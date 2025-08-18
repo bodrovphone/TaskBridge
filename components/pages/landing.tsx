@@ -1,10 +1,11 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import CategoryCard from "@/components/category-card";
 import TaskCard from "@/components/task-card";
 import { useTranslation } from 'react-i18next';
+import LandingSkeleton from "@/components/landing-skeleton";
 import { 
   Home, 
   Truck, 
@@ -17,19 +18,20 @@ import {
   CheckCircle,
   Plus,
   Search,
-  ArrowRight
+  ArrowRight,
+  Handshake
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Landing() {
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   
   // Mock featured tasks for display
   const featuredTasks = [
     {
       id: "1",
-      title: t('mockTask.dogWalking.title'),
-      description: t('mockTask.dogWalking.description'),
+      title: "Разходка с кучето",
+      description: "Търся надежден човек да разхожда кучето ми два пъти дневно в продължение на една седмица, докато съм в командировка.",
       category: "personal_care",
       budgetMin: 15,
       budgetMax: 20,
@@ -47,8 +49,8 @@ export default function Landing() {
     },
     {
       id: "2", 
-      title: t('mockTask.balconyRepair.title'),
-      description: t('mockTask.balconyRepair.description'),
+      title: "Ремонт на балкон",
+      description: "Нужен ми е опитен майстор за ремонт на балкона - подмяна на дренажа и освежаване на боята.",
       category: "home_repair",
       budgetMin: 300,
       budgetMax: 500,
@@ -66,8 +68,8 @@ export default function Landing() {
     },
     {
       id: "3",
-      title: t('mockTask.apartmentCleaning.title'),  
-      description: t('mockTask.apartmentCleaning.description'),
+      title: "Почистване на апартамент",  
+      description: "Необходимо е генерално почистване на тристаен апартамент след ремонт - почистване на прах, миене на прозорци и подове.",
       category: "personal_assistant",
       budgetMin: 120,
       budgetMax: 180,
@@ -195,9 +197,13 @@ export default function Landing() {
     window.location.href = `/browse-tasks?category=${category}`;
   };
 
+  // Show skeleton while translations are loading
+  if (!ready) {
+    return <LandingSkeleton />
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-50 to-white py-16 lg:py-24">
@@ -216,7 +222,7 @@ export default function Landing() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   size="lg" 
-                  className="bg-primary-500 hover:bg-primary-600 text-lg px-8 py-4 h-auto"
+                  className="bg-primary-500 hover:bg-primary-700 text-white hover:text-black transition-all border-2 border-primary-500 hover:border-primary-500 text-lg px-8 py-4 h-auto"
                   asChild
                 >
                   <a href="/api/login">
@@ -227,7 +233,7 @@ export default function Landing() {
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="border-2 border-primary-500 text-primary-600 hover:bg-primary-50 text-lg px-8 py-4 h-auto"
+                  className="border-2 border-primary-500 text-black bg-primary-700 hover:bg-primary-500 hover:text-white transition-all text-lg px-8 py-4 h-auto"
                   asChild
                 >
                   <a href="/browse-tasks">  
@@ -610,7 +616,7 @@ export default function Landing() {
             </div>
             
             <div className="relative text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-2xl mb-6 shadow-lg">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-500 rounded-2xl mb-6 shadow-lg">
                 <Handshake className="text-white" size={32} />
               </div>
               
@@ -673,7 +679,6 @@ export default function Landing() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

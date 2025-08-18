@@ -1,13 +1,15 @@
+'use client'
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Clock, Wallet, Star } from "lucide-react";
-import { Link } from "wouter";
+import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";
 import { useTranslation } from 'react-i18next';
-import type { Task } from "@shared/schema";
+import type { Task } from "@/shared/schema";
 
 interface TaskCardProps {
   task: Task & {
@@ -127,10 +129,8 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
           <span className="text-sm text-gray-500">{timeAgo}</span>
         </div>
         
-        <Link href={`/tasks/${task.id}`}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 line-clamp-2">
-            {task.title}
-          </h3>
+        <Link href={`/tasks/${task.id}`} className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 line-clamp-2 block">
+          {task.title}
         </Link>
         
         <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
@@ -163,7 +163,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
             <span className="text-sm text-gray-600">
               {task.customer?.firstName ? 
                 `${task.customer.firstName} ${task.customer.lastName?.[0] || ""}.` : 
-                "Анонимен"
+                t('taskCard.anonymous')
               }
             </span>
             {task.customer?.averageRating && Number(task.customer.averageRating) > 0 && (
@@ -186,7 +186,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
                 onApply(task.id);
               }}
             >
-              Кандидатствай
+              {t('taskCard.apply')}
             </Button>
           )}
         </div>

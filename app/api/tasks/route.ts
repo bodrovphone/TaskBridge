@@ -10,17 +10,19 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category')
     const limit = searchParams.get('limit')
 
-    let query = db.select().from(tasks).orderBy(desc(tasks.createdAt))
+    let query = db.select().from(tasks)
 
     if (category) {
       query = query.where(eq(tasks.category, category))
     }
 
+    query = query.orderBy(desc(tasks.createdAt))
+
     if (limit) {
       query = query.limit(parseInt(limit))
     }
 
-    const taskList = await query.execute()
+    const taskList = await query
     return NextResponse.json(taskList)
   } catch (error) {
     console.error('Error fetching tasks:', error)

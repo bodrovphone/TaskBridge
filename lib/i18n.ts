@@ -1,6 +1,5 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 // Translation resources
 const resources = {
@@ -47,10 +46,24 @@ const resources = {
       "landing.trustIndicators.verified": "Verified Professionals",
       "landing.trustIndicators.securePayments": "Secure Payments", 
       "landing.trustIndicators.support": "24/7 Support",
+      "landing.trustIndicators.freeToUse": "Free to Use",
+      "landing.trustIndicators.communityReviews": "Community Reviews",
+      "landing.trustIndicators.verifiedDescription": "All professionals are thoroughly verified",
+      "landing.trustIndicators.ratingSystem": "5-Star Rating System",
+      "landing.trustIndicators.ratingSystemDescription": "Quality assured through community feedback",
+      "landing.trustIndicators.dataProtection": "Data Protection",
+      "landing.trustIndicators.dataProtectionDescription": "Your personal information is secure",
+      "landing.trustIndicators.contracts": "Legal Protection",
+      "landing.trustIndicators.contractsDescription": "All work is protected by clear agreements",
       
       "landing.stats.averageRating": "average rating",
       "landing.stats.completedTasks": "completed tasks",
       "landing.categories.activeSpecialists": "active specialists",
+      
+      "landing.trustStats.securityUptime": "Security Uptime",
+      "landing.trustStats.avgRating": "Average Rating",
+      "landing.trustStats.encryption": "Data Encryption",
+      "landing.trustStats.compliance": "Legal Compliance",
       
       "landing.categories.title": "Popular Categories",
       "landing.categories.subtitle": "Find specialists for every task - from home repairs to personal assistance",
@@ -67,7 +80,10 @@ const resources = {
       "landing.categories.creative": "Creative Services",
       
       "landing.featured.title": "Featured Tasks",
+      "landing.featured.subtitle": "Recent tasks posted by our community",
       "landing.featured.viewAll": "View All Tasks",
+      "landing.featured.professionalDesc": "Find your next opportunity",
+      "landing.featured.customerDesc": "See what others are posting",
       
       "landing.howItWorks.title": "How It Works",
       "landing.howItWorks.subtitle": "Easy process for finding and completing tasks with verified specialists",
@@ -79,6 +95,20 @@ const resources = {
       "landing.howItWorks.step2.description": "Receive applications from verified professionals",
       "landing.howItWorks.step3.title": "Choose & Complete",
       "landing.howItWorks.step3.description": "Select the best professional and get your task done",
+      
+      "landing.howItWorks.customers.step1.title": "Post Your Task",
+      "landing.howItWorks.customers.step1.description": "Describe what you need done and set your budget",
+      "landing.howItWorks.customers.step2.title": "Get Proposals",
+      "landing.howItWorks.customers.step2.description": "Receive applications from verified professionals",
+      "landing.howItWorks.customers.step3.title": "Choose & Complete",
+      "landing.howItWorks.customers.step3.description": "Select the best professional and get your task done",
+      
+      "landing.howItWorks.professionals.step1.title": "Browse Tasks",
+      "landing.howItWorks.professionals.step1.description": "Find tasks that match your skills and availability",
+      "landing.howItWorks.professionals.step2.title": "Submit Proposal",
+      "landing.howItWorks.professionals.step2.description": "Send your best offer and showcase your expertise",
+      "landing.howItWorks.professionals.step3.title": "Complete Work",
+      "landing.howItWorks.professionals.step3.description": "Deliver quality service and build your reputation",
       
       // Tasks
       "tasks.title": "Browse Tasks",
@@ -165,6 +195,82 @@ const resources = {
       "language.ru": "Русский",
       
       // Messages and feedback
+      // Testimonials
+      "landing.testimonials.title": "What Our Users Say",
+      "landing.testimonials.subtitle": "Real feedback from our community",
+      "landing.testimonials.customers.title": "From Customers",
+      "landing.testimonials.customers.customer1.name": "Maria Ivanova",
+      "landing.testimonials.customers.customer1.location": "Sofia, Bulgaria", 
+      "landing.testimonials.customers.customer1.quote": "Found an amazing plumber in minutes. Professional service and fair pricing!",
+      "landing.testimonials.customers.customer2.name": "Georgi Petrov",
+      "landing.testimonials.customers.customer2.location": "Plovdiv, Bulgaria",
+      "landing.testimonials.customers.customer2.quote": "The cleaning service was exceptional. Will definitely use Trudify again.",
+      "landing.testimonials.customers.customer3.name": "Elena Dimitrova",
+      "landing.testimonials.customers.customer3.location": "Varna, Bulgaria",
+      "landing.testimonials.customers.customer3.quote": "Quick, reliable, and affordable. Exactly what I was looking for.",
+      
+      "landing.testimonials.professionals.title": "From Professionals",
+      "landing.testimonials.professionals.pro1.name": "Ivan Stoev",
+      "landing.testimonials.professionals.pro1.profession": "Electrician",
+      "landing.testimonials.professionals.pro1.quote": "Trudify helped me grow my business with steady stream of quality clients.",
+      "landing.testimonials.professionals.pro2.name": "Anna Nikolova",
+      "landing.testimonials.professionals.pro2.profession": "Cleaner",
+      "landing.testimonials.professionals.pro2.quote": "Easy to use platform. I love how I can manage my schedule and payments.",
+      "landing.testimonials.professionals.pro3.name": "Dimitar Georgiev",
+      "landing.testimonials.professionals.pro3.profession": "Handyman",
+      "landing.testimonials.professionals.pro3.quote": "Professional platform that connects me with customers who value quality work.",
+      
+      // Trust Section
+      "landing.trustSection.title": "Built on Trust",
+      "landing.trustSection.subtitle": "Your security and satisfaction are our top priorities",
+      
+      // Call to Action
+      "landing.cta.title": "Ready to Get Started?",
+      "landing.cta.subtitle": "Join thousands of satisfied users today",
+      "landing.cta.postTask": "Post a Task",
+      "landing.cta.joinProfessionals": "Join as Professional",
+      "landing.cta.freeToJoin": "Free to join, no hidden fees",
+      "landing.cta.stats.completedTasks": "Tasks Completed",
+      "landing.cta.stats.activeSpecialists": "Active Specialists",
+      "landing.cta.stats.averageRating": "Average Rating",
+      "landing.cta.stats.contractTemplates": "Legal Templates",
+      
+      // Task Card
+      "taskCard.apply": "Apply",
+      "taskCard.anonymous": "Anonymous",
+      "taskCard.budget.from": "from",
+      "taskCard.budget.to": "up to", 
+      "taskCard.budget.negotiable": "Negotiable",
+      "taskCard.deadline.flexible": "Flexible",
+      "taskCard.deadline.today": "Today",
+      "taskCard.deadline.tomorrow": "Tomorrow",
+      "taskCard.deadline.days": "days",
+      "taskCard.category.home_repair": "Home Repairs",
+      "taskCard.category.delivery_transport": "Delivery & Transport",
+      "taskCard.category.personal_care": "Personal Care",
+      "taskCard.category.personal_assistant": "Personal Assistant",
+      "taskCard.category.learning_fitness": "Learning & Fitness",
+      "taskCard.category.other": "Other",
+      
+      // Footer
+      "footer.company.description": "Connecting people with qualified professionals for all kinds of services in Bulgaria.",
+      "footer.quickLinks.title": "Quick Links",
+      "footer.quickLinks.howItWorks": "How It Works",
+      "footer.quickLinks.categories": "Categories", 
+      "footer.quickLinks.forProfessionals": "For Professionals",
+      "footer.quickLinks.security": "Security",
+      "footer.quickLinks.help": "Help",
+      "footer.legal.title": "Legal",
+      "footer.legal.terms": "Terms of Service",
+      "footer.legal.privacy": "Privacy Policy",
+      "footer.legal.gdpr": "GDPR",
+      "footer.legal.cookies": "Cookies",
+      "footer.legal.complaints": "Complaints",
+      "footer.contact.title": "Contact",
+      "footer.contact.subtitle": "Get in touch for questions and support",
+      "footer.language.label": "Language",
+      "footer.copyright": "© 2024 Trudify. All rights reserved.",
+
       "message.taskCreated": "Task created successfully!",
       "message.profileUpdated": "Profile updated successfully!",
       "message.applicationSubmitted": "Application submitted successfully!",
@@ -216,6 +322,15 @@ const resources = {
       "landing.trustIndicators.verified": "Проверени специалисти",
       "landing.trustIndicators.securePayments": "Сигурни плащания",
       "landing.trustIndicators.support": "24/7 поддръжка",
+      "landing.trustIndicators.freeToUse": "Безплатно за използване",
+      "landing.trustIndicators.communityReviews": "Отзиви от общността",
+      "landing.trustIndicators.verifiedDescription": "Всички специалисти са проверени",
+      "landing.trustIndicators.ratingSystem": "5-звездна система за оценка",
+      "landing.trustIndicators.ratingSystemDescription": "Качеството се гарантира чрез отзиви от общността",
+      "landing.trustIndicators.dataProtection": "Защита на данните",
+      "landing.trustIndicators.dataProtectionDescription": "Вашата лична информация е в безопасност",
+      "landing.trustIndicators.contracts": "Правна защита",
+      "landing.trustIndicators.contractsDescription": "Всички работи се защитават от ясни споразумения",
       
       "landing.stats.averageRating": "средна оценка",
       "landing.stats.completedTasks": "завършени задачи",
@@ -334,6 +449,106 @@ const resources = {
       "language.ru": "Русский",
       
       // Messages and feedback
+      // Missing trust stats and additional sections
+      "landing.trustStats.securityUptime": "Сигурност",
+      "landing.trustStats.avgRating": "Средна оценка",
+      "landing.trustStats.encryption": "Криптиране на данни",
+      "landing.trustStats.compliance": "Правно съответствие",
+      
+      "landing.featured.subtitle": "Последни задачи публикувани от общността",
+      "landing.featured.professionalDesc": "Намерете следващата си възможност",
+      "landing.featured.customerDesc": "Вижте какво публикуват други",
+      
+      "landing.howItWorks.customers.step1.title": "Публикувайте задачата си",
+      "landing.howItWorks.customers.step1.description": "Опишете какво трябва да бъде направено и определете бюджета си",
+      "landing.howItWorks.customers.step2.title": "Получете предложения",
+      "landing.howItWorks.customers.step2.description": "Получавайте заявления от верифицирани професионалисти",
+      "landing.howItWorks.customers.step3.title": "Изберете и завършете",
+      "landing.howItWorks.customers.step3.description": "Изберете най-добрия професионалист и приключете задачата си",
+      
+      "landing.howItWorks.professionals.step1.title": "Разгледайте задачи",
+      "landing.howItWorks.professionals.step1.description": "Намерете задачи, които съответстват на вашите умения и наличност",
+      "landing.howItWorks.professionals.step2.title": "Изпратете предложение",
+      "landing.howItWorks.professionals.step2.description": "Изпратете най-доброто си предложение и покажете експертизата си",
+      "landing.howItWorks.professionals.step3.title": "Завършете работата",
+      "landing.howItWorks.professionals.step3.description": "Предоставете качествена услуга и изградете репутацията си",
+      
+      // Testimonials
+      "landing.testimonials.title": "Какво казват нашите потребители",
+      "landing.testimonials.subtitle": "Истински отзиви от нашата общност",
+      "landing.testimonials.customers.title": "От клиенти",
+      "landing.testimonials.customers.customer1.name": "Мария Иванова",
+      "landing.testimonials.customers.customer1.location": "София, България",
+      "landing.testimonials.customers.customer1.quote": "Намерих невероятен водопроводчик за минути. Професионална услуга и честни цени!",
+      "landing.testimonials.customers.customer2.name": "Георги Петров",
+      "landing.testimonials.customers.customer2.location": "Пловдив, България",
+      "landing.testimonials.customers.customer2.quote": "Услугата за почистване беше изключителна. Определено ще използвам Trudify отново.",
+      "landing.testimonials.customers.customer3.name": "Елена Димитрова",
+      "landing.testimonials.customers.customer3.location": "Варна, България",
+      "landing.testimonials.customers.customer3.quote": "Бързо, надеждно и достъпно. Точно това, което търсех.",
+      
+      "landing.testimonials.professionals.title": "От специалисти",
+      "landing.testimonials.professionals.pro1.name": "Иван Стоев",
+      "landing.testimonials.professionals.pro1.profession": "Електротехник",
+      "landing.testimonials.professionals.pro1.quote": "Trudify ми помогна да разширя бизнеса си с постоянен поток от качествени клиенти.",
+      "landing.testimonials.professionals.pro2.name": "Анна Николова",
+      "landing.testimonials.professionals.pro2.profession": "Почистваща",
+      "landing.testimonials.professionals.pro2.quote": "Лесна за използване платформа. Харесвам как мога да управлявам графика и плащанията си.",
+      "landing.testimonials.professionals.pro3.name": "Димитър Георгиев",
+      "landing.testimonials.professionals.pro3.profession": "Майстор",
+      "landing.testimonials.professionals.pro3.quote": "Професионална платформа, която ме свързва с клиенти, които ценят качествената работа.",
+      
+      // Trust Section
+      "landing.trustSection.title": "Изградена върху доверие",
+      "landing.trustSection.subtitle": "Вашата сигурност и удовлетвореност са нашите най-важни приоритети",
+      
+      // Call to Action
+      "landing.cta.title": "Готови ли сте да започнете?",
+      "landing.cta.subtitle": "Присъединете се към хиляди доволни потребители днес",
+      "landing.cta.postTask": "Публикувайте задача",
+      "landing.cta.joinProfessionals": "Присъединете се като професионалист",
+      "landing.cta.freeToJoin": "Безплатно присъединяване, без скрити такси",
+      "landing.cta.stats.completedTasks": "Завършени задачи",
+      "landing.cta.stats.activeSpecialists": "Активни специалисти",
+      "landing.cta.stats.averageRating": "Средна оценка",
+      "landing.cta.stats.contractTemplates": "Правни шаблони",
+      
+      // Task Card
+      "taskCard.apply": "Кандидатствай",
+      "taskCard.anonymous": "Анонимен",
+      "taskCard.budget.from": "от",
+      "taskCard.budget.to": "до",
+      "taskCard.budget.negotiable": "За договаряне",
+      "taskCard.deadline.flexible": "Гъвкав",
+      "taskCard.deadline.today": "Днес",
+      "taskCard.deadline.tomorrow": "Утре",
+      "taskCard.deadline.days": "дни",
+      "taskCard.category.home_repair": "Домашни ремонти",
+      "taskCard.category.delivery_transport": "Доставки и транспорт",
+      "taskCard.category.personal_care": "Лична грижа",
+      "taskCard.category.personal_assistant": "Личен асистент",
+      "taskCard.category.learning_fitness": "Обучение и фитнес",
+      "taskCard.category.other": "Други",
+      
+      // Footer
+      "footer.company.description": "Свързваме хората с квалифицирани професионалисти за всякакъв вид услуги в България.",
+      "footer.quickLinks.title": "Бързи връзки",
+      "footer.quickLinks.howItWorks": "Как работи",
+      "footer.quickLinks.categories": "Категории",
+      "footer.quickLinks.forProfessionals": "За професионалисти",
+      "footer.quickLinks.security": "Сигурност",
+      "footer.quickLinks.help": "Помощ",
+      "footer.legal.title": "Правни",
+      "footer.legal.terms": "Общи условия",
+      "footer.legal.privacy": "Поверителност",
+      "footer.legal.gdpr": "GDPR",
+      "footer.legal.cookies": "Cookies",
+      "footer.legal.complaints": "Жалби",
+      "footer.contact.title": "Контакти",
+      "footer.contact.subtitle": "Свържете се с нас за въпроси и поддръжка",
+      "footer.language.label": "Език",
+      "footer.copyright": "© 2024 Trudify. Всички права запазени.",
+
       "message.taskCreated": "Задачата е създадена успешно!",
       "message.profileUpdated": "Профилът е актуализиран успешно!",
       "message.applicationSubmitted": "Заявлението е подадено успешно!",
@@ -503,6 +718,116 @@ const resources = {
       "language.ru": "Русский",
       
       // Messages and feedback
+      // Missing trust stats and additional sections  
+      "landing.trustStats.securityUptime": "Безопасность",
+      "landing.trustStats.avgRating": "Средний рейтинг",
+      "landing.trustStats.encryption": "Шифрование данных",
+      "landing.trustStats.compliance": "Правовое соответствие",
+      
+      "landing.trustIndicators.freeToUse": "Бесплатно в использовании",
+      "landing.trustIndicators.communityReviews": "Отзывы сообщества",
+      "landing.trustIndicators.verifiedDescription": "Все специалисты тщательно проверены",
+      "landing.trustIndicators.ratingSystem": "5-звездная система рейтинга",
+      "landing.trustIndicators.ratingSystemDescription": "Качество гарантировано через отзывы сообщества",
+      "landing.trustIndicators.dataProtection": "Защита данных",
+      "landing.trustIndicators.dataProtectionDescription": "Ваша личная информация в безопасности",
+      "landing.trustIndicators.contracts": "Правовая защита",
+      "landing.trustIndicators.contractsDescription": "Вся работа защищена четкими соглашениями",
+      
+      "landing.featured.subtitle": "Последние задачи, опубликованные нашим сообществом",
+      "landing.featured.professionalDesc": "Найдите свою следующую возможность",
+      "landing.featured.customerDesc": "Посмотрите, что публикуют другие",
+      
+      "landing.howItWorks.customers.step1.title": "Создайте вашу задачу",
+      "landing.howItWorks.customers.step1.description": "Опишите, что нужно сделать, и установите ваш бюджет",
+      "landing.howItWorks.customers.step2.title": "Получите предложения",
+      "landing.howItWorks.customers.step2.description": "Получайте заявки от верифицированных специалистов",
+      "landing.howItWorks.customers.step3.title": "Выберите и завершите",
+      "landing.howItWorks.customers.step3.description": "Выберите лучшего специалиста и выполните вашу задачу",
+      
+      "landing.howItWorks.professionals.step1.title": "Просматривайте задачи",
+      "landing.howItWorks.professionals.step1.description": "Найдите задачи, соответствующие вашим навыкам и доступности",
+      "landing.howItWorks.professionals.step2.title": "Отправьте предложение",
+      "landing.howItWorks.professionals.step2.description": "Отправьте лучшее предложение и покажите свою экспертизу",
+      "landing.howItWorks.professionals.step3.title": "Выполните работу",
+      "landing.howItWorks.professionals.step3.description": "Предоставьте качественную услугу и создайте репутацию",
+      
+      // Testimonials
+      "landing.testimonials.title": "Что говорят наши пользователи",
+      "landing.testimonials.subtitle": "Реальные отзывы нашего сообщества",
+      "landing.testimonials.customers.title": "От клиентов",
+      "landing.testimonials.customers.customer1.name": "Мария Иванова",
+      "landing.testimonials.customers.customer1.location": "София, Болгария",
+      "landing.testimonials.customers.customer1.quote": "Нашла отличного сантехника за минуты. Профессиональная услуга и справедливые цены!",
+      "landing.testimonials.customers.customer2.name": "Георги Петров",
+      "landing.testimonials.customers.customer2.location": "Пловдив, Болгария", 
+      "landing.testimonials.customers.customer2.quote": "Услуга уборки была исключительной. Определенно буду использовать Trudify снова.",
+      "landing.testimonials.customers.customer3.name": "Елена Димитрова",
+      "landing.testimonials.customers.customer3.location": "Варна, Болгария",
+      "landing.testimonials.customers.customer3.quote": "Быстро, надежно и доступно. Именно то, что я искала.",
+      
+      "landing.testimonials.professionals.title": "От специалистов",
+      "landing.testimonials.professionals.pro1.name": "Иван Стоев",
+      "landing.testimonials.professionals.pro1.profession": "Электрик",
+      "landing.testimonials.professionals.pro1.quote": "Trudify помог мне развить бизнес с постоянным потоком качественных клиентов.",
+      "landing.testimonials.professionals.pro2.name": "Анна Николова",
+      "landing.testimonials.professionals.pro2.profession": "Уборщица",
+      "landing.testimonials.professionals.pro2.quote": "Простая в использовании платформа. Нравится, как я могу управлять расписанием и платежами.",
+      "landing.testimonials.professionals.pro3.name": "Димитар Георгиев",
+      "landing.testimonials.professionals.pro3.profession": "Мастер на все руки",
+      "landing.testimonials.professionals.pro3.quote": "Профессиональная платформа, которая связывает меня с клиентами, ценящими качественную работу.",
+      
+      // Trust Section
+      "landing.trustSection.title": "Основана на доверии",
+      "landing.trustSection.subtitle": "Ваша безопасность и удовлетворенность - наши главные приоритеты",
+      
+      // Call to Action
+      "landing.cta.title": "Готовы начать?",
+      "landing.cta.subtitle": "Присоединяйтесь к тысячам довольных пользователей сегодня",
+      "landing.cta.postTask": "Создать задачу",
+      "landing.cta.joinProfessionals": "Присоединиться как специалист",
+      "landing.cta.freeToJoin": "Бесплатное присоединение, без скрытых комиссий",
+      "landing.cta.stats.completedTasks": "Выполненных задач",
+      "landing.cta.stats.activeSpecialists": "Активных специалистов", 
+      "landing.cta.stats.averageRating": "Средний рейтинг",
+      "landing.cta.stats.contractTemplates": "Правовых шаблонов",
+      
+      // Task Card
+      "taskCard.apply": "Откликнуться",
+      "taskCard.anonymous": "Анонимный",
+      "taskCard.budget.from": "от",
+      "taskCard.budget.to": "до",
+      "taskCard.budget.negotiable": "Договорная",
+      "taskCard.deadline.flexible": "Гибкий",
+      "taskCard.deadline.today": "Сегодня", 
+      "taskCard.deadline.tomorrow": "Завтра",
+      "taskCard.deadline.days": "дней",
+      "taskCard.category.home_repair": "Домашние ремонты",
+      "taskCard.category.delivery_transport": "Доставка и транспорт",
+      "taskCard.category.personal_care": "Личный уход",
+      "taskCard.category.personal_assistant": "Личный помощник",
+      "taskCard.category.learning_fitness": "Обучение и фитнес",
+      "taskCard.category.other": "Другое",
+      
+      // Footer
+      "footer.company.description": "Связываем людей с квалифицированными специалистами для всех видов услуг в Болгарии.",
+      "footer.quickLinks.title": "Быстрые ссылки",
+      "footer.quickLinks.howItWorks": "Как работает",
+      "footer.quickLinks.categories": "Категории",
+      "footer.quickLinks.forProfessionals": "Для специалистов",
+      "footer.quickLinks.security": "Безопасность",
+      "footer.quickLinks.help": "Помощь",
+      "footer.legal.title": "Правовые",
+      "footer.legal.terms": "Условия обслуживания",
+      "footer.legal.privacy": "Политика конфиденциальности",
+      "footer.legal.gdpr": "GDPR",
+      "footer.legal.cookies": "Cookies",
+      "footer.legal.complaints": "Жалобы",
+      "footer.contact.title": "Контакты",
+      "footer.contact.subtitle": "Свяжитесь с нами по вопросам и поддержке",
+      "footer.language.label": "Язык",
+      "footer.copyright": "© 2024 Trudify. Все права защищены.",
+
       "message.taskCreated": "Задача успешно создана!",
       "message.profileUpdated": "Профиль успешно обновлен!",
       "message.applicationSubmitted": "Заявка успешно отправлена!",
@@ -513,22 +838,22 @@ const resources = {
   }
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: 'bg', // Bulgarian as default
-    debug: false,
-    
-    interpolation: {
-      escapeValue: false,
-    },
-    
-    detection: {
-      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
-      caches: ['localStorage'],
-    },
-  });
+// Check if we're in browser environment
+const isBrowser = typeof window !== 'undefined';
+
+if (!i18n.isInitialized) {
+  i18n
+    .use(initReactI18next)
+    .init({
+      resources,
+      lng: 'bg', // Set default language
+      fallbackLng: 'bg',
+      debug: false,
+      
+      interpolation: {
+        escapeValue: false,
+      },
+    });
+}
 
 export default i18n;

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams } from "wouter";
+import { useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +33,7 @@ import { formatDistanceToNow, format } from "date-fns";
 import { bg } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertApplicationSchema, insertReviewSchema, TASK_CATEGORIES } from "@shared/schema";
+import { insertApplicationSchema, insertReviewSchema, TASK_CATEGORIES } from "@/shared/schema";
 import { z } from "zod";
 
 const applicationFormSchema = insertApplicationSchema.omit({
@@ -245,7 +243,6 @@ export default function TaskDetails() {
   if (taskError || !task) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Card>
             <CardContent className="pt-6">
@@ -261,7 +258,6 @@ export default function TaskDetails() {
             </CardContent>
           </Card>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -312,7 +308,6 @@ export default function TaskDetails() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
@@ -864,8 +859,6 @@ export default function TaskDetails() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from 'react-i18next';
@@ -7,8 +9,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,7 +19,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { insertTaskSchema, TASK_CATEGORIES, TASK_SUBCATEGORIES } from "@shared/schema";
+import { insertTaskSchema, TASK_CATEGORIES, TASK_SUBCATEGORIES } from "@/shared/schema";
 import { CalendarIcon, Upload, MapPin, DollarSign, Clock, ImageIcon, X } from "lucide-react";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
@@ -172,7 +172,6 @@ export default function CreateTask() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
@@ -637,7 +636,6 @@ export default function CreateTask() {
         </Form>
       </main>
 
-      <Footer />
     </div>
   );
 }

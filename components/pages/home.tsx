@@ -1,14 +1,12 @@
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import TaskCard from "@/components/task-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Search, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import Link from "next/link";
 import { isUnauthorizedError } from "@/lib/authUtils";
 
 export default function Home() {
@@ -59,7 +57,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
@@ -229,7 +226,6 @@ export default function Home() {
         </Card>
       </main>
 
-      <Footer />
     </div>
   );
 }

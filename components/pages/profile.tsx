@@ -6,8 +6,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,7 +30,7 @@ import {
   Settings,
   Briefcase
 } from "lucide-react";
-import { insertUserSchema, TASK_CATEGORIES } from "@shared/schema";
+import { insertUserSchema, TASK_CATEGORIES } from "@/shared/schema";
 import { z } from "zod";
 
 const profileUpdateSchema = insertUserSchema.pick({
@@ -170,7 +168,6 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
@@ -720,7 +717,6 @@ export default function Profile() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }
