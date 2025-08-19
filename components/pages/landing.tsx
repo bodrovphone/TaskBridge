@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import CategoryCard from "@/components/category-card";
 import TaskCard from "@/components/task-card";
+import { LocaleLink } from "@/components/locale-link";
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 import LandingSkeleton from "@/components/landing-skeleton";
@@ -226,10 +227,10 @@ export default function Landing() {
                   className="bg-primary-500 hover:bg-primary-700 text-white hover:text-black transition-all border-2 border-primary-500 hover:border-primary-500 text-lg px-8 py-4 h-auto"
                   asChild
                 >
-                  <a href="/api/login">
+                  <LocaleLink href="/create-task">
                     <Plus className="mr-2" size={20} />
                     {t('landing.hero.getStarted')}
-                  </a>
+                  </LocaleLink>
                 </Button>
                 <Button 
                   variant="outline" 
@@ -237,10 +238,10 @@ export default function Landing() {
                   className="border-2 border-primary-500 text-black bg-primary-700 hover:bg-primary-500 hover:text-white transition-all text-lg px-8 py-4 h-auto"
                   asChild
                 >
-                  <a href="/browse-tasks">  
+                  <LocaleLink href="/browse-tasks">  
                     <Search className="mr-2" size={20} />
                     {t('landing.hero.browseServices')}
-                  </a>
+                  </LocaleLink>
                 </Button>
               </div>
 
@@ -356,7 +357,7 @@ export default function Landing() {
               className="bg-primary-500 hover:bg-primary-600"
               asChild
             >
-              <a href="/browse-tasks">Виж всички задачи</a>
+              <LocaleLink href="/browse-tasks">Виж всички задачи</LocaleLink>
             </Button>
           </div>
 
@@ -377,7 +378,7 @@ export default function Landing() {
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">Няма налични задачи в момента.</p>
               <Button className="mt-4 bg-primary-500 hover:bg-primary-600" asChild>
-                <a href="/api/login">Публикувай първата задача</a>
+                <LocaleLink href="/create-task">Публикувай първата задача</LocaleLink>
               </Button>
             </div>
           )}
@@ -668,10 +669,10 @@ export default function Landing() {
                   className="bg-primary-600 text-white hover:bg-primary-700 hover:scale-105 transition-all duration-200 px-8 py-4 text-lg font-semibold shadow-xl"
                   asChild
                 >
-                  <a href="/create-task" className="flex items-center gap-2">
+                  <LocaleLink href="/create-task" className="flex items-center gap-2">
                     <Plus size={20} />
                     {t('landing.cta.postTask')}
-                  </a>
+                  </LocaleLink>
                 </Button>
                 <Button 
                   size="lg"
@@ -679,10 +680,10 @@ export default function Landing() {
                   className="border-2 border-gray-600 text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-white hover:scale-105 transition-all duration-200 px-8 py-4 text-lg font-semibold"
                   asChild
                 >
-                  <a href="/api/login" className="flex items-center gap-2">
+                  <LocaleLink href="/profile" className="flex items-center gap-2">
                     <UserCheck size={20} />
                     {t('landing.cta.joinProfessionals')}
-                  </a>
+                  </LocaleLink>
                 </Button>
               </div>
               
