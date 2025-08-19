@@ -8,7 +8,7 @@ interface LogoProps {
   variant?: 'light' | 'dark' | 'gradient'
 }
 
-export function Logo({ className, size = 'md', variant = 'gradient' }: LogoProps) {
+function Logo({ className, size = 'md', variant = 'gradient' }: LogoProps) {
   const sizes = {
     sm: 'w-8 h-8',
     md: 'w-12 h-12', 
@@ -63,7 +63,7 @@ export function Logo({ className, size = 'md', variant = 'gradient' }: LogoProps
 /**
  * Icon-only version of the logo
  */
-export function LogoIcon({ className, size = 'md' }: Omit<LogoProps, 'variant'>) {
+function LogoIcon({ className, size = 'md' }: Omit<LogoProps, 'variant'>) {
   const sizes = {
     sm: 'w-8 h-8 text-sm',
     md: 'w-12 h-12 text-lg',
@@ -82,3 +82,8 @@ export function LogoIcon({ className, size = 'md' }: Omit<LogoProps, 'variant'>)
     </div>
   )
 }
+
+Logo.displayName = 'Logo';
+LogoIcon.displayName = 'LogoIcon';
+
+export { Logo, LogoIcon };

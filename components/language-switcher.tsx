@@ -18,7 +18,7 @@ import { saveUserLocalePreference } from '@/lib/utils/client-locale'
  * Language switcher component with proper locale management
  * Handles both URL navigation and persistence of user preferences
  */
-export function LanguageSwitcher() {
+function LanguageSwitcher() {
   const { i18n } = useTranslation()
   const router = useRouter()
   const pathname = usePathname()
@@ -85,3 +85,7 @@ export function LanguageSwitcher() {
     </Dropdown>
   );
 }
+
+LanguageSwitcher.displayName = 'LanguageSwitcher';
+
+export { LanguageSwitcher };

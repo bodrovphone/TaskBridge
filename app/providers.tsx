@@ -7,7 +7,7 @@ import i18n from '@/lib/i18n'
 import { Toaster } from '@/components/ui/toaster'
 import { NextUIProvider } from '@nextui-org/react'
 
-export function Providers({ children }: { children: React.ReactNode }) {
+function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -32,3 +32,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </NextUIProvider>
   )
 }
+
+Providers.displayName = 'Providers';
+
+export { Providers };

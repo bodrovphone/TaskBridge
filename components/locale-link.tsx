@@ -17,7 +17,7 @@ interface LocaleLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
  * @param locale - Optional locale override
  * @param props - Other Link props
  */
-export function LocaleLink({ href, locale, ...props }: LocaleLinkProps) {
+function LocaleLink({ href, locale, ...props }: LocaleLinkProps) {
   const pathname = usePathname()
   
   // Extract current locale from URL or use provided locale
@@ -36,3 +36,7 @@ export function LocaleLink({ href, locale, ...props }: LocaleLinkProps) {
   
   return <Link href={localizedHref} {...props} />
 }
+
+LocaleLink.displayName = 'LocaleLink';
+
+export { LocaleLink };

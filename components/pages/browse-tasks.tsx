@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, MapPin, DollarSign, Calendar, Clock, SlidersHorizontal, X } from "lucide-react";
 import { TASK_CATEGORIES } from "../../shared/schema";
 
-export default function BrowseTasks() {
+function BrowseTasks() {
   const { t } = useTranslation();
   const [filters, setFilters] = useState({
     search: "",
@@ -364,3 +364,7 @@ export default function BrowseTasks() {
     </div>
   );
 }
+
+BrowseTasks.displayName = 'BrowseTasks';
+
+export default BrowseTasks;

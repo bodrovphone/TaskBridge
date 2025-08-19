@@ -2,7 +2,7 @@
 
 import { Skeleton, TaskCardSkeleton, CategoryCardSkeleton, TestimonialSkeleton } from "@/components/skeleton"
 
-export default function LandingSkeleton() {
+function LandingSkeleton() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section Skeleton */}
@@ -155,3 +155,7 @@ export default function LandingSkeleton() {
     </div>
   )
 }
+
+LandingSkeleton.displayName = 'LandingSkeleton';
+
+export default LandingSkeleton;

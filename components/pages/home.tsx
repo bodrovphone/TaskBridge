@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { isUnauthorizedError } from "@/lib/authUtils";
 
-export default function Home() {
+function Home() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -231,3 +231,7 @@ export default function Home() {
     </div>
   );
 }
+
+Home.displayName = 'Home';
+
+export default Home;

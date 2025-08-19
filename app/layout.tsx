@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'Connect with verified local professionals for all kinds of tasks - from home repairs to deliveries and personal assistance. Secure platform with verified professionals.',
 }
 
-export default function RootLayout({
+function RootLayout({
   children,
 }: {
   children: React.ReactNode
@@ -22,3 +22,7 @@ export default function RootLayout({
     </html>
   )
 }
+
+RootLayout.displayName = 'RootLayout';
+
+export default RootLayout;

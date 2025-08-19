@@ -19,7 +19,7 @@ interface ErrorBoundaryState {
  * Error boundary component to catch and handle React errors gracefully
  * Provides user-friendly error messages and recovery options
  */
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props)
     this.state = { hasError: false }
@@ -90,3 +90,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     return this.props.children
   }
 }
+
+ErrorBoundary.displayName = 'ErrorBoundary';
+
+export { ErrorBoundary };

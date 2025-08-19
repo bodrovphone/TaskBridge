@@ -17,7 +17,7 @@ import {
   Link as NextUILink
 } from "@nextui-org/react"
 
-export default function Header() {
+function Header() {
   const pathname = usePathname()
   const { t } = useTranslation()
 
@@ -107,3 +107,7 @@ export default function Header() {
     </Navbar>
   )
 }
+
+Header.displayName = 'Header'
+
+export default Header

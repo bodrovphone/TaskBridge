@@ -2,6 +2,10 @@
 
 import BrowseTasks from '@/components/pages/browse-tasks'
 
-export default function BrowseTasksPage() {
+function BrowseTasksPage() {
   return <BrowseTasks />
 }
+
+BrowseTasksPage.displayName = 'BrowseTasksPage';
+
+export default BrowseTasksPage;

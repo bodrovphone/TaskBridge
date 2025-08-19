@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
-export default function Landing() {
+function Landing() {
   const { t, ready } = useTranslation();
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
@@ -845,3 +845,7 @@ export default function Landing() {
     </div>
   );
 }
+
+Landing.displayName = 'Landing';
+
+export default Landing;

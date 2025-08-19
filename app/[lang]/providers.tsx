@@ -64,7 +64,7 @@ function createQueryClient() {
  * @param children - Child components
  * @param locale - Validated locale from URL
  */
-export function LocaleProviders({ children, locale }: LocaleProvidersProps) {
+function LocaleProviders({ children, locale }: LocaleProvidersProps) {
   const [queryClient] = useState(createQueryClient)
   const [isI18nReady, setIsI18nReady] = useState(false)
   const [i18nError, setI18nError] = useState<Error | null>(null)
@@ -129,3 +129,8 @@ export function LocaleProviders({ children, locale }: LocaleProvidersProps) {
     </ErrorBoundary>
   )
 }
+
+LocaleLoader.displayName = 'LocaleLoader';
+LocaleProviders.displayName = 'LocaleProviders';
+
+export { LocaleProviders };

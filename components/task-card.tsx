@@ -39,7 +39,7 @@ const categoryColors = {
   "other": "default"
 } as const;
 
-export default function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
+function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const { t, i18n } = useTranslation();
   
   const getCategoryName = (category: string) => {
@@ -219,3 +219,7 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     </Card>
   );
 }
+
+TaskCard.displayName = 'TaskCard'
+
+export default TaskCard

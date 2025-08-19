@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function Skeleton({ className, ...props }: SkeletonProps) {
+function Skeleton({ className, ...props }: SkeletonProps) {
   return (
     <div
       className={cn("animate-pulse rounded-md bg-gray-200", className)}
@@ -14,7 +14,7 @@ export function Skeleton({ className, ...props }: SkeletonProps) {
 }
 
 // Skeleton components for specific content types
-export function TaskCardSkeleton() {
+function TaskCardSkeleton() {
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-6">
       <div className="w-full h-48 bg-gray-200 animate-pulse rounded-lg mb-4"></div>
@@ -52,7 +52,7 @@ export function TaskCardSkeleton() {
   )
 }
 
-export function CategoryCardSkeleton() {
+function CategoryCardSkeleton() {
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-6">
       <Skeleton className="w-12 h-12 rounded-lg mb-4" />
@@ -64,7 +64,7 @@ export function CategoryCardSkeleton() {
   )
 }
 
-export function TestimonialSkeleton() {
+function TestimonialSkeleton() {
   return (
     <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
       <div className="flex items-center mb-6">
@@ -80,3 +80,10 @@ export function TestimonialSkeleton() {
     </div>
   )
 }
+
+Skeleton.displayName = 'Skeleton';
+TaskCardSkeleton.displayName = 'TaskCardSkeleton';
+CategoryCardSkeleton.displayName = 'CategoryCardSkeleton';
+TestimonialSkeleton.displayName = 'TestimonialSkeleton';
+
+export { Skeleton, TaskCardSkeleton, CategoryCardSkeleton, TestimonialSkeleton };

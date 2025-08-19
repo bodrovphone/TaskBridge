@@ -23,7 +23,7 @@ export async function generateStaticParams() {
  * @param children - Child components
  * @param params - Route parameters including locale
  */
-export default async function LocaleLayout({ 
+async function LocaleLayout({ 
   children, 
   params 
 }: LocaleLayoutProps) {
@@ -47,3 +47,7 @@ export default async function LocaleLayout({
     </LocaleProviders>
   )
 }
+
+LocaleLayout.displayName = 'LocaleLayout';
+
+export default LocaleLayout;

@@ -13,7 +13,7 @@ interface CategoryCardProps {
   onClick?: () => void;
 }
 
-export default function CategoryCard({ 
+function CategoryCard({ 
   title, 
   description, 
   count, 
@@ -89,3 +89,7 @@ export default function CategoryCard({
     </Card>
   );
 }
+
+CategoryCard.displayName = 'CategoryCard'
+
+export default CategoryCard

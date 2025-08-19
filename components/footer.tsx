@@ -7,7 +7,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { LocaleLink } from "@/components/locale-link";
 import { extractLocaleFromPathname } from "@/lib/utils/url-locale";
 
-export default function Footer() {
+function Footer() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
@@ -204,3 +204,7 @@ export default function Footer() {
     </footer>
   );
 }
+
+Footer.displayName = 'Footer';
+
+export default Footer;

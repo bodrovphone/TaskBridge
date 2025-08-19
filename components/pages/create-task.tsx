@@ -33,7 +33,7 @@ const createTaskSchema = insertTaskSchema.extend({
 
 type CreateTaskFormData = z.infer<typeof createTaskSchema>;
 
-export default function CreateTask() {
+function CreateTask() {
   const { t } = useTranslation();
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
@@ -647,3 +647,7 @@ export default function CreateTask() {
     </div>
   );
 }
+
+CreateTask.displayName = 'CreateTask';
+
+export default CreateTask;

@@ -26,7 +26,7 @@ interface WobblingGeometricProps {
  * Reusable spinning geometric element with accent dot
  * Features a slow rotating square with a pinging accent dot
  */
-export function SpinningGeometric({ 
+function SpinningGeometric({ 
   className, 
   size = 'md', 
   opacity = 0.3,
@@ -63,7 +63,7 @@ export function SpinningGeometric({
  * Reusable wobbling geometric element with accent dot
  * Features a wobbling rectangle with scale variations and a pinging accent
  */
-export function WobblingGeometric({ 
+function WobblingGeometric({ 
   className, 
   size = 'md', 
   opacity = 0.3,
@@ -119,3 +119,8 @@ export const geometricAnimationStyles = `
     animation: wobble 4s ease-in-out infinite;
   }
 `
+
+SpinningGeometric.displayName = 'SpinningGeometric';
+WobblingGeometric.displayName = 'WobblingGeometric';
+
+export { SpinningGeometric, WobblingGeometric };
