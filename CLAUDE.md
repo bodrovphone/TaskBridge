@@ -19,7 +19,10 @@ TaskBridge (branded as "Trudify") is a Bulgarian freelance platform that connect
 - **Routing**: Next.js App Router
 - **State Management**: TanStack Query (React Query)
 - **Authentication**: Currently disabled (no auth required)
-- **Internationalization**: i18next
+- **Internationalization**: Smart multilingual routing with i18next
+  - **URL Structure**: `/en/`, `/bg/`, `/ru/` for SEO-friendly locales
+  - **Smart Detection**: Cookie preference → Browser language → English default
+  - **Cost-Optimized**: Middleware with early returns (minimal execution for returning users)
 - **Animations**: Framer Motion (included with NextUI)
 - **Deployment**: Configured for Vercel deployment
 
@@ -39,15 +42,22 @@ npm run db:push         # Push schema changes to database using Drizzle
 ## Architecture
 
 ### Next.js App Router Structure
-- `/app/` - Next.js App Router pages and API routes
-  - `/app/page.tsx` - Landing page (no authentication required)
-  - `/app/browse-tasks/page.tsx` - Browse available tasks
-  - `/app/create-task/page.tsx` - Create new task
-  - `/app/profile/page.tsx` - User profile
+- `/app/` - Next.js App Router with multilingual routing
+  - `/app/page.tsx` - Root redirect to locale
+  - `/app/[lang]/` - Locale-specific pages (en, bg, ru)
+    - `/app/[lang]/page.tsx` - Localized homepage
+    - `/app/[lang]/browse-tasks/` - Browse available tasks
+    - `/app/[lang]/create-task/` - Create new task
+    - `/app/[lang]/profile/` - User profile
   - `/app/api/` - API routes (to be migrated from Express)
 - `/components/` - React UI components
 - `/lib/` - Shared utilities and configurations
+  - `/lib/constants/locales.ts` - Locale constants and configuration
+  - `/lib/utils/locale-detection.ts` - Server-side locale utilities
+  - `/lib/utils/url-locale.ts` - URL locale manipulation
+  - `/lib/utils/client-locale.ts` - Client-side locale utilities
 - `/hooks/` - Custom React hooks
+- `/middleware.ts` - Smart locale detection and redirection
 
 ### Database Schema
 The application has four main entities:
@@ -111,8 +121,11 @@ Key features include:
 - Both libraries work together seamlessly in the same project
 
 ### Internationalization
-- Uses i18next for Bulgarian/English translations
-- Text content should be translatable via the i18n system
+- **Smart multilingual routing** with URL-based locales (`/en/`, `/bg/`, `/ru/`)
+- **Production-ready middleware** with cost optimization and early returns
+- **Type-safe utilities** in `/lib/utils/` for locale detection and URL manipulation
+- **User preference persistence** via cookies and localStorage
+- **Error boundaries** and graceful fallbacks for i18n initialization
 
 ### Authentication
 - **Currently disabled** - no authentication required to access pages

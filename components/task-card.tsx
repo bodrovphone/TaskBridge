@@ -2,6 +2,7 @@
 
 import { MapPin, Clock, Wallet, Star } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";
 import { useTranslation } from 'react-i18next';
@@ -124,11 +125,12 @@ export default function TaskCard({ task, onApply, showApplyButton = true }: Task
     >
       <CardBody className="p-0">
         <div className="w-full h-48 overflow-hidden">
-          <img
+          <Image
             src={(task as any).imageUrl || getCategoryImage(task.category, task.id)}
             alt={task.title}
+            width={400}
+            height={192}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            loading="lazy"
           />
         </div>
         

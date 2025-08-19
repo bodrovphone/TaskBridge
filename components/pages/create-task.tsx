@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -313,9 +314,11 @@ export default function CreateTask() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {uploadedPhotos.map((photo, index) => (
                         <div key={index} className="relative group">
-                          <img
+                          <Image
                             src={photo}
                             alt={`Upload ${index + 1}`}
+                            width={96}
+                            height={96}
                             className="w-full h-24 object-cover rounded-lg"
                           />
                           <button

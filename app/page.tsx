@@ -1,8 +1,8 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import Landing from '@/components/pages/landing'
-
-export default function HomePage() {
-  // Authentication is currently disabled - show landing page for all users
-  return <Landing />
+// This page should never be reached due to middleware redirects,
+// but provides a fallback just in case
+export default function RootPage() {
+  // Redirect to default locale
+  redirect('/en')
 }

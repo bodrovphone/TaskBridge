@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import CategoryCard from "@/components/category-card";
 import TaskCard from "@/components/task-card";
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 import LandingSkeleton from "@/components/landing-skeleton";
 import { 
   Home, 
@@ -262,9 +263,11 @@ export default function Landing() {
 
             <div className="relative">
               {/* Hero Image */}
-              <img 
+              <Image 
                 src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
                 alt="Professional plumber working on home repairs" 
+                width={800}
+                height={600}
                 className="rounded-2xl shadow-2xl w-full h-auto"
               />
               
@@ -429,9 +432,11 @@ export default function Landing() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy customer"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -449,9 +454,11 @@ export default function Landing() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy customer"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -470,9 +477,11 @@ export default function Landing() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy customer"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -497,9 +506,11 @@ export default function Landing() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy professional"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -518,9 +529,11 @@ export default function Landing() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy professional"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -538,9 +551,11 @@ export default function Landing() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
                 <div className="flex items-center mb-4">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
                     alt="Happy professional"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
