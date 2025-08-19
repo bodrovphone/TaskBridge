@@ -64,7 +64,7 @@ export function LanguageSwitcher() {
           className="h-8 px-2 gap-1"
         >
           <span>{currentLanguage.flag}</span>
-          <span className="text-sm hidden sm:inline">{currentLanguage.name}</span>
+          <span className="text-sm">{currentLanguage.name}</span>
         </Button>
       </DropdownTrigger>
       <DropdownMenu 

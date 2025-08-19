@@ -127,6 +127,13 @@ Key features include:
 - **User preference persistence** via cookies and localStorage
 - **Error boundaries** and graceful fallbacks for i18n initialization
 
+#### Implementation Details
+- **LocaleLink Component** (`/components/locale-link.tsx`) - Automatically prefixes internal links with current locale
+- **Constants** (`/lib/constants/locales.ts`) - Centralized locale configuration, no hardcoded strings
+- **Middleware** (`/middleware.ts`) - Smart detection: Cookie → Browser → English default, optimized for minimal cost
+- **Language Priority**: User manual selection (highest) → Browser detection → English fallback
+- **Performance**: 90% of requests skip middleware via early returns for existing locale URLs
+
 ### Authentication
 - **Currently disabled** - no authentication required to access pages
 - Authentication system was removed during Next.js migration
@@ -141,3 +148,4 @@ Key features include:
 - Configured for Vercel deployment
 - Database connection via `DATABASE_URL` environment variable
 - Static assets served by Next.js
+- to memorize

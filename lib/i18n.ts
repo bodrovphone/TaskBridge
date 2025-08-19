@@ -81,6 +81,7 @@ const resources = {
       
       "landing.featured.title": "Featured Tasks",
       "landing.featured.subtitle": "Recent tasks posted by our community",
+      "landing.featured.badge": "Latest Opportunities",
       "landing.featured.viewAll": "View All Tasks",
       "landing.featured.professionalDesc": "Find your next opportunity",
       "landing.featured.customerDesc": "See what others are posting",
@@ -269,7 +270,7 @@ const resources = {
       "footer.contact.title": "Contact",
       "footer.contact.subtitle": "Get in touch for questions and support",
       "footer.language.label": "Language",
-      "footer.copyright": "© 2024 Trudify. All rights reserved.",
+      "footer.copyright": "© 2025 Obod Soft LTD. All rights reserved.",
 
       "message.taskCreated": "Task created successfully!",
       "message.profileUpdated": "Profile updated successfully!",
@@ -351,6 +352,7 @@ const resources = {
       "landing.categories.creative": "Творчески услуги",
       
       "landing.featured.title": "Препоръчани задачи",
+      "landing.featured.badge": "Последни възможности",
       "landing.featured.viewAll": "Вижте всички задачи",
       
       "landing.howItWorks.title": "Как работи платформата",
@@ -506,7 +508,7 @@ const resources = {
       "landing.cta.title": "Готови ли сте да започнете?",
       "landing.cta.subtitle": "Присъединете се към хиляди доволни потребители днес",
       "landing.cta.postTask": "Публикувайте задача",
-      "landing.cta.joinProfessionals": "Присъединете се като професионалист",
+      "landing.cta.joinProfessionals": "Стани професионалист",
       "landing.cta.freeToJoin": "Безплатно присъединяване, без скрити такси",
       "landing.cta.stats.completedTasks": "Завършени задачи",
       "landing.cta.stats.activeSpecialists": "Активни специалисти",
@@ -547,7 +549,7 @@ const resources = {
       "footer.contact.title": "Контакти",
       "footer.contact.subtitle": "Свържете се с нас за въпроси и поддръжка",
       "footer.language.label": "Език",
-      "footer.copyright": "© 2024 Trudify. Всички права запазени.",
+      "footer.copyright": "© 2025 Obod Soft LTD. Всички права запазени.",
 
       "message.taskCreated": "Задачата е създадена успешно!",
       "message.profileUpdated": "Профилът е актуализиран успешно!",
@@ -620,6 +622,7 @@ const resources = {
       "landing.categories.creative": "Творческие услуги",
       
       "landing.featured.title": "Рекомендуемые задачи",
+      "landing.featured.badge": "Последние возможности",
       "landing.featured.viewAll": "Посмотреть все задачи",
       
       "landing.howItWorks.title": "Как это работает",
@@ -826,7 +829,7 @@ const resources = {
       "footer.contact.title": "Контакты",
       "footer.contact.subtitle": "Свяжитесь с нами по вопросам и поддержке",
       "footer.language.label": "Язык",
-      "footer.copyright": "© 2024 Trudify. Все права защищены.",
+      "footer.copyright": "© 2025 Obod Soft LTD. Все права защищены.",
 
       "message.taskCreated": "Задача успешно создана!",
       "message.profileUpdated": "Профиль успешно обновлен!",

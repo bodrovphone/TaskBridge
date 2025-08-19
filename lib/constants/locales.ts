@@ -32,7 +32,7 @@ export const LANGUAGE_CONFIG: Record<SupportedLocale, {
   ru: {
     code: 'ru',
     name: 'Русский',
-    flag: '🇷🇺',
+    flag: '🚩',
     region: 'RU'
   }
 } as const
