@@ -89,8 +89,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     return this.props.children
   }
+  static displayName = 'ErrorBoundary';
 }
-
-ErrorBoundary.displayName = 'ErrorBoundary';
 
 export { ErrorBoundary };
