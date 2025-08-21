@@ -1,7 +1,7 @@
 'use client'
 
-import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { LocaleLink } from "@/components/locale-link"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { useTranslation } from 'react-i18next'
 import { Handshake, Plus } from "lucide-react"
