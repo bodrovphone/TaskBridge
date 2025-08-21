@@ -53,7 +53,7 @@ function Header() {
         {navigation.map((item) => (
           <NavbarItem key={item.name}>
             <NextUILink
-              as={Link}
+              as={LocaleLink}
               href={item.href}
               className="text-gray-900 hover:text-primary font-medium transition-colors relative"
               underline="hover"
@@ -71,7 +71,7 @@ function Header() {
         </NavbarItem>
         <NavbarItem>
           <Button 
-            as={Link}
+            as={LocaleLink}
             href="/create-task"
             color="primary"
             variant="solid"
@@ -89,7 +89,7 @@ function Header() {
         {navigation.map((item) => (
           <NavbarMenuItem key={item.name}>
             <NextUILink
-              as={Link}
+              as={LocaleLink}
               href={item.href}
               className="w-full text-gray-900 hover:text-primary font-medium py-2"
               size="lg"
