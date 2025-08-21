@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import CategoryCard from "@/components/category-card";
 import TaskCard from "@/components/task-card";
+import VideoBackground from "@/components/video-background";
 import { LocaleLink } from "@/components/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/animated-elements";
 import { LogoIcon } from "@/components/logo";
 import { useTranslation } from 'react-i18next';
 import { usePathname } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
+import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
 import LandingSkeleton from "@/components/landing-skeleton";
 import { 
@@ -33,6 +35,7 @@ function Landing() {
   const { t, ready } = useTranslation();
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
+  const isDesktop = useIsDesktop();
   
   // Mock featured tasks for display
   const featuredTasks = [
@@ -335,16 +338,34 @@ function Landing() {
             </div>
 
             <div className="relative lg:scale-105 hover:scale-110 transition-transform duration-500">
-              {/* Hero Image with enhanced styling */}
+              {/* Hero Video/Image with enhanced styling */}
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-lg opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
-                <Image 
-                  src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                  alt="Professional plumber working on home repairs" 
-                  width={800}
-                  height={600}
-                  className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white"
-                />
+                {isDesktop ? (
+                  <video 
+                    src="/assets/hero_video_2.mp4"
+                    poster="/images/hero_image_1.jpg"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
+                    style={{ maxHeight: '600px' }}
+                  >
+                    <source src="/assets/hero_video_2.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <Image 
+                    src="/images/hero_image_1.jpg"
+                    alt="Professional working on home repairs" 
+                    width={800}
+                    height={600}
+                    className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
+                    style={{ maxHeight: '600px' }}
+                    priority
+                  />
+                )}
               </div>
               
               {/* Enhanced Floating Stats Cards */}

@@ -3,13 +3,16 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from "framer-motion";
 import TaskCard from "@/components/task-card";
+import VideoBackground from "@/components/video-background";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input as ShadcnInput } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, MapPin, DollarSign, Calendar, Clock, SlidersHorizontal, X } from "lucide-react";
+import { Input, Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
+import { Search, Filter, MapPin, DollarSign, Calendar, Clock, SlidersHorizontal, X, Sparkles } from "lucide-react";
 import { TASK_CATEGORIES } from "../../shared/schema";
 
 function BrowseTasks() {
@@ -108,257 +111,305 @@ function BrowseTasks() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            {t('tasks.title')}
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('tasks.subtitle')}
-          </p>
+      {/* Hero Section with Video Background */}
+      <VideoBackground 
+        videoSrc="/assets/hero_video_1.mp4"
+        fallbackGradient="from-blue-600 via-blue-700 to-emerald-600"
+        overlayOpacity={0.6}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center text-white"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-white/20 rounded-full backdrop-blur-sm"
+            >
+              <Sparkles className="w-5 h-5" />
+              <span className="text-sm font-medium">{t('browseTasks.hero.badge')}</span>
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-4xl lg:text-6xl font-bold mb-6 leading-tight"
+            >
+              {t('browseTasks.hero.title1')}
+              <br />
+              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                {t('browseTasks.hero.title2')}
+              </span>
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl lg:text-2xl text-blue-100 max-w-3xl mx-auto mb-12 leading-relaxed"
+            >
+              {t('browseTasks.hero.subtitle')}
+            </motion.p>
+          </motion.div>
         </div>
+      </VideoBackground>
 
-        {/* Main Search Bar */}
-        <div className="mb-8">
-          <Card className="bg-white shadow-lg border-0">
-            <CardContent className="p-8">
-              <div className="relative">
-                <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400" size={24} />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+        {/* Centralized Search Bar */}
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mb-12"
+        >
+          <NextUICard className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 max-w-4xl mx-auto">
+            <div className="p-8">
+              <motion.div
+                whileFocus={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
                 <Input
-                  placeholder={t('tasks.searchPlaceholder')}
+                  size="lg"
+                  placeholder={t('browseTasks.search.placeholder')}
                   value={filters.search}
                   onChange={(e) => handleFilterChange("search", e.target.value)}
-                  className="pl-16 pr-4 py-6 text-lg border-2 border-gray-200 rounded-2xl focus:border-primary-500 transition-colors"
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Advanced Filters */}
-        <Card className="mb-8">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-4">
-              <SlidersHorizontal size={20} className="text-gray-600" />
-              <h3 className="text-lg font-semibold text-gray-900">{t('tasks.filters.title')}</h3>
-            </div>
-            
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-              {/* Category Filter */}
-              <Select value={filters.category} onValueChange={(value) => handleFilterChange("category", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t('tasks.filters.category')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">{t('tasks.filters.allCategories')}</SelectItem>
-                  {Object.entries(TASK_CATEGORIES).map(([key, name]) => (
-                    <SelectItem key={key} value={key}>{name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* City Filter */}
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                <Input
-                  placeholder={t('tasks.filters.location')}
-                  value={filters.city}
-                  onChange={(e) => handleFilterChange("city", e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Budget Min Filter */}
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                <Input
-                  placeholder={t('tasks.filters.budgetMin')}
-                  type="number"
-                  value={filters.budgetMin}
-                  onChange={(e) => handleFilterChange("budgetMin", e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Budget Max Filter */}
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                <Input
-                  placeholder={t('tasks.filters.budgetMax')}
-                  type="number"
-                  value={filters.budgetMax}
-                  onChange={(e) => handleFilterChange("budgetMax", e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Deadline Filter */}
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                <Input
-                  placeholder={t('tasks.filters.deadline')}
-                  type="date"
-                  value={filters.deadline}
-                  onChange={(e) => handleFilterChange("deadline", e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Status Filter */}
-              <Select value={filters.status} onValueChange={(value) => handleFilterChange("status", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t('tasks.filters.status')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">{t('tasks.filters.all')}</SelectItem>
-                  <SelectItem value="open">{t('tasks.filters.open')}</SelectItem>
-                  <SelectItem value="in_progress">{t('tasks.filters.inProgress')}</SelectItem>
-                  <SelectItem value="completed">{t('tasks.filters.completed')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Active Filters Display */}
-            {hasActiveFilters && (
-              <div className="mt-4 pt-4 border-t">
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                  <span className="text-sm font-medium text-gray-700">{t('tasks.filters.activeFilters')}:</span>
-                  {getActiveFilters().map((filter) => (
-                    <Badge 
-                      key={filter.key} 
-                      variant="secondary" 
-                      className="bg-primary-100 text-primary-800 hover:bg-primary-200 cursor-pointer"
-                      onClick={() => removeFilter(filter.key)}
+                  startContent={
+                    <motion.div
+                      animate={{ rotate: filters.search ? 360 : 0 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      {filter.label}
-                      <X size={12} className="ml-1" />
-                    </Badge>
-                  ))}
+                      <Search className="text-blue-500" size={24} />
+                    </motion.div>
+                  }
+                  classNames={{
+                    base: "max-w-full",
+                    mainWrapper: "h-full",
+                    input: "text-lg",
+                    inputWrapper: "h-16 px-6 bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg transition-all duration-300"
+                  }}
+                />
+              </motion.div>
+              
+              {/* Quick Filter Suggestions */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="mt-6 flex flex-wrap gap-3 justify-center"
+              >
+                <span className="text-sm text-gray-600 mr-2">{t('browseTasks.search.popular')}:</span>
+                {['programming', 'design', 'marketing', 'translation', 'photography'].map((tag) => (
+                  <motion.button
+                    key={tag}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleFilterChange("search", t(`browseTasks.search.tags.${tag}`))}
+                    className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                  >
+                    {t(`browseTasks.search.tags.${tag}`)}
+                  </motion.button>
+                ))}
+              </motion.div>
+            </div>
+          </NextUICard>
+        </motion.div>
+
+        {/* Filters Placeholder */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.0 }}
+          className="mb-8"
+        >
+          <NextUICard className="bg-white shadow-lg">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal size={20} className="text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">{t('browseTasks.filters.title')}</h3>
+                </div>
+                <NextUIButton 
+                  size="sm" 
+                  variant="light"
+                  className="text-blue-600"
+                  startContent={<Filter size={16} />}
+                >
+                  {t('browseTasks.filters.advanced')}
+                </NextUIButton>
+              </div>
+              
+              {/* Quick Filters Row */}
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm text-gray-600">{t('browseTasks.filters.quick')}:</span>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t('browseTasks.filters.allCategories')}
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t('browseTasks.filters.sofia')}
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t('browseTasks.filters.budgetUpTo')}
+                </motion.button>
+                
+                <div className="ml-auto flex items-center gap-2">
+                  <span className="text-sm text-gray-600">{t('browseTasks.filters.sortBy')}:</span>
+                  <select className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white">
+                    <option>{t('browseTasks.filters.sort.newest')}</option>
+                    <option>{t('browseTasks.filters.sort.oldest')}</option>
+                    <option>{t('browseTasks.filters.sort.highBudget')}</option>
+                    <option>{t('browseTasks.filters.sort.lowBudget')}</option>
+                  </select>
                 </div>
               </div>
-            )}
-
-            {/* Filter Actions */}
-            <div className="flex justify-between items-center mt-4 pt-4 border-t">
-              <div className="flex items-center space-x-4">
-                {hasActiveFilters && (
-                  <Button variant="outline" size="sm" onClick={clearFilters}>
-                    <X size={16} className="mr-2" />
-                    {t('tasks.filters.clearAll')}
-                  </Button>
-                )}
+              
+              {/* Results Count */}
+              <div className="mt-4 pt-4 border-t border-gray-100">
                 <span className="text-sm text-gray-600">
-                  {isLoading ? t('loading') : `${(tasks as any[]).length} ${t('tasks.results')}`}
+                  {isLoading ? t('browseTasks.results.loading') : t('browseTasks.results.shown', { count: (tasks as any[]).length })}
                 </span>
               </div>
-
-              {/* Sort Options */}
-              <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange("sortBy", value)}>
-                <SelectTrigger className="w-48">
-                  <Clock size={16} className="mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">{t('tasks.sort.newest')}</SelectItem>
-                  <SelectItem value="oldest">{t('tasks.sort.oldest')}</SelectItem>
-                  <SelectItem value="budget_high">{t('tasks.sort.budgetHigh')}</SelectItem>
-                  <SelectItem value="budget_low">{t('tasks.sort.budgetLow')}</SelectItem>
-                  <SelectItem value="deadline">{t('tasks.sort.deadline')}</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
-          </CardContent>
-        </Card>
+          </NextUICard>
+        </motion.div>
 
         {/* Results */}
-        {error ? (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center py-12">
-                <div className="text-red-500 mb-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+        >
+          {error ? (
+            <NextUICard className="bg-white shadow-lg">
+              <div className="p-12 text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", bounce: 0.4 }}
+                  className="text-red-500 mb-4"
+                >
                   <Filter size={48} className="mx-auto" />
-                </div>
+                </motion.div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Грешка при зареждане
+                  {t('browseTasks.results.error.title')}
                 </h3>
                 <p className="text-gray-600">
-                  Моля, опитайте отново или свържете се с поддръжката.
+                  {t('browseTasks.results.error.description')}
                 </p>
               </div>
-            </CardContent>
-          </Card>
-        ) : isLoading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="pt-6">
-                  <div className="space-y-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div className="space-y-2">
-                      <div className="h-3 bg-gray-200 rounded"></div>
-                      <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (tasks as any[]).length > 0 ? (
-          <>
+            </NextUICard>
+          ) : isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(tasks as any[]).map((task: any) => (
-                <TaskCard 
-                  key={task.id} 
-                  task={task}
-                  onApply={handleApplyToTask}
-                />
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <NextUICard className="animate-pulse">
+                    <div className="p-6 space-y-4">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                      <div className="space-y-2">
+                        <div className="h-3 bg-gray-200 rounded"></div>
+                        <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+                      </div>
+                    </div>
+                  </NextUICard>
+                </motion.div>
               ))}
             </div>
-
-            {/* Pagination */}
-            {(tasks as any[]).length === pageSize && (
-              <div className="flex justify-center mt-8">
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
-                    disabled={currentPage === 0}
+          ) : (tasks as any[]).length > 0 ? (
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(tasks as any[]).map((task: any, index: number) => (
+                  <motion.div
+                    key={task.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
                   >
-                    Предишна
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setCurrentPage(prev => prev + 1)}
-                    disabled={(tasks as any[]).length < pageSize}
-                  >
-                    Следваща
-                  </Button>
-                </div>
+                    <TaskCard 
+                      task={task}
+                      onApply={handleApplyToTask}
+                    />
+                  </motion.div>
+                ))}
               </div>
-            )}
-          </>
-        ) : (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center py-12">
-                <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+
+              {/* Pagination */}
+              {(tasks as any[]).length === pageSize && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex justify-center mt-8"
+                >
+                  <div className="flex space-x-2">
+                    <NextUIButton
+                      variant="bordered"
+                      onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                      isDisabled={currentPage === 0}
+                    >
+                      {t('browseTasks.pagination.previous')}
+                    </NextUIButton>
+                    <NextUIButton
+                      variant="bordered"
+                      onClick={() => setCurrentPage(prev => prev + 1)}
+                      isDisabled={(tasks as any[]).length < pageSize}
+                    >
+                      {t('browseTasks.pagination.next')}
+                    </NextUIButton>
+                  </div>
+                </motion.div>
+              )}
+            </>
+          ) : (
+            <NextUICard className="bg-white shadow-lg">
+              <div className="p-12 text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", bounce: 0.4 }}
+                >
+                  <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                </motion.div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Няма намерени задачи
+                  {t('browseTasks.results.noTasks.title')}
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Опитайте да промените филтрите или да търсите по различни критерии.
+                  {t('browseTasks.results.noTasks.description')}
                 </p>
-                <Button variant="outline" onClick={clearFilters}>
-                  Изчисти филтрите
-                </Button>
+                <NextUIButton 
+                  variant="bordered" 
+                  onClick={clearFilters}
+                  startContent={<X size={16} />}
+                >
+                  {t('browseTasks.results.noTasks.clearFilters')}
+                </NextUIButton>
               </div>
-            </CardContent>
-          </Card>
-        )}
+            </NextUICard>
+          )}
+        </motion.div>
       </main>
 
     </div>
