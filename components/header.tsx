@@ -4,7 +4,8 @@ import { usePathname } from "next/navigation"
 import { LocaleLink } from "@/components/locale-link"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { useTranslation } from 'react-i18next'
-import { Handshake, Plus } from "lucide-react"
+import { Handshake, Plus, LogOut } from "lucide-react"
+import { useAuth } from "@/hooks/use-auth"
 import { 
   Navbar, 
   NavbarBrand, 
@@ -20,8 +21,7 @@ import {
 function Header() {
   const pathname = usePathname()
   const { t } = useTranslation()
-
-  // Authentication is currently disabled - always show non-authenticated state
+  const { user, isAuthenticated, logout } = useAuth()
 
   const navigation = [
     { name: t('nav.browseTasks'), href: "/browse-tasks" },
@@ -69,18 +69,45 @@ function Header() {
         <NavbarItem className="hidden md:flex">
           <LanguageSwitcher />
         </NavbarItem>
-        <NavbarItem>
-          <Button 
-            as={LocaleLink}
-            href="/create-task"
-            color="primary"
-            variant="solid"
-            startContent={<Plus size={16} />}
-            className="font-medium"
-          >
-            {t('nav.createTask')}
-          </Button>
-        </NavbarItem>
+        {isAuthenticated ? (
+          <>
+            <NavbarItem>
+              <Button 
+                as={LocaleLink}
+                href="/create-task"
+                color="primary"
+                variant="solid"
+                startContent={<Plus size={16} />}
+                className="font-medium"
+              >
+                {t('nav.createTask')}
+              </Button>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                variant="ghost"
+                startContent={<LogOut size={16} />}
+                onClick={logout}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                {t('logout')}
+              </Button>
+            </NavbarItem>
+          </>
+        ) : (
+          <NavbarItem>
+            <Button 
+              as={LocaleLink}
+              href="/create-task"
+              color="primary"
+              variant="solid"
+              startContent={<Plus size={16} />}
+              className="font-medium"
+            >
+              {t('nav.createTask')}
+            </Button>
+          </NavbarItem>
+        )}
         <NavbarMenuToggle className="md:hidden" />
       </NavbarContent>
 
@@ -99,8 +126,18 @@ function Header() {
           </NavbarMenuItem>
         ))}
         <NavbarMenuItem>
-          <div className="pt-4 border-t border-gray-200 w-full">
+          <div className="pt-4 border-t border-gray-200 w-full space-y-3">
             <LanguageSwitcher />
+            {isAuthenticated && (
+              <Button
+                variant="ghost"
+                startContent={<LogOut size={16} />}
+                onClick={logout}
+                className="w-full justify-start text-gray-600 hover:text-gray-900"
+              >
+                {t('logout')}
+              </Button>
+            )}
           </div>
         </NavbarMenuItem>
       </NavbarMenu>

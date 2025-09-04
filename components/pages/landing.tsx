@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
+import { mockTasks } from '@/lib/mock-data';
 import LandingSkeleton from "@/components/landing-skeleton";
 import { 
   Home, 
@@ -37,66 +38,8 @@ function Landing() {
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
   const isDesktop = useIsDesktop();
   
-  // Mock featured tasks for display
-  const featuredTasks = [
-    {
-      id: "1",
-      title: "Разходка с кучето",
-      description: "Търся надежден човек да разхожда кучето ми два пъти дневно в продължение на една седмица, докато съм в командировка.",
-      category: "personal_care",
-      budgetMin: 15,
-      budgetMax: 20,
-      budgetType: "fixed",
-      city: "София",
-      neighborhood: "Лозенец", 
-      deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-
-      customer: {
-        firstName: "Мария",
-        lastName: "Петрова",
-        averageRating: "4.8"
-      }
-    },
-    {
-      id: "2", 
-      title: "Ремонт на балкон",
-      description: "Нужен ми е опитен майстор за ремонт на балкона - подмяна на дренажа и освежаване на боята.",
-      category: "home_repair",
-      budgetMin: 300,
-      budgetMax: 500,
-      budgetType: "negotiable",
-      city: "Пловдив", 
-      neighborhood: "Център",
-      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-
-      customer: {
-        firstName: "Георги",
-        lastName: "Иванов", 
-        averageRating: "4.5"
-      }
-    },
-    {
-      id: "3",
-      title: "Почистване на апартамент",  
-      description: "Необходимо е генерално почистване на тристаен апартамент след ремонт - почистване на прах, миене на прозорци и подове.",
-      category: "personal_assistant",
-      budgetMin: 120,
-      budgetMax: 180,
-      budgetType: "fixed",
-      city: "Варна",
-      neighborhood: "Морска градина",
-      deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), 
-      createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-
-      customer: {
-        firstName: "Анна",
-        lastName: "Стоянова",
-        averageRating: "4.9"
-      }
-    }
-  ];
+  // Use first 3 tasks from shared mock data for display
+  const featuredTasks = mockTasks.slice(0, 3);
 
   const categories = [
     {
@@ -214,10 +157,21 @@ function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div 
+      className="min-h-screen relative"
+      style={{
+        backgroundImage: 'url(/images/cardboard.png)',
+        backgroundRepeat: 'repeat',
+        backgroundSize: 'auto'
+      }}
+    >
+      {/* Subtle overlay for sections that need it */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-[0.5px]"></div>
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-20 lg:py-32">
+      <section className="relative overflow-hidden py-20 lg:py-32 z-10">
+        {/* Cardboard background with hero overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 via-blue-50/70 to-indigo-100/80 backdrop-blur-[1px]"></div>
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
         
@@ -398,7 +352,9 @@ function Landing() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-24 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+      <section id="how-it-works" className="py-24 relative overflow-hidden">
+        {/* Cardboard background with subtle overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-slate-50/70 backdrop-blur-[1px]"></div>
         {/* Background decoration */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full opacity-30 blur-3xl"></div>
         
@@ -422,7 +378,7 @@ function Landing() {
           }}
         />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-6 mb-20">
             <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full text-blue-700 text-sm font-semibold">
               <ArrowRight className="mr-2 h-4 w-4" />
@@ -487,12 +443,14 @@ function Landing() {
       </section>
 
       {/* Featured Tasks */}
-      <section id="browse-tasks" className="py-24 bg-slate-50 relative overflow-hidden">
+      <section id="browse-tasks" className="py-24 relative overflow-hidden">
+        {/* Cardboard background with slate overlay */}
+        <div className="absolute inset-0 bg-slate-50/70 backdrop-blur-[1px]"></div>
         {/* Background Elements */}
         <div className="absolute top-20 right-10 w-64 h-64 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full opacity-40 blur-3xl"></div>
         <div className="absolute bottom-20 left-10 w-48 h-48 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full opacity-40 blur-2xl"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-16 space-y-6 lg:space-y-0">
             <div className="space-y-4">
               <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 rounded-full text-orange-700 text-sm font-semibold">
@@ -552,8 +510,10 @@ function Landing() {
       </section>
 
       {/* Popular Categories */}
-      <section id="categories" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="categories" className="py-16 relative">
+        {/* Section overlay for better contrast */}
+        <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px]"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4 mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t('landing.categories.title')}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -576,7 +536,7 @@ function Landing() {
           </div>
 
           <div className="text-center mt-8">
-            <Button variant="ghost" className="text-primary-600 hover:text-primary-700 font-semibold text-lg">
+            <Button variant="ghost" className="text-slate-800 hover:text-slate-900 font-semibold text-lg">
               {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />
             </Button>
           </div>
@@ -584,8 +544,10 @@ function Landing() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="testimonials" className="py-20 relative">
+        {/* Section overlay for testimonials */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/50 backdrop-blur-[1px]"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">{t('landing.testimonials.title')}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -597,7 +559,7 @@ function Landing() {
           <div className="mb-16">
             <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.customers.title')}</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <Image 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -619,7 +581,7 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <Image 
                     src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -642,7 +604,7 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <Image 
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -671,7 +633,7 @@ function Landing() {
           <div className="mb-16">
             <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.professionals.title')}</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <Image 
                     src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -694,7 +656,7 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <Image 
                     src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -716,7 +678,7 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg flex flex-col h-full">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
                 <div className="flex items-center mb-4">
                   <Image 
                     src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
@@ -745,7 +707,9 @@ function Landing() {
       </section>
 
       {/* Trust & Verification */}
-      <section className="py-20 bg-gradient-to-br from-primary-50 via-white to-secondary-50 relative overflow-hidden">
+      <section className="py-20 relative overflow-hidden z-10">
+        {/* Section overlay for trust section */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/50 backdrop-blur-[1px]"></div>
         {/* Background decoration */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-32 h-32 bg-primary-200 rounded-full blur-xl"></div>
@@ -753,7 +717,7 @@ function Landing() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-6 mb-16">
             <div className="flex justify-center mb-6">
               <LogoIcon size="xl" className="hover:scale-110 transition-transform duration-300" />
@@ -767,7 +731,7 @@ function Landing() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {trustFeatures.map((feature, index) => (
               <div key={feature.title} className="group relative">
-                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 backdrop-blur-sm h-full flex flex-col">
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 h-full flex flex-col">
                   <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 ${feature.color} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <feature.icon size={36} />
                   </div>

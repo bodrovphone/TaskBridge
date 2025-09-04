@@ -120,6 +120,37 @@ Key features include:
 - **Keep Radix UI for**: Forms, Complex Dialogs, Data Tables, Advanced Interactions
 - Both libraries work together seamlessly in the same project
 
+### Task Detail Page (`/app/[lang]/tasks/[id]/`)
+The task detail page features a comprehensive view of individual tasks with advanced functionality:
+
+**🏗️ Architecture:**
+- **Server Component**: Main page (`page.tsx`) handles data fetching and SEO optimization
+- **Client Component**: `task-detail-content.tsx` handles translations and interactivity
+- **Modular Components**: Split into focused, reusable components
+
+**🔐 Privacy & Authentication Features:**
+- **Privacy Toggle**: (`privacy-toggle.tsx`) - Automatically hides sensitive client information for non-authenticated users
+- **Authentication Slide-over**: (`auth-slide-over.tsx`) - Portal-based slide-over with Google/Facebook login options
+- **Mock Authentication**: (`/hooks/use-auth.ts`) - Development-ready auth system for testing
+
+**🎯 Key Components:**
+- **TaskGallery**: Image carousel with navigation
+- **TaskActions**: Apply/Question buttons with authentication flow
+- **PrivacyToggle**: Client information with conditional visibility
+- **TaskActivity**: (Hidden) - Applications and questions management for task authors
+
+**💬 TaskActivity Component (Author-Only):**
+- **Purpose**: Allows task creators to manage applications and respond to questions
+- **Features**: Tabbed interface for Applications/Questions, Accept/Reject functionality, messaging system
+- **Status**: Currently hidden - requires proper author verification logic
+- **Location**: `/app/[lang]/tasks/[id]/components/task-activity.tsx`
+- **Mock Data**: Includes sample applications and questions for development
+
+**🌐 Internationalization:**
+- Full i18n support across all components (EN/BG/RU)
+- Server-side rendering maintained for SEO benefits
+- Dynamic content properly translated
+
 ### Internationalization
 - **Smart multilingual routing** with URL-based locales (`/en/`, `/bg/`, `/ru/`)
 - **Production-ready middleware** with cost optimization and early returns

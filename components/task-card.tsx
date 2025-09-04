@@ -6,6 +6,9 @@ import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";
 import { useTranslation } from 'react-i18next';
+import { usePathname, useRouter } from 'next/navigation';
+import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
+import { DEFAULT_LOCALE } from '@/lib/constants/locales';
 import type { Task } from "@/shared/schema";
 import {
   Card,
@@ -41,6 +44,8 @@ const categoryColors = {
 
 function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const { t, i18n } = useTranslation();
+  const router = useRouter();
+  const pathname = usePathname();
   
   const getCategoryName = (category: string) => {
     const categoryKey = `taskCard.category.${category}`;
@@ -116,12 +121,18 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
     return deadline.toLocaleDateString();
   };
 
+  const handleCardPress = () => {
+    const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
+    router.push(`/${currentLocale}/tasks/${task.id}`);
+  };
+
   return (
     <Card 
       isPressable
       className="h-full"
       shadow="sm"
       radius="lg"
+      onPress={handleCardPress}
     >
       <CardBody className="p-0">
         <div className="w-full h-48 overflow-hidden">
@@ -146,12 +157,9 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
             <span className="text-xs text-default-500">{timeAgo}</span>
           </div>
           
-          <Link 
-            href={`/tasks/${task.id}`} 
-            className="text-lg font-semibold text-foreground hover:text-primary line-clamp-2 block"
-          >
+          <h3 className="text-lg font-semibold text-foreground hover:text-primary line-clamp-2">
             {task.title}
-          </Link>
+          </h3>
           
           <p className="text-sm text-default-600 line-clamp-3">
             {task.description}
@@ -208,6 +216,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
               size="sm"
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 onApply(task.id);
               }}
             >
