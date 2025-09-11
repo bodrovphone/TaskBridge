@@ -3,16 +3,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import TaskCard from "@/components/ui/task-card";
 import VideoBackground from "@/components/ui/video-background";
-import { Button } from "@/components/ui/button";
-import { Input as ShadcnInput } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input, Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
-import { Search, Filter, MapPin, DollarSign, Calendar, Clock, SlidersHorizontal, X, Sparkles } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, X, Sparkles } from "lucide-react";
 
 // Mock categories for now - will be replaced with proper schema import
 const TASK_CATEGORIES = {
@@ -80,44 +75,11 @@ export default function BrowseTasksPage() {
     window.location.href = `/tasks/${taskId}`;
   };
 
-  const hasActiveFilters = filters.search || filters.category || filters.city || filters.budgetMin || filters.budgetMax || filters.deadline || (filters.status !== "open");
-
-  const getActiveFilters = () => {
-    const active = [];
-    if (filters.search) active.push({ key: 'search', label: `"${filters.search}"`, value: filters.search });
-    if (filters.category) active.push({ key: 'category', label: TASK_CATEGORIES[filters.category as keyof typeof TASK_CATEGORIES] || filters.category, value: filters.category });
-    if (filters.city) active.push({ key: 'city', label: filters.city, value: filters.city });
-    if (filters.budgetMin || filters.budgetMax) {
-      const budgetLabel = filters.budgetMin && filters.budgetMax 
-        ? `${filters.budgetMin}-${filters.budgetMax} лв`
-        : filters.budgetMin 
-        ? `от ${filters.budgetMin} лв`
-        : `до ${filters.budgetMax} лв`;
-      active.push({ key: 'budget', label: budgetLabel, value: 'budget' });
-    }
-    if (filters.deadline) active.push({ key: 'deadline', label: `До ${filters.deadline}`, value: filters.deadline });
-    if (filters.status !== "open") active.push({ key: 'status', label: getStatusLabel(filters.status), value: filters.status });
-    return active;
-  };
-
-  const getStatusLabel = (status: string) => {
-    switch(status) {
-      case 'open': return 'Отворени';
-      case 'in_progress': return 'В ход';
-      case 'completed': return 'Завършени';
-      default: return 'Всички';
-    }
-  };
-
-  const removeFilter = (filterKey: string) => {
-    if (filterKey === 'budget') {
-      setFilters(prev => ({ ...prev, budgetMin: "", budgetMax: "" }));
-    } else {
-      const defaultValue = filterKey === 'status' ? 'open' : '';
-      setFilters(prev => ({ ...prev, [filterKey]: defaultValue }));
-    }
-    setCurrentPage(0);
-  };
+  // Filter helper functions (kept for future use)
+  // const hasActiveFilters = filters.search || filters.category || filters.city || filters.budgetMin || filters.budgetMax || filters.deadline || (filters.status !== "open");
+  // const getActiveFilters = () => { ... }
+  // const getStatusLabel = (status: string) => { ... }
+  // const removeFilter = (filterKey: string) => { ... }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">

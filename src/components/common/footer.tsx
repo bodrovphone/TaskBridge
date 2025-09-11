@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 import { usePathname } from "next/navigation";
 import { LanguageSwitcher } from "./language-switcher";
 import { LocaleLink } from "./locale-link";
-import { extractLocaleFromPathname } from "@/lib/utils/url-locale";
+// import { extractLocaleFromPathname } from "@/lib/utils/url-locale";
 
 function Footer() {
   const { t } = useTranslation();
-  const pathname = usePathname();
-  const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
+  // const pathname = usePathname();
+  // const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
   
   const quickLinks = [
     { name: t('footer.quickLinks.howItWorks'), href: "/#how-it-works" },

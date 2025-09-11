@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname } from "next/navigation"
+// import { usePathname } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
 import { useTranslation } from 'react-i18next'
@@ -19,9 +19,9 @@ import {
 } from "@nextui-org/react"
 
 function Header() {
-  const pathname = usePathname()
+  // const pathname = usePathname()
   const { t } = useTranslation()
-  const { user, isAuthenticated, logout } = useAuth()
+  const { /* user, */ isAuthenticated, logout } = useAuth()
 
   const navigation = [
     { name: t('nav.browseTasks'), href: "/browse-tasks" },

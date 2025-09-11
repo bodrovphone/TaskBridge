@@ -280,7 +280,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
               };
               const option = sortOptions[item.key as keyof typeof sortOptions];
               return (
-                <div key={item.key} className="flex items-center gap-2">
+                <div key={item.key || 'default'} className="flex items-center gap-2">
                   <span>{option?.icon}</span>
                   <span>{option?.text}</span>
                 </div>

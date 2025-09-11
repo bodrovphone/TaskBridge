@@ -1,7 +1,6 @@
 'use client'
 
 import { MapPin, Clock, Wallet, Star } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";

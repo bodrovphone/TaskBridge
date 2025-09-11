@@ -5,7 +5,7 @@ import {
   timestamp,
   jsonb,
   index,
-  serial,
+  // serial,
   integer,
   decimal,
   boolean,

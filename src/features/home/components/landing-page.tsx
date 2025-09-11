@@ -1,10 +1,8 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import CategoryCard from "@/components/ui/category-card";
 import TaskCard from "@/components/ui/task-card";
-import VideoBackground from "@/components/ui/video-background";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import { LogoIcon } from "@/components/common/logo";
@@ -30,7 +28,6 @@ import {
   ArrowRight,
   Handshake
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
 
 function Landing() {
   const { t, ready } = useTranslation();
