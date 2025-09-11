@@ -14,7 +14,9 @@ import {
 import { Search, Filter, SlidersHorizontal, X, Briefcase } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Badge as ShadcnBadge } from "@/components/ui/badge";
-import { TypingPlaceholder } from "@/components/common";
+import { ProfessionalsTypingPlaceholder } from "@/components/common";
+import CompactRatingSlider from "@/components/ui/compact-rating-slider";
+import SortingPicker from "@/components/ui/sorting-picker";
 import FilterControls from "./filter-controls";
 import ProfessionalCard from "./professional-card";
 import { mockProfessionals } from "../lib";
@@ -134,8 +136,8 @@ export default function ProfessionalsPage() {
     return result;
   }, [filters]);
 
-  const featuredProfessionals = filteredProfessionals.filter(p => p.featured);
-  const regularProfessionals = filteredProfessionals.filter(p => !p.featured);
+  // Show all professionals (both featured and regular) in a single section
+  const allProfessionals = filteredProfessionals;
 
   const hasActiveFilters = filters.search || filters.category !== "all" || filters.location || filters.minRating > 0 || filters.mostActive || filters.gender;
 
@@ -145,13 +147,57 @@ export default function ProfessionalsPage() {
     if (filters.category !== "all") active.push({ key: 'category', label: getCategoryLabel(filters.category as TaskCategory, t), value: filters.category });
     if (filters.location) active.push({ key: 'location', label: filters.location, value: filters.location });
     if (filters.minRating > 0) active.push({ key: 'minRating', label: `${filters.minRating}+ stars`, value: filters.minRating });
-    if (filters.mostActive) active.push({ key: 'mostActive', label: 'Most Active', value: 'mostActive' });
-    if (filters.gender) active.push({ key: 'gender', label: filters.gender === 'male' ? 'Male' : 'Female', value: filters.gender });
+    if (filters.mostActive) active.push({ key: 'mostActive', label: t('professionals.mostActive', { fallback: 'Most Active' }), value: 'mostActive' });
+    if (filters.gender) active.push({ key: 'gender', label: t(`professionals.gender.${filters.gender}`, { fallback: filters.gender === 'male' ? 'Male' : 'Female' }), value: filters.gender });
     return active;
   };
 
   return (
     <>
+      {/* Pinterest-style Masonry CSS */}
+      <style jsx global>{`
+        .masonry-grid {
+          column-count: 1;
+          column-gap: 1.5rem;
+          column-fill: balance;
+          padding: 0;
+        }
+        
+        @media (min-width: 640px) {
+          .masonry-grid {
+            column-count: 2;
+          }
+        }
+        
+        @media (min-width: 1024px) {
+          .masonry-grid {
+            column-count: 3;
+          }
+        }
+        
+        @media (min-width: 1280px) {
+          .masonry-grid {
+            column-count: 3;
+          }
+        }
+        
+        .masonry-item {
+          display: inline-block;
+          width: 100%;
+          margin-bottom: 1.5rem;
+          break-inside: avoid;
+          page-break-inside: avoid;
+          -webkit-column-break-inside: avoid;
+          vertical-align: top;
+        }
+        
+        /* Ensure cards have variable height */
+        .masonry-item .professional-card {
+          height: auto !important;
+          min-height: unset !important;
+        }
+      `}</style>
+
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 -mt-16 pt-20 pb-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white min-h-[150px] md:min-h-[300px] flex items-center justify-center">
@@ -275,7 +321,7 @@ export default function ProfessionalsPage() {
                         className="absolute left-16 top-1/2 transform -translate-y-1/2 pointer-events-none text-lg font-medium"
                         style={{ zIndex: 1 }}
                       >
-                        <TypingPlaceholder />
+                        <ProfessionalsTypingPlaceholder />
                       </div>
                     )}
                     
@@ -298,7 +344,7 @@ export default function ProfessionalsPage() {
                   className="mt-8 space-y-4"
                 >
                   <div className="text-center">
-                    <span className="text-sm font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">Popular categories</span>
+                    <span className="text-sm font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">{t('professionals.popularCategories')}</span>
                   </div>
                   <div className="flex flex-wrap gap-3 justify-center">
                     {['plumbing', 'house_cleaning', 'tutoring', 'photography', 'delivery', 'electrical', 'painting', 'carpentry'].map((category, index) => (
@@ -390,7 +436,7 @@ export default function ProfessionalsPage() {
                   </div>
                   <div>
                     <span className="text-lg font-bold text-gray-900">{t('professionals.filterBy')}</span>
-                    <p className="text-sm text-gray-500">Refine your search results</p>
+                    <p className="text-sm text-gray-500">{t('professionals.refineSearch')}</p>
                   </div>
                 </div>
                 
@@ -447,7 +493,7 @@ export default function ProfessionalsPage() {
                     </Select>
                     
                     <Select
-                      placeholder="📍 Location"
+                      placeholder={t('professionals.filters.locationPlaceholderDesktop')}
                       selectedKeys={filters.location ? [filters.location] : []}
                       onSelectionChange={(keys) => handleFilterChange("location", Array.from(keys)[0] as string || "")}
                       className="min-w-[180px]"
@@ -467,63 +513,17 @@ export default function ProfessionalsPage() {
                       <SelectItem key="варна" value="варна">🌊 Варна</SelectItem>
                     </Select>
                     
-                    <Select
-                      placeholder="⭐ Min Rating"
-                      selectedKeys={filters.minRating > 0 ? [filters.minRating.toString()] : []}
-                      onSelectionChange={(keys) => handleFilterChange("minRating", Array.from(keys)[0] ? parseFloat(Array.from(keys)[0] as string) : 0)}
+                    <CompactRatingSlider
+                      value={filters.minRating}
+                      onChange={(rating) => handleFilterChange("minRating", rating)}
                       className="min-w-[160px]"
-                      size="lg"
-                      variant="bordered"
-                      aria-label="Filter by minimum rating"
-                      classNames={{
-                        trigger: "bg-white shadow-lg border-2 border-gray-200 hover:border-yellow-400 focus:border-yellow-500 transition-colors duration-300 h-12",
-                        value: "text-gray-900 font-medium",
-                        popoverContent: "z-[60] bg-white border-2 border-gray-200 shadow-xl rounded-xl",
-                        listbox: "p-2"
-                      }}
-                      popoverProps={{
-                        placement: "bottom-start",
-                        offset: 8,
-                        classNames: {
-                          content: "z-[60]"
-                        }
-                      }}
-                    >
-                      <SelectItem key="0" value="0">⭐ Any Rating</SelectItem>
-                      <SelectItem key="2.5" value="2.5">⭐ 2.5+ stars</SelectItem>
-                      <SelectItem key="3" value="3">⭐ 3+ stars</SelectItem>
-                      <SelectItem key="3.5" value="3.5">⭐ 3.5+ stars</SelectItem>
-                      <SelectItem key="4" value="4">⭐ 4+ stars</SelectItem>
-                      <SelectItem key="4.5" value="4.5">⭐ 4.5+ stars</SelectItem>
-                      <SelectItem key="5" value="5">⭐ 5 stars only</SelectItem>
-                    </Select>
+                    />
                     
-                    <Select
-                      placeholder="📊 Sort by"
-                      selectedKeys={[filters.sortBy]}
-                      onSelectionChange={(keys) => handleFilterChange("sortBy", Array.from(keys)[0] as string || "featured")}
+                    <SortingPicker
+                      value={filters.sortBy}
+                      onChange={(sortBy) => handleFilterChange("sortBy", sortBy)}
                       className="min-w-[180px]"
-                      size="lg"
-                      variant="bordered"
-                      aria-label="Sort professionals"
-                      classNames={{
-                        trigger: "bg-white shadow-lg border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors duration-300 h-12",
-                        value: "text-gray-900 font-medium",
-                        popoverContent: "z-[60] bg-white border-2 border-gray-200 shadow-xl rounded-xl",
-                        listbox: "p-2"
-                      }}
-                      popoverProps={{
-                        placement: "bottom-start",
-                        offset: 8,
-                        classNames: {
-                          content: "z-[60]"
-                        }
-                      }}
-                    >
-                      <SelectItem key="featured" value="featured">⭐ Featured First</SelectItem>
-                      <SelectItem key="rating" value="rating">📈 Highest Rating</SelectItem>
-                      <SelectItem key="jobs" value="jobs">🏆 Most Jobs</SelectItem>
-                    </Select>
+                    />
                   </div>
                 </div>
               </div>
@@ -550,8 +550,8 @@ export default function ProfessionalsPage() {
                           <Filter size={16} className="text-blue-600" />
                         </motion.div>
                         <div>
-                          <h4 className="text-base font-bold text-blue-800 leading-none">Active Filters</h4>
-                          <p className="text-xs text-blue-600 mt-0.5">{getActiveFilters().length} filter{getActiveFilters().length !== 1 ? 's' : ''} applied</p>
+                          <h4 className="text-base font-bold text-blue-800 leading-none">{t('professionals.filters.activeFilters')}</h4>
+                          <p className="text-xs text-blue-600 mt-0.5">{getActiveFilters().length === 1 ? t('professionals.filters.filterApplied', { count: getActiveFilters().length }) : t('professionals.filters.filtersApplied', { count: getActiveFilters().length })}</p>
                         </div>
                       </div>
                       <motion.div
@@ -573,7 +573,7 @@ export default function ProfessionalsPage() {
                             </motion.div>
                           }
                         >
-                          Clear All
+                          {t('professionals.filters.clearAll')}
                         </NextUIButton>
                       </motion.div>
                     </div>
@@ -622,8 +622,8 @@ export default function ProfessionalsPage() {
             </div>
           </motion.div>
 
-          {/* Enhanced Featured Professionals */}
-          {featuredProfessionals.length > 0 && (
+          {/* Pinterest-style Professionals Grid */}
+          {allProfessionals.length > 0 && (
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -637,61 +637,32 @@ export default function ProfessionalsPage() {
                   transition={{ duration: 0.5 }}
                   className="inline-block"
                 >
-                  <div className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-full px-6 py-2 border border-yellow-200 mb-4">
-                    <span className="text-yellow-700 font-semibold text-sm">⭐ FEATURED PROFESSIONALS</span>
+                  <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-full px-6 py-2 border border-blue-200 mb-4">
+                    <span className="text-blue-700 font-semibold text-sm">👥 {t('professionals.recommendedTitle')}</span>
                   </div>
                 </motion.div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-                  {t('professionals.featuredTitle')}
+                  {filters.category === 'all' ? t('professionals.findPerfect') : `${getCategoryLabel(filters.category as TaskCategory, t)} Specialists`}
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Handpicked professionals with exceptional ratings and proven track records
+                  {t('professionals.discoverTrusted')}
                 </p>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredProfessionals.map((professional, index) => (
-                  <motion.div
-                    key={professional.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 + (index * 0.1) }}
-                  >
-                    <ProfessionalCard professional={professional} featured={true} />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Enhanced All Professionals */}
-          {regularProfessionals.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Briefcase className="text-blue-600" size={20} />
-                    </div>
-                    {filters.category === 'all' ? 'All Professionals' : `${getCategoryLabel(filters.category as TaskCategory, t)} Professionals`}
-                  </h2>
-                  <div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                    {regularProfessionals.length} professionals
-                  </div>
+                <div className="text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full inline-block mt-4">
+                  {allProfessionals.length} {t('professionals.professionalsAvailable')}
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {regularProfessionals.map((professional, index) => (
+              
+              {/* Pinterest-style Masonry Grid */}
+              <div className="masonry-grid">
+                {allProfessionals.map((professional, index) => (
                   <motion.div
                     key={professional.id}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 + (index * 0.05) }}
+                    className="masonry-item"
                   >
-                    <ProfessionalCard professional={professional} featured={false} />
+                    <ProfessionalCard professional={professional} featured={professional.featured} />
                   </motion.div>
                 ))}
               </div>
@@ -699,7 +670,7 @@ export default function ProfessionalsPage() {
           )}
 
           {/* Enhanced No Results */}
-          {filteredProfessionals.length === 0 && (
+          {allProfessionals.length === 0 && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -731,7 +702,7 @@ export default function ProfessionalsPage() {
                 >
                   {filters.category === 'all' 
                     ? 'Try adjusting your search terms or filters to find the perfect professional for your needs.' 
-                    : `No professionals available matching your criteria. Try broadening your search.`
+                    : t('professionals.noMatchingResults')
                   }
                 </motion.p>
                 <motion.div
@@ -747,7 +718,7 @@ export default function ProfessionalsPage() {
                     className="font-semibold"
                     startContent={<X size={18} />}
                   >
-                    Clear all filters
+                    {t('professionals.filters.clearAll')}
                   </NextUIButton>
                 </motion.div>
               </div>

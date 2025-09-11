@@ -12,6 +12,7 @@ import {
   Divider
 } from "@nextui-org/react"
 import { Star, MapPin, Briefcase, SlidersHorizontal } from "lucide-react"
+import SortingPicker from "@/components/ui/sorting-picker"
 
 interface FilterControlsProps {
   filters: any
@@ -32,7 +33,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-          <label className="text-base font-semibold text-gray-800">Category</label>
+          <label className="text-base font-semibold text-gray-800">{t('professionals.filters.category')}</label>
         </div>
         <Select
           placeholder={t('professionals.allCategories')}
@@ -66,10 +67,10 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-          <label className="text-base font-semibold text-gray-800">Location</label>
+          <label className="text-base font-semibold text-gray-800">{t('professionals.filters.location')}</label>
         </div>
         <Input
-          placeholder="Sofia, Plovdiv, Varna..."
+          placeholder={t('professionals.filters.locationPlaceholder')}
           value={filters.location}
           onChange={(e) => onFilterChange("location", e.target.value)}
           size="lg"
@@ -95,12 +96,12 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-            <label className="text-base font-semibold text-gray-800">Minimum Rating</label>
+            <label className="text-base font-semibold text-gray-800">{t('professionals.filters.minimumRating')}</label>
           </div>
           <div className="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-200">
             <Star className="text-yellow-500 fill-current" size={16} />
             <span className="font-bold text-yellow-700 text-sm">
-              {filters.minRating > 0 ? `${filters.minRating}+` : 'Any'}
+              {filters.minRating > 0 ? `${filters.minRating}+` : t('professionals.filters.any')}
             </span>
           </div>
         </div>
@@ -129,7 +130,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
               label: "text-sm font-medium text-gray-600"
             }}
             marks={[
-              { value: 0, label: "Any" },
+              { value: 0, label: t('professionals.filters.any') },
               { value: 2.5, label: "2.5" },
               { value: 4, label: "4.0" },
               { value: 5, label: "5.0" },
@@ -157,7 +158,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-          <label className="text-base font-semibold text-gray-800">Gender Preference</label>
+          <label className="text-base font-semibold text-gray-800">{t('professionals.filters.genderPreference')}</label>
         </div>
         <RadioGroup
           value={filters.gender || "all"}
@@ -179,7 +180,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
           >
             <div className="flex items-center gap-2 py-2">
               <span className="text-lg">👥</span>
-              <span>All</span>
+              <span>{t('professionals.filters.all')}</span>
             </div>
           </Radio>
           <Radio 
@@ -193,7 +194,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
           >
             <div className="flex items-center gap-2 py-2">
               <span className="text-lg">👩</span>
-              <span>Female</span>
+              <span>{t('professionals.gender.female')}</span>
             </div>
           </Radio>
           <Radio 
@@ -207,7 +208,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
           >
             <div className="flex items-center gap-2 py-2">
               <span className="text-lg">👨</span>
-              <span>Male</span>
+              <span>{t('professionals.gender.male')}</span>
             </div>
           </Radio>
         </RadioGroup>
@@ -224,7 +225,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-          <label className="text-base font-semibold text-gray-800">Activity Level</label>
+          <label className="text-base font-semibold text-gray-800">{t('professionals.filters.activityLevel')}</label>
         </div>
         <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-xl border border-orange-200">
           <Checkbox
@@ -242,7 +243,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <Briefcase className="text-orange-600" size={16} />
-                <span className="font-semibold">Top Performers Only</span>
+                <span className="font-semibold">{t('professionals.filters.topPerformersOnly')}</span>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Show professionals with 50+ completed jobs
@@ -263,75 +264,13 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-          <label className="text-base font-semibold text-gray-800">Sort Results By</label>
+          <label className="text-base font-semibold text-gray-800">{t('professionals.filters.sortResultsBy')}</label>
         </div>
-        <Select
-          selectedKeys={[filters.sortBy]}
-          onSelectionChange={(keys) => onFilterChange("sortBy", Array.from(keys)[0] as string || "featured")}
+        <SortingPicker
+          value={filters.sortBy}
+          onChange={(sortBy) => onFilterChange("sortBy", sortBy)}
           className="w-full"
-          size="lg"
-          variant="bordered"
-          renderValue={(items) => {
-            return items.map((item) => {
-              const sortOptions = {
-                featured: { icon: "⭐", text: "Featured First" },
-                rating: { icon: "📈", text: "Highest Rating" },
-                jobs: { icon: "🏆", text: "Most Experience" }
-              };
-              const option = sortOptions[item.key as keyof typeof sortOptions];
-              return (
-                <div key={item.key || 'default'} className="flex items-center gap-2">
-                  <span>{option?.icon}</span>
-                  <span>{option?.text}</span>
-                </div>
-              );
-            });
-          }}
-          classNames={{
-            base: "bg-white",
-            trigger: "bg-white shadow-md border-2 border-gray-200 hover:border-indigo-400 focus:border-indigo-500 transition-all duration-300 h-14 rounded-xl",
-            value: "text-gray-900 font-medium text-base",
-            label: "text-gray-700",
-            popoverContent: "bg-white border-2 border-gray-200 shadow-xl rounded-xl z-[100]",
-            listbox: "p-2"
-          }}
-          popoverProps={{
-            placement: "bottom",
-            offset: 4,
-            classNames: {
-              content: "z-[100]"
-            }
-          }}
-          startContent={<SlidersHorizontal className="text-indigo-500" size={18} />}
-        >
-          <SelectItem key="featured" value="featured" textValue="Featured First">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-yellow-500">⭐</span>
-                <span className="font-medium">Featured First</span>
-              </div>
-              <span className="text-xs text-gray-500 ml-6">Top-rated professionals</span>
-            </div>
-          </SelectItem>
-          <SelectItem key="rating" value="rating" textValue="Highest Rating">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-green-500">📈</span>
-                <span className="font-medium">Highest Rating</span>
-              </div>
-              <span className="text-xs text-gray-500 ml-6">Best reviewed first</span>
-            </div>
-          </SelectItem>
-          <SelectItem key="jobs" value="jobs" textValue="Most Experience">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-blue-500">🏆</span>
-                <span className="font-medium">Most Experience</span>
-              </div>
-              <span className="text-xs text-gray-500 ml-6">Most jobs completed</span>
-            </div>
-          </SelectItem>
-        </Select>
+        />
       </motion.div>
       
       {/* Bottom padding for mobile scrolling */}

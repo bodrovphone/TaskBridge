@@ -4,7 +4,7 @@ import { useState } from "react";
 import { User, MessageCircle, Share2 } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
-import AuthSlideOver from "./auth-slide-over";
+import AuthSlideOver from "@/components/ui/auth-slide-over";
 
 export default function TaskActions() {
   const { t } = useTranslation();

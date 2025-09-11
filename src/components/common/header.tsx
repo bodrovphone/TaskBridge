@@ -1,8 +1,11 @@
 'use client'
 
 // import { usePathname } from "next/navigation"
+import { useState } from "react"
+import { useRouter, useParams } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
+import AuthSlideOver from "@/components/ui/auth-slide-over"
 import { useTranslation } from 'react-i18next'
 import { Handshake, Plus, LogOut } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
@@ -22,6 +25,11 @@ function Header() {
   // const pathname = usePathname()
   const { t } = useTranslation()
   const { /* user, */ isAuthenticated, logout } = useAuth()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
+  const router = useRouter()
+  const params = useParams()
+  const lang = params?.lang as string || 'en'
 
   const navigation = [
     { name: t('nav.browseTasks'), href: "/browse-tasks" },
@@ -30,6 +38,16 @@ function Header() {
     { name: t('nav.forProfessionals'), href: "/professionals" },
   ]
 
+  const handleCreateTask = () => {
+    if (isAuthenticated) {
+      // If authenticated, navigate directly to create task
+      router.push(`/${lang}/create-task`)
+    } else {
+      // If not authenticated, show auth slide-over
+      setIsAuthSlideOverOpen(true)
+    }
+  }
+
   return (
     <Navbar 
       maxWidth="xl"
@@ -37,6 +55,8 @@ function Header() {
       className="bg-white shadow-sm border-b border-gray-100"
       height="4rem"
       isBordered
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
     >
       {/* Logo/Brand */}
       <NavbarBrand>
@@ -73,12 +93,11 @@ function Header() {
           <>
             <NavbarItem>
               <Button 
-                as={LocaleLink}
-                href="/create-task"
                 color="primary"
                 variant="solid"
                 startContent={<Plus size={16} />}
                 className="font-medium"
+                onClick={handleCreateTask}
               >
                 {t('nav.createTask')}
               </Button>
@@ -97,12 +116,11 @@ function Header() {
         ) : (
           <NavbarItem>
             <Button 
-              as={LocaleLink}
-              href="/create-task"
               color="primary"
               variant="solid"
               startContent={<Plus size={16} />}
               className="font-medium"
+              onClick={handleCreateTask}
             >
               {t('nav.createTask')}
             </Button>
@@ -120,6 +138,7 @@ function Header() {
               href={item.href}
               className="w-full text-gray-900 hover:text-primary font-medium py-2"
               size="lg"
+              onClick={() => setIsMenuOpen(false)}
             >
               {item.name}
             </NextUILink>
@@ -141,6 +160,12 @@ function Header() {
           </div>
         </NavbarMenuItem>
       </NavbarMenu>
+
+      <AuthSlideOver 
+        isOpen={isAuthSlideOverOpen}
+        onClose={() => setIsAuthSlideOverOpen(false)}
+        action="create-task"
+      />
     </Navbar>
   )
 }

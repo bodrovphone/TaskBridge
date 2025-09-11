@@ -8,6 +8,7 @@ import TaskCard from "@/components/ui/task-card";
 import VideoBackground from "@/components/ui/video-background";
 import { Input, Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
 import { Search, Filter, SlidersHorizontal, X, Sparkles } from "lucide-react";
+import { mockTasks } from "@/lib/mock-data";
 
 // Mock categories for now - will be replaced with proper schema import
 const TASK_CATEGORIES = {
@@ -34,6 +35,9 @@ export default function BrowseTasksPage() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const pageSize = 12;
+  
+  // Get recommended tasks from mock data (first 6 tasks)
+  const recommendedTasks = mockTasks.slice(0, 6);
 
   // Build query parameters
   const queryParams = new URLSearchParams();
@@ -269,24 +273,56 @@ export default function BrowseTasksPage() {
           transition={{ delay: 1.2 }}
         >
           {error ? (
-            <NextUICard className="bg-white shadow-lg">
-              <div className="p-12 text-center">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", bounce: 0.4 }}
-                  className="text-red-500 mb-4"
-                >
-                  <Filter size={48} className="mx-auto" />
-                </motion.div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {t('browseTasks.results.error.title')}
-                </h3>
-                <p className="text-gray-600">
-                  {t('browseTasks.results.error.description')}
+            <div className="space-y-8">
+              {/* Error Message */}
+              <NextUICard className="bg-white shadow-lg">
+                <div className="p-8 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.4 }}
+                    className="text-red-500 mb-4"
+                  >
+                    <Filter size={48} className="mx-auto" />
+                  </motion.div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {t('browseTasks.results.error.title')}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {t('browseTasks.results.error.description')}
+                  </p>
+                </div>
+              </NextUICard>
+
+              {/* Recommended Tasks Fallback */}
+              <div className="pb-12">
+                <div className="flex items-center gap-2 mb-6">
+                  <Sparkles className="text-orange-500" size={24} />
+                  <h3 className="text-2xl font-bold text-gray-900">
+                    {t('browseTasks.results.suggestedTasks')}
+                  </h3>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  {t('browseTasks.results.suggestedDescription')}
                 </p>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {recommendedTasks.map((task: any, index: number) => (
+                    <motion.div
+                      key={task.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <TaskCard 
+                        task={task}
+                        onApply={handleApplyToTask}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-            </NextUICard>
+            </div>
           ) : isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (

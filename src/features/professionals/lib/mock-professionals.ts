@@ -15,6 +15,9 @@ export interface Professional {
   description: string
   verified: boolean
   featured: boolean
+  skills?: string[]
+  certifications?: string[]
+  languages?: string[]
 }
 
 export const mockProfessionals: Professional[] = [
@@ -30,7 +33,7 @@ export const mockProfessionals: Professional[] = [
     experience: "5 години",
     availability: "Достъпна",
     priceRange: "от 25 лв/час",
-    description: "Професионално почистване с внимание към детайлите. Използвам екологични препарати и модерна техника.",
+    description: "Професионално почистване с внимание към детайлите. Използвам екологични препарати и модерна техника за перфектни резултати. Специализирам се в генерално почистване, почистване след ремонт и поддръжка на офиси.",
     verified: true,
     featured: true
   },
@@ -62,9 +65,12 @@ export const mockProfessionals: Professional[] = [
     experience: "10 години",
     availability: "Достъпна",
     priceRange: "от 30 лв/час",
-    description: "Преподавател по английски език с дългогодишен опит. Индивидуален подход към всеки ученик.",
+    description: "Преподавател по английски език с дългогодишен опит. Индивидуален подход към всеки ученик. Подготвям за изпити Cambridge, IELTS и TOEFL. Работя с деца, студенти и възрастни. Предлагам и бизнес английски за корпоративни клиенти.",
     verified: true,
-    featured: true
+    featured: true,
+    skills: ["Cambridge Preparation", "Business English", "IELTS/TOEFL"],
+    certifications: ["TEFL Certificate", "Cambridge CELTA"],
+    languages: ["Български", "English", "Deutsch"]
   },
   {
     id: "4",
@@ -78,7 +84,7 @@ export const mockProfessionals: Professional[] = [
     experience: "12 години",
     availability: "Достъпен след 15-то",
     priceRange: "от 35 лв/час",
-    description: "Майстор дърводелец и боядисвач. Специализирам се в изработка на мебели по поръчка.",
+    description: "Майстор дърводелец и боядисвач с дългогодишен опит. Специализирам се в изработка на мебели по поръчка, вградени шкафове, кухненски мебели и реставрация на антикварни предмети. Използвам само високококачествени материали.",
     verified: true,
     featured: false
   },
@@ -96,12 +102,14 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 80 лв/събитие",
     description: "Професионален фотограф и видеограф. Специализирам се в сватби и корпоративни събития.",
     verified: true,
-    featured: false
+    featured: false,
+    skills: ["Сватбена фотография", "Портрети", "Продуктова фотография", "Видеомонтаж"],
+    certifications: ["Adobe Certified Expert"]
   },
   {
     id: "6",
     name: "Петър Георгиев",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+    avatar: "", // Test fallback avatar
     rating: 4.6,
     reviewsCount: 15,
     completedJobs: 28,
@@ -112,6 +120,22 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 1 лв/км",
     description: "Бърза и надеждна доставка и преместване. Разполагам с товарен автомобил и помощници.",
     verified: false,
+    featured: false
+  },
+  {
+    id: "7",
+    name: "Радост Иванова",
+    avatar: "", // Test fallback avatar for female
+    rating: 4.4,
+    reviewsCount: 12,
+    completedJobs: 32,
+    categories: ["tutoring", "child_care"] as TaskCategory[],
+    location: "София, Витоша",
+    experience: "4 години",
+    availability: "Достъпна вечер", 
+    priceRange: "от 20 лв/час",
+    description: "Опитна детегледачка и преподавател. Работя с деца от всички възрасти с много търпение и грижа.",
+    verified: true,
     featured: false
   }
 ]

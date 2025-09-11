@@ -6,10 +6,10 @@ import {
   Card as NextUICard, 
   CardBody, 
   Button as NextUIButton, 
-  Avatar,
   Chip
 } from "@nextui-org/react"
 import { Star, MapPin, Clock, Briefcase } from "lucide-react"
+import FallbackAvatar from "@/components/ui/fallback-avatar"
 import { getCategoryLabel } from '@/lib/constants/categories'
 import type { Professional } from '../lib/mock-professionals'
 
@@ -27,7 +27,7 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="group"
     >
-      <NextUICard className="bg-white shadow-lg hover:shadow-2xl transition-all duration-500 relative border border-gray-100 group-hover:border-blue-200 overflow-hidden">
+      <NextUICard className="professional-card bg-white shadow-lg hover:shadow-2xl transition-all duration-500 relative border border-gray-100 group-hover:border-blue-200 overflow-hidden">
         {/* Enhanced featured badge */}
         {professional.featured && (
           <div className="absolute top-0 right-0 z-20">
@@ -48,11 +48,11 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.2 }}
               >
-                <Avatar
+                <FallbackAvatar
                   src={professional.avatar}
                   name={professional.name}
                   size="lg"
-                  className="w-18 h-18 ring-4 ring-gray-100 group-hover:ring-blue-200 transition-all duration-300"
+                  className=""
                 />
               </motion.div>
               {professional.verified && (
@@ -60,9 +60,9 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
-                  className="absolute -bottom-1 -right-1 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full p-1.5 shadow-lg"
+                  className="absolute -bottom-0.5 -right-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full p-1 shadow-lg w-5 h-5 flex items-center justify-center"
                 >
-                  <span className="text-white text-xs font-bold">✓</span>
+                  <span className="text-white text-[10px] font-bold">✓</span>
                 </motion.div>
               )}
             </div>
@@ -118,9 +118,57 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
           </div>
 
           {/* Enhanced Description */}
-          <p className="text-gray-700 text-sm mb-6 leading-relaxed line-clamp-3 group-hover:text-gray-800 transition-colors">
+          <p className="text-gray-700 text-sm mb-4 leading-relaxed group-hover:text-gray-800 transition-colors">
             {professional.description}
           </p>
+
+          {/* Skills Section */}
+          {professional.skills && professional.skills.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Skills</h4>
+              <div className="flex flex-wrap gap-1">
+                {professional.skills.slice(0, 3).map((skill, index) => (
+                  <Chip
+                    key={skill}
+                    size="sm"
+                    variant="flat"
+                    color="secondary"
+                    className="text-xs bg-purple-100 text-purple-700 border border-purple-200"
+                  >
+                    {skill}
+                  </Chip>
+                ))}
+                {professional.skills.length > 3 && (
+                  <Chip size="sm" variant="flat" color="default" className="text-xs bg-gray-100 text-gray-600">
+                    +{professional.skills.length - 3}
+                  </Chip>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Certifications */}
+          {professional.certifications && professional.certifications.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Certifications</h4>
+              <div className="space-y-1">
+                {professional.certifications.slice(0, 2).map((cert) => (
+                  <div key={cert} className="flex items-center gap-2 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-lg">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    {cert}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Languages */}
+          {professional.languages && professional.languages.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Languages</h4>
+              <p className="text-xs text-gray-600">{professional.languages.join(', ')}</p>
+            </div>
+          )}
 
           {/* Enhanced Details */}
           <div className="space-y-4 mb-8">
