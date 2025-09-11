@@ -41,23 +41,44 @@ npm run db:push         # Push schema changes to database using Drizzle
 
 ## Architecture
 
-### Next.js App Router Structure
-- `/app/` - Next.js App Router with multilingual routing
-  - `/app/page.tsx` - Root redirect to locale
-  - `/app/[lang]/` - Locale-specific pages (en, bg, ru)
-    - `/app/[lang]/page.tsx` - Localized homepage
-    - `/app/[lang]/browse-tasks/` - Browse available tasks
-    - `/app/[lang]/create-task/` - Create new task
-    - `/app/[lang]/profile/` - User profile
-  - `/app/api/` - API routes (to be migrated from Express)
-- `/components/` - React UI components
-- `/lib/` - Shared utilities and configurations
-  - `/lib/constants/locales.ts` - Locale constants and configuration
-  - `/lib/utils/locale-detection.ts` - Server-side locale utilities
-  - `/lib/utils/url-locale.ts` - URL locale manipulation
-  - `/lib/utils/client-locale.ts` - Client-side locale utilities
-- `/hooks/` - Custom React hooks
-- `/middleware.ts` - Smart locale detection and redirection
+### Clean `/src/` Directory Structure
+TaskBridge follows a modern `/src/` structure for better organization and scalability:
+
+```
+/src/
+├── app/                    # Next.js App Router with multilingual routing
+│   ├── page.tsx           # Root redirect to locale  
+│   ├── [lang]/            # Locale-specific pages (en, bg, ru)
+│   │   ├── page.tsx       # Localized homepage
+│   │   ├── browse-tasks/  # Browse available tasks
+│   │   ├── create-task/   # Create new task
+│   │   ├── professionals/ # Professionals directory
+│   │   └── profile/       # User profile
+│   └── api/               # API routes (to be migrated from Express)
+├── features/              # 🎯 Self-contained business domains
+│   └── professionals/     # Complete professionals feature
+│       ├── components/    # Professional-specific UI components
+│       ├── lib/          # Professional data, types, and utilities
+│       ├── hooks/        # Professional-specific hooks (if needed)
+│       └── index.ts      # Barrel exports for clean imports
+├── components/           # 🧩 Technical UI organization
+│   ├── ui/              # Design system primitives (shadcn/ui)
+│   └── common/          # Shared layout components (Header, Footer, etc.)
+├── database/            # 🗃️ Database schema and configurations
+│   └── schema.ts        # Database schema with Drizzle ORM
+├── lib/                 # 🔧 Global utilities and configurations
+│   ├── constants/       # Application constants (locales, categories)
+│   └── utils/           # Utility functions (locale detection, URL manipulation)
+├── hooks/               # 🎣 Global custom React hooks
+└── types/               # 📝 Global TypeScript type definitions
+```
+
+### Architecture Benefits
+- **🎯 Feature Cohesion** - Each business domain (professionals, tasks, etc.) is self-contained
+- **🧩 Clear Component Hierarchy** - UI primitives → Shared components → Feature-specific components
+- **📦 Clean Imports** - Barrel exports enable simple import patterns
+- **🔧 Separation of Concerns** - Global utilities separate from feature-specific logic
+- **⚡ Next.js Compatibility** - Full support for App Router with `/src/` directory
 
 ### Database Schema
 The application has four main entities:
@@ -72,28 +93,82 @@ Key features include:
 - Location-based matching (city/neighborhood)
 - Professional portfolio and rating systems
 
+### Feature-Based Architecture
+Each business domain is organized as a self-contained feature with all related code co-located:
+
+#### **Feature Structure**
+```
+/src/features/[feature]/
+├── components/         # Feature-specific UI components
+├── lib/               # Feature data, types, and utilities  
+├── hooks/             # Feature-specific custom hooks (optional)
+└── index.ts           # Barrel exports for clean imports
+```
+
+#### **Current Features**
+- **professionals** - Complete professionals feature (listings, filtering, cards, data)
+- **tasks** - Task details, actions, gallery, and activity management *(to be migrated)*
+- **browse-tasks** - Task browsing and search functionality *(to be migrated)*
+
+#### **Migration Benefits**
+- **🎯 Complete Feature Isolation** - All feature code lives together
+- **📦 Barrel Exports** - Clean, simple import patterns
+- **🔧 Better Maintainability** - Changes stay within feature boundaries
+- **🚀 Improved Performance** - Feature-based code splitting
+- **👥 Team Scalability** - Different teams can own different features
+
+#### **New Import Patterns**
+```typescript
+// ✅ Clean feature imports via barrel exports
+import { ProfessionalsPage, ProfessionalCard } from '@/features/professionals'
+import { TaskDetailPage, TaskActions } from '@/features/tasks'
+
+// ✅ Shared components from organized directories  
+import { Button, Card } from '@/components/ui'
+import { Header, Footer } from '@/components/common'
+
+// ✅ Global utilities and constants
+import { formatDate } from '@/lib/utils'
+import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
+```
+
 ## Development Notes
 
 ### Path Aliases
-- `@/` points to project root
-- `@/components/*` points to `./components/*`
-- `@/lib/*` points to `./lib/*`
-- `@/hooks/*` points to `./hooks/*`
-- `@/shared/*` points to `./shared/*`
+All paths are configured to point to the `/src/` directory:
+- `@/` points to `./src/`
+- `@/components/*` points to `./src/components/*`
+- `@/lib/*` points to `./src/lib/*`
+- `@/hooks/*` points to `./src/hooks/*`
+- `@/features/*` points to `./src/features/*`
+- `@/database/*` points to `./src/database/*`
 
 ### Database Operations
 - Use Drizzle ORM for all database operations
-- Schema is defined in `/shared/schema.ts` with Zod validation
+- Schema is defined in `/src/database/schema.ts` with Zod validation
 - Run `npm run db:push` after schema changes
 
-### Component Development
+### Component Development Architecture
+
+**Updated `/src/` Component Structure:**
+```
+/src/
+├── features/              # 🎯 Self-contained business domains
+│   └── professionals/     # Complete feature with components, data, hooks
+├── components/           # 🧩 Shared UI components
+│   ├── ui/              # Design system primitives (shadcn/ui)
+│   └── common/          # Layout components (Header, Footer, etc.)
+└── app/                 # ⚡ Next.js pages and routing
+```
+
+**Component Guidelines:**
 - **UI components use both Radix UI and NextUI**:
-  - **Radix UI** (via shadcn/ui): Existing components like Dialog, Select, Form fields
-  - **NextUI**: New components like Card, Button, Input - modern and beautiful out-of-box
+  - **Radix UI** (via shadcn/ui): Base components in `/src/components/ui/` - Dialog, Select, Form fields
+  - **NextUI**: Modern components - Card, Button, Input - beautiful out-of-box
   - Both work together seamlessly with Tailwind CSS
-- All components are in `/components/` directory
 - **NextUI theming**: Configured in `tailwind.config.ts` with custom primary/secondary colors
 - **Animation**: NextUI includes Framer Motion for smooth animations
+- **Feature Components**: Feature-specific UI lives in `/src/features/[feature]/components/`
 
 ### NextUI Integration
 - **Provider**: Wrapped in `NextUIProvider` in `/app/providers.tsx`

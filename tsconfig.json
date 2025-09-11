@@ -24,19 +24,22 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ],
       "@/components/*": [
-        "./components/*"
+        "./src/components/*"
       ],
       "@/lib/*": [
-        "./lib/*"
+        "./src/lib/*"
       ],
       "@/hooks/*": [
-        "./hooks/*"
+        "./src/hooks/*"
       ],
-      "@/shared/*": [
-        "./shared/*"
+      "@/database/*": [
+        "./src/database/*"
+      ],
+      "@/features/*": [
+        "./src/features/*"
       ]
     },
     "target": "ES2017"

@@ -3,6 +3,7 @@
   "rules": {
     "react/no-unescaped-entities": "warn",
     "@next/next/no-img-element": "warn",
-    "react/display-name": "error"
+    "react/display-name": "error",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
   }
 }

@@ -1,0 +1,6 @@
+export { default as Header } from './header'
+export { default as Footer } from './footer'
+export { LocaleLink } from './locale-link'
+export { LanguageSwitcher } from './language-switcher'
+export { default as TypingPlaceholder } from './typing-placeholder'
+export { Logo } from './logo'
