@@ -32,7 +32,7 @@ export default function ActionButtonsRow({
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left Column */}
         <div className="flex flex-col gap-3">
           {/* Propose Task - smaller size */}
@@ -46,6 +46,20 @@ export default function ActionButtonsRow({
             {t('professionalDetail.actions.proposeTask')}
           </Button>
 
+          {/* Ask Question */}
+          <Button
+            size="md"
+            variant="bordered"
+            className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-semibold w-full"
+            startContent={<MessageSquare size={16} />}
+            onClick={onAskQuestion}
+          >
+            {t('professionalDetail.actions.askQuestion')}
+          </Button>
+        </div>
+
+        {/* Right Column */}
+        <div className="flex flex-col gap-3">
           {/* Contact Button - only if allowed */}
           {professional.contactSettings.allowDirectContact && (
             <Button
@@ -58,20 +72,6 @@ export default function ActionButtonsRow({
               {t('professionalDetail.actions.contact')}
             </Button>
           )}
-        </div>
-
-        {/* Right Column */}
-        <div className="flex flex-col gap-3">
-          {/* Ask Question */}
-          <Button
-            size="md"
-            variant="bordered"
-            className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-semibold w-full"
-            startContent={<MessageSquare size={16} />}
-            onClick={onAskQuestion}
-          >
-            {t('professionalDetail.actions.askQuestion')}
-          </Button>
 
           {/* Save to Favorites */}
           <Button

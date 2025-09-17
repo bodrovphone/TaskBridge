@@ -84,7 +84,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
               <CardBody className="p-4">
                 <div className="flex items-start gap-3">
                   <Avatar
-                    name={review.anonymous ? "Анонимен" : review.clientName}
+                    name={review.anonymous ? t('common.anonymous') : review.clientName}
                     size="sm"
                     className={`flex-shrink-0 ${review.anonymous ? 'bg-gray-400 text-white' : ''}`}
                     fallback={review.anonymous ? <UserX size={16} /> : undefined}
@@ -92,17 +92,12 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className={`font-medium text-sm ${review.anonymous ? 'text-gray-600 italic' : 'text-gray-900'}`}>
-                          {review.clientName}
+                          {review.anonymous ? t('common.anonymous') : review.clientName}
                         </span>
                         {review.verified && (
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                        )}
-                        {review.anonymous && (
-                          <Chip size="sm" variant="flat" color="default" className="text-xs">
-                            Анонимен
-                          </Chip>
                         )}
                       </div>
                       <span className="text-xs text-gray-500 flex-shrink-0">

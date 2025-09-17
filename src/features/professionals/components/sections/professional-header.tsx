@@ -125,7 +125,7 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 min-w-fit">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="text-xl font-bold text-blue-600">{professional.completedTasks}</div>
+                  <div className="text-xl font-bold text-blue-600">{professional.completedTasks || 0}</div>
                   <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.completedTasks')}</div>
                 </div>
                 <div>

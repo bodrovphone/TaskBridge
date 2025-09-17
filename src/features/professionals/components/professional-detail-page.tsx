@@ -5,6 +5,7 @@ import ProfessionalHeader from './sections/professional-header';
 import ActionButtonsRow from './sections/action-buttons-row';
 import ServicesSection from './sections/services-section';
 import PortfolioGallery from './sections/portfolio-gallery';
+import CompletedTasksSection from './sections/completed-tasks-section';
 import ReviewsSection from './sections/reviews-section';
 
 interface ProfessionalDetailPageProps {
@@ -51,8 +52,42 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
       {
         id: "1",
         title: "Дълбоко почистване на апартамент",
-        beforeImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
-        afterImage: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=300&h=200&fit=crop"
+        beforeImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+        afterImage: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop",
+        description: "Превръщане на запуснат апартамент в блестящо чисто жилище. Фокус върху детайлите и използване на професионални техники за дълбоко почистване.",
+        duration: "4 часа",
+        difficulty: "Medium" as const,
+        tags: ["Дълбоко почистване", "Кухня", "Баня", "Прозорци"]
+      },
+      {
+        id: "2",
+        title: "Почистване на кухня и баня",
+        beforeImage: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop",
+        afterImage: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
+        description: "Специализирано почистване на кухня и баня с премахване на упорити петна и дезинфекция.",
+        duration: "2.5 часа",
+        difficulty: "Easy" as const,
+        tags: ["Кухня", "Баня", "Дезинфекция"]
+      },
+      {
+        id: "3",
+        title: "Офис почистване след ремонт",
+        beforeImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop",
+        afterImage: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&h=300&fit=crop",
+        description: "Цялостно почистване на офис след строителни дейности. Премахване на прах и строителни отпадъци.",
+        duration: "6 часа",
+        difficulty: "Hard" as const,
+        tags: ["Офис", "След ремонт", "Строителен прах"]
+      },
+      {
+        id: "4",
+        title: "Почистване на стъкла и прозорци",
+        beforeImage: "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
+        afterImage: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
+        description: "Професионално почистване на прозорци и стъклени повърхности за кристална прозрачност.",
+        duration: "1.5 часа",
+        difficulty: "Easy" as const,
+        tags: ["Прозорци", "Стъкла", "Бърза услуга"]
       }
     ],
     reviews: [
@@ -124,7 +159,91 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
       allowDirectContact: true,
       preferredHours: "9:00 - 18:00",
       contactMethods: ["message", "phone"]
-    }
+    },
+    completedTasksList: [
+      {
+        id: "task-1",
+        title: "Генерално почистване на 3-стаен апартамент",
+        category: "Почистване",
+        completedDate: "2024-01-15",
+        clientRating: 5,
+        budget: "120 лв",
+        location: "София, Лозенец",
+        clientName: "Елена М.",
+        testimonial: "Изключителна работа! Мария преобрази напълно апартамента ни. Препоръчвам я на всички!",
+        isVerified: true,
+        durationCompleted: "Завършено за 4ч",
+        complexity: "Standard" as const
+      },
+      {
+        id: "task-2",
+        title: "Ежемесечно поддържащо почистване на офис",
+        category: "Почистване",
+        completedDate: "2024-01-10",
+        clientRating: 5,
+        budget: "80 лв",
+        location: "София, Център",
+        clientName: "Иван Петров",
+        testimonial: "Професионална и надеждна. Офисът винаги изглежда перфектно!",
+        isVerified: true,
+        durationCompleted: "Завършено за 2ч",
+        complexity: "Simple" as const
+      },
+      {
+        id: "task-3",
+        title: "Почистване на мазе и тавански етаж",
+        category: "Специално почистване",
+        completedDate: "2024-01-05",
+        clientRating: 4,
+        budget: "150 лв",
+        location: "София, Витоша",
+        clientName: "Георги С.",
+        isVerified: true,
+        durationCompleted: "Завършено за 5ч",
+        complexity: "Complex" as const
+      },
+      {
+        id: "task-4",
+        title: "Почистване след парти в къща",
+        category: "Почистване",
+        completedDate: "2023-12-28",
+        clientRating: 5,
+        budget: "90 лв",
+        location: "София, Драгалевци",
+        clientName: "Мария К.",
+        testimonial: "Дойде рано сутринта и за 3 часа къщата изглеждаше като нова. Благодаря!",
+        isVerified: false,
+        durationCompleted: "Завършено за 3ч",
+        complexity: "Standard" as const
+      },
+      {
+        id: "task-5",
+        title: "Дълбоко почистване на кухня след ремонт",
+        category: "След ремонт",
+        completedDate: "2023-12-20",
+        clientRating: 5,
+        budget: "110 лв",
+        location: "София, Студентски град",
+        clientName: "Анна Д.",
+        isVerified: true,
+        durationCompleted: "Завършено за 4ч",
+        complexity: "Complex" as const
+      },
+      {
+        id: "task-6",
+        title: "Редовно почистване на входна зона",
+        category: "Поддържане",
+        completedDate: "2023-12-15",
+        clientRating: 4,
+        budget: "45 лв",
+        location: "София, Редута",
+        clientName: "Петър М.",
+        testimonial: "Бърза и качествена работа. Входът винаги е чист и подреден.",
+        isVerified: true,
+        durationCompleted: "Завършено за 1ч",
+        complexity: "Simple" as const
+      }
+    ]
   };
 
   return (
@@ -166,8 +285,11 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
             <ReviewsSection reviews={mockProfessional.reviews} />
           </div>
 
-          {/* Portfolio Gallery */}
+          {/* Portfolio Gallery - My Demos */}
           <PortfolioGallery portfolio={mockProfessional.portfolio} />
+
+          {/* Completed Tasks */}
+          <CompletedTasksSection completedTasks={mockProfessional.completedTasksList} />
         </div>
       </div>
     </div>

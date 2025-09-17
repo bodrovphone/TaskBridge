@@ -25,7 +25,8 @@ async function getProfessional(id: string) {
 }
 
 export async function generateMetadata({ params }: ProfessionalPageProps): Promise<Metadata> {
-  const professional = await getProfessional(params.id);
+  const resolvedParams = await params;
+  const professional = await getProfessional(resolvedParams.id);
   
   if (!professional) {
     return {
@@ -34,17 +35,18 @@ export async function generateMetadata({ params }: ProfessionalPageProps): Promi
   }
 
   return {
-    title: `Professional Profile - ${params.id}`,
+    title: `Professional Profile - ${resolvedParams.id}`,
     description: `View professional services and contact information`,
   };
 }
 
 export default async function ProfessionalPage({ params }: ProfessionalPageProps) {
-  const professional = await getProfessional(params.id);
+  const resolvedParams = await params;
+  const professional = await getProfessional(resolvedParams.id);
 
   if (!professional) {
     notFound();
   }
 
-  return <ProfessionalDetailPage professionalId={params.id} />;
+  return <ProfessionalDetailPage professionalId={resolvedParams.id} />;
 }
