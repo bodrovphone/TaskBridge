@@ -1,5 +1,11 @@
 'use client'
 
+// @todo REFACTORING: Split this 730-line component into smaller sections:
+// - ProfessionalsHeroSection (search + categories)
+// - ProfessionalsFiltersSection (desktop/mobile filters)  
+// - ProfessionalsGridSection (masonry grid + pagination)
+// Target: Reduce from 730 lines to ~300 lines
+
 import { useState, useMemo } from "react";
 import { useTranslation } from 'react-i18next';
 import { motion } from "framer-motion";

@@ -11,6 +11,7 @@ import {
 import { Star, MapPin, Clock, Briefcase } from "lucide-react"
 import FallbackAvatar from "@/components/ui/fallback-avatar"
 import { getCategoryLabel } from '@/lib/constants/categories'
+import { LocaleLink } from '@/components/common/locale-link'
 import type { Professional } from '../lib/mock-professionals'
 
 interface ProfessionalCardProps {
@@ -43,7 +44,7 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
         <CardBody className="p-6 relative z-10">
           {/* Enhanced Header */}
           <div className="flex items-start gap-4 mb-6">
-            <div className="relative group">
+            <LocaleLink href={`/professionals/${professional.id}`} className="relative group">
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.2 }}
@@ -65,12 +66,14 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
                   <span className="text-white text-[10px] font-bold">✓</span>
                 </motion.div>
               )}
-            </div>
+            </LocaleLink>
             
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-blue-700 transition-colors truncate">
-                {professional.name}
-              </h3>
+              <LocaleLink href={`/professionals/${professional.id}`}>
+                <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-blue-700 hover:text-blue-600 transition-colors truncate cursor-pointer">
+                  {professional.name}
+                </h3>
+              </LocaleLink>
               <div className="flex items-center gap-3 mb-3">
                 <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
                   <Star className="text-yellow-500 fill-current" size={16} />
@@ -197,23 +200,25 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <NextUIButton
-              color="primary"
-              variant="shadow"
-              size="lg"
-              className="w-full font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl"
-              endContent={
-                <motion.div
-                  animate={{ x: 0 }}
-                  whileHover={{ x: 4 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  →
-                </motion.div>
-              }
-            >
-              {t('professionals.viewProfile')}
-            </NextUIButton>
+            <LocaleLink href={`/professionals/${professional.id}`} className="block">
+              <NextUIButton
+                color="primary"
+                variant="shadow"
+                size="lg"
+                className="w-full font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl"
+                endContent={
+                  <motion.div
+                    animate={{ x: 0 }}
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    →
+                  </motion.div>
+                }
+              >
+                {t('professionals.viewProfile')}
+              </NextUIButton>
+            </LocaleLink>
           </motion.div>
         </CardBody>
       </NextUICard>

@@ -1,9 +1,15 @@
 'use client'
 
+// @todo REFACTORING: Extract mock data to separate data provider or hook
+// - Move mockQuestions and mockApplications to shared data service (~40 lines)
+// - Create useTaskActivity hook for state management (~20 lines) 
+// Target: Reduce from 150 lines to ~90 lines
+
 import { useState } from "react";
-import { Card as NextUICard, CardBody, Avatar, Button as NextUIButton, Chip, Tabs, Tab } from "@nextui-org/react";
-import { MessageCircle, User, CheckCircle, Clock, Star } from "lucide-react";
+import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
+import { MessageCircle, User } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import { ApplicationsSection, QuestionsSection } from "./sections";
 
 // Mock data - in real app this would come from props or API
 const mockQuestions = [
@@ -59,7 +65,7 @@ const mockApplications = [
     price: "120 лв",
     timeline: "2 дни",
     timestamp: "преди 1 час",
-    status: "pending" // pending, accepted, rejected
+    status: "pending"
   },
   {
     id: "a2",
@@ -107,8 +113,8 @@ export default function TaskActivity() {
     // TODO: Implement reject logic
   };
 
-  const handleReplyToQuestion = (questionId: string) => {
-    console.log("Reply to question:", questionId);
+  const handleReplyToQuestion = (questionId: string, reply: string) => {
+    console.log("Reply to question:", questionId, reply);
     // TODO: Implement reply logic
   };
 
@@ -133,93 +139,11 @@ export default function TaskActivity() {
               </div>
             }
           >
-            <div className="space-y-4 mt-4">
-              {mockApplications.map((application) => (
-                <div key={application.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
-                  {/* User Header */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <Avatar 
-                        src={application.user.avatar}
-                        name={application.user.name}
-                        className="w-12 h-12"
-                      />
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{application.user.name}</h4>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Star className="text-yellow-500 fill-current" size={12} />
-                            <span>{application.user.rating}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <CheckCircle className="text-green-500" size={12} />
-                            <span>{application.user.completedTasks} {t('taskDetail.tasks')}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right text-sm text-gray-500">
-                      <div>{application.timestamp}</div>
-                    </div>
-                  </div>
-
-                  {/* Specializations */}
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {application.user.specializations.map((spec) => (
-                      <Chip key={spec} size="sm" variant="flat" color="primary">
-                        {spec}
-                      </Chip>
-                    ))}
-                  </div>
-
-                  {/* Proposal */}
-                  <p className="text-gray-700 mb-3">{application.proposal}</p>
-
-                  {/* Price and Timeline */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm text-gray-600">{t('taskDetail.price')}</span>
-                        <span className="font-semibold text-green-600">{application.price}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock size={14} className="text-gray-500" />
-                        <span className="text-sm text-gray-600">{application.timeline}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  {application.status === "pending" && (
-                    <div className="flex gap-2">
-                      <NextUIButton
-                        color="success"
-                        size="sm"
-                        variant="solid"
-                        onClick={() => handleAcceptApplication(application.id)}
-                      >
-                        {t('taskDetail.accept')}
-                      </NextUIButton>
-                      <NextUIButton
-                        color="danger"
-                        size="sm"
-                        variant="bordered"
-                        onClick={() => handleRejectApplication(application.id)}
-                      >
-                        {t('taskDetail.reject')}
-                      </NextUIButton>
-                      <NextUIButton
-                        color="primary"
-                        size="sm"
-                        variant="light"
-                      >
-                        {t('taskDetail.message')}
-                      </NextUIButton>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <ApplicationsSection
+              applications={mockApplications}
+              onAcceptApplication={handleAcceptApplication}
+              onRejectApplication={handleRejectApplication}
+            />
           </Tab>
           
           <Tab 
@@ -231,60 +155,10 @@ export default function TaskActivity() {
               </div>
             }
           >
-            <div className="space-y-4 mt-4">
-              {mockQuestions.map((question) => (
-                <div key={question.id} className="border border-gray-200 rounded-lg p-4">
-                  {/* User Header */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <Avatar 
-                        src={question.user.avatar}
-                        name={question.user.name}
-                        className="w-10 h-10"
-                      />
-                      <div>
-                        <h4 className="font-medium text-gray-900">{question.user.name}</h4>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <Star className="text-yellow-500 fill-current" size={10} />
-                            <span>{question.user.rating}</span>
-                          </div>
-                          <span>•</span>
-                          <span>{question.user.completedTasks} {t('taskDetail.tasks')}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-xs text-gray-500">{question.timestamp}</span>
-                  </div>
-
-                  {/* Question */}
-                  <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                    <p className="text-gray-700">{question.question}</p>
-                  </div>
-
-                  {/* Reply */}
-                  {question.reply ? (
-                    <div className="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r-lg">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-blue-900">{t('taskDetail.yourReply')}</span>
-                      </div>
-                      <p className="text-blue-800">{question.reply}</p>
-                    </div>
-                  ) : (
-                    <div className="flex justify-end">
-                      <NextUIButton
-                        color="primary"
-                        size="sm"
-                        variant="bordered"
-                        onClick={() => handleReplyToQuestion(question.id)}
-                      >
-                        {t('taskDetail.reply')}
-                      </NextUIButton>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <QuestionsSection
+              questions={mockQuestions}
+              onReplyToQuestion={handleReplyToQuestion}
+            />
           </Tab>
         </Tabs>
       </CardBody>

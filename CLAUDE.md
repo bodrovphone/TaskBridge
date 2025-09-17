@@ -254,4 +254,24 @@ The task detail page features a comprehensive view of individual tasks with adva
 - Configured for Vercel deployment
 - Database connection via `DATABASE_URL` environment variable
 - Static assets served by Next.js
-- to memorize
+
+### Code Quality & Maintenance
+
+#### TODO Comment Convention
+- Use `@todo` comments to mark future refactoring tasks and technical debt
+- Format: `@todo CATEGORY: Description of work needed`
+- Categories: REFACTORING, MIGRATION, FEATURE, BUG, PERFORMANCE, etc.
+- **Always check for `@todo` comments** when working in a file or feature
+- Examples:
+  ```typescript
+  // @todo REFACTORING: Extract PopularCategoriesSection to reduce component size
+  // @todo MIGRATION: Convert Express API routes to Next.js API routes
+  // @todo FEATURE: Add user authentication flow
+  ```
+
+#### Large Component Refactoring Progress
+- **✅ browse-tasks-page.tsx** (423 → 103 lines) - 75% reduction via HeroSection, SearchFiltersSection, ResultsSection
+- **✅ task-activity.tsx** (292 → 167 lines) - 43% reduction via ApplicationsSection, QuestionsSection
+- **✅ landing-page.tsx** (831 → 581 lines) - 30% reduction via HeroSection, FeaturedTasksSection
+- **⏸️ sidebar.tsx** (771 lines) - Skipped (shadcn/ui design system component)
+- **🎯 professionals-page.tsx** (730 lines) → Target: 300 lines via section extraction (next priority)
