@@ -232,13 +232,34 @@ The task detail page features a comprehensive view of individual tasks with adva
 - **Type-safe utilities** in `/lib/utils/` for locale detection and URL manipulation
 - **User preference persistence** via cookies and localStorage
 - **Error boundaries** and graceful fallbacks for i18n initialization
+- **Modular translation resources** - Separated language files for better maintainability
+
+#### Translation Resources Structure
+```
+/src/lib/intl/
+├── config.ts          # i18n configuration and initialization
+├── en.ts              # English translations (588 keys)
+├── bg.ts              # Bulgarian translations (614 keys)
+└── ru.ts              # Russian translations (597 keys)
+```
 
 #### Implementation Details
+- **Translation Config** (`/src/lib/intl/config.ts`) - Centralized i18next setup with modular imports
+- **Language Files** (`/src/lib/intl/[lang].ts`) - Complete translation objects with namespaced keys
 - **LocaleLink Component** (`/components/locale-link.tsx`) - Automatically prefixes internal links with current locale
 - **Constants** (`/lib/constants/locales.ts`) - Centralized locale configuration, no hardcoded strings
 - **Middleware** (`/middleware.ts`) - Smart detection: Cookie → Browser → English default, optimized for minimal cost
 - **Language Priority**: User manual selection (highest) → Browser detection → English fallback
 - **Performance**: 90% of requests skip middleware via early returns for existing locale URLs
+
+#### Translation Key Structure
+Translation keys follow a hierarchical namespace pattern:
+- **Navigation**: `nav.*` (home, browseTasks, createTask, etc.)
+- **Landing Page**: `landing.*` (hero, categories, testimonials, etc.)
+- **Pages**: `professionals.*`, `tasks.*`, `browseTasks.*`, `createTask.*`
+- **Components**: `taskCard.*`, `professionalDetail.*`, `auth.*`
+- **Categories**: `categories.*` (comprehensive service categories)
+- **Common**: Global terms (welcome, login, search, etc.)
 
 ### Authentication
 - **Currently disabled** - no authentication required to access pages
