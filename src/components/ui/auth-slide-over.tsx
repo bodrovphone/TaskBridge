@@ -42,24 +42,20 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
     }
   };
 
-  const handleRegister = () => {
-    // TODO: Handle register logic - for now just simulate login
-    handleLogin();
-  };
 
   return createPortal(
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
-        style={{ zIndex: 99998 }}
+        style={{ zIndex: 999998 }}
         onClick={onClose}
       />
-      
+
       {/* Slide-over Panel */}
-      <div 
+      <div
         className="fixed inset-y-0 right-0 w-full max-w-md transform transition-transform duration-300 ease-in-out"
-        style={{ zIndex: 99999 }}
+        style={{ zIndex: 999999 }}
       >
         <div className="flex h-full flex-col bg-white shadow-xl">
           {/* Header */}
@@ -67,22 +63,26 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-white">
-                  {action === 'apply' ? t('auth.applyForTask') : 
-                   action === 'question' ? t('auth.askQuestion') : 
-                   action === 'create-task' ? t('auth.createTask') : t('auth.login')}
+                  {action === 'apply' ? t('auth.applyForTask') :
+                   action === 'question' ? t('auth.askQuestion') :
+                   action === 'create-task' ? t('auth.createTask') : t('auth.loginOrRegister')}
                 </h2>
                 <p className="text-blue-100 text-sm">
-                  {t('auth.loginToContinue')}
+                  {t('auth.loginOrRegisterToContinue')}
                 </p>
               </div>
-              <NextUIButton
-                isIconOnly
-                variant="light"
-                className="text-white hover:bg-blue-700"
-                onClick={onClose}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onClose()
+                }}
+                className="flex items-center justify-center w-12 h-12 text-white hover:bg-blue-700 rounded-lg transition-colors touch-manipulation min-h-[48px] min-w-[48px]"
+                aria-label="Close"
               >
-                <X size={20} />
-              </NextUIButton>
+                <X size={24} />
+              </button>
             </div>
           </div>
 
@@ -92,18 +92,18 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
               {/* Action Description */}
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h3 className="font-medium text-gray-900 mb-2">
-                  {action === 'apply' ? `🎯 ${t('auth.applyForTask')}` : 
+                  {action === 'apply' ? `🎯 ${t('auth.applyForTask')}` :
                    action === 'question' ? `💬 ${t('auth.askQuestion')}` :
-                   action === 'create-task' ? `➕ ${t('auth.createTask')}` : `🔐 ${t('auth.login')}`}
+                   action === 'create-task' ? `➕ ${t('auth.createTask')}` : `🔐 ${t('auth.loginOrRegister')}`}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  {action === 'apply' 
+                  {action === 'apply'
                     ? t('auth.applyDescription')
-                    : action === 'question' 
+                    : action === 'question'
                     ? t('auth.questionDescription')
                     : action === 'create-task'
                     ? t('auth.createTaskDescription')
-                    : t('auth.loginDescription')
+                    : t('auth.loginOrRegisterDescription')
                   }
                 </p>
               </div>
@@ -147,16 +147,16 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
                 </div>
               </div>
 
-              {/* Login Button */}
-              <NextUIButton 
-                color="primary" 
-                size="lg" 
+              {/* Login/Register Button */}
+              <NextUIButton
+                color="primary"
+                size="lg"
                 className="w-full"
                 onClick={handleLogin}
                 isLoading={isLoading}
                 isDisabled={!email || !password}
               >
-                {t('auth.login')}
+                {t('auth.continue')}
               </NextUIButton>
 
               {/* Social Login */}
@@ -191,43 +191,6 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
                 </NextUIButton>
               </div>
 
-              {/* Divider */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">{t('auth.or')}</span>
-                </div>
-              </div>
-
-              {/* Register Section */}
-              <div className="text-center">
-                <p className="text-sm text-gray-600 mb-4">
-                  {t('auth.noAccount')}
-                </p>
-                <NextUIButton 
-                  variant="bordered" 
-                  size="lg" 
-                  className="w-full"
-                  onClick={handleRegister}
-                >
-                  {t('auth.createAccount')}
-                </NextUIButton>
-              </div>
-
-              {/* Benefits */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-2">
-                  🚀 {t('auth.whyRegister')}
-                </h4>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>{t('auth.benefit1')}</li>
-                  <li>{t('auth.benefit2')}</li>
-                  <li>{t('auth.benefit3')}</li>
-                  <li>{t('auth.benefit4')}</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>

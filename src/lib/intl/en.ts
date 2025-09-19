@@ -28,6 +28,8 @@ const en = {
   'nav.howItWorks': 'How It Works',
   'nav.categories': 'Categories',
   'nav.forProfessionals': 'Professionals',
+  'nav.myTasks': 'My Tasks',
+  'nav.help': 'Help',
 
   'landing.hero.title': 'Find Trusted Local Professionals',
   'landing.hero.subtitle':
@@ -566,6 +568,10 @@ const en = {
   'auth.password': 'Password',
   'auth.rememberMe': 'Remember me',
   'auth.forgotPassword': 'Forgot password?',
+  'auth.loginOrRegister': 'Login / Register',
+  'auth.loginOrRegisterToContinue': 'Please login or register to continue',
+  'auth.loginOrRegisterDescription': 'Enter your credentials to access your account or create a new one.',
+  'auth.continue': 'Continue',
   'auth.login': 'Log In',
   'auth.or': 'or',
   'auth.noAccount': "Don't have an account?",

@@ -30,6 +30,8 @@ const bg = {
   'nav.howItWorks': 'Как работи',
   'nav.categories': 'Категории',
   'nav.forProfessionals': 'Професионалисти',
+  'nav.myTasks': 'Моите задачи',
+  'nav.help': 'Помощ',
 
   // Landing Page
   'landing.hero.title': 'Намерете доверени местни професионалисти',
@@ -590,6 +592,10 @@ const bg = {
   'auth.password': 'Парола',
   'auth.rememberMe': 'Запомни ме',
   'auth.forgotPassword': 'Забравена парола?',
+  'auth.loginOrRegister': 'Влизане / Регистрация',
+  'auth.loginOrRegisterToContinue': 'За да продължите, моля влезте или се регистрирайте',
+  'auth.loginOrRegisterDescription': 'Въведете данните си за достъп до акаунта или създайте нов.',
+  'auth.continue': 'Продължи',
   'auth.login': 'Влизане',
   'auth.or': 'или',
   'auth.noAccount': 'Нямате акаунт?',

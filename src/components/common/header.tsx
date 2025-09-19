@@ -6,8 +6,9 @@ import { useRouter, useParams } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
 import AuthSlideOver from "@/components/ui/auth-slide-over"
+import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import { useTranslation } from 'react-i18next'
-import { Handshake, Plus, LogOut } from "lucide-react"
+import { Handshake, Plus } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { 
   Navbar, 
@@ -24,7 +25,7 @@ import {
 function Header() {
   // const pathname = usePathname()
   const { t } = useTranslation()
-  const { /* user, */ isAuthenticated, logout } = useAuth()
+  const { isAuthenticated } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
   const router = useRouter()
@@ -84,49 +85,47 @@ function Header() {
         ))}
       </NavbarContent>
 
-      {/* Actions Section */}
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden md:flex">
+      {/* Desktop Actions Section */}
+      <NavbarContent justify="end" className="hidden md:flex gap-3">
+        <NavbarItem>
           <LanguageSwitcher />
         </NavbarItem>
-        {isAuthenticated ? (
-          <>
-            <NavbarItem>
-              <Button 
-                color="primary"
-                variant="solid"
-                startContent={<Plus size={16} />}
-                className="font-medium"
-                onClick={handleCreateTask}
-              >
-                {t('nav.createTask')}
-              </Button>
-            </NavbarItem>
-            <NavbarItem>
-              <Button
-                variant="ghost"
-                startContent={<LogOut size={16} />}
-                onClick={logout}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                {t('logout')}
-              </Button>
-            </NavbarItem>
-          </>
-        ) : (
-          <NavbarItem>
-            <Button 
-              color="primary"
-              variant="solid"
-              startContent={<Plus size={16} />}
-              className="font-medium"
-              onClick={handleCreateTask}
-            >
-              {t('nav.createTask')}
-            </Button>
-          </NavbarItem>
-        )}
-        <NavbarMenuToggle className="md:hidden" />
+        <NavbarItem>
+          <Button
+            color="primary"
+            variant="solid"
+            startContent={<Plus size={16} />}
+            className="font-medium"
+            onClick={handleCreateTask}
+          >
+            {t('nav.createTask')}
+          </Button>
+        </NavbarItem>
+        <NavbarItem>
+          {isAuthenticated ? (
+            <UserAvatarDropdown size="md" />
+          ) : (
+            <UserAvatarDropdown
+              size="md"
+              onLoginClick={() => setIsAuthSlideOverOpen(true)}
+            />
+          )}
+        </NavbarItem>
+      </NavbarContent>
+
+      {/* Mobile Actions Section */}
+      <NavbarContent justify="end" className="md:hidden gap-6">
+        <NavbarItem>
+          {isAuthenticated ? (
+            <UserAvatarDropdown size="sm" />
+          ) : (
+            <UserAvatarDropdown
+              size="sm"
+              onLoginClick={() => setIsAuthSlideOverOpen(true)}
+            />
+          )}
+        </NavbarItem>
+        <NavbarMenuToggle />
       </NavbarContent>
 
       {/* Mobile Menu */}
@@ -147,16 +146,18 @@ function Header() {
         <NavbarMenuItem>
           <div className="pt-4 border-t border-gray-200 w-full space-y-3">
             <LanguageSwitcher />
-            {isAuthenticated && (
-              <Button
-                variant="ghost"
-                startContent={<LogOut size={16} />}
-                onClick={logout}
-                className="w-full justify-start text-gray-600 hover:text-gray-900"
-              >
-                {t('logout')}
-              </Button>
-            )}
+            <Button
+              color="primary"
+              variant="solid"
+              startContent={<Plus size={16} />}
+              className="w-full font-medium"
+              onClick={() => {
+                setIsMenuOpen(false)
+                handleCreateTask()
+              }}
+            >
+              {t('nav.createTask')}
+            </Button>
           </div>
         </NavbarMenuItem>
       </NavbarMenu>

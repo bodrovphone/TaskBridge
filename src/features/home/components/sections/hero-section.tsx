@@ -1,17 +1,19 @@
 'use client'
 
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
+import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useTranslation } from 'react-i18next';
 import { usePathname } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
-import { 
-  Shield, 
-  Star, 
-  Heart, 
+import {
+  Shield,
+  Star,
+  Heart,
   CheckCircle,
   Plus,
   Search
@@ -22,6 +24,7 @@ export default function HeroSection() {
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
   const isDesktop = useIsDesktop();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
     <section className="relative overflow-hidden py-20 lg:py-32 z-10">
@@ -100,15 +103,13 @@ export default function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
-                asChild
+                onClick={() => setIsAuthOpen(true)}
               >
-                <LocaleLink href="/create-task">
-                  <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
-                  {t('landing.hero.getStarted')}
-                </LocaleLink>
+                <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+                {t('landing.hero.getStarted')}
               </Button>
               <Button 
                 variant="outline" 
@@ -204,6 +205,13 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
+
+      {/* Auth Slide-over */}
+      <AuthSlideOver
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        action="create-task"
+      />
     </section>
   );
 }

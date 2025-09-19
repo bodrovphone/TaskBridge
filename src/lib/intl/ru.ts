@@ -28,6 +28,8 @@ const ru = {
   'nav.howItWorks': 'Как работает',
   'nav.categories': 'Категории',
   'nav.forProfessionals': 'Профессионалы',
+  'nav.myTasks': 'Мои задачи',
+  'nav.help': 'Помощь',
 
   'landing.hero.title': 'Найдите проверенных местных специалистов',
   'landing.hero.subtitle':
@@ -573,6 +575,10 @@ const ru = {
   'auth.password': 'Пароль',
   'auth.rememberMe': 'Запомнить меня',
   'auth.forgotPassword': 'Забыли пароль?',
+  'auth.loginOrRegister': 'Войти / Регистрация',
+  'auth.loginOrRegisterToContinue': 'Для продолжения войдите или зарегистрируйтесь',
+  'auth.loginOrRegisterDescription': 'Введите свои данные для доступа к аккаунту или создайте новый.',
+  'auth.continue': 'Продолжить',
   'auth.login': 'Войти',
   'auth.or': 'или',
   'auth.noAccount': 'Нет аккаунта?',
