@@ -8,7 +8,7 @@ import { LanguageSwitcher } from "./language-switcher"
 import AuthSlideOver from "@/components/ui/auth-slide-over"
 import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import { useTranslation } from 'react-i18next'
-import { Handshake, Plus } from "lucide-react"
+import { Plus, Handshake } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { 
   Navbar, 
@@ -62,8 +62,8 @@ function Header() {
       {/* Logo/Brand */}
       <NavbarBrand>
         <LocaleLink href="/" className="flex items-center">
-          <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center mr-2">
-            <Handshake className="text-white" size={16} />
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mr-3">
+            <Handshake className="text-white" size={20} />
           </div>
           <span className="text-xl font-bold text-gray-900">Trudify</span>
         </LocaleLink>

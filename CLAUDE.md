@@ -134,6 +134,50 @@ import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
 
 ## Development Notes
 
+### Task Management Workflow
+TaskBridge uses a structured approach to manage development tasks:
+
+**📋 Task Organization:**
+- `todo_tasks/` - Contains markdown files for tasks to be completed
+- `complete_tasks/` - Contains completed task files moved from todo_tasks
+
+**🔄 Workflow Process:**
+1. **Task Creation**: New tasks are described and saved as `.md` files in `todo_tasks/`
+2. **Task Naming**: Use descriptive kebab-case names (e.g., `profile-page-customer-avatar-upload.md`)
+3. **Task Structure**: Each task file includes:
+   - Task Description and Requirements
+   - Acceptance Criteria (checkboxes)
+   - Technical Notes and Priority
+4. **Task Completion**: When finished, move the task file from `todo_tasks/` to `complete_tasks/`
+
+**📝 Task File Template:**
+```markdown
+# Task Title
+
+## Task Description
+Brief description of what needs to be done
+
+## Requirements
+- Bullet point requirements
+- Keep it simple for MVP
+
+## Acceptance Criteria
+- [ ] Specific deliverable 1
+- [ ] Specific deliverable 2
+
+## Technical Notes
+Implementation notes and considerations
+
+## Priority
+Low/Medium/High
+```
+
+**Benefits:**
+- Clear task tracking and progress visibility
+- Documentation of decisions and requirements
+- Historical record of completed work
+- Easy to reference and update task scope
+
 ### Path Aliases
 All paths are configured to point to the `/src/` directory:
 - `@/` points to `./src/`

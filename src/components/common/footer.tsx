@@ -43,9 +43,8 @@ function Footer() {
             {/* Company Info */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg relative">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
                   <Handshake className="text-white" size={24} />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-sm"></div>
                 </div>
                 <span className="text-2xl font-bold text-white">Trudify</span>
               </div>

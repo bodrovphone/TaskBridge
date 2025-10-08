@@ -40,6 +40,14 @@ export const users = pgTable('users', {
   city: varchar('city'),
   country: varchar('country'),
   isPhoneVerified: boolean('is_phone_verified').default(false),
+  isEmailVerified: boolean('is_email_verified').default(false),
+  verifiedAt: timestamp('verified_at'),
+  preferredLanguage: varchar('preferred_language', {
+    enum: ['en', 'bg', 'ru'],
+  }).default('en'),
+  preferredContact: varchar('preferred_contact', {
+    enum: ['email', 'phone', 'sms'],
+  }).default('email'),
   vatNumber: varchar('vat_number'),
   isVatVerified: boolean('is_vat_verified').default(false),
   serviceCategories: text('service_categories').array(),
