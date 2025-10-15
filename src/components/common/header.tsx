@@ -1,8 +1,7 @@
 'use client'
 
-// import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { useRouter, useParams } from "next/navigation"
+import { useRouter, useParams, usePathname } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
 import AuthSlideOver from "@/components/ui/auth-slide-over"
@@ -10,20 +9,20 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import { useTranslation } from 'react-i18next'
 import { Plus, Handshake } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
-import { 
-  Navbar, 
-  NavbarBrand, 
-  NavbarContent, 
-  NavbarItem, 
-  NavbarMenuToggle, 
-  NavbarMenu, 
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
   NavbarMenuItem,
   Button,
   Link as NextUILink
 } from "@nextui-org/react"
 
 function Header() {
-  // const pathname = usePathname()
+  const pathname = usePathname()
   const { t } = useTranslation()
   const { isAuthenticated } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -32,10 +31,16 @@ function Header() {
   const params = useParams()
   const lang = params?.lang as string || 'en'
 
+  // Check if we're on the index/landing page
+  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
+
+  // Dynamic categories link based on current page
+  const categoriesHref = isIndexPage ? "/#categories" : "/categories"
+
   const navigation = [
     { name: t('nav.browseTasks'), href: "/browse-tasks" },
     { name: t('nav.howItWorks'), href: "/#how-it-works" },
-    { name: t('nav.categories'), href: "/#categories" },
+    { name: t('nav.categories'), href: categoriesHref },
     { name: t('nav.forProfessionals'), href: "/professionals" },
   ]
 

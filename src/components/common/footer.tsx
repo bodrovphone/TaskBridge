@@ -9,12 +9,16 @@ import { LocaleLink } from "./locale-link";
 
 function Footer() {
   const { t } = useTranslation();
-  // const pathname = usePathname();
-  // const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
-  
+  const pathname = usePathname();
+
+  // Check if we're on the index/landing page for smart category linking
+  const lang = pathname.split('/')[1] || 'en';
+  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`;
+  const categoriesHref = isIndexPage ? "/#categories" : "/categories";
+
   const quickLinks = [
     { name: t('footer.quickLinks.howItWorks'), href: "/#how-it-works" },
-    { name: t('footer.quickLinks.categories'), href: "/#categories" },
+    { name: t('footer.quickLinks.categories'), href: categoriesHref },
     { name: t('footer.quickLinks.forProfessionals'), href: "/#for-professionals" },
     { name: t('footer.quickLinks.security'), href: "/security" },
     { name: t('footer.quickLinks.help'), href: "/help" },

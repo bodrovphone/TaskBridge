@@ -194,8 +194,10 @@ function Landing() {
           </div>
 
           <div className="text-center mt-8">
-            <Button variant="ghost" className="text-slate-800 hover:text-slate-900 font-semibold text-lg">
-              {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />
+            <Button variant="ghost" className="text-slate-800 hover:text-slate-900 font-semibold text-lg" asChild>
+              <LocaleLink href="/categories">
+                {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />
+              </LocaleLink>
             </Button>
           </div>
         </div>

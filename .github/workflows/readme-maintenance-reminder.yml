@@ -1,0 +1,122 @@
+name: Monthly README Maintenance Reminder
+
+on:
+  schedule:
+    # Runs at 9:00 AM UTC on the 1st of every month
+    - cron: '0 9 1 * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  create-reminder-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current month and year
+        id: date
+        run: |
+          echo "month=$(date +'%B %Y')" >> $GITHUB_OUTPUT
+          echo "month_num=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
+
+      - name: Check if README was updated this month
+        id: check_readme
+        run: |
+          # Check if README.md was updated in the last 30 days
+          LAST_UPDATE=$(git log -1 --format=%cd --date=short -- README.md)
+          DAYS_SINCE=$(( ($(date +%s) - $(date -d "$LAST_UPDATE" +%s)) / 86400 ))
+
+          echo "last_update=$LAST_UPDATE" >> $GITHUB_OUTPUT
+          echo "days_since=$DAYS_SINCE" >> $GITHUB_OUTPUT
+
+          if [ $DAYS_SINCE -gt 30 ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create reminder issue
+        if: steps.check_readme.outputs.needs_update == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const month = '${{ steps.date.outputs.month }}';
+            const lastUpdate = '${{ steps.check_readme.outputs.last_update }}';
+            const daysSince = '${{ steps.check_readme.outputs.days_since }}';
+
+            const issueBody = `## 📋 Monthly README Maintenance Due
+
+            It's time for the monthly README.md review and update!
+
+            ### Status
+            - **Last Update**: ${lastUpdate} (${daysSince} days ago)
+            - **Current Month**: ${month}
+
+            ### Task Location
+            The detailed maintenance checklist is available at:
+            \`\`\`
+            todo_tasks/monthly-readme-maintenance.md
+            \`\`\`
+
+            ### Quick Steps
+            1. Open \`todo_tasks/monthly-readme-maintenance.md\`
+            2. Follow the 12-section maintenance checklist
+            3. Update README.md with current information
+            4. Run verification commands provided in the task
+            5. Commit changes with: \`docs: monthly README maintenance - ${month}\`
+            6. Close this issue
+
+            ### Key Areas to Review
+            - ✅ Routes documentation (check for new pages)
+            - ✅ User flow diagrams (verify accuracy)
+            - ✅ Tech stack updates (check package.json)
+            - ✅ Feature list (add completed features)
+            - ✅ Translation counts (update key numbers)
+            - ✅ Authentication status (document changes)
+            - ✅ Database schema (sync with schema.ts)
+            - ✅ Refactoring progress (update line counts)
+
+            ### Automation Commands
+            \`\`\`bash
+            # Check for new routes
+            find src/app -type f -name "page.tsx"
+
+            # Count translation keys
+            grep -o '"[^"]*":' src/lib/intl/en.ts | wc -l
+
+            # Check component sizes
+            wc -l src/components/pages/*.tsx
+            \`\`\`
+
+            ### Expected Time
+            ⏱️ 30-45 minutes
+
+            ---
+
+            This is an automated reminder. The README should be reviewed monthly to ensure documentation stays current with the codebase.
+
+            **Assigned to**: Project maintainers
+            **Due**: Within 7 days
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📋 Monthly README Maintenance - ${month}`,
+              body: issueBody,
+              labels: ['documentation', 'maintenance', 'monthly']
+            });
+
+      - name: Send summary
+        run: |
+          if [ "${{ steps.check_readme.outputs.needs_update }}" == "true" ]; then
+            echo "✅ Reminder issue created - README needs update"
+            echo "📅 Last updated: ${{ steps.check_readme.outputs.last_update }}"
+            echo "⏰ Days since update: ${{ steps.check_readme.outputs.days_since }}"
+          else
+            echo "✨ README is up-to-date - no reminder needed"
+            echo "📅 Last updated: ${{ steps.check_readme.outputs.last_update }}"
+          fi
