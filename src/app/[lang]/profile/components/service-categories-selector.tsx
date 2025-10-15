@@ -4,12 +4,11 @@ import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Chip, Input } from '@nextui-org/react'
 import { Search, X } from 'lucide-react'
-import type { TaskCategory } from '@/lib/constants/categories'
-import { getCategoryLabel } from '@/lib/constants/categories'
+import { getCategoryLabelBySlug } from '@/features/categories'
 
 interface ServiceCategoriesSelectorProps {
-  selectedCategories: TaskCategory[]
-  onChange: (categories: TaskCategory[]) => void
+  selectedCategories: string[] // Category slugs
+  onChange: (categories: string[]) => void
   maxSelections?: number
 }
 
@@ -21,7 +20,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-blue-500' as const,
     chipColor: 'primary' as const,
     chipClass: 'bg-blue-100 text-blue-700 border-blue-300',
-    categories: ['plumbing', 'electrical', 'hvac', 'carpentry', 'painting', 'flooring', 'roofing', 'home_renovation', 'appliance_repair', 'handyman'] as TaskCategory[]
+    categories: ['plumbing', 'electrical', 'hvac', 'carpentry', 'painting', 'flooring', 'roofing', 'home_renovation', 'appliance_repair', 'handyman']
   },
   'cleaning': {
     labelKey: 'categoryGroups.cleaning',
@@ -29,7 +28,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-green-500' as const,
     chipColor: 'success' as const,
     chipClass: 'bg-green-100 text-green-700 border-green-300',
-    categories: ['house_cleaning', 'deep_cleaning', 'carpet_cleaning', 'window_cleaning', 'garden_maintenance', 'landscaping'] as TaskCategory[]
+    categories: ['house_cleaning', 'deep_cleaning', 'carpet_cleaning', 'window_cleaning', 'garden_maintenance', 'landscaping']
   },
   'delivery_transport': {
     labelKey: 'categoryGroups.deliveryTransport',
@@ -37,7 +36,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-orange-500' as const,
     chipColor: 'warning' as const,
     chipClass: 'bg-orange-100 text-orange-700 border-orange-300',
-    categories: ['delivery', 'moving', 'taxi_driver', 'courier'] as TaskCategory[]
+    categories: ['delivery', 'moving', 'taxi_driver', 'courier']
   },
   'personal_care': {
     labelKey: 'categoryGroups.personalCare',
@@ -45,7 +44,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-pink-500' as const,
     chipColor: 'secondary' as const,
     chipClass: 'bg-pink-100 text-pink-700 border-pink-300',
-    categories: ['babysitting', 'elderly_care', 'pet_sitting'] as TaskCategory[]
+    categories: ['babysitting', 'elderly_care', 'pet_sitting']
   },
   'professional': {
     labelKey: 'categoryGroups.professional',
@@ -53,7 +52,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-purple-500' as const,
     chipColor: 'secondary' as const,
     chipClass: 'bg-purple-100 text-purple-700 border-purple-300',
-    categories: ['tutoring', 'translation', 'accounting', 'legal_services', 'consulting', 'personal_trainer', 'massage_therapy'] as TaskCategory[]
+    categories: ['tutoring', 'translation', 'accounting', 'legal_services', 'consulting', 'personal_trainer', 'massage_therapy']
   },
   'creative': {
     labelKey: 'categoryGroups.creative',
@@ -61,7 +60,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-indigo-500' as const,
     chipColor: 'primary' as const,
     chipClass: 'bg-indigo-100 text-indigo-700 border-indigo-300',
-    categories: ['graphic_design', 'web_development', 'photography', 'videography', 'writing', 'music_lessons'] as TaskCategory[]
+    categories: ['graphic_design', 'web_development', 'photography', 'videography', 'writing', 'music_lessons']
   },
   'events': {
     labelKey: 'categoryGroups.events',
@@ -69,7 +68,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-rose-500' as const,
     chipColor: 'danger' as const,
     chipClass: 'bg-rose-100 text-rose-700 border-rose-300',
-    categories: ['event_planning', 'catering', 'dj_services'] as TaskCategory[]
+    categories: ['event_planning', 'catering', 'dj_services']
   },
   'beauty': {
     labelKey: 'categoryGroups.beauty',
@@ -77,7 +76,7 @@ const CATEGORY_GROUPS = {
     color: 'bg-fuchsia-500' as const,
     chipColor: 'secondary' as const,
     chipClass: 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-300',
-    categories: ['hairdressing', 'makeup_artist', 'nail_services'] as TaskCategory[]
+    categories: ['hairdressing', 'makeup_artist', 'nail_services']
   },
   'other': {
     labelKey: 'categoryGroups.other',
@@ -85,12 +84,12 @@ const CATEGORY_GROUPS = {
     color: 'bg-gray-500' as const,
     chipColor: 'default' as const,
     chipClass: 'bg-gray-100 text-gray-700 border-gray-300',
-    categories: ['other'] as TaskCategory[]
+    categories: ['other']
   }
 } as const
 
 // Popular categories (most frequently used)
-const POPULAR_CATEGORIES: TaskCategory[] = [
+const POPULAR_CATEGORIES: string[] = [
   'house_cleaning',
   'plumbing',
   'electrical',
@@ -102,9 +101,9 @@ const POPULAR_CATEGORIES: TaskCategory[] = [
 ]
 
 // Helper function to get category group info
-const getCategoryGroupInfo = (category: TaskCategory) => {
+const getCategoryGroupInfo = (category: string) => {
   for (const [groupKey, group] of Object.entries(CATEGORY_GROUPS)) {
-    if (group.categories.includes(category)) {
+    if ((group.categories as readonly string[]).includes(category)) {
       return group
     }
   }
@@ -119,7 +118,7 @@ export function ServiceCategoriesSelector({
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
 
-  const toggleCategory = (category: TaskCategory) => {
+  const toggleCategory = (category: string) => {
     if (selectedCategories.includes(category)) {
       onChange(selectedCategories.filter(c => c !== category))
     } else {
@@ -129,7 +128,7 @@ export function ServiceCategoriesSelector({
     }
   }
 
-  const removeCategory = (category: TaskCategory) => {
+  const removeCategory = (category: string) => {
     onChange(selectedCategories.filter(c => c !== category))
   }
 
@@ -142,7 +141,7 @@ export function ServiceCategoriesSelector({
 
     Object.entries(CATEGORY_GROUPS).forEach(([groupKey, group]) => {
       const matchingCategories = group.categories.filter(cat => {
-        const label = getCategoryLabel(cat, t).toLowerCase()
+        const label = getCategoryLabelBySlug(cat, t).toLowerCase()
         return label.includes(query)
       })
 
@@ -195,7 +194,7 @@ export function ServiceCategoriesSelector({
                   onClick={() => toggleCategory(category)}
                   className={`cursor-pointer hover:scale-105 transition-transform ${!isSelected ? groupInfo.chipClass : ''}`}
                 >
-                  {getCategoryLabel(category, t)}
+                  {getCategoryLabelBySlug(category, t)}
                 </Chip>
               )
             })}
@@ -212,7 +211,7 @@ export function ServiceCategoriesSelector({
               <span>{t(group.labelKey)}</span>
             </p>
             <div className="flex flex-wrap gap-2 pl-6">
-              {group.categories.map((category: TaskCategory) => {
+              {group.categories.map((category: string) => {
                 const isSelected = selectedCategories.includes(category)
                 return (
                   <Chip
@@ -222,7 +221,7 @@ export function ServiceCategoriesSelector({
                     onClick={() => toggleCategory(category)}
                     className={`cursor-pointer hover:scale-105 transition-transform ${!isSelected ? group.chipClass : ''}`}
                   >
-                    {getCategoryLabel(category, t)}
+                    {getCategoryLabelBySlug(category, t)}
                   </Chip>
                 )
               })}
@@ -256,7 +255,7 @@ export function ServiceCategoriesSelector({
                   color={groupInfo.chipColor}
                   className="shadow-sm"
                 >
-                  {getCategoryLabel(category, t)}
+                  {getCategoryLabelBySlug(category, t)}
                 </Chip>
               )
             })}

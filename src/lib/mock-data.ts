@@ -104,7 +104,7 @@ export const mockTasks = [
     id: "4",
     title: "Уроци по китара",
     description: "Търся преподавател по китара за начинаещ. Предпочитам индивидуални уроци, 2 пъти седмично. Имам собствена китара, но се нуждая от основни знания за свирене и четене на ноти.",
-    category: "education_fitness",
+    category: "learning_fitness",
     subcategory: "Музикални уроци",
     budgetMin: 25,
     budgetMax: 40,

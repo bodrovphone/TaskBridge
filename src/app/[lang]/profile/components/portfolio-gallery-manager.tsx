@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { Card, CardBody, Button, Input, Textarea, Chip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
 import { Plus, Edit, Trash2, X, Save, Clock, Image as ImageIcon } from 'lucide-react'
-import type { TaskCategory } from '@/lib/constants/categories'
-import { getCategoryLabel } from '@/lib/constants/categories'
+import { getCategoryLabelBySlug } from '@/features/categories'
 import { useTranslation } from 'react-i18next'
 
 interface PortfolioItem {
@@ -14,7 +13,7 @@ interface PortfolioItem {
   afterImage: string
   description: string
   duration: string
-  tags: TaskCategory[]
+  tags: string[] // Category slugs
 }
 
 interface PortfolioGalleryManagerProps {
@@ -160,7 +159,7 @@ export function PortfolioGalleryManager({
                   <div className="flex flex-wrap gap-1 justify-end">
                     {item.tags.slice(0, 2).map(tag => (
                       <Chip key={tag} size="sm" variant="flat" color="primary" className="text-xs">
-                        {getCategoryLabel(tag, t)}
+                        {getCategoryLabelBySlug(tag, t)}
                       </Chip>
                     ))}
                     {item.tags.length > 2 && (

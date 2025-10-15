@@ -29,7 +29,7 @@ import {
 } from 'lucide-react'
 import { ServiceCategoriesSelector } from './service-categories-selector'
 import { PortfolioGalleryManager } from './portfolio-gallery-manager'
-import type { TaskCategory } from '@/lib/constants/categories'
+// Categories are now managed through /features/categories
 
 interface User {
   id: string
@@ -66,7 +66,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
   const [isEditingAvailability, setIsEditingAvailability] = useState(false)
   const [isEditingBusiness, setIsEditingBusiness] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [tempCategories, setTempCategories] = useState<TaskCategory[]>([])
+  const [tempCategories, setTempCategories] = useState<string[]>([])
   const router = useRouter()
   const pathname = usePathname()
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en'
@@ -76,7 +76,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
     title: 'Professional Cleaning & Home Services',
     bio: 'Experienced home service professional with 5 years of expertise. I specialize in deep cleaning, regular maintenance, and use eco-friendly products with my own equipment.',
     yearsExperience: '5-10',
-    serviceCategories: [] as TaskCategory[], // Empty for new professionals - shows CTA
+    serviceCategories: [] as string[], // Empty for new professionals - shows CTA
     availability: 'available' as 'available' | 'busy' | 'unavailable',
     responseTime: '2h',
     serviceArea: ['Sofia', 'Plovdiv'],
@@ -94,7 +94,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
         afterImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400',
         description: 'Complete deep cleaning of a 2-bedroom apartment including kitchen and bathroom.',
         duration: '4 hours',
-        tags: ['deep_cleaning', 'house_cleaning'] as TaskCategory[]
+        tags: ['deep_cleaning', 'house_cleaning']
       }
     ],
     // Statistics (read-only)

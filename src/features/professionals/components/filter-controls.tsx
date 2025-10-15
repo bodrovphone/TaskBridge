@@ -11,17 +11,21 @@ import {
   Radio,
   Divider
 } from "@nextui-org/react"
+import { TFunction } from 'i18next'
 import { Star, MapPin, Briefcase, SlidersHorizontal } from "lucide-react"
 import SortingPicker from "@/components/ui/sorting-picker"
+import { getLocationOptions } from '@/lib/constants/locations'
 
 interface FilterControlsProps {
   filters: any
   onFilterChange: (key: string, value: any) => void
   categorySelectItems: JSX.Element[]
-  t: (key: string) => string
+  t: TFunction
 }
 
 export default function FilterControls({ filters, onFilterChange, categorySelectItems, t }: FilterControlsProps) {
+  const locationOptions = getLocationOptions(t);
+
   return (
     <div className="space-y-8 px-1 max-h-[80vh] overflow-y-scroll scrollbar-hide">
       {/* Category Filter */}
@@ -69,19 +73,28 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           <label className="text-base font-semibold text-gray-800">{t('professionals.filters.location')}</label>
         </div>
-        <Input
+        <Select
           placeholder={t('professionals.filters.locationPlaceholder')}
-          value={filters.location}
-          onChange={(e) => onFilterChange("location", e.target.value)}
+          selectedKeys={filters.location ? [filters.location] : []}
+          onSelectionChange={(keys) => onFilterChange("location", Array.from(keys)[0] as string || "")}
           size="lg"
           variant="bordered"
           classNames={{
             base: "bg-white",
-            input: "text-gray-900 text-base placeholder:text-gray-400",
-            inputWrapper: "bg-white shadow-md border-2 border-gray-200 hover:border-green-400 focus-within:border-green-500 transition-all duration-300 h-14 rounded-xl"
+            trigger: "bg-white shadow-md border-2 border-gray-200 hover:border-green-400 focus:border-green-500 transition-all duration-300 h-14 rounded-xl",
+            value: "text-gray-900 font-medium text-base",
+            label: "text-gray-700",
+            popoverContent: "bg-white border-2 border-gray-200 shadow-xl rounded-xl",
+            listbox: "p-2"
           }}
           startContent={<MapPin className="text-green-500" size={18} />}
-        />
+        >
+          {locationOptions.map((location) => (
+            <SelectItem key={location.value} value={location.value}>
+              {location.emoji} {location.label}
+            </SelectItem>
+          ))}
+        </Select>
       </motion.div>
 
       <Divider className="bg-gray-200" />

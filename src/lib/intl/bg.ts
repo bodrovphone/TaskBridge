@@ -439,7 +439,7 @@ const bg = {
   'categoryGroups.beauty': 'Красота',
   'categoryGroups.other': 'Други',
 
-  // Categories - Comprehensive list
+  // Categories - Comprehensive list (legacy keys - kept for backward compatibility)
   'categories.plumbing': 'Водопровод',
   'categories.electrical': 'Електричество',
   'categories.hvac': 'Климатици и отопление',
@@ -483,6 +483,55 @@ const bg = {
   'categories.makeupArtist': 'Грим',
   'categories.nailServices': 'Маникюр и педикюр',
   'categories.other': 'Други',
+
+  // Main Categories (centralized categories feature)
+  'categories.main.homeServices.title': 'Домашни услуги',
+  'categories.main.homeServices.description': 'Водопровод, електричество, майсторски услуги',
+  'categories.main.renovation.title': 'Ремонт и строителство',
+  'categories.main.renovation.description': 'Ремонти, боядисване, облицовка',
+  'categories.main.moving.title': 'Преместване и транспорт',
+  'categories.main.moving.description': 'Преместване, товарен транспорт, товарачи',
+  'categories.main.cleaning.title': 'Услуги за почистване',
+  'categories.main.cleaning.description': 'Почистване на дом, дълбоко почистване, почистване на офис',
+  'categories.main.personal.title': 'Лични услуги',
+  'categories.main.personal.description': 'Детегледане, уроци, грижа за домашни любимци',
+  'categories.main.tech.title': 'Технологии и дигитални',
+  'categories.main.tech.description': 'Ремонт на компютри, IT поддръжка, уеб разработка',
+
+  // Subcategories (centralized categories feature)
+  'categories.sub.plumbing': 'Водопровод',
+  'categories.sub.electrician': 'Електротехник',
+  'categories.sub.handyman': 'Майстор',
+  'categories.sub.locksmith': 'Ключар',
+  'categories.sub.carpenter': 'Дърводелец',
+  'categories.sub.appliance_repair': 'Ремонт на уреди',
+  'categories.sub.apartment_renovation': 'Ремонт на апартамент',
+  'categories.sub.tile_installation': 'Полагане на плочки',
+  'categories.sub.painting': 'Боядисване',
+  'categories.sub.plastering': 'Мазилка',
+  'categories.sub.bricklaying': 'Зидария',
+  'categories.sub.general_labor': 'Общо строителство',
+  'categories.sub.moving-service': 'Услуги по преместване',
+  'categories.sub.cargo-transport': 'Товарен транспорт',
+  'categories.sub.loaders': 'Товарачи',
+  'categories.sub.furniture_moving': 'Преместване на мебели',
+  'categories.sub.waste_removal': 'Извозване на отпадъци',
+  'categories.sub.apartment-cleaning': 'Почистване на апартамент',
+  'categories.sub.deep-cleaning': 'Дълбоко почистване',
+  'categories.sub.post_renovation_cleaning': 'Почистване след ремонт',
+  'categories.sub.house-cleaning': 'Почистване на дом',
+  'categories.sub.office_cleaning': 'Почистване на офис',
+  'categories.sub.babysitting': 'Детегледане',
+  'categories.sub.caregiver': 'Болногледач',
+  'categories.sub.housekeeper': 'Домакин',
+  'categories.sub.tutoring': 'Уроци',
+  'categories.sub.pet_care': 'Грижа за домашни любимци',
+  'categories.sub.computer_repair': 'Ремонт на компютри',
+  'categories.sub.phone_repair': 'Ремонт на телефони',
+  'categories.sub.it_support': 'IT поддръжка',
+  'categories.sub.web_development': 'Уеб разработка',
+  'categories.sub.digital_marketing': 'Дигитален маркетинг',
+  'categories.sub.seo_services': 'SEO услуги',
 
   // Professional Detail Page
   'professionalDetail.about': 'За професионалиста',
@@ -795,6 +844,17 @@ const bg = {
   'profile.form.validation.phoneRequired': 'Телефонният номер е задължителен',
   'profile.form.validation.phoneInvalid': 'Моля, въведете валиден телефонен номер',
   'profile.form.validation.locationRequired': 'Местоположението е задължително (минимум 3 символа)',
+
+  // Locations
+  'locations.sofiaCenter': 'София, Център',
+  'locations.sofiaLyulin': 'София, Люлин',
+  'locations.sofiaStudentski': 'София, Студентски град',
+  'locations.sofiaVitosha': 'София, Витоша',
+  'locations.plovdiv': 'Пловдив',
+  'locations.varna': 'Варна',
+  'locations.burgas': 'Бургас',
+  'locations.ruse': 'Русе',
+  'locations.staraZagora': 'Стара Загора',
 };
 
 export default bg;

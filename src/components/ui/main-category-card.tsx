@@ -104,7 +104,7 @@ function MainCategoryCard({
   }, [subcategories, color])
 
   const handleSubcategoryClick = (subcategoryValue: string) => {
-    router.push(`/${lang}/browse-tasks?category=${subcategoryValue}`)
+    router.push(`/${lang}/professionals?category=${subcategoryValue}`)
   }
 
   return (

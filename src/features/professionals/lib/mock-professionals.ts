@@ -1,5 +1,3 @@
-import type { TaskCategory } from '@/lib/constants/categories'
-
 export interface Professional {
   id: string
   name: string
@@ -7,7 +5,7 @@ export interface Professional {
   rating: number
   reviewsCount: number
   completedJobs: number
-  categories: TaskCategory[]
+  categories: string[] // Category slugs (e.g., "plumbing", "house_cleaning")
   location: string
   experience: string
   availability: string
@@ -28,7 +26,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.9,
     reviewsCount: 67,
     completedJobs: 142,
-    categories: ["house_cleaning", "deep_cleaning"] as TaskCategory[],
+    categories: ["house-cleaning", "deep-cleaning"],
     location: "София, Център",
     experience: "5 години",
     availability: "Достъпна",
@@ -44,7 +42,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.8,
     reviewsCount: 43,
     completedJobs: 89,
-    categories: ["plumbing", "electrical"] as TaskCategory[],
+    categories: ["plumbing", "electrician"],
     location: "София, Люлин",
     experience: "8 години",
     availability: "Зает до петък",
@@ -60,7 +58,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.95,
     reviewsCount: 89,
     completedJobs: 203,
-    categories: ["tutoring", "translation"] as TaskCategory[],
+    categories: ["tutoring", "tutoring"], // Note: translation not in centralized categories yet
     location: "София, Студентски град",
     experience: "10 години",
     availability: "Достъпна",
@@ -79,7 +77,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.7,
     reviewsCount: 31,
     completedJobs: 76,
-    categories: ["carpentry", "painting"] as TaskCategory[],
+    categories: ["carpenter", "painting"],
     location: "София, Витоша",
     experience: "12 години",
     availability: "Достъпен след 15-то",
@@ -95,7 +93,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.85,
     reviewsCount: 23,
     completedJobs: 45,
-    categories: ["photography", "videography"] as TaskCategory[],
+    categories: ["tutoring", "tutoring"], // Note: photography/videography not in centralized categories yet
     location: "София, Борово",
     experience: "6 години", 
     availability: "Достъпна",
@@ -113,7 +111,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.6,
     reviewsCount: 15,
     completedJobs: 28,
-    categories: ["delivery", "moving"] as TaskCategory[],
+    categories: ["moving-service", "cargo-transport"],
     location: "София, Надежда",
     experience: "3 години",
     availability: "Достъпен", 
@@ -129,7 +127,7 @@ export const mockProfessionals: Professional[] = [
     rating: 4.4,
     reviewsCount: 12,
     completedJobs: 32,
-    categories: ["tutoring", "child_care"] as TaskCategory[],
+    categories: ["tutoring", "babysitting"],
     location: "София, Витоша",
     experience: "4 години",
     availability: "Достъпна вечер", 

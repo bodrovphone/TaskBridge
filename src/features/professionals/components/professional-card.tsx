@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react"
 import { Star, MapPin, Clock, Briefcase } from "lucide-react"
 import FallbackAvatar from "@/components/ui/fallback-avatar"
-import { getCategoryLabel } from '@/lib/constants/categories'
+import { getCategoryLabelBySlug } from '@/features/categories'
 import { LocaleLink } from '@/components/common/locale-link'
 import type { Professional } from '../lib/mock-professionals'
 
@@ -104,7 +104,7 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
                   color="primary"
                   className="font-medium bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-colors"
                 >
-                  {getCategoryLabel(category, t)}
+                  {getCategoryLabelBySlug(category, t)}
                 </Chip>
               </motion.div>
             ))}

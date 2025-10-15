@@ -6,8 +6,9 @@
 // - ProfessionalsGridSection (masonry grid + pagination)
 // Target: Reduce from 730 lines to ~300 lines
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { motion } from "framer-motion";
 import { 
   Card as NextUICard, 
@@ -26,11 +27,17 @@ import SortingPicker from "@/components/ui/sorting-picker";
 import FilterControls from "./filter-controls";
 import ProfessionalCard from "./professional-card";
 import { mockProfessionals } from "../lib";
-import { getCategoryOptions, getCategoryLabel } from '@/lib/constants/categories';
-import type { TaskCategory } from '@/lib/constants/categories';
+import { getCategoryOptions, getCategoryLabelBySlug } from '@/features/categories';
+import { getLocationOptions, getLocationLabel } from '@/lib/constants/locations';
+import type { LocationSlug } from '@/lib/constants/locations';
 
 export default function ProfessionalsPage() {
   const { t } = useTranslation();
+  const router = useRouter();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const lang = params?.lang as string || 'en';
+
   const [filters, setFilters] = useState({
     search: "",
     category: "all",
@@ -41,8 +48,31 @@ export default function ProfessionalsPage() {
     sortBy: "featured"
   });
 
-  // Get category options with translations
+  // Read category from URL query params on mount
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    const locationParam = searchParams.get('location');
+    const ratingParam = searchParams.get('rating');
+
+    const updates: any = {};
+    if (categoryParam && categoryParam !== filters.category) {
+      updates.category = categoryParam;
+    }
+    if (locationParam && locationParam !== filters.location) {
+      updates.location = locationParam;
+    }
+    if (ratingParam && Number(ratingParam) !== filters.minRating) {
+      updates.minRating = Number(ratingParam);
+    }
+
+    if (Object.keys(updates).length > 0) {
+      setFilters(prev => ({ ...prev, ...updates }));
+    }
+  }, [searchParams]);
+
+  // Get category and location options with translations
   const categoryOptions = useMemo(() => getCategoryOptions(t), [t]);
+  const locationOptions = useMemo(() => getLocationOptions(t), [t]);
 
   // Create select items for categories
   const categorySelectItems = useMemo(() => {
@@ -62,7 +92,18 @@ export default function ProfessionalsPage() {
   }, [categoryOptions, t]);
 
   const handleFilterChange = (key: string, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+
+    // Update URL with query params for shareability
+    const params = new URLSearchParams();
+    if (newFilters.category !== "all") params.set('category', newFilters.category);
+    if (newFilters.location) params.set('location', newFilters.location);
+    if (newFilters.minRating > 0) params.set('rating', newFilters.minRating.toString());
+
+    const queryString = params.toString();
+    const newUrl = `/${lang}/professionals${queryString ? `?${queryString}` : ''}`;
+    router.push(newUrl, { scroll: false });
   };
 
   const clearFilters = () => {
@@ -75,6 +116,8 @@ export default function ProfessionalsPage() {
       gender: "",
       sortBy: "featured"
     });
+    // Clear URL params
+    router.push(`/${lang}/professionals`, { scroll: false });
   };
 
   // Filter categories based on search term
@@ -94,7 +137,7 @@ export default function ProfessionalsPage() {
     // Category filter
     if (filters.category !== "all") {
       result = result.filter(professional =>
-        professional.categories.includes(filters.category as TaskCategory)
+        professional.categories.includes(filters.category)
       );
     }
     
@@ -150,8 +193,8 @@ export default function ProfessionalsPage() {
   const getActiveFilters = () => {
     const active = [];
     if (filters.search) active.push({ key: 'search', label: `"${filters.search}"`, value: filters.search });
-    if (filters.category !== "all") active.push({ key: 'category', label: getCategoryLabel(filters.category as TaskCategory, t), value: filters.category });
-    if (filters.location) active.push({ key: 'location', label: filters.location, value: filters.location });
+    if (filters.category !== "all") active.push({ key: 'category', label: getCategoryLabelBySlug(filters.category, t), value: filters.category });
+    if (filters.location) active.push({ key: 'location', label: getLocationLabel(filters.location as LocationSlug, t), value: filters.location });
     if (filters.minRating > 0) active.push({ key: 'minRating', label: `${filters.minRating}+ stars`, value: filters.minRating });
     if (filters.mostActive) active.push({ key: 'mostActive', label: t('professionals.mostActive', { fallback: 'Most Active' }), value: 'mostActive' });
     if (filters.gender) active.push({ key: 'gender', label: t(`professionals.gender.${filters.gender}`, { fallback: filters.gender === 'male' ? 'Male' : 'Female' }), value: filters.gender });
@@ -353,7 +396,7 @@ export default function ProfessionalsPage() {
                     <span className="text-sm font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">{t('professionals.popularCategories')}</span>
                   </div>
                   <div className="flex flex-wrap gap-3 justify-center">
-                    {['plumbing', 'house_cleaning', 'tutoring', 'photography', 'delivery', 'electrical', 'painting', 'carpentry'].map((category, index) => (
+                    {['plumbing', 'house-cleaning', 'tutoring', 'electrician', 'painting', 'carpenter', 'apartment-cleaning', 'handyman'].map((category, index) => (
                       <motion.button
                         key={category}
                         initial={{ opacity: 0, y: 10 }}
@@ -368,7 +411,7 @@ export default function ProfessionalsPage() {
                         onClick={() => handleFilterChange("category", category)}
                         className="group relative px-4 py-2 text-sm font-medium bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-xl hover:from-blue-100 hover:to-blue-200 transition-all duration-300 border border-blue-200 hover:border-blue-300 shadow-sm hover:shadow-md"
                       >
-                        <span className="relative z-10">{getCategoryLabel(category as TaskCategory, t)}</span>
+                        <span className="relative z-10">{getCategoryLabelBySlug(category, t)}</span>
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 to-blue-400/0 group-hover:from-blue-400/10 group-hover:to-blue-400/20 rounded-xl transition-all duration-300"></div>
                       </motion.button>
                     ))}
@@ -502,21 +545,34 @@ export default function ProfessionalsPage() {
                       placeholder={t('professionals.filters.locationPlaceholderDesktop')}
                       selectedKeys={filters.location ? [filters.location] : []}
                       onSelectionChange={(keys) => handleFilterChange("location", Array.from(keys)[0] as string || "")}
-                      className="min-w-[180px]"
+                      className="min-w-[220px]"
                       size="lg"
                       variant="bordered"
                       aria-label="Filter by location"
                       classNames={{
-                        trigger: "bg-white shadow-lg border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors duration-300 h-12",
-                        value: "text-gray-900 font-medium"
+                        base: "bg-white",
+                        trigger: "bg-white shadow-lg border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors duration-300 h-12 data-[hover=true]:bg-white",
+                        value: "text-gray-900 font-medium text-base",
+                        label: "text-gray-700",
+                        innerWrapper: "text-gray-900"
+                      }}
+                      renderValue={(items) => {
+                        return items.map((item) => {
+                          const location = locationOptions.find(loc => loc.value === item.key);
+                          return (
+                            <div key={item.key} className="flex items-center gap-2">
+                              <span>{location?.emoji}</span>
+                              <span className="text-gray-900 font-medium">{location?.label}</span>
+                            </div>
+                          );
+                        });
                       }}
                     >
-                      <SelectItem key="софия-център" value="софия-център">🏛️ София, Център</SelectItem>
-                      <SelectItem key="софия-люлин" value="софия-люлин">🏘️ София, Люлин</SelectItem>
-                      <SelectItem key="софия-студентски" value="софия-студентски">🎓 София, Студентски град</SelectItem>
-                      <SelectItem key="софия-витоша" value="софия-витоша">🏔️ София, Витоша</SelectItem>
-                      <SelectItem key="пловдив" value="пловдив">🏛️ Пловдив</SelectItem>
-                      <SelectItem key="варна" value="варна">🌊 Варна</SelectItem>
+                      {locationOptions.map((location) => (
+                        <SelectItem key={location.value} value={location.value}>
+                          {location.emoji} {location.label}
+                        </SelectItem>
+                      ))}
                     </Select>
                     
                     <CompactRatingSlider
@@ -648,7 +704,7 @@ export default function ProfessionalsPage() {
                   </div>
                 </motion.div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-                  {filters.category === 'all' ? t('professionals.findPerfect') : `${getCategoryLabel(filters.category as TaskCategory, t)} Specialists`}
+                  {filters.category === 'all' ? t('professionals.findPerfect') : `${getCategoryLabelBySlug(filters.category, t)} Specialists`}
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   {t('professionals.discoverTrusted')}
