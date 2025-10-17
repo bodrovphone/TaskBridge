@@ -2,13 +2,16 @@
 
 import { useTranslation } from 'react-i18next'
 import { useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import MainCategoryCard from "@/components/ui/main-category-card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { getMainCategoriesWithSubcategories } from '@/features/categories'
+import { CategorySearch } from '@/components/common/category-search'
 
 function CategoriesPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const router = useRouter()
 
   // Get main categories with subcategories from centralized feature
   const mainCategories = useMemo(() => {
@@ -24,6 +27,13 @@ function CategoriesPage() {
       })),
     }));
   }, [t])
+
+  // Handle category selection from search
+  const handleCategorySelect = (slug: string) => {
+    // Navigate to professionals page filtered by category with locale prefix
+    const locale = i18n.language
+    router.push(`/${locale}/professionals?category=${slug}`)
+  }
 
   return (
     <div
@@ -50,6 +60,14 @@ function CategoriesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               {t('categories.pageSubtitle', 'Find the perfect professional for any task')}
             </p>
+          </div>
+
+          {/* Smart Search Bar */}
+          <div className="max-w-3xl mx-auto mb-12">
+            <CategorySearch
+              onCategorySelect={handleCategorySelect}
+              placeholder={t('categories.searchPlaceholder', 'Search for services... (e.g. plumber, cleaning, tutoring)')}
+            />
           </div>
 
           {/* Main Categories Grid */}

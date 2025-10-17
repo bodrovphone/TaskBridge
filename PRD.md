@@ -99,24 +99,96 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 - Search and filter functionality
 - Task application system
 
-### 3.3 Application & Contact System
+### 3.3 Application & Bidding System
 
-#### Professional Applications
+**Detailed Plan:** See `/docs/planning/task-application-bidding-system-plan.md`
 
-- Apply to tasks with:
-  - Proposed timeline
-  - Final price quote
-  - Brief message to customer
-  - Portfolio images (optional)
-- Application status tracking
+#### Who Can Apply?
+
+- **ANY registered user** can apply to any "open" task
+- No strict role separation - users can be both task givers and professionals
+- Constraints:
+  - Must be logged in (authenticated)
+  - Cannot apply to own tasks
+  - One application per task per user
+  - Task status must be "open"
+
+#### Application Submission Flow
+
+- Click "Apply" button on task detail page
+- Authentication check (show login if needed)
+- Application dialog with form fields:
+  - **Proposed Price** (required, number input)
+  - **Timeline/Availability** (required, select or text)
+  - **Application Message** (required, 50-500 chars)
+  - **Portfolio Images** (optional, max 5 images)
+- Submit and receive confirmation
+- Application status visible on task cards
+
+#### Application States
+
+- **Pending** - Awaiting task owner review
+- **Accepted** - Professional selected for the task
+- **Rejected** - Another professional was selected
+- **Withdrawn** - Applicant cancelled before acceptance
+
+#### Task Owner Review Process
+
+- View all applications in organized list
+- Sort by: Newest, Price, Rating, Experience
+- Filter by: Status (All, Pending, Accepted, Rejected)
+- See professional's:
+  - Avatar, name, rating
+  - Proposed price and timeline
+  - Application message
+  - Stats (completed tasks, ratings, specializations)
+  - Portfolio images
+- Actions: Accept, Reject, Message
+
+#### Acceptance Flow
+
+- When task owner accepts an application:
+  1. Confirmation dialog shown
+  2. All other applications automatically rejected
+  3. Task status → "in_progress"
+  4. Contact information revealed to both parties:
+     - Full name, phone number, email
+     - Exact task address (if provided)
+  5. Notifications sent to all applicants
+  6. Both parties can now communicate directly
+
+#### Task Completion Workflow
+
+**Dual Confirmation System:**
+- Both customer and professional must confirm completion
+- Either party can mark task as completed first
+- Other party must confirm for final completion
+- If disagreement → Dispute resolution system
+
+**Completion Steps:**
+1. Professional or customer marks as "Completed"
+2. Other party receives notification to confirm
+3. Both confirm → Task status: "completed"
+4. Review period opens (7 days)
+5. Task archived after 30 days
+
+#### Cancellation/Decline After Acceptance
+
+- Either party can cancel if deal falls through
+- Reasons: No-show, unsatisfactory work, mutual agreement
+- Task status → "open" (reactivated)
+- Can receive new applications
+- Cancellation tracked (impacts reputation)
 
 #### Contact Exchange
 
-- After customer selects a service provider, contact information is exchanged:
-  - Phone numbers revealed to both parties
-  - Email addresses shared
-- Platform sends notification with contact details
-- All further communication happens directly between parties
+- Contact info hidden until application accepted
+- After acceptance, both parties see:
+  - Full name
+  - Phone number
+  - Email address
+  - Exact task location
+- All further communication direct (off-platform)
 
 ### 3.4 Rating & Review System
 
@@ -227,12 +299,30 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 ## 6. MVP Feature Prioritization
 
-### Must Have (MVP v1.0)
+### Must Have (MVP v1.0 - UI Focus)
 
 - User registration (both types)
 - Optional VAT verification system
 - Task posting and browsing
-- Application system
+- **Application submission UI:**
+  - Application dialog/modal with form
+  - Price, timeline, message inputs
+  - Portfolio image upload
+  - Application status badges
+- **Applications management UI:**
+  - Applications list for task owners
+  - Application detail view
+  - Accept/Reject buttons
+  - Professional profile preview
+- **Task completion UI:**
+  - Dual confirmation dialogs
+  - Completion status indicators
+  - Review prompts
+- **Notification Center UI:**
+  - Header bell icon with unread badge
+  - Notifications dropdown/panel
+  - Filter by type (Applications, Tasks, Messages)
+  - Mark as read functionality
 - Contact exchange system
 - Rating/review system
 - Search and filters
@@ -241,10 +331,12 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 ### Should Have (v1.1)
 
 - Advanced search filters
-- Email notification system
+- **Email notification templates**
 - Service provider portfolios
 - Task categories expansion
 - Multiple language support
+- **Task activity log/timeline**
+- **User dashboard (My Applications, My Tasks)**
 
 ### Could Have (v2.0)
 
@@ -253,14 +345,17 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 - Video calls integration
 - Advanced analytics
 - Premium service provider features
+- **Real-time WebSocket notifications**
+- **Dispute resolution UI**
+- **Application comparison mode**
 
-### Won’t Have (Initial Release)
+### Won't Have (Initial Release)
 
-- Payment processing
-- In-app messaging
-- Video/audio calls
+- Payment processing (escrow system)
+- Backend/Database implementation (focus on UI mockups)
+- In-app video/audio calls
 - Complex verification processes
-- Document uploads
+- Document uploads beyond images
 
 ## 7. Business Requirements
 
@@ -338,6 +433,24 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 -----
 
-**Document Version:** 1.0  
-**Last Updated:** June 23, 2025  
-**Next Review:** July 15, 2025
+## 11. Related Documentation
+
+- **Application & Bidding System Plan:** `/docs/planning/task-application-bidding-system-plan.md`
+  - Comprehensive 21-section plan covering complete user flows
+  - Database schema specifications
+  - API endpoints design
+  - UI component requirements
+  - Security and privacy considerations
+
+-----
+
+**Document Version:** 2.0
+**Last Updated:** January 2025
+**Next Review:** February 2025
+
+**Major Changes in v2.0:**
+- Added comprehensive Application & Bidding System section (3.3)
+- Updated MVP feature prioritization with UI-focused tasks
+- Added reference to detailed planning documentation
+- Clarified dual confirmation workflow for task completion
+- Added notification center requirements

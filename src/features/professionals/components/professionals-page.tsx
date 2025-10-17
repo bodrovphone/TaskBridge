@@ -67,6 +67,17 @@ export default function ProfessionalsPage() {
 
     if (Object.keys(updates).length > 0) {
       setFilters(prev => ({ ...prev, ...updates }));
+
+      // Scroll to results section when navigating with category/location/rating params
+      setTimeout(() => {
+        const resultsSection = document.getElementById('professionals-results-section');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 300); // Delay to allow filters to render
     }
   }, [searchParams]);
 
@@ -592,7 +603,8 @@ export default function ProfessionalsPage() {
               
               {/* Enhanced Active Filters */}
               {hasActiveFilters && (
-                <motion.div 
+                <motion.div
+                  id="active-filters-section"
                   initial={{ opacity: 0, height: 0, y: -10 }}
                   animate={{ opacity: 1, height: 'auto', y: 0 }}
                   exit={{ opacity: 0, height: 0, y: -10 }}
@@ -686,7 +698,8 @@ export default function ProfessionalsPage() {
 
           {/* Pinterest-style Professionals Grid */}
           {allProfessionals.length > 0 && (
-            <motion.div 
+            <motion.div
+              id="professionals-results-section"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
