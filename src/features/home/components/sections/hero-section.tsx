@@ -83,18 +83,15 @@ export default function HeroSection() {
       `}</style>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-10">
+        <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-8 lg:gap-16 items-center">
+          {/* Text Content - Order 1 on mobile, Order 1 on desktop */}
+          <div className="space-y-10 order-1">
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full text-blue-700 text-sm font-medium shadow-lg">
                 <Shield className="mr-2 h-4 w-4" />
                 Trusted by 10,000+ professionals
               </div>
-              <h1 className={`font-bold text-slate-900 leading-[1.1] tracking-tight ${
-                currentLocale === 'bg' 
-                  ? 'text-4xl lg:text-6xl' 
-                  : 'text-5xl lg:text-7xl'
-              }`}>
+              <h1 className="font-bold text-slate-900 leading-[1.1] tracking-tight text-[2.5rem]">
                 {t('landing.hero.title')}
               </h1>
               <p className="text-xl lg:text-2xl text-slate-600 leading-relaxed font-light">
@@ -102,7 +99,8 @@ export default function HeroSection() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            {/* CTA Buttons - Hidden on mobile, shown on desktop */}
+            <div className="hidden lg:flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
                 className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
@@ -124,35 +122,45 @@ export default function HeroSection() {
               </Button>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
-              <div className="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 transition-all duration-300">
-                <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-                  <Shield className="text-white h-4 w-4" />
+            {/* Trust Indicators - Hidden on mobile */}
+            <div className="hidden lg:grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+              <div className="flex items-start space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
+                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <Shield className="text-white h-5 w-5" />
                 </div>
-                <span className="text-sm font-semibold text-slate-700">{t('landing.trustIndicators.verified')}</span>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.verified')}</span>
+                  <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.verifiedDescription')}</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 transition-all duration-300">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <Heart className="text-white h-4 w-4" />
+              <div className="flex items-start space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <Heart className="text-white h-5 w-5" />
                 </div>
-                <span className="text-sm font-semibold text-slate-700">{t('landing.trustIndicators.freeToUse')}</span>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.freeToUse')}</span>
+                  <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 transition-all duration-300">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                  <Star className="text-white h-4 w-4" />
+              <div className="flex items-start space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <Star className="text-white h-5 w-5" />
                 </div>
-                <span className="text-sm font-semibold text-slate-700">{t('landing.trustIndicators.communityReviews')}</span>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.communityReviews')}</span>
+                  <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="relative lg:scale-105 hover:scale-110 transition-transform duration-500">
+          {/* Hero Image/Video - Order 2 on mobile, Order 2 on desktop */}
+          <div className="relative hover:scale-105 transition-transform duration-500 order-2">
             {/* Hero Video/Image with enhanced styling */}
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-lg opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
               {isDesktop ? (
-                <video 
+                <video
                   src="/assets/hero_video_2.mp4"
                   poster="/images/hero_image_1.jpg"
                   autoPlay
@@ -160,19 +168,19 @@ export default function HeroSection() {
                   muted
                   playsInline
                   className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
-                  style={{ maxHeight: '600px' }}
+                  style={{ maxHeight: '420px' }}
                 >
                   <source src="/assets/hero_video_2.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               ) : (
-                <Image 
+                <Image
                   src="/images/hero_image_1.jpg"
-                  alt="Professional working on home repairs" 
+                  alt="Professional working on home repairs"
                   width={800}
                   height={600}
                   className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
-                  style={{ maxHeight: '600px' }}
+                  style={{ maxHeight: '420px' }}
                   priority
                 />
               )}
@@ -199,6 +207,63 @@ export default function HeroSection() {
                 <div>
                   <div className="text-2xl font-bold text-slate-900">2,500+</div>
                   <div className="text-sm text-slate-600 font-medium">{t('landing.stats.completedTasks')}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Only: CTA Buttons + Trust Indicators after image - Order 3 */}
+          <div className="lg:hidden space-y-6 order-3">
+            {/* CTA Buttons */}
+            <div className="flex flex-col gap-4">
+              <Button
+                size="lg"
+                className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
+                onClick={() => setIsAuthOpen(true)}
+              >
+                <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+                {t('landing.hero.getStarted')}
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="group border-2 border-slate-300 text-slate-700 bg-white/70 backdrop-blur-sm hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
+                asChild
+              >
+                <LocaleLink href="/browse-tasks">
+                  <Search className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
+                  {t('landing.hero.browseServices')}
+                </LocaleLink>
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-1 gap-4 pt-4">
+              <div className="flex items-start space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
+                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <Shield className="text-white h-5 w-5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.verified')}</span>
+                  <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.verifiedDescription')}</span>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <Heart className="text-white h-5 w-5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.freeToUse')}</span>
+                  <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <Star className="text-white h-5 w-5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.communityReviews')}</span>
+                  <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
                 </div>
               </div>
             </div>

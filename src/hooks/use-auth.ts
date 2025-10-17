@@ -28,8 +28,16 @@ export function useAuth(): UseAuthReturn {
   useEffect(() => {
     // Simulate checking for existing session
     const checkAuth = () => {
-      // For demo purposes, we're not authenticated by default
+      // @todo TESTING: Temporarily authenticated by default to test notification center
       // In a real app, you'd check localStorage/cookies/tokens here
+      const mockUser: User = {
+        id: 'mock-user-id',
+        email: 'test@example.com',
+        firstName: 'Иван',
+        lastName: 'Иванов',
+        profileImageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face'
+      };
+      setUser(mockUser);
       setIsLoading(false);
     };
 

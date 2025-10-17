@@ -29,11 +29,11 @@ const en = {
   'nav.myTasks': 'My Tasks',
   'nav.help': 'Help',
 
-  'landing.hero.title': 'Find Trusted Local Professionals',
+  'landing.hero.title': 'Your Local Marketplace for Services & Opportunities',
   'landing.hero.subtitle':
-    'Connect with verified service providers for all your needs in your area',
-  'landing.hero.getStarted': 'Get Started',
-  'landing.hero.browseServices': 'Browse Services',
+    'Trudify connects people who need help with skilled professionals ready to earn. Post your task or find work - trusted, verified, and simple.',
+  'landing.hero.getStarted': 'Post a Task',
+  'landing.hero.browseServices': 'Find Work',
 
   'landing.trustIndicators.verified': 'Verified Professionals',
   'landing.trustIndicators.securePayments': 'Secure Payments',
@@ -1154,6 +1154,21 @@ const en = {
   'locations.burgas': 'Burgas',
   'locations.ruse': 'Ruse',
   'locations.staraZagora': 'Stara Zagora',
+
+  // Notifications
+  'notifications.title': 'Notifications',
+  'notifications.markAllRead': 'Mark all as read',
+  'notifications.tabAll': 'All',
+  'notifications.tabApplications': 'Applications',
+  'notifications.tabTasks': 'Tasks',
+  'notifications.tabMessages': 'Messages',
+  'notifications.empty.title': 'No notifications yet',
+  'notifications.empty.message': "You'll be notified when someone applies to your tasks or responds to your applications.",
+  'notifications.empty.filterMessage': 'No notifications in this category.',
+  'notifications.emptyUnread.title': "You're all caught up!",
+  'notifications.emptyUnread.message': 'All notifications have been read.',
+  'notifications.viewApplication': 'View Application',
+  'notifications.viewTask': 'View Task',
 };
 
 export default en;

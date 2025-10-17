@@ -31,11 +31,11 @@ const ru = {
   'nav.myTasks': 'Мои задачи',
   'nav.help': 'Помощь',
 
-  'landing.hero.title': 'Найдите проверенных местных специалистов',
+  'landing.hero.title': 'Ваша местная платформа для услуг и возможностей',
   'landing.hero.subtitle':
-    'Свяжитесь с верифицированными поставщиками услуг для всех ваших потребностей в вашем районе',
-  'landing.hero.getStarted': 'Начать',
-  'landing.hero.browseServices': 'Обзор услуг',
+    'Trudify связывает людей, которым нужна помощь, с квалифицированными специалистами, готовыми зарабатывать. Разместите задачу или найдите работу - надежно, проверено и просто.',
+  'landing.hero.getStarted': 'Разместить задачу',
+  'landing.hero.browseServices': 'Найти работу',
 
   'landing.trustIndicators.verified': 'Проверенные специалисты',
   'landing.trustIndicators.securePayments': 'Безопасные платежи',
@@ -1160,6 +1160,21 @@ const ru = {
   'locations.burgas': 'Бургас',
   'locations.ruse': 'Русе',
   'locations.staraZagora': 'Стара Загора',
+
+  // Notifications
+  'notifications.title': 'Уведомления',
+  'notifications.markAllRead': 'Отметить все как прочитанное',
+  'notifications.tabAll': 'Все',
+  'notifications.tabApplications': 'Заявки',
+  'notifications.tabTasks': 'Задачи',
+  'notifications.tabMessages': 'Сообщения',
+  'notifications.empty.title': 'Уведомлений пока нет',
+  'notifications.empty.message': 'Вы получите уведомление, когда кто-то откликнется на ваши задачи или ответит на ваши заявки.',
+  'notifications.empty.filterMessage': 'Нет уведомлений в этой категории.',
+  'notifications.emptyUnread.title': 'Вы прочитали всё!',
+  'notifications.emptyUnread.message': 'Все уведомления прочитаны.',
+  'notifications.viewApplication': 'Посмотреть заявку',
+  'notifications.viewTask': 'Посмотреть задачу',
 };
 
 export default ru;

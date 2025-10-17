@@ -34,11 +34,11 @@ const bg = {
   'nav.help': 'Помощ',
 
   // Landing Page
-  'landing.hero.title': 'Намерете доверени местни професионалисти',
+  'landing.hero.title': 'Вашата местна платформа за услуги и възможности',
   'landing.hero.subtitle':
-    'Свържете се с верифицирани доставчици на услуги за всичките ви нужди във вашия район',
-  'landing.hero.getStarted': 'Започнете',
-  'landing.hero.browseServices': 'Разгледайте услугите',
+    'Trudify свързва хора, които се нуждаят от помощ, с квалифицирани специалисти, готови да печелят. Публикувайте задача или намерете работа - доверено, проверено и лесно.',
+  'landing.hero.getStarted': 'Публикувай задача',
+  'landing.hero.browseServices': 'Намери работа',
 
   'landing.trustIndicators.verified': 'Проверени специалисти',
   'landing.trustIndicators.securePayments': 'Сигурни плащания',
@@ -1175,6 +1175,21 @@ const bg = {
   'locations.burgas': 'Бургас',
   'locations.ruse': 'Русе',
   'locations.staraZagora': 'Стара Загора',
+
+  // Notifications
+  'notifications.title': 'Известия',
+  'notifications.markAllRead': 'Маркирай всички като прочетени',
+  'notifications.tabAll': 'Всички',
+  'notifications.tabApplications': 'Кандидатури',
+  'notifications.tabTasks': 'Задачи',
+  'notifications.tabMessages': 'Съобщения',
+  'notifications.empty.title': 'Все още няма известия',
+  'notifications.empty.message': 'Ще получите известие когато някой кандидатства за вашите задачи или отговори на вашите кандидатури.',
+  'notifications.empty.filterMessage': 'Няма известия в тази категория.',
+  'notifications.emptyUnread.title': 'Вече сте наваксали!',
+  'notifications.emptyUnread.message': 'Всички известия са прочетени.',
+  'notifications.viewApplication': 'Виж кандидатурата',
+  'notifications.viewTask': 'Виж задачата',
 };
 
 export default bg;

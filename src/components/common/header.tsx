@@ -6,6 +6,8 @@ import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
 import AuthSlideOver from "@/components/ui/auth-slide-over"
 import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
+import NotificationBell from "./notification-bell"
+import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
 import { Plus, Handshake } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
@@ -95,6 +97,11 @@ function Header() {
         <NavbarItem>
           <LanguageSwitcher />
         </NavbarItem>
+        {isAuthenticated && (
+          <NavbarItem>
+            <NotificationBell />
+          </NavbarItem>
+        )}
         <NavbarItem>
           <Button
             color="primary"
@@ -119,7 +126,12 @@ function Header() {
       </NavbarContent>
 
       {/* Mobile Actions Section */}
-      <NavbarContent justify="end" className="md:hidden gap-6">
+      <NavbarContent justify="end" className="md:hidden gap-2">
+        {isAuthenticated && (
+          <NavbarItem>
+            <NotificationBell />
+          </NavbarItem>
+        )}
         <NavbarItem>
           {isAuthenticated ? (
             <UserAvatarDropdown size="sm" />
@@ -167,11 +179,14 @@ function Header() {
         </NavbarMenuItem>
       </NavbarMenu>
 
-      <AuthSlideOver 
+      <AuthSlideOver
         isOpen={isAuthSlideOverOpen}
         onClose={() => setIsAuthSlideOverOpen(false)}
         action="create-task"
       />
+
+      {/* Notification Center */}
+      <NotificationCenter />
     </Navbar>
   )
 }
