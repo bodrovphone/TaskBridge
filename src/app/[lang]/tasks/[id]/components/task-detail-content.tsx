@@ -1,12 +1,13 @@
 'use client'
 
 import Link from "next/link";
-import { ChevronLeft, MapPin, Clock, Wallet, Star } from "lucide-react";
-import { Card as NextUICard, CardBody, Chip } from "@nextui-org/react";
+import { ChevronLeft, MapPin, Clock, Wallet, Star, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
+import { Card as NextUICard, CardBody, Chip, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import TaskGallery from "./task-gallery";
 import TaskActions from "./task-actions";
 import PrivacyToggle from "./privacy-toggle";
+import { getUserApplication } from "@/components/tasks/mock-submit";
 
 interface TaskDetailContentProps {
   task: any;
@@ -66,6 +67,52 @@ function getUrgencyText(urgency: string, t: any) {
   }
 }
 
+function getTaskStatus(taskId: string, taskStatus?: string) {
+  // Check if user has applied
+  const userApplication = getUserApplication(taskId, 'mock-user-id');
+
+  // If task is completed or archived
+  if (taskStatus === 'completed') {
+    return {
+      key: 'done',
+      icon: CheckCircle,
+      color: 'success',
+      bgColor: 'bg-green-100',
+      iconColor: 'text-green-600'
+    };
+  }
+  if (taskStatus === 'archived') {
+    return {
+      key: 'archived',
+      icon: Archive,
+      color: 'default',
+      bgColor: 'bg-gray-100',
+      iconColor: 'text-gray-600'
+    };
+  }
+
+  // If user has applied
+  if (userApplication?.status) {
+    return {
+      key: 'applied',
+      icon: AlertCircle,
+      color: 'primary',
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+      showTooltip: true
+    };
+  }
+
+  // Default: vacant/pending
+  return {
+    key: 'vacant',
+    icon: Sparkles,
+    color: 'warning',
+    bgColor: 'bg-orange-100',
+    iconColor: 'text-orange-600'
+  };
+}
+
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
   const { t } = useTranslation();
   
@@ -108,9 +155,10 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center gap-3">
                     <Chip
-                      color="primary"
-                      variant="flat"
+                      color="secondary"
+                      variant="solid"
                       size="md"
+                      className="font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600"
                     >
                       {t(TASK_CATEGORIES[task.category as keyof typeof TASK_CATEGORIES] || task.category)}
                     </Chip>
@@ -189,13 +237,43 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg">
-                      <div className="text-purple-600 text-sm">💼</div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">{t('task.applications')}</p>
-                      <p className="font-semibold text-gray-900">{task.applicationsCount} {t('taskDetail.applicationsCount')}</p>
-                    </div>
+                    {(() => {
+                      const status = getTaskStatus(task.id, task.status);
+                      const StatusIcon = status.icon;
+                      const statusContent = (
+                        <>
+                          <div className={`flex items-center justify-center w-10 h-10 ${status.bgColor} rounded-lg`}>
+                            <StatusIcon className={status.iconColor} size={20} />
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-600">{t('taskDetail.status')}</p>
+                            <Chip
+                              color={status.color as any}
+                              variant="flat"
+                              size="sm"
+                              className="font-semibold"
+                            >
+                              {t(`taskDetail.statusTypes.${status.key}`)}
+                            </Chip>
+                          </div>
+                        </>
+                      );
+
+                      // Wrap in tooltip for "applied" status
+                      if (status.showTooltip) {
+                        return (
+                          <Tooltip
+                            content={t('taskDetail.appliedTooltip')}
+                            placement="top"
+                            color="primary"
+                          >
+                            {statusContent}
+                          </Tooltip>
+                        );
+                      }
+
+                      return statusContent;
+                    })()}
                   </div>
                 </div>
               </CardBody>
@@ -226,7 +304,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
             </NextUICard>
 
             {/* Action Buttons - Client Component */}
-            <TaskActions />
+            <TaskActions task={task} />
 
             {/* Similar Tasks - Server Rendered */}
             <NextUICard className="bg-white/95 backdrop-blur-sm shadow-lg">

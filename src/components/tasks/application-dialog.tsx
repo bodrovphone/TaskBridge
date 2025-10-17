@@ -1,0 +1,599 @@
+'use client'
+
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useForm } from '@tanstack/react-form'
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+  Chip,
+} from '@nextui-org/react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Check,
+  Wallet,
+  Clock,
+  MessageSquare,
+  Sparkles,
+  Calendar,
+  Zap,
+  ArrowRight,
+  AlertCircle,
+} from 'lucide-react'
+import type { ApplicationFormData } from './types'
+import { TIMELINE_OPTIONS } from './types'
+import { submitApplication, storeApplicationLocally, hasUserApplied } from './mock-submit'
+
+interface ApplicationDialogProps {
+  isOpen: boolean
+  onClose: () => void
+  taskId: string
+  taskTitle: string
+  taskBudget?: { min?: number; max?: number }
+}
+
+// Timeline options with proper translation keys
+const TIMELINE_DISPLAY = {
+  today: 'application.timelineToday',
+  'within-3-days': 'application.timeline3days',
+  'within-week': 'application.timelineWeek',
+  flexible: 'application.timelineFlexible',
+} as const
+
+export default function ApplicationDialog({
+  isOpen,
+  onClose,
+  taskId,
+  taskTitle,
+  taskBudget,
+}: ApplicationDialogProps) {
+  const { t } = useTranslation()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [applicationId, setApplicationId] = useState<string | null>(null)
+
+  // Mock user ID (in real app, get from auth context)
+  const userId = 'mock-user-123'
+
+  // Check if user already applied
+  const alreadyApplied = hasUserApplied(taskId, userId)
+
+  const form = useForm({
+    defaultValues: {
+      proposedPrice: 0,
+      timeline: '',
+      message: '',
+    },
+    onSubmit: async ({ value }: { value: ApplicationFormData }) => {
+      setIsSubmitting(true)
+      try {
+        // Submit application
+        const response = await submitApplication(value)
+
+        // Store locally
+        storeApplicationLocally(taskId, userId, response.applicationId, value)
+
+        // Show success
+        setApplicationId(response.applicationId)
+        setIsSuccess(true)
+      } catch (error) {
+        console.error('Application submission error:', error)
+      } finally {
+        setIsSubmitting(false)
+      }
+    },
+  })
+
+  const handleClose = () => {
+    if (!isSubmitting) {
+      form.reset()
+      setIsSuccess(false)
+      setApplicationId(null)
+      onClose()
+    }
+  }
+
+  const handleBrowseOther = () => {
+    handleClose()
+    // Navigate to browse tasks (will be implemented with router)
+  }
+
+  const handleViewApplication = () => {
+    handleClose()
+    // Navigate to my applications (will be implemented with router)
+  }
+
+  // Character count for message
+  const messageLength = form.state.values.message?.length || 0
+  const messageMax = 500
+  const messageProgress = (messageLength / messageMax) * 100
+
+  // Validation helpers
+  const containsPhoneNumber = (text: string): boolean => {
+    // Matches various phone formats: +359, 0888, 359888, etc.
+    const phoneRegex = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{3,4}|\b\d{9,10}\b/g
+    return phoneRegex.test(text)
+  }
+
+  const containsUrl = (text: string): boolean => {
+    // Matches URLs and common patterns to bypass detection
+    const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-z0-9]+\.(com|net|org|bg|info|io|co|me|online)[^\s]*)/gi
+    // Also catch attempts like "dot com", "gmail dot com", etc.
+    const dotComRegex = /\b(dot|d0t)\s*(com|net|org|bg|info)\b/gi
+    return urlRegex.test(text) || dotComRegex.test(text)
+  }
+
+  const containsEmail = (text: string): boolean => {
+    // Matches email addresses and common obfuscation attempts
+    const emailRegex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi
+    const atRegex = /\b(at|@|а)\s*(gmail|yahoo|hotmail|abv|mail)/gi
+    return emailRegex.test(text) || atRegex.test(text)
+  }
+
+  // Button state logic
+  const hasPrice = form.state.values.proposedPrice > 0
+  const hasTimeline = form.state.values.timeline.length > 0
+  const hasValidMessage = messageLength >= 30 && messageLength <= 500
+  const isFormValid = hasPrice && hasTimeline && hasValidMessage
+
+  // Button color based on form state
+  const getButtonColor = () => {
+    if (alreadyApplied) return 'default'
+    if (isFormValid) return 'success' // Green when all valid
+    if (hasPrice || hasTimeline || messageLength > 0) return 'warning' // Orange when partially filled
+    return 'danger' // Red when empty
+  }
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="2xl"
+      scrollBehavior="inside"
+      backdrop="blur"
+      placement="center"
+      classNames={{
+        backdrop: 'bg-gradient-to-t from-zinc-900/80 to-zinc-900/20',
+        base: 'border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-800 max-h-[98vh] sm:max-h-[90vh] my-auto',
+        header: 'border-b border-gray-200 dark:border-gray-800',
+        body: 'overflow-y-auto',
+        footer: 'border-t border-gray-200 dark:border-gray-800',
+        closeButton: 'hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-2xl font-bold',
+      }}
+      motionProps={{
+        variants: {
+          enter: {
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.3,
+              ease: 'easeOut',
+            },
+          },
+          exit: {
+            y: -20,
+            opacity: 0,
+            transition: {
+              duration: 0.2,
+              ease: 'easeIn',
+            },
+          },
+        },
+      }}
+    >
+      <ModalContent>
+        <AnimatePresence mode="wait">
+          {!isSuccess ? (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ModalHeader className="flex flex-col gap-3 pt-6 px-6 pb-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {t('application.title')}
+                    </h2>
+                    <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                      {taskTitle}
+                    </p>
+                  </div>
+                </div>
+                {taskBudget && (taskBudget.min || taskBudget.max) && (
+                  <Chip
+                    startContent={<Wallet className="w-4 h-4" />}
+                    variant="flat"
+                    color="success"
+                    size="sm"
+                    className="w-fit"
+                  >
+                    Budget: {taskBudget.min || 0} - {taskBudget.max || 0} BGN
+                  </Chip>
+                )}
+              </ModalHeader>
+
+              <ModalBody className="gap-6 py-6 px-6">
+                <form
+                  id="application-form"
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    form.handleSubmit()
+                  }}
+                  className="space-y-6"
+                >
+                  {alreadyApplied && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 flex items-start gap-3"
+                    >
+                      <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium">
+                        {t('application.alreadyApplied')}
+                      </p>
+                    </motion.div>
+                  )}
+
+                  {/* Proposed Price */}
+                  <form.Field
+                    name="proposedPrice"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (value <= 0) {
+                          return t('application.errors.priceMin')
+                        }
+                        return undefined
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          {t('application.proposedPrice')} <span className="text-danger">*</span>
+                        </label>
+                        <Input
+                          placeholder={t('application.pricePlaceholder')}
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={field.state.value?.toString() || ''}
+                          onChange={(e) =>
+                            field.handleChange(parseFloat(e.target.value) || 0)
+                          }
+                          onBlur={field.handleBlur}
+                          isInvalid={field.state.meta.errors.length > 0}
+                          errorMessage={field.state.meta.errors.length > 0 ? String(field.state.meta.errors[0]) : undefined}
+                          endContent={
+                            <div className="pointer-events-none flex items-center">
+                              <span className="text-default-400 text-sm font-semibold">
+                                BGN
+                              </span>
+                            </div>
+                          }
+                          classNames={{
+                            input: 'text-base',
+                            inputWrapper: 'h-12',
+                          }}
+                          variant="bordered"
+                        />
+                        {taskBudget && (taskBudget.min || taskBudget.max) && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
+                            <Zap className="w-3 h-3" />
+                            Tip: Client budget is {taskBudget.min || 0} - {taskBudget.max || 0} BGN
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+
+                  {/* Timeline */}
+                  <form.Field
+                    name="timeline"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value || value.length === 0) {
+                          return t('application.errors.timelineRequired')
+                        }
+                        return undefined
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          {t('application.timeline')} <span className="text-danger">*</span>
+                        </label>
+                        <Select
+                          placeholder={t('application.timeline')}
+                          selectedKeys={field.state.value ? [field.state.value] : []}
+                          onSelectionChange={(keys) => {
+                            const value = Array.from(keys)[0] as string
+                            field.handleChange(value)
+                          }}
+                          onBlur={field.handleBlur}
+                          isInvalid={field.state.meta.errors.length > 0}
+                          errorMessage={field.state.meta.errors.length > 0 ? String(field.state.meta.errors[0]) : undefined}
+                          classNames={{
+                            trigger: 'h-14',
+                          }}
+                          variant="bordered"
+                          startContent={<Clock className="w-4 h-4 text-gray-500" />}
+                        >
+                          {TIMELINE_OPTIONS.map((option) => (
+                            <SelectItem
+                              key={option}
+                              value={option}
+                              startContent={
+                                option === 'today' ? (
+                                  <Zap className="w-4 h-4 text-orange-500" />
+                                ) : option === 'within-3-days' ? (
+                                  <Clock className="w-4 h-4 text-blue-500" />
+                                ) : option === 'within-week' ? (
+                                  <Calendar className="w-4 h-4 text-green-500" />
+                                ) : (
+                                  <Sparkles className="w-4 h-4 text-purple-500" />
+                                )
+                              }
+                            >
+                              {t(TIMELINE_DISPLAY[option])}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      </div>
+                    )}
+                  </form.Field>
+
+                  {/* Application Message */}
+                  <form.Field
+                    name="message"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value || value.length < 30) {
+                          return t('application.errors.messageMin')
+                        }
+                        if (value.length > 500) {
+                          return t('application.errors.messageMax')
+                        }
+                        if (containsPhoneNumber(value)) {
+                          return t('application.errors.noPhoneNumbers')
+                        }
+                        if (containsUrl(value)) {
+                          return t('application.errors.noUrls')
+                        }
+                        if (containsEmail(value)) {
+                          return t('application.errors.noEmails')
+                        }
+                        return undefined
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          {t('application.message')} <span className="text-danger">*</span>
+                        </label>
+                        <Textarea
+                          placeholder={t('application.messagePlaceholder')}
+                          value={field.state.value || ''}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                          isInvalid={field.state.meta.errors.length > 0}
+                          errorMessage={field.state.meta.errors.length > 0 ? String(field.state.meta.errors[0]) : undefined}
+                          minRows={3}
+                          maxRows={8}
+                          variant="bordered"
+                          description={
+                            <div className="flex items-center justify-between mt-2">
+                              <span
+                                className={`text-xs font-medium transition-colors ${
+                                  messageLength > messageMax
+                                    ? 'text-danger'
+                                    : messageLength >= 30
+                                    ? 'text-success'
+                                    : 'text-default-400'
+                                }`}
+                              >
+                                {t('application.characterCount', {
+                                  current: messageLength,
+                                  max: messageMax,
+                                })}
+                              </span>
+                              <div className="w-24 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <motion.div
+                                  className={`h-full rounded-full ${
+                                    messageLength >= 30
+                                      ? 'bg-success'
+                                      : 'bg-gray-400'
+                                  }`}
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${Math.min(messageProgress, 100)}%` }}
+                                  transition={{ duration: 0.2 }}
+                                />
+                              </div>
+                            </div>
+                          }
+                        />
+                        {messageLength < 30 && messageLength > 0 && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
+                            <Zap className="w-3 h-3" />
+                            Tip: Share your relevant experience to stand out
+                          </p>
+                        )}
+                        {messageLength === 0 && (
+                          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-start gap-2">
+                            <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                            <p className="text-xs text-blue-700 dark:text-blue-300">
+                              {t('application.messageInfo')}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+                </form>
+              </ModalBody>
+
+              <ModalFooter className="flex flex-col-reverse sm:flex-row gap-3 px-6 py-5">
+                <Button
+                  color="default"
+                  variant="flat"
+                  onPress={handleClose}
+                  isDisabled={isSubmitting}
+                  size="lg"
+                  className="font-semibold w-full sm:w-auto py-6"
+                >
+                  {t('application.cancel')}
+                </Button>
+                <Button
+                  color={getButtonColor()}
+                  type="submit"
+                  form="application-form"
+                  isLoading={isSubmitting}
+                  isDisabled={alreadyApplied || !isFormValid}
+                  size="lg"
+                  variant="bordered"
+                  className="font-semibold transition-colors duration-300 w-full sm:w-auto py-6"
+                  endContent={
+                    !isSubmitting && <ArrowRight className="w-4 h-4" />
+                  }
+                >
+                  {isSubmitting
+                    ? t('application.submitting')
+                    : t('application.submit')}
+                </Button>
+              </ModalFooter>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              className="relative"
+            >
+              {/* Confetti Effect */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {[...Array(20)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-2 h-2 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full"
+                    initial={{
+                      x: '50%',
+                      y: '50%',
+                      opacity: 1,
+                      scale: 0,
+                    }}
+                    animate={{
+                      x: `${50 + (Math.random() - 0.5) * 100}%`,
+                      y: `${50 + (Math.random() - 0.5) * 100}%`,
+                      opacity: 0,
+                      scale: 1,
+                    }}
+                    transition={{
+                      duration: 1 + Math.random(),
+                      ease: 'easeOut',
+                      delay: i * 0.02,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <ModalHeader className="flex flex-col items-center gap-4 pt-8 px-6 pb-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 15,
+                    delay: 0.1,
+                  }}
+                  className="w-20 h-20 rounded-full bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 flex items-center justify-center border-4 border-green-200 dark:border-green-800 shadow-lg"
+                >
+                  <Check className="text-green-600 dark:text-green-400 w-10 h-10 stroke-[3]" />
+                </motion.div>
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    {t('application.success')}
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Application #{applicationId?.slice(0, 8)}
+                  </p>
+                </div>
+              </ModalHeader>
+
+              <ModalBody className="py-6 px-6">
+                <div className="text-center space-y-6">
+                  <div className="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-2xl p-6 border border-primary-100 dark:border-primary-800">
+                    <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                      {t('application.successMessage')}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Quick Review</p>
+                    </div>
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                        <MessageSquare className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Get Response</p>
+                    </div>
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <Check className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      </div>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Start Work</p>
+                    </div>
+                  </div>
+                </div>
+              </ModalBody>
+
+              <ModalFooter className="flex-col sm:flex-row gap-3 px-6 py-6">
+                <Button
+                  color="default"
+                  variant="bordered"
+                  onPress={handleViewApplication}
+                  className="w-full sm:w-auto font-semibold"
+                  size="lg"
+                >
+                  {t('application.viewApplication')}
+                </Button>
+                <Button
+                  color="primary"
+                  variant="solid"
+                  onPress={handleBrowseOther}
+                  className="w-full sm:w-auto font-semibold"
+                  size="lg"
+                  endContent={<ArrowRight className="w-4 h-4" />}
+                >
+                  {t('application.browseOther')}
+                </Button>
+              </ModalFooter>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </ModalContent>
+    </Modal>
+  )
+}

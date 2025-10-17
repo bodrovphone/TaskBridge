@@ -93,7 +93,7 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
           <div className="flex flex-wrap gap-2 mb-4">
             {professional.categories.slice(0, 2).map((category, index) => (
               <motion.div
-                key={category}
+                key={`${professional.id}-category-${index}`}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: 0.1 + (index * 0.1) }}

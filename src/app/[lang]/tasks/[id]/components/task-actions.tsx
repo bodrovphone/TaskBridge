@@ -1,45 +1,47 @@
 'use client'
 
 import { useState } from "react";
-import { User, MessageCircle, Share2 } from "lucide-react";
+import { MessageCircle, Share2 } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
-import AuthSlideOver from "@/components/ui/auth-slide-over";
+import ApplicationDialog from "@/components/tasks/application-dialog";
+import TaskApplicationBadge from "@/components/tasks/task-application-badge";
+import { getUserApplication } from "@/components/tasks/mock-submit";
 
-export default function TaskActions() {
+interface TaskActionsProps {
+  task: any;
+}
+
+export default function TaskActions({ task }: TaskActionsProps) {
   const { t } = useTranslation();
-  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
-  const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
+  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
 
-  const handleAuthAction = (action: 'apply' | 'question') => {
-    setAuthAction(action);
-    setIsAuthSlideOverOpen(true);
-  };
+  // Mock user ID (in real app, get from auth context)
+  const userId = 'mock-user-123';
+
+  // Check if user has already applied
+  const userApplication = getUserApplication(task.id, userId);
 
   return (
     <>
       <NextUICard className="bg-white/95 backdrop-blur-sm shadow-lg">
         <CardBody className="p-6 space-y-3">
-          <NextUIButton
-            color="primary"
-            size="lg"
-            className="w-full font-semibold"
-            startContent={<User size={20} />}
-            onPress={() => handleAuthAction('apply')}
-          >
-            {t('taskDetail.apply')}
-          </NextUIButton>
-          
+          {/* Application Badge/Button */}
+          <TaskApplicationBadge
+            status={userApplication?.status}
+            onClick={() => setIsApplicationDialogOpen(true)}
+            className="w-full justify-center"
+          />
+
           <NextUIButton
             variant="bordered"
             size="lg"
             className="w-full"
             startContent={<MessageCircle size={20} />}
-            onPress={() => handleAuthAction('question')}
           >
             {t('taskDetail.askQuestion')}
           </NextUIButton>
-          
+
           <NextUIButton
             variant="light"
             size="lg"
@@ -51,10 +53,16 @@ export default function TaskActions() {
         </CardBody>
       </NextUICard>
 
-      <AuthSlideOver 
-        isOpen={isAuthSlideOverOpen}
-        onClose={() => setIsAuthSlideOverOpen(false)}
-        action={authAction}
+      {/* Application Dialog */}
+      <ApplicationDialog
+        isOpen={isApplicationDialogOpen}
+        onClose={() => setIsApplicationDialogOpen(false)}
+        taskId={task.id}
+        taskTitle={task.title}
+        taskBudget={{
+          min: task.budgetMin,
+          max: task.budgetMax,
+        }}
       />
     </>
   );
