@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion"
 import { useTranslation } from 'react-i18next'
-import { 
-  Card as NextUICard, 
-  CardBody, 
-  Button as NextUIButton, 
+import {
+  Card as NextUICard,
+  CardBody,
+  Button as NextUIButton,
   Chip
 } from "@nextui-org/react"
 import { Star, MapPin, Clock, Briefcase } from "lucide-react"
@@ -23,10 +23,8 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
   const { t } = useTranslation()
 
   return (
-    <motion.div
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="group"
+    <div
+      className="group hover:-translate-y-2 hover:scale-[1.02] transition-transform duration-300 ease-out will-change-transform"
     >
       <NextUICard className="professional-card bg-white shadow-lg hover:shadow-2xl transition-all duration-500 relative border border-gray-100 group-hover:border-blue-200 overflow-hidden">
         {/* Enhanced featured badge */}
@@ -45,26 +43,18 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
           {/* Enhanced Header */}
           <div className="flex items-start gap-4 mb-6">
             <LocaleLink href={`/professionals/${professional.id}`} className="relative group">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-              >
+              <div className="hover:scale-110 transition-transform duration-200">
                 <FallbackAvatar
                   src={professional.avatar}
                   name={professional.name}
                   size="lg"
                   className=""
                 />
-              </motion.div>
+              </div>
               {professional.verified && (
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className="absolute -bottom-0.5 -right-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full p-1 shadow-lg w-5 h-5 flex items-center justify-center"
-                >
+                <div className="absolute -bottom-0.5 -right-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full p-1 shadow-lg w-5 h-5 flex items-center justify-center animate-in fade-in zoom-in duration-300">
                   <span className="text-white text-[10px] font-bold">✓</span>
-                </motion.div>
+                </div>
               )}
             </LocaleLink>
             
@@ -92,11 +82,10 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
           {/* Enhanced Categories */}
           <div className="flex flex-wrap gap-2 mb-4">
             {professional.categories.slice(0, 2).map((category, index) => (
-              <motion.div
+              <div
                 key={`${professional.id}-category-${index}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.1 + (index * 0.1) }}
+                className="animate-in fade-in zoom-in duration-300"
+                style={{ animationDelay: `${0.1 + (index * 0.1)}s`, animationFillMode: 'backwards' }}
               >
                 <Chip
                   size="sm"
@@ -106,7 +95,7 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
                 >
                   {getCategoryLabelBySlug(category, t)}
                 </Chip>
-              </motion.div>
+              </div>
             ))}
             {professional.categories.length > 2 && (
               <Chip 
@@ -196,10 +185,7 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
           </div>
 
           {/* Enhanced Action */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
+          <div className="hover:scale-[1.02] active:scale-[0.98] transition-transform duration-150">
             <LocaleLink href={`/professionals/${professional.id}`} className="block">
               <NextUIButton
                 color="primary"
@@ -207,21 +193,17 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
                 size="lg"
                 className="w-full font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl"
                 endContent={
-                  <motion.div
-                    animate={{ x: 0 }}
-                    whileHover={{ x: 4 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                  <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
                     →
-                  </motion.div>
+                  </span>
                 }
               >
                 {t('professionals.viewProfile')}
               </NextUIButton>
             </LocaleLink>
-          </motion.div>
+          </div>
         </CardBody>
       </NextUICard>
-    </motion.div>
+    </div>
   )
 }

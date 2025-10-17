@@ -57,14 +57,15 @@ function Header() {
   }
 
   return (
-    <Navbar 
+    <Navbar
       maxWidth="xl"
       position="sticky"
-      className="bg-white shadow-sm border-b border-gray-100"
+      className="bg-white shadow-sm border-b border-gray-100 z-50"
       height="4rem"
       isBordered
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
+      style={{ isolation: 'isolate' }}
     >
       {/* Logo/Brand */}
       <NavbarBrand>

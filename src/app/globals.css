@@ -151,3 +151,68 @@
   .hover\\:text-primary-600:hover { color: hsl(var(--primary-600)); }
   .hover\\:text-primary-700:hover { color: hsl(var(--primary-700)); }
 }
+
+/* Performance Optimizations */
+@layer utilities {
+  /* GPU acceleration for smooth animations */
+  .gpu-accelerate {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Layout containment for cards to prevent reflow cascades */
+  .contain-card {
+    contain: layout style paint;
+  }
+
+  /* Optimize scroll performance */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent layout shifts during image loading */
+  .aspect-ratio-16-9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-ratio-4-3 {
+    aspect-ratio: 4 / 3;
+  }
+
+  .aspect-ratio-square {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Global performance improvements */
+@layer base {
+  /* Optimize rendering for all images */
+  img {
+    content-visibility: auto;
+  }
+
+  /* Smooth font rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Optimize scrolling containers */
+  [data-scroll-container] {
+    contain: layout style paint;
+  }
+}
+
+/* Reduce motion for accessibility and performance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
+import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
 import { useTranslation } from 'react-i18next';
 import { usePathname } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
-import { useIsDesktop } from '@/hooks/use-media-query';
-import Image from 'next/image';
 import {
   Shield,
   Star,
@@ -23,7 +22,6 @@ export default function HeroSection() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
-  const isDesktop = useIsDesktop();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
@@ -159,31 +157,15 @@ export default function HeroSection() {
             {/* Hero Video/Image with enhanced styling */}
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-lg opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
-              {isDesktop ? (
-                <video
-                  src="/assets/hero_video_2.mp4"
-                  poster="/images/hero_image_1.jpg"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
-                  style={{ maxHeight: '420px' }}
-                >
-                  <source src="/assets/hero_video_2.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <Image
-                  src="/images/hero_image_1.jpg"
-                  alt="Professional working on home repairs"
-                  width={800}
-                  height={600}
-                  className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
-                  style={{ maxHeight: '420px' }}
-                  priority
-                />
-              )}
+              <OptimizedVideoHero
+                videoSrc="/assets/hero_video_2.mp4"
+                poster="/images/hero_image_1.jpg"
+                alt="Professional working on home repairs"
+                width={800}
+                height={600}
+                className="relative rounded-3xl shadow-2xl w-full h-auto border-4 border-white object-cover"
+                maxHeight="420px"
+              />
             </div>
             
             {/* Enhanced Floating Stats Cards */}

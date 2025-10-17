@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
-import VideoBackground from "@/components/ui/video-background";
+import OptimizedVideoBackground from "@/components/ui/optimized-video-background";
 import { Sparkles } from "lucide-react";
 
 export default function BrowseTasksHeroSection() {
   const { t } = useTranslation();
 
   return (
-    <VideoBackground 
+    <OptimizedVideoBackground
       videoSrc="/assets/hero_video_1.mp4"
       fallbackGradient="from-blue-600 via-blue-700 to-emerald-600"
       overlayOpacity={0.6}
@@ -54,6 +54,6 @@ export default function BrowseTasksHeroSection() {
           </motion.p>
         </motion.div>
       </div>
-    </VideoBackground>
+    </OptimizedVideoBackground>
   );
 }
