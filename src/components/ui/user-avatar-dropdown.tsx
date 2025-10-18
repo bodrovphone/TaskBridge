@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/use-auth'
 import {
  User,
  FileText,
+ Briefcase,
  Settings,
  HelpCircle,
  LogOut
@@ -43,6 +44,9 @@ export default function UserAvatarDropdown({
     break
    case 'my-tasks':
     router.push(`/${lang}/my-tasks`)
+    break
+   case 'my-applications':
+    router.push(`/${lang}/my-applications`)
     break
    case 'settings':
     router.push(`/${lang}/settings`)
@@ -135,6 +139,13 @@ export default function UserAvatarDropdown({
       className="text-gray-900"
      >
       {t('nav.myTasks')}
+     </DropdownItem>
+     <DropdownItem
+      key="my-applications"
+      startContent={<Briefcase className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.myApplications')}
      </DropdownItem>
      <DropdownItem
       key="settings"
