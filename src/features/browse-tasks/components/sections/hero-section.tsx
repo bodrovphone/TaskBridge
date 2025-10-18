@@ -10,7 +10,7 @@ export default function BrowseTasksHeroSection() {
 
  return (
   <OptimizedVideoBackground
-   videoSrc="/assets/optimized/hero_video_1_hq.mp4"
+   videoSrc="/assets/hero_video_1.mp4"
    fallbackGradient="from-blue-600 via-blue-700 to-emerald-600"
    overlayOpacity={0.6}
   >

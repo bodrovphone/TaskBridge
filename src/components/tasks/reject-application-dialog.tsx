@@ -1,0 +1,145 @@
+'use client'
+
+import { Application } from '@/types/applications'
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  RadioGroup,
+  Radio
+} from '@nextui-org/react'
+import { XCircle, AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
+
+interface RejectApplicationDialogProps {
+  application: Application | null
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: (id: string, reason?: string) => void
+}
+
+export default function RejectApplicationDialog({
+  application,
+  isOpen,
+  onClose,
+  onConfirm
+}: RejectApplicationDialogProps) {
+  const { t } = useTranslation()
+  const [selectedReason, setSelectedReason] = useState<string>('')
+
+  if (!application) return null
+
+  const { professional } = application
+
+  const rejectionReasons = [
+    { value: 'better-fit', label: t('rejectApplication.reasons.betterFit') },
+    { value: 'price-high', label: t('rejectApplication.reasons.priceHigh') },
+    { value: 'timeline-issue', label: t('rejectApplication.reasons.timelineIssue') },
+    { value: 'changed-mind', label: t('rejectApplication.reasons.changedMind') },
+    { value: 'other', label: t('rejectApplication.reasons.other') }
+  ]
+
+  const handleConfirm = () => {
+    onConfirm(application.id, selectedReason || undefined)
+    // Reset reason for next time
+    setSelectedReason('')
+  }
+
+  const handleClose = () => {
+    // Reset reason when closing
+    setSelectedReason('')
+    onClose()
+  }
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="2xl"
+      classNames={{
+        base: 'max-h-[90vh]',
+        body: 'py-6'
+      }}
+    >
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <XCircle className="w-6 h-6 text-red-500" />
+                <h2 className="text-2xl font-bold">{t('rejectApplication.title')}</h2>
+              </div>
+            </ModalHeader>
+
+            <ModalBody>
+              <p className="text-gray-700 mb-4">
+                {t('rejectApplication.description', { name: professional.name })}
+              </p>
+
+              {/* Optional Reason Selection */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-base mb-3">
+                  {t('rejectApplication.reasonTitle')}
+                </h4>
+                <p className="text-sm text-gray-600 mb-4">
+                  {t('rejectApplication.reasonHelp')}
+                </p>
+
+                <RadioGroup
+                  value={selectedReason}
+                  onValueChange={setSelectedReason}
+                  classNames={{
+                    wrapper: 'gap-3'
+                  }}
+                >
+                  {rejectionReasons.map((reason) => (
+                    <Radio
+                      key={reason.value}
+                      value={reason.value}
+                      classNames={{
+                        label: 'text-sm',
+                        wrapper: 'group-data-[selected=true]:border-red-500',
+                        control: 'bg-red-500'
+                      }}
+                    >
+                      {reason.label}
+                    </Radio>
+                  ))}
+                </RadioGroup>
+              </div>
+
+              {/* Info Notice */}
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-blue-800">
+                      {t('rejectApplication.note', { name: professional.name })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button variant="light" onPress={handleClose}>
+                {t('rejectApplication.cancel')}
+              </Button>
+              <Button
+                color="danger"
+                onPress={handleConfirm}
+                startContent={<XCircle className="w-4 h-4" />}
+              >
+                {t('rejectApplication.confirm')}
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  )
+}

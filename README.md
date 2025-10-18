@@ -282,6 +282,43 @@ graph TD
     M --> N[Manage Applications]
 ```
 
+### 6. Applications Management Flow (Task Owner)
+
+```mermaid
+graph TD
+    A[Task Detail Page] --> B[Notification Received]
+    B --> C[Click View Application]
+    C --> D[Applications Tab Opens]
+
+    D --> E[Applications List]
+    E --> F{Filter/Sort}
+    F -->|Filter| G[All/Pending/Accepted/Rejected]
+    F -->|Sort| H[Newest/Price/Rating/Experience]
+
+    G --> I[Application Cards]
+    H --> I
+
+    I --> J{Action}
+    J -->|View Details| K[Application Detail Modal]
+    J -->|Accept| L[Accept Confirmation Dialog]
+    J -->|Reject| M[Reject Reason Dialog]
+
+    K --> N[See Portfolio]
+    K --> O[See Reviews]
+    K --> P[See Proposal]
+
+    L --> Q[Confirm Agreements]
+    Q --> R[Accept Application]
+    R --> S[Auto-reject Other Applications]
+    S --> T[Task Status: In Progress]
+    T --> U[Contact Info Exchanged]
+
+    M --> V[Select Rejection Reason]
+    V --> W[Confirm Rejection]
+    W --> X[Application Rejected]
+    X --> Y[Notification Sent]
+```
+
 ### 4. Authentication Flow
 
 ```mermaid

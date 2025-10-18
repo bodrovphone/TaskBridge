@@ -1,12 +1,14 @@
 'use client'
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ChevronLeft, MapPin, Clock, Wallet, Star, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
 import { Card as NextUICard, CardBody, Chip, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import TaskGallery from "./task-gallery";
 import TaskActions from "./task-actions";
 import PrivacyToggle from "./privacy-toggle";
+import TaskActivity from "./task-activity";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 
 interface TaskDetailContentProps {
@@ -115,7 +117,11 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
 
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
  const { t } = useTranslation();
- 
+ const searchParams = useSearchParams();
+
+ // Get application ID from query params (for auto-opening application detail dialog)
+ const applicationId = searchParams.get('application');
+
  // Server-side time calculation for initial render
  const timeAgo = `${t('taskDetail.timeAgo')} 2 часа`; // TODO: Implement proper server-side time calculation
 
@@ -279,12 +285,11 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
        </CardBody>
       </NextUICard>
 
-      {/* Task Activity - Questions and Applications 
+      {/* Task Activity - Questions and Applications
         TODO: This component should only be visible to task authors (task creators/givers)
-        to manage applications and answer questions. Currently hidden until proper 
-        authentication and authorization logic is implemented.
+        to manage applications and answer questions. For now, showing for all users for testing.
       */}
-      {/* <TaskActivity /> */}
+      <TaskActivity taskId={task.id} initialApplicationId={applicationId || undefined} />
      </div>
 
      {/* Sidebar */}

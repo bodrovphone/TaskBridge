@@ -1,15 +1,26 @@
 'use client'
 
 // @todo REFACTORING: Extract mock data to separate data provider or hook
-// - Move mockQuestions and mockApplications to shared data service (~40 lines)
-// - Create useTaskActivity hook for state management (~20 lines) 
+// - Move mockQuestions to shared data service (~20 lines)
+// - Create useTaskActivity hook for state management (~20 lines)
 // Target: Reduce from 150 lines to ~90 lines
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
 import { MessageCircle, User } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import { ApplicationsSection, QuestionsSection } from "./sections";
+import { QuestionsSection } from "./sections";
+import ApplicationsList from '@/components/tasks/applications-list';
+import ApplicationDetail from '@/components/tasks/application-detail';
+import AcceptApplicationDialog from '@/components/tasks/accept-application-dialog';
+import RejectApplicationDialog from '@/components/tasks/reject-application-dialog';
+import { getApplicationsForTask } from '@/lib/mock-data/applications';
+import { Application } from '@/types/applications';
+
+interface TaskActivityProps {
+  taskId: string;
+  initialApplicationId?: string;  // Auto-open application detail for this ID
+}
 
 // Mock data - in real app this would come from props or API
 const mockQuestions = [
@@ -51,66 +62,81 @@ const mockQuestions = [
  }
 ];
 
-const mockApplications = [
- {
-  id: "a1",
-  user: {
-   name: "Мария Петрова",
-   avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-   rating: 4.9,
-   completedTasks: 67,
-   specializations: ["Домашно почистване", "Дълбоко почистване"]
-  },
-  proposal: "Здравейте! Имам 5 години опит в професионалното почистване. Мога да завърша работата за 2 дни с гаранция за качеството. Разполагам с всички необходими препарати и оборудване.",
-  price: "120 лв",
-  timeline: "2 дни",
-  timestamp: "преди 1 час",
-  status: "pending"
- },
- {
-  id: "a2",
-  user: {
-   name: "Георги Иванов",
-   avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face", 
-   rating: 4.6,
-   completedTasks: 43,
-   specializations: ["Почистване", "Поддръжка"]
-  },
-  proposal: "Добър ден! Предлагам професионално почистване на изгодна цена. Имам застраховка и всички разрешения. Мога да започна още утре.",
-  price: "95 лв",
-  timeline: "1 ден",
-  timestamp: "преди 3 часа",
-  status: "pending"
- },
- {
-  id: "a3",
-  user: {
-   name: "Елена Димитрова",
-   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face",
-   rating: 5.0,
-   completedTasks: 89,
-   specializations: ["Екологично почистване", "Домашна помощ"]
-  },
-  proposal: "Здравейте! Специализирам се в екологично почистване с био препарати. Работя внимателно и с голямо внимание към детайлите. Мога да предоставя референции от предишни клиенти.",
-  price: "140 лв",
-  timeline: "1.5 дни", 
-  timestamp: "преди 5 часа",
-  status: "pending"
- }
-];
-
-export default function TaskActivity() {
+export default function TaskActivity({ taskId, initialApplicationId }: TaskActivityProps) {
  const { t } = useTranslation();
  const [selectedTab, setSelectedTab] = useState("applications");
 
- const handleAcceptApplication = (applicationId: string) => {
-  console.log("Accept application:", applicationId);
-  // TODO: Implement accept logic
+ // State for applications - filter by task ID
+ const [applications, setApplications] = useState<Application[]>(getApplicationsForTask(taskId));
+
+ // State for modals
+ const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+ const [isDetailOpen, setIsDetailOpen] = useState(false);
+ const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
+ const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+
+ // Auto-open application detail dialog if initialApplicationId is provided
+ useEffect(() => {
+  if (initialApplicationId) {
+   const app = applications.find(a => a.id === initialApplicationId);
+   if (app) {
+    setSelectedApplication(app);
+    setIsDetailOpen(true);
+    // Ensure we're on the applications tab
+    setSelectedTab("applications");
+   }
+  }
+ }, [initialApplicationId, applications]);
+
+ // Handlers
+ const handleViewDetails = (id: string) => {
+  const app = applications.find(a => a.id === id);
+  if (app) {
+   setSelectedApplication(app);
+   setIsDetailOpen(true);
+  }
  };
 
- const handleRejectApplication = (applicationId: string) => {
-  console.log("Reject application:", applicationId);
-  // TODO: Implement reject logic
+ const handleAcceptClick = (id: string) => {
+  const app = applications.find(a => a.id === id);
+  if (app) {
+   setSelectedApplication(app);
+   setIsAcceptDialogOpen(true);
+  }
+ };
+
+ const handleRejectClick = (id: string) => {
+  const app = applications.find(a => a.id === id);
+  if (app) {
+   setSelectedApplication(app);
+   setIsRejectDialogOpen(true);
+  }
+ };
+
+ const handleAcceptConfirm = (id: string) => {
+  // Update application status: accept selected, reject all others
+  setApplications(prev => prev.map(app =>
+   app.id === id
+    ? { ...app, status: 'accepted' as const, updatedAt: new Date() }
+    : app.status === 'pending'
+     ? { ...app, status: 'rejected' as const, updatedAt: new Date() }
+     : app
+  ));
+  setIsAcceptDialogOpen(false);
+  setIsDetailOpen(false);
+  console.log('✅ Application accepted:', id);
+ };
+
+ const handleRejectConfirm = (id: string, reason?: string) => {
+  // Update application status
+  setApplications(prev => prev.map(app =>
+   app.id === id
+    ? { ...app, status: 'rejected' as const, rejectionReason: reason, updatedAt: new Date() }
+    : app
+  ));
+  setIsRejectDialogOpen(false);
+  setIsDetailOpen(false);
+  console.log('❌ Application rejected:', id, 'Reason:', reason || 'Not specified');
  };
 
  const handleReplyToQuestion = (questionId: string, reply: string) => {
@@ -119,49 +145,79 @@ export default function TaskActivity() {
  };
 
  return (
-  <NextUICard className="bg-white/95 shadow-lg">
-   <CardBody className="p-6">
-    <h3 className="text-lg font-bold text-gray-900 mb-4">
-     {t('taskDetail.activity')}
-    </h3>
-    
-    <Tabs 
-     selectedKey={selectedTab} 
-     onSelectionChange={(key) => setSelectedTab(key as string)}
-     className="w-full"
-    >
-     <Tab 
-      key="applications" 
-      title={
-       <div className="flex items-center gap-2">
-        <User size={16} />
-        <span>{t('taskDetail.applications')} ({mockApplications.length})</span>
-       </div>
-      }
+  <>
+   <NextUICard className="bg-white/95 shadow-lg">
+    <CardBody className="p-6">
+     <h3 className="text-lg font-bold text-gray-900 mb-4">
+      {t('taskDetail.activity')}
+     </h3>
+
+     <Tabs
+      selectedKey={selectedTab}
+      onSelectionChange={(key) => setSelectedTab(key as string)}
+      className="w-full"
      >
-      <ApplicationsSection
-       applications={mockApplications}
-       onAcceptApplication={handleAcceptApplication}
-       onRejectApplication={handleRejectApplication}
-      />
-     </Tab>
-     
-     <Tab 
-      key="questions" 
-      title={
-       <div className="flex items-center gap-2">
-        <MessageCircle size={16} />
-        <span>{t('taskDetail.questions')} ({mockQuestions.length})</span>
+      <Tab
+       key="applications"
+       title={
+        <div className="flex items-center gap-2">
+         <User size={16} />
+         <span>{t('taskDetail.applications')} ({applications.length})</span>
+        </div>
+       }
+      >
+       <div className="mt-4">
+        <ApplicationsList
+         applications={applications}
+         onAccept={handleAcceptClick}
+         onReject={handleRejectClick}
+         onViewDetails={handleViewDetails}
+        />
        </div>
-      }
-     >
-      <QuestionsSection
-       questions={mockQuestions}
-       onReplyToQuestion={handleReplyToQuestion}
-      />
-     </Tab>
-    </Tabs>
-   </CardBody>
-  </NextUICard>
+      </Tab>
+
+      <Tab
+       key="questions"
+       title={
+        <div className="flex items-center gap-2">
+         <MessageCircle size={16} />
+         <span>{t('taskDetail.questions')} ({mockQuestions.length})</span>
+        </div>
+       }
+      >
+       <QuestionsSection
+        questions={mockQuestions}
+        onReplyToQuestion={handleReplyToQuestion}
+       />
+      </Tab>
+     </Tabs>
+    </CardBody>
+   </NextUICard>
+
+   {/* Application Detail Modal */}
+   <ApplicationDetail
+    application={selectedApplication}
+    isOpen={isDetailOpen}
+    onClose={() => setIsDetailOpen(false)}
+    onAccept={handleAcceptClick}
+    onReject={handleRejectClick}
+   />
+
+   {/* Accept Dialog */}
+   <AcceptApplicationDialog
+    application={selectedApplication}
+    isOpen={isAcceptDialogOpen}
+    onClose={() => setIsAcceptDialogOpen(false)}
+    onConfirm={handleAcceptConfirm}
+   />
+
+   {/* Reject Dialog */}
+   <RejectApplicationDialog
+    application={selectedApplication}
+    isOpen={isRejectDialogOpen}
+    onClose={() => setIsRejectDialogOpen(false)}
+    onConfirm={handleRejectConfirm}
+   />
+  </>
  );
 }

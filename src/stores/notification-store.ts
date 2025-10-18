@@ -34,15 +34,15 @@ const mockNotifications: Notification[] = [
     userId: 'user-1',
     type: 'application_received',
     title: 'Нова кандидатура',
-    message: 'Иван Д. кандидатства за вашата задача "Ремонт на водопровод"',
+    message: 'Иван Д. кандидатства за вашата задача "Разходка с кучето"',
     isRead: false,
     createdAt: new Date(Date.now() - 2 * 60 * 1000), // 2 mins ago
-    actionUrl: '/bg/tasks/task-123/applications',
-    relatedTaskId: 'task-123',
+    actionUrl: '/bg/tasks/1?application=app-1',
+    relatedTaskId: '1',
     relatedApplicationId: 'app-1',
     metadata: {
       professionalName: 'Иван Д.',
-      taskTitle: 'Ремонт на водопровод',
+      taskTitle: 'Разходка с кучето',
     },
   },
   {
@@ -50,14 +50,15 @@ const mockNotifications: Notification[] = [
     userId: 'user-1',
     type: 'application_accepted',
     title: 'Кандидатурата е приета',
-    message: 'Вашата кандидатура за "Почистване на къща" беше приета от Мария П.',
+    message: 'Вашата кандидатура за "Почистване на апартамент" беше приета от Елена Д.',
     isRead: false,
     createdAt: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
-    actionUrl: '/bg/tasks/task-456',
-    relatedTaskId: 'task-456',
+    actionUrl: '/bg/tasks/3',
+    relatedTaskId: '3',
+    relatedApplicationId: 'app-4',
     metadata: {
-      customerName: 'Мария П.',
-      taskTitle: 'Почистване на къща',
+      customerName: 'Елена Д.',
+      taskTitle: 'Почистване на апартамент',
     },
   },
   {
@@ -65,14 +66,14 @@ const mockNotifications: Notification[] = [
     userId: 'user-1',
     type: 'review_received',
     title: 'Получена 5-звездна оценка',
-    message: 'Мария П. ви остави 5-звездна оценка за "Почистване на къща"',
+    message: 'Елена Д. ви остави 5-звездна оценка за "Почистване на апартамент"',
     isRead: true,
     createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
     actionUrl: '/bg/profile',
-    relatedTaskId: 'task-456',
+    relatedTaskId: '3',
     metadata: {
-      customerName: 'Мария П.',
-      taskTitle: 'Почистване на къща',
+      customerName: 'Елена Д.',
+      taskTitle: 'Почистване на апартамент',
       rating: 5,
     },
   },
@@ -81,13 +82,13 @@ const mockNotifications: Notification[] = [
     userId: 'user-1',
     type: 'task_completed',
     title: 'Задачата е завършена',
-    message: 'Вашата задача "Поддръжка на градина" беше маркирана като завършена',
+    message: 'Вашата задача "Пренос на мебели" беше маркирана като завършена',
     isRead: true,
     createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-    actionUrl: '/bg/tasks/task-789',
-    relatedTaskId: 'task-789',
+    actionUrl: '/bg/tasks/2',
+    relatedTaskId: '2',
     metadata: {
-      taskTitle: 'Поддръжка на градина',
+      taskTitle: 'Пренос на мебели',
     },
   },
   {
@@ -95,13 +96,13 @@ const mockNotifications: Notification[] = [
     userId: 'user-1',
     type: 'application_rejected',
     title: 'Кандидатурата не е избрана',
-    message: 'Вашата кандидатура за "Услуги по преместване" не беше избрана',
+    message: 'Вашата кандидатура за "Уроци по китара" не беше избрана',
     isRead: false,
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-    actionUrl: '/bg/tasks/task-999',
-    relatedTaskId: 'task-999',
+    actionUrl: '/bg/tasks/4',
+    relatedTaskId: '4',
     metadata: {
-      taskTitle: 'Услуги по преместване',
+      taskTitle: 'Уроци по китара',
     },
   },
 ];
@@ -178,6 +179,7 @@ export const useNotificationStore = create<NotificationStore>()(
     }),
     {
       name: 'notification-storage',
+      version: 1, // Increment this to force localStorage refresh
       partialize: (state) => ({
         notifications: state.notifications,
       }),

@@ -334,6 +334,57 @@ Translation keys follow a hierarchical namespace pattern:
   // @todo FEATURE: Add user authentication flow
   ```
 
+#### CSS Performance Guidelines
+
+**⚠️ CRITICAL: Avoid `backdrop-blur` in Chrome**
+
+**Issue**: The CSS `backdrop-blur` property causes severe visual flickering and performance issues in Chrome/Chromium browsers, especially on:
+- Modal overlays and dialogs
+- Slide-over panels and drawers
+- Dropdown menus with transparent backgrounds
+- Any animated or transitioning elements
+
+**Symptoms**:
+- Content behind blur flickers during animations
+- White flashes when modals open/close
+- Janky scrolling with blurred backgrounds
+- Inconsistent rendering across Chrome versions
+
+**Solution**:
+- **NEVER use `backdrop-blur` unless absolutely critical for design**
+- Use solid background colors with opacity instead: `bg-black/80` or `bg-white/95`
+- If blur is required, test extensively in Chrome and provide fallbacks
+- Consider using `will-change: transform` for performance hints
+- Document any `backdrop-blur` usage with performance justification
+
+**Example - Bad**:
+```css
+/* ❌ Causes flickering in Chrome */
+.modal-overlay {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
+}
+```
+
+**Example - Good**:
+```css
+/* ✅ Smooth and performant */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.8);  /* Solid opacity, no blur */
+}
+```
+
+**Related Components with Issues**:
+- Notification center slide-over (removed `backdrop-blur-sm`)
+- Modal dialogs (using solid backgrounds)
+- Authentication slide-over (solid backgrounds recommended)
+
+**Testing Checklist**:
+- [ ] Test all modals/overlays in Chrome (not just Safari/Firefox)
+- [ ] Verify smooth open/close animations without flicker
+- [ ] Check background elements don't flash white
+- [ ] Ensure mobile Chrome performance is acceptable
+
 #### Large Component Refactoring Progress
 - **✅ browse-tasks-page.tsx** (423 → 103 lines) - 75% reduction via HeroSection, SearchFiltersSection, ResultsSection
 - **✅ task-activity.tsx** (292 → 167 lines) - 43% reduction via ApplicationsSection, QuestionsSection

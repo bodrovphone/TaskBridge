@@ -75,8 +75,7 @@ export default function NotificationCard({ notification }: NotificationCardProps
   }
  };
 
- const handleActionClick = (e: React.MouseEvent) => {
-  e.preventDefault();
+ const handleActionClick = () => {
   markAsRead(notification.id);
   setOpen(false);
  };
