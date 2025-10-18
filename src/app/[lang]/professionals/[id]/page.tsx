@@ -3,50 +3,50 @@ import { notFound } from 'next/navigation';
 import { ProfessionalDetailPage } from '@/features/professionals';
 
 interface ProfessionalPageProps {
-  params: {
-    id: string;
-    lang: string;
-  };
+ params: {
+  id: string;
+  lang: string;
+ };
 }
 
 // Mock function to check if professional exists
 async function getProfessional(id: string) {
-  // In a real app, this would be an API call
-  // For now, return a mock professional or null
-  if (!id || id === 'undefined') {
-    return null;
-  }
-  
-  // Mock professional data - in real app would come from database
-  return {
-    id,
-    // This would be populated with actual professional data
-  };
+ // In a real app, this would be an API call
+ // For now, return a mock professional or null
+ if (!id || id === 'undefined') {
+  return null;
+ }
+ 
+ // Mock professional data - in real app would come from database
+ return {
+  id,
+  // This would be populated with actual professional data
+ };
 }
 
 export async function generateMetadata({ params }: ProfessionalPageProps): Promise<Metadata> {
-  const resolvedParams = await params;
-  const professional = await getProfessional(resolvedParams.id);
-  
-  if (!professional) {
-    return {
-      title: 'Professional Not Found',
-    };
-  }
-
+ const resolvedParams = await params;
+ const professional = await getProfessional(resolvedParams.id);
+ 
+ if (!professional) {
   return {
-    title: `Professional Profile - ${resolvedParams.id}`,
-    description: `View professional services and contact information`,
+   title: 'Professional Not Found',
   };
+ }
+
+ return {
+  title: `Professional Profile - ${resolvedParams.id}`,
+  description: `View professional services and contact information`,
+ };
 }
 
 export default async function ProfessionalPage({ params }: ProfessionalPageProps) {
-  const resolvedParams = await params;
-  const professional = await getProfessional(resolvedParams.id);
+ const resolvedParams = await params;
+ const professional = await getProfessional(resolvedParams.id);
 
-  if (!professional) {
-    notFound();
-  }
+ if (!professional) {
+  notFound();
+ }
 
-  return <ProfessionalDetailPage professionalId={resolvedParams.id} />;
+ return <ProfessionalDetailPage professionalId={resolvedParams.id} />;
 }

@@ -6,176 +6,176 @@ import { useRouter, useParams } from "next/navigation"
 import { useMemo } from "react"
 
 interface Subcategory {
-  label: string
-  value: string
+ label: string
+ value: string
 }
 
 interface MainCategoryCardProps {
-  title: string
-  description: string
-  icon: LucideIcon
-  color: string
-  subcategories: Subcategory[]
-  totalCount: number
+ title: string
+ description: string
+ icon: LucideIcon
+ color: string
+ subcategories: Subcategory[]
+ totalCount: number
 }
 
 // Map card colors to chip colors to avoid - excluding colors that are too similar
 const colorExclusions: Record<string, Array<"primary" | "secondary" | "success" | "warning" | "danger">> = {
-  blue: ["primary"],                    // Blue card → avoid primary (blue)
-  green: ["success"],                   // Green card → avoid success (green)
-  purple: ["secondary"],                // Purple card → avoid secondary (purple)
-  orange: ["warning", "danger"],        // Orange card → avoid warning (orange) and danger (red/orange)
-  indigo: ["primary", "secondary"],     // Indigo card → avoid primary (blue) and secondary (purple)
-  pink: ["danger", "secondary"],        // Pink card → avoid danger (pink/red) and secondary (purple/pink)
+ blue: ["primary"],          // Blue card → avoid primary (blue)
+ green: ["success"],          // Green card → avoid success (green)
+ purple: ["secondary"],        // Purple card → avoid secondary (purple)
+ orange: ["warning", "danger"],    // Orange card → avoid warning (orange) and danger (red/orange)
+ indigo: ["primary", "secondary"],   // Indigo card → avoid primary (blue) and secondary (purple)
+ pink: ["danger", "secondary"],    // Pink card → avoid danger (pink/red) and secondary (purple/pink)
 }
 
 function MainCategoryCard({
-  title,
-  description,
-  icon: Icon,
-  color,
-  subcategories,
-  totalCount
+ title,
+ description,
+ icon: Icon,
+ color,
+ subcategories,
+ totalCount
 }: MainCategoryCardProps) {
-  const router = useRouter()
-  const params = useParams()
-  const lang = params?.lang as string || 'en'
+ const router = useRouter()
+ const params = useParams()
+ const lang = params?.lang as string || 'en'
 
-  const colorConfig = {
-    blue: {
-      background: "bg-blue-50/80 hover:bg-gradient-to-br hover:from-blue-100 hover:to-indigo-100",
-      border: "border-blue-200/50 hover:border-blue-300/70",
-      icon: "text-blue-600",
-      iconBg: "bg-blue-100/50 group-hover:bg-blue-200/70 group-hover:shadow-lg group-hover:shadow-blue-200/50"
-    },
-    green: {
-      background: "bg-emerald-50/80 hover:bg-gradient-to-br hover:from-emerald-100 hover:to-teal-100",
-      border: "border-emerald-200/50 hover:border-emerald-300/70",
-      icon: "text-emerald-600",
-      iconBg: "bg-emerald-100/50 group-hover:bg-emerald-200/70 group-hover:shadow-lg group-hover:shadow-emerald-200/50"
-    },
-    purple: {
-      background: "bg-purple-50/80 hover:bg-gradient-to-br hover:from-purple-100 hover:to-violet-100",
-      border: "border-purple-200/50 hover:border-purple-300/70",
-      icon: "text-purple-600",
-      iconBg: "bg-purple-100/50 group-hover:bg-purple-200/70 group-hover:shadow-lg group-hover:shadow-purple-200/50"
-    },
-    orange: {
-      background: "bg-orange-50/80 hover:bg-gradient-to-br hover:from-orange-100 hover:to-red-100",
-      border: "border-orange-200/50 hover:border-orange-300/70",
-      icon: "text-orange-600",
-      iconBg: "bg-orange-100/50 group-hover:bg-orange-200/70 group-hover:shadow-lg group-hover:shadow-orange-200/50"
-    },
-    indigo: {
-      background: "bg-indigo-50/80 hover:bg-gradient-to-br hover:from-indigo-100 hover:to-blue-100",
-      border: "border-indigo-200/50 hover:border-indigo-300/70",
-      icon: "text-indigo-600",
-      iconBg: "bg-indigo-100/50 group-hover:bg-indigo-200/70 group-hover:shadow-lg group-hover:shadow-indigo-200/50"
-    },
-    pink: {
-      background: "bg-pink-50/80 hover:bg-gradient-to-br hover:from-pink-100 hover:to-rose-100",
-      border: "border-pink-200/50 hover:border-pink-300/70",
-      icon: "text-pink-600",
-      iconBg: "bg-pink-100/50 group-hover:bg-pink-200/70 group-hover:shadow-lg group-hover:shadow-pink-200/50"
-    },
-  }
+ const colorConfig = {
+  blue: {
+   background: "bg-blue-50/80 hover:bg-gradient-to-br hover:from-blue-100 hover:to-indigo-100",
+   border: "border-blue-200/50 hover:border-blue-300/70",
+   icon: "text-blue-600",
+   iconBg: "bg-blue-100/50 group-hover:bg-blue-200/70 group-hover:shadow-lg group-hover:shadow-blue-200/50"
+  },
+  green: {
+   background: "bg-emerald-50/80 hover:bg-gradient-to-br hover:from-emerald-100 hover:to-teal-100",
+   border: "border-emerald-200/50 hover:border-emerald-300/70",
+   icon: "text-emerald-600",
+   iconBg: "bg-emerald-100/50 group-hover:bg-emerald-200/70 group-hover:shadow-lg group-hover:shadow-emerald-200/50"
+  },
+  purple: {
+   background: "bg-purple-50/80 hover:bg-gradient-to-br hover:from-purple-100 hover:to-violet-100",
+   border: "border-purple-200/50 hover:border-purple-300/70",
+   icon: "text-purple-600",
+   iconBg: "bg-purple-100/50 group-hover:bg-purple-200/70 group-hover:shadow-lg group-hover:shadow-purple-200/50"
+  },
+  orange: {
+   background: "bg-orange-50/80 hover:bg-gradient-to-br hover:from-orange-100 hover:to-red-100",
+   border: "border-orange-200/50 hover:border-orange-300/70",
+   icon: "text-orange-600",
+   iconBg: "bg-orange-100/50 group-hover:bg-orange-200/70 group-hover:shadow-lg group-hover:shadow-orange-200/50"
+  },
+  indigo: {
+   background: "bg-indigo-50/80 hover:bg-gradient-to-br hover:from-indigo-100 hover:to-blue-100",
+   border: "border-indigo-200/50 hover:border-indigo-300/70",
+   icon: "text-indigo-600",
+   iconBg: "bg-indigo-100/50 group-hover:bg-indigo-200/70 group-hover:shadow-lg group-hover:shadow-indigo-200/50"
+  },
+  pink: {
+   background: "bg-pink-50/80 hover:bg-gradient-to-br hover:from-pink-100 hover:to-rose-100",
+   border: "border-pink-200/50 hover:border-pink-300/70",
+   icon: "text-pink-600",
+   iconBg: "bg-pink-100/50 group-hover:bg-pink-200/70 group-hover:shadow-lg group-hover:shadow-pink-200/50"
+  },
+ }
 
-  const config = colorConfig[color as keyof typeof colorConfig]
+ const config = colorConfig[color as keyof typeof colorConfig]
 
-  // Generate random chip colors, avoiding the parent card's color(s)
-  const chipColors = useMemo(() => {
-    const allColors: Array<"primary" | "secondary" | "success" | "warning" | "danger"> = [
-      "primary",
-      "secondary",
-      "success",
-      "warning",
-      "danger"
-    ]
+ // Generate random chip colors, avoiding the parent card's color(s)
+ const chipColors = useMemo(() => {
+  const allColors: Array<"primary" | "secondary" | "success" | "warning" | "danger"> = [
+   "primary",
+   "secondary",
+   "success",
+   "warning",
+   "danger"
+  ]
 
-    // Remove colors that are too similar to parent card
-    const excludedColors = colorExclusions[color] || []
-    const availableColors = allColors.filter(c => !excludedColors.includes(c))
+  // Remove colors that are too similar to parent card
+  const excludedColors = colorExclusions[color] || []
+  const availableColors = allColors.filter(c => !excludedColors.includes(c))
 
-    // Assign random colors to each subcategory
-    return subcategories.map(() => {
-      const randomIndex = Math.floor(Math.random() * availableColors.length)
-      return availableColors[randomIndex]
-    })
-  }, [subcategories, color])
+  // Assign random colors to each subcategory
+  return subcategories.map(() => {
+   const randomIndex = Math.floor(Math.random() * availableColors.length)
+   return availableColors[randomIndex]
+  })
+ }, [subcategories, color])
 
-  const handleSubcategoryClick = (subcategoryValue: string) => {
-    router.push(`/${lang}/professionals?category=${subcategoryValue}`)
-  }
+ const handleSubcategoryClick = (subcategoryValue: string) => {
+  router.push(`/${lang}/professionals?category=${subcategoryValue}`)
+ }
 
-  return (
-    <Card
-      className={`
-        group relative overflow-hidden transition-all duration-300
-        ${config.background}
-        hover:scale-[1.02] hover:shadow-2xl
-        border-2 ${config.border}
-        backdrop-blur-sm
-      `}
+ return (
+  <Card
+   className={`
+    group relative overflow-hidden transition-all duration-300
+    ${config.background}
+    hover:scale-[1.02] hover:shadow-2xl
+    border-2 ${config.border}
+    
+   `}
+  >
+   <CardBody className="p-6">
+    {/* Header */}
+    <div className="flex items-start gap-4 mb-4">
+     <div className={`
+      w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0
+      ${config.iconBg}
+      transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
+     `}>
+      <Icon size={24} className={`${config.icon} transition-all duration-300`} />
+     </div>
+     <div className="flex-1">
+      <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors">
+       {title}
+      </h3>
+      <p className="text-slate-600 text-sm leading-relaxed">
+       {description}
+      </p>
+     </div>
+    </div>
+
+    {/* Subcategories */}
+    <div className="flex flex-wrap gap-2 mt-4">
+     {subcategories.map((subcategory, index) => (
+      <Chip
+       key={subcategory.value}
+       color={chipColors[index]}
+       variant="bordered"
+       size="md"
+       className="cursor-pointer hover:scale-105 transition-transform font-semibold"
+       onClick={(e) => {
+        e.stopPropagation()
+        handleSubcategoryClick(subcategory.value)
+       }}
+      >
+       {subcategory.label}
+      </Chip>
+     ))}
+    </div>
+   </CardBody>
+
+   <CardFooter className="px-6 pb-6 pt-0 justify-between border-t border-slate-200/50">
+    <div className="text-sm font-semibold text-slate-700">
+     <span className="text-lg font-bold text-slate-900">{totalCount}+</span> specialists
+    </div>
+    <button
+     onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
+     className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
     >
-      <CardBody className="p-6">
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-4">
-          <div className={`
-            w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0
-            ${config.iconBg}
-            transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
-          `}>
-            <Icon size={24} className={`${config.icon} transition-all duration-300`} />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors">
-              {title}
-            </h3>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              {description}
-            </p>
-          </div>
-        </div>
+     View all →
+    </button>
+   </CardFooter>
 
-        {/* Subcategories */}
-        <div className="flex flex-wrap gap-2 mt-4">
-          {subcategories.map((subcategory, index) => (
-            <Chip
-              key={subcategory.value}
-              color={chipColors[index]}
-              variant="bordered"
-              size="md"
-              className="cursor-pointer hover:scale-105 transition-transform font-semibold"
-              onClick={(e) => {
-                e.stopPropagation()
-                handleSubcategoryClick(subcategory.value)
-              }}
-            >
-              {subcategory.label}
-            </Chip>
-          ))}
-        </div>
-      </CardBody>
-
-      <CardFooter className="px-6 pb-6 pt-0 justify-between border-t border-slate-200/50">
-        <div className="text-sm font-semibold text-slate-700">
-          <span className="text-lg font-bold text-slate-900">{totalCount}+</span> specialists
-        </div>
-        <button
-          onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
-          className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-        >
-          View all →
-        </button>
-      </CardFooter>
-
-      {/* Subtle background decoration */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-white/40"></div>
-        <div className="absolute bottom-6 left-4 w-2 h-2 rounded-full bg-white/30"></div>
-      </div>
-    </Card>
-  )
+   {/* Subtle background decoration */}
+   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+    <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-white/40"></div>
+    <div className="absolute bottom-6 left-4 w-2 h-2 rounded-full bg-white/30"></div>
+   </div>
+  </Card>
+ )
 }
 
 MainCategoryCard.displayName = 'MainCategoryCard'

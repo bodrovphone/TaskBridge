@@ -9,61 +9,61 @@ import TaskApplicationBadge from "@/components/tasks/task-application-badge";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 
 interface TaskActionsProps {
-  task: any;
+ task: any;
 }
 
 export default function TaskActions({ task }: TaskActionsProps) {
-  const { t } = useTranslation();
-  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
+ const { t } = useTranslation();
+ const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
 
-  // Mock user ID (in real app, get from auth context)
-  const userId = 'mock-user-123';
+ // Mock user ID (in real app, get from auth context)
+ const userId = 'mock-user-123';
 
-  // Check if user has already applied
-  const userApplication = getUserApplication(task.id, userId);
+ // Check if user has already applied
+ const userApplication = getUserApplication(task.id, userId);
 
-  return (
-    <>
-      <NextUICard className="bg-white/95 backdrop-blur-sm shadow-lg">
-        <CardBody className="p-6 space-y-3">
-          {/* Application Badge/Button */}
-          <TaskApplicationBadge
-            status={userApplication?.status}
-            onClick={() => setIsApplicationDialogOpen(true)}
-            className="w-full justify-center"
-          />
+ return (
+  <>
+   <NextUICard className="bg-white/95 shadow-lg">
+    <CardBody className="p-6 space-y-3">
+     {/* Application Badge/Button */}
+     <TaskApplicationBadge
+      status={userApplication?.status}
+      onClick={() => setIsApplicationDialogOpen(true)}
+      className="w-full justify-center"
+     />
 
-          <NextUIButton
-            variant="bordered"
-            size="lg"
-            className="w-full"
-            startContent={<MessageCircle size={20} />}
-          >
-            {t('taskDetail.askQuestion')}
-          </NextUIButton>
+     <NextUIButton
+      variant="bordered"
+      size="lg"
+      className="w-full"
+      startContent={<MessageCircle size={20} />}
+     >
+      {t('taskDetail.askQuestion')}
+     </NextUIButton>
 
-          <NextUIButton
-            variant="light"
-            size="lg"
-            className="w-full"
-            startContent={<Share2 size={20} />}
-          >
-            {t('taskDetail.share')}
-          </NextUIButton>
-        </CardBody>
-      </NextUICard>
+     <NextUIButton
+      variant="light"
+      size="lg"
+      className="w-full"
+      startContent={<Share2 size={20} />}
+     >
+      {t('taskDetail.share')}
+     </NextUIButton>
+    </CardBody>
+   </NextUICard>
 
-      {/* Application Dialog */}
-      <ApplicationDialog
-        isOpen={isApplicationDialogOpen}
-        onClose={() => setIsApplicationDialogOpen(false)}
-        taskId={task.id}
-        taskTitle={task.title}
-        taskBudget={{
-          min: task.budgetMin,
-          max: task.budgetMax,
-        }}
-      />
-    </>
-  );
+   {/* Application Dialog */}
+   <ApplicationDialog
+    isOpen={isApplicationDialogOpen}
+    onClose={() => setIsApplicationDialogOpen(false)}
+    taskId={task.id}
+    taskTitle={task.title}
+    taskBudget={{
+     min: task.budgetMin,
+     max: task.budgetMax,
+    }}
+   />
+  </>
+ );
 }

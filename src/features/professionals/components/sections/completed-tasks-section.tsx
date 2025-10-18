@@ -8,304 +8,304 @@ import { LocaleLink } from '@/components/common/locale-link';
 import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
 
 interface CompletedTask {
-  id: string;
-  title: string;
-  category: string;
-  completedDate: string;
-  clientRating: number;
-  budget: string;
-  location: string;
-  clientName?: string;
-  clientAvatar?: string;
-  testimonial?: string;
-  isVerified?: boolean;
-  durationCompleted?: string;
-  complexity?: 'Simple' | 'Standard' | 'Complex';
+ id: string;
+ title: string;
+ category: string;
+ completedDate: string;
+ clientRating: number;
+ budget: string;
+ location: string;
+ clientName?: string;
+ clientAvatar?: string;
+ testimonial?: string;
+ isVerified?: boolean;
+ durationCompleted?: string;
+ complexity?: 'Simple' | 'Standard' | 'Complex';
 }
 
 interface CompletedTasksSectionProps {
-  completedTasks: CompletedTask[];
+ completedTasks: CompletedTask[];
 }
 
 export default function CompletedTasksSection({ completedTasks }: CompletedTasksSectionProps) {
-  const { t } = useTranslation();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+ const { t } = useTranslation();
+ const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={`w-4 h-4 ${
-              star <= rating
-                ? 'fill-yellow-400 text-yellow-400'
-                : 'text-gray-300'
-            }`}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  const getComplexityColor = (complexity?: string) => {
-    switch (complexity) {
-      case 'Simple': return 'success';
-      case 'Standard': return 'primary';
-      case 'Complex': return 'warning';
-      default: return 'default';
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('bg-BG', {
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  if (!completedTasks || completedTasks.length === 0) {
-    return (
-      <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 shadow-lg border border-green-100">
-        <h3 className="text-3xl font-bold text-gray-900 mb-6 flex items-center justify-center gap-3">
-          <Award className="text-green-600" size={28} />
-          {t('professionalDetail.completedTasks.title')}
-        </h3>
-        <div className="text-center py-12">
-          <div className="bg-white/70 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-            <CheckCircle className="text-green-400" size={48} />
-          </div>
-          <p className="text-gray-600 text-lg">{t('professionalDetail.completedTasks.noTasks')}</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Statistics summary
-  const totalTasks = completedTasks.length;
-  const averageRating = completedTasks.reduce((sum, task) => sum + task.clientRating, 0) / totalTasks;
-  const fiveStarTasks = completedTasks.filter(task => task.clientRating === 5).length;
-
+ const renderStars = (rating: number) => {
   return (
-    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 shadow-lg border border-green-100">
-      {/* Header with Statistics */}
-      <div className="text-center mb-8">
-        <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center justify-center gap-2">
-          <Award className="text-green-600" size={28} />
-          {t('professionalDetail.completedTasks.title')}
-        </h3>
+   <div className="flex gap-1">
+    {[1, 2, 3, 4, 5].map((star) => (
+     <Star
+      key={star}
+      className={`w-4 h-4 ${
+       star <= rating
+        ? 'fill-yellow-400 text-yellow-400'
+        : 'text-gray-300'
+      }`}
+     />
+    ))}
+   </div>
+  );
+ };
 
-        {/* Quick Stats */}
-        <div className="flex justify-center gap-6 mb-6">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">{totalTasks}</div>
-            <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.tasksCompleted')}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-600">{averageRating.toFixed(1)}</div>
-            <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.avgRating')}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">{Math.round((fiveStarTasks / totalTasks) * 100)}%</div>
-            <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.fiveStarTasks')}</div>
-          </div>
+ const getComplexityColor = (complexity?: string) => {
+  switch (complexity) {
+   case 'Simple': return 'success';
+   case 'Standard': return 'primary';
+   case 'Complex': return 'warning';
+   default: return 'default';
+  }
+ };
+
+ const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('bg-BG', {
+   month: 'short',
+   day: 'numeric'
+  });
+ };
+
+ if (!completedTasks || completedTasks.length === 0) {
+  return (
+   <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 shadow-lg border border-green-100">
+    <h3 className="text-3xl font-bold text-gray-900 mb-6 flex items-center justify-center gap-3">
+     <Award className="text-green-600" size={28} />
+     {t('professionalDetail.completedTasks.title')}
+    </h3>
+    <div className="text-center py-12">
+     <div className="bg-white/70 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+      <CheckCircle className="text-green-400" size={48} />
+     </div>
+     <p className="text-gray-600 text-lg">{t('professionalDetail.completedTasks.noTasks')}</p>
+    </div>
+   </div>
+  );
+ }
+
+ // Statistics summary
+ const totalTasks = completedTasks.length;
+ const averageRating = completedTasks.reduce((sum, task) => sum + task.clientRating, 0) / totalTasks;
+ const fiveStarTasks = completedTasks.filter(task => task.clientRating === 5).length;
+
+ return (
+  <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 shadow-lg border border-green-100">
+   {/* Header with Statistics */}
+   <div className="text-center mb-8">
+    <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center justify-center gap-2">
+     <Award className="text-green-600" size={28} />
+     {t('professionalDetail.completedTasks.title')}
+    </h3>
+
+    {/* Quick Stats */}
+    <div className="flex justify-center gap-6 mb-6">
+     <div className="text-center">
+      <div className="text-2xl font-bold text-green-600">{totalTasks}</div>
+      <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.tasksCompleted')}</div>
+     </div>
+     <div className="text-center">
+      <div className="text-2xl font-bold text-yellow-600">{averageRating.toFixed(1)}</div>
+      <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.avgRating')}</div>
+     </div>
+     <div className="text-center">
+      <div className="text-2xl font-bold text-purple-600">{Math.round((fiveStarTasks / totalTasks) * 100)}%</div>
+      <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.fiveStarTasks')}</div>
+     </div>
+    </div>
+   </div>
+
+   {/* Desktop Timeline View */}
+   <div className="hidden md:block relative pr-4">
+    <div className="space-y-6 relative pt-10 pb-4">
+     {/* Timeline Line with Gaps - positioned relative to content */}
+     <div className="absolute left-8 top-10 w-0.5 bg-gradient-to-b from-green-400 to-emerald-300" style={{ height: 'calc(100% - 2.5rem)' }}></div>
+
+     {completedTasks.slice(0, 4).map((task, index) => (
+      <div key={task.id} className="relative flex gap-6">
+       {/* Timeline Node */}
+       <div className="relative z-10 flex-shrink-0">
+        {/* Date with background to create gap in timeline */}
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 font-medium whitespace-nowrap bg-gradient-to-br from-green-50 to-emerald-50 px-2 py-1 rounded">
+         {formatDate(task.completedDate)}
         </div>
-      </div>
+        <div className="w-16 h-16 bg-white rounded-full border-4 border-green-400 flex items-center justify-center shadow-lg">
+         <CheckCircle className="w-6 h-6 text-green-600" />
+        </div>
+       </div>
 
-      {/* Desktop Timeline View */}
-      <div className="hidden md:block relative pr-4">
-        <div className="space-y-6 relative pt-10 pb-4">
-          {/* Timeline Line with Gaps - positioned relative to content */}
-          <div className="absolute left-8 top-10 w-0.5 bg-gradient-to-b from-green-400 to-emerald-300" style={{ height: 'calc(100% - 2.5rem)' }}></div>
-
-          {completedTasks.slice(0, 4).map((task, index) => (
-            <div key={task.id} className="relative flex gap-6">
-              {/* Timeline Node */}
-              <div className="relative z-10 flex-shrink-0">
-                {/* Date with background to create gap in timeline */}
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 font-medium whitespace-nowrap bg-gradient-to-br from-green-50 to-emerald-50 px-2 py-1 rounded">
-                  {formatDate(task.completedDate)}
-                </div>
-                <div className="w-16 h-16 bg-white rounded-full border-4 border-green-400 flex items-center justify-center shadow-lg">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                </div>
+       {/* Task Card */}
+       <div className="flex-1 pb-6">
+        <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/95 ">
+         <CardBody className="p-6">
+          <div className="flex flex-col lg:flex-row gap-4">
+           <div className="flex-1">
+            <div className="flex items-start justify-between mb-3">
+             <div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">
+               {task.title}
+              </h4>
+              <div className="flex flex-wrap gap-2 mb-3">
+               <Chip size="sm" variant="flat" color="secondary">
+                {task.category}
+               </Chip>
+               {task.isVerified && (
+                <Chip
+                 size="sm"
+                 variant="flat"
+                 color="success"
+                 startContent={<CheckCircle size={12} />}
+                >
+                 {t('professionalDetail.verified')}
+                </Chip>
+               )}
               </div>
+             </div>
 
-              {/* Task Card */}
-              <div className="flex-1 pb-6">
-                <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/95 backdrop-blur-sm">
-                  <CardBody className="p-6">
-                    <div className="flex flex-col lg:flex-row gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-3">
-                          <div>
-                            <h4 className="text-lg font-bold text-gray-900 mb-2">
-                              {task.title}
-                            </h4>
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              <Chip size="sm" variant="flat" color="secondary">
-                                {task.category}
-                              </Chip>
-                              {task.isVerified && (
-                                <Chip
-                                  size="sm"
-                                  variant="flat"
-                                  color="success"
-                                  startContent={<CheckCircle size={12} />}
-                                >
-                                  {t('professionalDetail.verified')}
-                                </Chip>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="text-right">
-                            <div className="text-xl font-bold text-green-600">{task.budget}</div>
-                            {task.durationCompleted && (
-                              <div className="text-xs text-gray-500 flex items-center gap-1">
-                                <Clock size={10} />
-                                {task.durationCompleted}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                          <div className="flex items-center gap-1">
-                            <MapPin size={14} />
-                            <span>{task.location}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {renderStars(task.clientRating)}
-                            <span className="font-semibold text-gray-900">{task.clientRating}</span>
-                          </div>
-                        </div>
-
-                        {task.testimonial && (
-                          <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400 mb-4">
-                            <p className="text-blue-800 text-sm italic mb-2">"{task.testimonial}"</p>
-                            <div className="flex items-center gap-2">
-                              {task.clientAvatar ? (
-                                <Avatar src={task.clientAvatar} size="sm" />
-                              ) : (
-                                <Avatar name={task.clientName} size="sm" />
-                              )}
-                              <span className="text-blue-700 font-semibold text-xs">
-                                - {task.clientName}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-
-                        <LocaleLink href={`/tasks/${task.id}`}>
-                          <Button
-                            size="sm"
-                            variant="bordered"
-                            color="primary"
-                            endContent={<ExternalLink size={14} />}
-                            className="font-medium"
-                          >
-                            {t('professionalDetail.completedTasks.viewTask')}
-                          </Button>
-                        </LocaleLink>
-                      </div>
-                    </div>
-                  </CardBody>
-                </Card>
-              </div>
+             <div className="text-right">
+              <div className="text-xl font-bold text-green-600">{task.budget}</div>
+              {task.durationCompleted && (
+               <div className="text-xs text-gray-500 flex items-center gap-1">
+                <Clock size={10} />
+                {task.durationCompleted}
+               </div>
+              )}
+             </div>
             </div>
-          ))}
-        </div>
 
-        {/* View All Tasks Button - Desktop */}
-        {completedTasks.length > 4 && (
-          <div className="text-center mt-6">
-            <Button
-              size="md"
-              variant="bordered"
-              color="success"
-              className="font-medium"
-              onPress={onOpen}
-            >
-              View all {completedTasks.length} tasks
-            </Button>
-          </div>
-        )}
-      </div>
+            <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
+             <div className="flex items-center gap-1">
+              <MapPin size={14} />
+              <span>{task.location}</span>
+             </div>
+             <div className="flex items-center gap-2">
+              {renderStars(task.clientRating)}
+              <span className="font-semibold text-gray-900">{task.clientRating}</span>
+             </div>
+            </div>
 
-      {/* Mobile: Simple Grid View */}
-      <div className="md:hidden">
-        <div className="grid grid-cols-1 gap-4">
-          {completedTasks.slice(0, 4).map((task, index) => (
-            <Card key={task.id} className="bg-white/95 backdrop-blur-sm border-0">
-              <CardBody className="p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1 min-w-0 mr-3">
-                    <h4 className="text-base font-bold text-gray-900 mb-2 truncate">
-                      {task.title}
-                    </h4>
-                    <div className="flex items-center flex-wrap gap-2 mb-2">
-                      <span className="text-xs text-gray-500 whitespace-nowrap">{formatDate(task.completedDate)}</span>
-                      <Chip size="sm" variant="flat" color="secondary" className="text-xs">
-                        {task.category}
-                      </Chip>
-                      {task.isVerified && (
-                        <Chip size="sm" variant="flat" color="success" startContent={<CheckCircle size={10} />} className="text-xs">
-                          {t('professionalDetail.verified')}
-                        </Chip>
-                      )}
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0 ml-2">
-                    <div className="text-lg font-bold text-green-600 whitespace-nowrap">{task.budget}</div>
-                  </div>
-                </div>
+            {task.testimonial && (
+             <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400 mb-4">
+              <p className="text-blue-800 text-sm italic mb-2">"{task.testimonial}"</p>
+              <div className="flex items-center gap-2">
+               {task.clientAvatar ? (
+                <Avatar src={task.clientAvatar} size="sm" />
+               ) : (
+                <Avatar name={task.clientName} size="sm" />
+               )}
+               <span className="text-blue-700 font-semibold text-xs">
+                - {task.clientName}
+               </span>
+              </div>
+             </div>
+            )}
 
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-1 flex-1 min-w-0">
-                    <MapPin size={12} className="flex-shrink-0" />
-                    <span className="truncate text-sm text-gray-600">{task.location}</span>
-                  </div>
-                  <div className="flex items-center gap-1 ml-2">
-                    {renderStars(task.clientRating)}
-                    <span className="text-xs text-gray-600 ml-1">{task.clientRating}</span>
-                  </div>
-                </div>
-
-                {task.testimonial && (
-                  <div className="bg-blue-50 p-3 rounded-lg border-l-3 border-blue-400 mt-2">
-                    <p className="text-blue-800 text-xs italic line-clamp-2">"{task.testimonial}"</p>
-                    <p className="text-blue-700 text-xs font-medium mt-1">- {task.clientName}</p>
-                  </div>
-                )}
-              </CardBody>
-            </Card>
-          ))}
-        </div>
-
-        {/* View All Tasks Button - Mobile */}
-        {completedTasks.length > 4 && (
-          <div className="text-center mt-4">
-            <Button
+            <LocaleLink href={`/tasks/${task.id}`}>
+             <Button
               size="sm"
               variant="bordered"
-              color="success"
+              color="primary"
+              endContent={<ExternalLink size={14} />}
               className="font-medium"
-              onPress={onOpen}
-            >
-              View all {completedTasks.length} tasks
-            </Button>
+             >
+              {t('professionalDetail.completedTasks.viewTask')}
+             </Button>
+            </LocaleLink>
+           </div>
           </div>
-        )}
+         </CardBody>
+        </Card>
+       </div>
       </div>
-
-      {/* Completed Tasks Dialog */}
-      <CompletedTasksDialog
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        completedTasks={completedTasks}
-      />
-
+     ))}
     </div>
-  );
+
+    {/* View All Tasks Button - Desktop */}
+    {completedTasks.length > 4 && (
+     <div className="text-center mt-6">
+      <Button
+       size="md"
+       variant="bordered"
+       color="success"
+       className="font-medium"
+       onPress={onOpen}
+      >
+       View all {completedTasks.length} tasks
+      </Button>
+     </div>
+    )}
+   </div>
+
+   {/* Mobile: Simple Grid View */}
+   <div className="md:hidden">
+    <div className="grid grid-cols-1 gap-4">
+     {completedTasks.slice(0, 4).map((task, index) => (
+      <Card key={task.id} className="bg-white/95 border-0">
+       <CardBody className="p-4">
+        <div className="flex items-start justify-between mb-3">
+         <div className="flex-1 min-w-0 mr-3">
+          <h4 className="text-base font-bold text-gray-900 mb-2 truncate">
+           {task.title}
+          </h4>
+          <div className="flex items-center flex-wrap gap-2 mb-2">
+           <span className="text-xs text-gray-500 whitespace-nowrap">{formatDate(task.completedDate)}</span>
+           <Chip size="sm" variant="flat" color="secondary" className="text-xs">
+            {task.category}
+           </Chip>
+           {task.isVerified && (
+            <Chip size="sm" variant="flat" color="success" startContent={<CheckCircle size={10} />} className="text-xs">
+             {t('professionalDetail.verified')}
+            </Chip>
+           )}
+          </div>
+         </div>
+         <div className="text-right flex-shrink-0 ml-2">
+          <div className="text-lg font-bold text-green-600 whitespace-nowrap">{task.budget}</div>
+         </div>
+        </div>
+
+        <div className="flex items-center justify-between mb-2">
+         <div className="flex items-center gap-1 flex-1 min-w-0">
+          <MapPin size={12} className="flex-shrink-0" />
+          <span className="truncate text-sm text-gray-600">{task.location}</span>
+         </div>
+         <div className="flex items-center gap-1 ml-2">
+          {renderStars(task.clientRating)}
+          <span className="text-xs text-gray-600 ml-1">{task.clientRating}</span>
+         </div>
+        </div>
+
+        {task.testimonial && (
+         <div className="bg-blue-50 p-3 rounded-lg border-l-3 border-blue-400 mt-2">
+          <p className="text-blue-800 text-xs italic line-clamp-2">"{task.testimonial}"</p>
+          <p className="text-blue-700 text-xs font-medium mt-1">- {task.clientName}</p>
+         </div>
+        )}
+       </CardBody>
+      </Card>
+     ))}
+    </div>
+
+    {/* View All Tasks Button - Mobile */}
+    {completedTasks.length > 4 && (
+     <div className="text-center mt-4">
+      <Button
+       size="sm"
+       variant="bordered"
+       color="success"
+       className="font-medium"
+       onPress={onOpen}
+      >
+       View all {completedTasks.length} tasks
+      </Button>
+     </div>
+    )}
+   </div>
+
+   {/* Completed Tasks Dialog */}
+   <CompletedTasksDialog
+    isOpen={isOpen}
+    onOpenChange={onOpenChange}
+    completedTasks={completedTasks}
+   />
+
+  </div>
+ );
 }

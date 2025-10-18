@@ -3,167 +3,167 @@
 import { useRouter, useParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  DropdownSection
+ Dropdown,
+ DropdownTrigger,
+ DropdownMenu,
+ DropdownItem,
+ DropdownSection
 } from '@nextui-org/react'
 import UserAvatar from './user-avatar'
 import { useAuth } from '@/hooks/use-auth'
 import {
-  User,
-  FileText,
-  Settings,
-  HelpCircle,
-  LogOut
+ User,
+ FileText,
+ Settings,
+ HelpCircle,
+ LogOut
 } from 'lucide-react'
 
 interface UserAvatarDropdownProps {
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
-  onLoginClick?: () => void
+ size?: 'sm' | 'md' | 'lg'
+ className?: string
+ onLoginClick?: () => void
 }
 
 export default function UserAvatarDropdown({
-  size = 'md',
-  className,
-  onLoginClick
+ size = 'md',
+ className,
+ onLoginClick
 }: UserAvatarDropdownProps) {
-  const { user, logout } = useAuth()
-  const { t } = useTranslation()
-  const router = useRouter()
-  const params = useParams()
-  const lang = params?.lang as string || 'en'
+ const { user, logout } = useAuth()
+ const { t } = useTranslation()
+ const router = useRouter()
+ const params = useParams()
+ const lang = params?.lang as string || 'en'
 
-  const handleMenuAction = (key: string) => {
-    switch (key) {
-      case 'profile':
-        router.push(`/${lang}/profile`)
-        break
-      case 'my-tasks':
-        router.push(`/${lang}/my-tasks`)
-        break
-      case 'settings':
-        router.push(`/${lang}/settings`)
-        break
-      case 'help':
-        router.push(`/${lang}/help`)
-        break
-      case 'logout':
-        logout()
-        break
-    }
+ const handleMenuAction = (key: string) => {
+  switch (key) {
+   case 'profile':
+    router.push(`/${lang}/profile`)
+    break
+   case 'my-tasks':
+    router.push(`/${lang}/my-tasks`)
+    break
+   case 'settings':
+    router.push(`/${lang}/settings`)
+    break
+   case 'help':
+    router.push(`/${lang}/help`)
+    break
+   case 'logout':
+    logout()
+    break
   }
+ }
 
-  // For non-authenticated users, show a clickable avatar that triggers login
-  if (!user) {
-    return (
-      <div className={className}>
-        <UserAvatar
-          user={null}
-          size={size}
-          isClickable
-          onClick={onLoginClick}
-          className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
-        />
-      </div>
-    )
-  }
-
+ // For non-authenticated users, show a clickable avatar that triggers login
+ if (!user) {
   return (
-    <Dropdown
-      placement="bottom-end"
-      className="min-w-[200px]"
-      classNames={{
-        content: "py-1 px-1 border border-gray-200"
-      }}
-    >
-      <DropdownTrigger>
-        <div className={className}>
-          <UserAvatar
-            user={user}
-            size={size}
-            isClickable
-            className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
-          />
-        </div>
-      </DropdownTrigger>
-
-      <DropdownMenu
-        aria-label="User menu"
-        onAction={(key) => handleMenuAction(key as string)}
-        variant="flat"
-        classNames={{
-          list: "gap-1"
-        }}
-      >
-        {/* User Info Section */}
-        <DropdownSection showDivider>
-          <DropdownItem
-            key="user-info"
-            className="h-14 gap-2 opacity-100"
-            textValue="User info"
-            isReadOnly
-          >
-            <div className="flex gap-3 items-center">
-              <UserAvatar user={user} size="sm" />
-              <div className="flex flex-col">
-                <p className="text-small font-semibold text-gray-900">
-                  {user.firstName && user.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : user.email}
-                </p>
-                <p className="text-tiny text-gray-500">{user.email}</p>
-              </div>
-            </div>
-          </DropdownItem>
-        </DropdownSection>
-
-        {/* Navigation Items */}
-        <DropdownSection showDivider>
-          <DropdownItem
-            key="profile"
-            startContent={<User className="text-gray-500" size={18} />}
-            className="text-gray-900"
-          >
-            {t('nav.profile')}
-          </DropdownItem>
-          <DropdownItem
-            key="my-tasks"
-            startContent={<FileText className="text-gray-500" size={18} />}
-            className="text-gray-900"
-          >
-            {t('nav.myTasks')}
-          </DropdownItem>
-          <DropdownItem
-            key="settings"
-            startContent={<Settings className="text-gray-500" size={18} />}
-            className="text-gray-900"
-          >
-            {t('settings')}
-          </DropdownItem>
-          <DropdownItem
-            key="help"
-            startContent={<HelpCircle className="text-gray-500" size={18} />}
-            className="text-gray-900"
-          >
-            {t('nav.help')}
-          </DropdownItem>
-        </DropdownSection>
-
-        {/* Logout */}
-        <DropdownSection>
-          <DropdownItem
-            key="logout"
-            startContent={<LogOut className="text-red-500" size={18} />}
-            className="text-red-600 data-[hover=true]:text-red-700"
-            color="danger"
-          >
-            {t('logout')}
-          </DropdownItem>
-        </DropdownSection>
-      </DropdownMenu>
-    </Dropdown>
+   <div className={className}>
+    <UserAvatar
+     user={null}
+     size={size}
+     isClickable
+     onClick={onLoginClick}
+     className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
+    />
+   </div>
   )
+ }
+
+ return (
+  <Dropdown
+   placement="bottom-end"
+   className="min-w-[200px]"
+   classNames={{
+    content: "py-1 px-1 border border-gray-200"
+   }}
+  >
+   <DropdownTrigger>
+    <div className={className}>
+     <UserAvatar
+      user={user}
+      size={size}
+      isClickable
+      className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
+     />
+    </div>
+   </DropdownTrigger>
+
+   <DropdownMenu
+    aria-label="User menu"
+    onAction={(key) => handleMenuAction(key as string)}
+    variant="flat"
+    classNames={{
+     list: "gap-1"
+    }}
+   >
+    {/* User Info Section */}
+    <DropdownSection showDivider>
+     <DropdownItem
+      key="user-info"
+      className="h-14 gap-2 opacity-100"
+      textValue="User info"
+      isReadOnly
+     >
+      <div className="flex gap-3 items-center">
+       <UserAvatar user={user} size="sm" />
+       <div className="flex flex-col">
+        <p className="text-small font-semibold text-gray-900">
+         {user.firstName && user.lastName
+          ? `${user.firstName} ${user.lastName}`
+          : user.email}
+        </p>
+        <p className="text-tiny text-gray-500">{user.email}</p>
+       </div>
+      </div>
+     </DropdownItem>
+    </DropdownSection>
+
+    {/* Navigation Items */}
+    <DropdownSection showDivider>
+     <DropdownItem
+      key="profile"
+      startContent={<User className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.profile')}
+     </DropdownItem>
+     <DropdownItem
+      key="my-tasks"
+      startContent={<FileText className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.myTasks')}
+     </DropdownItem>
+     <DropdownItem
+      key="settings"
+      startContent={<Settings className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('settings')}
+     </DropdownItem>
+     <DropdownItem
+      key="help"
+      startContent={<HelpCircle className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.help')}
+     </DropdownItem>
+    </DropdownSection>
+
+    {/* Logout */}
+    <DropdownSection>
+     <DropdownItem
+      key="logout"
+      startContent={<LogOut className="text-red-500" size={18} />}
+      className="text-red-600 data-[hover=true]:text-red-700"
+      color="danger"
+     >
+      {t('logout')}
+     </DropdownItem>
+    </DropdownSection>
+   </DropdownMenu>
+  </Dropdown>
+ )
 }

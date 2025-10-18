@@ -8,29 +8,29 @@ import { Toaster } from '@/components/ui/toaster'
 import { NextUIProvider } from '@nextui-org/react'
 
 function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 5 * 60 * 1000, // 5 minutes
-            retry: false,
-            refetchOnWindowFocus: false,
-          },
-        },
-      })
-  )
+ const [queryClient] = useState(
+  () =>
+   new QueryClient({
+    defaultOptions: {
+     queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: false,
+      refetchOnWindowFocus: false,
+     },
+    },
+   })
+ )
 
-  return (
-    <NextUIProvider>
-      <QueryClientProvider client={queryClient}>
-        <I18nextProvider i18n={i18n}>
-          {children}
-          <Toaster />
-        </I18nextProvider>
-      </QueryClientProvider>
-    </NextUIProvider>
-  )
+ return (
+  <NextUIProvider>
+   <QueryClientProvider client={queryClient}>
+    <I18nextProvider i18n={i18n}>
+     {children}
+     <Toaster />
+    </I18nextProvider>
+   </QueryClientProvider>
+  </NextUIProvider>
+ )
 }
 
 Providers.displayName = 'Providers';

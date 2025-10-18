@@ -6,15 +6,15 @@ import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { validateLocale } from '@/lib/utils/locale-detection'
 
 interface LocaleLayoutProps {
-  children: ReactNode
-  params: Promise<{ lang: string }>
+ children: ReactNode
+ params: Promise<{ lang: string }>
 }
 
 /**
  * Generate static params for all supported locales
  */
 export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((locale) => ({ lang: locale }))
+ return SUPPORTED_LOCALES.map((locale) => ({ lang: locale }))
 }
 
 /**
@@ -23,28 +23,28 @@ export async function generateStaticParams() {
  * @param params - Route parameters including locale
  */
 async function LocaleLayout({ 
-  children, 
-  params 
+ children, 
+ params 
 }: LocaleLayoutProps) {
-  const { lang } = await params
-  
-  // Validate that the locale is supported using our utility
-  const validatedLocale = validateLocale(lang)
-  if (!validatedLocale) {
-    notFound()
-  }
+ const { lang } = await params
+ 
+ // Validate that the locale is supported using our utility
+ const validatedLocale = validateLocale(lang)
+ if (!validatedLocale) {
+  notFound()
+ }
 
-  return (
-    <LocaleProviders locale={validatedLocale}>
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-      </div>
-    </LocaleProviders>
-  )
+ return (
+  <LocaleProviders locale={validatedLocale}>
+   <div className="min-h-screen flex flex-col">
+    <Header />
+    <main className="flex-1">
+     {children}
+    </main>
+    <Footer />
+   </div>
+  </LocaleProviders>
+ )
 }
 
 LocaleLayout.displayName = 'LocaleLayout';

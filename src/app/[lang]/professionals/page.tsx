@@ -3,7 +3,7 @@
 import { ProfessionalsPage } from '@/features/professionals'
 
 function ProfessionalsPageRoute() {
-  return <ProfessionalsPage />
+ return <ProfessionalsPage />
 }
 
 ProfessionalsPageRoute.displayName = 'ProfessionalsPage';
