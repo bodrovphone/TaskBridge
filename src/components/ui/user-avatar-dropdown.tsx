@@ -17,7 +17,9 @@ import {
  Briefcase,
  Settings,
  HelpCircle,
- LogOut
+ LogOut,
+ Search,
+ Send
 } from 'lucide-react'
 
 interface UserAvatarDropdownProps {
@@ -42,11 +44,17 @@ export default function UserAvatarDropdown({
    case 'profile':
     router.push(`/${lang}/profile`)
     break
-   case 'my-tasks':
-    router.push(`/${lang}/my-tasks`)
+   case 'tasks-posted':
+    router.push(`/${lang}/tasks/posted`)
     break
-   case 'my-applications':
-    router.push(`/${lang}/my-applications`)
+   case 'browse-tasks':
+    router.push(`/${lang}/browse-tasks`)
+    break
+   case 'tasks-applications':
+    router.push(`/${lang}/tasks/applications`)
+    break
+   case 'tasks-work':
+    router.push(`/${lang}/tasks/work`)
     break
    case 'settings':
     router.push(`/${lang}/settings`)
@@ -124,7 +132,7 @@ export default function UserAvatarDropdown({
      </DropdownItem>
     </DropdownSection>
 
-    {/* Navigation Items */}
+    {/* Profile */}
     <DropdownSection showDivider>
      <DropdownItem
       key="profile"
@@ -133,20 +141,46 @@ export default function UserAvatarDropdown({
      >
       {t('nav.profile')}
      </DropdownItem>
+    </DropdownSection>
+
+    {/* For Customers */}
+    <DropdownSection title={t('nav.forCustomers')} showDivider>
      <DropdownItem
-      key="my-tasks"
+      key="tasks-posted"
       startContent={<FileText className="text-gray-500" size={18} />}
       className="text-gray-900"
      >
-      {t('nav.myTasks')}
+      {t('nav.myPostedTasks')}
+     </DropdownItem>
+    </DropdownSection>
+
+    {/* For Professionals */}
+    <DropdownSection title={t('nav.forProfessionals')} showDivider>
+     <DropdownItem
+      key="browse-tasks"
+      startContent={<Search className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.browseTasks')}
      </DropdownItem>
      <DropdownItem
-      key="my-applications"
-      startContent={<Briefcase className="text-gray-500" size={18} />}
+      key="tasks-applications"
+      startContent={<Send className="text-gray-500" size={18} />}
       className="text-gray-900"
      >
       {t('nav.myApplications')}
      </DropdownItem>
+     <DropdownItem
+      key="tasks-work"
+      startContent={<Briefcase className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.myWork')}
+     </DropdownItem>
+    </DropdownSection>
+
+    {/* General */}
+    <DropdownSection showDivider>
      <DropdownItem
       key="settings"
       startContent={<Settings className="text-gray-500" size={18} />}

@@ -47,13 +47,18 @@ TaskBridge follows a modern `/src/` structure for better organization and scalab
 ```
 /src/
 ├── app/                    # Next.js App Router with multilingual routing
-│   ├── page.tsx           # Root redirect to locale  
+│   ├── page.tsx           # Root redirect to locale
 │   ├── [lang]/            # Locale-specific pages (en, bg, ru)
 │   │   ├── page.tsx       # Localized homepage
-│   │   ├── browse-tasks/  # Browse available tasks
+│   │   ├── browse-tasks/  # Browse available tasks (professionals)
 │   │   ├── create-task/   # Create new task
 │   │   ├── professionals/ # Professionals directory
-│   │   └── profile/       # User profile
+│   │   ├── profile/       # User profile
+│   │   └── tasks/         # Task management routes
+│   │       ├── [id]/      # Task detail page
+│   │       ├── posted/    # Customer: my posted tasks
+│   │       ├── applications/ # Professional: my applications
+│   │       └── work/      # Professional: my active work
 │   └── api/               # API routes (to be migrated from Express)
 ├── features/              # 🎯 Self-contained business domains
 │   └── professionals/     # Complete professionals feature
@@ -238,6 +243,67 @@ All paths are configured to point to the `/src/` directory:
 - **Use NextUI for**: Cards, Buttons, Navigation, Simple Dropdowns, Images, Avatars, Chips
 - **Keep Radix UI for**: Forms, Complex Dialogs, Data Tables, Advanced Interactions
 - Both libraries work together seamlessly in the same project
+
+### Navigation Architecture
+
+**Design Philosophy**: Clear separation of customer and professional contexts to eliminate confusion in dual-role users.
+
+#### Route Structure
+
+**Customer Routes:**
+- `/tasks/posted` - View and manage tasks the user created
+  - Filter by status: All, Open, In Progress, Completed, Cancelled
+  - View applications received on each task
+  - Click through to task details and application management
+
+**Professional Routes:**
+- `/browse-tasks` - Discover and browse available tasks (existing)
+- `/tasks/applications` - View all applications submitted to tasks
+  - Filter by status: All, Pending, Accepted, Rejected, Withdrawn
+  - Track application status and responses
+  - Quick actions to view task or withdraw application
+- `/tasks/work` - Manage active work and professional dashboard
+  - **In Progress** (default) - Active accepted applications
+  - **Pending Confirmations** - Tasks awaiting confirmation
+  - **Completed** - Historical work record
+
+#### Navigation Menu Organization
+
+**Header User Avatar Dropdown** - Contextual sections:
+```
+Profile (standalone)
+
+For Customers:
+- My Posted Tasks → /tasks/posted
+
+For Professionals:
+- Browse Tasks → /browse-tasks
+- My Applications → /tasks/applications
+- My Work → /tasks/work
+
+General:
+- Settings
+- Help
+```
+
+**Profile Page Quick Actions:**
+- "My Posted Tasks" button → `/tasks/posted`
+- "My Work" button → `/tasks/work`
+
+**Benefits:**
+- ✅ No confusion between customer and professional roles
+- ✅ Clear URL semantics (`/tasks/posted` vs `/tasks/applications` vs `/tasks/work`)
+- ✅ Each route has single, focused purpose
+- ✅ Scalable for future features
+- ✅ Mobile-responsive with section headers
+- ✅ Full i18n support (EN/BG/RU)
+
+**Implementation Details:**
+- All pages use NextUI Tabs for filters with badge counts
+- Mock data included for development
+- Empty states customized for each page/filter
+- Translation keys namespaced: `postedTasks.*`, `myApplications.*`, `myWork.*`
+- Comprehensive task documentation: `/todo_tasks/09-navigation-architecture-refactor.md`
 
 ### Task Detail Page (`/app/[lang]/tasks/[id]/`)
 The task detail page features a comprehensive view of individual tasks with advanced functionality:

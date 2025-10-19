@@ -155,20 +155,20 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
     <Button
      size="sm"
      variant="bordered"
-     onPress={() => router.push(`/${lang}/my-tasks`)}
+     onPress={() => router.push(`/${lang}/tasks/posted`)}
      startContent={<FileText className="w-4 h-4" />}
      className="flex-1 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 font-medium"
     >
-     {t('nav.myTasks')}
+     {t('nav.myPostedTasks')}
     </Button>
     <Button
      size="sm"
      variant="bordered"
-     onPress={() => router.push(`/${lang}/my-applications`)}
+     onPress={() => router.push(`/${lang}/tasks/work`)}
      startContent={<ClipboardList className="w-4 h-4" />}
      className="flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
     >
-     {t('nav.myApplications')}
+     {t('nav.myWork')}
     </Button>
    </div>
 

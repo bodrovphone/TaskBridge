@@ -159,18 +159,50 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 #### Task Completion Workflow
 
-**Dual Confirmation System:**
+**MVP Simplified Approach - No Support Team:**
 - Both customer and professional must confirm completion
 - Either party can mark task as completed first
-- Other party must confirm for final completion
-- If disagreement → Dispute resolution system
+- Other party can either:
+  - ✅ **Confirm** → Task status: "completed"
+  - ❌ **Reject** → Task returns to "in_progress" (can retry)
+- **No dispute system** - customers simply reject and communicate
 
 **Completion Steps:**
 1. Professional or customer marks as "Completed"
-2. Other party receives notification to confirm
-3. Both confirm → Task status: "completed"
-4. Review period opens (7 days)
-5. Task archived after 30 days
+2. Other party receives notification to confirm or reject
+3. If confirmed → Task status: "completed"
+4. If rejected → Task returns to "in_progress", both parties can message
+5. Review period opens (7 days after completion)
+6. Task archived after 30 days
+
+**Customer Confirmation Flow:**
+- When customer confirms completion, they see:
+  - ✅ Confirm or ❌ Reject radio selection
+  - If confirming:
+    - **Actual Price Paid** (optional field) - tracks actual payment vs original budget
+    - **Rating** (1-5 stars) - optional immediate rating
+    - **Review Text** (optional) - brief review text input
+  - If rejecting:
+    - **Rejection Reason** (required) - predefined reasons + "Other"
+    - **Description** (required) - specific details about the issue
+    - **Info disclaimer:** "This task will return to 'In Progress' status and may become visible to other professionals again if work cannot be completed with current professional"
+
+**Professional Completion Flow:**
+- Professional marks task as complete with:
+  - Required checklist confirmation (requirements completed, customer satisfied)
+  - Optional completion notes
+  - No photo upload needed (removed for MVP simplicity)
+
+**Rejection Flow (MVP):**
+- Customer can reject completion with reason:
+  - Work not completed
+  - Poor quality
+  - Different from agreed scope
+  - Other issues
+- Task status returns to "in_progress"
+- Professional can rework and mark complete again
+- If professional cannot resolve issues, either party can cancel task
+- Cancelled tasks may become "open" again for other professionals
 
 #### Cancellation/Decline After Acceptance
 
@@ -207,28 +239,63 @@ A comprehensive regional task platform connecting people in the Balkans with ver
   - Overall experience (1-5 stars)
   - Written review (optional)
 
-#### Review Management
+#### Review Management & Visibility (MVP)
 
+**Smart Negative Review Hiding:**
+- Reviews with ≤3 stars are **hidden by default**
+- Negative reviews become visible when pattern detected:
+  - Professional has 2+ reviews with ≤3 stars
+  - OR another customer also left ≤3 star review
+- Prevents single unfair review from destroying reputation
+- Patterns of poor service become visible to all users
+- High ratings (>3 stars) always visible immediately
+
+**Standard Review Rules:**
 - Reviews published after task completion
-- Both parties must submit reviews to see each other’s
+- Both parties must submit reviews to see each other's
 - 30-day review window
 - Review authenticity verification
 
-### 3.5 Anti-Fraud Measures (MVP)
+### 3.5 Safety & Trust System (MVP - No Support Team)
+
+**Design Philosophy:** Automated safety mechanisms without requiring manual admin/support intervention.
 
 #### Professional Verification
 
 - Optional VAT number verification for verified badge
-- Phone number verification
+- Phone number verification (mandatory)
 - Basic profile completeness check
-- User reporting system for problematic behavior
+- Trust indicators displayed on profile
+
+#### Scam/Abuse Reporting System
+
+**Automated Two-Report Suspension:**
+- "Report Scam/Abuse" button on tasks and profiles
+- Report types:
+  - Fraud/scam attempts
+  - Threatening behavior
+  - Off-platform payment requests
+  - Identity theft
+  - Harassment
+- **1st report:** Logged, no immediate action
+- **2nd report** (from different user): Automatic account suspension
+- False reports tracked and may result in reporter suspension
+- Professional can appeal via email (manual review post-MVP)
+
+#### Safety Indicators
+
+- ✅ Phone Verified
+- ✅ Email Verified
+- ✅ Clean Safety Record (no reports)
+- ⚠️ Multiple Negative Reviews (pattern detected)
+- Professional profiles show warning banner if multiple reports/negative reviews
 
 #### Task Authenticity
 
 - Photo requirement for task posts
 - Location verification
 - Suspicious activity detection (multiple similar posts, etc.)
-- User reporting system
+- Community-driven safety through reporting system
 
 ## 4. Technical Requirements
 
@@ -290,7 +357,56 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 1. Register → Browse Tasks → Apply → Get Selected → Receive Customer Contact → Complete Work → Receive Rating
 
-### 5.3 Performance Requirements
+### 5.3 Navigation Architecture
+
+**Design Philosophy:** Clear separation of customer and professional contexts to eliminate confusion in dual-role users.
+
+#### Route Structure
+
+**Customer Routes:**
+- `/tasks/posted` - View and manage tasks the user created
+  - Filter by status: All, Open, In Progress, Completed, Cancelled
+  - View applications received on each task
+  - Click through to task details and application management
+
+**Professional Routes:**
+- `/browse-tasks` - Discover and browse available tasks
+- `/tasks/applications` - View all applications submitted to tasks
+  - Filter by status: All, Pending, Accepted, Rejected, Withdrawn
+  - Track application status and responses
+  - Quick actions to view task or withdraw application
+- `/tasks/work` - Manage active work and professional dashboard
+  - **In Progress** (default) - Active accepted applications
+  - **Pending Confirmations** - Tasks awaiting confirmation
+  - **Completed** - Historical work record
+
+#### Navigation Menu Organization
+
+**Header User Avatar Dropdown:**
+```
+Profile
+
+For Customers:
+- My Posted Tasks → /tasks/posted
+
+For Professionals:
+- Browse Tasks → /browse-tasks
+- My Applications → /tasks/applications
+- My Work → /tasks/work
+
+General:
+- Settings
+- Help
+```
+
+**Benefits:**
+- ✅ No confusion between customer and professional roles
+- ✅ Clear URL semantics (`/tasks/posted` vs `/tasks/applications`)
+- ✅ Each route has single, focused purpose
+- ✅ Scalable for future features
+- ✅ Mobile-responsive with section headers
+
+### 5.4 Performance Requirements
 
 - Page load time < 3 seconds
 - Mobile responsiveness across devices
@@ -347,7 +463,13 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 - Task categories expansion
 - Multiple language support
 - **Task activity log/timeline**
-- **User dashboard (My Applications, My Tasks)**
+- **Navigation Architecture:** ✅ COMPLETED
+  - Clear role separation (Customer vs Professional views)
+  - `/tasks/posted` - Customer view for managing posted tasks
+  - `/tasks/applications` - Professional view for submitted applications
+  - `/tasks/work` - Professional view for active work (In Progress, Pending Confirmations)
+  - Context-aware navigation menu with sections ("For Customers", "For Professionals")
+  - Full internationalization (EN/BG/RU)
 
 ### Could Have (v2.0)
 
@@ -455,9 +577,26 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 -----
 
-**Document Version:** 2.2
-**Last Updated:** October 18, 2024
+**Document Version:** 2.4
+**Last Updated:** October 19, 2024
 **Next Review:** November 2024
+
+**Major Changes in v2.4:**
+- ✅ **Navigation Architecture Implementation** - Complete dual-role UX separation
+  - Implemented `/tasks/posted` for customer task management
+  - Implemented `/tasks/applications` for professional application tracking
+  - Implemented `/tasks/work` for professional active work dashboard
+  - Context-aware navigation menu with role-based sections
+  - Full internationalization across EN/BG/RU
+  - Comprehensive task document in `/todo_tasks/09-navigation-architecture-refactor.md`
+
+**Major Changes in v2.3:**
+- 🔄 **Simplified MVP Safety & Dispute System** - No support team required
+  - Task rejection flow instead of complex dispute resolution
+  - Automated two-report suspension system for scam/abuse
+  - Smart negative review hiding (pattern detection)
+  - Community-driven safety without manual intervention
+  - Comprehensive documentation in `/todo_tasks/07-mvp-task-rejection-and-safety.md`
 
 **Major Changes in v2.2:**
 - ✅ **Applications Management UI completed** - Full implementation details added
