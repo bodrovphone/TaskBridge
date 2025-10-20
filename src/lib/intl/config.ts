@@ -1,10 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import enMessages from './en';
 import bgMessages from './bg';
 import ruMessages from './ru';
-import enMessages from './en';
 
-// Translation resources
+// Translation resources (now using modular barrel exports)
 const resources = {
   en: {
     translation: enMessages,

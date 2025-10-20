@@ -1,0 +1,36 @@
+// Navigation, header, and footer translations
+export const navigation = {
+  'nav.home': 'Начало',
+  'nav.browseTasks': 'Задачи',
+  'nav.createTask': 'Създай',
+  'nav.profile': 'Профил',
+  'nav.howItWorks': 'Как работи',
+  'nav.categories': 'Категории',
+  'nav.forProfessionals': 'Професионалисти',
+  'nav.forCustomers': 'За клиенти',
+  'nav.myTasks': 'Моите задачи',
+  'nav.myPostedTasks': 'Моите публикувани задачи',
+  'nav.myApplications': 'Моите кандидатури',
+  'nav.myWork': 'Моята работа',
+  'nav.help': 'Помощ',
+
+  // Footer
+  'footer.company.description':
+    'Свързваме хора с квалифицирани специалисти за всякакви услуги в България.',
+  'footer.quickLinks.title': 'Бързи връзки',
+  'footer.quickLinks.howItWorks': 'Как работи',
+  'footer.quickLinks.categories': 'Категории',
+  'footer.quickLinks.forProfessionals': 'За професионалисти',
+  'footer.quickLinks.security': 'Сигурност',
+  'footer.quickLinks.help': 'Помощ',
+  'footer.legal.title': 'Правни',
+  'footer.legal.terms': 'Условия за ползване',
+  'footer.legal.privacy': 'Политика за поверителност',
+  'footer.legal.gdpr': 'GDPR',
+  'footer.legal.cookies': 'Бисквитки',
+  'footer.legal.complaints': 'Жалби',
+  'footer.contact.title': 'Контакти',
+  'footer.contact.subtitle': 'Свържете се с нас за въпроси и поддръжка',
+  'footer.language.label': 'Език',
+  'footer.copyright': '© 2025 Obod Soft LTD. Всички права запазени.',
+};

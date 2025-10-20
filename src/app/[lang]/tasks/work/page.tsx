@@ -9,7 +9,6 @@ import {
   mockMyApplications,
   MyApplication
 } from '@/features/applications'
-import { Container } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 
 export default function MyApplicationsPage() {
