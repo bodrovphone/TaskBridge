@@ -47,13 +47,18 @@ TaskBridge follows a modern `/src/` structure for better organization and scalab
 ```
 /src/
 ├── app/                    # Next.js App Router with multilingual routing
-│   ├── page.tsx           # Root redirect to locale  
+│   ├── page.tsx           # Root redirect to locale
 │   ├── [lang]/            # Locale-specific pages (en, bg, ru)
 │   │   ├── page.tsx       # Localized homepage
-│   │   ├── browse-tasks/  # Browse available tasks
+│   │   ├── browse-tasks/  # Browse available tasks (professionals)
 │   │   ├── create-task/   # Create new task
 │   │   ├── professionals/ # Professionals directory
-│   │   └── profile/       # User profile
+│   │   ├── profile/       # User profile
+│   │   └── tasks/         # Task management routes
+│   │       ├── [id]/      # Task detail page
+│   │       ├── posted/    # Customer: my posted tasks
+│   │       ├── applications/ # Professional: my applications
+│   │       └── work/      # Professional: my active work
 │   └── api/               # API routes (to be migrated from Express)
 ├── features/              # 🎯 Self-contained business domains
 │   └── professionals/     # Complete professionals feature
@@ -239,6 +244,67 @@ All paths are configured to point to the `/src/` directory:
 - **Keep Radix UI for**: Forms, Complex Dialogs, Data Tables, Advanced Interactions
 - Both libraries work together seamlessly in the same project
 
+### Navigation Architecture
+
+**Design Philosophy**: Clear separation of customer and professional contexts to eliminate confusion in dual-role users.
+
+#### Route Structure
+
+**Customer Routes:**
+- `/tasks/posted` - View and manage tasks the user created
+  - Filter by status: All, Open, In Progress, Completed, Cancelled
+  - View applications received on each task
+  - Click through to task details and application management
+
+**Professional Routes:**
+- `/browse-tasks` - Discover and browse available tasks (existing)
+- `/tasks/applications` - View all applications submitted to tasks
+  - Filter by status: All, Pending, Accepted, Rejected, Withdrawn
+  - Track application status and responses
+  - Quick actions to view task or withdraw application
+- `/tasks/work` - Manage active work and professional dashboard
+  - **In Progress** (default) - Active accepted applications
+  - **Pending Confirmations** - Tasks awaiting confirmation
+  - **Completed** - Historical work record
+
+#### Navigation Menu Organization
+
+**Header User Avatar Dropdown** - Contextual sections:
+```
+Profile (standalone)
+
+For Customers:
+- My Posted Tasks → /tasks/posted
+
+For Professionals:
+- Browse Tasks → /browse-tasks
+- My Applications → /tasks/applications
+- My Work → /tasks/work
+
+General:
+- Settings
+- Help
+```
+
+**Profile Page Quick Actions:**
+- "My Posted Tasks" button → `/tasks/posted`
+- "My Work" button → `/tasks/work`
+
+**Benefits:**
+- ✅ No confusion between customer and professional roles
+- ✅ Clear URL semantics (`/tasks/posted` vs `/tasks/applications` vs `/tasks/work`)
+- ✅ Each route has single, focused purpose
+- ✅ Scalable for future features
+- ✅ Mobile-responsive with section headers
+- ✅ Full i18n support (EN/BG/RU)
+
+**Implementation Details:**
+- All pages use NextUI Tabs for filters with badge counts
+- Mock data included for development
+- Empty states customized for each page/filter
+- Translation keys namespaced: `postedTasks.*`, `myApplications.*`, `myWork.*`
+- Comprehensive task documentation: `/todo_tasks/09-navigation-architecture-refactor.md`
+
 ### Task Detail Page (`/app/[lang]/tasks/[id]/`)
 The task detail page features a comprehensive view of individual tasks with advanced functionality:
 
@@ -278,32 +344,70 @@ The task detail page features a comprehensive view of individual tasks with adva
 - **Error boundaries** and graceful fallbacks for i18n initialization
 - **Modular translation resources** - Separated language files for better maintainability
 
-#### Translation Resources Structure
+#### Translation Resources Structure (Modular Chunks)
 ```
 /src/lib/intl/
 ├── config.ts          # i18n configuration and initialization
-├── en.ts              # English translations (588 keys)
-├── bg.ts              # Bulgarian translations (614 keys)
-└── ru.ts              # Russian translations (597 keys)
+├── types.ts           # TypeScript type definitions for translations
+├── validate-translations.ts  # Validation script (npm run validate:translations)
+├── en/                # English translations (1,203 keys total)
+│   ├── index.ts       # Barrel export combining all chunks
+│   ├── common.ts      # ~52 keys - Common UI terms, messages, locations
+│   ├── navigation.ts  # ~31 keys - Nav menu, header, footer
+│   ├── landing.ts     # ~124 keys - Landing page content
+│   ├── tasks.ts       # ~190 keys - Browse, create, task cards
+│   ├── professionals.ts  # ~129 keys - Professional listings & profiles
+│   ├── applications.ts   # ~163 keys - Application management
+│   ├── profile.ts     # ~166 keys - User profiles & settings
+│   ├── categories.ts  # ~245 keys - 26 main + 135 subcategories
+│   ├── auth.ts        # ~30 keys - Authentication
+│   ├── task-completion.ts  # ~72 keys - Task status & completion
+│   └── notifications.ts    # ~68 keys - Notifications & posted tasks
+├── bg/                # Bulgarian translations (same structure)
+└── ru/                # Russian translations (same structure)
 ```
 
+**Benefits of Chunked Structure:**
+- ✅ **Reduced Token Usage** - Edit only relevant chunks instead of 1,400+ line files
+- ✅ **Better Maintainability** - Easy to find and edit specific translations
+- ✅ **Fewer Merge Conflicts** - Teams can work on different features simultaneously
+- ✅ **Clear Organization** - Translations organized by feature/domain
+- ✅ **Type Safety** - TypeScript ensures all languages have identical keys
+- ✅ **Validation** - Automated script checks key consistency across languages
+
 #### Implementation Details
-- **Translation Config** (`/src/lib/intl/config.ts`) - Centralized i18next setup with modular imports
-- **Language Files** (`/src/lib/intl/[lang].ts`) - Complete translation objects with namespaced keys
+- **Translation Config** (`/src/lib/intl/config.ts`) - Centralized i18next setup with modular barrel exports
+- **Barrel Exports** (`/src/lib/intl/[lang]/index.ts`) - Combines all chunks into single object
 - **LocaleLink Component** (`/components/locale-link.tsx`) - Automatically prefixes internal links with current locale
 - **Constants** (`/lib/constants/locales.ts`) - Centralized locale configuration, no hardcoded strings
 - **Middleware** (`/middleware.ts`) - Smart detection: Cookie → Browser → English default, optimized for minimal cost
 - **Language Priority**: User manual selection (highest) → Browser detection → English fallback
 - **Performance**: 90% of requests skip middleware via early returns for existing locale URLs
 
+#### Working with Translations
+```bash
+# Validate all translations have same keys
+npx tsx src/lib/intl/validate-translations.ts
+
+# Add a new translation key
+# 1. Find the appropriate chunk (e.g., tasks.ts for task-related keys)
+# 2. Add the key to all 3 languages (en, bg, ru) in the same chunk
+# 3. Run validation to ensure consistency
+```
+
 #### Translation Key Structure
-Translation keys follow a hierarchical namespace pattern:
-- **Navigation**: `nav.*` (home, browseTasks, createTask, etc.)
-- **Landing Page**: `landing.*` (hero, categories, testimonials, etc.)
-- **Pages**: `professionals.*`, `tasks.*`, `browseTasks.*`, `createTask.*`
-- **Components**: `taskCard.*`, `professionalDetail.*`, `auth.*`
-- **Categories**: `categories.*` (comprehensive service categories)
-- **Common**: Global terms (welcome, login, search, etc.)
+Translation keys follow a hierarchical namespace pattern organized by chunks:
+- **common.ts**: Global terms (welcome, login, save, language.*, locations.*, message.*, error.*)
+- **navigation.ts**: Navigation & footer (nav.*, footer.*)
+- **landing.ts**: Landing page (landing.*)
+- **tasks.ts**: Task management (tasks.*, browseTasks.*, task.*, createTask.*, taskCard.*)
+- **professionals.ts**: Professionals (professionals.*, professionalDetail.*)
+- **applications.ts**: Applications (applications.*, myApplications.*, application.*, acceptApplication.*, rejectApplication.*)
+- **profile.ts**: User profiles (profile.*)
+- **categories.ts**: Service categories (categories.*, categoryGroups.*)
+- **auth.ts**: Authentication (auth.*)
+- **task-completion.ts**: Task status & completion (taskCompletion.*, taskStatus.*)
+- **notifications.ts**: Notifications & detail pages (notifications.*, taskDetail.*, postedTasks.*)
 
 ### Authentication
 - **Currently disabled** - no authentication required to access pages

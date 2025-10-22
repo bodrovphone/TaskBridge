@@ -57,14 +57,13 @@ function LanguageSwitcher() {
  return (
   <Dropdown>
    <DropdownTrigger>
-    <Button 
-     variant="light" 
+    <Button
+     variant="light"
      size="sm"
-     startContent={<Globe size={16} />}
-     className="h-8 px-2 gap-1"
+     className="h-8 px-2 min-w-[32px] flex-shrink-0"
+     isIconOnly
     >
-     <span>{currentLanguage.flag}</span>
-     <span className="text-sm">{currentLanguage.name}</span>
+     <span className="text-xl">{currentLanguage.flag}</span>
     </Button>
    </DropdownTrigger>
    <DropdownMenu 

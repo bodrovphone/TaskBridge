@@ -35,12 +35,12 @@ export default function FeaturedTasksSection() {
       <h2 className="text-4xl lg:text-6xl font-bold text-slate-900 tracking-tight">{t('landing.featured.title')}</h2>
       <p className="text-xl lg:text-2xl text-slate-600 font-light">{t('landing.featured.subtitle')}</p>
      </div>
-     <Button 
+     <Button
       className="group bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-4 rounded-xl font-semibold"
       asChild
      >
       <LocaleLink href="/browse-tasks" className="flex items-center">
-       Виж всички задачи
+       {t('landing.featured.viewAll')}
        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
       </LocaleLink>
      </Button>
@@ -72,11 +72,11 @@ export default function FeaturedTasksSection() {
       <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-8">
        <FileText className="h-12 w-12 text-slate-400" />
       </div>
-      <p className="text-slate-500 text-xl mb-6 font-light">Няма налични задачи в момента.</p>
+      <p className="text-slate-500 text-xl mb-6 font-light">{t('landing.featured.noTasks')}</p>
       <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-4 rounded-xl font-semibold" asChild>
        <LocaleLink href="/create-task" className="flex items-center">
         <Plus className="mr-2 h-5 w-5" />
-        Публикувай първата задача
+        {t('landing.featured.postFirstTask')}
        </LocaleLink>
       </Button>
      </div>

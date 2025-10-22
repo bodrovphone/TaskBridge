@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/navigation'
 import { Tabs, Tab, Card, CardBody, Button, Avatar, Chip } from '@nextui-org/react'
-import { User, Briefcase, Settings, Bell, Shield, CreditCard, BarChart3 } from 'lucide-react'
+import { User, Briefcase, Settings, Bell, Shield, CreditCard, BarChart3, FileText, ClipboardList } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { CustomerProfile } from './customer-profile'
 import { ProfessionalProfile } from './professional-profile'
@@ -18,6 +19,7 @@ interface ProfilePageContentProps {
 export function ProfilePageContent({ lang }: ProfilePageContentProps) {
  const { t } = useTranslation()
  const { user } = useAuth()
+ const router = useRouter()
  const [selectedTab, setSelectedTab] = useState('customer')
  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
  const [isStatisticsOpen, setIsStatisticsOpen] = useState(false)
@@ -146,6 +148,28 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
       </div>
      </CardBody>
     </Card>
+   </div>
+
+   {/* Quick Action Buttons */}
+   <div className="mb-4 flex gap-2">
+    <Button
+     size="sm"
+     variant="bordered"
+     onPress={() => router.push(`/${lang}/tasks/posted`)}
+     startContent={<FileText className="w-4 h-4" />}
+     className="flex-1 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 font-medium"
+    >
+     {t('nav.myPostedTasks')}
+    </Button>
+    <Button
+     size="sm"
+     variant="bordered"
+     onPress={() => router.push(`/${lang}/tasks/work`)}
+     startContent={<ClipboardList className="w-4 h-4" />}
+     className="flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
+    >
+     {t('nav.myWork')}
+    </Button>
    </div>
 
    {/* Profile Tabs */}

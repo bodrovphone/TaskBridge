@@ -68,9 +68,9 @@ export default function ApplicationCard({
                 )}
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span>{professional.specializations[0]}</span>
+                <span>{t(professional.specializations[0])}</span>
                 <span>•</span>
-                <span>{professional.completedTasks} {t('applications.completedTasks', 'completed tasks')}</span>
+                <span>{professional.completedTasks} {t('applications.tasksCompleted', 'tasks completed')}</span>
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ export default function ApplicationCard({
         {/* Price & Timeline */}
         <div className="flex items-center gap-6 mb-4 pb-4 border-b">
           <div>
-            <div className="text-sm text-gray-500">{t('applications.price', 'Price')}</div>
+            <div className="text-sm text-gray-500">{t('applications.proposedPrice', 'Price')}</div>
             <div className="font-bold text-lg text-blue-600">
               {proposedPrice} {currency}
             </div>
@@ -114,7 +114,7 @@ export default function ApplicationCard({
         <div className="flex flex-wrap gap-2 mb-4">
           {professional.specializations.map((spec, index) => (
             <Chip key={index} variant="flat" size="sm" color="primary">
-              {spec}
+              {t(spec)}
             </Chip>
           ))}
         </div>
@@ -130,7 +130,7 @@ export default function ApplicationCard({
                 onClick={() => onAccept(application.id)}
                 className="flex-1"
               >
-                {t('applications.accept', 'Accept')}
+                {t('applications.acceptApplication', 'Accept')}
               </Button>
               <Button
                 color="danger"
@@ -139,7 +139,7 @@ export default function ApplicationCard({
                 onClick={() => onReject(application.id)}
                 className="flex-1"
               >
-                {t('applications.reject', 'Reject')}
+                {t('applications.rejectApplication', 'Reject')}
               </Button>
             </>
           ) : null}

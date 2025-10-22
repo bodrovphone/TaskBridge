@@ -1,0 +1,36 @@
+// Navigation, header, and footer translations
+export const navigation = {
+  'nav.home': 'Home',
+  'nav.browseTasks': 'Browse Tasks',
+  'nav.createTask': 'Post a Task',
+  'nav.profile': 'Profile',
+  'nav.howItWorks': 'How It Works',
+  'nav.categories': 'Categories',
+  'nav.forProfessionals': 'Professionals',
+  'nav.forCustomers': 'For Customers',
+  'nav.myTasks': 'My Tasks',
+  'nav.myPostedTasks': 'My Tasks',
+  'nav.myApplications': 'My Applications',
+  'nav.myWork': 'My Work',
+  'nav.help': 'Help',
+
+  // Footer
+  'footer.company.description':
+    'Connecting people with qualified professionals for all kinds of services in Bulgaria.',
+  'footer.quickLinks.title': 'Quick Links',
+  'footer.quickLinks.howItWorks': 'How It Works',
+  'footer.quickLinks.categories': 'Categories',
+  'footer.quickLinks.forProfessionals': 'For Professionals',
+  'footer.quickLinks.security': 'Security',
+  'footer.quickLinks.help': 'Help',
+  'footer.legal.title': 'Legal',
+  'footer.legal.terms': 'Terms of Service',
+  'footer.legal.privacy': 'Privacy Policy',
+  'footer.legal.gdpr': 'GDPR',
+  'footer.legal.cookies': 'Cookies',
+  'footer.legal.complaints': 'Complaints',
+  'footer.contact.title': 'Contact',
+  'footer.contact.subtitle': 'Get in touch for questions and support',
+  'footer.language.label': 'Language',
+  'footer.copyright': '© 2025 Obod Soft LTD. All rights reserved.',
+};

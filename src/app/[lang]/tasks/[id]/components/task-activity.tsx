@@ -5,7 +5,7 @@
 // - Create useTaskActivity hook for state management (~20 lines)
 // Target: Reduce from 150 lines to ~90 lines
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
 import { MessageCircle, User } from "lucide-react";
 import { useTranslation } from 'react-i18next';
@@ -65,9 +65,20 @@ const mockQuestions = [
 export default function TaskActivity({ taskId, initialApplicationId }: TaskActivityProps) {
  const { t } = useTranslation();
  const [selectedTab, setSelectedTab] = useState("applications");
+ const applicationsRef = useRef<HTMLDivElement>(null);
 
  // State for applications - filter by task ID
  const [applications, setApplications] = useState<Application[]>(getApplicationsForTask(taskId));
+
+ // Handle URL hash navigation (e.g., #applications)
+ useEffect(() => {
+  const hash = window.location.hash.replace('#', '');
+  if (hash === 'applications') {
+   setSelectedTab('applications');
+   // Scroll to the applications section using ref
+   applicationsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+ }, []);
 
  // State for modals
  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
@@ -145,7 +156,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
  };
 
  return (
-  <>
+  <div id="applications" ref={applicationsRef}>
    <NextUICard className="bg-white/95 shadow-lg">
     <CardBody className="p-6">
      <h3 className="text-lg font-bold text-gray-900 mb-4">
@@ -194,6 +205,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
     </CardBody>
    </NextUICard>
 
+   {/* Modals */}
    {/* Application Detail Modal */}
    <ApplicationDetail
     application={selectedApplication}
@@ -218,6 +230,6 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
     onClose={() => setIsRejectDialogOpen(false)}
     onConfirm={handleRejectConfirm}
    />
-  </>
+  </div>
  );
 }

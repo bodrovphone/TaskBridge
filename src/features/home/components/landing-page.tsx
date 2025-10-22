@@ -1,10 +1,12 @@
 'use client'
 
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import CategoryCard from "@/components/ui/category-card";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
-import { LogoIcon } from "@/components/common/logo";
+import { Logo } from "@/components/common/logo";
+import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useTranslation } from 'react-i18next';
 import { usePathname } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
@@ -35,6 +37,7 @@ function Landing() {
  const pathname = usePathname();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
  const isDesktop = useIsDesktop();
+ const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
 
  const categories = [
   {
@@ -217,7 +220,7 @@ function Landing() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
      <div className="text-center space-y-6 mb-16">
       <div className="flex justify-center mb-6">
-       <LogoIcon size="xl" className="hover:scale-110 transition-transform duration-300" />
+       <Logo size="xl" variant="gradient" className="hover:scale-110 transition-transform duration-300" />
       </div>
       <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent tracking-tight">{t('landing.trustSection.title', 'Built on Trust')}</h2>
       <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-light">
@@ -274,20 +277,20 @@ function Landing() {
        {/* Enhanced Stats Row */}
        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 max-w-5xl mx-auto">
         <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">2,500+</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.completedTasks', 'Completed Tasks')}</div>
+         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">{t('landing.cta.stats.completedTasksValue')}</div>
+         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.completedTasks')}</div>
         </div>
         <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">850+</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.activeSpecialists', 'Active Specialists')}</div>
+         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">{t('landing.cta.stats.activeSpecialistsValue')}</div>
+         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.activeSpecialists')}</div>
         </div>
         <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">4.8★</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.averageRating', 'Average Rating')}</div>
+         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">{t('landing.cta.stats.averageRatingValue')}</div>
+         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.averageRating')}</div>
         </div>
         <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">50+</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.contractTemplates', 'Contract Templates')}</div>
+         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">{t('landing.cta.stats.contractTemplatesValue')}</div>
+         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.contractTemplates')}</div>
         </div>
        </div>
        
@@ -302,16 +305,14 @@ function Landing() {
           {t('landing.cta.postTask', 'Post Your Task')}
          </LocaleLink>
         </Button>
-        <Button 
+        <Button
          size="lg"
          variant="outline"
          className="group border-2 border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50 transform hover:scale-105 transition-all duration-300 px-10 py-6 text-xl font-bold rounded-2xl"
-         asChild
+         onClick={() => setIsAuthSlideOverOpen(true)}
         >
-         <LocaleLink href="/professionals" className="flex items-center gap-3">
-          <UserCheck className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
-          {t('landing.cta.joinProfessionals', 'Join as Professional')}
-         </LocaleLink>
+         <UserCheck className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+         {t('landing.cta.joinProfessionals', 'Join as Professional')}
         </Button>
        </div>
        
@@ -355,7 +356,7 @@ function Landing() {
      <div className="text-center space-y-6 mb-20">
       <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full text-blue-700 text-sm font-semibold">
        <ArrowRight className="mr-2 h-4 w-4" />
-       Simple Process
+       {t('landing.howItWorks.badge')}
       </div>
       <h2 className="text-4xl lg:text-6xl font-bold text-slate-900 tracking-tight">{t('landing.howItWorks.title')}</h2>
       <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
@@ -577,6 +578,12 @@ function Landing() {
     </div>
    </section>
 
+   {/* Auth Slide-over */}
+   <AuthSlideOver
+    isOpen={isAuthSlideOverOpen}
+    onClose={() => setIsAuthSlideOverOpen(false)}
+    action="join-professional"
+   />
   </div>
  );
 }

@@ -1,0 +1,52 @@
+// Common UI terms and global actions
+export const common = {
+  welcome: 'Добре дошли',
+  login: 'Вход',
+  logout: 'Изход',
+  signup: 'Регистрация',
+  search: 'Търсене',
+  browse: 'Разглеждане',
+  create: 'Създаване',
+  edit: 'Редактиране',
+  delete: 'Изтриване',
+  cancel: 'Отказ',
+  important: 'Важно',
+  save: 'Запазване',
+  submit: 'Изпращане',
+  loading: 'Зареждане...',
+  error: 'Грешка',
+  success: 'Успех',
+  back: 'Назад',
+  next: 'Напред',
+  previous: 'Предишна',
+  reviews: 'отзива',
+  close: 'Затвори',
+
+  'common.optional': 'По избор',
+  'common.days': 'дни',
+  'common.cancel': 'Отказ',
+  'common.anonymous': 'Анонимен потребител',
+
+  'language.en': 'English',
+  'language.bg': 'Български',
+  'language.ru': 'Русский',
+
+  // Locations
+  'locations.sofiaCenter': 'София, Център',
+  'locations.sofiaLyulin': 'София, Люлин',
+  'locations.sofiaStudentski': 'София, Студентски град',
+  'locations.sofiaVitosha': 'София, Витоша',
+  'locations.plovdiv': 'Пловдив',
+  'locations.varna': 'Варна',
+  'locations.burgas': 'Бургас',
+  'locations.ruse': 'Русе',
+  'locations.staraZagora': 'Стара Загора',
+
+  // Common messages
+  'message.taskCreated': 'Задачата е създадена успешно!',
+  'message.profileUpdated': 'Профилът е актуализиран успешно!',
+  'message.applicationSubmitted': 'Кандидатурата е изпратена успешно!',
+  'error.generic': 'Нещо се обърка. Моля, опитайте отново.',
+  'error.network': 'Грешка в мрежата. Моля, проверете връзката си.',
+  'error.unauthorized': 'Трябва да влезете, за да достъпите тази страница.',
+};

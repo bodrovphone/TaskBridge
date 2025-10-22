@@ -1,0 +1,52 @@
+// Common UI terms and global actions
+export const common = {
+  welcome: 'Welcome',
+  login: 'Log In',
+  logout: 'Log Out',
+  signup: 'Sign Up',
+  search: 'Search',
+  browse: 'Browse',
+  create: 'Create',
+  edit: 'Edit',
+  delete: 'Delete',
+  cancel: 'Cancel',
+  important: 'Important',
+  save: 'Save',
+  submit: 'Submit',
+  loading: 'Loading...',
+  error: 'Error',
+  success: 'Success',
+  back: 'Back',
+  next: 'Next',
+  previous: 'Previous',
+  reviews: 'reviews',
+  close: 'Close',
+
+  'common.optional': 'Optional',
+  'common.days': 'days',
+  'common.cancel': 'Cancel',
+  'common.anonymous': 'Anonymous User',
+
+  'language.en': 'English',
+  'language.bg': 'Български',
+  'language.ru': 'Русский',
+
+  // Locations
+  'locations.sofiaCenter': 'Sofia, Center',
+  'locations.sofiaLyulin': 'Sofia, Lyulin',
+  'locations.sofiaStudentski': 'Sofia, Studentski Grad',
+  'locations.sofiaVitosha': 'Sofia, Vitosha',
+  'locations.plovdiv': 'Plovdiv',
+  'locations.varna': 'Varna',
+  'locations.burgas': 'Burgas',
+  'locations.ruse': 'Ruse',
+  'locations.staraZagora': 'Stara Zagora',
+
+  // Common messages
+  'message.taskCreated': 'Task created successfully!',
+  'message.profileUpdated': 'Profile updated successfully!',
+  'message.applicationSubmitted': 'Application submitted successfully!',
+  'error.generic': 'Something went wrong. Please try again.',
+  'error.network': 'Network error. Please check your connection.',
+  'error.unauthorized': 'You need to log in to access this page.',
+};

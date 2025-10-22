@@ -78,7 +78,7 @@ function Header() {
    </NavbarBrand>
 
    {/* Desktop Navigation */}
-   <NavbarContent className="hidden md:flex gap-8" justify="center">
+   <NavbarContent className="hidden lg:flex gap-8" justify="center">
     {navigation.map((item) => (
      <NavbarItem key={item.name}>
       <NextUILink
@@ -94,7 +94,7 @@ function Header() {
    </NavbarContent>
 
    {/* Desktop Actions Section */}
-   <NavbarContent justify="end" className="hidden md:flex gap-3">
+   <NavbarContent justify="end" className="hidden lg:flex gap-3">
     <NavbarItem>
      <LanguageSwitcher />
     </NavbarItem>
@@ -126,8 +126,11 @@ function Header() {
     </NavbarItem>
    </NavbarContent>
 
-   {/* Mobile Actions Section */}
-   <NavbarContent justify="end" className="md:hidden gap-2">
+   {/* Mobile/Tablet Actions Section */}
+   <NavbarContent justify="end" className="lg:hidden gap-4">
+    <NavbarItem>
+     <LanguageSwitcher />
+    </NavbarItem>
     {isAuthenticated && (
      <NavbarItem>
       <NotificationBell />
@@ -162,8 +165,7 @@ function Header() {
      </NavbarMenuItem>
     ))}
     <NavbarMenuItem>
-     <div className="pt-4 border-t border-gray-200 w-full space-y-3">
-      <LanguageSwitcher />
+     <div className="pt-4 border-t border-gray-200 w-full">
       <Button
        color="primary"
        variant="solid"

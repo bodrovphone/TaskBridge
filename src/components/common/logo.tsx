@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { Handshake } from 'lucide-react'
 
 interface LogoProps {
  className?: string
@@ -29,6 +30,13 @@ function Logo({ className, size = 'md', variant = 'gradient' }: LogoProps) {
   gradient: 'bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent'
  }
 
+ const iconSizes = {
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 28
+ }
+
  return (
   <div className={cn('flex items-center space-x-3', className)}>
    {/* Logo Icon */}
@@ -36,14 +44,8 @@ function Logo({ className, size = 'md', variant = 'gradient' }: LogoProps) {
     sizes[size],
     'relative rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg'
    )}>
-    {/* T for Trudify */}
-    <span className={cn(
-     'font-bold text-white',
-     size === 'sm' ? 'text-sm' : size === 'md' ? 'text-lg' : size === 'lg' ? 'text-xl' : 'text-2xl'
-    )}>
-     T
-    </span>
-    
+    <Handshake className="text-white" size={iconSizes[size]} />
+
     {/* Accent dot */}
     <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-sm"></div>
    </div>
@@ -65,10 +67,17 @@ function Logo({ className, size = 'md', variant = 'gradient' }: LogoProps) {
  */
 function LogoIcon({ className, size = 'md' }: Omit<LogoProps, 'variant'>) {
  const sizes = {
-  sm: 'w-8 h-8 text-sm',
-  md: 'w-12 h-12 text-lg',
-  lg: 'w-16 h-16 text-xl', 
-  xl: 'w-20 h-20 text-2xl'
+  sm: 'w-8 h-8',
+  md: 'w-12 h-12',
+  lg: 'w-16 h-16',
+  xl: 'w-20 h-20'
+ }
+
+ const iconSizes = {
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 28
  }
 
  return (
@@ -77,7 +86,7 @@ function LogoIcon({ className, size = 'md' }: Omit<LogoProps, 'variant'>) {
    'relative rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg',
    className
   )}>
-   <span className="font-bold text-white">T</span>
+   <Handshake className="text-white" size={iconSizes[size]} />
    <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-sm"></div>
   </div>
  )

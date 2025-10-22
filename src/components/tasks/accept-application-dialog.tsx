@@ -9,9 +9,10 @@ import {
   ModalFooter,
   Button,
   Checkbox,
-  Divider
+  Divider,
+  Textarea
 } from '@nextui-org/react'
-import { CheckCircle, Wallet, Calendar, AlertTriangle } from 'lucide-react'
+import { CheckCircle, Wallet, Calendar, AlertTriangle, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 
@@ -29,6 +30,7 @@ export default function AcceptApplicationDialog({
   onConfirm
 }: AcceptApplicationDialogProps) {
   const { t } = useTranslation()
+  const [message, setMessage] = useState('')
   const [agreements, setAgreements] = useState({
     priceTimeline: false,
     contactSharing: false,
@@ -44,7 +46,8 @@ export default function AcceptApplicationDialog({
   const handleConfirm = () => {
     if (allAgreed) {
       onConfirm(application.id)
-      // Reset agreements for next time
+      // Reset state for next time
+      setMessage('')
       setAgreements({
         priceTimeline: false,
         contactSharing: false,
@@ -54,7 +57,8 @@ export default function AcceptApplicationDialog({
   }
 
   const handleClose = () => {
-    // Reset agreements when closing
+    // Reset state when closing
+    setMessage('')
     setAgreements({
       priceTimeline: false,
       contactSharing: false,
@@ -128,6 +132,27 @@ export default function AcceptApplicationDialog({
                   </div>
                   <div className="text-xl font-bold text-blue-900">{timeline}</div>
                 </div>
+              </div>
+
+              <Divider className="my-4" />
+
+              {/* Message to Professional */}
+              <div className="mb-6">
+                <Textarea
+                  label={t('acceptApplication.messageLabel')}
+                  placeholder={t('acceptApplication.messagePlaceholder')}
+                  value={message}
+                  onValueChange={setMessage}
+                  minRows={3}
+                  maxRows={6}
+                  description={t('acceptApplication.messageHelp', { name: professional.name })}
+                  startContent={<MessageSquare className="w-4 h-4 text-gray-400" />}
+                  classNames={{
+                    label: 'font-medium',
+                    input: 'text-sm',
+                    description: 'text-xs'
+                  }}
+                />
               </div>
 
               <Divider className="my-4" />

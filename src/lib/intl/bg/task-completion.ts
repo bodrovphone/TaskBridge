@@ -1,0 +1,90 @@
+// Task completion and status management translations
+export const taskCompletion = {
+  // Task Completion & Status
+  'taskStatus.open': 'Отворена',
+  'taskStatus.inProgress': 'В процес',
+  'taskStatus.awaitingConfirmation': 'Очаква потвърждение',
+  'taskStatus.completed': 'Завършена',
+  'taskStatus.cancelled': 'Отменена',
+  'taskStatus.underReview': 'В процес на преглед',
+  'taskStatus.openTooltip': 'Приема кандидатури от специалисти',
+  'taskStatus.inProgressTooltip': 'Работата в момента е в процес',
+  'taskStatus.pendingProfessionalTooltip': 'Изчаква специалистът да потвърди завършването',
+  'taskStatus.pendingCustomerTooltip': 'Изчаква клиентът да потвърди завършването',
+  'taskStatus.completedTooltip': 'Задачата е завършена успешно',
+  'taskStatus.cancelledTooltip': 'Задачата беше отменена',
+  'taskStatus.disputedTooltip': 'В процес на преглед от администратор',
+
+  // Task Completion Actions
+  'taskCompletion.markCompleted': 'Маркирай като завършена',
+  'taskCompletion.confirmCompletion': 'Потвърди завършването',
+  'taskCompletion.rejectCompletion': 'Отхвърли завършването',
+  'taskCompletion.alreadyMarkedByYou': 'Вие маркирахте като завършена',
+  'taskCompletion.alreadyConfirmedByYou': 'Вече сте потвърдили',
+
+  // Mark Completed Dialog (Professional)
+  'taskCompletion.markDialog.title': 'Маркиране на задача като завършена?',
+  'taskCompletion.markDialog.task': 'Задача',
+  'taskCompletion.markDialog.customer': 'Клиент',
+  'taskCompletion.markDialog.payment': 'Плащане',
+  'taskCompletion.markDialog.question': 'Завършихте ли цялата работа?',
+  'taskCompletion.markDialog.checkRequirements': 'Всички изисквания са изпълнени',
+  'taskCompletion.markDialog.checkSatisfied': 'Клиентът е доволен от резултата',
+  'taskCompletion.markDialog.photos': 'Качете снимки на завършената работа (по избор)',
+  'taskCompletion.markDialog.addPhotos': 'Добави снимки',
+  'taskCompletion.markDialog.notes': 'Допълнителни бележки',
+  'taskCompletion.markDialog.notesPlaceholder': 'Финални бележки относно завършената работа...',
+
+  // Confirm Completion Dialog (Customer)
+  'taskCompletion.confirmDialog.title': 'Потвърждаване на завършването?',
+  'taskCompletion.confirmDialog.professional': 'Специалист',
+  'taskCompletion.confirmDialog.task': 'Задача',
+  'taskCompletion.confirmDialog.question': 'Доволни ли сте от извършената работа?',
+  'taskCompletion.confirmDialog.yes': 'Да, доволен съм',
+  'taskCompletion.confirmDialog.no': 'Не, има проблеми',
+  'taskCompletion.confirmDialog.greatMessage': 'Чудесно! Благодарим, че потвърдихте.',
+  'taskCompletion.confirmDialog.reviewReminder': 'Ще можете да оставите отзив след потвърждението.',
+
+  // Rejection Flow
+  'taskCompletion.reject.title': 'Моля обяснете проблема',
+  'taskCompletion.reject.reason': 'Защо отхвърляте?',
+  'taskCompletion.reject.notCompleted': 'Работата не е завършена',
+  'taskCompletion.reject.poorQuality': 'Лошо качество',
+  'taskCompletion.reject.differentScope': 'Различно от договореното',
+  'taskCompletion.reject.other': 'Други проблеми',
+  'taskCompletion.reject.explain': 'Опишете проблема',
+  'taskCompletion.reject.explainPlaceholder': 'Моля опишете какво трябва да бъде поправено...',
+  'taskCompletion.reject.warning': 'Задачата ще се върне към "В процес". Можете да обсъдите със специалиста и той може да преработи.',
+  'taskCompletion.reject.disclaimer': 'Тази задача ще се върне към статус "В процес" и може да стане видима отново за други специалисти, ако работата не може да бъде завършена с настоящия специалист.',
+  'taskCompletion.reject.button': 'Отхвърли',
+
+  // Pending Confirmation Banner
+  'taskCompletion.pending.waitingCustomer': 'Изчаква потвърждение от клиента',
+  'taskCompletion.pending.waitingProfessional': 'Изчаква потвърждение от специалиста',
+  'taskCompletion.pending.professionalMarkedComplete': 'Специалистът маркира задачата като завършена',
+  'taskCompletion.pending.customerMarkedComplete': 'Клиентът маркира задачата като завършена',
+  'taskCompletion.pending.markedComplete': 'маркира тази задача като завършена.',
+  'taskCompletion.pending.youMarked': 'Вие маркирахте тази задача като завършена.',
+  'taskCompletion.pending.waitingFor': 'Изчаква',
+  'taskCompletion.pending.toConfirm': 'да потвърди.',
+
+  // Success View
+  'taskCompletion.success.title': 'Задачата е завършена!',
+  'taskCompletion.success.message': 'Браво! И двете страни потвърдиха завършването на задачата.',
+  'taskCompletion.success.nextSteps': 'Следващи стъпки',
+  'taskCompletion.success.step1': 'Оставете отзив',
+  'taskCompletion.success.step1Description': 'Споделете опита си с {{name}}',
+  'taskCompletion.success.step2': 'Задачата ще бъде архивирана след 30 дни',
+  'taskCompletion.success.step2Description': 'Задачата ще бъде автоматично архивирана',
+  'taskCompletion.success.leaveReview': 'Остави отзив',
+  'taskCompletion.success.viewDetails': 'Виж детайли',
+
+  // Timeline
+  'taskCompletion.timeline.title': 'Напредък на задачата',
+  'taskCompletion.timeline.started': 'Започната',
+  'taskCompletion.timeline.proMarked': 'Специалистът маркира като завършена',
+  'taskCompletion.timeline.customerConfirmed': 'Клиентът потвърди',
+  'taskCompletion.timeline.completed': 'Завършена',
+  'taskCompletion.timeline.pending': 'Чака',
+  'taskCompletion.timeline.totalDuration': 'Обща продължителност',
+};

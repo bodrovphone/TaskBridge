@@ -1,367 +1,5 @@
-const ru = {
-  welcome: 'Добро пожаловать',
-  login: 'Войти',
-  logout: 'Выйти',
-  signup: 'Регистрация',
-  search: 'Поиск',
-  browse: 'Обзор',
-  create: 'Создать',
-  edit: 'Редактировать',
-  delete: 'Удалить',
-  cancel: 'Отмена',
-  important: 'Важно',
-  save: 'Сохранить',
-  submit: 'Отправить',
-  loading: 'Загрузка...',
-  error: 'Ошибка',
-  success: 'Успех',
-  back: 'Назад',
-  next: 'Далее',
-  previous: 'Предыдущая',
-  home: 'Главная',
-  profile: 'Профиль',
-  settings: 'Настройки',
-
-  'nav.home': 'Главная',
-  'nav.browseTasks': 'Задачи',
-  'nav.createTask': 'Создать',
-  'nav.profile': 'Профиль',
-  'nav.howItWorks': 'Как работает',
-  'nav.categories': 'Категории',
-  'nav.forProfessionals': 'Профессионалы',
-  'nav.myTasks': 'Мои задачи',
-  'nav.help': 'Помощь',
-
-  'landing.hero.title': 'Ваша местная платформа для услуг и возможностей',
-  'landing.hero.subtitle':
-    'Trudify связывает людей, которым нужна помощь, с квалифицированными специалистами, готовыми зарабатывать. Разместите задачу или найдите работу - надежно, проверено и просто.',
-  'landing.hero.getStarted': 'Разместить задачу',
-  'landing.hero.browseServices': 'Найти работу',
-
-  'landing.trustIndicators.verified': 'Проверенные специалисты',
-  'landing.trustIndicators.securePayments': 'Безопасные платежи',
-  'landing.trustIndicators.support': 'Поддержка 24/7',
-
-  'landing.stats.averageRating': 'средний рейтинг',
-  'landing.stats.completedTasks': 'выполненных задач',
-  'landing.categories.activeSpecialists': 'активных специалистов',
-
-  'landing.categories.title': 'Популярные категории',
-  'landing.categories.subtitle':
-    'Найдите специалистов для любой задачи - от ремонта дома до персональной помощи',
-  'landing.categories.viewAll': 'Посмотреть все категории',
-  'landing.categories.home': 'Дом и сад',
-  'landing.categories.home.description':
-    'Электричество, сантехника, уборка, техобслуживание',
-  'landing.categories.tech': 'Технологии',
-  'landing.categories.tech.description':
-    'IT поддержка, веб-дизайн, разработка ПО',
-  'landing.categories.business': 'Бизнес-услуги',
-  'landing.categories.business.description':
-    'Административные задачи, мероприятия, консультации',
-  'landing.categories.personal': 'Личные услуги',
-  'landing.categories.personal.description':
-    'Уход за питомцами, детьми, пожилыми',
-  'landing.categories.education': 'Образование и обучение',
-  'landing.categories.creative': 'Творческие услуги',
-
-  'landing.featured.title': 'Рекомендуемые задачи',
-  'landing.featured.badge': 'Последние возможности',
-  'landing.featured.viewAll': 'Посмотреть все задачи',
-
-  'landing.howItWorks.title': 'Как это работает',
-  'landing.howItWorks.subtitle':
-    'Простой процесс поиска и выполнения задач с проверенными специалистами',
-  'landing.howItWorks.forCustomers': 'Для клиентов',
-  'landing.howItWorks.forProfessionals': 'Для специалистов',
-  'landing.howItWorks.step1.title': 'Опубликуйте вашу задачу',
-  'landing.howItWorks.step1.description':
-    'Опишите, что нужно сделать, и установите ваш бюджет',
-  'landing.howItWorks.step2.title': 'Получите предложения',
-  'landing.howItWorks.step2.description':
-    'Получайте заявки от верифицированных специалистов',
-  'landing.howItWorks.step3.title': 'Выберите и завершите',
-  'landing.howItWorks.step3.description':
-    'Выберите лучшего специалиста и выполните вашу задачу',
-
-  'tasks.title': 'Обзор задач',
-  'tasks.subtitle':
-    'Найдите идеальную задачу, которая соответствует вашим навыкам и интересам',
-  'tasks.searchPlaceholder':
-    'Поиск задач по ключевым словам, категориям или местоположению...',
-  'tasks.filters.title': 'Фильтры',
-  'tasks.filters.category': 'Категория',
-  'tasks.filters.allCategories': 'Все категории',
-  'tasks.filters.location': 'Местоположение',
-  'tasks.filters.budget': 'Бюджет',
-  'tasks.filters.budgetMin': 'Мин. бюджет',
-  'tasks.filters.budgetMax': 'Макс. бюджет',
-  'tasks.filters.deadline': 'Срок',
-  'tasks.filters.status': 'Статус',
-  'tasks.filters.all': 'Все',
-  'tasks.filters.open': 'Открытые',
-  'tasks.filters.inProgress': 'В процессе',
-  'tasks.filters.completed': 'Завершенные',
-  'tasks.filters.activeFilters': 'Активные фильтры',
-  'tasks.filters.clearAll': 'Очистить все',
-  'tasks.results': 'результатов',
-  'tasks.sort.newest': 'Сначала новые',
-  'tasks.sort.oldest': 'Сначала старые',
-  'tasks.sort.budgetHigh': 'Высокий бюджет',
-  'tasks.sort.budgetLow': 'Низкий бюджет',
-  'tasks.sort.deadline': 'По сроку',
-
-  'professionals.hero.title': 'Найдите проверенных специалистов',
-  'professionals.hero.subtitle':
-    'Просматривайте верифицированных специалистов по категориям и найдите идеальное соответствие для ваших потребностей',
-  'professionals.hero.badge': 'Сеть профессионалов',
-  'professionals.searchPlaceholder':
-    'Поиск категорий... (например, ремонт, уборка, уроки)',
-  'professionals.allCategories': 'Все категории',
-  'professionals.featuredTitle': 'Рекомендуемые специалисты',
-  'professionals.viewProfile': 'Посмотреть профиль',
-  'professionals.rating': 'Рейтинг',
-  'professionals.completedJobs': 'Выполненные задания',
-  'professionals.startingFrom': 'Начиная от',
-  'professionals.noResults': 'Нет категорий, соответствующих вашему поиску',
-  'professionals.categoryResults': 'категории найдены',
-  'professionals.filterBy': 'Фильтровать по',
-  'professionals.location': 'Местоположение',
-  'professionals.experience': 'Опыт',
-  'professionals.priceRange': 'Ценовой диапазон',
-  'professionals.availability': 'Доступность',
-  'professionals.findPerfect': 'Найдите идеального профессионала',
-  'professionals.discoverTrusted':
-    'Откройте для себя надежных профессионалов с проверенной репутацией и отличными отзывами',
-  'professionals.popularCategories': 'Популярные категории',
-  'professionals.refineSearch': 'Уточните результаты поиска',
-  'professionals.professionalsAvailable': 'доступных профессионалов',
-  'professionals.noMatchingResults':
-    'Нет профессионалов, соответствующих вашим критериям. Попробуйте расширить поиск.',
-  'professionals.mostActive': 'Наиболее активные',
-  'professionals.gender.male': 'Мужчина',
-  'professionals.gender.female': 'Женщина',
-  'professionals.filters.category': 'Категория',
-  'professionals.filters.location': 'Местоположение',
-  'professionals.filters.minimumRating': 'Минимальный рейтинг',
-  'professionals.filters.genderPreference': 'Предпочтение по полу',
-  'professionals.filters.activityLevel': 'Уровень активности',
-  'professionals.filters.all': 'Все',
-  'professionals.filters.topPerformersOnly': 'Только топ исполнители',
-  'professionals.filters.locationPlaceholder': 'София, Пловдив, Варна...',
-  'professionals.filters.any': 'Любой',
-  'professionals.filters.anyShort': 'Любой',
-  'professionals.typing.plumber': 'сантехник в Софии',
-  'professionals.typing.cleaner': 'специалист по уборке',
-  'professionals.typing.electrician': 'сертифицированный электрик',
-  'professionals.typing.tutor': 'учитель английского',
-  'professionals.typing.photographer': 'свадебный фотограф',
-  'professionals.typing.handyman': 'мастер на все руки',
-  'professionals.recommendedTitle': 'РЕКОМЕНДУЕМЫЕ ПРОФЕССИОНАЛЫ',
-  'professionals.filters.clear': 'Очистить',
-  'professionals.filters.clearAll': 'Очистить все фильтры',
-  'professionals.filters.fourPlusStars': '4+ звезд',
-  'professionals.filters.fiveStarsOnly': 'Только 5 звезд',
-  'professionals.filters.anyRating': 'По рейтингу',
-  'professionals.filters.showProfessionalsWithAnyRating':
-    'Показать профессионалов с любым рейтингом',
-  'professionals.filters.locationPlaceholderDesktop': '📍 Местоположение',
-  'professionals.sorting.featuredFirst': 'Топ выбор',
-  'professionals.sorting.featuredFirstDesc': 'Лучшие профессионалы',
-  'professionals.sorting.highestRating': 'По рейтингу',
-  'professionals.sorting.highestRatingDesc': 'С лучшими отзывами',
-  'professionals.sorting.mostExperience': 'По опыту',
-  'professionals.sorting.mostExperienceDesc': 'Много заказов',
-  'professionals.filters.sortResultsBy': 'Сортировка по',
-  'professionals.filters.sortResultsTitle': 'Сортировка',
-  'professionals.filters.sortResultsDescription':
-    'Выберите, как упорядочить профессионалов',
-  'professionals.filters.selectMinimumRating': 'Выберите минимальный рейтинг',
-  'professionals.filters.showingVerifiedFirst':
-    'Показать проверенных топ профессионалов первыми',
-  'professionals.filters.proTip': 'Совет',
-  'professionals.filters.proTipMessage':
-    'Попробуйте "{{sortOption}}" для качественных профессионалов с подтвержденными квалификациями',
-  'professionals.filters.sortingBy': 'Сортировка по {{option}}',
-  'professionals.filters.sortingDescFeatured':
-    'Показать проверенных топ профессионалов первыми',
-  'professionals.filters.sortingDescRating':
-    'Профессионалы с высшим рейтингом показываются первыми',
-  'professionals.filters.sortingDescJobs':
-    'Самые опытные профессионалы показываются первыми',
-  'professionals.filters.activeFilters': 'Активные фильтры',
-  'professionals.filters.filterApplied': '{{count}} фильтр применен',
-  'professionals.filters.filtersApplied': '{{count}} фильтров применено',
-  'professionals.filters.showProfessionalsWithRating':
-    'Показать профессионалов с {{rating}}+ звездным рейтингом',
-  'professionals.filters.showPerfectRating':
-    'Показать только профессионалов с совершенным 5-звездным рейтингом',
-
-  'browseTasks.hero.badge': 'Найдите идеальных специалистов',
-  'browseTasks.hero.title1': 'Найдите идеальную',
-  'browseTasks.hero.title2': 'задачу для вас',
-  'browseTasks.hero.subtitle':
-    'Просмотрите сотни возможностей от проверенных клиентов. Начните работать сегодня.',
-  'browseTasks.search.placeholder':
-    'Поиск задач по ключевым словам, категории или городу...',
-  'browseTasks.search.popular': 'Популярные',
-  'browseTasks.filters.title': 'Фильтрация и сортировка',
-  'browseTasks.filters.advanced': 'Расширенные фильтры',
-  'browseTasks.filters.quick': 'Быстрый фильтр',
-  'browseTasks.filters.searchPlaceholder':
-    'Поиск задач... (например, уборка, ремонт, доставка)',
-  'browseTasks.filters.category': 'Категория',
-  'browseTasks.filters.allCategories': 'Все категории',
-  'browseTasks.filters.city': 'Город',
-  'browseTasks.filters.allCities': 'Все города',
-  'browseTasks.filters.cities.sofia': 'София',
-  'browseTasks.filters.cities.plovdiv': 'Пловдив',
-  'browseTasks.filters.cities.varna': 'Варна',
-  'browseTasks.filters.cities.burgas': 'Бургас',
-  'browseTasks.filters.budget': 'Бюджет',
-  'browseTasks.filters.budgetMin': 'Мин',
-  'browseTasks.filters.budgetMax': 'Макс',
-  'browseTasks.filters.budgetUpTo': 'До 500 лв',
-  'browseTasks.filters.sortBy': 'Сортировка',
-  'browseTasks.filters.sort.newest': 'Новые',
-  'browseTasks.filters.sort.oldest': 'Старые',
-  'browseTasks.filters.sort.highBudget': 'Высокий бюджет',
-  'browseTasks.filters.sort.lowBudget': 'Низкий бюджет',
-  'browseTasks.results.shown': 'Показано {{count}} результатов',
-  'browseTasks.results.featured': 'Показано {{count}} популярных задач',
-  'browseTasks.results.loading': 'Загрузка...',
-  'browseTasks.results.noTasks.title': 'Задачи не найдены',
-  'browseTasks.results.noTasks.description':
-    'Попробуйте изменить фильтры или искать по другим критериям.',
-  'browseTasks.results.noTasks.clearFilters': 'Очистить фильтры',
-  'browseTasks.results.suggestedTasks':
-    'Популярные задачи, которые могут вам понравиться',
-  'browseTasks.results.suggestedDescription':
-    'Вот некоторые популярные задачи из нашего сообщества',
-  'browseTasks.results.error.title': 'Ошибка при загрузке',
-  'browseTasks.results.error.description':
-    'Пожалуйста, попробуйте снова или обратитесь в службу поддержки.',
-  'browseTasks.pagination.previous': 'Предыдущая',
-  'browseTasks.pagination.next': 'Следующая',
-  'browseTasks.search.tags.programming': 'Программирование',
-  'browseTasks.search.tags.design': 'Дизайн',
-  'browseTasks.search.tags.marketing': 'Маркетинг',
-  'browseTasks.search.tags.translation': 'Переводы',
-  'browseTasks.search.tags.photography': 'Фотография',
-  'browseTasks.typing.plumber': 'сантехник в Софии',
-  'browseTasks.typing.cleaner': 'уборка дома',
-  'browseTasks.typing.electrician': 'ремонт электрики',
-  'browseTasks.typing.tutor': 'учитель английского',
-  'browseTasks.typing.moving': 'перевозка мебели',
-  'browseTasks.typing.gardener': 'уход за садом',
-
-  'task.budget': 'Бюджет',
-  'task.location': 'Местоположение',
-  'task.category': 'Категория',
-  'task.applications': 'Заявки',
-  'task.viewDetails': 'Посмотреть детали',
-  'task.apply': 'Подать заявку',
-  'task.created': 'Создана',
-  'task.deadline': 'Срок',
-
-  // Create Task Form
-  'createTask.title': 'Создать новую задачу',
-  'createTask.hero.subtitle': 'Опишите что вам нужно и позвольте профессионалам прийти к вам',
-  'createTask.hero.freeToPost': 'Бесплатная публикация',
-  'createTask.hero.noPayment': 'Без оплаты до начала работы',
-  'createTask.hero.avgResponse': 'Среднее время ответа: 2 часа',
-  'createTask.hero.verifiedPros': '1,500+ верифицированных профессионалов',
-  'createTask.hero.help': 'Нужна помощь? Свяжитесь с нашей командой поддержки',
-
-  // Category Section
-  'createTask.category.title': 'Какая услуга вам нужна?',
-  'createTask.category.subtitle': 'Выберите категорию, которая лучше всего описывает вашу задачу',
-  'createTask.category.selectSubcategory': 'Выберите конкретную услугу',
-  'createTask.category.backToMain': 'Назад к основным категориям',
-  'createTask.category.selected': 'Выбранная услуга',
-  'createTask.category.tryDifferent': 'Попробуйте другой поисковый запрос',
-
-  // Details Section
-  'createTask.details.title': 'Опишите вашу задачу',
-  'createTask.details.subtitle': 'Чем больше деталей, тем лучше предложения вы получите',
-  'createTask.details.titleLabel': 'Название задачи',
-  'createTask.details.titlePlaceholder': 'напр. Нужен сантехник для устранения течи на кухне',
-  'createTask.details.descriptionLabel': 'Описание',
-  'createTask.details.descriptionPlaceholder': 'Опишите что нужно сделать, когда и какие особые требования у вас есть...',
-  'createTask.details.requirementsLabel': 'Особые требования (по желанию)',
-  'createTask.details.requirementsPlaceholder': 'Перечислите инструменты, навыки или опыт, которые необходимы...',
-
-  // Location Section
-  'createTask.location.title': 'Где находится задача?',
-  'createTask.location.subtitle': 'Это помогает найти профессионалов в вашем районе',
-  'createTask.location.cityLabel': 'Город',
-  'createTask.location.cityPlaceholder': 'Выберите город',
-  'createTask.location.neighborhoodLabel': 'Район (по желанию)',
-  'createTask.location.neighborhoodPlaceholder': 'напр. Центр, Люлин, Студенческий городок',
-  'createTask.location.addressLabel': 'Точный адрес (по желанию)',
-  'createTask.location.addressPlaceholder': 'Будет передан выбранному профессионалу',
-  'createTask.location.addressSecurity': 'Полный адрес скрыт до найма профессионала',
-
-  // Budget Section
-  'createTask.budget.title': 'Какой ваш бюджет?',
-  'createTask.budget.help': 'Честные бюджеты получают в 3 раза больше откликов',
-  'createTask.budget.typeFixed': 'Фиксированная цена',
-  'createTask.budget.typeRange': 'Диапазон цен',
-  'createTask.budget.fixedLabel': 'Ваш бюджет',
-  'createTask.budget.minLabel': 'Минимум',
-  'createTask.budget.maxLabel': 'Максимум',
-  'createTask.budget.notSure': 'Не уверен в бюджете',
-
-  // Timeline Section
-  'createTask.timeline.title': 'Когда вам это нужно?',
-  'createTask.timeline.subtitle': 'Сообщите профессионалам о вашем графике',
-  'createTask.timeline.urgentTitle': 'Срочно - В тот же день',
-  'createTask.timeline.urgentDesc': 'Мне нужно сегодня',
-  'createTask.timeline.soonTitle': 'Скоро - В течение недели',
-  'createTask.timeline.soonDesc': 'Мне нужно в течение ближайших 7 дней',
-  'createTask.timeline.flexibleTitle': 'Гибкий',
-  'createTask.timeline.flexibleDesc': 'У меня гибкий график',
-  'createTask.timeline.deadlineLabel': 'Конкретный срок (по желанию)',
-  'createTask.timeline.deadlineHelp': 'Оставьте пустым, если у вас нет конкретного срока',
-
-  // Photos Section
-  'createTask.photos.title': 'Добавьте фотографии (по желанию)',
-  'createTask.photos.help': 'Фотографии помогают профессионалам лучше понять вашу задачу',
-  'createTask.photos.dragDrop': 'Перетащите изображения сюда',
-  'createTask.photos.orBrowse': 'или кликните для обзора',
-  'createTask.photos.maxFiles': 'Максимум 5 изображений',
-  'createTask.photos.maxSize': '5MB на изображение',
-  'createTask.photos.formats': 'JPG, PNG, WebP',
-  'createTask.photos.addMore': 'Добавить еще',
-  'createTask.photos.uploading': 'Загрузка фотографий...',
-  'createTask.photos.fileTooLarge': 'Файл {{fileName}} слишком большой. Максимальный размер 5MB',
-  'createTask.photos.invalidType': 'Файл {{fileName}} не является поддерживаемым форматом изображения',
-  'createTask.photos.uploadError': 'Не удалось загрузить фотографии. Пожалуйста, попробуйте еще раз.',
-
-  // Review Section
-  'createTask.review.title': 'Проверьте вашу задачу',
-  'createTask.review.subtitle': 'Убедитесь, что всё выглядит правильно перед публикацией',
-  'createTask.review.noTitle': 'Нет названия пока',
-  'createTask.review.noDescription': 'Нет описания пока',
-  'createTask.review.location': 'Местоположение',
-  'createTask.review.noCity': 'Город не выбран',
-  'createTask.review.budget': 'Бюджет',
-  'createTask.review.timeline': 'График',
-  'createTask.review.requirements': 'Требования',
-  'createTask.review.photos': 'Фотографии',
-  'createTask.review.submit': 'Опубликовать задачу',
-  'createTask.review.fillRequired': 'Пожалуйста, заполните все обязательные поля для публикации',
-
-  // Form Validation Errors
-  'createTask.errors.categoryRequired': 'Пожалуйста, выберите категорию',
-  'createTask.errors.titleTooShort': 'Название должно быть не менее 10 символов',
-  'createTask.errors.titleTooLong': 'Название не может быть более 200 символов',
-  'createTask.errors.descriptionTooShort': 'Описание должно быть не менее 50 символов',
-  'createTask.errors.descriptionTooLong': 'Описание не может быть более 2000 символов',
-  'createTask.errors.cityRequired': 'Пожалуйста, выберите город',
-  'createTask.errors.budgetInvalid': 'Максимальный бюджет должен быть больше минимального',
-  'createTask.errors.tooManyPhotos': 'Разрешено максимум 5 фотографий',
-
+// Profile page translations - personal info, professional info, statistics, settings
+export const profile = {
   'profile.title': 'Мой профиль',
   'profile.personalInfo': 'Личная информация',
   'profile.professionalInfo': 'Профессиональная информация',
@@ -1241,6 +879,146 @@ const ru = {
   'rejectApplication.note': '{{name}} будет уведомлен, что его заявка не выбрана. Вы все еще можете просматривать другие заявки и принять другого специалиста.',
   'rejectApplication.confirm': 'Отклонить заявку',
   'rejectApplication.cancel': 'Отмена',
-};
 
-export default ru;
+  // My Applications (Professional Applications Dashboard)
+  'myApplications.title': 'Мои заявки',
+  'myApplications.count': '{{count}} заявок',
+  'myApplications.sortBy': 'Сортировать по',
+  'myApplications.sortNewest': 'Сначала новые',
+  'myApplications.sortOldest': 'Сначала старые',
+  'myApplications.sortPriceHigh': 'Цена: От высокой к низкой',
+  'myApplications.sortPriceLow': 'Цена: От низкой к высокой',
+  'myApplications.filterAll': 'Все',
+  'myApplications.filterPending': 'В ожидании',
+  'myApplications.filterAccepted': 'Принятые',
+  'myApplications.filterRejected': 'Отклоненные',
+  'myApplications.filterWithdrawn': 'Отозванные',
+  'myApplications.status.pending': 'В ожидании',
+  'myApplications.status.accepted': 'Принята',
+  'myApplications.status.rejected': 'Отклонена',
+  'myApplications.status.withdrawn': 'Отозвана',
+  'myApplications.yourQuote': 'Ваша цена',
+  'myApplications.taskBudget': 'Бюджет задачи',
+
+  'myApplications.viewDetails': 'Посмотреть детали',
+  'myApplications.withdraw': 'Отозвать',
+  'myApplications.messageCustomer': 'Написать клиенту',
+  'myApplications.viewTask': 'Посмотреть задачу',
+  'myApplications.markStarted': 'Отметить как начатую',
+  'myApplications.markCompleted': 'Отметить как завершенную',
+  'myApplications.reportIssue': 'Сообщить о проблеме',
+  'myApplications.findSimilar': 'Найти похожие',
+
+  'myApplications.emptyState.title': 'Вы еще не подавали заявки на задачи',
+  'myApplications.emptyState.message': 'Начните просматривать доступные задачи и подавайте заявки на те, которые соответствуют вашим навыкам.',
+
+  // Application Detail Modal
+
+  'myApplications.detail.taskDetails': 'Детали задачи',
+
+  'myApplications.detail.yourProposal': 'Ваше предложение',
+
+  'myApplications.detail.waitingResponse': 'Ожидание ответа клиента',
+  'myApplications.detail.usuallyResponds': 'Обычно клиенты отвечают в течение 24-48 часов.',
+  'myApplications.detail.otherApplicants': 'Также подали заявки еще {{count}} человек.',
+  'myApplications.detail.customerApproved': 'Клиент одобрил вашу заявку',
+  'myApplications.detail.nextSteps': 'Следующие шаги:',
+  'myApplications.detail.contactCustomer': 'Свяжитесь с клиентом для уточнения деталей',
+
+  'myApplications.detail.feedback': 'Не принимайте это на свой счет! Продолжайте подавать заявки на похожие задачи.',
+  'myApplications.detail.rejectionReason': 'Причина отказа',
+
+  // Withdraw Dialog
+  'myApplications.withdrawDialog.title': 'Отозвать заявку?',
+
+  'myApplications.withdrawDialog.reason': 'Причина отзыва (необязательно)',
+
+  'myApplications.withdrawDialog.reasonUnavailable': 'Больше недоступен',
+  'myApplications.withdrawDialog.reasonFoundWork': 'Нашел другую работу',
+  'myApplications.withdrawDialog.reasonChanged': 'Передумал',
+  'myApplications.withdrawDialog.reasonPrice': 'Цена слишком низкая',
+  'myApplications.withdrawDialog.reasonOther': 'Другая причина',
+  'myApplications.withdrawDialog.cancel': 'Отмена',
+  'myApplications.withdrawDialog.confirm': 'Отозвать заявку',
+
+  // Task Status
+  'taskStatus.open': 'Открыта',
+  'taskStatus.inProgress': 'В процессе',
+
+  'taskStatus.completed': 'Завершена',
+  'taskStatus.cancelled': 'Отменена',
+
+  'taskStatus.openTooltip': 'Задача открыта для заявок специалистов',
+  'taskStatus.inProgressTooltip': 'Специалист работает над этой задачей',
+
+  'taskStatus.completedTooltip': 'Обе стороны подтвердили завершение задачи',
+  'taskStatus.cancelledTooltip': 'Задача была отменена',
+  'taskStatus.disputedTooltip': 'Возникли разногласия, требуется разрешение',
+
+  // Task Completion
+  'taskCompletion.markCompleted': 'Отметить как завершённую',
+  'taskCompletion.confirmCompletion': 'Подтвердить завершение',
+  'taskCompletion.alreadyMarkedByYou': 'Вы уже отметили как завершённую',
+  'taskCompletion.alreadyConfirmedByYou': 'Вы уже подтвердили завершение',
+  'taskCompletion.rejectCompletion': 'Отклонить завершение',
+
+  // Mark Completed Dialog (Professional)
+  'taskCompletion.markDialog.title': 'Отметить задачу как завершённую',
+
+  'taskCompletion.markDialog.notesPlaceholder': 'Добавьте любые дополнительные детали о выполненной работе...',
+
+  // Confirm Completion Dialog (Customer)
+  'taskCompletion.confirmDialog.title': 'Подтвердить завершение задачи',
+
+  'taskCompletion.confirmDialog.question': 'Вы удовлетворены выполненной работой?',
+  'taskCompletion.confirmDialog.yes': 'Да, я удовлетворён',
+  'taskCompletion.confirmDialog.no': 'Нет, у меня есть замечания',
+
+  // Reject Completion
+  'taskCompletion.reject.title': 'Укажите свои замечания',
+
+  'taskCompletion.reject.notCompleted': 'Работа не завершена',
+  'taskCompletion.reject.poorQuality': 'Качество не соответствует ожиданиям',
+  'taskCompletion.reject.differentScope': 'Работа отличается от согласованной',
+  'taskCompletion.reject.other': 'Другая причина',
+
+  'taskCompletion.reject.disclaimer': 'Эта задача вернётся к статусу "В процессе" и может снова стать видимой для других специалистов, если работа не может быть завершена с текущим специалистом.',
+  'taskCompletion.reject.button': 'Отклонить',
+
+  // Pending Confirmation Banners
+  'taskCompletion.pending.waitingCustomer': 'Ожидание подтверждения клиента',
+  'taskCompletion.pending.waitingProfessional': 'Ожидание подтверждения специалиста',
+  'taskCompletion.pending.youMarked': 'Вы отметили эту задачу как завершённую.',
+  'taskCompletion.pending.waitingFor': 'Ожидание подтверждения от',
+  'taskCompletion.pending.toConfirm': 'для завершения задачи.',
+  'taskCompletion.pending.professionalMarkedComplete': 'Специалист отметил задачу как завершённую',
+  'taskCompletion.pending.customerMarkedComplete': 'Клиент отметил задачу как завершённую',
+  'taskCompletion.pending.markedComplete': 'отметил эту задачу как завершённую. Пожалуйста, проверьте работу.',
+
+  // Success View
+  'taskCompletion.success.title': 'Задача завершена!',
+  'taskCompletion.success.message': 'Обе стороны подтвердили завершение этой задачи',
+  'taskCompletion.success.nextSteps': 'Следующие шаги',
+  'taskCompletion.success.step1': 'Оставить отзыв',
+  'taskCompletion.success.step1Description': 'Помогите другим, поделившись своим опытом работы с {{name}}',
+  'taskCompletion.success.step2': 'Просмотреть детали',
+  'taskCompletion.success.step2Description': 'Получите доступ к полному резюме задачи и фотографиям завершения',
+  'taskCompletion.success.leaveReview': 'Оставить отзыв',
+  'taskCompletion.success.viewDetails': 'Просмотреть детали',
+
+  // Timeline
+  'taskCompletion.timeline.title': 'Прогресс завершения',
+  'taskCompletion.timeline.started': 'Задача начата',
+  'taskCompletion.timeline.proMarked': 'Специалист отметил как завершённую',
+  'taskCompletion.timeline.customerConfirmed': 'Клиент подтвердил',
+  'taskCompletion.timeline.completed': 'Задача завершена',
+  'taskCompletion.timeline.pending': 'В ожидании',
+  'taskCompletion.timeline.totalDuration': 'Общая продолжительность',
+
+  // Common
+  'common.optional': 'необязательно',
+  'common.days': 'дней',
+  'common.cancel': 'Отмена',
+
+  close: 'Закрыть',
+};

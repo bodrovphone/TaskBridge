@@ -20,8 +20,8 @@ export const LANGUAGE_CONFIG: Record<SupportedLocale, {
   en: {
     code: 'en',
     name: 'English',
-    flag: '🇺🇸',
-    region: 'US'
+    flag: '🇬🇧',
+    region: 'GB'
   },
   bg: {
     code: 'bg',
@@ -32,7 +32,7 @@ export const LANGUAGE_CONFIG: Record<SupportedLocale, {
   ru: {
     code: 'ru',
     name: 'Русский',
-    flag: '🚩',
+    flag: '🇷🇺',
     region: 'RU'
   }
 } as const

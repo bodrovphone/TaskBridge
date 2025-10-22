@@ -1,0 +1,36 @@
+// Navigation, header, and footer translations
+export const navigation = {
+  'nav.home': 'Главная',
+  'nav.browseTasks': 'Задачи',
+  'nav.createTask': 'Создать',
+  'nav.profile': 'Профиль',
+  'nav.howItWorks': 'Как работает',
+  'nav.categories': 'Категории',
+  'nav.forProfessionals': 'Профессионалы',
+  'nav.forCustomers': 'Для клиентов',
+  'nav.myTasks': 'Мои задачи',
+  'nav.myPostedTasks': 'Мои задачи',
+  'nav.myApplications': 'Мои заявки',
+  'nav.myWork': 'Моя работа',
+  'nav.help': 'Помощь',
+
+  // Footer
+  'footer.company.description':
+    'Связываем людей с квалифицированными специалистами для всех видов услуг в Болгарии.',
+  'footer.quickLinks.title': 'Быстрые ссылки',
+  'footer.quickLinks.howItWorks': 'Как работает',
+  'footer.quickLinks.categories': 'Категории',
+  'footer.quickLinks.forProfessionals': 'Для специалистов',
+  'footer.quickLinks.security': 'Безопасность',
+  'footer.quickLinks.help': 'Помощь',
+  'footer.legal.title': 'Правовые',
+  'footer.legal.terms': 'Условия обслуживания',
+  'footer.legal.privacy': 'Политика конфиденциальности',
+  'footer.legal.gdpr': 'GDPR',
+  'footer.legal.cookies': 'Cookies',
+  'footer.legal.complaints': 'Жалобы',
+  'footer.contact.title': 'Контакты',
+  'footer.contact.subtitle': 'Свяжитесь с нами по вопросам и поддержке',
+  'footer.language.label': 'Язык',
+  'footer.copyright': '© 2025 Obod Soft LTD. Все права защищены.',
+};
