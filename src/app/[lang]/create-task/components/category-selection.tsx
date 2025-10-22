@@ -7,7 +7,7 @@ import { CreateTaskFormData } from '../lib/validation'
 import { useState, useMemo } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory } from '@/features/categories'
+import { MAIN_CATEGORIES, SUBCATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory } from '@/features/categories'
 
 interface CategorySelectionProps {
  form: UseFormReturn<CreateTaskFormData>
@@ -79,57 +79,44 @@ export function CategorySelection({ form }: CategorySelectionProps) {
   ).slice(0, 12) // Limit to 12 results
  }, [searchQuery, allSubcategories, t])
 
- // Helper function to get icon for category
- function getCategoryIcon(slug: string): string {
-  const iconMap: Record<string, string> = {
-   'plumbing': '🔧',
-   'electrician': '⚡',
-   'handyman': '🛠️',
-   'locksmith': '🔑',
-   'carpenter': '🪚',
-   'appliance-repair': '🔌',
-   'apartment-renovation': '🏗️',
-   'tile-installation': '🏺',
-   'painting': '🎨',
-   'plastering': '🧱',
-   'bricklaying': '🧱',
-   'general-labor': '👷',
-   'moving-service': '🚚',
-   'cargo-transport': '📦',
-   'loaders': '💪',
-   'furniture-moving': '🛋️',
-   'waste-removal': '🗑️',
-   'apartment-cleaning': '🧹',
-   'deep-cleaning': '✨',
-   'post-renovation-cleaning': '🧽',
-   'house-cleaning': '🏡',
-   'office-cleaning': '🏢',
-   'babysitting': '👶',
-   'caregiver': '👵',
-   'housekeeper': '🧹',
-   'tutoring': '📚',
-   'pet-care': '🐕',
-   'computer-repair': '💻',
-   'phone-repair': '📱',
-   'it-support': '🖥️',
-   'web-development': '🌐',
-   'digital-marketing': '📈',
-   'seo-services': '🔍',
-  }
-  return iconMap[slug] || '📋'
- }
-
- // Helper function to get main category icon
- function getMainCategoryIcon(slug: string): string {
-  const iconMap: Record<string, string> = {
-   'home-services': '🏠',
-   'renovation': '🔨',
-   'moving': '🚚',
-   'cleaning': '✨',
-   'personal': '👤',
-   'tech': '💻',
-  }
-  return iconMap[slug] || '📋'
+ // Color configuration for main category cards (matching MainCategoryCard)
+ const colorConfig = {
+  blue: {
+   background: "bg-blue-50/80 hover:bg-gradient-to-br hover:from-blue-100 hover:to-indigo-100",
+   border: "border-blue-200/50 hover:border-blue-300/70",
+   icon: "text-blue-600",
+   iconBg: "bg-blue-100/50 group-hover:bg-blue-200/70 group-hover:shadow-lg group-hover:shadow-blue-200/50"
+  },
+  green: {
+   background: "bg-emerald-50/80 hover:bg-gradient-to-br hover:from-emerald-100 hover:to-teal-100",
+   border: "border-emerald-200/50 hover:border-emerald-300/70",
+   icon: "text-emerald-600",
+   iconBg: "bg-emerald-100/50 group-hover:bg-emerald-200/70 group-hover:shadow-lg group-hover:shadow-emerald-200/50"
+  },
+  purple: {
+   background: "bg-purple-50/80 hover:bg-gradient-to-br hover:from-purple-100 hover:to-violet-100",
+   border: "border-purple-200/50 hover:border-purple-300/70",
+   icon: "text-purple-600",
+   iconBg: "bg-purple-100/50 group-hover:bg-purple-200/70 group-hover:shadow-lg group-hover:shadow-purple-200/50"
+  },
+  orange: {
+   background: "bg-orange-50/80 hover:bg-gradient-to-br hover:from-orange-100 hover:to-red-100",
+   border: "border-orange-200/50 hover:border-orange-300/70",
+   icon: "text-orange-600",
+   iconBg: "bg-orange-100/50 group-hover:bg-orange-200/70 group-hover:shadow-lg group-hover:shadow-orange-200/50"
+  },
+  indigo: {
+   background: "bg-indigo-50/80 hover:bg-gradient-to-br hover:from-indigo-100 hover:to-blue-100",
+   border: "border-indigo-200/50 hover:border-indigo-300/70",
+   icon: "text-indigo-600",
+   iconBg: "bg-indigo-100/50 group-hover:bg-indigo-200/70 group-hover:shadow-lg group-hover:shadow-indigo-200/50"
+  },
+  pink: {
+   background: "bg-pink-50/80 hover:bg-gradient-to-br hover:from-pink-100 hover:to-rose-100",
+   border: "border-pink-200/50 hover:border-pink-300/70",
+   icon: "text-pink-600",
+   iconBg: "bg-pink-100/50 group-hover:bg-pink-200/70 group-hover:shadow-lg group-hover:shadow-pink-200/50"
+  },
  }
 
  const handleMainCategorySelect = (categoryId: string) => {
@@ -230,9 +217,16 @@ export function CategorySelection({ form }: CategorySelectionProps) {
       {t('createTask.category.backToMain', 'Back to main categories')}
      </button>
      <ChevronRight size={16} className="text-gray-400" />
-     <span className="text-sm font-semibold text-gray-900">
-      {getMainCategoryIcon(selectedMainCategory)} {t(`${MAIN_CATEGORIES.find(c => c.id === selectedMainCategory)?.translationKey}.title` || '')}
-     </span>
+     {(() => {
+      const mainCat = MAIN_CATEGORIES.find(c => c.id === selectedMainCategory)
+      const Icon = mainCat?.icon
+      return (
+       <span className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+        {Icon && <Icon size={16} className="text-primary" />}
+        {t(`${mainCat?.translationKey}.title` || '')}
+       </span>
+      )
+     })()}
     </motion.div>
    )}
 
@@ -276,9 +270,6 @@ export function CategorySelection({ form }: CategorySelectionProps) {
                : 'hover:border-primary/50 hover:shadow-md'
              }`}
              onClick={() => handleSubcategorySelect(category.slug)}
-             startContent={
-              <span className="text-2xl mr-1">{getCategoryIcon(category.slug)}</span>
-             }
             >
              <span className="font-semibold text-base">{t(category.translationKey)}</span>
             </Chip>
@@ -290,31 +281,58 @@ export function CategorySelection({ form }: CategorySelectionProps) {
       ) : !searchQuery && filteredMainCategories.length > 0 ? (
        /* Show main categories when no search */
        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {filteredMainCategories.map((category, index) => (
-         <motion.div
-          key={category.id}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: index * 0.05, duration: 0.2 }}
-         >
-          <Card
-           isPressable
-           isHoverable
-           onPress={() => handleMainCategorySelect(category.id)}
-           className="border-2 border-transparent hover:border-primary/50 hover:shadow-lg transition-all"
+        {filteredMainCategories.map((category, index) => {
+         const Icon = category.icon
+         const config = colorConfig[category.color as keyof typeof colorConfig]
+
+         return (
+          <motion.div
+           key={category.id}
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ delay: index * 0.05, duration: 0.2 }}
           >
-           <CardBody className="text-center p-6">
-            <div className="text-5xl mb-3">{getMainCategoryIcon(category.slug)}</div>
-            <h3 className="font-bold text-gray-900 mb-1">
-             {t(`${category.translationKey}.title`)}
-            </h3>
-            <p className="text-xs text-gray-500">
-             {t(`${category.translationKey}.description`)}
-            </p>
-           </CardBody>
-          </Card>
-         </motion.div>
-        ))}
+           <Card
+            isPressable
+            isHoverable
+            onPress={() => handleMainCategorySelect(category.id)}
+            className={`
+             group relative overflow-hidden transition-all duration-300
+             ${config.background}
+             hover:scale-[1.02] hover:shadow-2xl
+             border-2 ${config.border}
+            `}
+           >
+            <CardBody className="p-6">
+             <div className="flex flex-col items-center text-center">
+              {/* Icon Container */}
+              <div className={`
+               w-16 h-16 rounded-xl flex items-center justify-center mb-4
+               ${config.iconBg}
+               transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
+              `}>
+               <Icon size={32} className={`${config.icon} transition-all duration-300`} />
+              </div>
+
+              {/* Text Content */}
+              <h3 className="font-bold text-gray-900 mb-2 text-lg group-hover:text-slate-800 transition-colors">
+               {t(`${category.translationKey}.title`)}
+              </h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+               {t(`${category.translationKey}.description`)}
+              </p>
+             </div>
+            </CardBody>
+
+            {/* Subtle background decoration */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+             <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-white/40"></div>
+             <div className="absolute bottom-4 left-4 w-1.5 h-1.5 rounded-full bg-white/30"></div>
+            </div>
+           </Card>
+          </motion.div>
+         )
+        })}
        </div>
       ) : (
        <motion.div
@@ -363,9 +381,6 @@ export function CategorySelection({ form }: CategorySelectionProps) {
               : 'hover:border-primary/50 hover:shadow-md'
             }`}
             onClick={() => handleSubcategorySelect(category.slug)}
-            startContent={
-             <span className="text-2xl mr-1">{getCategoryIcon(category.slug)}</span>
-            }
            >
             <span className="font-semibold text-base">{t(category.translationKey)}</span>
            </Chip>
@@ -401,9 +416,14 @@ export function CategorySelection({ form }: CategorySelectionProps) {
     >
      <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-       <div className="text-2xl">
-        {getCategoryIcon(selectedCategory)}
-       </div>
+       {selectedMainCategoryData && (() => {
+        const Icon = selectedMainCategoryData.icon
+        return Icon ? (
+         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+          <Icon size={20} className="text-primary" />
+         </div>
+        ) : null
+       })()}
        <div>
         <p className="text-xs text-primary font-medium uppercase">
          {t('createTask.category.selected', 'Selected Service')}
