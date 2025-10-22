@@ -15,7 +15,6 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
     "@neondatabase/serverless": "^0.10.4",
     "@nextui-org/react": "^2.6.11",
@@ -71,7 +70,6 @@
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.55.0",
     "react-i18next": "^15.6.0",
     "react-icons": "^5.4.0",
     "react-resizable-panels": "^2.1.7",

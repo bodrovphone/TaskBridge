@@ -2,7 +2,6 @@
 
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Input } from '@nextui-org/react'
-import { UseFormReturn } from 'react-hook-form'
 import { CreateTaskFormData } from '../lib/validation'
 import { useState, useMemo } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
@@ -10,16 +9,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory } from '@/features/categories'
 
 interface CategorySelectionProps {
- form: UseFormReturn<CreateTaskFormData>
+ form: any
+ onCategoryChange: (category: string) => void
 }
 
-export function CategorySelection({ form }: CategorySelectionProps) {
+export function CategorySelection({ form, onCategoryChange }: CategorySelectionProps) {
  const { t } = useTranslation()
- const { setValue, watch, formState: { errors } } = form
  const [searchQuery, setSearchQuery] = useState('')
  const [selectedMainCategory, setSelectedMainCategory] = useState<string | null>(null)
-
- const selectedCategory = watch('category')
+ const [selectedCategory, setSelectedCategory] = useState('')
+ const [errors, setErrors] = useState<string[]>([])
 
  // Get subcategories for selected main category
  const subcategories = selectedMainCategory
@@ -138,13 +137,17 @@ export function CategorySelection({ form }: CategorySelectionProps) {
  }
 
  const handleSubcategorySelect = (slug: string) => {
-  setValue('category', slug, { shouldValidate: true })
+  form.setFieldValue('category', slug)
+  setSelectedCategory(slug)
+  onCategoryChange(slug)
   setSearchQuery('') // Clear search after selection
  }
 
  const handleReset = () => {
   setSelectedMainCategory(null)
-  setValue('category', '', { shouldValidate: true })
+  form.setFieldValue('category', '')
+  setSelectedCategory('')
+  onCategoryChange('')
   setSearchQuery('')
  }
 
@@ -436,9 +439,9 @@ export function CategorySelection({ form }: CategorySelectionProps) {
    )}
 
    {/* Error Message */}
-   {errors.category && (
+   {errors && errors.length > 0 && (
     <p className="text-danger text-sm text-center">
-     {t(errors.category.message as string)}
+     {t(errors[0] as string)}
     </p>
    )}
   </div>

@@ -3,22 +3,19 @@
 import { useTranslation } from 'react-i18next'
 import { Button, Card, CardBody } from '@nextui-org/react'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
-import { CreateTaskFormData } from '../lib/validation'
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 
 interface PhotosSectionProps {
- form: UseFormReturn<CreateTaskFormData>
+ form: any
 }
 
 export function PhotosSection({ form }: PhotosSectionProps) {
  const { t } = useTranslation()
- const { setValue, watch, formState: { errors } } = form
  const [isUploading, setIsUploading] = useState(false)
  const fileInputRef = useRef<HTMLInputElement>(null)
-
- const photos = watch('photos') || []
+ const [photos, setPhotos] = useState<string[]>([])
+ const [errors, setErrors] = useState<string[]>([])
 
  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const files = event.target.files
@@ -55,7 +52,9 @@ export function PhotosSection({ form }: PhotosSectionProps) {
    }
 
    // Update form with new photo URLs
-   setValue('photos', [...photos, ...newPhotoUrls], { shouldValidate: true })
+   const updatedPhotos = [...photos, ...newPhotoUrls]
+   form.setFieldValue('photos', updatedPhotos)
+   setPhotos(updatedPhotos)
   } catch (error) {
    console.error('Error uploading photos:', error)
    alert(t('createTask.photos.uploadError', 'Failed to upload photos. Please try again.'))
@@ -69,8 +68,9 @@ export function PhotosSection({ form }: PhotosSectionProps) {
  }
 
  const removePhoto = (index: number) => {
-  const newPhotos = photos.filter((_, i) => i !== index)
-  setValue('photos', newPhotos, { shouldValidate: true })
+  const newPhotos = photos.filter((_: any, i: number) => i !== index)
+  form.setFieldValue('photos', newPhotos)
+  setPhotos(newPhotos)
  }
 
  return (
@@ -128,7 +128,7 @@ export function PhotosSection({ form }: PhotosSectionProps) {
    {/* Photo Previews */}
    {photos.length > 0 && (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-     {photos.map((photoUrl, index) => (
+     {photos.map((photoUrl: string, index: number) => (
       <div key={index} className="relative group">
        <Card>
         <CardBody className="p-0 aspect-square">
@@ -170,9 +170,9 @@ export function PhotosSection({ form }: PhotosSectionProps) {
    )}
 
    {/* Error Message */}
-   {errors.photos && (
+   {errors && errors.length > 0 && (
     <p className="text-danger text-sm">
-     {t(errors.photos.message as string)}
+     {t(errors[0] as string)}
     </p>
    )}
 
