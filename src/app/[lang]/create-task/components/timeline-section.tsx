@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, DatePicker } from '@nextui-org/react'
 import { parseDate } from '@internationalized/date'
+import { Clock } from 'lucide-react'
 
 interface TimelineSectionProps {
  form: any
@@ -36,16 +37,22 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
  ]
 
  return (
-  <div className="space-y-6">
-   {/* Section Header */}
-   <div>
-    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-     {t('createTask.timeline.title', 'When do you need this done?')}
-    </h2>
-    <p className="text-gray-600">
-     {t('createTask.timeline.subtitle', 'Let professionals know your timeline')}
-    </p>
-   </div>
+  <Card className="shadow-md border border-gray-100">
+   <CardBody className="p-6 md:p-8 space-y-6">
+    {/* Section Header */}
+    <div className="flex items-start gap-3 pb-4 border-b border-gray-200">
+     <div className="p-2 bg-purple-100 rounded-lg">
+      <Clock className="w-6 h-6 text-purple-600" />
+     </div>
+     <div>
+      <h2 className="text-2xl font-bold text-gray-900 mb-1">
+       {t('createTask.timeline.title', 'When do you need this done?')}
+      </h2>
+      <p className="text-gray-600">
+       {t('createTask.timeline.subtitle', 'Let professionals know your timeline')}
+      </p>
+     </div>
+    </div>
 
    {/* Urgency Selection */}
    <form.Field name="urgency">
@@ -85,9 +92,10 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
 
    {/* Specific Deadline (Optional) - Hidden for same_day urgency */}
    {urgency !== 'same_day' && (
-    <form.Field name="deadline">
+    <form.Field name="deadline" key="deadline-field">
      {(field: any) => (
       <DatePicker
+       key="deadline-picker"
        label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
        description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
        value={field.state.value ? parseDate(field.state.value.toISOString().split('T')[0]) : null}
@@ -101,13 +109,18 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
        }}
        minValue={parseDate(new Date().toISOString().split('T')[0])}
        showMonthAndYearPickers
+       labelPlacement="outside"
+       isDisabled={false}
        classNames={{
         base: 'max-w-md',
+        popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
+        calendar: 'bg-white shadow-sm',
        }}
       />
      )}
     </form.Field>
    )}
-  </div>
+   </CardBody>
+  </Card>
  )
 }
