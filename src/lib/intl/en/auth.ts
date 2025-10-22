@@ -10,6 +10,9 @@ export const auth = {
     'Ask the client a question before applying for the task.',
   'auth.createTaskDescription':
     'Create a new task and find trusted professionals to complete your work.',
+  'auth.joinAsProfessional': 'Join as Professional',
+  'auth.joinAsProfessionalDescription':
+    'Start earning by offering your skills and services to customers in your area.',
   'auth.loginDescription':
     'Access your account to manage tasks and connect with professionals.',
   'auth.email': 'Email address',

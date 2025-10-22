@@ -76,9 +76,15 @@ function CategoryCard({
     </p>
    </CardBody>
    <CardFooter className="px-8 pb-8 pt-0 justify-center">
-    <div className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors duration-300">
-     <span className="text-lg font-bold">{count}+</span> {t('landing.categories.activeSpecialists')}
-    </div>
+    {count === 0 ? (
+     <div className="text-sm font-bold text-blue-600 group-hover:text-blue-700 transition-colors duration-300">
+      {t('landing.categories.beFirst')}
+     </div>
+    ) : (
+     <div className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors duration-300">
+      <span className="text-lg font-bold">{count}+</span> {t('landing.categories.activeSpecialists')}
+     </div>
+    )}
    </CardFooter>
    
    {/* Subtle background decoration */}

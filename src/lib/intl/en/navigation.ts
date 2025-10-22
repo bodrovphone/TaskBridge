@@ -9,7 +9,7 @@ export const navigation = {
   'nav.forProfessionals': 'Professionals',
   'nav.forCustomers': 'For Customers',
   'nav.myTasks': 'My Tasks',
-  'nav.myPostedTasks': 'My Posted Tasks',
+  'nav.myPostedTasks': 'My Tasks',
   'nav.myApplications': 'My Applications',
   'nav.myWork': 'My Work',
   'nav.help': 'Help',

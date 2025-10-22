@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 interface AuthSlideOverProps {
  isOpen: boolean;
  onClose: () => void;
- action: 'apply' | 'question' | 'create-task' | null;
+ action: 'apply' | 'question' | 'create-task' | 'join-professional' | null;
 }
 
 export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
@@ -65,7 +65,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         <h2 className="text-lg font-semibold text-white">
          {action === 'apply' ? t('auth.applyForTask') :
           action === 'question' ? t('auth.askQuestion') :
-          action === 'create-task' ? t('auth.createTask') : t('auth.loginOrRegister')}
+          action === 'create-task' ? t('auth.createTask') :
+          action === 'join-professional' ? t('auth.joinAsProfessional') : t('auth.loginOrRegister')}
         </h2>
         <p className="text-blue-100 text-sm">
          {t('auth.loginOrRegisterToContinue')}
@@ -94,7 +95,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         <h3 className="font-medium text-gray-900 mb-2">
          {action === 'apply' ? `🎯 ${t('auth.applyForTask')}` :
           action === 'question' ? `💬 ${t('auth.askQuestion')}` :
-          action === 'create-task' ? `➕ ${t('auth.createTask')}` : `🔐 ${t('auth.loginOrRegister')}`}
+          action === 'create-task' ? `➕ ${t('auth.createTask')}` :
+          action === 'join-professional' ? `💼 ${t('auth.joinAsProfessional')}` : `🔐 ${t('auth.loginOrRegister')}`}
         </h3>
         <p className="text-sm text-gray-600">
          {action === 'apply'
@@ -103,6 +105,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           ? t('auth.questionDescription')
           : action === 'create-task'
           ? t('auth.createTaskDescription')
+          : action === 'join-professional'
+          ? t('auth.joinAsProfessionalDescription')
           : t('auth.loginOrRegisterDescription')
          }
         </p>

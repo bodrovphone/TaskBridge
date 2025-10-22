@@ -19,7 +19,7 @@ export const notifications = {
   'taskDetail.backToTasks': 'Back to tasks',
   'taskDetail.requirements': 'Requirements:',
   'taskDetail.keyInformation': 'Key Information',
-  'taskDetail.client': 'Client',
+  'taskDetail.client': 'Task Author',
   'taskDetail.loginForMore': 'Login for more',
   'taskDetail.loginMessage': 'Log in to see full information',
   'taskDetail.completedTasks': 'completed tasks',

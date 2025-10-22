@@ -1,18 +1,19 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
+  'landing.hero.badge': 'Вашата доверена платформа за услуги',
   'landing.hero.title': 'Вашата местна платформа за услуги и възможности',
   'landing.hero.subtitle':
     'Trudify свързва хора, които се нуждаят от помощ, с квалифицирани специалисти, готови да печелят. Публикувайте задача или намерете работа - доверено, проверено и лесно.',
   'landing.hero.getStarted': 'Публикувай задача',
   'landing.hero.browseServices': 'Намери работа',
 
-  'landing.trustIndicators.verified': 'Проверени специалисти',
+  'landing.trustIndicators.verified': 'Верифицирани от общността',
   'landing.trustIndicators.securePayments': 'Сигурни плащания',
   'landing.trustIndicators.support': '24/7 поддръжка',
   'landing.trustIndicators.freeToUse': 'Безплатно за използване',
   'landing.trustIndicators.communityReviews': 'Отзиви от общността',
   'landing.trustIndicators.verifiedDescription':
-    'Всички специалисти са проверени',
+    'Email/SMS верификация и отзиви от общността',
   'landing.trustIndicators.ratingSystem': '5-звездна система за оценка',
   'landing.trustIndicators.ratingSystemDescription':
     'Качеството се гарантира чрез отзиви от общността',
@@ -23,9 +24,13 @@ export const landing = {
   'landing.trustIndicators.contractsDescription':
     'Всички работи се защитават от ясни споразумения',
 
-  'landing.stats.averageRating': 'средна оценка',
-  'landing.stats.completedTasks': 'завършени задачи',
+  'landing.stats.averageRating': 'Качествена услуга',
+  'landing.stats.completedTasks': 'Расте всеки ден',
+  'landing.stats.ratingValue': 'Стартираме',
+  'landing.stats.tasksValue': 'Бета версия',
   'landing.categories.activeSpecialists': 'активни специалисти',
+  'landing.categories.specialists': 'специалисти',
+  'landing.categories.beFirst': 'Бъди първият!',
 
   'landing.trustStats.securityUptime': 'Сигурност',
   'landing.trustStats.avgRating': 'Средна оценка',
@@ -57,7 +62,10 @@ export const landing = {
   'landing.featured.viewAll': 'Вижте всички задачи',
   'landing.featured.professionalDesc': 'Намерете следващата си възможност',
   'landing.featured.customerDesc': 'Вижте какво публикуват други',
+  'landing.featured.noTasks': 'Няма налични задачи в момента.',
+  'landing.featured.postFirstTask': 'Публикувай първата задача',
 
+  'landing.howItWorks.badge': 'Лесен процес',
   'landing.howItWorks.title': 'Как работи платформата',
   'landing.howItWorks.subtitle':
     'Лесен процес за намиране и завършване на задачи с проверени специалисти',
@@ -128,12 +136,16 @@ export const landing = {
     'Вашата сигурност и удовлетвореност са нашите най-важни приоритети',
 
   'landing.cta.title': 'Готови ли сте да започнете?',
-  'landing.cta.subtitle': 'Присъединете се към хиляди доволни потребители днес',
+  'landing.cta.subtitle': 'Бъдете част от общността от първия ден',
   'landing.cta.postTask': 'Публикувайте задача',
   'landing.cta.joinProfessionals': 'Стани професионалист',
   'landing.cta.freeToJoin': 'Безплатно присъединяване, без скрити такси',
-  'landing.cta.stats.completedTasks': 'Завършени задачи',
-  'landing.cta.stats.activeSpecialists': 'Активни специалисти',
-  'landing.cta.stats.averageRating': 'Средна оценка',
-  'landing.cta.stats.contractTemplates': 'Правни шаблони',
+  'landing.cta.stats.completedTasks': 'Категории услуги',
+  'landing.cta.stats.activeSpecialists': 'Български градове',
+  'landing.cta.stats.averageRating': 'Доверие в общността',
+  'landing.cta.stats.contractTemplates': 'Сигурност',
+  'landing.cta.stats.completedTasksValue': '26+',
+  'landing.cta.stats.activeSpecialistsValue': '50+',
+  'landing.cta.stats.averageRatingValue': '100%',
+  'landing.cta.stats.contractTemplatesValue': 'GDPR',
 };

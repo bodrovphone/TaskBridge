@@ -1,18 +1,19 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
+  'landing.hero.badge': 'Ваша надежная платформа услуг',
   'landing.hero.title': 'Ваша местная платформа для услуг и возможностей',
   'landing.hero.subtitle':
     'Trudify связывает людей, которым нужна помощь, с квалифицированными специалистами, готовыми зарабатывать. Разместите задачу или найдите работу - надежно, проверено и просто.',
   'landing.hero.getStarted': 'Разместить задачу',
   'landing.hero.browseServices': 'Найти работу',
 
-  'landing.trustIndicators.verified': 'Проверенные специалисты',
+  'landing.trustIndicators.verified': 'Проверено сообществом',
   'landing.trustIndicators.securePayments': 'Безопасные платежи',
   'landing.trustIndicators.support': 'Поддержка 24/7',
   'landing.trustIndicators.freeToUse': 'Бесплатно в использовании',
   'landing.trustIndicators.communityReviews': 'Отзывы сообщества',
   'landing.trustIndicators.verifiedDescription':
-    'Все специалисты тщательно проверены',
+    'Email/SMS верификация и отзывы сообщества',
   'landing.trustIndicators.ratingSystem': '5-звездная система рейтинга',
   'landing.trustIndicators.ratingSystemDescription':
     'Качество гарантировано через отзывы сообщества',
@@ -23,9 +24,13 @@ export const landing = {
   'landing.trustIndicators.contractsDescription':
     'Вся работа защищена четкими соглашениями',
 
-  'landing.stats.averageRating': 'средний рейтинг',
-  'landing.stats.completedTasks': 'выполненных задач',
+  'landing.stats.averageRating': 'Качественный сервис',
+  'landing.stats.completedTasks': 'Растем каждый день',
+  'landing.stats.ratingValue': 'Запуск',
+  'landing.stats.tasksValue': 'Бета-версия',
   'landing.categories.activeSpecialists': 'активных специалистов',
+  'landing.categories.specialists': 'специалистов',
+  'landing.categories.beFirst': 'Будь первым!',
 
   'landing.trustStats.securityUptime': 'Безопасность',
   'landing.trustStats.avgRating': 'Средний рейтинг',
@@ -54,11 +59,14 @@ export const landing = {
   'landing.featured.title': 'Рекомендуемые задачи',
   'landing.featured.subtitle':
     'Последние задачи, опубликованные нашим сообществом',
-  'landing.featured.badge': 'Последние возможности',
+  'landing.featured.badge': 'Избранные задачи',
   'landing.featured.viewAll': 'Посмотреть все задачи',
   'landing.featured.professionalDesc': 'Найдите свою следующую возможность',
   'landing.featured.customerDesc': 'Посмотрите, что публикуют другие',
+  'landing.featured.noTasks': 'В данный момент нет доступных задач.',
+  'landing.featured.postFirstTask': 'Разместить первую задачу',
 
+  'landing.howItWorks.badge': 'Простой процесс',
   'landing.howItWorks.title': 'Как это работает',
   'landing.howItWorks.subtitle':
     'Простой процесс поиска и выполнения задач с проверенными специалистами',
@@ -129,13 +137,16 @@ export const landing = {
     'Ваша безопасность и удовлетворенность - наши главные приоритеты',
 
   'landing.cta.title': 'Готовы начать?',
-  'landing.cta.subtitle':
-    'Присоединяйтесь к тысячам довольных пользователей сегодня',
+  'landing.cta.subtitle': 'Станьте частью сообщества с первого дня',
   'landing.cta.postTask': 'Создать задачу',
   'landing.cta.joinProfessionals': 'Присоединиться как специалист',
   'landing.cta.freeToJoin': 'Бесплатное присоединение, без скрытых комиссий',
-  'landing.cta.stats.completedTasks': 'Выполненных задач',
-  'landing.cta.stats.activeSpecialists': 'Активных специалистов',
-  'landing.cta.stats.averageRating': 'Средний рейтинг',
-  'landing.cta.stats.contractTemplates': 'Правовых шаблонов',
+  'landing.cta.stats.completedTasks': 'Категории услуг',
+  'landing.cta.stats.activeSpecialists': 'Болгарские города',
+  'landing.cta.stats.averageRating': 'Доверие сообщества',
+  'landing.cta.stats.contractTemplates': 'Безопасность',
+  'landing.cta.stats.completedTasksValue': '26+',
+  'landing.cta.stats.activeSpecialistsValue': '50+',
+  'landing.cta.stats.averageRatingValue': '100%',
+  'landing.cta.stats.contractTemplatesValue': 'GDPR',
 };

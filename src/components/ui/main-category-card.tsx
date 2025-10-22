@@ -3,6 +3,7 @@
 import { LucideIcon } from "lucide-react"
 import { Card, CardBody, CardFooter, Chip } from "@nextui-org/react"
 import { useRouter, useParams } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import { useMemo } from "react"
 
 interface Subcategory {
@@ -37,6 +38,7 @@ function MainCategoryCard({
  subcategories,
  totalCount
 }: MainCategoryCardProps) {
+ const { t } = useTranslation()
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'en'
@@ -158,14 +160,20 @@ function MainCategoryCard({
    </CardBody>
 
    <CardFooter className="px-6 pb-6 pt-0 justify-between border-t border-slate-200/50">
-    <div className="text-sm font-semibold text-slate-700">
-     <span className="text-lg font-bold text-slate-900">{totalCount}+</span> specialists
-    </div>
+    {totalCount === 0 ? (
+     <div className="text-sm font-bold text-blue-600">
+      {t('landing.categories.beFirst')}
+     </div>
+    ) : (
+     <div className="text-sm font-semibold text-slate-700">
+      <span className="text-lg font-bold text-slate-900">{totalCount}+</span> {t('landing.categories.specialists')}
+     </div>
+    )}
     <button
      onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
      className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
     >
-     View all →
+     {t('landing.categories.viewAll')} →
     </button>
    </CardFooter>
 

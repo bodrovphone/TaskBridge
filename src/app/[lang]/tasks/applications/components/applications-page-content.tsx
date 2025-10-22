@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
-import { Send, Calendar, DollarSign, MapPin, User, FileText, X } from 'lucide-react'
+import { Send, Calendar, Banknote, MapPin, User, FileText, X } from 'lucide-react'
 
 interface ApplicationsPageContentProps {
   lang: string
@@ -34,8 +34,8 @@ interface MyApplication {
   }
 }
 
-// Mock data for development
-const mockApplications: MyApplication[] = [
+// Mock data for development - timeline keys reference translation keys
+const getMockApplications = (t: (key: string) => string): MyApplication[] => [
   {
     id: 'app-1',
     taskId: 'task-1',
@@ -44,7 +44,7 @@ const mockApplications: MyApplication[] = [
     customerName: 'Peter Ivanov',
     customerAvatar: undefined,
     proposedPrice: 250,
-    timeline: 'This weekend (Oct 21-22)',
+    timeline: t('myApplications.mockTimeline.thisWeekend'),
     message: 'I have experience with office relocations and own a van. Can complete this efficiently.',
     status: 'pending',
     submittedAt: new Date('2024-10-18'),
@@ -65,7 +65,7 @@ const mockApplications: MyApplication[] = [
     customerName: 'Elena Dimitrova',
     customerAvatar: undefined,
     proposedPrice: 180,
-    timeline: 'Next week, flexible schedule',
+    timeline: t('myApplications.mockTimeline.nextWeek'),
     message: 'Professional tiler with 10 years experience. Can provide references.',
     status: 'accepted',
     submittedAt: new Date('2024-10-16'),
@@ -86,7 +86,7 @@ const mockApplications: MyApplication[] = [
     customerName: 'Georgi Petrov',
     customerAvatar: undefined,
     proposedPrice: 15,
-    timeline: 'Starting next Monday, Mon-Fri 7-8am',
+    timeline: t('myApplications.mockTimeline.startMonday'),
     message: 'Dog lover with experience walking large breeds. Available every morning.',
     status: 'rejected',
     submittedAt: new Date('2024-10-14'),
@@ -105,6 +105,9 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   const { t } = useTranslation()
   const router = useRouter()
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('all')
+
+  // Get mock applications with localized timelines
+  const mockApplications = getMockApplications(t)
 
   const filteredApplications = mockApplications.filter(app => {
     if (selectedStatus === 'all') return true
@@ -142,8 +145,8 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   }
 
   const getApplicationCountByStatus = (status: ApplicationStatus) => {
-    if (status === 'all') return mockApplications.length
-    return mockApplications.filter(app => app.status === status).length
+    if (status === 'all') return getMockApplications(t).length
+    return getMockApplications(t).filter(app => app.status === status).length
   }
 
   const handleWithdrawApplication = (appId: string) => {
@@ -319,16 +322,16 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                     <h4 className="text-sm font-semibold text-blue-900 mb-2">
                       {t('myApplications.yourProposal')}
                     </h4>
-                    <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="space-y-2 mb-3">
                       <div className="flex items-center gap-2 text-sm">
-                        <DollarSign className="w-4 h-4 text-blue-600" />
+                        <Banknote className="w-4 h-4 text-blue-600 flex-shrink-0" />
                         <span className="font-semibold text-blue-900">
-                          {t('myApplications.proposedPrice', { price: application.proposedPrice })}
+                          {application.proposedPrice} лв
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-blue-800">
-                        <Calendar className="w-4 h-4 text-blue-600" />
-                        <span>{application.timeline}</span>
+                      <div className="flex items-start gap-2 text-sm text-blue-800">
+                        <Calendar className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <span className="break-words">{application.timeline}</span>
                       </div>
                     </div>
                     <p className="text-sm text-blue-900 italic">"{application.message}"</p>
@@ -351,7 +354,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 pt-4 border-t border-gray-200">
                     <Button
                       size="sm"
                       variant="flat"

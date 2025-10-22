@@ -9,7 +9,7 @@ export const navigation = {
   'nav.forProfessionals': 'Профессионалы',
   'nav.forCustomers': 'Для клиентов',
   'nav.myTasks': 'Мои задачи',
-  'nav.myPostedTasks': 'Мои опубликованные задачи',
+  'nav.myPostedTasks': 'Мои задачи',
   'nav.myApplications': 'Мои заявки',
   'nav.myWork': 'Моя работа',
   'nav.help': 'Помощь',

@@ -2,14 +2,16 @@
 
 import { Mail, Shield, Star, Award, Heart, Handshake } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { usePathname } from "next/navigation";
-import { LanguageSwitcher } from "./language-switcher";
+import { usePathname, useRouter } from "next/navigation";
 import { LocaleLink } from "./locale-link";
-// import { extractLocaleFromPathname } from "@/lib/utils/url-locale";
+import { LANGUAGE_CONFIG } from "@/lib/constants/locales";
+import { extractLocaleFromPathname, replaceLocaleInPathname } from "@/lib/utils/url-locale";
+import { saveUserLocalePreference } from "@/lib/utils/client-locale";
 
 function Footer() {
- const { t } = useTranslation();
+ const { t, i18n } = useTranslation();
  const pathname = usePathname();
+ const router = useRouter();
 
  // Check if we're on the index/landing page for smart category linking
  const lang = pathname.split('/')[1] || 'en';
@@ -42,62 +44,62 @@ function Footer() {
    <div className="relative">
     {/* Main Footer Content */}
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-      
-      {/* Company Info */}
-      <div className="lg:col-span-2 space-y-6">
-       <div className="flex items-center gap-3">
-        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-         <Handshake className="text-white" size={24} />
-        </div>
-        <span className="text-2xl font-bold text-white">Trudify</span>
+     {/* Company Info - Full Width on Mobile */}
+     <div className="mb-12 col-span-full">
+      <div className="flex items-center gap-3 mb-4">
+       <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+        <Handshake className="text-white" size={20} />
        </div>
-       <p className="text-slate-300 text-base leading-relaxed max-w-md">
-        {t('footer.company.description')}
-       </p>
-       
-       {/* Trust Indicators */}
-       <div className="flex flex-wrap gap-4 text-sm">
-        <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-2 rounded-full">
-         <Shield className="h-4 w-4 text-blue-400" />
-         <span className="text-slate-300">SSL Secured</span>
-        </div>
-        <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-2 rounded-full">
-         <Star className="h-4 w-4 text-yellow-400" />
-         <span className="text-slate-300">4.9/5 Rating</span>
-        </div>
-        <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-2 rounded-full">
-         <Award className="h-4 w-4 text-green-400" />
-         <span className="text-slate-300">Verified Platform</span>
-        </div>
+       <span className="text-xl sm:text-2xl font-bold text-white">Trudify</span>
+      </div>
+      <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md mb-4">
+       {t('footer.company.description')}
+      </p>
+
+      {/* Trust Indicators */}
+      <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm mb-4">
+       <div className="flex items-center gap-2 bg-slate-800/50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full">
+        <Shield className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
+        <span className="text-slate-300">SSL Secured</span>
        </div>
-       
-       {/* Contact Info */}
-       <div className="flex items-center gap-3 text-slate-300">
-        <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl">
-         <Mail className="h-5 w-5 text-white" />
-        </div>
-        <div>
-         <p className="text-sm text-slate-400">Get in touch</p>
-         <a 
-          href="mailto:support@obodsoft.com" 
-          className="text-slate-200 hover:text-blue-400 transition-colors font-medium"
-         >
-          support@obodsoft.com
-         </a>
-        </div>
+       <div className="flex items-center gap-2 bg-slate-800/50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full">
+        <Star className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400" />
+        <span className="text-slate-300">4.9/5 Rating</span>
+       </div>
+       <div className="flex items-center gap-2 bg-slate-800/50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full">
+        <Award className="h-3 w-3 sm:h-4 sm:w-4 text-green-400" />
+        <span className="text-slate-300">Verified Platform</span>
        </div>
       </div>
 
+      {/* Contact Info */}
+      <div className="flex items-center gap-3 text-slate-300">
+       <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl">
+        <Mail className="h-5 w-5 text-white" />
+       </div>
+       <div>
+        <p className="text-xs sm:text-sm text-slate-400">Get in touch</p>
+        <a
+         href="mailto:support@obodsoft.com"
+         className="text-sm sm:text-base text-slate-200 hover:text-blue-400 transition-colors font-medium"
+        >
+         support@obodsoft.com
+        </a>
+       </div>
+      </div>
+     </div>
+
+     {/* Two Column Layout for Links */}
+     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-12">
       {/* Quick Links */}
       <div>
-       <h3 className="text-lg font-bold mb-6 text-white">{t('footer.quickLinks.title')}</h3>
-       <ul className="space-y-3">
+       <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6 text-white">{t('footer.quickLinks.title')}</h3>
+       <ul className="space-y-2 sm:space-y-3">
         {quickLinks.map((link) => (
          <li key={link.name}>
-          <LocaleLink 
+          <LocaleLink
            href={link.href}
-           className="text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2"
+           className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2"
           >
            <span className="group-hover:translate-x-1 transition-transform">
             {link.name}
@@ -110,13 +112,13 @@ function Footer() {
 
       {/* Legal */}
       <div>
-       <h3 className="text-lg font-bold mb-6 text-white">{t('footer.legal.title')}</h3>
-       <ul className="space-y-3">
+       <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6 text-white">{t('footer.legal.title')}</h3>
+       <ul className="space-y-2 sm:space-y-3">
         {legalLinks.map((link) => (
          <li key={link.name}>
-          <LocaleLink 
+          <LocaleLink
            href={link.href}
-           className="text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2"
+           className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2"
           >
            <span className="group-hover:translate-x-1 transition-transform">
             {link.name}
@@ -126,36 +128,45 @@ function Footer() {
         ))}
        </ul>
       </div>
-     </div>
 
-     
-     {/* Language & Stats */}
-     <div className="space-y-6">
-      <div>
-       <h3 className="text-lg font-bold mb-4 text-white">{t('footer.language.label')}</h3>
-       <LanguageSwitcher />
-      </div>
-      
-      {/* Quick Stats */}
-      <div className="bg-slate-800/30 rounded-2xl p-4 border border-slate-700/50">
-       <h4 className="text-sm font-semibold text-slate-300 mb-3">Platform Stats</h4>
-       <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="text-center">
-         <div className="text-blue-400 font-bold">50K+</div>
-         <div className="text-slate-400 text-xs">{t('landing.stats.completedTasks')}</div>
-        </div>
-        <div className="text-center">
-         <div className="text-indigo-400 font-bold">15K+</div>
-         <div className="text-slate-400 text-xs">{t('landing.categories.activeSpecialists')}</div>
-        </div>
-        <div className="text-center">
-         <div className="text-yellow-400 font-bold">4.9</div>
-         <div className="text-slate-400 text-xs">{t('landing.stats.averageRating')}</div>
-        </div>
-        <div className="text-center">
-         <div className="text-green-400 font-bold">99.9%</div>
-         <div className="text-slate-400 text-xs">Uptime</div>
-        </div>
+      {/* Language Selector */}
+      <div className="col-span-2 md:col-span-1">
+       <h3 className="text-base sm:text-lg font-bold mb-4 text-white">{t('footer.language.label')}</h3>
+       <div className="flex items-center gap-3">
+        {Object.values(LANGUAGE_CONFIG).map((language) => {
+         const isActive = extractLocaleFromPathname(pathname) === language.code;
+
+         const handleLanguageChange = () => {
+          if (isActive) return;
+
+          try {
+           saveUserLocalePreference(language.code);
+           i18n.changeLanguage(language.code);
+           const newPath = replaceLocaleInPathname(pathname, language.code);
+           router.push(newPath);
+          } catch (error) {
+           console.error('Failed to change language:', error);
+          }
+         };
+
+         return (
+          <button
+           key={language.code}
+           onClick={handleLanguageChange}
+           className={`
+            text-3xl sm:text-4xl transition-all duration-200
+            ${isActive
+             ? 'scale-110 opacity-100 ring-2 ring-blue-400 ring-offset-2 ring-offset-slate-900 rounded-lg'
+             : 'opacity-50 hover:opacity-100 hover:scale-105'
+            }
+           `}
+           aria-label={`Switch to ${language.name}`}
+           title={language.name}
+          >
+           {language.flag}
+          </button>
+         );
+        })}
        </div>
       </div>
      </div>

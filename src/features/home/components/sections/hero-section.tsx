@@ -87,7 +87,7 @@ export default function HeroSection() {
       <div className="space-y-6">
        <div className="inline-flex items-center px-4 py-2 bg-white/70 border border-blue-200 rounded-full text-blue-700 text-sm font-medium shadow-lg">
         <Shield className="mr-2 h-4 w-4" />
-        Trusted by 10,000+ professionals
+        {t('landing.hero.badge')}
        </div>
        <h1 className="font-bold text-slate-900 leading-[1.1] tracking-tight text-[2.5rem]">
         {t('landing.hero.title')}
@@ -175,7 +175,7 @@ export default function HeroSection() {
          <Star className="text-white h-6 w-6" />
         </div>
         <div>
-         <div className="text-2xl font-bold text-slate-900">4.8</div>
+         <div className="text-xl font-bold text-slate-900">{t('landing.stats.ratingValue')}</div>
          <div className="text-sm text-slate-600 font-medium">{t('landing.stats.averageRating')}</div>
         </div>
        </div>
@@ -187,7 +187,7 @@ export default function HeroSection() {
          <CheckCircle className="text-white h-6 w-6" />
         </div>
         <div>
-         <div className="text-2xl font-bold text-slate-900">2,500+</div>
+         <div className="text-xl font-bold text-slate-900">{t('landing.stats.tasksValue')}</div>
          <div className="text-sm text-slate-600 font-medium">{t('landing.stats.completedTasks')}</div>
         </div>
        </div>

@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab } from '@nextui-org/react'
-import { FileText, Users, Calendar, DollarSign, MapPin, Plus } from 'lucide-react'
+import { FileText, Plus } from 'lucide-react'
+import PostedTaskCard from '@/components/ui/posted-task-card'
 
 interface PostedTasksPageContentProps {
   lang: string
@@ -38,7 +39,7 @@ const mockPostedTasks: PostedTask[] = [
     id: '1',
     title: 'Electrical outlet installation in living room',
     description: 'Need to install 3 additional power outlets in the living room',
-    category: 'Electrical Work',
+    category: 'categories.electrical', // Translation key
     budget: 150,
     status: 'open',
     applicationsCount: 5,
@@ -53,7 +54,7 @@ const mockPostedTasks: PostedTask[] = [
     id: '2',
     title: 'Weekly apartment cleaning',
     description: 'Looking for regular cleaning service every Tuesday',
-    category: 'Cleaning',
+    category: 'categories.houseCleaning', // Translation key
     budget: 80,
     status: 'in_progress',
     applicationsCount: 8,
@@ -71,7 +72,7 @@ const mockPostedTasks: PostedTask[] = [
     id: '3',
     title: 'Plumbing repair - leaking sink',
     description: 'Kitchen sink is leaking, needs urgent repair',
-    category: 'Plumbing',
+    category: 'categories.plumbing', // Translation key
     budget: 100,
     status: 'completed',
     applicationsCount: 3,
@@ -96,36 +97,6 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
     if (selectedStatus === 'all') return true
     return task.status === selectedStatus
   })
-
-  const getStatusColor = (status: PostedTask['status']) => {
-    switch (status) {
-      case 'open':
-        return 'primary'
-      case 'in_progress':
-        return 'warning'
-      case 'completed':
-        return 'success'
-      case 'cancelled':
-        return 'danger'
-      default:
-        return 'default'
-    }
-  }
-
-  const getStatusLabel = (status: PostedTask['status']) => {
-    switch (status) {
-      case 'open':
-        return t('postedTasks.filter.open')
-      case 'in_progress':
-        return t('postedTasks.filter.inProgress')
-      case 'completed':
-        return t('postedTasks.filter.completed')
-      case 'cancelled':
-        return t('postedTasks.filter.cancelled')
-      default:
-        return status
-    }
-  }
 
   const getTaskCountByStatus = (status: TaskStatus) => {
     if (status === 'all') return mockPostedTasks.length
@@ -255,86 +226,22 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             </CardBody>
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredTasks.map((task) => (
-              <Card
+              <PostedTaskCard
                 key={task.id}
-                isPressable
-                onPress={() => router.push(`/${lang}/tasks/${task.id}`)}
-                className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-shadow"
-              >
-                <CardBody className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-start gap-3 mb-2">
-                        <h3 className="text-xl font-semibold text-gray-900">
-                          {task.title}
-                        </h3>
-                        <Chip
-                          color={getStatusColor(task.status)}
-                          variant="flat"
-                          size="sm"
-                        >
-                          {getStatusLabel(task.status)}
-                        </Chip>
-                      </div>
-                      <p className="text-gray-600 text-sm line-clamp-2 mb-3">
-                        {task.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                    <div className="flex items-center gap-2 text-sm">
-                      <DollarSign className="w-4 h-4 text-gray-400" />
-                      <span className="font-semibold text-gray-700">{task.budget} BGN</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span>{task.location.city}, {task.location.neighborhood}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span>{task.createdAt.toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Users className="w-4 h-4 text-gray-400" />
-                      <span className="font-semibold text-primary">
-                        {t('postedTasks.applicationsCount', { count: task.applicationsCount })}
-                      </span>
-                    </div>
-                  </div>
-
-                  {task.acceptedApplication && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                      <p className="text-sm text-green-800">
-                        <span className="font-semibold">{t('postedTasks.acceptedProfessional')}:</span>{' '}
-                        {task.acceptedApplication.professionalName}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                    <Button
-                      size="sm"
-                      variant="flat"
-                      color="primary"
-                      onPress={() => router.push(`/${lang}/tasks/${task.id}`)}
-                    >
-                      {t('postedTasks.viewDetails')}
-                    </Button>
-                    {task.applicationsCount > 0 && (
-                      <Button
-                        size="sm"
-                        variant="bordered"
-                        onPress={() => router.push(`/${lang}/tasks/${task.id}#applications`)}
-                      >
-                        {t('postedTasks.viewApplications')} ({task.applicationsCount})
-                      </Button>
-                    )}
-                  </div>
-                </CardBody>
-              </Card>
+                id={task.id}
+                title={task.title}
+                description={task.description}
+                category={task.category}
+                budget={task.budget}
+                status={task.status}
+                applicationsCount={task.applicationsCount}
+                acceptedApplication={task.acceptedApplication}
+                location={task.location}
+                createdAt={task.createdAt}
+                lang={lang}
+              />
             ))}
           </div>
         )}

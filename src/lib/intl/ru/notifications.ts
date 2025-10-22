@@ -19,7 +19,7 @@ export const notifications = {
   'taskDetail.backToTasks': 'Обратно к задачам',
   'taskDetail.requirements': 'Требования:',
   'taskDetail.keyInformation': 'Ключевая информация',
-  'taskDetail.client': 'Клиент',
+  'taskDetail.client': 'Автор задачи',
   'taskDetail.loginForMore': 'Войдите для большего',
   'taskDetail.loginMessage':
     'Войдите в аккаунт чтобы увидеть полную информацию',
