@@ -255,8 +255,8 @@ export function CategorySelection({ form }: CategorySelectionProps) {
         </div>
        </>
       ) : !searchQuery && mainCategories.length > 0 ? (
-       /* Show main categories - EXACT same grid as categories page */
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+       /* Show main categories - 2 columns on desktop, 1 on mobile */
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {mainCategories.map((category, index) => (
          <motion.div
            key={category.title}
@@ -272,6 +272,7 @@ export function CategorySelection({ form }: CategorySelectionProps) {
             subcategories={category.subcategories}
             totalCount={category.totalCount}
             onSubcategoryClick={handleSubcategorySelect}
+            showFooter={false}
            />
           </motion.div>
         ))}
