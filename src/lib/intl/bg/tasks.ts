@@ -68,9 +68,12 @@ export const tasks = {
     'Популярни задачи, които може да ви харесат',
   'browseTasks.results.suggestedDescription':
     'Ето някои популярни задачи от нашата общност',
-  'browseTasks.results.error.title': 'Грешка при зареждане',
+  'browseTasks.results.error.title': 'Опа! Нашите сървъри си взеха кафе пауза ☕',
   'browseTasks.results.error.description':
-    'Моля, опитайте отново или свържете се с поддръжката.',
+    'Изглежда хомстерите спряха да тичат на колелата си. Не се притеснявайте, даваме им еспресо шотове!',
+  'browseTasks.results.error.subtext':
+    'Обикновено се оправя по-бързо, отколкото можете да кажете "капучино"',
+  'browseTasks.results.error.retry': 'Опитай отново',
   'browseTasks.pagination.previous': 'Предишна',
   'browseTasks.pagination.next': 'Следваща',
   'browseTasks.search.tags.programming': 'Програмиране',

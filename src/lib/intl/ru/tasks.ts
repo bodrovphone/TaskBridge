@@ -68,9 +68,12 @@ export const tasks = {
     'Популярные задачи, которые могут вам понравиться',
   'browseTasks.results.suggestedDescription':
     'Вот некоторые популярные задачи из нашего сообщества',
-  'browseTasks.results.error.title': 'Ошибка при загрузке',
+  'browseTasks.results.error.title': 'Упс! Наши серверы ушли на кофе-брейк ☕',
   'browseTasks.results.error.description':
-    'Пожалуйста, попробуйте снова или обратитесь в службу поддержки.',
+    'Похоже, хомяки перестали бегать в колесе. Не волнуйтесь, мы угощаем их эспрессо!',
+  'browseTasks.results.error.subtext':
+    'Обычно это исправляется быстрее, чем вы скажете "капучино"',
+  'browseTasks.results.error.retry': 'Попробовать снова',
   'browseTasks.pagination.previous': 'Предыдущая',
   'browseTasks.pagination.next': 'Следующая',
   'browseTasks.search.tags.programming': 'Программирование',

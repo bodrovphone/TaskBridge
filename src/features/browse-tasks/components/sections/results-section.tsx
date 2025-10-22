@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 import { Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
-import { Search, Filter, Sparkles, X } from "lucide-react";
+import { Search, Filter, Sparkles, X, Coffee, RotateCw } from "lucide-react";
 import TaskCard from "@/components/ui/task-card";
 
 interface ResultsSectionProps {
@@ -16,6 +16,7 @@ interface ResultsSectionProps {
  onSetCurrentPage: (page: number) => void;
  onClearFilters: () => void;
  onApplyToTask: (taskId: string) => void;
+ onRetry?: () => void;
 }
 
 export default function ResultsSection({
@@ -27,7 +28,8 @@ export default function ResultsSection({
  pageSize,
  onSetCurrentPage,
  onClearFilters,
- onApplyToTask
+ onApplyToTask,
+ onRetry
 }: ResultsSectionProps) {
  const { t } = useTranslation();
 
@@ -39,23 +41,63 @@ export default function ResultsSection({
   >
    {error ? (
     <div className="space-y-8">
-     {/* Error Message */}
-     <NextUICard className="bg-white shadow-lg">
+     {/* Friendly Error Message */}
+     <NextUICard className="bg-gradient-to-br from-amber-50 to-orange-50 shadow-lg border-2 border-amber-200">
       <div className="p-8 text-center">
+       {/* Coffee cup with steam animation */}
        <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", bounce: 0.4 }}
-        className="text-red-500 mb-4"
+        initial={{ scale: 0, rotate: -10 }}
+        animate={{
+         scale: 1,
+         rotate: [0, -5, 5, -5, 0],
+        }}
+        transition={{
+         scale: { type: "spring", bounce: 0.6 },
+         rotate: {
+           repeat: Infinity,
+           duration: 2,
+           ease: "easeInOut"
+         }
+        }}
+        className="text-amber-500 mb-6"
        >
-        <Filter size={48} className="mx-auto" />
+        <Coffee size={56} className="mx-auto" strokeWidth={2} />
        </motion.div>
-       <h3 className="text-lg font-semibold text-gray-900 mb-2">
+
+       {/* Friendly title */}
+       <h3 className="text-2xl font-bold text-gray-900 mb-3">
         {t('browseTasks.results.error.title')}
        </h3>
-       <p className="text-gray-600 mb-4">
+
+       {/* Humorous description */}
+       <p className="text-gray-700 text-lg mb-2">
         {t('browseTasks.results.error.description')}
        </p>
+
+       {/* Subtext */}
+       <p className="text-gray-500 text-sm mb-6">
+        {t('browseTasks.results.error.subtext')}
+       </p>
+
+       {/* Retry button */}
+       {onRetry && (
+        <motion.div
+         initial={{ opacity: 0, y: 10 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ delay: 0.3 }}
+        >
+         <NextUIButton
+          color="warning"
+          variant="shadow"
+          size="lg"
+          onClick={onRetry}
+          startContent={<RotateCw size={20} />}
+          className="font-semibold"
+         >
+          {t('browseTasks.results.error.retry')}
+         </NextUIButton>
+        </motion.div>
+       )}
       </div>
      </NextUICard>
 

@@ -67,9 +67,12 @@ export const tasks = {
   'browseTasks.results.suggestedTasks': 'Popular Tasks You Might Like',
   'browseTasks.results.suggestedDescription':
     'Here are some popular tasks from our community',
-  'browseTasks.results.error.title': 'Error loading',
+  'browseTasks.results.error.title': 'Oops! Our servers took a coffee break ☕',
   'browseTasks.results.error.description':
-    'Please try again or contact support.',
+    'Looks like our hamsters stopped running on their wheels. Don\'t worry, we\'re giving them espresso shots!',
+  'browseTasks.results.error.subtext':
+    'This usually fixes itself faster than you can say "cappuccino"',
+  'browseTasks.results.error.retry': 'Try Again',
   'browseTasks.pagination.previous': 'Previous',
   'browseTasks.pagination.next': 'Next',
   'browseTasks.search.tags.programming': 'Programming',
