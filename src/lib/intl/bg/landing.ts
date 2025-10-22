@@ -30,7 +30,7 @@ export const landing = {
   'landing.stats.tasksValue': 'Бета версия',
   'landing.categories.activeSpecialists': 'активни специалисти',
   'landing.categories.specialists': 'специалисти',
-  'landing.categories.beFirst': 'Бъди първият!',
+  'landing.categories.beFirst': 'Бъдете първият специалист',
 
   'landing.trustStats.securityUptime': 'Сигурност',
   'landing.trustStats.avgRating': 'Средна оценка',
