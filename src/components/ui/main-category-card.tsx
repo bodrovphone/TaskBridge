@@ -142,7 +142,7 @@ function MainCategoryCard({
     ${onClick ? 'cursor-pointer' : ''}
    `}
   >
-   <CardBody className="p-6">
+   <CardBody className={variant === 'simple' ? 'p-6 min-h-[200px] flex items-center justify-center' : 'p-6'}>
     {variant === 'simple' ? (
      /* Simple centered layout for selection */
      <div className="flex flex-col items-center text-center">
@@ -156,7 +156,7 @@ function MainCategoryCard({
       <h3 className="font-bold text-gray-900 mb-2 text-lg group-hover:text-slate-800 transition-colors">
        {title}
       </h3>
-      <p className="text-xs text-gray-600 leading-relaxed">
+      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
        {description}
       </p>
      </div>

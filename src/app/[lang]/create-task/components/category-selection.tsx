@@ -241,7 +241,7 @@ export function CategorySelection({ form }: CategorySelectionProps) {
        </>
       ) : !searchQuery && filteredMainCategories.length > 0 ? (
        /* Show main categories when no search */
-       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredMainCategories.map((category, index) => (
          <motion.div
            key={category.id}
