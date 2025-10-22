@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
 import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send } from 'lucide-react'
+import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
 
 interface MyWorkContentProps {
   lang: string
@@ -94,6 +95,8 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const { t } = useTranslation()
   const router = useRouter()
   const [selectedFilter, setSelectedFilter] = useState<WorkFilter>('in_progress')
+  const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false)
+  const [selectedTaskForCompletion, setSelectedTaskForCompletion] = useState<WorkTask | null>(null)
 
   const workTasks = getMockWorkTasks(t)
 
@@ -130,6 +133,18 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
     const now = new Date()
     const diffTime = Math.abs(now.getTime() - startDate.getTime())
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  }
+
+  const handleMarkAsCompleteClick = (task: WorkTask) => {
+    setSelectedTaskForCompletion(task)
+    setIsMarkCompletedDialogOpen(true)
+  }
+
+  const handleMarkCompletedConfirm = (data: any) => {
+    console.log('Task marked as completed:', selectedTaskForCompletion?.id, data)
+    // In a real app, this would call an API endpoint
+    setIsMarkCompletedDialogOpen(false)
+    setSelectedTaskForCompletion(null)
   }
 
   // Convert filter key to translation key format
@@ -347,7 +362,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 pt-4 border-t border-gray-200">
+                  <div className="flex gap-2 pt-4 border-t border-gray-200 justify-between items-center">
                     <Button
                       size="sm"
                       variant="flat"
@@ -356,34 +371,36 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                     >
                       {t('myApplications.viewTask')}
                     </Button>
-                    {selectedFilter === 'in_progress' && (
-                      <Button
-                        size="sm"
-                        color="success"
-                        variant="bordered"
-                        onPress={() => console.log('Mark as completed:', task.id)}
-                      >
-                        {t('myApplications.markCompleted')}
-                      </Button>
-                    )}
-                    {selectedFilter === 'pending_completion' && (
-                      <Button
-                        size="sm"
-                        color="success"
-                        onPress={() => console.log('Confirm completion:', task.id)}
-                      >
-                        {t('myWork.confirmCompletion')}
-                      </Button>
-                    )}
-                    {selectedFilter === 'completed' && (
-                      <Button
-                        size="sm"
-                        variant="flat"
-                        onPress={() => console.log('View review:', task.id)}
-                      >
-                        {t('myWork.viewReview')}
-                      </Button>
-                    )}
+                    <div className="flex gap-2">
+                      {selectedFilter === 'in_progress' && (
+                        <Button
+                          size="sm"
+                          color="success"
+                          variant="bordered"
+                          onPress={() => handleMarkAsCompleteClick(task)}
+                        >
+                          {t('myApplications.markCompleted')}
+                        </Button>
+                      )}
+                      {selectedFilter === 'pending_completion' && (
+                        <Button
+                          size="sm"
+                          color="success"
+                          onPress={() => console.log('Confirm completion:', task.id)}
+                        >
+                          {t('myWork.confirmCompletion')}
+                        </Button>
+                      )}
+                      {selectedFilter === 'completed' && (
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          onPress={() => console.log('View review:', task.id)}
+                        >
+                          {t('myWork.viewReview')}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardBody>
               </Card>
@@ -391,6 +408,21 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
           </div>
         )}
       </div>
+
+      {/* Mark Completed Dialog */}
+      {selectedTaskForCompletion && (
+        <MarkCompletedDialog
+          isOpen={isMarkCompletedDialogOpen}
+          onClose={() => {
+            setIsMarkCompletedDialogOpen(false)
+            setSelectedTaskForCompletion(null)
+          }}
+          onConfirm={handleMarkCompletedConfirm}
+          taskTitle={selectedTaskForCompletion.taskTitle}
+          customerName={selectedTaskForCompletion.customer.name}
+          payment={`${selectedTaskForCompletion.agreedPrice} лв`}
+        />
+      )}
     </div>
   )
 }
