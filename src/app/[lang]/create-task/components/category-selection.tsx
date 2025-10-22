@@ -2,7 +2,6 @@
 
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Input } from '@nextui-org/react'
-import { CreateTaskFormData } from '../lib/validation'
 import { useState, useMemo } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -10,7 +9,7 @@ import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubc
 
 interface CategorySelectionProps {
  form: any
- onCategoryChange: (category: string) => void
+ onCategoryChange: (_category: string) => void
 }
 
 export function CategorySelection({ form, onCategoryChange }: CategorySelectionProps) {
@@ -18,12 +17,14 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
  const [searchQuery, setSearchQuery] = useState('')
  const [selectedMainCategory, setSelectedMainCategory] = useState<string | null>(null)
  const [selectedCategory, setSelectedCategory] = useState('')
- const [errors, setErrors] = useState<string[]>([])
+ const [errors, _setErrors] = useState<string[]>([])
 
  // Get subcategories for selected main category
- const subcategories = selectedMainCategory
-  ? getSubcategoriesByMainCategory(selectedMainCategory)
-  : []
+ const subcategories = useMemo(() => {
+  return selectedMainCategory
+   ? getSubcategoriesByMainCategory(selectedMainCategory)
+   : []
+ }, [selectedMainCategory])
 
  // Get all subcategories for search
  const allSubcategories = useMemo(() => {

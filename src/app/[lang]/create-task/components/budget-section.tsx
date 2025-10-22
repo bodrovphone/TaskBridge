@@ -7,7 +7,7 @@ import { Wallet, Info } from 'lucide-react'
 interface BudgetSectionProps {
  form: any
  budgetType: 'fixed' | 'range' | undefined
- onBudgetTypeChange: (type: 'fixed' | 'range') => void
+ onBudgetTypeChange: (_type: 'fixed' | 'range') => void
 }
 
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
