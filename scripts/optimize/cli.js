@@ -48,7 +48,7 @@ function filterByExtension(files, extensions) {
 program
   .command('images')
   .description('Optimize images (JPEG, PNG, WebP, AVIF)')
-  .option('-i, --input <pattern>', 'Input file pattern (e.g., "public/images/**/*.jpg")', 'public/images/**/*')
+  .option('-i, --input <pattern>', 'Input file pattern (e.g., "public/**/*.jpg")', 'public/**/*')
   .option('-o, --output <dir>', 'Output directory for optimized images')
   .option('-q, --quality <number>', 'Image quality (1-100)', '85')
   .option('-f, --formats <formats>', 'Output formats (comma-separated)', 'webp,avif')
@@ -127,7 +127,7 @@ program
 program
   .command('videos')
   .description('Optimize videos (MP4, WebM)')
-  .option('-i, --input <pattern>', 'Input file pattern (e.g., "public/videos/**/*.mp4")', 'public/videos/**/*')
+  .option('-i, --input <pattern>', 'Input file pattern (e.g., "public/**/*.mp4")', 'public/**/*')
   .option('-o, --output <dir>', 'Output directory for optimized videos')
   .option('-f, --formats <formats>', 'Output formats (comma-separated)', 'mp4,webm')
   .option('-r, --resolution <number>', 'Max resolution width', '1920')
