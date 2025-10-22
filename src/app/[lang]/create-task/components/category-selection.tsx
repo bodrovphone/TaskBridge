@@ -2,6 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Input } from '@nextui-org/react'
+import { Badge as ShadcnBadge } from '@/components/ui/badge'
 import { CreateTaskFormData } from '../lib/validation'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
@@ -358,44 +359,48 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
     </AnimatePresence>
    )}
 
-   {/* Selected Category Display - Simple chip with close icon */}
+   {/* Selected Category Display - Styled badge with animated close button */}
    {selectedCategory && (
     <motion.div
-     initial={{ opacity: 0, scale: 0.9 }}
-     animate={{ opacity: 1, scale: 1 }}
-     transition={{ duration: 0.2 }}
+     initial={{ opacity: 0, scale: 0.8, y: 10 }}
+     animate={{ opacity: 1, scale: 1, y: 0 }}
+     transition={{
+      duration: 0.3,
+      ease: "easeOut",
+      type: "spring",
+      stiffness: 100
+     }}
+     whileHover={{ scale: 1.05, y: -1 }}
+     whileTap={{ scale: 0.95 }}
      className="flex justify-start"
     >
-     <Chip
-      size="lg"
-      variant="solid"
-      color="primary"
-      endContent={
-       <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={handleReset}
-        className="ml-2 rounded-full p-1 bg-white/20 hover:bg-white/30"
-        type="button"
-        aria-label="Remove category"
-       >
-        <X size={16} className="text-white" />
-       </motion.button>
-      }
-      classNames={{
-       base: "px-6 py-7 shadow-lg !bg-blue-600 hover:!bg-blue-700",
-       content: "font-semibold text-lg !text-white"
-      }}
-     >
-      {(() => {
-       // Find the selected subcategory to get its translation key
-       const allSubs = MAIN_CATEGORIES.flatMap(mainCat =>
-        getSubcategoriesByMainCategory(mainCat.id)
-       )
-       const selectedSub = allSubs.find(sub => sub.slug === selectedCategory)
-       return selectedSub ? t(selectedSub.translationKey) : selectedCategory
-      })()}
-     </Chip>
+     <ShadcnBadge className="group flex items-center gap-2.5 bg-white text-blue-900 border-2 border-blue-300 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 font-semibold px-4 py-2.5 rounded-xl shadow-sm hover:shadow-md cursor-pointer">
+      <span className="text-sm leading-none">
+       {(() => {
+        // Find the selected subcategory to get its translation key
+        const allSubs = MAIN_CATEGORIES.flatMap(mainCat =>
+         getSubcategoriesByMainCategory(mainCat.id)
+        )
+        const selectedSub = allSubs.find(sub => sub.slug === selectedCategory)
+        return selectedSub ? t(selectedSub.translationKey) : selectedCategory
+       })()}
+      </span>
+      <motion.div
+       whileHover={{ scale: 1.3, rotate: 90 }}
+       whileTap={{ scale: 0.8 }}
+       transition={{ duration: 0.2 }}
+       className="flex items-center justify-center w-5 h-5 bg-blue-100 hover:bg-red-100 rounded-full border border-blue-200 hover:border-red-200 transition-all duration-200"
+      >
+       <X
+        size={12}
+        className="text-blue-600 hover:text-red-600 transition-colors duration-200"
+        onClick={(e) => {
+         e.stopPropagation();
+         handleReset();
+        }}
+       />
+      </motion.div>
+     </ShadcnBadge>
     </motion.div>
    )}
 
