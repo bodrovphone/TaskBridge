@@ -79,9 +79,10 @@ export default function VideoBackground({
       onLoadedData={handleVideoLoad}
       onError={handleVideoError}
      >
+      {/* WebM first (smaller, better quality for modern browsers) */}
+      <source src={videoSrc.replace('.mp4', '.webm')} type="video/webm" />
+      {/* MP4 fallback (Safari/iOS compatibility) */}
       <source src={videoSrc} type="video/mp4" />
-      {/* Can add WebM format for better browser support */}
-      {/* <source src={videoSrc.replace('.mp4', '.webm')} type="video/webm" /> */}
      </motion.video>
     </AnimatePresence>
    )}

@@ -130,7 +130,7 @@ export default function OptimizedVideoHero({
     />
    )}
 
-   {/* Optimized video */}
+   {/* Optimized video with WebM + MP4 fallback */}
    <video
     ref={videoRef}
     autoPlay
@@ -149,6 +149,9 @@ export default function OptimizedVideoHero({
     onLoadedData={handleVideoLoad}
     onError={handleVideoError}
    >
+    {/* WebM first (smaller, better quality for modern browsers) */}
+    <source src={videoSrc.replace('.mp4', '.webm')} type="video/webm" />
+    {/* MP4 fallback (Safari/iOS compatibility) */}
     <source src={videoSrc} type="video/mp4" />
     Your browser does not support the video tag.
    </video>

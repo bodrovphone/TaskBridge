@@ -94,7 +94,7 @@ export default function OptimizedVideoBackground({
    {/* Fallback gradient - always visible */}
    <div className={`absolute inset-0 bg-gradient-to-r ${fallbackGradient}`} />
 
-   {/* Video - desktop only, with smooth fade-in */}
+   {/* Video - desktop only, with smooth fade-in and format fallback */}
    {!hasError && isDesktop && (
     <video
      ref={videoRef}
@@ -114,6 +114,9 @@ export default function OptimizedVideoBackground({
      onLoadedData={handleVideoLoad}
      onError={handleVideoError}
     >
+     {/* WebM first (smaller, better quality for modern browsers) */}
+     <source src={videoSrc.replace('.mp4', '.webm')} type="video/webm" />
+     {/* MP4 fallback (Safari/iOS compatibility) */}
      <source src={videoSrc} type="video/mp4" />
     </video>
    )}
