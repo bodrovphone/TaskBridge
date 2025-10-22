@@ -240,30 +240,35 @@ export function CategorySelection({ form }: CategorySelectionProps) {
         </div>
        </>
       ) : !searchQuery && filteredMainCategories.length > 0 ? (
-       /* Show main categories when no search */
+       /* Show main categories when no search - using exact same cards as categories page */
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredMainCategories.map((category, index) => (
-         <motion.div
-           key={category.id}
-           initial={{ opacity: 0, scale: 0.9 }}
-           animate={{ opacity: 1, scale: 1 }}
-           transition={{ delay: index * 0.05, duration: 0.2 }}
-           className="w-full"
-          >
-           <MainCategoryCard
-            title={t(`${category.translationKey}.title`)}
-            description={t(`${category.translationKey}.description`)}
-            icon={category.icon}
-            color={category.color}
-            subcategories={[]} // Don't show subcategories in selection mode
-            totalCount={0} // Not relevant for selection
-            onClick={() => handleMainCategorySelect(category.id)}
-            variant="simple"
-            showSubcategories={false}
-            showFooter={false}
-           />
-          </motion.div>
-        ))}
+        {filteredMainCategories.map((category, index) => {
+         const subcategories = getSubcategoriesByMainCategory(category.id)
+
+         return (
+          <motion.div
+            key={category.id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.05, duration: 0.2 }}
+            className="w-full"
+           >
+            <MainCategoryCard
+             title={t(`${category.translationKey}.title`)}
+             description={t(`${category.translationKey}.description`)}
+             icon={category.icon}
+             color={category.color}
+             subcategories={subcategories.map(sub => ({
+              label: t(sub.translationKey),
+              value: sub.slug
+             }))}
+             totalCount={0} // Not showing professional count in selection mode
+             onSubcategoryClick={handleSubcategorySelect}
+             showFooter={false} // Hide footer in selection mode
+            />
+           </motion.div>
+         )
+        })}
        </div>
       ) : (
        <motion.div
