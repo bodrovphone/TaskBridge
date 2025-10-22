@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next'
 import { TaskStatusBadge, type TaskStatus } from '@/components/tasks/task-status-badge'
 import { TaskCompletionButton } from '@/components/tasks/task-completion-button'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
-import { ConfirmCompletionDialog } from '@/components/tasks/confirm-completion-dialog'
+import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { PendingConfirmationBanner } from '@/components/tasks/pending-confirmation-banner'
 import { CompletionSuccessView } from '@/components/tasks/completion-success-view'
 import { CompletionTimeline } from '@/components/tasks/completion-timeline'
+import { StarRating } from '@/components/common/star-rating'
 
 export default function TaskCompletionDemoPage() {
   const { t } = useTranslation()
@@ -24,6 +25,7 @@ export default function TaskCompletionDemoPage() {
   const [professionalMarkedAt, setProfessionalMarkedAt] = useState<Date | undefined>()
   const [customerConfirmedAt, setCustomerConfirmedAt] = useState<Date | undefined>()
   const [completedAt, setCompletedAt] = useState<Date | undefined>()
+  const [reviewData, setReviewData] = useState<ConfirmationData | undefined>()
 
   const mockStartDate = new Date('2024-01-15T10:00:00')
 
@@ -34,8 +36,9 @@ export default function TaskCompletionDemoPage() {
     setShowMarkDialog(false)
   }
 
-  const handleConfirmComplete = () => {
-    console.log('Customer confirmed completion')
+  const handleConfirmComplete = (data?: ConfirmationData) => {
+    console.log('Customer confirmed completion with data:', data)
+    setReviewData(data)
     setCustomerConfirmedAt(new Date())
     setCompletedAt(new Date())
     setTaskStatus('completed')
@@ -54,6 +57,7 @@ export default function TaskCompletionDemoPage() {
     setProfessionalMarkedAt(undefined)
     setCustomerConfirmedAt(undefined)
     setCompletedAt(undefined)
+    setReviewData(undefined)
   }
 
   return (
@@ -258,6 +262,61 @@ export default function TaskCompletionDemoPage() {
                 onLeaveReview={() => console.log('Leave review')}
                 onViewDetails={() => console.log('View details')}
               />
+            )}
+
+            {/* Review Data Display */}
+            {reviewData && (
+              <Card className="shadow-lg bg-blue-50 border-2 border-blue-200">
+                <CardBody className="p-6">
+                  <h2 className="text-xl font-bold text-blue-900 mb-4">
+                    Review Data Submitted
+                  </h2>
+
+                  <div className="space-y-3">
+                    {reviewData.actualPricePaid && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-blue-700">
+                          Actual Price Paid:
+                        </span>
+                        <span className="text-lg font-bold text-blue-900">
+                          {reviewData.actualPricePaid.toFixed(2)} BGN
+                        </span>
+                      </div>
+                    )}
+
+                    {reviewData.rating && (
+                      <div>
+                        <span className="block text-sm font-medium text-blue-700 mb-1">
+                          Rating:
+                        </span>
+                        <StarRating
+                          value={reviewData.rating}
+                          interactive={false}
+                          size="md"
+                          showValue={true}
+                        />
+                      </div>
+                    )}
+
+                    {reviewData.reviewText && (
+                      <div>
+                        <span className="block text-sm font-medium text-blue-700 mb-1">
+                          Review:
+                        </span>
+                        <p className="text-sm text-blue-900 bg-white p-3 rounded border border-blue-200">
+                          {reviewData.reviewText}
+                        </p>
+                      </div>
+                    )}
+
+                    {!reviewData.actualPricePaid && !reviewData.rating && !reviewData.reviewText && (
+                      <p className="text-sm text-blue-700 italic">
+                        Customer confirmed without providing review data
+                      </p>
+                    )}
+                  </div>
+                </CardBody>
+              </Card>
             )}
 
             {/* Workflow Simulation */}

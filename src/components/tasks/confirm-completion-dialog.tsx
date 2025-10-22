@@ -13,15 +13,23 @@ import {
   Textarea,
   Card,
   CardBody,
-  Divider
+  Divider,
+  Input
 } from '@nextui-org/react'
-import { CheckCircle, XCircle, User, Briefcase, AlertCircle } from 'lucide-react'
+import { CheckCircle, XCircle, User, Briefcase, AlertCircle, DollarSign } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { StarRating } from '@/components/common/star-rating'
+
+export interface ConfirmationData {
+  actualPricePaid?: number
+  rating?: number
+  reviewText?: string
+}
 
 interface ConfirmCompletionDialogProps {
   isOpen: boolean
   onClose: () => void
-  onConfirm: () => void
+  onConfirm: (data?: ConfirmationData) => void
   onReject: (reason: string, description?: string) => void
   professionalName: string
   taskTitle: string
@@ -42,6 +50,11 @@ export function ConfirmCompletionDialog({
   const [rejectionReason, setRejectionReason] = useState<string>('')
   const [rejectionDescription, setRejectionDescription] = useState('')
 
+  // Review fields state
+  const [actualPrice, setActualPrice] = useState<string>('')
+  const [rating, setRating] = useState<number>(0)
+  const [reviewText, setReviewText] = useState('')
+
   const rejectionReasons = [
     { value: 'not_completed', label: t('taskCompletion.reject.notCompleted') },
     { value: 'poor_quality', label: t('taskCompletion.reject.poorQuality') },
@@ -50,7 +63,24 @@ export function ConfirmCompletionDialog({
   ]
 
   const handleConfirm = () => {
-    onConfirm()
+    // Prepare confirmation data
+    const confirmationData: ConfirmationData = {}
+
+    if (actualPrice && !isNaN(parseFloat(actualPrice))) {
+      confirmationData.actualPricePaid = parseFloat(actualPrice)
+    }
+
+    if (rating > 0) {
+      confirmationData.rating = rating
+    }
+
+    if (reviewText.trim()) {
+      confirmationData.reviewText = reviewText.trim()
+    }
+
+    // Pass data to parent (or undefined if no data was filled)
+    const hasData = Object.keys(confirmationData).length > 0
+    onConfirm(hasData ? confirmationData : undefined)
   }
 
   const handleReject = () => {
@@ -63,8 +93,15 @@ export function ConfirmCompletionDialog({
     setIsSatisfied(null)
     setRejectionReason('')
     setRejectionDescription('')
+    setActualPrice('')
+    setRating(0)
+    setReviewText('')
     onClose()
   }
+
+  // Calculate character count for review
+  const reviewCharCount = reviewText.length
+  const hasReviewData = actualPrice || rating > 0 || reviewText.trim()
 
   return (
     <Modal
@@ -136,23 +173,80 @@ export function ConfirmCompletionDialog({
             </RadioGroup>
           </div>
 
-          {/* If satisfied - Show success message */}
+          {/* If satisfied - Show review fields */}
           {isSatisfied === 'yes' && (
-            <Card className="bg-success-50 border-success-200 border">
-              <CardBody className="p-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+            <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <Divider />
+
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">
+                  {t('taskCompletion.confirmDialog.reviewSection')}
+                </h3>
+
+                <div className="space-y-4">
+                  {/* Actual Price Paid */}
                   <div>
-                    <p className="font-medium text-success-900 mb-1">
-                      {t('taskCompletion.confirmDialog.greatMessage')}
-                    </p>
-                    <p className="text-sm text-success-700">
-                      {t('taskCompletion.confirmDialog.reviewReminder')}
-                    </p>
+                    <Input
+                      label={t('taskCompletion.confirmDialog.actualPricePaid')}
+                      placeholder={t('taskCompletion.confirmDialog.actualPricePlaceholder')}
+                      description={t('taskCompletion.confirmDialog.actualPriceHelp')}
+                      value={actualPrice}
+                      onValueChange={setActualPrice}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-gray-500 text-sm">BGN</span>
+                        </div>
+                      }
+                      classNames={{
+                        input: 'pl-12'
+                      }}
+                    />
+                  </div>
+
+                  {/* Star Rating */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t('taskCompletion.confirmDialog.ratingLabel')}
+                    </label>
+                    <StarRating
+                      value={rating}
+                      onChange={setRating}
+                      interactive={true}
+                      size="lg"
+                      className="py-1"
+                    />
+                  </div>
+
+                  {/* Review Text */}
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        {t('taskCompletion.confirmDialog.reviewLabel')}
+                      </label>
+                      <span
+                        className={`text-xs ${
+                          reviewCharCount > 500 ? 'text-danger font-semibold' : 'text-gray-500'
+                        }`}
+                      >
+                        {reviewCharCount}/500
+                      </span>
+                    </div>
+                    <Textarea
+                      placeholder={t('taskCompletion.confirmDialog.reviewPlaceholder', { name: professionalName })}
+                      description={t('taskCompletion.confirmDialog.reviewHelp')}
+                      value={reviewText}
+                      onValueChange={setReviewText}
+                      minRows={3}
+                      maxRows={6}
+                      maxLength={500}
+                    />
                   </div>
                 </div>
-              </CardBody>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* If not satisfied - Show rejection form */}
@@ -225,7 +319,10 @@ export function ConfirmCompletionDialog({
               onPress={handleConfirm}
               isLoading={isLoading}
             >
-              {t('taskCompletion.confirmCompletion')}
+              {hasReviewData
+                ? t('taskCompletion.confirmDialog.confirmWithReview')
+                : t('taskCompletion.confirmDialog.skipAndConfirm')
+              }
             </Button>
           )}
 

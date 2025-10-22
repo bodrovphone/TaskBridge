@@ -45,6 +45,18 @@ export const taskCompletion = {
   'taskCompletion.confirmDialog.greatMessage': 'Отлично! Спасибо за подтверждение.',
   'taskCompletion.confirmDialog.reviewReminder': 'Вы сможете оставить отзыв после подтверждения.',
 
+  // Review Section (Optional fields when satisfied)
+  'taskCompletion.confirmDialog.reviewSection': 'Отзыв (Необязательно)',
+  'taskCompletion.confirmDialog.actualPricePaid': 'Фактически оплаченная сумма',
+  'taskCompletion.confirmDialog.actualPricePlaceholder': 'Введите сумму...',
+  'taskCompletion.confirmDialog.actualPriceHelp': 'Отследите фактическую оплату от изначального бюджета',
+  'taskCompletion.confirmDialog.ratingLabel': 'Оцените свой опыт',
+  'taskCompletion.confirmDialog.reviewLabel': 'Напишите отзыв',
+  'taskCompletion.confirmDialog.reviewPlaceholder': 'Поделитесь своим опытом с {{name}}...',
+  'taskCompletion.confirmDialog.reviewHelp': 'Ваш отзыв будет виден в профиле специалиста',
+  'taskCompletion.confirmDialog.skipAndConfirm': 'Пропустить и подтвердить',
+  'taskCompletion.confirmDialog.confirmWithReview': 'Подтвердить завершение',
+
   // Rejection Flow
   'taskCompletion.reject.title': 'Пожалуйста, объясните проблему',
   'taskCompletion.reject.reason': 'Почему вы отклоняете?',

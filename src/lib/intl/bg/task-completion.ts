@@ -45,6 +45,18 @@ export const taskCompletion = {
   'taskCompletion.confirmDialog.greatMessage': 'Чудесно! Благодарим, че потвърдихте.',
   'taskCompletion.confirmDialog.reviewReminder': 'Ще можете да оставите отзив след потвърждението.',
 
+  // Review Section (Optional fields when satisfied)
+  'taskCompletion.confirmDialog.reviewSection': 'Отзив (По избор)',
+  'taskCompletion.confirmDialog.actualPricePaid': 'Реална заплатена сума',
+  'taskCompletion.confirmDialog.actualPricePlaceholder': 'Въведете сума...',
+  'taskCompletion.confirmDialog.actualPriceHelp': 'Проследете реалното плащане спрямо първоначалния бюджет',
+  'taskCompletion.confirmDialog.ratingLabel': 'Оценете опита си',
+  'taskCompletion.confirmDialog.reviewLabel': 'Напишете отзив',
+  'taskCompletion.confirmDialog.reviewPlaceholder': 'Споделете опита си с {{name}}...',
+  'taskCompletion.confirmDialog.reviewHelp': 'Вашият отзив ще бъде видим в профила на специалиста',
+  'taskCompletion.confirmDialog.skipAndConfirm': 'Пропусни и потвърди',
+  'taskCompletion.confirmDialog.confirmWithReview': 'Потвърди завършването',
+
   // Rejection Flow
   'taskCompletion.reject.title': 'Моля обяснете проблема',
   'taskCompletion.reject.reason': 'Защо отхвърляте?',

@@ -45,6 +45,18 @@ export const taskCompletion = {
   'taskCompletion.confirmDialog.greatMessage': 'Great! Thank you for confirming.',
   'taskCompletion.confirmDialog.reviewReminder': 'You\'ll be able to leave a review after confirmation.',
 
+  // Review Section (Optional fields when satisfied)
+  'taskCompletion.confirmDialog.reviewSection': 'Review (Optional)',
+  'taskCompletion.confirmDialog.actualPricePaid': 'Actual Price Paid',
+  'taskCompletion.confirmDialog.actualPricePlaceholder': 'Enter amount...',
+  'taskCompletion.confirmDialog.actualPriceHelp': 'Track actual payment vs original budget',
+  'taskCompletion.confirmDialog.ratingLabel': 'Rate your experience',
+  'taskCompletion.confirmDialog.reviewLabel': 'Write a review',
+  'taskCompletion.confirmDialog.reviewPlaceholder': 'Share your experience with {{name}}...',
+  'taskCompletion.confirmDialog.reviewHelp': 'Your review will be visible on the professional\'s profile',
+  'taskCompletion.confirmDialog.skipAndConfirm': 'Skip and Confirm',
+  'taskCompletion.confirmDialog.confirmWithReview': 'Confirm Completion',
+
   // Rejection Flow
   'taskCompletion.reject.title': 'Please explain the issue',
   'taskCompletion.reject.reason': 'Why are you rejecting?',
