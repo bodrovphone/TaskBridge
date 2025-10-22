@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, Button, Divider } from '@nextui-org/react'
+import { Card, CardBody, Button, Divider } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { TaskStatusBadge, type TaskStatus } from '@/components/tasks/task-status-badge'
 import { TaskCompletionButton } from '@/components/tasks/task-completion-button'

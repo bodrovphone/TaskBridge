@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Input, Select, SelectItem, Card, CardBody } from '@nextui-org/react'
+import { Input, Select, SelectItem, Card, CardBody } from '@heroui/react'
 import { Lock, MapPin } from 'lucide-react'
 import { BULGARIAN_CITIES } from '../lib/validation'
 
@@ -55,7 +55,7 @@ export function LocationSection({ form }: LocationSectionProps) {
        }}
       >
        {BULGARIAN_CITIES.map((cityName) => (
-        <SelectItem key={cityName} value={cityName}>
+        <SelectItem key={cityName} >
          {cityName}
         </SelectItem>
        ))}

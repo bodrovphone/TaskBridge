@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Input, Chip, Button, Card, CardBody } from '@nextui-org/react'
+import { Input, Chip, Button, Card, CardBody } from '@heroui/react'
 import { Plus, X, Search } from 'lucide-react'
 
 interface SkillsSelectorProps {

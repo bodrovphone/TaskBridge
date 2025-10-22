@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Input, RadioGroup, Radio, Chip, Card, CardBody } from '@nextui-org/react'
+import { Input, RadioGroup, Radio, Chip, Card, CardBody } from '@heroui/react'
 import { Wallet, Info } from 'lucide-react'
 
 interface BudgetSectionProps {

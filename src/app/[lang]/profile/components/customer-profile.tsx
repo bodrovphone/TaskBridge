@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter } from 'next/navigation'
 import { MapPin, Phone, Mail, Calendar, Star, CheckCircle, Save, X, Edit, User as UserIcon, Shield, Globe, MessageSquare } from 'lucide-react'
@@ -281,9 +281,9 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
            }}
            startContent={<Globe className="w-4 h-4 text-gray-500" />}
           >
-           <SelectItem key="en" value="en">English</SelectItem>
-           <SelectItem key="bg" value="bg">Български</SelectItem>
-           <SelectItem key="ru" value="ru">Русский</SelectItem>
+           <SelectItem key="en">English</SelectItem>
+           <SelectItem key="bg">Български</SelectItem>
+           <SelectItem key="ru">Русский</SelectItem>
           </Select>
          )}
         </personalForm.Field>
@@ -330,7 +330,7 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
              </div>
             </Radio>
             <Radio
-             value="sms"
+             value="message"
              classNames={{
               base: "inline-flex m-0 bg-gray-100 hover:bg-gray-200 items-center justify-between flex-row-reverse max-w-fit cursor-pointer rounded-lg gap-3 p-3 border-2 border-gray-300 data-[selected=true]:border-primary data-[selected=true]:bg-primary-50",
               wrapper: "group-data-[selected=true]:border-primary",

@@ -13,7 +13,7 @@ import {
  CardBody,
  Switch,
  Divider
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
  Settings,
  Bell,

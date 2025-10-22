@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { MessageCircle, Share2 } from "lucide-react";
-import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
+import { Button as NextUIButton, Card as NextUICard, CardBody } from "@heroui/react";
 import { useTranslation } from 'react-i18next';
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";

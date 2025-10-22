@@ -1,6 +1,6 @@
 'use client'
 
-import { Slider } from "@nextui-org/react"
+import { Slider } from "@heroui/react"
 import { Star } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"

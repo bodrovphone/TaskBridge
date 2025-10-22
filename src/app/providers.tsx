@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next'
 import { useState } from 'react'
 import i18n from '@/lib/intl/config'
 import { Toaster } from '@/components/ui/toaster'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 
 function Providers({ children }: { children: React.ReactNode }) {
  const [queryClient] = useState(
@@ -22,14 +22,14 @@ function Providers({ children }: { children: React.ReactNode }) {
  )
 
  return (
-  <NextUIProvider>
+  <HeroUIProvider>
    <QueryClientProvider client={queryClient}>
     <I18nextProvider i18n={i18n}>
      {children}
      <Toaster />
     </I18nextProvider>
    </QueryClientProvider>
-  </NextUIProvider>
+  </HeroUIProvider>
  )
 }
 

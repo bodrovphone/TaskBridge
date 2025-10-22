@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, DatePicker } from '@nextui-org/react'
+import { Card, CardBody, DatePicker } from '@heroui/react'
 import { parseDate } from '@internationalized/date'
 import { Clock } from 'lucide-react'
 

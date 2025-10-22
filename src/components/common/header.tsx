@@ -21,7 +21,7 @@ import {
  NavbarMenuItem,
  Button,
  Link as NextUILink
-} from "@nextui-org/react"
+} from "@heroui/react"
 
 function Header() {
  const pathname = usePathname()

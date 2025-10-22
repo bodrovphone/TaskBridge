@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Chip, Input } from '@nextui-org/react'
+import { Chip, Input } from '@heroui/react'
 import { Search, X } from 'lucide-react'
 import { getCategoryLabelBySlug } from '@/features/categories'
 

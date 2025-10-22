@@ -10,7 +10,7 @@ import {
  RadioGroup,
  Radio,
  Divider
-} from "@nextui-org/react"
+} from "@heroui/react"
 import { TFunction } from 'i18next'
 import { Star, MapPin, Briefcase, SlidersHorizontal } from "lucide-react"
 import SortingPicker from "@/components/ui/sorting-picker"
@@ -90,7 +90,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
      startContent={<MapPin className="text-green-500" size={18} />}
     >
      {locationOptions.map((location) => (
-      <SelectItem key={location.value} value={location.value}>
+      <SelectItem key={location.value} >
        {location.emoji} {location.label}
       </SelectItem>
      ))}
@@ -182,7 +182,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
       wrapper: "gap-6"
      }}
     >
-     <Radio 
+     <Radio
       value="all"
       classNames={{
        base: "flex items-center gap-2 max-w-none",
@@ -196,7 +196,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
        <span>{t('professionals.filters.all')}</span>
       </div>
      </Radio>
-     <Radio 
+     <Radio
       value="female"
       classNames={{
        base: "flex items-center gap-2 max-w-none",
@@ -210,7 +210,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
        <span>{t('professionals.gender.female')}</span>
       </div>
      </Radio>
-     <Radio 
+     <Radio
       value="male"
       classNames={{
        base: "flex items-center gap-2 max-w-none",

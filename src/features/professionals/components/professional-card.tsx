@@ -7,7 +7,7 @@ import {
  CardBody,
  Button as NextUIButton,
  Chip
-} from "@nextui-org/react"
+} from "@heroui/react"
 import { Star, MapPin, Clock, Briefcase } from "lucide-react"
 import FallbackAvatar from "@/components/ui/fallback-avatar"
 import { getCategoryLabelBySlug } from '@/features/categories'

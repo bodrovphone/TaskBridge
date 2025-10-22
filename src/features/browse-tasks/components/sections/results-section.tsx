@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
-import { Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
+import { Card as NextUICard, Button as NextUIButton } from "@heroui/react";
 import { Search, Filter, Sparkles, X, Coffee, RotateCw } from "lucide-react";
 import TaskCard from "@/components/ui/task-card";
 

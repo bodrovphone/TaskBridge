@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Button as NextUIButton, Textarea } from "@nextui-org/react";
+import { Avatar, Button as NextUIButton, Textarea } from "@heroui/react";
 import { MessageCircle, Star } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';

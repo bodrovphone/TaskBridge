@@ -17,7 +17,7 @@ import {
  Select,
  SelectItem,
  Chip
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Search, Filter, SlidersHorizontal, X, Briefcase } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Badge as ShadcnBadge } from "@/components/ui/badge";
@@ -88,12 +88,12 @@ export default function ProfessionalsPage() {
  // Create select items for categories
  const categorySelectItems = useMemo(() => {
   const items = [
-   <SelectItem key="all" value="all">{t('professionals.allCategories')}</SelectItem>
+   <SelectItem key="all">{t('professionals.allCategories')}</SelectItem>
   ];
   
   categoryOptions.forEach(category => {
    items.push(
-    <SelectItem key={category.value} value={category.value}>
+    <SelectItem key={category.value} >
      {category.label}
     </SelectItem>
    );
@@ -580,7 +580,7 @@ export default function ProfessionalsPage() {
            }}
           >
            {locationOptions.map((location) => (
-            <SelectItem key={location.value} value={location.value}>
+            <SelectItem key={location.value} >
              {location.emoji} {location.label}
             </SelectItem>
            ))}

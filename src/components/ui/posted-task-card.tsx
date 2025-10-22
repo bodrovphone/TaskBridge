@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip } from '@nextui-org/react'
+import { Card, CardBody, Button, Chip } from '@heroui/react'
 import { Banknote, MapPin, Calendar, Users, Eye, FileText } from 'lucide-react'
 
 interface PostedTaskCardProps {

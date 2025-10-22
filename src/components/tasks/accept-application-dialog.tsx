@@ -11,7 +11,7 @@ import {
   Checkbox,
   Divider,
   Textarea
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { CheckCircle, Wallet, Calendar, AlertTriangle, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'

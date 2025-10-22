@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { MessageSquare, Phone, Heart, FileText } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 

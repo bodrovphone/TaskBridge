@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, Chip, Input } from '@nextui-org/react'
+import { Card, CardBody, Chip, Input } from '@heroui/react'
 import { Badge as ShadcnBadge } from '@/components/ui/badge'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'

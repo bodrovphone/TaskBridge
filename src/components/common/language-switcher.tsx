@@ -9,7 +9,7 @@ import {
  DropdownMenu,
  DropdownItem,
  Button
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { LANGUAGE_CONFIG, type SupportedLocale } from '@/lib/constants/locales'
 import { extractLocaleFromPathname, replaceLocaleInPathname } from '@/lib/utils/url-locale'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'

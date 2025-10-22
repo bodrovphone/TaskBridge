@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
-import { Input, Card as NextUICard, Chip } from "@nextui-org/react";
+import { Input, Card as NextUICard, Chip } from "@heroui/react";
 import { Search, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -178,11 +178,11 @@ export default function SearchFiltersSection({
           value={filters.city}
           onChange={(e) => onFilterChange('city', e.target.value)}
          >
-          <option value="">{t('browseTasks.filters.allCities')}</option>
-          <option value="sofia">{t('browseTasks.filters.cities.sofia')}</option>
-          <option value="plovdiv">{t('browseTasks.filters.cities.plovdiv')}</option>
-          <option value="varna">{t('browseTasks.filters.cities.varna')}</option>
-          <option value="burgas">{t('browseTasks.filters.cities.burgas')}</option>
+          <option>{t('browseTasks.filters.allCities')}</option>
+          <option>{t('browseTasks.filters.cities.sofia')}</option>
+          <option>{t('browseTasks.filters.cities.plovdiv')}</option>
+          <option>{t('browseTasks.filters.cities.varna')}</option>
+          <option>{t('browseTasks.filters.cities.burgas')}</option>
          </select>
         </div>
 
@@ -217,10 +217,10 @@ export default function SearchFiltersSection({
           value={filters.sortBy}
           onChange={(e) => onFilterChange('sortBy', e.target.value)}
          >
-          <option value="newest">{t('browseTasks.filters.sort.newest')}</option>
-          <option value="oldest">{t('browseTasks.filters.sort.oldest')}</option>
-          <option value="highBudget">{t('browseTasks.filters.sort.highBudget')}</option>
-          <option value="lowBudget">{t('browseTasks.filters.sort.lowBudget')}</option>
+          <option>{t('browseTasks.filters.sort.newest')}</option>
+          <option>{t('browseTasks.filters.sort.oldest')}</option>
+          <option>{t('browseTasks.filters.sort.highBudget')}</option>
+          <option>{t('browseTasks.filters.sort.lowBudget')}</option>
          </select>
         </div>
        </div>

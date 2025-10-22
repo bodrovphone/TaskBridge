@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, MapPin, Clock, Wallet, Star, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
-import { Card as NextUICard, CardBody, Chip, Tooltip } from "@nextui-org/react";
+import { Card as NextUICard, CardBody, Chip, Tooltip } from "@heroui/react";
 import { useTranslation } from 'react-i18next';
 import TaskGallery from "./task-gallery";
 import TaskActions from "./task-actions";

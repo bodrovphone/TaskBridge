@@ -1,9 +1,9 @@
 'use client'
 
-import { Card, CardBody, Chip, Button, Avatar } from "@nextui-org/react";
+import { Card, CardBody, Chip, Button, Avatar } from "@heroui/react";
 import { CheckCircle, MapPin, Calendar, Star, ExternalLink, TrendingUp, Award, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import { LocaleLink } from '@/components/common/locale-link';
 import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
 

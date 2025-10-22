@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { MyApplication, SortOption, FilterOption } from '../lib/types'
 import MyApplicationCard from './my-application-card'
-import { Select, SelectItem, Tabs, Tab, Chip } from '@nextui-org/react'
+import { Select, SelectItem, Tabs, Tab, Chip } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { PackageOpen, CheckCircle, XCircle, Clock, FileX } from 'lucide-react'
 
@@ -158,22 +158,22 @@ export default function MyApplicationsList({
           className="max-w-xs"
           size="sm"
         >
-          <SelectItem key="newest" value="newest">
+          <SelectItem key="newest">
             {t('myApplications.sortNewest')}
           </SelectItem>
-          <SelectItem key="oldest" value="oldest">
+          <SelectItem key="oldest">
             {t('myApplications.sortOldest')}
           </SelectItem>
-          <SelectItem key="status" value="status">
+          <SelectItem key="status">
             {t('myApplications.sortStatus')}
           </SelectItem>
-          <SelectItem key="taskDate" value="taskDate">
+          <SelectItem key="taskDate">
             {t('myApplications.sortTaskDate')}
           </SelectItem>
-          <SelectItem key="priceHigh" value="priceHigh">
+          <SelectItem key="priceHigh">
             {t('myApplications.sortPriceHigh')}
           </SelectItem>
-          <SelectItem key="priceLow" value="priceLow">
+          <SelectItem key="priceLow">
             {t('myApplications.sortPriceLow')}
           </SelectItem>
         </Select>

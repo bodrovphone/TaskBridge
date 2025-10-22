@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Badge, Chip } from "@nextui-org/react";
+import { Avatar, Badge, Chip } from "@heroui/react";
 import { Star, MapPin, Clock, CheckCircle, Shield, Phone, Users } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 

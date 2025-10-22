@@ -2,7 +2,7 @@
 
 import { LucideIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Card, CardBody, CardFooter } from "@nextui-org/react";
+import { Card, CardBody, CardFooter } from "@heroui/react";
 
 interface CategoryCardProps {
  title: string;

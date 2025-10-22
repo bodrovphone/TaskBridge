@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { Application, ApplicationFilters, SortOption, ApplicationStatus } from '@/types/applications'
 import ApplicationCard from './application-card'
-import { Select, SelectItem, Chip } from '@nextui-org/react'
+import { Select, SelectItem, Chip } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { Filter, ArrowUpDown } from 'lucide-react'
 
@@ -126,7 +126,7 @@ export default function ApplicationsList({
             className="max-w-xs"
           >
             {sortOptions.map(option => (
-              <SelectItem key={option.value} value={option.value}>
+              <SelectItem key={option.value} >
                 {option.label}
               </SelectItem>
             ))}

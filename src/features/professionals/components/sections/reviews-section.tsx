@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@nextui-org/react";
+import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@heroui/react";
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import ReviewsDialog from '@/components/common/reviews-dialog';

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { Button as NextUIButton } from "@nextui-org/react";
+import { Button as NextUIButton } from "@heroui/react";
 import { useAuth } from "@/hooks/use-auth";
 import { useTranslation } from 'react-i18next';
 

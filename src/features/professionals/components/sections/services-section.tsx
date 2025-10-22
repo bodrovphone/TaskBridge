@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import { Card, CardBody, Chip } from "@heroui/react";
 import { DollarSign, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 

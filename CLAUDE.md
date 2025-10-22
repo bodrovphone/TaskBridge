@@ -11,10 +11,10 @@ TaskBridge (branded as "Trudify") is a Bulgarian freelance platform that connect
 - **Frontend**: Next.js 15 with App Router
 - **Backend**: Next.js API Routes
 - **Database**: PostgreSQL with Drizzle ORM
-- **UI Components**: 
+- **UI Components**:
   - **Radix UI** (via shadcn/ui) - Headless, accessible components
-  - **NextUI** - Modern React UI library with beautiful components
-  - Both libraries work together, use NextUI for new components and keep Radix for existing ones
+  - **HeroUI** (formerly NextUI) - Modern React UI library with beautiful components
+  - Both libraries work together, use HeroUI for new components and keep Radix for existing ones
 - **Styling**: Tailwind CSS
 - **Routing**: Next.js App Router
 - **State Management**: TanStack Query (React Query)
@@ -23,7 +23,7 @@ TaskBridge (branded as "Trudify") is a Bulgarian freelance platform that connect
   - **URL Structure**: `/en/`, `/bg/`, `/ru/` for SEO-friendly locales
   - **Smart Detection**: Cookie preference → Browser language → English default
   - **Cost-Optimized**: Middleware with early returns (minimal execution for returning users)
-- **Animations**: Framer Motion (included with NextUI)
+- **Animations**: Framer Motion (included with HeroUI)
 - **Deployment**: Configured for Vercel deployment
 
 ## Key Commands
@@ -211,28 +211,28 @@ All paths are configured to point to the `/src/` directory:
 ```
 
 **Component Guidelines:**
-- **UI components use both Radix UI and NextUI**:
+- **UI components use both Radix UI and HeroUI**:
   - **Radix UI** (via shadcn/ui): Base components in `/src/components/ui/` - Dialog, Select, Form fields
-  - **NextUI**: Modern components - Card, Button, Input - beautiful out-of-box
+  - **HeroUI** (formerly NextUI): Modern components - Card, Button, Input - beautiful out-of-box
   - Both work together seamlessly with Tailwind CSS
-- **NextUI theming**: Configured in `tailwind.config.ts` with custom primary/secondary colors
-- **Animation**: NextUI includes Framer Motion for smooth animations
+- **HeroUI theming**: Configured in `tailwind.config.ts` with custom primary/secondary colors
+- **Animation**: HeroUI includes Framer Motion for smooth animations
 - **Feature Components**: Feature-specific UI lives in `/src/features/[feature]/components/`
 
-### NextUI Integration
-- **Provider**: Wrapped in `NextUIProvider` in `/app/providers.tsx`
-- **Theme colors**: 
+### HeroUI Integration
+- **Provider**: Wrapped in `HeroUIProvider` in `/app/providers.tsx`
+- **Theme colors**:
   - Primary: `#0066CC` (blue)
   - Secondary: `#00A86B` (green)
 - **Available components**: Card, Button, Input, Modal, Navbar, etc.
-- **Usage pattern**: Import from `@nextui-org/react`
+- **Usage pattern**: Import from `@heroui/react`
 
 ### Component Migration Strategy
-**✅ Migrated to NextUI:**
-- **Header/Navbar** - Uses NextUI Navbar with responsive mobile menu
-- **TaskCard** - Uses NextUI Card, Image, Chip, Avatar, and Button components
-- **CategoryCard** - Uses NextUI Card with press interactions
-- **LanguageSwitcher** - Uses NextUI Dropdown with selection states
+**✅ Migrated to HeroUI:**
+- **Header/Navbar** - Uses HeroUI Navbar with responsive mobile menu
+- **TaskCard** - Uses HeroUI Card, Image, Chip, Avatar, and Button components
+- **CategoryCard** - Uses HeroUI Card with press interactions
+- **LanguageSwitcher** - Uses HeroUI Dropdown with selection states
 
 **⚠️ Keep with Radix UI:**
 - **Form components** in `/components/pages/create-task.tsx` - Complex validation
@@ -240,7 +240,7 @@ All paths are configured to point to the `/src/` directory:
 - **All `/components/ui/` shadcn components** - Form fields, dialogs, sheets, etc.
 
 **📋 Migration Guidelines:**
-- **Use NextUI for**: Cards, Buttons, Navigation, Simple Dropdowns, Images, Avatars, Chips
+- **Use HeroUI for**: Cards, Buttons, Navigation, Simple Dropdowns, Images, Avatars, Chips
 - **Keep Radix UI for**: Forms, Complex Dialogs, Data Tables, Advanced Interactions
 - Both libraries work together seamlessly in the same project
 
@@ -299,7 +299,7 @@ General:
 - ✅ Full i18n support (EN/BG/RU)
 
 **Implementation Details:**
-- All pages use NextUI Tabs for filters with badge counts
+- All pages use HeroUI Tabs for filters with badge counts
 - Mock data included for development
 - Empty states customized for each page/filter
 - Translation keys namespaced: `postedTasks.*`, `myApplications.*`, `myWork.*`

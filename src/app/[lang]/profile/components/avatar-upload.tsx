@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { Camera, Upload, X, Check } from 'lucide-react'
 

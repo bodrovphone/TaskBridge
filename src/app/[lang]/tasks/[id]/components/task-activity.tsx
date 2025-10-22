@@ -6,7 +6,7 @@
 // Target: Reduce from 150 lines to ~90 lines
 
 import { useState, useEffect, useRef } from "react";
-import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
+import { Card as NextUICard, CardBody, Tabs, Tab } from "@heroui/react";
 import { MessageCircle, User } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { QuestionsSection } from "./sections";

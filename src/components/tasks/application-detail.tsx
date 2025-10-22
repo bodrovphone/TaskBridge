@@ -11,7 +11,7 @@ import {
   Avatar,
   Chip,
   Divider
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { Star, CheckCircle, XCircle, MapPin, Calendar, Wallet, Award, BadgeCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import Image from 'next/image'

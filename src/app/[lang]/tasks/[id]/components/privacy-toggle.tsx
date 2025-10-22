@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import { Lock, User } from "lucide-react";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 import { useAuth } from "@/hooks/use-auth";
 import { useTranslation } from 'react-i18next';
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Input, Textarea, Card, CardBody } from '@nextui-org/react'
+import { Input, Textarea, Card, CardBody } from '@heroui/react'
 import { FileText } from 'lucide-react'
 
 interface TaskDetailsSectionProps {

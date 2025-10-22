@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, Chip } from '@nextui-org/react'
+import { Card, CardBody, Chip } from '@heroui/react'
 import { CheckCircle, Clock, Shield, Users } from 'lucide-react'
 import { CreateTaskForm } from './components/create-task-form'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { MyApplication } from '../lib/types'
-import { Card, CardBody, CardFooter, Chip, Button, Avatar } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, Chip, Button, Avatar } from '@heroui/react'
 import {
   Clock,
   MapPin,

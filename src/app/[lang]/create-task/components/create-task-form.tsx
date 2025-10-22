@@ -3,7 +3,7 @@
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { defaultFormValues } from '../lib/validation'
 import { CategorySelection } from './category-selection'
 import { TaskDetailsSection } from './task-details-section'

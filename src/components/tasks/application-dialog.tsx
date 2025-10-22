@@ -15,7 +15,7 @@ import {
  SelectItem,
  Textarea,
  Chip,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  Check,
@@ -337,7 +337,6 @@ export default function ApplicationDialog({
              {TIMELINE_OPTIONS.map((option) => (
               <SelectItem
                key={option}
-               value={option}
                startContent={
                 option === 'today' ? (
                  <Zap className="w-4 h-4 text-orange-500" />

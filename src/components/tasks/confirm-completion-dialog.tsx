@@ -14,7 +14,7 @@ import {
   Card,
   CardBody,
   Divider
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { CheckCircle, XCircle, User, Briefcase, AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 

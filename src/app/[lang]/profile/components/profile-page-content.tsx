@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Tabs, Tab, Card, CardBody, Button, Avatar, Chip } from '@nextui-org/react'
+import { Tabs, Tab, Card, CardBody, Button, Avatar, Chip } from '@heroui/react'
 import { User, Briefcase, Settings, Bell, Shield, CreditCard, BarChart3, FileText, ClipboardList } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { CustomerProfile } from './customer-profile'

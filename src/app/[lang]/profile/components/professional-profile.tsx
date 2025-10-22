@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Textarea, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Textarea, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter } from 'next/navigation'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
@@ -235,7 +235,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
            startContent={<Award className="w-4 h-4 text-gray-500" />}
           >
            {experienceOptions.map(opt => (
-            <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+            <SelectItem key={opt.key} >{opt.label}</SelectItem>
            ))}
           </Select>
          )}
@@ -472,7 +472,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
            startContent={<Clock className="w-4 h-4 text-gray-500" />}
           >
            {responseTimeOptions.map(opt => (
-            <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+            <SelectItem key={opt.key} >{opt.label}</SelectItem>
            ))}
           </Select>
          )}

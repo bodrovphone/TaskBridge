@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
+import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@heroui/react'
 import { Send, Calendar, Banknote, MapPin, User, FileText, X } from 'lucide-react'
 
 interface ApplicationsPageContentProps {

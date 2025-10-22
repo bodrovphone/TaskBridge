@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, Input } from '@nextui-org/react'
+import { Card, CardBody, Input } from '@heroui/react'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X } from 'lucide-react'
 import { motion } from 'framer-motion'

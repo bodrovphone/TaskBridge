@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import i18n from '@/lib/intl/config'
 import { Toaster } from '@/components/ui/toaster'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { type SupportedLocale } from '@/lib/constants/locales'
 
@@ -118,14 +118,14 @@ function LocaleProviders({ children, locale }: LocaleProvidersProps) {
 
  return (
   <ErrorBoundary>
-   <NextUIProvider>
+   <HeroUIProvider>
     <QueryClientProvider client={queryClient}>
      <I18nextProvider i18n={i18n}>
       {children}
       <Toaster />
      </I18nextProvider>
     </QueryClientProvider>
-   </NextUIProvider>
+   </HeroUIProvider>
   </ErrorBoundary>
  )
 }

@@ -7,7 +7,7 @@ import AcceptApplicationDialog from '@/components/tasks/accept-application-dialo
 import RejectApplicationDialog from '@/components/tasks/reject-application-dialog'
 import { mockApplications } from '@/lib/mock-data/applications'
 import { Application } from '@/types/applications'
-import { Card, CardBody } from '@nextui-org/react'
+import { Card, CardBody } from '@heroui/react'
 
 export default function ApplicationsDemoPage() {
   // State for applications (using mock data)

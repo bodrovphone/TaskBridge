@@ -8,7 +8,7 @@ import {
  DropdownMenu,
  DropdownItem,
  DropdownSection
-} from '@nextui-org/react'
+} from '@heroui/react'
 import UserAvatar from './user-avatar'
 import { useAuth } from '@/hooks/use-auth'
 import {

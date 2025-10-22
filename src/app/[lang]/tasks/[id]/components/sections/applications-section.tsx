@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Button as NextUIButton, Chip } from "@nextui-org/react";
+import { Avatar, Button as NextUIButton, Chip } from "@heroui/react";
 import { Star, CheckCircle, X } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 

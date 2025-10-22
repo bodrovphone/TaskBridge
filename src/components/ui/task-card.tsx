@@ -16,7 +16,7 @@ import {
  Button,
  Chip,
  Avatar
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 interface TaskCardProps {
  task: Task & {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, Button, Input, Textarea, Chip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
+import { Card, CardBody, Button, Input, Textarea, Chip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@heroui/react'
 import { Plus, Edit, Trash2, X, Save, Clock, Image as ImageIcon } from 'lucide-react'
 import { getCategoryLabelBySlug } from '@/features/categories'
 import { useTranslation } from 'react-i18next'
