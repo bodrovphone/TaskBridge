@@ -109,6 +109,7 @@ export const tasks = {
   'createTask.category.selectSubcategory': 'Выберите конкретную услугу',
   'createTask.category.backToMain': 'Назад к основным категориям',
   'createTask.category.selected': 'Выбранная услуга',
+  'createTask.category.categorySelected': 'Выбранная категория. Нажмите X, чтобы изменить.',
   'createTask.category.tryDifferent': 'Попробуйте другой поисковый запрос',
 
   // Details Section

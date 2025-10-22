@@ -108,6 +108,7 @@ export const tasks = {
   'createTask.category.selectSubcategory': 'Select a specific service',
   'createTask.category.backToMain': 'Back to main categories',
   'createTask.category.selected': 'Selected Service',
+  'createTask.category.categorySelected': 'Selected category. Click the X to change.',
   'createTask.category.tryDifferent': 'Try a different search term',
 
   // Details Section
