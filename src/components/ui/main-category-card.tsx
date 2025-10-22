@@ -135,6 +135,7 @@ function MainCategoryCard({
    isPressable={!!onClick}
    onPress={onClick ? handleCardClick : undefined}
    className={`
+    w-full h-full
     group relative overflow-hidden transition-all duration-300
     ${config.background}
     hover:scale-[1.02] hover:shadow-2xl
