@@ -61,7 +61,7 @@ function Header() {
    maxWidth="full"
    position="sticky"
    className="bg-white shadow-sm border-b border-gray-100 z-50"
-   height="4rem"
+   height="5rem"
    isBordered
    isMenuOpen={isMenuOpen}
    onMenuOpenChange={setIsMenuOpen}
