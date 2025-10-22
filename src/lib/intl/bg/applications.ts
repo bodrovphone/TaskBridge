@@ -31,6 +31,12 @@ export const applications = {
   'application.errors.noEmails': 'Имейл адреси не са разрешени в кандидатури. Можете да обменяте контактна информация след приемане на кандидатурата.',
   'application.alreadyApplied': 'Вече сте кандидатствали за тази задача',
   'application.cannotApplyOwnTask': 'Не можете да кандидатствате за собствената си задача',
+  'application.budget': 'Бюджет',
+  'application.tipClientBudget': 'Подсказка: Бюджетът на клиента е {{min}} - {{max}} лв',
+  'application.tipShareExperience': 'Подсказка: Споделете вашия релевантен опит, за да се откроите',
+  'application.successSteps.quickReview': 'Бърз преглед',
+  'application.successSteps.getResponse': 'Получаване на отговор',
+  'application.successSteps.startWork': 'Започнете работа',
 
   // Applications Management
   'applications.title': 'Кандидатури',

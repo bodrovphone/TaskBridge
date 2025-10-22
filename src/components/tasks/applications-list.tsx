@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Application, ApplicationFilters, SortOption, ApplicationStatus } from '@/types/applications'
+import { Application, SortOption } from '@/types/applications'
 import ApplicationCard from './application-card'
-import { Select, SelectItem, Chip } from '@nextui-org/react'
+import { Select, SelectItem } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
-import { Filter, ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 
 interface ApplicationsListProps {
   applications: Application[]
@@ -22,22 +22,14 @@ export default function ApplicationsList({
 }: ApplicationsListProps) {
   const { t } = useTranslation()
 
-  const [filters, setFilters] = useState<ApplicationFilters>({
-    status: 'all',
-    sortBy: 'newest'
-  })
+  const [sortBy, setSortBy] = useState<SortOption>('newest')
 
-  // Filter and sort applications
-  const filteredAndSortedApplications = useMemo(() => {
+  // Sort applications
+  const sortedApplications = useMemo(() => {
     let result = [...applications]
 
-    // Apply status filter
-    if (filters.status !== 'all') {
-      result = result.filter(app => app.status === filters.status)
-    }
-
     // Apply sorting
-    switch (filters.sortBy) {
+    switch (sortBy) {
       case 'newest':
         result.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
         break
@@ -58,15 +50,7 @@ export default function ApplicationsList({
     }
 
     return result
-  }, [applications, filters])
-
-  // Calculate stats
-  const stats = useMemo(() => ({
-    total: applications.length,
-    pending: applications.filter(a => a.status === 'pending').length,
-    accepted: applications.filter(a => a.status === 'accepted').length,
-    rejected: applications.filter(a => a.status === 'rejected').length
-  }), [applications])
+  }, [applications, sortBy])
 
   const sortOptions = [
     { value: 'newest', label: t('applications.sortNewest', 'Newest First') },
@@ -74,13 +58,6 @@ export default function ApplicationsList({
     { value: 'price-high', label: t('applications.sortPriceHigh', 'Price: High to Low') },
     { value: 'rating', label: t('applications.sortRating', 'Highest Rated') },
     { value: 'experience', label: t('applications.sortExperience', 'Most Experience') }
-  ]
-
-  const statusFilters: Array<{ value: ApplicationStatus | 'all', label: string, count: number }> = [
-    { value: 'all', label: t('applications.filterAll', 'All'), count: stats.total },
-    { value: 'pending', label: t('applications.filterPending', 'Pending'), count: stats.pending },
-    { value: 'accepted', label: t('applications.filterAccepted', 'Accepted'), count: stats.accepted },
-    { value: 'rejected', label: t('applications.filterRejected', 'Rejected'), count: stats.rejected }
   ]
 
   return (
@@ -92,52 +69,35 @@ export default function ApplicationsList({
             {t('applications.title', 'Applications')}
           </h2>
           <p className="text-gray-600 mt-1">
-            {filteredAndSortedApplications.length} {t('applications.count', 'applications')}
+            {sortedApplications.length} {t('applications.count', 'applications')}
           </p>
         </div>
-      </div>
 
-      {/* Controls: Sort & Filter */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        {/* Status Filter Chips */}
-        <div className="flex flex-wrap gap-2 items-center">
-          <Filter className="w-4 h-4 text-gray-500" />
-          {statusFilters.map(filter => (
-            <Chip
-              key={filter.value}
-              variant={filters.status === filter.value ? 'solid' : 'flat'}
-              color={filters.status === filter.value ? 'primary' : 'default'}
-              className="cursor-pointer"
-              onClick={() => setFilters(prev => ({ ...prev, status: filter.value }))}
+        {/* Sort Dropdown - Only show when there are applications */}
+        {sortedApplications.length > 0 && (
+          <div className="flex items-center gap-2 min-w-[200px]">
+            <ArrowUpDown className="w-4 h-4 text-gray-500" />
+            <Select
+              size="sm"
+              label={t('applications.sortBy', 'Sort by')}
+              selectedKeys={[sortBy]}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              className="max-w-xs"
             >
-              {filter.label} ({filter.count})
-            </Chip>
-          ))}
-        </div>
-
-        {/* Sort Dropdown */}
-        <div className="flex items-center gap-2 min-w-[200px]">
-          <ArrowUpDown className="w-4 h-4 text-gray-500" />
-          <Select
-            size="sm"
-            label={t('applications.sortBy', 'Sort by')}
-            selectedKeys={[filters.sortBy]}
-            onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value as SortOption }))}
-            className="max-w-xs"
-          >
-            {sortOptions.map(option => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </Select>
-        </div>
+              {sortOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+        )}
       </div>
 
       {/* Applications Grid */}
-      {filteredAndSortedApplications.length > 0 ? (
+      {sortedApplications.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredAndSortedApplications.map(application => (
+          {sortedApplications.map(application => (
             <ApplicationCard
               key={application.id}
               application={application}
@@ -152,16 +112,10 @@ export default function ApplicationsList({
         <div className="text-center py-16">
           <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            {filters.status === 'all'
-              ? t('applications.emptyState.title', 'No applications yet')
-              : `No ${filters.status} applications`
-            }
+            {t('applications.emptyState.title', 'No applications yet')}
           </h3>
           <p className="text-gray-600">
-            {filters.status === 'all'
-              ? t('applications.emptyState.message', 'Your task is live! Professionals will start applying soon.')
-              : `Try adjusting your filters to see more applications.`
-            }
+            {t('applications.emptyState.message', 'Your task is live! Professionals will start applying soon.')}
           </p>
         </div>
       )}

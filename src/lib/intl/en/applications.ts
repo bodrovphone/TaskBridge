@@ -31,6 +31,12 @@ export const applications = {
   'application.errors.noEmails': 'Email addresses are not allowed in applications. You can exchange contact info after your application is accepted.',
   'application.alreadyApplied': 'You have already applied to this task',
   'application.cannotApplyOwnTask': 'You cannot apply to your own task',
+  'application.budget': 'Budget',
+  'application.tipClientBudget': 'Tip: Client budget is {{min}} - {{max}} BGN',
+  'application.tipShareExperience': 'Tip: Share your relevant experience to stand out',
+  'application.successSteps.quickReview': 'Quick Review',
+  'application.successSteps.getResponse': 'Get Response',
+  'application.successSteps.startWork': 'Start Work',
 
   // Applications Management
   'applications.title': 'Applications',

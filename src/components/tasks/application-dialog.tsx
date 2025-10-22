@@ -141,7 +141,12 @@ export default function ApplicationDialog({
  // Button state logic
  const hasPrice = form.state.values.proposedPrice > 0
  const hasTimeline = form.state.values.timeline.length > 0
- const hasValidMessage = messageLength >= 30 && messageLength <= 500
+ // Message is optional - just check it's not too long and doesn't contain forbidden content
+ const hasValidMessage = messageLength <= 500 &&
+   !containsPhoneNumber(form.state.values.message || '') &&
+   !containsUrl(form.state.values.message || '') &&
+   !containsEmail(form.state.values.message || '')
+
  const isFormValid = hasPrice && hasTimeline && hasValidMessage
 
  // Button color based on form state
@@ -221,7 +226,7 @@ export default function ApplicationDialog({
           size="sm"
           className="w-fit"
          >
-          Budget: {taskBudget.min || 0} - {taskBudget.max || 0} BGN
+          {t('application.budget')}: {taskBudget.min || 0} - {taskBudget.max || 0} BGN
          </Chip>
         )}
        </ModalHeader>
@@ -294,7 +299,7 @@ export default function ApplicationDialog({
             {taskBudget && (taskBudget.min || taskBudget.max) && (
              <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
               <Zap className="w-3 h-3" />
-              Tip: Client budget is {taskBudget.min || 0} - {taskBudget.max || 0} BGN
+              {t('application.tipClientBudget', { min: taskBudget.min || 0, max: taskBudget.max || 0 })}
              </p>
             )}
            </div>
@@ -363,19 +368,16 @@ export default function ApplicationDialog({
           name="message"
           validators={{
            onChange: ({ value }) => {
-            if (!value || value.length < 30) {
-             return t('application.errors.messageMin')
-            }
-            if (value.length > 500) {
+            if (value && value.length > 500) {
              return t('application.errors.messageMax')
             }
-            if (containsPhoneNumber(value)) {
+            if (value && containsPhoneNumber(value)) {
              return t('application.errors.noPhoneNumbers')
             }
-            if (containsUrl(value)) {
+            if (value && containsUrl(value)) {
              return t('application.errors.noUrls')
             }
-            if (containsEmail(value)) {
+            if (value && containsEmail(value)) {
              return t('application.errors.noEmails')
             }
             return undefined
@@ -385,7 +387,7 @@ export default function ApplicationDialog({
           {(field) => (
            <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-             {t('application.message')} <span className="text-danger">*</span>
+             {t('application.message')} <span className="text-gray-400 text-sm">({t('common.optional', 'Optional')})</span>
             </label>
             <Textarea
              placeholder={t('application.messagePlaceholder')}
@@ -403,8 +405,6 @@ export default function ApplicationDialog({
                 className={`text-xs font-medium transition-colors ${
                  messageLength > messageMax
                   ? 'text-danger'
-                  : messageLength >= 30
-                  ? 'text-success'
                   : 'text-default-400'
                 }`}
                >
@@ -413,27 +413,23 @@ export default function ApplicationDialog({
                  max: messageMax,
                 })}
                </span>
-               <div className="w-24 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                <motion.div
-                 className={`h-full rounded-full ${
-                  messageLength >= 30
-                   ? 'bg-success'
-                   : 'bg-gray-400'
-                 }`}
-                 initial={{ width: 0 }}
-                 animate={{ width: `${Math.min(messageProgress, 100)}%` }}
-                 transition={{ duration: 0.2 }}
-                />
-               </div>
+               {messageLength > 0 && (
+                <div className="w-24 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                 <motion.div
+                  className={`h-full rounded-full ${
+                   messageLength > messageMax
+                    ? 'bg-danger'
+                    : 'bg-primary'
+                  }`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(messageProgress, 100)}%` }}
+                  transition={{ duration: 0.2 }}
+                 />
+                </div>
+               )}
               </div>
              }
             />
-            {messageLength < 30 && messageLength > 0 && (
-             <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
-              <Zap className="w-3 h-3" />
-              Tip: Share your relevant experience to stand out
-             </p>
-            )}
             {messageLength === 0 && (
              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
@@ -551,19 +547,19 @@ export default function ApplicationDialog({
            <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
             <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
            </div>
-           <p className="text-xs text-gray-600 dark:text-gray-400">Quick Review</p>
+           <p className="text-xs text-gray-600 dark:text-gray-400">{t('application.successSteps.quickReview')}</p>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
            <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
             <MessageSquare className="w-5 h-5 text-purple-600 dark:text-purple-400" />
            </div>
-           <p className="text-xs text-gray-600 dark:text-gray-400">Get Response</p>
+           <p className="text-xs text-gray-600 dark:text-gray-400">{t('application.successSteps.getResponse')}</p>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
            <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
             <Check className="w-5 h-5 text-green-600 dark:text-green-400" />
            </div>
-           <p className="text-xs text-gray-600 dark:text-gray-400">Start Work</p>
+           <p className="text-xs text-gray-600 dark:text-gray-400">{t('application.successSteps.startWork')}</p>
           </div>
          </div>
         </div>

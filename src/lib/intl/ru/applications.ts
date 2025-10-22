@@ -31,6 +31,12 @@ export const applications = {
   'application.errors.noEmails': 'Адреса электронной почты не разрешены в заявках. Вы можете обменяться контактной информацией после принятия заявки.',
   'application.alreadyApplied': 'Вы уже откликнулись на эту задачу',
   'application.cannotApplyOwnTask': 'Вы не можете откликнуться на свою собственную задачу',
+  'application.budget': 'Бюджет',
+  'application.tipClientBudget': 'Подсказка: Бюджет клиента {{min}} - {{max}} лв',
+  'application.tipShareExperience': 'Подсказка: Поделитесь своим опытом, чтобы выделиться',
+  'application.successSteps.quickReview': 'Быстрая проверка',
+  'application.successSteps.getResponse': 'Получить ответ',
+  'application.successSteps.startWork': 'Начать работу',
 
   // Applications Management
   'applications.title': 'Заявки',
