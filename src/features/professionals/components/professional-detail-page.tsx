@@ -252,29 +252,26 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
     <div className="space-y-8">
      {/* Professional Header */}
      <ProfessionalHeader professional={mockProfessional} />
-     
-     {/* Action Buttons */}
-     <ActionButtonsRow 
-      professional={mockProfessional}
-      onProposeTask={() => console.log('Propose task clicked')}
-      onContact={() => console.log('Contact clicked')}
-      onAskQuestion={() => console.log('Ask question clicked')}
-      onSaveToFavorites={() => console.log('Save to favorites clicked')}
-     />
-     
-     {/* Services & About Grid */}
-     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      {/* Left Column - Services */}
-      <div>
+
+     {/* Two Column Layout - Equal Height */}
+     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-stretch">
+      {/* Left Column - Action Buttons + Services */}
+      <div className="flex flex-col gap-8">
+       <ActionButtonsRow
+        professional={mockProfessional}
+        onProposeTask={() => console.log('Propose task clicked')}
+        onAskQuestion={() => console.log('Ask question clicked')}
+        onSaveToFavorites={() => console.log('Save to favorites clicked')}
+       />
        <ServicesSection services={mockProfessional.services} />
       </div>
 
-      {/* Right Column - About */}
-      <div className="bg-white/80 rounded-2xl p-8 shadow-lg">
+      {/* Right Column - About (Full Height) */}
+      <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
        <h3 className="text-2xl font-bold text-gray-900 mb-4">
         {t('professionalDetail.about')}
        </h3>
-       <p className="text-gray-700 leading-relaxed">
+       <p className="text-gray-700 leading-relaxed flex-1">
         {mockProfessional.bio}
        </p>
       </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@nextui-org/react";
-import { MessageSquare, Phone, Heart, FileText } from "lucide-react";
+import { MessageSquare, Heart, FileText } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 
 interface Professional {
@@ -16,17 +16,15 @@ interface Professional {
 interface ActionButtonsRowProps {
  professional: Professional;
  onProposeTask: () => void;
- onContact: () => void;
  onAskQuestion: () => void;
  onSaveToFavorites: () => void;
 }
 
-export default function ActionButtonsRow({ 
- professional, 
- onProposeTask, 
- onContact, 
+export default function ActionButtonsRow({
+ professional,
+ onProposeTask,
  onAskQuestion,
- onSaveToFavorites 
+ onSaveToFavorites
 }: ActionButtonsRowProps) {
  const { t } = useTranslation();
 
@@ -35,7 +33,7 @@ export default function ActionButtonsRow({
    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     {/* Left Column */}
     <div className="flex flex-col gap-3">
-     {/* Propose Task - smaller size */}
+     {/* Propose Task */}
      <Button
       size="md"
       color="primary"
@@ -58,22 +56,8 @@ export default function ActionButtonsRow({
      </Button>
     </div>
 
-    {/* Right Column */}
+    {/* Right Column - Save to Favorites */}
     <div className="flex flex-col gap-3">
-     {/* Contact Button - only if allowed */}
-     {professional.contactSettings.allowDirectContact && (
-      <Button
-       size="md"
-       variant="bordered"
-       className="border-2 border-green-500 text-green-600 hover:bg-green-50 font-semibold w-full"
-       startContent={<Phone size={16} />}
-       onClick={onContact}
-      >
-       {t('professionalDetail.actions.contact')}
-      </Button>
-     )}
-
-     {/* Save to Favorites */}
      <Button
       size="md"
       variant="bordered"
@@ -87,7 +71,7 @@ export default function ActionButtonsRow({
     </div>
    </div>
 
-   {/* Contact Info Hint */}
+   {/* Available Hours */}
    {professional.contactSettings.allowDirectContact && (
     <div className="mt-4 text-center">
      <p className="text-sm text-gray-600">

@@ -9,7 +9,7 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
-import { Plus, Handshake } from "lucide-react"
+import { Plus, Handshake, FileText, Send, Briefcase } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import {
  Navbar,
@@ -164,6 +164,64 @@ function Header() {
       </NextUILink>
      </NavbarMenuItem>
     ))}
+
+    {/* Portfolio menu items for authenticated users */}
+    {isAuthenticated && (
+     <>
+      <NavbarMenuItem>
+       <div className="pt-4 border-t border-gray-200 w-full">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+         {t('nav.forCustomers')}
+        </p>
+       </div>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
+        as={LocaleLink}
+        href="/tasks/posted"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onClick={() => setIsMenuOpen(false)}
+       >
+        <FileText size={18} className="text-gray-500" />
+        {t('nav.myPostedTasks')}
+       </NextUILink>
+      </NavbarMenuItem>
+
+      <NavbarMenuItem>
+       <div className="pt-4 border-t border-gray-200 w-full">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+         {t('nav.forProfessionals')}
+        </p>
+       </div>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
+        as={LocaleLink}
+        href="/tasks/applications"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onClick={() => setIsMenuOpen(false)}
+       >
+        <Send size={18} className="text-gray-500" />
+        {t('nav.myApplications')}
+       </NextUILink>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
+        as={LocaleLink}
+        href="/tasks/work"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onClick={() => setIsMenuOpen(false)}
+       >
+        <Briefcase size={18} className="text-gray-500" />
+        {t('nav.myWork')}
+       </NextUILink>
+      </NavbarMenuItem>
+     </>
+    )}
+
     <NavbarMenuItem>
      <div className="pt-4 border-t border-gray-200 w-full">
       <Button

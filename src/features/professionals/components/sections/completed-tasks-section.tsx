@@ -72,10 +72,18 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
      {t('professionalDetail.completedTasks.title')}
     </h3>
     <div className="text-center py-12">
-     <div className="bg-white/70 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-      <CheckCircle className="text-green-400" size={48} />
+     <div className="bg-white/70 rounded-full p-8 w-32 h-32 mx-auto mb-6 flex items-center justify-center animate-pulse">
+      <TrendingUp className="text-green-400" size={64} />
      </div>
-     <p className="text-gray-600 text-lg">{t('professionalDetail.completedTasks.noTasks')}</p>
+     <h4 className="text-2xl font-bold text-gray-800 mb-3">
+      🚀 {t('professionalDetail.completedTasks.hugePotential')}
+     </h4>
+     <p className="text-gray-600 text-lg mb-2">
+      {t('professionalDetail.completedTasks.comingSoon')}
+     </p>
+     <p className="text-gray-500 text-sm">
+      {t('professionalDetail.completedTasks.watchThisSpace')}
+     </p>
     </div>
    </div>
   );

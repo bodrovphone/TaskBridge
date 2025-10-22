@@ -43,7 +43,7 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
          <Chip
           size="lg"
           className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 font-semibold px-4 py-2"
-          startContent={<DollarSign size={16} />}
+          startContent={<Banknote size={16} />}
          >
           {service.price}
          </Chip>

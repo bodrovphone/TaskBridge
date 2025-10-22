@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
-import { Send, Calendar, Banknote, MapPin, User, FileText, X } from 'lucide-react'
+import { Send, Calendar, Banknote, MapPin, User, X } from 'lucide-react'
 
 interface ApplicationsPageContentProps {
   lang: string
@@ -354,7 +354,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 pt-4 border-t border-gray-200">
+                  <div className="flex justify-between items-center gap-2 pt-4 border-t border-gray-200">
                     <Button
                       size="sm"
                       variant="flat"
