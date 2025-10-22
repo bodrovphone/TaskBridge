@@ -172,45 +172,12 @@ function Footer() {
      </div>
     </div>
 
-    
     {/* Bottom Bar */}
-    <div className="border-t border-slate-700/50 mt-12 pt-8">
-     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-      <div className="flex items-center gap-2 text-slate-400 text-sm">
+    <div className="border-t border-slate-700/50">
+     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex items-center justify-center gap-2 text-slate-400 text-sm">
        <Heart className="h-4 w-4 text-red-400" />
        <span>© 2025 Obod Soft LTD. All rights reserved.</span>
-      </div>
-      
-      {/* Social Links */}
-      <div className="flex items-center gap-3">
-       <a 
-        href="#" 
-        className="w-8 h-8 bg-slate-800/50 hover:bg-blue-600/20 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-        aria-label="Facebook"
-       >
-        <div className="w-4 h-4 bg-blue-500 rounded"></div>
-       </a>
-       <a 
-        href="#" 
-        className="w-8 h-8 bg-slate-800/50 hover:bg-blue-400/20 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-        aria-label="Twitter"
-       >
-        <div className="w-4 h-4 bg-blue-400 rounded"></div>
-       </a>
-       <a 
-        href="#" 
-        className="w-8 h-8 bg-slate-800/50 hover:bg-gradient-to-br hover:from-purple-500/20 hover:to-pink-500/20 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-        aria-label="Instagram"
-       >
-        <div className="w-4 h-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded"></div>
-       </a>
-       <a 
-        href="#" 
-        className="w-8 h-8 bg-slate-800/50 hover:bg-blue-700/20 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-        aria-label="LinkedIn"
-       >
-        <div className="w-4 h-4 bg-blue-700 rounded"></div>
-       </a>
       </div>
      </div>
     </div>
