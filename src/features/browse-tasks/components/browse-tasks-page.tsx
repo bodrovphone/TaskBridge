@@ -41,7 +41,7 @@ export default function BrowseTasksPage() {
  queryParams.append("limit", pageSize.toString());
  queryParams.append("offset", (currentPage * pageSize).toString());
 
- const { data: tasks = [], isLoading, error } = useQuery({
+ const { data: tasks = [], isLoading, error, refetch } = useQuery({
   queryKey: [`/api/tasks?${queryParams.toString()}`],
  });
 
@@ -66,6 +66,10 @@ export default function BrowseTasksPage() {
 
  const handleApplyToTask = (taskId: string) => {
   window.location.href = `/tasks/${taskId}`;
+ };
+
+ const handleRetry = () => {
+  refetch();
  };
 
  // Filter helper functions (kept for future use)
@@ -96,6 +100,7 @@ export default function BrowseTasksPage() {
      onSetCurrentPage={setCurrentPage}
      onClearFilters={clearFilters}
      onApplyToTask={handleApplyToTask}
+     onRetry={handleRetry}
     />
    </main>
   </div>
