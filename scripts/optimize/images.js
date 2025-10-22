@@ -32,6 +32,7 @@ async function optimizeImage(inputPath, config, dryRun = false) {
     original: inputPath,
     originalSize,
     optimizedSize: 0,
+    totalVariantsSize: 0,  // Total size of all variants
     savings: 0,
     savingsPercent: 0,
     outputs: [],
@@ -103,7 +104,7 @@ async function optimizeImage(inputPath, config, dryRun = false) {
             format,
             width: size,
           });
-          results.optimizedSize += optimizedSize;
+          results.totalVariantsSize += optimizedSize;
         } else {
           // Dry run - just log what would be created
           results.outputs.push({
@@ -141,7 +142,12 @@ async function optimizeImage(inputPath, config, dryRun = false) {
           format,
           width: metadata.width,
         });
-        results.optimizedSize += optimizedSize;
+        results.totalVariantsSize += optimizedSize;
+
+        // Use first format at original size as the primary comparison
+        if (results.optimizedSize === 0) {
+          results.optimizedSize = optimizedSize;
+        }
       } else {
         results.outputs.push({
           path: outputPath,
@@ -182,6 +188,8 @@ async function optimizeImages(files, config, dryRun = false, onProgress = null) 
     failed: 0,
     totalOriginalSize: 0,
     totalOptimizedSize: 0,
+    totalVariantsSize: 0,
+    totalVariantsCount: 0,
     totalSavings: 0,
     totalSavingsPercent: 0,
     results: [],
@@ -205,6 +213,8 @@ async function optimizeImages(files, config, dryRun = false, onProgress = null) 
       summary.successful++;
       summary.totalOriginalSize += result.originalSize;
       summary.totalOptimizedSize += result.optimizedSize;
+      summary.totalVariantsSize += result.totalVariantsSize;
+      summary.totalVariantsCount += result.outputs.length;
     }
   }
 
@@ -234,12 +244,19 @@ function printSummary(summary, dryRun = false) {
 
   if (!dryRun && summary.successful > 0) {
     console.log(chalk.cyan(`Original size: ${summary.totalOriginalSize} KB`));
-    console.log(chalk.cyan(`Optimized size: ${summary.totalOptimizedSize} KB`));
+    console.log(chalk.cyan(`Primary format size: ${summary.totalOptimizedSize} KB`));
+
+    const savingsColor = summary.totalSavings > 0 ? chalk.green.bold : chalk.yellow;
+    const savingsSign = summary.totalSavings > 0 ? '✓' : '→';
     console.log(
-      chalk.green.bold(
-        `✓ Saved: ${summary.totalSavings} KB (${summary.totalSavingsPercent}%)`
+      savingsColor(
+        `${savingsSign} Saved: ${summary.totalSavings} KB (${summary.totalSavingsPercent}%)`
       )
     );
+
+    // Show info about responsive variants
+    console.log(chalk.dim(`\nGenerated ${summary.totalVariantsCount} responsive variants (${summary.totalVariantsSize} KB total)`));
+    console.log(chalk.dim(`Multiple formats and sizes created for optimal web performance`));
   }
 
   if (summary.errors.length > 0) {
