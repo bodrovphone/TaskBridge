@@ -100,7 +100,7 @@ export const tasks = {
   'createTask.hero.freeToPost': 'Безплатна публикация',
   'createTask.hero.noPayment': 'Без плащане до започване на работа',
   'createTask.hero.avgResponse': 'Средно време за отговор: 2 часа',
-  'createTask.hero.verifiedPros': '1,500+ верифицирани професионалисти',
+  'createTask.hero.verifiedPros': 'Верифицирани професионалисти готови да помогнат',
   'createTask.hero.help': 'Нуждаете се от помощ? Свържете се с нашия екип за поддръжка',
 
   // Category Section
