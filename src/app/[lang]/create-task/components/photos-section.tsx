@@ -76,13 +76,18 @@ export function PhotosSection({ form }: PhotosSectionProps) {
  return (
   <div className="space-y-6">
    {/* Section Header */}
-   <div>
-    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-     {t('createTask.photos.title', 'Add photos (optional)')}
-    </h2>
-    <p className="text-gray-600">
-     {t('createTask.photos.help', 'Photos help professionals understand your task better')}
-    </p>
+   <div className="flex items-start gap-3 pb-4 border-b border-gray-200">
+    <div className="p-2 bg-pink-100 rounded-lg">
+     <ImageIcon className="w-6 h-6 text-pink-600" />
+    </div>
+    <div>
+     <h2 className="text-2xl font-bold text-gray-900 mb-1">
+      {t('createTask.photos.title', 'Add photos (optional)')}
+     </h2>
+     <p className="text-gray-600">
+      {t('createTask.photos.help', 'Photos help professionals understand your task better')}
+     </p>
+    </div>
    </div>
 
    {/* Upload Zone */}

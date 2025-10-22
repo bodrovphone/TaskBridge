@@ -137,53 +137,70 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
     </p>
    </div>
 
-   {/* Search Input - Disabled when category is selected to avoid CLS */}
-   <Card className="bg-white/98 shadow-lg border-0">
-    <CardBody className="p-4">
-     <div className="relative group">
-      <Input
-       size="lg"
-       placeholder={t('professionals.searchPlaceholder', 'Search categories... (e.g. repair, cleaning, lessons)')}
-       value={searchQuery}
-       onChange={(e) => setSearchQuery(e.target.value)}
-       isDisabled={!!selectedCategory}
-       startContent={
-        <motion.div
-         animate={{
-          rotate: searchQuery ? 360 : 0,
-          scale: searchQuery ? 1.1 : 1
-         }}
-         transition={{ duration: 0.4, ease: "easeInOut" }}
-         className="flex items-center justify-center"
-        >
-         <Search className="text-primary group-focus-within:text-primary" size={20} />
-        </motion.div>
+   {/* Search Input - Smoothly hide when category is selected */}
+   <AnimatePresence>
+    {!selectedCategory && (
+     <motion.div
+      initial={{ opacity: 1, height: 'auto' }}
+      exit={{
+       opacity: 0,
+       height: 0,
+       marginBottom: 0,
+       transition: {
+        height: { duration: 0.5, ease: 'easeInOut' },
+        opacity: { duration: 0.4, ease: 'easeOut' }
        }
-       endContent={
-        searchQuery && !selectedCategory && (
-         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setSearchQuery('')}
-          className="text-gray-400 hover:text-gray-600"
-         >
-          <X size={18} />
-         </motion.button>
-        )
-       }
-       classNames={{
-        base: "max-w-full",
-        mainWrapper: "h-full",
-        input: "text-base font-medium placeholder:text-gray-400",
-        inputWrapper: "h-14 px-4 bg-gradient-to-r from-gray-50 to-white border-2 border-gray-200 group-focus-within:border-primary group-hover:border-primary/50 shadow-md group-focus-within:shadow-lg transition-all duration-300 ease-out group-focus-within:bg-white"
-       }}
-      />
-     </div>
-    </CardBody>
-   </Card>
+      }}
+      style={{ overflow: 'hidden' }}
+     >
+      <Card className="bg-white/98 shadow-lg border-0">
+       <CardBody className="p-4">
+        <div className="relative group">
+         <Input
+          size="lg"
+          placeholder={t('professionals.searchPlaceholder', 'Search categories... (e.g. repair, cleaning, lessons)')}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          startContent={
+           <motion.div
+            animate={{
+             rotate: searchQuery ? 360 : 0,
+             scale: searchQuery ? 1.1 : 1
+            }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="flex items-center justify-center"
+           >
+            <Search className="text-primary group-focus-within:text-primary" size={20} />
+           </motion.div>
+          }
+          endContent={
+           searchQuery && (
+            <motion.button
+             initial={{ opacity: 0, scale: 0.8 }}
+             animate={{ opacity: 1, scale: 1 }}
+             exit={{ opacity: 0, scale: 0.8 }}
+             whileHover={{ scale: 1.1 }}
+             whileTap={{ scale: 0.9 }}
+             onClick={() => setSearchQuery('')}
+             className="text-gray-400 hover:text-gray-600"
+            >
+             <X size={18} />
+            </motion.button>
+           )
+          }
+          classNames={{
+           base: "max-w-full",
+           mainWrapper: "h-full",
+           input: "text-base font-medium placeholder:text-gray-400",
+           inputWrapper: "h-14 px-4 bg-gradient-to-r from-gray-50 to-white border-2 border-gray-200 group-focus-within:border-primary group-hover:border-primary/50 shadow-md group-focus-within:shadow-lg transition-all duration-300 ease-out group-focus-within:bg-white"
+          }}
+         />
+        </div>
+       </CardBody>
+      </Card>
+     </motion.div>
+    )}
+   </AnimatePresence>
 
    {/* Breadcrumb / Back Navigation */}
    {selectedMainCategory && !selectedCategory && (
