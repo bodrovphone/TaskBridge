@@ -84,11 +84,11 @@ export function MarkCompletedDialog({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      size="2xl"
+      size="lg"
       scrollBehavior="inside"
       classNames={{
         wrapper: 'overflow-x-hidden',
-        base: 'bg-white max-h-[95vh] md:max-h-[90vh] mx-2 md:mx-auto max-w-full',
+        base: 'bg-white max-h-[95vh] md:max-h-[90vh] mx-2 md:mx-auto w-full',
         header: 'border-b border-gray-200',
         body: 'max-h-[calc(95vh-140px)] md:max-h-none overflow-x-hidden',
         footer: 'border-t border-gray-200'

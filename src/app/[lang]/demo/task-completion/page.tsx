@@ -2,18 +2,15 @@
 
 import { useState } from 'react'
 import { Card, CardBody, Button, Divider } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
 import { TaskStatusBadge, type TaskStatus } from '@/components/tasks/task-status-badge'
 import { TaskCompletionButton } from '@/components/tasks/task-completion-button'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
-import { ConfirmCompletionDialog } from '@/components/tasks/confirm-completion-dialog'
+import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { PendingConfirmationBanner } from '@/components/tasks/pending-confirmation-banner'
 import { CompletionSuccessView } from '@/components/tasks/completion-success-view'
 import { CompletionTimeline } from '@/components/tasks/completion-timeline'
 
 export default function TaskCompletionDemoPage() {
-  const { t } = useTranslation()
-
   // Dialog states
   const [showMarkDialog, setShowMarkDialog] = useState(false)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
@@ -34,8 +31,8 @@ export default function TaskCompletionDemoPage() {
     setShowMarkDialog(false)
   }
 
-  const handleConfirmComplete = () => {
-    console.log('Customer confirmed completion')
+  const handleConfirmComplete = (data?: ConfirmationData) => {
+    console.log('Customer confirmed completion with data:', data)
     setCustomerConfirmedAt(new Date())
     setCompletedAt(new Date())
     setTaskStatus('completed')

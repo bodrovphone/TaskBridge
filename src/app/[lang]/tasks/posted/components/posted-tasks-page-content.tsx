@@ -11,7 +11,7 @@ interface PostedTasksPageContentProps {
   lang: string
 }
 
-type TaskStatus = 'all' | 'open' | 'in_progress' | 'completed' | 'cancelled'
+type TaskStatus = 'all' | 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
 
 interface PostedTask {
   id: string
@@ -19,7 +19,7 @@ interface PostedTask {
   description: string
   category: string
   budget: number
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled'
+  status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
   applicationsCount: number
   acceptedApplication?: {
     professionalId: string
@@ -52,6 +52,24 @@ const mockPostedTasks: PostedTask[] = [
   },
   {
     id: '2',
+    title: 'Kitchen sink plumbing repair',
+    description: 'Professional completed the work and is waiting for your confirmation',
+    category: 'categories.plumbing',
+    budget: 120,
+    status: 'pending_customer_confirmation',
+    applicationsCount: 4,
+    acceptedApplication: {
+      professionalId: 'prof-1',
+      professionalName: 'Ivan Georgiev'
+    },
+    location: {
+      city: 'Sofia',
+      neighborhood: 'Lozenets'
+    },
+    createdAt: new Date('2024-10-12'),
+  },
+  {
+    id: '2b',
     title: 'Weekly apartment cleaning',
     description: 'Looking for regular cleaning service every Tuesday',
     category: 'categories.houseCleaning', // Translation key
@@ -59,7 +77,7 @@ const mockPostedTasks: PostedTask[] = [
     status: 'in_progress',
     applicationsCount: 8,
     acceptedApplication: {
-      professionalId: 'prof-1',
+      professionalId: 'prof-2',
       professionalName: 'Maria Petrova'
     },
     location: {
@@ -181,6 +199,15 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.inProgress')}</span>
                     <Chip size="sm" variant="flat" color="warning">{getTaskCountByStatus('in_progress')}</Chip>
+                  </div>
+                }
+              />
+              <Tab
+                key="pending_customer_confirmation"
+                title={
+                  <div className="flex items-center gap-2">
+                    <span>{t('postedTasks.filter.awaitingConfirmation')}</span>
+                    <Chip size="sm" variant="flat" color="secondary">{getTaskCountByStatus('pending_customer_confirmation')}</Chip>
                   </div>
                 }
               />

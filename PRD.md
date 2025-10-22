@@ -204,6 +204,30 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 - If professional cannot resolve issues, either party can cancel task
 - Cancelled tasks may become "open" again for other professionals
 
+**Task Creation Constraints (Post-Completion):**
+
+To ensure accountability and maintain platform trust, customers face restrictions when creating new tasks:
+
+**Priority 1: HARD BLOCK - Pending Confirmations (CRITICAL)**
+- **Trigger:** Task status is `pending_customer_confirmation`
+- **What happened:** Professional marked task as complete, awaiting customer response
+- **Rule:** ❌ Customer **CANNOT** create new task until they respond (confirm or reject)
+- **Grace period:** None - immediate enforcement
+- **Rationale:** Professional completed work and is waiting for payment/feedback
+
+**Priority 2: SOFT BLOCK - Missing Reviews (IMPORTANT)**
+- **Trigger:** Task status is `completed` but `reviewedByCustomer: false`
+- **What happened:** Task confirmed complete but customer didn't leave review
+- **Rule:** ⚠️ Customer can create **3 new tasks** without review (grace period)
+- **After 3 tasks:** ❌ Hard block until reviews submitted
+- **Rationale:** Task is resolved, just need feedback to help professionals
+
+**Priority 3: Tasks In Progress (NO BLOCK)**
+- **Trigger:** Task status is `in_progress`
+- **Rule:** ✅ No blocking - customers can have multiple simultaneous tasks
+- **Optional:** Show soft reminder if >5 active tasks
+- **Rationale:** Legitimate to have multiple projects running
+
 #### Cancellation/Decline After Acceptance
 
 - Either party can cancel if deal falls through
@@ -577,9 +601,16 @@ General:
 
 -----
 
-**Document Version:** 2.4
-**Last Updated:** October 19, 2024
+**Document Version:** 2.5
+**Last Updated:** October 22, 2024
 **Next Review:** November 2024
+
+**Major Changes in v2.5:**
+- 🚨 **Task Creation Constraints & Review Enforcement** - Two-tier accountability system
+  - **HARD BLOCK:** Pending confirmations (`pending_customer_confirmation`) - customer MUST respond
+  - **SOFT BLOCK:** Missing reviews - 3 task grace period before enforcement
+  - In-progress tasks don't block (allows multiple simultaneous projects)
+  - Detailed implementation plan in `/todo_tasks/08-completion-and-review-enforcement.md`
 
 **Major Changes in v2.4:**
 - ✅ **Navigation Architecture Implementation** - Complete dual-role UX separation

@@ -13,15 +13,23 @@ import {
   Textarea,
   Card,
   CardBody,
-  Divider
+  Divider,
+  Input
 } from '@nextui-org/react'
-import { CheckCircle, XCircle, User, Briefcase, AlertCircle } from 'lucide-react'
+import { CheckCircle, XCircle, User, Briefcase, AlertCircle, DollarSign } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { StarRating } from '@/components/common/star-rating'
+
+export interface ConfirmationData {
+  actualPricePaid?: number
+  rating?: number
+  reviewText?: string
+}
 
 interface ConfirmCompletionDialogProps {
   isOpen: boolean
   onClose: () => void
-  onConfirm: () => void
+  onConfirm: (data?: ConfirmationData) => void
   onReject: (reason: string, description?: string) => void
   professionalName: string
   taskTitle: string
@@ -42,6 +50,11 @@ export function ConfirmCompletionDialog({
   const [rejectionReason, setRejectionReason] = useState<string>('')
   const [rejectionDescription, setRejectionDescription] = useState('')
 
+  // Review fields (optional)
+  const [actualPricePaid, setActualPricePaid] = useState('')
+  const [rating, setRating] = useState<number>(0)
+  const [reviewText, setReviewText] = useState('')
+
   const rejectionReasons = [
     { value: 'not_completed', label: t('taskCompletion.reject.notCompleted') },
     { value: 'poor_quality', label: t('taskCompletion.reject.poorQuality') },
@@ -50,7 +63,12 @@ export function ConfirmCompletionDialog({
   ]
 
   const handleConfirm = () => {
-    onConfirm()
+    const confirmationData: ConfirmationData = {
+      actualPricePaid: actualPricePaid ? parseFloat(actualPricePaid) : undefined,
+      rating: rating > 0 ? rating : undefined,
+      reviewText: reviewText.trim() || undefined
+    }
+    onConfirm(confirmationData)
   }
 
   const handleReject = () => {
@@ -63,17 +81,23 @@ export function ConfirmCompletionDialog({
     setIsSatisfied(null)
     setRejectionReason('')
     setRejectionDescription('')
+    setActualPricePaid('')
+    setRating(0)
+    setReviewText('')
     onClose()
   }
+
+  const reviewCharCount = reviewText.length
+  const maxReviewChars = 500
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      size="2xl"
+      size="lg"
       scrollBehavior="inside"
       classNames={{
-        base: 'bg-white',
+        base: 'bg-white mx-2 md:mx-auto w-full',
         header: 'border-b border-gray-200',
         footer: 'border-t border-gray-200'
       }}
@@ -106,10 +130,8 @@ export function ConfirmCompletionDialog({
             </CardBody>
           </Card>
 
-          <Divider className="my-4" />
-
           {/* Satisfaction Question */}
-          <div className="space-y-4">
+          <div className="space-y-4 mt-4">
             <p className="font-medium text-gray-900">
               {t('taskCompletion.confirmDialog.question')}
             </p>
@@ -121,38 +143,123 @@ export function ConfirmCompletionDialog({
                 wrapper: 'gap-3'
               }}
             >
-              <Radio value="yes" className="w-full">
+              <Radio
+                value="yes"
+                classNames={{
+                  base: 'inline-flex m-0 bg-content1 hover:bg-success-50 items-center justify-between flex-row-reverse max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent data-[selected=true]:border-success',
+                  control: 'bg-white border-2 border-default-200 data-[selected=true]:border-success data-[selected=true]:bg-success',
+                  wrapper: 'group-data-[selected=true]:border-success',
+                  labelWrapper: 'ml-0'
+                }}
+              >
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-success" />
-                  <span>{t('taskCompletion.confirmDialog.yes')}</span>
+                  <span className="font-medium">{t('taskCompletion.confirmDialog.yes')}</span>
                 </div>
               </Radio>
-              <Radio value="no" className="w-full">
+              <Radio
+                value="no"
+                classNames={{
+                  base: 'inline-flex m-0 bg-content1 hover:bg-danger-50 items-center justify-between flex-row-reverse max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent data-[selected=true]:border-danger',
+                  control: 'bg-white border-2 border-default-200 data-[selected=true]:border-danger data-[selected=true]:bg-danger',
+                  wrapper: 'group-data-[selected=true]:border-danger',
+                  labelWrapper: 'ml-0'
+                }}
+              >
                 <div className="flex items-center gap-2">
                   <XCircle className="w-4 h-4 text-danger" />
-                  <span>{t('taskCompletion.confirmDialog.no')}</span>
+                  <span className="font-medium">{t('taskCompletion.confirmDialog.no')}</span>
                 </div>
               </Radio>
             </RadioGroup>
           </div>
 
-          {/* If satisfied - Show success message */}
+          {/* If satisfied - Show review fields */}
           {isSatisfied === 'yes' && (
-            <Card className="bg-success-50 border-success-200 border">
-              <CardBody className="p-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-success-900 mb-1">
-                      {t('taskCompletion.confirmDialog.greatMessage')}
-                    </p>
+            <div className="space-y-4 animate-in slide-in-from-top duration-300">
+              <Divider />
+
+              <div className="space-y-4">
+                <h3 className="font-semibold text-gray-900">
+                  {t('taskCompletion.confirmDialog.reviewSection')}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {t('taskCompletion.confirmDialog.reviewSectionHelp')}
+                </p>
+
+                {/* Actual Price Paid */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    {t('taskCompletion.confirmDialog.actualPricePaid')}
+                    <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
+                  </label>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={actualPricePaid}
+                    onValueChange={setActualPricePaid}
+                    placeholder={t('taskCompletion.confirmDialog.actualPricePlaceholder')}
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">BGN</span>
+                      </div>
+                    }
+                    description={t('taskCompletion.confirmDialog.actualPriceHelp')}
+                    classNames={{
+                      input: 'text-right'
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    {t('taskCompletion.confirmDialog.ratingLabel')}
+                    <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
+                  </label>
+                  <StarRating
+                    value={rating}
+                    onChange={setRating}
+                    interactive={true}
+                    size="lg"
+                  />
+                </div>
+
+                {/* Review Text */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium text-gray-700">
+                      {t('taskCompletion.confirmDialog.reviewLabel')}
+                      <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
+                    </label>
+                    <span className={`text-xs ${reviewCharCount > maxReviewChars ? 'text-danger' : 'text-gray-500'}`}>
+                      {reviewCharCount}/{maxReviewChars}
+                    </span>
+                  </div>
+                  <Textarea
+                    value={reviewText}
+                    onValueChange={setReviewText}
+                    placeholder={t('taskCompletion.confirmDialog.reviewPlaceholder', { name: professionalName })}
+                    minRows={3}
+                    maxRows={5}
+                    maxLength={maxReviewChars}
+                    description={t('taskCompletion.confirmDialog.reviewHelp')}
+                  />
+                </div>
+              </div>
+
+              <Card className="bg-success-50 border-success-200 border">
+                <CardBody className="p-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-success-700">
                       {t('taskCompletion.confirmDialog.reviewReminder')}
                     </p>
                   </div>
-                </div>
-              </CardBody>
-            </Card>
+                </CardBody>
+              </Card>
+            </div>
           )}
 
           {/* If not satisfied - Show rejection form */}

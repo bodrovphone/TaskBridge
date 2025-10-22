@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { Banknote, MapPin, Calendar, Users, Eye, FileText } from 'lucide-react'
+import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle } from 'lucide-react'
+import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 
 interface PostedTaskCardProps {
   id: string
@@ -11,7 +13,7 @@ interface PostedTaskCardProps {
   description: string
   category: string
   budget: number
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled'
+  status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
   applicationsCount: number
   acceptedApplication?: {
     professionalId: string
@@ -40,6 +42,7 @@ function PostedTaskCard({
 }: PostedTaskCardProps) {
   const { t } = useTranslation()
   const router = useRouter()
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
 
   const getStatusColor = (taskStatus: typeof status) => {
     switch (taskStatus) {
@@ -47,6 +50,8 @@ function PostedTaskCard({
         return 'primary'
       case 'in_progress':
         return 'warning'
+      case 'pending_customer_confirmation':
+        return 'secondary'
       case 'completed':
         return 'success'
       case 'cancelled':
@@ -62,6 +67,8 @@ function PostedTaskCard({
         return t('postedTasks.filter.open')
       case 'in_progress':
         return t('postedTasks.filter.inProgress')
+      case 'pending_customer_confirmation':
+        return t('postedTasks.filter.awaitingConfirmation')
       case 'completed':
         return t('postedTasks.filter.completed')
       case 'cancelled':
@@ -69,6 +76,21 @@ function PostedTaskCard({
       default:
         return taskStatus
     }
+  }
+
+  const handleConfirmComplete = (data?: ConfirmationData) => {
+    console.log('Task confirmed with data:', data)
+    // @todo INTEGRATION: Send confirmation to backend API
+    setShowConfirmDialog(false)
+    // Refresh page or update task status
+    router.refresh()
+  }
+
+  const handleRejectComplete = (reason: string, description?: string) => {
+    console.log('Task rejected:', { reason, description })
+    // @todo INTEGRATION: Send rejection to backend API
+    setShowConfirmDialog(false)
+    router.refresh()
   }
 
   return (
@@ -127,9 +149,24 @@ function PostedTaskCard({
           </div>
         </div>
 
-        {/* Accepted professional banner - fixed height with min-h to prevent layout shift */}
+        {/* Status-specific banners - fixed height with min-h to prevent layout shift */}
         <div className="min-h-[52px] mb-4">
-          {acceptedApplication && (
+          {status === 'pending_customer_confirmation' && acceptedApplication && (
+            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-3">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-yellow-900">
+                    {t('postedTasks.awaitingYourConfirmation')}
+                  </p>
+                  <p className="text-xs text-yellow-700 mt-0.5">
+                    {acceptedApplication.professionalName} {t('postedTasks.markedComplete')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {status === 'in_progress' && acceptedApplication && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <p className="text-sm text-green-800">
                 <span className="font-semibold">{t('postedTasks.acceptedProfessional')}:</span>{' '}
@@ -141,30 +178,54 @@ function PostedTaskCard({
 
         {/* Action buttons */}
         <div className="flex gap-2 mt-auto" onClick={(e) => e.stopPropagation()}>
-          <Button
-            size="sm"
-            variant="flat"
-            color="primary"
-            startContent={<Eye className="w-4 h-4" />}
-            onPress={() => router.push(`/${lang}/tasks/${id}`)}
-            className="flex-1"
-          >
-            {t('postedTasks.viewDetails')}
-          </Button>
-          {applicationsCount > 0 && (
+          {status === 'pending_customer_confirmation' ? (
             <Button
               size="sm"
-              variant="bordered"
-              color="primary"
-              startContent={<FileText className="w-4 h-4" />}
-              onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
-              className="flex-1"
+              color="success"
+              startContent={<CheckCircle className="w-4 h-4" />}
+              onPress={() => setShowConfirmDialog(true)}
+              className="flex-1 font-semibold"
             >
-              {t('postedTasks.viewApplications')} ({applicationsCount})
+              {t('taskCompletion.confirmCompletion')}
             </Button>
+          ) : (
+            <>
+              <Button
+                size="sm"
+                variant="flat"
+                color="primary"
+                startContent={<Eye className="w-4 h-4" />}
+                onPress={() => router.push(`/${lang}/tasks/${id}`)}
+                className="flex-1"
+              >
+                {t('postedTasks.viewDetails')}
+              </Button>
+              {applicationsCount > 0 && (
+                <Button
+                  size="sm"
+                  variant="bordered"
+                  color="primary"
+                  startContent={<FileText className="w-4 h-4" />}
+                  onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
+                  className="flex-1"
+                >
+                  {t('postedTasks.viewApplications')} ({applicationsCount})
+                </Button>
+              )}
+            </>
           )}
         </div>
       </CardBody>
+
+      {/* Confirmation Dialog */}
+      <ConfirmCompletionDialog
+        isOpen={showConfirmDialog}
+        onClose={() => setShowConfirmDialog(false)}
+        onConfirm={handleConfirmComplete}
+        onReject={handleRejectComplete}
+        professionalName={acceptedApplication?.professionalName || ''}
+        taskTitle={title}
+      />
     </Card>
   )
 }
