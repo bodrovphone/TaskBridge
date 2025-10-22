@@ -2,15 +2,15 @@
 
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Input } from '@nextui-org/react'
-import { CreateTaskFormData } from '../lib/validation'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MAIN_CATEGORIES, SUBCATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory, getMainCategoriesWithSubcategories } from '@/features/categories'
+import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoriesWithSubcategories } from '@/features/categories'
 import MainCategoryCard from '@/components/ui/main-category-card'
 
 interface CategorySelectionProps {
  form: any
+ // eslint-disable-next-line no-unused-vars
  onCategoryChange: (category: string) => void
 }
 
@@ -19,7 +19,6 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
  const [searchQuery, setSearchQuery] = useState('')
  const [selectedMainCategory, setSelectedMainCategory] = useState<string | null>(null)
  const [selectedCategory, setSelectedCategory] = useState('')
- const [errors, setErrors] = useState<string[]>([])
 
  // Get main categories with subcategories - EXACT same pattern as categories page
  const mainCategories = useMemo(() => {
@@ -37,9 +36,11 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
  }, [t])
 
  // Get subcategories for selected main category
- const subcategories = selectedMainCategory
-  ? getSubcategoriesByMainCategory(selectedMainCategory)
-  : []
+ const subcategories = useMemo(() => {
+  return selectedMainCategory
+   ? getSubcategoriesByMainCategory(selectedMainCategory)
+   : []
+ }, [selectedMainCategory])
 
  // Get all subcategories for search
  const allSubcategories = useMemo(() => {
@@ -47,32 +48,6 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
    getSubcategoriesByMainCategory(mainCat.id)
   )
  }, [])
-
- // Filter main categories and subcategories based on search
- const filteredMainCategories = useMemo(() => {
-  if (!searchQuery.trim()) return MAIN_CATEGORIES
-
-  // If searching, find matching main categories OR main categories that have matching subcategories
-  const matchingMainCategories = MAIN_CATEGORIES.filter(cat =>
-   t(`${cat.translationKey}.title`).toLowerCase().includes(searchQuery.toLowerCase()) ||
-   cat.slug.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
-  // Also include main categories that have matching subcategories
-  const categoriesWithMatchingSubs = MAIN_CATEGORIES.filter(mainCat => {
-   const subs = getSubcategoriesByMainCategory(mainCat.id)
-   return subs.some(sub =>
-    t(sub.translationKey).toLowerCase().includes(searchQuery.toLowerCase()) ||
-    sub.slug.toLowerCase().includes(searchQuery.toLowerCase())
-   )
-  })
-
-  // Combine and deduplicate
-  const combined = [...matchingMainCategories, ...categoriesWithMatchingSubs]
-  return Array.from(new Set(combined.map(c => c.id))).map(id =>
-   MAIN_CATEGORIES.find(c => c.id === id)!
-  )
- }, [searchQuery, t])
 
  // Filter subcategories based on search
  const filteredSubcategories = useMemo(() => {
@@ -94,11 +69,6 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
   ).slice(0, 12) // Limit to 12 results
  }, [searchQuery, allSubcategories, t])
 
- const handleMainCategorySelect = useCallback((categoryId: string) => {
-  setSelectedMainCategory(categoryId)
-  setSearchQuery('') // Clear search when selecting main category
- }, [])
-
  const handleSubcategorySelect = useCallback((slug: string) => {
   form.setFieldValue('category', slug)
   setSelectedCategory(slug)
@@ -113,11 +83,6 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
   onCategoryChange('')
   setSearchQuery('')
  }, [form, onCategoryChange])
-
- // Get the main category for the selected subcategory (for display)
- const selectedMainCategoryData = selectedCategory
-  ? getMainCategoryForSubcategory(selectedCategory)
-  : null
 
  return (
   <div className="space-y-6">
@@ -397,13 +362,6 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
       })()}
      </Chip>
     </motion.div>
-   )}
-
-   {/* Error Message */}
-   {errors && errors.length > 0 && (
-    <p className="text-danger text-sm text-center">
-     {t(errors[0] as string)}
-    </p>
    )}
   </div>
  )
