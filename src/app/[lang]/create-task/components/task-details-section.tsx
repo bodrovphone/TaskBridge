@@ -100,12 +100,11 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
        description={t('createTask.details.requirementsHelp', 'List any special skills, certifications, or equipment needed (one per line)')}
        value={field.state.value || ''}
        onValueChange={field.handleChange}
-       minRows={3}
-       disableAutosize
+       minRows={4}
+       maxRows={4}
        classNames={{
         base: 'w-full',
-        inputWrapper: 'min-h-[100px]',
-        input: 'resize-none',
+        input: 'text-base resize-none',
        }}
       />
      </div>

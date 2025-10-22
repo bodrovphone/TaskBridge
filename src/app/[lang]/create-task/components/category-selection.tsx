@@ -245,8 +245,8 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
          </div>
         </>
        ) : !searchQuery && mainCategories.length > 0 ? (
-        /* Show main categories - 2 columns on desktop, 1 on mobile */
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        /* Show main categories - 2 columns above 520px, 1 on mobile */
+        <div className="grid grid-cols-1 min-[520px]:grid-cols-2 gap-8">
          {mainCategories.map((category, index) => (
           <motion.div
             key={category.title}

@@ -85,7 +85,7 @@ export function CreateTaskForm() {
        <PhotosSection form={form} />
 
        {/* Review & Submit */}
-       <ReviewSection />
+       <ReviewSection form={form} />
 
        {/* Submit Button */}
        <div className="flex flex-col items-center gap-3 pt-8 pb-4">

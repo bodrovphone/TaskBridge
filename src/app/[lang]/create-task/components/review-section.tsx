@@ -1,41 +1,59 @@
 'use client'
 
+import React, { useDeferredValue, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Divider } from '@nextui-org/react'
 import { MapPin, Wallet, Clock, FileText } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
 import Image from 'next/image'
 
-export function ReviewSection() {
+interface ReviewSectionProps {
+ form: any
+}
+
+export function ReviewSection({ form }: ReviewSectionProps) {
  const { t } = useTranslation()
 
- // For now, use empty data - will be populated when form is submitted
- const formData: any = {}
+ // Subscribe to all form field values using TanStack Form
+ const [formData, setFormData] = useState<any>({})
+
+ // Use deferred value to throttle re-renders (updates max once per render cycle)
+ const deferredFormData = useDeferredValue(formData)
+
+ useEffect(() => {
+  // Subscribe to form state changes
+  const unsubscribe = form.store.subscribe(() => {
+   setFormData(form.state.values)
+  })
+  // Set initial values
+  setFormData(form.state.values)
+  return unsubscribe
+ }, [form])
 
  // Get category info
- const categoryInfo = TASK_CATEGORIES.find(cat => cat.value === formData.category)
+ const categoryInfo = TASK_CATEGORIES.find(cat => cat.value === deferredFormData.category)
 
  // Format budget display
  const getBudgetDisplay = () => {
-  if (formData.budgetType === 'fixed' && formData.budgetMax) {
-   return `${formData.budgetMax} лв`
-  } else if (formData.budgetMin && formData.budgetMax) {
-   return `${formData.budgetMin}-${formData.budgetMax} лв`
-  } else if (formData.budgetMin) {
-   return `${t('taskCard.budget.from')} ${formData.budgetMin} лв`
-  } else if (formData.budgetMax) {
-   return `${t('taskCard.budget.to')} ${formData.budgetMax} лв`
+  if (deferredFormData.budgetType === 'fixed' && deferredFormData.budgetMax) {
+   return `${deferredFormData.budgetMax} лв`
+  } else if (deferredFormData.budgetMin && deferredFormData.budgetMax) {
+   return `${deferredFormData.budgetMin}-${deferredFormData.budgetMax} лв`
+  } else if (deferredFormData.budgetMin) {
+   return `${t('taskCard.budget.from')} ${deferredFormData.budgetMin} лв`
+  } else if (deferredFormData.budgetMax) {
+   return `${t('taskCard.budget.to')} ${deferredFormData.budgetMax} лв`
   }
   return t('taskCard.budget.negotiable')
  }
 
  // Format deadline display
  const getDeadlineDisplay = () => {
-  if (formData.deadline) {
-   return new Date(formData.deadline).toLocaleDateString()
+  if (deferredFormData.deadline) {
+   return new Date(deferredFormData.deadline).toLocaleDateString()
   }
-  if (formData.urgency === 'same_day') return t('createTask.timeline.urgentTitle')
-  if (formData.urgency === 'within_week') return t('createTask.timeline.soonTitle')
+  if (deferredFormData.urgency === 'same_day') return t('createTask.timeline.urgentTitle')
+  if (deferredFormData.urgency === 'within_week') return t('createTask.timeline.soonTitle')
   return t('createTask.timeline.flexibleTitle')
  }
 
@@ -63,10 +81,10 @@ export function ReviewSection() {
        )}
       </div>
       <h3 className="text-xl font-bold text-gray-900 mb-2">
-       {formData.title || t('createTask.review.noTitle', 'No title yet')}
+       {deferredFormData.title || t('createTask.review.noTitle', 'No title yet')}
       </h3>
       <p className="text-gray-600 whitespace-pre-wrap">
-       {formData.description || t('createTask.review.noDescription', 'No description yet')}
+       {deferredFormData.description || t('createTask.review.noDescription', 'No description yet')}
       </p>
      </div>
 
@@ -81,10 +99,10 @@ export function ReviewSection() {
        </h4>
       </div>
       <p className="text-gray-600 ml-7">
-       {formData.city || t('createTask.review.noCity', 'No city selected')}
-       {formData.neighborhood && `, ${formData.neighborhood}`}
+       {deferredFormData.city || t('createTask.review.noCity', 'No city selected')}
+       {deferredFormData.neighborhood && `, ${deferredFormData.neighborhood}`}
       </p>
-      {formData.exactAddress && (
+      {deferredFormData.exactAddress && (
        <p className="text-sm text-gray-500 ml-7 mt-1">
         {t('createTask.location.addressSecurity', 'Full address hidden until professional is hired')}
        </p>
@@ -118,7 +136,7 @@ export function ReviewSection() {
      </div>
 
      {/* Requirements */}
-     {formData.requirements && (
+     {deferredFormData.requirements && (
       <>
        <Divider />
        <div>
@@ -129,22 +147,22 @@ export function ReviewSection() {
          </h4>
         </div>
         <p className="text-gray-600 ml-7 whitespace-pre-wrap">
-         {formData.requirements}
+         {deferredFormData.requirements}
         </p>
        </div>
       </>
      )}
 
      {/* Photos */}
-     {formData.photos && formData.photos.length > 0 && (
+     {deferredFormData.photos && deferredFormData.photos.length > 0 && (
       <>
        <Divider />
        <div>
         <h4 className="font-semibold text-gray-900 mb-3">
-         {t('createTask.review.photos', 'Photos')} ({formData.photos.length})
+         {t('createTask.review.photos', 'Photos')} ({deferredFormData.photos.length})
         </h4>
         <div className="grid grid-cols-4 gap-2">
-         {formData.photos.map((photoUrl: string, index: number) => (
+         {deferredFormData.photos.map((photoUrl: string, index: number) => (
           <div key={index} className="aspect-square relative rounded-lg overflow-hidden">
            <Image
             src={photoUrl}

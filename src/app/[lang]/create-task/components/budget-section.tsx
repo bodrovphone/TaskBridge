@@ -60,9 +60,11 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      name="budgetMax"
      validators={{
       onChange: ({ value }: any) => {
-       if (value !== undefined && value !== null && value <= 0) {
+       // Only validate if user has entered a value
+       if (value !== undefined && value !== null && value !== '' && value <= 0) {
         return t('createTask.budget.mustBePositive', 'Budget must be positive')
        }
+       return undefined
       }
      }}
     >
@@ -94,9 +96,11 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       name="budgetMin"
       validators={{
        onChange: ({ value }: any) => {
-        if (value !== undefined && value !== null && value <= 0) {
+        // Only validate if user has entered a value
+        if (value !== undefined && value !== null && value !== '' && value <= 0) {
          return t('createTask.budget.mustBePositive', 'Budget must be positive')
         }
+        return undefined
        }
       }}
      >
@@ -126,9 +130,11 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       name="budgetMax"
       validators={{
        onChange: ({ value }: any) => {
-        if (value !== undefined && value !== null && value <= 0) {
+        // Only validate if user has entered a value
+        if (value !== undefined && value !== null && value !== '' && value <= 0) {
          return t('createTask.budget.mustBePositive', 'Budget must be positive')
         }
+        return undefined
        }
       }}
      >

@@ -101,7 +101,8 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
        value={field.state.value ? parseDate(field.state.value.toISOString().split('T')[0]) : null}
        onChange={(date: any) => {
         if (date) {
-         const jsDate = new Date(date.year, date.month - 1, date.day)
+         // Create date at noon UTC to avoid timezone issues
+         const jsDate = new Date(Date.UTC(date.year, date.month - 1, date.day, 12, 0, 0))
          field.handleChange(jsDate)
         } else {
          field.handleChange(undefined)
@@ -110,7 +111,6 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
        minValue={parseDate(new Date().toISOString().split('T')[0])}
        showMonthAndYearPickers
        labelPlacement="outside"
-       isDisabled={false}
        classNames={{
         base: 'max-w-md',
         popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
