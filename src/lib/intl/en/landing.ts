@@ -30,7 +30,7 @@ export const landing = {
   'landing.stats.tasksValue': 'Join Beta',
   'landing.categories.activeSpecialists': 'active specialists',
   'landing.categories.specialists': 'specialists',
-  'landing.categories.beFirst': 'Be the first!',
+  'landing.categories.beFirst': 'Be the first specialist',
 
   'landing.trustStats.securityUptime': 'Security Uptime',
   'landing.trustStats.avgRating': 'Average Rating',
