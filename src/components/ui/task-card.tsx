@@ -32,13 +32,14 @@ interface TaskCardProps {
  showApplyButton?: boolean;
 }
 
+// Rich badge colors matching the original design
 const categoryColors = {
- "home_repair": "primary",
- "delivery_transport": "success", 
- "personal_care": "secondary",
- "personal_assistant": "warning",
- "learning_fitness": "danger",
- "other": "default"
+ "home_repair": "bg-blue-100 text-blue-800 border-blue-200",
+ "delivery_transport": "bg-green-100 text-green-800 border-green-200",
+ "personal_care": "bg-purple-100 text-purple-800 border-purple-200",
+ "personal_assistant": "bg-orange-100 text-orange-800 border-orange-200",
+ "learning_fitness": "bg-pink-100 text-pink-800 border-pink-200",
+ "other": "bg-gray-100 text-gray-800 border-gray-200"
 } as const;
 
 function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
@@ -126,15 +127,16 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  };
 
  return (
-  <Card 
+  <Card
    isPressable
-   className="h-full"
-   shadow="sm"
+   className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-200 hover:border-primary-200 cursor-pointer"
+   shadow="md"
    radius="lg"
    onPress={handleCardPress}
   >
-   <CardBody className="p-0">
-    <div className="w-full h-48 overflow-hidden">
+   <CardBody className="p-0 flex-grow flex flex-col">
+    {/* Image with loading background */}
+    <div className="w-full h-48 bg-gray-200 overflow-hidden flex-shrink-0">
      <Image
       src={(task as any).imageUrl || getCategoryImage(task.category, task.id)}
       alt={task.title}
@@ -143,76 +145,77 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
      />
     </div>
-    
-    <div className="p-4 space-y-3">
-     <div className="flex justify-between items-start">
-      <Chip 
-       color={categoryColor}
-       size="sm"
-       variant="flat"
-      >
+
+    {/* Content with better spacing */}
+    <div className="p-6 flex-grow flex flex-col">
+     {/* Category badge and time */}
+     <div className="flex justify-between items-start mb-4">
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor}`}>
        {categoryName}
-      </Chip>
-      <span className="text-xs text-default-500">{timeAgo}</span>
+      </span>
+      <span className="text-sm text-gray-500">{timeAgo}</span>
      </div>
-     
-     <h3 className="text-lg font-semibold text-foreground hover:text-primary line-clamp-2">
+
+     {/* Title with better contrast */}
+     <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 line-clamp-2 transition-colors">
       {task.title}
      </h3>
-     
-     <p className="text-sm text-default-600 line-clamp-3">
+
+     {/* Description with better contrast */}
+     <p className="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">
       {task.description}
      </p>
 
-     <div className="space-y-2">
-      <div className="flex items-center text-sm text-default-600">
-       <MapPin size={14} className="mr-2 flex-shrink-0" />
+     {/* Task details with larger icons */}
+     <div className="space-y-2 mb-4 mt-auto">
+      <div className="flex items-center text-sm text-gray-600">
+       <MapPin size={16} className="mr-2 flex-shrink-0" />
        <span className="truncate">{task.city}{task.neighborhood && `, ${task.neighborhood}`}</span>
       </div>
-      <div className="flex items-center text-sm text-default-600">
-       <Clock size={14} className="mr-2 flex-shrink-0" />
+      <div className="flex items-center text-sm text-gray-600">
+       <Clock size={16} className="mr-2 flex-shrink-0" />
        <span>{formatDeadline()}</span>
       </div>
-      <div className="flex items-center text-sm text-default-600">
-       <Wallet size={14} className="mr-2 flex-shrink-0" />
+      <div className="flex items-center text-sm text-gray-600">
+       <Wallet size={16} className="mr-2 flex-shrink-0" />
        <span>{formatBudget()}</span>
       </div>
      </div>
     </div>
    </CardBody>
 
-   <CardFooter className="px-4 pb-4 pt-2 border-t border-divider">
+   {/* Footer with clear separator */}
+   <CardFooter className="px-6 pb-4 pt-4 border-t border-gray-100 mt-auto">
     <div className="flex justify-between items-center w-full">
-     <div className="flex items-center gap-2">
-      <Avatar 
+     <div className="flex items-center space-x-2">
+      <Avatar
        src={task.customer?.profileImageUrl || ""}
        name={task.customer?.firstName?.[0] || "?"}
        size="sm"
        className="w-6 h-6"
       />
-      <div className="flex items-center gap-2">
-       <span className="text-sm text-default-600">
-        {task.customer?.firstName ? 
-         `${task.customer.firstName} ${task.customer.lastName?.[0] || ""}.` : 
-         t('taskCard.anonymous')
-        }
-       </span>
-       {task.customer?.averageRating && Number(task.customer.averageRating) > 0 && (
-        <div className="flex items-center">
-         <Star size={12} className="text-warning fill-current" />
-         <span className="text-xs text-default-600 ml-1">
-          {Number(task.customer.averageRating).toFixed(1)}
-         </span>
-        </div>
-       )}
-      </div>
+      <span className="text-sm text-gray-600">
+       {task.customer?.firstName ?
+        `${task.customer.firstName} ${task.customer.lastName?.[0] || ""}.` :
+        t('taskCard.anonymous')
+       }
+      </span>
+      {task.customer?.averageRating && Number(task.customer.averageRating) > 0 && (
+       <div className="flex items-center">
+        <Star size={12} className="text-yellow-400 fill-current" />
+        <span className="text-xs text-gray-600 ml-1">
+         {Number(task.customer.averageRating).toFixed(1)}
+        </span>
+       </div>
+      )}
      </div>
-     
+
      {showApplyButton && onApply && (
       <Button
        color="primary"
        variant="light"
        size="sm"
+       className="text-primary-600 hover:text-primary-700"
        onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
