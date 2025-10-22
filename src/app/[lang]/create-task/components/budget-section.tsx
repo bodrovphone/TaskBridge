@@ -3,17 +3,15 @@
 import { useTranslation } from 'react-i18next'
 import { Input, RadioGroup, Radio, Chip } from '@nextui-org/react'
 import { Wallet, Info } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
-import { CreateTaskFormData } from '../lib/validation'
 
 interface BudgetSectionProps {
- form: UseFormReturn<CreateTaskFormData>
- budgetType: 'fixed' | 'range'
+ form: any
+ budgetType: 'fixed' | 'range' | undefined
+ onBudgetTypeChange: (type: 'fixed' | 'range') => void
 }
 
-export function BudgetSection({ form, budgetType }: BudgetSectionProps) {
+export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
  const { t } = useTranslation()
- const { register, setValue, formState: { errors } } = form
 
  return (
   <div className="space-y-6">
@@ -29,68 +27,111 @@ export function BudgetSection({ form, budgetType }: BudgetSectionProps) {
    </div>
 
    {/* Budget Type Selection */}
-   <RadioGroup
-    value={budgetType}
-    onValueChange={(value) => setValue('budgetType', value as 'fixed' | 'range')}
-    orientation="horizontal"
-   >
-    <Radio value="fixed">
-     {t('createTask.budget.typeFixed', 'Fixed Price')}
-    </Radio>
-    <Radio value="range">
-     {t('createTask.budget.typeRange', 'Price Range')}
-    </Radio>
-   </RadioGroup>
+   <form.Field name="budgetType">
+    {(field: any) => (
+     <RadioGroup
+      value={field.state.value || 'range'}
+      onValueChange={(value: any) => {
+       field.handleChange(value as 'fixed' | 'range')
+       onBudgetTypeChange(value as 'fixed' | 'range')
+      }}
+      orientation="horizontal"
+     >
+      <Radio value="fixed">
+       {t('createTask.budget.typeFixed', 'Fixed Price')}
+      </Radio>
+      <Radio value="range">
+       {t('createTask.budget.typeRange', 'Price Range')}
+      </Radio>
+     </RadioGroup>
+    )}
+   </form.Field>
 
    {/* Budget Input(s) */}
    {budgetType === 'fixed' ? (
-    <Input
-     {...register('budgetMax', {
-      setValueAs: (v) => v === '' || v === null ? undefined : Number(v)
-     })}
-     type="number"
-     label={t('createTask.budget.fixedLabel', 'Your Budget')}
-     placeholder="100"
-     startContent={<Wallet className="w-4 h-4 text-gray-400" />}
-     endContent={<span className="text-gray-400">лв</span>}
-     isInvalid={!!errors.budgetMax}
-     errorMessage={errors.budgetMax && t(errors.budgetMax.message as string)}
-     classNames={{
-      input: 'text-base',
+    <form.Field
+     name="budgetMax"
+     validators={{
+      onChange: ({ value }: any) => {
+       if (value !== undefined && value !== null && value <= 0) {
+        return t('createTask.budget.mustBePositive', 'Budget must be positive')
+       }
+      }
      }}
-    />
+    >
+     {(field: any) => (
+      <Input
+       type="number"
+       label={t('createTask.budget.fixedLabel', 'Your Budget')}
+       placeholder="100"
+       value={field.state.value?.toString() || ''}
+       onValueChange={(val: string) => field.handleChange(val === '' ? undefined : Number(val))}
+       startContent={<Wallet className="w-4 h-4 text-gray-400" />}
+       endContent={<span className="text-gray-400">лв</span>}
+       isInvalid={field.state.meta.errors.length > 0}
+       errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+       classNames={{
+        input: 'text-base',
+       }}
+      />
+     )}
+    </form.Field>
    ) : (
     <div className="grid grid-cols-2 gap-4">
-     <Input
-      {...register('budgetMin', {
-       setValueAs: (v) => v === '' || v === null ? undefined : Number(v)
-      })}
-      type="number"
-      label={t('createTask.budget.minLabel', 'Minimum')}
-      placeholder="50"
-      startContent={<Wallet className="w-4 h-4 text-gray-400" />}
-      endContent={<span className="text-gray-400">лв</span>}
-      isInvalid={!!errors.budgetMin}
-      errorMessage={errors.budgetMin && t(errors.budgetMin.message as string)}
-      classNames={{
-       input: 'text-base',
+     <form.Field
+      name="budgetMin"
+      validators={{
+       onChange: ({ value }: any) => {
+        if (value !== undefined && value !== null && value <= 0) {
+         return t('createTask.budget.mustBePositive', 'Budget must be positive')
+        }
+       }
       }}
-     />
-     <Input
-      {...register('budgetMax', {
-       setValueAs: (v) => v === '' || v === null ? undefined : Number(v)
-      })}
-      type="number"
-      label={t('createTask.budget.maxLabel', 'Maximum')}
-      placeholder="100"
-      startContent={<Wallet className="w-4 h-4 text-gray-400" />}
-      endContent={<span className="text-gray-400">лв</span>}
-      isInvalid={!!errors.budgetMax}
-      errorMessage={errors.budgetMax && t(errors.budgetMax.message as string)}
-      classNames={{
-       input: 'text-base',
+     >
+      {(field: any) => (
+       <Input
+        type="number"
+        label={t('createTask.budget.minLabel', 'Minimum')}
+        placeholder="50"
+        value={field.state.value?.toString() || ''}
+        onValueChange={(val: string) => field.handleChange(val === '' ? undefined : Number(val))}
+        startContent={<Wallet className="w-4 h-4 text-gray-400" />}
+        endContent={<span className="text-gray-400">лв</span>}
+        isInvalid={field.state.meta.errors.length > 0}
+        errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+        classNames={{
+         input: 'text-base',
+        }}
+       />
+      )}
+     </form.Field>
+     <form.Field
+      name="budgetMax"
+      validators={{
+       onChange: ({ value }: any) => {
+        if (value !== undefined && value !== null && value <= 0) {
+         return t('createTask.budget.mustBePositive', 'Budget must be positive')
+        }
+       }
       }}
-     />
+     >
+      {(field: any) => (
+       <Input
+        type="number"
+        label={t('createTask.budget.maxLabel', 'Maximum')}
+        placeholder="100"
+        value={field.state.value?.toString() || ''}
+        onValueChange={(val: string) => field.handleChange(val === '' ? undefined : Number(val))}
+        startContent={<Wallet className="w-4 h-4 text-gray-400" />}
+        endContent={<span className="text-gray-400">лв</span>}
+        isInvalid={field.state.meta.errors.length > 0}
+        errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+        classNames={{
+         input: 'text-base',
+        }}
+       />
+      )}
+     </form.Field>
     </div>
    )}
 
@@ -101,8 +142,8 @@ export function BudgetSection({ form, budgetType }: BudgetSectionProps) {
     size="sm"
     className="cursor-pointer"
     onClick={() => {
-     setValue('budgetMin', undefined)
-     setValue('budgetMax', undefined)
+     form.setFieldValue('budgetMin', undefined)
+     form.setFieldValue('budgetMax', undefined)
     }}
    >
     {t('createTask.budget.notSure', "I'm not sure about the budget")}
