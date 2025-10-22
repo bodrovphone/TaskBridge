@@ -5,7 +5,7 @@ import { Card, CardBody, Chip, Input } from '@nextui-org/react'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MAIN_CATEGORIES, SUBCATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory, getMainCategoriesWithSubcategories } from '@/features/categories'
+import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory, getMainCategoriesWithSubcategories } from '@/features/categories'
 import MainCategoryCard from '@/components/ui/main-category-card'
 
 interface CategorySelectionProps {
@@ -50,7 +50,7 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
  }, [])
 
  // Filter main categories and subcategories based on search
- const filteredMainCategories = useMemo(() => {
+ const _filteredMainCategories = useMemo(() => {
   if (!searchQuery.trim()) return MAIN_CATEGORIES
 
   // If searching, find matching main categories OR main categories that have matching subcategories
@@ -95,7 +95,7 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
   ).slice(0, 12) // Limit to 12 results
  }, [searchQuery, allSubcategories, t])
 
- const handleMainCategorySelect = useCallback((categoryId: string) => {
+ const _handleMainCategorySelect = useCallback((categoryId: string) => {
   setSelectedMainCategory(categoryId)
   setSearchQuery('') // Clear search when selecting main category
  }, [])
@@ -116,7 +116,7 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
  }, [form, onCategoryChange])
 
  // Get the main category for the selected subcategory (for display)
- const selectedMainCategoryData = selectedCategory
+ const _selectedMainCategoryData = selectedCategory
   ? getMainCategoryForSubcategory(selectedCategory)
   : null
 
