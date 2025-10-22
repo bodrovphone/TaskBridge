@@ -438,6 +438,51 @@ Translation keys follow a hierarchical namespace pattern organized by chunks:
   // @todo FEATURE: Add user authentication flow
   ```
 
+#### ESLint & Unused Code Policy
+
+**⚠️ CRITICAL: Delete unused code, don't prefix with underscores**
+
+**Rule**: When fixing ESLint `no-unused-vars` warnings, **DELETE** the unused imports, variables, or parameters. Do NOT prefix them with underscores.
+
+**Why**:
+- Unused code is dead code and should be removed
+- Underscore prefixes hide the problem instead of solving it
+- Clean code has no unused variables
+
+**Exceptions** (very rare):
+- Interface/type definitions that must match an external API signature
+- Callback parameters required by a library but not used in implementation
+- When removing would break the function signature contract
+
+**Examples:**
+
+```typescript
+// ❌ BAD: Don't prefix with underscore
+const [value, _setValue] = useState()
+function handleClick(_event: Event, data: Data) { }
+import { Foo, _Bar } from './module'
+
+// ✅ GOOD: Remove the unused code entirely
+const [value] = useState()  // Removed setValue
+function handleClick(data: Data) { }  // Removed event param
+import { Foo } from './module'  // Removed Bar import
+
+// ✅ ACCEPTABLE (rare cases): When signature must be preserved
+interface ApiCallback {
+  (error: Error | null, data: Data): void  // error param required by API
+}
+const myCallback: ApiCallback = (_error, data) => {
+  // We don't use error but API requires this signature
+}
+```
+
+**Action**: When you see unused variable warnings:
+1. First, check if the variable is actually needed
+2. If not needed, DELETE it completely
+3. If it's part of a destructure, remove it from the destructure
+4. If it's an import, remove it from the import statement
+5. Only if removal breaks a required signature, then use underscore prefix
+
 #### CSS Performance Guidelines
 
 **⚠️ CRITICAL: Avoid `backdrop-blur` in Chrome**
