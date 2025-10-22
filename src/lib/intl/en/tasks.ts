@@ -102,7 +102,7 @@ export const tasks = {
   'createTask.hero.freeToPost': 'Free to post',
   'createTask.hero.noPayment': 'No payment until work starts',
   'createTask.hero.avgResponse': 'Average response time: 2 hours',
-  'createTask.hero.verifiedPros': '1,500+ verified professionals',
+  'createTask.hero.verifiedPros': 'Verified professionals ready to help',
   'createTask.hero.help': 'Need help? Contact our support team',
 
   // Category Section
