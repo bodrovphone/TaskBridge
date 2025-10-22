@@ -10,7 +10,7 @@ interface ReviewSectionProps {
  form: any
 }
 
-export function ReviewSection({ form }: ReviewSectionProps) {
+export function ReviewSection({ form: _form }: ReviewSectionProps) {
  const { t } = useTranslation()
 
  // For now, use empty data - will be populated when form is submitted

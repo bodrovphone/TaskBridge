@@ -7,7 +7,7 @@ import { parseDate } from '@internationalized/date'
 interface TimelineSectionProps {
  form: any
  urgency: 'same_day' | 'within_week' | 'flexible' | undefined
- onUrgencyChange: (urgency: 'same_day' | 'within_week' | 'flexible') => void
+ onUrgencyChange: (_urgency: 'same_day' | 'within_week' | 'flexible') => void
 }
 
 export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSectionProps) {
