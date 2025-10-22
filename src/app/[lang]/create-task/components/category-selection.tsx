@@ -7,7 +7,7 @@ import { CreateTaskFormData } from '../lib/validation'
 import { useState, useMemo } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MAIN_CATEGORIES, SUBCATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory } from '@/features/categories'
+import { MAIN_CATEGORIES, SUBCATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory, getMainCategoriesWithSubcategories } from '@/features/categories'
 import MainCategoryCard from '@/components/ui/main-category-card'
 
 interface CategorySelectionProps {
@@ -21,6 +21,21 @@ export function CategorySelection({ form }: CategorySelectionProps) {
  const [selectedMainCategory, setSelectedMainCategory] = useState<string | null>(null)
 
  const selectedCategory = watch('category')
+
+ // Get main categories with subcategories - EXACT same pattern as categories page
+ const mainCategories = useMemo(() => {
+  return getMainCategoriesWithSubcategories(t).map(cat => ({
+   title: cat.title,
+   description: cat.description,
+   icon: cat.icon,
+   color: cat.color,
+   totalCount: cat.totalCount || 0,
+   subcategories: cat.subcategories.map(sub => ({
+    label: sub.label,
+    value: sub.slug,
+   })),
+  }));
+ }, [t])
 
  // Get subcategories for selected main category
  const subcategories = selectedMainCategory
@@ -239,36 +254,27 @@ export function CategorySelection({ form }: CategorySelectionProps) {
          })}
         </div>
        </>
-      ) : !searchQuery && filteredMainCategories.length > 0 ? (
-       /* Show main categories when no search - using exact same cards as categories page */
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredMainCategories.map((category, index) => {
-         const subcategories = getSubcategoriesByMainCategory(category.id)
-
-         return (
-          <motion.div
-            key={category.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.05, duration: 0.2 }}
-            className="w-full"
-           >
-            <MainCategoryCard
-             title={t(`${category.translationKey}.title`)}
-             description={t(`${category.translationKey}.description`)}
-             icon={category.icon}
-             color={category.color}
-             subcategories={subcategories.map(sub => ({
-              label: t(sub.translationKey),
-              value: sub.slug
-             }))}
-             totalCount={0} // Not showing professional count in selection mode
-             onSubcategoryClick={handleSubcategorySelect}
-             showFooter={false} // Hide footer in selection mode
-            />
-           </motion.div>
-         )
-        })}
+      ) : !searchQuery && mainCategories.length > 0 ? (
+       /* Show main categories - EXACT same grid as categories page */
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {mainCategories.map((category, index) => (
+         <motion.div
+           key={category.title}
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ delay: index * 0.05, duration: 0.2 }}
+          >
+           <MainCategoryCard
+            title={category.title}
+            description={category.description}
+            icon={category.icon}
+            color={category.color}
+            subcategories={category.subcategories}
+            totalCount={category.totalCount}
+            onSubcategoryClick={handleSubcategorySelect}
+           />
+          </motion.div>
+        ))}
        </div>
       ) : (
        <motion.div
