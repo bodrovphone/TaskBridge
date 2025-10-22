@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Input } from '@nextui-org/react'
 import { UseFormReturn } from 'react-hook-form'
 import { CreateTaskFormData } from '../lib/validation'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MAIN_CATEGORIES, SUBCATEGORIES, getSubcategoriesByMainCategory, getMainCategoryForSubcategory, getMainCategoriesWithSubcategories } from '@/features/categories'
@@ -95,21 +95,21 @@ export function CategorySelection({ form }: CategorySelectionProps) {
   ).slice(0, 12) // Limit to 12 results
  }, [searchQuery, allSubcategories, t])
 
- const handleMainCategorySelect = (categoryId: string) => {
+ const handleMainCategorySelect = useCallback((categoryId: string) => {
   setSelectedMainCategory(categoryId)
   setSearchQuery('') // Clear search when selecting main category
- }
+ }, [])
 
- const handleSubcategorySelect = (slug: string) => {
+ const handleSubcategorySelect = useCallback((slug: string) => {
   setValue('category', slug, { shouldValidate: true })
   setSearchQuery('') // Clear search after selection
- }
+ }, [setValue])
 
- const handleReset = () => {
+ const handleReset = useCallback(() => {
   setSelectedMainCategory(null)
   setValue('category', '', { shouldValidate: true })
   setSearchQuery('')
- }
+ }, [setValue])
 
  // Get the main category for the selected subcategory (for display)
  const selectedMainCategoryData = selectedCategory
