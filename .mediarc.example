@@ -1,0 +1,17 @@
+{
+  "images": {
+    "quality": 85,
+    "formats": ["webp", "avif"],
+    "sizes": [320, 640, 1024, 1920],
+    "outputDir": "public/optimized/images",
+    "preserveOriginal": true,
+    "removeMetadata": true
+  },
+  "videos": {
+    "formats": ["mp4", "webm"],
+    "maxResolution": 1920,
+    "bitrate": "1M",
+    "outputDir": "public/optimized/videos",
+    "generateThumbnails": true
+  }
+}
