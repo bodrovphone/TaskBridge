@@ -6,11 +6,7 @@ import { MapPin, Wallet, Clock, FileText } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
 import Image from 'next/image'
 
-interface ReviewSectionProps {
- form: any
-}
-
-export function ReviewSection({ form: _form }: ReviewSectionProps) {
+export function ReviewSection() {
  const { t } = useTranslation()
 
  // For now, use empty data - will be populated when form is submitted

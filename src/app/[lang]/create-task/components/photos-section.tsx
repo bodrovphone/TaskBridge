@@ -15,7 +15,6 @@ export function PhotosSection({ form }: PhotosSectionProps) {
  const [isUploading, setIsUploading] = useState(false)
  const fileInputRef = useRef<HTMLInputElement>(null)
  const [photos, setPhotos] = useState<string[]>([])
- const [errors, _setErrors] = useState<string[]>([])
 
  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const files = event.target.files
@@ -167,13 +166,6 @@ export function PhotosSection({ form }: PhotosSectionProps) {
       </button>
      )}
     </div>
-   )}
-
-   {/* Error Message */}
-   {errors && errors.length > 0 && (
-    <p className="text-danger text-sm">
-     {t(errors[0] as string)}
-    </p>
    )}
 
    {/* Upload Progress */}

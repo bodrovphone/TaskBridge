@@ -7,7 +7,8 @@ import { parseDate } from '@internationalized/date'
 interface TimelineSectionProps {
  form: any
  urgency: 'same_day' | 'within_week' | 'flexible' | undefined
- onUrgencyChange: (_urgency: 'same_day' | 'within_week' | 'flexible') => void
+ // eslint-disable-next-line no-unused-vars
+ onUrgencyChange: (urgency: 'same_day' | 'within_week' | 'flexible') => void
 }
 
 export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSectionProps) {

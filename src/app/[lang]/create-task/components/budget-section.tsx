@@ -7,7 +7,8 @@ import { Wallet, Info } from 'lucide-react'
 interface BudgetSectionProps {
  form: any
  budgetType: 'fixed' | 'range' | undefined
- onBudgetTypeChange: (_type: 'fixed' | 'range') => void
+ // eslint-disable-next-line no-unused-vars
+ onBudgetTypeChange: (type: 'fixed' | 'range') => void
 }
 
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {

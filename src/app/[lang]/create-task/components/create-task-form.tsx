@@ -52,9 +52,9 @@ export function CreateTaskForm() {
 
  return (
   <form.Subscribe
-   selector={(state) => [state.canSubmit, state.isSubmitting]}
+   selector={(state) => [state.canSubmit]}
   >
-   {([canSubmit, _formIsSubmitting]) => (
+   {([canSubmit]) => (
     <form
      onSubmit={(e) => {
       e.preventDefault()
@@ -85,7 +85,7 @@ export function CreateTaskForm() {
        <PhotosSection form={form} />
 
        {/* Review & Submit */}
-       <ReviewSection form={form} />
+       <ReviewSection />
 
        {/* Submit Button */}
        <div className="flex flex-col items-center gap-3 pt-8 pb-4">
