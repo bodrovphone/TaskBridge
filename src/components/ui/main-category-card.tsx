@@ -18,6 +18,12 @@ interface MainCategoryCardProps {
  color: string
  subcategories: Subcategory[]
  totalCount: number
+ // Optional props for customization
+ onClick?: () => void // Custom click handler for the main card
+ onSubcategoryClick?: (value: string) => void // Custom handler for subcategory clicks
+ showSubcategories?: boolean // Whether to show subcategories (default: true)
+ showFooter?: boolean // Whether to show footer (default: true)
+ variant?: 'full' | 'simple' // 'full' shows everything, 'simple' is just icon+title+description
 }
 
 // Map card colors to chip colors to avoid - excluding colors that are too similar
@@ -36,7 +42,12 @@ function MainCategoryCard({
  icon: Icon,
  color,
  subcategories,
- totalCount
+ totalCount,
+ onClick,
+ onSubcategoryClick,
+ showSubcategories = true,
+ showFooter = true,
+ variant = 'full'
 }: MainCategoryCardProps) {
  const { t } = useTranslation()
  const router = useRouter()
@@ -106,76 +117,115 @@ function MainCategoryCard({
  }, [subcategories, color])
 
  const handleSubcategoryClick = (subcategoryValue: string) => {
-  router.push(`/${lang}/professionals?category=${subcategoryValue}`)
+  if (onSubcategoryClick) {
+   onSubcategoryClick(subcategoryValue)
+  } else {
+   router.push(`/${lang}/professionals?category=${subcategoryValue}`)
+  }
+ }
+
+ const handleCardClick = () => {
+  if (onClick) {
+   onClick()
+  }
  }
 
  return (
   <Card
+   isPressable={!!onClick}
+   onPress={onClick ? handleCardClick : undefined}
    className={`
+    w-full h-full
     group relative overflow-hidden transition-all duration-300
     ${config.background}
     hover:scale-[1.02] hover:shadow-2xl
     border-2 ${config.border}
-    
+    ${onClick ? 'cursor-pointer' : ''}
    `}
   >
-   <CardBody className="p-6">
-    {/* Header */}
-    <div className="flex items-start gap-4 mb-4">
-     <div className={`
-      w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0
-      ${config.iconBg}
-      transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
-     `}>
-      <Icon size={24} className={`${config.icon} transition-all duration-300`} />
-     </div>
-     <div className="flex-1">
-      <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors">
+   <CardBody className={variant === 'simple' ? 'p-6 min-h-[200px] flex items-center justify-center' : 'p-6'}>
+    {variant === 'simple' ? (
+     /* Simple centered layout for selection */
+     <div className="flex flex-col items-center text-center">
+      <div className={`
+       w-16 h-16 rounded-xl flex items-center justify-center mb-4
+       ${config.iconBg}
+       transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
+      `}>
+       <Icon size={32} className={`${config.icon} transition-all duration-300`} />
+      </div>
+      <h3 className="font-bold text-gray-900 mb-2 text-lg group-hover:text-slate-800 transition-colors">
        {title}
       </h3>
-      <p className="text-slate-600 text-sm leading-relaxed">
+      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
        {description}
       </p>
      </div>
-    </div>
+    ) : (
+     /* Full layout with side-by-side header */
+     <>
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-4">
+       <div className={`
+        w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0
+        ${config.iconBg}
+        transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
+       `}>
+        <Icon size={24} className={`${config.icon} transition-all duration-300`} />
+       </div>
+       <div className="flex-1">
+        <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors">
+         {title}
+        </h3>
+        <p className="text-slate-600 text-sm leading-relaxed">
+         {description}
+        </p>
+       </div>
+      </div>
 
-    {/* Subcategories */}
-    <div className="flex flex-wrap gap-2 mt-4">
-     {subcategories.map((subcategory, index) => (
-      <Chip
-       key={subcategory.value}
-       color={chipColors[index]}
-       variant="bordered"
-       size="md"
-       className="cursor-pointer hover:scale-105 transition-transform font-semibold"
-       onClick={(e) => {
-        e.stopPropagation()
-        handleSubcategoryClick(subcategory.value)
-       }}
-      >
-       {subcategory.label}
-      </Chip>
-     ))}
-    </div>
+      {/* Subcategories */}
+      {showSubcategories && subcategories.length > 0 && (
+       <div className="flex flex-wrap gap-2 mt-4">
+        {subcategories.map((subcategory, index) => (
+         <Chip
+          key={subcategory.value}
+          color={chipColors[index]}
+          variant="bordered"
+          size="md"
+          className="cursor-pointer hover:scale-105 transition-transform font-semibold"
+          onClick={(e) => {
+           e.stopPropagation()
+           handleSubcategoryClick(subcategory.value)
+          }}
+         >
+          {subcategory.label}
+         </Chip>
+        ))}
+       </div>
+      )}
+     </>
+    )}
    </CardBody>
 
-   <CardFooter className="px-6 pb-6 pt-0 justify-between border-t border-slate-200/50">
-    {totalCount === 0 ? (
-     <div className="text-sm font-bold text-blue-600">
-      {t('landing.categories.beFirst')}
-     </div>
-    ) : (
-     <div className="text-sm font-semibold text-slate-700">
-      <span className="text-lg font-bold text-slate-900">{totalCount}+</span> {t('landing.categories.specialists')}
-     </div>
-    )}
-    <button
-     onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
-     className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-    >
-     {t('landing.categories.viewAll')} →
-    </button>
-   </CardFooter>
+   {showFooter && (
+    <CardFooter className="px-6 pb-6 pt-0 justify-between border-t border-slate-200/50">
+     {totalCount === 0 ? (
+      <div className="text-sm font-bold text-blue-600">
+       {t('landing.categories.beFirst')}
+      </div>
+     ) : (
+      <div className="text-sm font-semibold text-slate-700">
+       <span className="text-lg font-bold text-slate-900">{totalCount}+</span> {t('landing.categories.specialists')}
+      </div>
+     )}
+     <button
+      onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
+      className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+     >
+      {t('landing.categories.viewAll')} →
+     </button>
+    </CardFooter>
+   )}
 
    {/* Subtle background decoration */}
    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
