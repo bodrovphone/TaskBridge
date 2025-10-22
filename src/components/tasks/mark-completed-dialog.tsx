@@ -14,7 +14,7 @@ import {
   CardBody,
   Divider
 } from '@nextui-org/react'
-import { CheckCircle, Upload, X, User, DollarSign } from 'lucide-react'
+import { CheckCircle, Upload, X, User, Banknote } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 interface MarkCompletedDialogProps {
@@ -87,8 +87,10 @@ export function MarkCompletedDialog({
       size="2xl"
       scrollBehavior="inside"
       classNames={{
-        base: 'bg-white',
+        wrapper: 'overflow-x-hidden',
+        base: 'bg-white max-h-[95vh] md:max-h-[90vh] mx-2 md:mx-auto max-w-full',
         header: 'border-b border-gray-200',
+        body: 'max-h-[calc(95vh-140px)] md:max-h-none overflow-x-hidden',
         footer: 'border-t border-gray-200'
       }}
     >
@@ -119,7 +121,7 @@ export function MarkCompletedDialog({
               </div>
 
               <div className="flex items-start gap-2">
-                <DollarSign className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                <Banknote className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-xs text-gray-500">{t('taskCompletion.markDialog.payment')}</p>
                   <p className="font-semibold text-gray-900">{payment}</p>
@@ -136,7 +138,7 @@ export function MarkCompletedDialog({
               {t('taskCompletion.markDialog.question')}
             </p>
 
-            <div className="space-y-3">
+            <div className="flex flex-col gap-3">
               <Checkbox
                 isSelected={requirementsCompleted}
                 onValueChange={setRequirementsCompleted}
@@ -162,32 +164,34 @@ export function MarkCompletedDialog({
           <Divider className="my-4" />
 
           {/* Optional: Completion Photos */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             <p className="text-sm font-medium text-gray-700">
               {t('taskCompletion.markDialog.photos')}
             </p>
 
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handlePhotoUpload}
-              className="hidden"
-              id="completion-photos"
-              disabled={photos.length >= 5}
-            />
+            <div>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handlePhotoUpload}
+                className="hidden"
+                id="completion-photos"
+                disabled={photos.length >= 5}
+              />
 
-            <label htmlFor="completion-photos">
-              <Button
-                as="span"
-                variant="bordered"
-                startContent={<Upload className="w-4 h-4" />}
-                className="cursor-pointer"
-                isDisabled={photos.length >= 5}
-              >
-                {t('taskCompletion.markDialog.addPhotos')} ({photos.length}/5)
-              </Button>
-            </label>
+              <label htmlFor="completion-photos">
+                <Button
+                  as="span"
+                  variant="bordered"
+                  startContent={<Upload className="w-4 h-4" />}
+                  className="cursor-pointer"
+                  isDisabled={photos.length >= 5}
+                >
+                  {t('taskCompletion.markDialog.addPhotos')} ({photos.length}/5)
+                </Button>
+              </label>
+            </div>
 
             {photos.length > 0 && (
               <div className="flex flex-wrap gap-2">

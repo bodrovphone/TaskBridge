@@ -20,7 +20,7 @@ import {
  Save,
  X,
  Settings,
- DollarSign
+ Banknote
 } from 'lucide-react'
 import { SkillsSelector } from './skills-selector'
 

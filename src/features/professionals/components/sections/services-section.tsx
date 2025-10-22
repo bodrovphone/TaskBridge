@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardBody, Chip } from "@nextui-org/react";
-import { DollarSign, Clock } from "lucide-react";
+import { Banknote, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 
 interface Service {
@@ -21,7 +21,7 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
  return (
   <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
    <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-    <DollarSign className="text-green-600" size={24} />
+    <Banknote className="text-green-600" size={24} />
     {t('professionalDetail.services.title')}
    </h3>
 

@@ -19,7 +19,7 @@ import {
  Star,
  Calendar,
  TrendingUp,
- DollarSign,
+ Banknote,
  Eye,
  CheckCircle,
  Clock,
@@ -252,7 +252,7 @@ export function StatisticsModal({ isOpen, onClose, userRole }: StatisticsModalPr
 
       <div className="flex items-center gap-3">
        <div className="p-2 rounded-lg bg-secondary/10">
-        <DollarSign className="w-5 h-5 text-secondary" />
+        <Banknote className="w-5 h-5 text-secondary" />
        </div>
        <div>
         <p className="font-medium">{formatCurrency(professionalStats.monthlyEarnings)}</p>

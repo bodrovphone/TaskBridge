@@ -182,21 +182,21 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
       <div className="container mx-auto px-4 py-8 max-w-6xl relative z-10">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
                 {t('myWork.title')}
               </h1>
               <p className="text-gray-600 mt-1">{t('myWork.subtitle')}</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button
                 color="default"
                 size="lg"
                 variant="bordered"
                 startContent={<Send className="w-5 h-5" />}
                 onPress={() => router.push(`/${lang}/tasks/applications`)}
-                className="shadow-lg"
+                className="shadow-lg flex-1 sm:flex-none"
               >
                 {t('myApplications.title')}
               </Button>
@@ -205,7 +205,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                 size="lg"
                 startContent={<Briefcase className="w-5 h-5" />}
                 onPress={() => router.push(`/${lang}/browse-tasks`)}
-                className="shadow-lg"
+                className="shadow-lg flex-1 sm:flex-none"
               >
                 {t('myWork.empty.inProgress.browseButton')}
               </Button>
