@@ -212,10 +212,10 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
 
      {showApplyButton && onApply && (
       <Button
-       color="primary"
-       variant="light"
+       color="success"
+       variant="solid"
        size="sm"
-       className="text-primary-600 hover:text-primary-700"
+       className="font-semibold px-6 shadow-md hover:shadow-lg transition-shadow"
        onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
