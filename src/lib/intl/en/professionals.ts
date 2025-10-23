@@ -28,6 +28,8 @@ export const professionals = {
   'professionals.noMatchingResults':
     'No professionals available matching your criteria. Try broadening your search.',
   'professionals.mostActive': 'Most Active',
+  'professionals.specialists': 'Specialists',
+  'professionals.stars': 'stars',
   'professionals.gender.male': 'Male',
   'professionals.gender.female': 'Female',
   'professionals.filters.category': 'Category',

@@ -29,6 +29,8 @@ export const professionals = {
   'professionals.noMatchingResults':
     'Няма професионалисти, които да отговарят на вашите критерии. Опитайте да разширите търсенето.',
   'professionals.mostActive': 'Най-активни',
+  'professionals.specialists': 'Специалисти',
+  'professionals.stars': 'звезди',
   'professionals.gender.male': 'Мъж',
   'professionals.gender.female': 'Жена',
   'professionals.filters.category': 'Категория',

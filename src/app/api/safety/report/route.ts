@@ -174,13 +174,11 @@ async function verifyTaskInteraction(
         eq(applications.status, 'accepted')
       ),
       with: {
-        task: {
-          where: eq(tasks.customerId, reportedUserId)
-        }
+        task: true
       }
     })
 
-    if (professionalReportingCustomer && professionalReportingCustomer.task) {
+    if (professionalReportingCustomer?.task?.customerId === reportedUserId) {
       return true // Professional worked for this customer
     }
 

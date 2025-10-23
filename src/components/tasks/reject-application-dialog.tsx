@@ -126,7 +126,7 @@ export default function RejectApplicationDialog({
             </ModalBody>
 
             <ModalFooter>
-              <Button variant="light" onPress={handleClose}>
+              <Button variant="bordered" onPress={handleClose}>
                 {t('rejectApplication.cancel')}
               </Button>
               <Button

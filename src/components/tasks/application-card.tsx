@@ -52,35 +52,38 @@ export default function ApplicationCard({
     >
       <CardBody className="p-6">
         {/* Professional Header */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <Avatar
-              src={professional.avatar}
-              name={professional.name}
-              size="lg"
-              className="flex-shrink-0"
-            />
-            <div>
-              <div className="flex items-center gap-2">
+        <div className="mb-4">
+          <div className="flex items-start gap-3 mb-3">
+            {/* Avatar with Rating centered below */}
+            <div className="flex flex-col items-center gap-1 flex-shrink-0">
+              <Avatar
+                src={professional.avatar}
+                name={professional.name}
+                size="lg"
+                className="flex-shrink-0"
+              />
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <span className="font-semibold text-sm">{professional.rating}</span>
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-semibold text-lg">{professional.name}</h3>
                 {professional.verified && (
-                  <CheckCircle className="w-4 h-4 text-blue-500" />
+                  <CheckCircle className="w-4 h-4 text-blue-500 flex-shrink-0" />
                 )}
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span>{t(professional.specializations[0])}</span>
-                <span>•</span>
-                <span>{professional.completedTasks} {t('applications.tasksCompleted', 'tasks completed')}</span>
+              <div className="text-sm text-gray-600 space-y-0.5">
+                <div className="truncate">{t(professional.specializations[0])}</div>
+                <div className="text-gray-500">{professional.completedTasks} {t('applications.tasksCompleted', 'tasks completed')}</div>
               </div>
             </div>
           </div>
 
-          {/* Rating & Status */}
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <span className="font-semibold">{professional.rating}</span>
-            </div>
+          {/* Status */}
+          <div className="flex justify-end">
             <Chip
               color={getStatusColor(status)}
               variant="flat"
@@ -120,37 +123,48 @@ export default function ApplicationCard({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2">
           {status === 'pending' ? (
             <>
+              <div className="flex gap-2">
+                <Button
+                  color="success"
+                  variant="flat"
+                  startContent={<CheckCircle className="w-4 h-4" />}
+                  onPress={() => onAccept(application.id)}
+                  className="flex-1"
+                >
+                  {t('applications.acceptApplication', 'Accept')}
+                </Button>
+                <Button
+                  color="danger"
+                  variant="flat"
+                  startContent={<XCircle className="w-4 h-4" />}
+                  onPress={() => onReject(application.id)}
+                  className="flex-1"
+                >
+                  {t('applications.rejectApplication', 'Reject')}
+                </Button>
+              </div>
               <Button
-                color="success"
-                variant="flat"
-                startContent={<CheckCircle className="w-4 h-4" />}
-                onClick={() => onAccept(application.id)}
-                className="flex-1"
+                variant="bordered"
+                startContent={<Eye className="w-4 h-4" />}
+                onPress={() => onViewDetails(application.id)}
+                className="w-full"
               >
-                {t('applications.acceptApplication', 'Accept')}
-              </Button>
-              <Button
-                color="danger"
-                variant="flat"
-                startContent={<XCircle className="w-4 h-4" />}
-                onClick={() => onReject(application.id)}
-                className="flex-1"
-              >
-                {t('applications.rejectApplication', 'Reject')}
+                {t('applications.viewDetails', 'View Details')}
               </Button>
             </>
-          ) : null}
-          <Button
-            variant="bordered"
-            startContent={<Eye className="w-4 h-4" />}
-            onClick={() => onViewDetails(application.id)}
-            className={status === 'pending' ? '' : 'flex-1'}
-          >
-            {t('applications.viewDetails', 'View Details')}
-          </Button>
+          ) : (
+            <Button
+              variant="bordered"
+              startContent={<Eye className="w-4 h-4" />}
+              onPress={() => onViewDetails(application.id)}
+              className="w-full"
+            >
+              {t('applications.viewDetails', 'View Details')}
+            </Button>
+          )}
         </div>
       </CardBody>
     </Card>

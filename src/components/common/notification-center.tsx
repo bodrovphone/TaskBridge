@@ -37,8 +37,8 @@ export default function NotificationCenter() {
 
  return (
   <Sheet open={isOpen} onOpenChange={setOpen}>
-   <SheetContent side="right" className="w-full sm:max-w-md p-0 bg-white">
-    <SheetHeader className="border-b px-6 py-4 bg-white">
+   <SheetContent side="right" className="w-full sm:max-w-md p-0 bg-white flex flex-col">
+    <SheetHeader className="border-b px-6 py-4 bg-white flex-shrink-0">
      <div className="flex items-center justify-between">
       <SheetTitle className="text-xl font-bold">
        {t('notifications.title')}
@@ -61,9 +61,9 @@ export default function NotificationCenter() {
     <Tabs
      value={activeFilter}
      onValueChange={handleFilterChange}
-     className="flex flex-col h-[calc(100vh-5rem)] bg-white"
+     className="flex flex-col flex-1 bg-white overflow-hidden"
     >
-     <div className="border-b px-6 py-3 bg-white">
+     <div className="border-b px-6 py-3 bg-white flex-shrink-0">
       <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1">
        <TabsTrigger
         value="all"
@@ -93,7 +93,7 @@ export default function NotificationCenter() {
      </div>
 
      {/* Notification List */}
-     <TabsContent value={activeFilter} className="flex-1 mt-0 bg-white">
+     <TabsContent value={activeFilter} className="flex-1 mt-0 bg-white overflow-hidden">
       <ScrollArea className="h-full bg-white">
        <div className="px-2 py-2 space-y-1 bg-white">
         {filteredNotifications.length > 0 ? (

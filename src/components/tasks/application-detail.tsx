@@ -59,46 +59,62 @@ export default function ApplicationDetail({
 
             <ModalBody>
               {/* Professional Profile Section */}
-              <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
-                <Avatar
-                  src={professional.avatar}
-                  name={professional.name}
-                  className="w-20 h-20 flex-shrink-0"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-xl font-bold">{professional.name}</h3>
-                    {professional.verified && (
-                      <BadgeCheck className="w-5 h-5 text-blue-500" />
-                    )}
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-semibold">{professional.rating}</span>
+              <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
+                {/* Mobile: 2-column layout, Desktop: horizontal layout */}
+                <div className="grid grid-cols-2 sm:flex sm:flex-row items-start gap-4">
+                  {/* Left Column (Mobile) / Avatar (Desktop) */}
+                  <div className="flex flex-col gap-3 items-center">
+                    {/* Name - centered */}
+                    <div className="flex items-center justify-center gap-2 flex-wrap">
+                      <h3 className="text-lg sm:text-xl font-bold text-center">{professional.name}</h3>
+                      {professional.verified && (
+                        <BadgeCheck className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                      )}
                     </div>
+
+                    {/* Avatar */}
+                    <Avatar
+                      src={professional.avatar}
+                      name={professional.name}
+                      className="w-20 h-20 flex-shrink-0"
+                    />
+
+                    {/* Rating - centered under avatar */}
                     <div className="flex items-center gap-1">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 flex-shrink-0" />
+                      <span className="font-semibold text-sm">{professional.rating}</span>
+                    </div>
+                  </div>
+
+                  {/* Right Column (Mobile) / Content (Desktop) */}
+                  <div className="flex flex-col gap-3 sm:flex-1">
+                    {/* Tasks Completed */}
+                    <div className="flex items-center gap-1 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                       <span>{professional.completedTasks} {t('applications.tasksCompleted')}</span>
                     </div>
+
+                    {/* Years of Experience */}
                     {professional.yearsOfExperience && (
-                      <div className="flex items-center gap-1">
-                        <Award className="w-4 h-4 text-purple-500" />
+                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <Award className="w-4 h-4 text-purple-500 flex-shrink-0" />
                         <span>{professional.yearsOfExperience} {t('applications.yearsExperience')}</span>
                       </div>
                     )}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {professional.specializations.map((spec, index) => (
-                      <Chip
-                        key={index}
-                        size="sm"
-                        variant="solid"
-                        className="bg-white text-gray-900 font-medium"
-                      >
-                        {spec}
-                      </Chip>
-                    ))}
+
+                    {/* Specializations */}
+                    <div className="flex flex-wrap gap-2">
+                      {professional.specializations.map((spec, index) => (
+                        <Chip
+                          key={index}
+                          size="sm"
+                          variant="solid"
+                          className="bg-white text-gray-900 font-medium"
+                        >
+                          {spec}
+                        </Chip>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -229,33 +245,27 @@ export default function ApplicationDetail({
             <ModalFooter>
               {status === 'pending' ? (
                 <>
-                  <Button variant="light" onPress={onClose}>
+                  <Button variant="bordered" onPress={onClose}>
                     {t('applicationDetail.close')}
                   </Button>
                   <Button
                     color="danger"
                     variant="flat"
                     startContent={<XCircle className="w-4 h-4" />}
-                    onPress={() => {
-                      onReject(application.id)
-                      onClose()
-                    }}
+                    onPress={() => onReject(application.id)}
                   >
                     {t('applications.rejectApplication')}
                   </Button>
                   <Button
                     color="success"
                     startContent={<CheckCircle className="w-4 h-4" />}
-                    onPress={() => {
-                      onAccept(application.id)
-                      onClose()
-                    }}
+                    onPress={() => onAccept(application.id)}
                   >
                     {t('applications.acceptApplication')}
                   </Button>
                 </>
               ) : (
-                <Button color="primary" onPress={onClose}>
+                <Button variant="bordered" onPress={onClose}>
                   {t('applicationDetail.close')}
                 </Button>
               )}

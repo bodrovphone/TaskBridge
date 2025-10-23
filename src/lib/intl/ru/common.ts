@@ -81,6 +81,7 @@ export const common = {
   'report.descriptionPlaceholder': 'Пожалуйста, предоставьте конкретные детали о проблеме...',
   'report.evidenceLabel': 'Доказательства (Необязательно)',
   'report.evidenceHint': 'Загрузите скриншоты или фотографии в поддержку вашего сообщения',
+  'report.evidenceComingSoon': '(Скоро появится)',
   'report.submitButton': 'Отправить сообщение',
   'report.cancelButton': 'Отмена',
   'report.successMessage': 'Сообщение успешно отправлено. Наша команда рассмотрит его в ближайшее время.',

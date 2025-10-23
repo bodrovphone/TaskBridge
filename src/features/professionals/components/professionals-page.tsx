@@ -206,7 +206,7 @@ export default function ProfessionalsPage() {
   if (filters.search) active.push({ key: 'search', label: `"${filters.search}"`, value: filters.search });
   if (filters.category !== "all") active.push({ key: 'category', label: getCategoryLabelBySlug(filters.category, t), value: filters.category });
   if (filters.location) active.push({ key: 'location', label: getLocationLabel(filters.location as LocationSlug, t), value: filters.location });
-  if (filters.minRating > 0) active.push({ key: 'minRating', label: `${filters.minRating}+ stars`, value: filters.minRating });
+  if (filters.minRating > 0) active.push({ key: 'minRating', label: `${filters.minRating}+ ${t('professionals.stars')}`, value: filters.minRating });
   if (filters.mostActive) active.push({ key: 'mostActive', label: t('professionals.mostActive', { fallback: 'Most Active' }), value: 'mostActive' });
   if (filters.gender) active.push({ key: 'gender', label: t(`professionals.gender.${filters.gender}`, { fallback: filters.gender === 'male' ? 'Male' : 'Female' }), value: filters.gender });
   return active;
@@ -717,7 +717,7 @@ export default function ProfessionalsPage() {
          </div>
         </motion.div>
         <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-         {filters.category === 'all' ? t('professionals.findPerfect') : `${getCategoryLabelBySlug(filters.category, t)} Specialists`}
+         {filters.category === 'all' ? t('professionals.findPerfect') : `${getCategoryLabelBySlug(filters.category, t)} ${t('professionals.specialists')}`}
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
          {t('professionals.discoverTrusted')}
@@ -761,22 +761,22 @@ export default function ProfessionalsPage() {
         >
          🔍
         </motion.div>
-        <motion.h3 
+        <motion.h3
          initial={{ opacity: 0, y: 20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.5, delay: 0.3 }}
          className="text-2xl font-bold text-gray-800 mb-4"
         >
-         No professionals found
+         {t('professionals.noProfessionalsFound')}
         </motion.h3>
-        <motion.p 
+        <motion.p
          initial={{ opacity: 0, y: 20 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.5, delay: 0.4 }}
          className="text-gray-600 mb-6 leading-relaxed"
         >
-         {filters.category === 'all' 
-          ? 'Try adjusting your search terms or filters to find the perfect professional for your needs.' 
+         {filters.category === 'all'
+          ? t('professionals.tryAdjustingFilters')
           : t('professionals.noMatchingResults')
          }
         </motion.p>

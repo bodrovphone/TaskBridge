@@ -80,6 +80,7 @@ export const common = {
   'report.descriptionPlaceholder': 'Моля, предоставете конкретни детайли за проблема...',
   'report.evidenceLabel': 'Доказателства (По избор)',
   'report.evidenceHint': 'Качете екранни снимки или снимки в подкрепа на доклада',
+  'report.evidenceComingSoon': '(Очаквайте скоро)',
   'report.submitButton': 'Изпращане на доклад',
   'report.cancelButton': 'Отказ',
   'report.successMessage': 'Докладът е изпратен успешно. Екипът ни ще го прегледа незабавно.',

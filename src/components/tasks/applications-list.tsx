@@ -63,7 +63,7 @@ export default function ApplicationsList({
   return (
     <div className="w-full space-y-6">
       {/* Header with Title and Count */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">
             {t('applications.title', 'Applications')}
@@ -75,14 +75,14 @@ export default function ApplicationsList({
 
         {/* Sort Dropdown - Only show when there are applications */}
         {sortedApplications.length > 0 && (
-          <div className="flex items-center gap-2 min-w-[200px]">
-            <ArrowUpDown className="w-4 h-4 text-gray-500" />
+          <div className="flex items-center gap-2 w-full sm:w-auto sm:min-w-[200px]">
+            <ArrowUpDown className="w-4 h-4 text-gray-500 flex-shrink-0" />
             <Select
               size="sm"
               label={t('applications.sortBy', 'Sort by')}
               selectedKeys={[sortBy]}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="max-w-xs"
+              className="flex-1 sm:max-w-xs"
             >
               {sortOptions.map(option => (
                 <SelectItem key={option.value} value={option.value}>

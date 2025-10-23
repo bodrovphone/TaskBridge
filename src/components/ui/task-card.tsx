@@ -149,8 +149,8 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
     {/* Content with better spacing */}
     <div className="p-6 flex-grow flex flex-col">
      {/* Category badge and time */}
-     <div className="flex justify-between items-start mb-4">
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor}`}>
+     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor} w-fit`}>
        {categoryName}
       </span>
       <span className="text-sm text-gray-500">{timeAgo}</span>

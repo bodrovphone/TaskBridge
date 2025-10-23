@@ -177,7 +177,7 @@ export function ReportScamDialog({
                       {t('report.evidenceHint')}
                     </p>
                     <p className="text-xs text-default-400 mt-1">
-                      (Coming soon)
+                      {t('report.evidenceComingSoon')}
                     </p>
                   </div>
                 </div>

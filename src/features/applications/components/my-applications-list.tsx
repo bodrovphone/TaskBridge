@@ -126,14 +126,28 @@ export default function MyApplicationsList({
       )
     }
 
+    if (selectedFilter === 'rejected' && counts.rejected === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center py-16 px-4">
+          <XCircle className="w-16 h-16 text-gray-300 mb-4" />
+          <h3 className="text-xl font-bold text-gray-700 mb-2">
+            {t('myApplications.emptyStateRejected.title')}
+          </h3>
+          <p className="text-gray-500 text-center max-w-md">
+            {t('myApplications.emptyStateRejected.message')}
+          </p>
+        </div>
+      )
+    }
+
     return (
       <div className="flex flex-col items-center justify-center py-16 px-4">
         <XCircle className="w-16 h-16 text-gray-300 mb-4" />
         <h3 className="text-xl font-bold text-gray-700 mb-2">
-          {t('myApplications.emptyState.title')}
+          {t('myApplications.emptyStateWithdrawn.title')}
         </h3>
         <p className="text-gray-500 text-center max-w-md">
-          No {selectedFilter} applications found.
+          {t('myApplications.emptyStateWithdrawn.message')}
         </p>
       </div>
     )

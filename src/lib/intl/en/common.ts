@@ -80,6 +80,7 @@ export const common = {
   'report.descriptionPlaceholder': 'Please provide specific details about the issue...',
   'report.evidenceLabel': 'Evidence (Optional)',
   'report.evidenceHint': 'Upload screenshots or photos to support your report',
+  'report.evidenceComingSoon': '(Coming soon)',
   'report.submitButton': 'Submit Report',
   'report.cancelButton': 'Cancel',
   'report.successMessage': 'Report submitted successfully. Our team will review it promptly.',

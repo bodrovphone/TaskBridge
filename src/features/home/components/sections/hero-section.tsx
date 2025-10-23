@@ -168,27 +168,27 @@ export default function HeroSection() {
        />
       </div>
       
-      {/* Enhanced Floating Stats Cards */}
-      <div className="absolute -top-6 -left-6 bg-white/90 rounded-2xl shadow-xl p-6 border border-slate-200 hover:scale-105 transition-transform duration-300">
-       <div className="flex items-center space-x-4">
-        <div className="w-12 h-12 bg-gradient-to-r from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-         <Star className="text-white h-6 w-6" />
+      {/* Enhanced Floating Stats Cards - Responsive positioning */}
+      <div className="absolute top-2 left-2 lg:-top-6 lg:-left-6 bg-white/90 rounded-2xl shadow-xl p-3 lg:p-6 border border-slate-200 hover:scale-105 transition-transform duration-300">
+       <div className="flex items-center space-x-2 lg:space-x-4">
+        <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+         <Star className="text-white h-5 w-5 lg:h-6 lg:w-6" />
         </div>
         <div>
-         <div className="text-xl font-bold text-slate-900">{t('landing.stats.ratingValue')}</div>
-         <div className="text-sm text-slate-600 font-medium">{t('landing.stats.averageRating')}</div>
+         <div className="text-lg lg:text-xl font-bold text-slate-900">{t('landing.stats.ratingValue')}</div>
+         <div className="text-xs lg:text-sm text-slate-600 font-medium whitespace-nowrap">{t('landing.stats.averageRating')}</div>
         </div>
        </div>
       </div>
 
-      <div className="absolute -bottom-6 -right-6 bg-white/90 rounded-2xl shadow-xl p-6 border border-slate-200 hover:scale-105 transition-transform duration-300">
-       <div className="flex items-center space-x-4">
-        <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
-         <CheckCircle className="text-white h-6 w-6" />
+      <div className="absolute bottom-2 right-2 lg:-bottom-6 lg:-right-6 bg-white/90 rounded-2xl shadow-xl p-3 lg:p-6 border border-slate-200 hover:scale-105 transition-transform duration-300">
+       <div className="flex items-center space-x-2 lg:space-x-4">
+        <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+         <CheckCircle className="text-white h-5 w-5 lg:h-6 lg:w-6" />
         </div>
         <div>
-         <div className="text-xl font-bold text-slate-900">{t('landing.stats.tasksValue')}</div>
-         <div className="text-sm text-slate-600 font-medium">{t('landing.stats.completedTasks')}</div>
+         <div className="text-lg lg:text-xl font-bold text-slate-900">{t('landing.stats.tasksValue')}</div>
+         <div className="text-xs lg:text-sm text-slate-600 font-medium whitespace-nowrap">{t('landing.stats.completedTasks')}</div>
         </div>
        </div>
       </div>

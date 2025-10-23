@@ -216,7 +216,7 @@ export default function AcceptApplicationDialog({
             </ModalBody>
 
             <ModalFooter>
-              <Button variant="light" onPress={handleClose}>
+              <Button variant="bordered" onPress={handleClose}>
                 {t('acceptApplication.cancel')}
               </Button>
               <Button
