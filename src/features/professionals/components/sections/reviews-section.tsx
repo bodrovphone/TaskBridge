@@ -4,6 +4,8 @@ import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@nextui-org
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import ReviewsDialog from '@/components/common/reviews-dialog';
+import { HiddenReviewsNotice } from '@/components/reviews/hidden-reviews-notice';
+import { getVisibleReviews, getReviewVisibilityStats, type ReviewWithVisibility } from '@/lib/reviews';
 
 interface Review {
  id: string;
@@ -13,6 +15,9 @@ interface Review {
  date: string;
  verified: boolean;
  anonymous: boolean;
+ // Visibility fields for pattern detection
+ isVisible?: boolean;
+ visibilityReason?: 'visible_high_rating' | 'visible_pattern_detected' | 'hidden_pending_pattern';
 }
 
 interface ReviewsSectionProps {
@@ -23,6 +28,16 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
  const { t } = useTranslation();
  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+ // Filter to only show visible reviews (pattern detection logic)
+ const reviewsWithVisibility = reviews.map(r => ({
+  ...r,
+  isVisible: r.isVisible !== undefined ? r.isVisible : true,
+  visibilityReason: r.visibilityReason || ('visible_high_rating' as const)
+ }));
+
+ const visibleReviews = getVisibleReviews(reviewsWithVisibility);
+ const stats = getReviewVisibilityStats(reviewsWithVisibility);
+
  const renderStars = (rating: number) => {
   return (
    <div className="flex gap-1">
@@ -30,8 +45,8 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
      <Star
       key={star}
       className={`w-4 h-4 ${
-       star <= rating 
-        ? 'fill-yellow-400 text-yellow-400' 
+       star <= rating
+        ? 'fill-yellow-400 text-yellow-400'
         : 'text-gray-300'
       }`}
      />
@@ -40,8 +55,9 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
   );
  };
 
- const averageRating = reviews.length > 0
-  ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
+ // Calculate average from visible reviews only
+ const averageRating = visibleReviews.length > 0
+  ? (visibleReviews.reduce((sum, review) => sum + review.rating, 0) / visibleReviews.length).toFixed(1)
   : "0";
 
  return (
@@ -51,8 +67,17 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
     {t('professionalDetail.reviews.title')}
    </h3>
 
+   {/* Hidden Reviews Notice */}
+   {(stats.hidden > 0 || stats.hasPattern) && (
+    <HiddenReviewsNotice
+     hiddenCount={stats.hidden}
+     hasPattern={stats.hasPattern}
+     className="mb-6"
+    />
+   )}
+
    {/* Rating Summary */}
-   {reviews.length > 0 && (
+   {visibleReviews.length > 0 && (
     <div className="mb-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-100">
      <div className="flex items-center justify-between">
       <div>
@@ -61,7 +86,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
         {renderStars(Math.round(Number(averageRating)))}
        </div>
        <div className="text-sm text-gray-600">
-        {reviews.length} {t('professionalDetail.reviews.count')}
+        {visibleReviews.length} {t('professionalDetail.reviews.count')}
        </div>
       </div>
       <div className="text-right">
@@ -76,10 +101,10 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
     </div>
    )}
 
-   {/* Reviews List - Show first 4 reviews */}
-   {reviews.length > 0 ? (
+   {/* Reviews List - Show first 4 visible reviews */}
+   {visibleReviews.length > 0 ? (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-     {reviews.slice(0, 4).map((review) => (
+     {visibleReviews.slice(0, 4).map((review) => (
       <Card key={review.id} className="hover:shadow-md transition-shadow">
        <CardBody className="p-4">
         <div className="flex items-start gap-3">
@@ -131,7 +156,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
    )}
 
    {/* Show All Reviews Button */}
-   {reviews.length > 4 && (
+   {visibleReviews.length > 4 && (
     <div className="text-center mt-6 pt-4 border-t border-gray-100">
      <Button
       variant="ghost"
@@ -139,16 +164,16 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
       onPress={onOpen}
       className="font-medium"
      >
-{t('professionalDetail.reviews.showMore')} ({reviews.length - 4} {t('professionalDetail.reviews.more')})
+{t('professionalDetail.reviews.showMore')} ({visibleReviews.length - 4} {t('professionalDetail.reviews.more')})
      </Button>
     </div>
    )}
 
-   {/* Reviews Dialog */}
+   {/* Reviews Dialog - Pass only visible reviews */}
    <ReviewsDialog
     isOpen={isOpen}
     onOpenChange={onOpenChange}
-    reviews={reviews}
+    reviews={visibleReviews}
     averageRating={averageRating}
    />
   </div>

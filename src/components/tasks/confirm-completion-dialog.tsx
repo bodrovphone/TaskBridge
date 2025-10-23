@@ -16,7 +16,7 @@ import {
   Divider,
   Input
 } from '@nextui-org/react'
-import { CheckCircle, XCircle, User, Briefcase, AlertCircle, DollarSign } from 'lucide-react'
+import { CheckCircle, XCircle, User, Briefcase, AlertCircle, DollarSign, ShieldAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { StarRating } from '@/components/common/star-rating'
 
@@ -31,6 +31,7 @@ interface ConfirmCompletionDialogProps {
   onClose: () => void
   onConfirm: (data?: ConfirmationData) => void
   onReject: (reason: string, description?: string) => void
+  onReportProfessional?: () => void // Optional - opens report dialog
   professionalName: string
   taskTitle: string
   isLoading?: boolean
@@ -41,6 +42,7 @@ export function ConfirmCompletionDialog({
   onClose,
   onConfirm,
   onReject,
+  onReportProfessional,
   professionalName,
   taskTitle,
   isLoading = false
@@ -312,6 +314,31 @@ export function ConfirmCompletionDialog({
                   </div>
                 </CardBody>
               </Card>
+
+              {/* Report Professional Button - Only shown if handler provided */}
+              {onReportProfessional && (
+                <div className="pt-2">
+                  <Divider className="mb-4" />
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-gray-700">
+                      {t('taskCompletion.reject.seriousIssue')}
+                    </p>
+                    <Button
+                      color="danger"
+                      variant="flat"
+                      startContent={<ShieldAlert className="w-4 h-4" />}
+                      onPress={onReportProfessional}
+                      className="w-full"
+                      size="sm"
+                    >
+                      {t('report.button')}
+                    </Button>
+                    <p className="text-xs text-gray-600">
+                      {t('taskCompletion.reject.reportHint')}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </ModalBody>

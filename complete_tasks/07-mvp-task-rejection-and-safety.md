@@ -1,5 +1,17 @@
 # MVP Task Rejection & Safety System
 
+## 📊 Progress: 50% Complete (Phase 1 Done ✅)
+
+### What's Already Done:
+✅ **Task Rejection UI** - Customer can reject completion with reasons (in `confirm-completion-dialog.tsx`)
+
+### What's Left to Build:
+❌ **Negative Review Visibility System** - Hide reviews ≤3 stars until pattern detected
+❌ **Scam Reporting** - Report button with automated 2-report suspension
+❌ **Safety Indicators** - Trust badges on professional profiles
+
+---
+
 ## Task Description
 
 Implement a simplified task rejection and safety reporting system for MVP without requiring admin/support team intervention. Focus on automated safety mechanisms and transparent feedback.
@@ -213,37 +225,66 @@ interface User {
 }
 ```
 
-## Acceptance Criteria
+## Implementation Status
 
-### Task Rejection:
-- [ ] Customer can reject professional's completion
-- [ ] Rejection dialog shows reason options
-- [ ] Task returns to "in_progress" status
-- [ ] Professional receives notification
-- [ ] No limit on rejection cycles (for MVP)
+**Overall Progress: 50% Complete** ✅❌
 
-### Negative Review System:
-- [ ] Reviews with ≤3 stars are hidden by default
-- [ ] Hidden reviews become visible when pattern detected
-- [ ] Professional profile shows warning badge if multiple negative reviews
-- [ ] Review visibility logic works correctly
+### ✅ Phase 1: Task Rejection (COMPLETED)
+- [x] Customer can reject professional's completion
+- [x] Rejection dialog shows reason options (4 predefined reasons)
+- [x] Optional description textarea
+- [x] Warning about task status returning to in_progress
+- [x] UI implemented in `confirm-completion-dialog.tsx` (lines 265-310)
+- [x] Translations complete (EN/BG/RU) in `task-completion.ts`
+- [ ] Backend: Task returns to "in_progress" status (needs API)
+- [ ] Backend: Professional receives notification (needs API)
+- [ ] Backend: Track rejection count and reasons (needs DB)
 
-### Scam Reporting:
-- [ ] "Report Scam" button accessible from task/profile
-- [ ] Report dialog with serious warnings
-- [ ] First report logged, no action taken
-- [ ] Second report (different user) suspends account automatically
-- [ ] Suspended professional cannot access platform
+**Location:** `/src/components/tasks/confirm-completion-dialog.tsx`
+**Translation keys:** All exist in `/src/lib/intl/[lang]/task-completion.ts`
 
-### Safety Indicators:
-- [ ] Trust badges display on professional profiles
-- [ ] Warning banner shows when multiple reports/negative reviews
-- [ ] Clean record badge for professionals with no issues
+### ❌ Phase 2: Negative Review System (TODO)
+- [ ] Backend: Reviews with ≤3 stars are hidden by default
+- [ ] Backend: Hidden reviews become visible when pattern detected
+- [ ] Backend: Review visibility calculation logic
+- [ ] UI: Professional profile shows warning badge if multiple negative reviews
+- [ ] UI: Tooltip explaining review visibility system
+- [ ] Component: `NegativeReviewBadge.tsx`
+- [ ] Database: `Review.isVisible`, `Review.visibilityReason` fields
+- [ ] Translations needed
 
-### Translations:
-- [ ] All UI strings in English
-- [ ] All UI strings in Bulgarian
-- [ ] All UI strings in Russian
+### ❌ Phase 3: Scam Reporting (TODO)
+- [ ] UI: "Report Scam" button accessible from task/profile pages
+- [ ] UI: Report dialog with serious warnings
+- [ ] UI: Evidence upload (photos/screenshots)
+- [ ] Backend: First report logged, no action taken
+- [ ] Backend: Second report (different user) suspends account automatically
+- [ ] Backend: Suspended professional cannot access platform
+- [ ] Component: `ReportScamDialog.tsx`
+- [ ] Database: `safety_reports` table
+- [ ] Database: `User.safetyReportsCount`, `User.isSuspended` fields
+- [ ] Translations needed
+
+### ❌ Phase 4: Safety Indicators (TODO)
+- [ ] UI: Trust badges display on professional profiles
+  - [ ] Phone Verified badge
+  - [ ] Email Verified badge
+  - [ ] Clean Safety Record badge
+- [ ] UI: Warning banner shows when multiple reports/negative reviews
+- [ ] UI: Clean record badge for professionals with no issues
+- [ ] Component: `SafetyIndicators.tsx`
+- [ ] Translations needed
+
+### Translation Status
+**Phase 1 (Task Rejection):**
+- [x] All UI strings in English ✅
+- [x] All UI strings in Bulgarian ✅
+- [x] All UI strings in Russian ✅
+
+**Phase 2-4 (Safety Features):**
+- [ ] Safety reporting translations (EN/BG/RU)
+- [ ] Review visibility translations (EN/BG/RU)
+- [ ] Safety indicator translations (EN/BG/RU)
 
 ## Translation Keys Needed
 
@@ -295,18 +336,64 @@ interface User {
 
 ## Estimated Time
 
-2-3 days
+**Remaining work:** 1-2 days
+- Phase 2 (Negative Reviews): 4-5 hours
+- Phase 3 (Scam Reporting): 3-4 hours
+- Phase 4 (Safety Indicators): 2-3 hours
+
+**Completed:** Task Rejection UI (1 day already done ✅)
+
+## Implementation Plan
+
+### Next Steps (Recommended Order):
+
+**Step 1: Phase 4 - Safety Indicators (Easiest)**
+- Start here because it's visual and doesn't need backend
+- Create trust badges for professional profiles
+- Mock data for testing (verified phone, email, clean record)
+- **Why first?** No backend dependencies, immediate visual impact
+
+**Step 2: Phase 2 - Negative Review Visibility**
+- Implement review visibility logic
+- Add warning badges on profiles with negative reviews
+- Mock the pattern detection for now
+- **Why second?** Builds on review system already in place
+
+**Step 3: Phase 3 - Scam Reporting**
+- Create report dialog UI
+- Mock the reporting flow
+- Add "Report" button to profiles/tasks
+- **Why last?** Most complex, needs careful UX considerations
 
 ## Related Tasks
 
-- Task Completion UI (04-task-completion-ui.md) - Will be simplified
-- Review System (needs to be created)
-- Professional Profile Safety Indicators
+- ✅ Task Completion UI (06-customer-review-on-completion.md) - COMPLETED
+- Task 08 - Completion & Review Enforcement - Will use rejection data
+- Professional Profile Pages - Need safety indicators
 
 ## Notes
 
-- This approach requires ZERO manual support for MVP
-- Automated suspension after 2 reports is aggressive but safe
-- Can be refined post-MVP based on user feedback
-- False positive protection: requires multiple reports
-- Negative review hiding protects against single unfair reviews
+### Why This Approach Works:
+- ✅ **ZERO manual support required** - All automated
+- ✅ **Automated suspension after 2 reports** - Aggressive but safe for MVP
+- ✅ **Can be refined post-MVP** based on user feedback
+- ✅ **False positive protection** - Requires multiple reports from different users
+- ✅ **Negative review hiding** - Protects against single unfair/malicious reviews
+- ✅ **Community-driven safety** - Users police the platform
+
+### Current Implementation Note:
+**Phase 1 (Task Rejection)** is already implemented in the customer confirmation dialog. Customer selects "No, there are issues" and sees:
+- 4 predefined rejection reasons
+- Optional description field
+- Warning that task returns to "in_progress"
+- All translations exist for EN/BG/RU
+
+**What's Missing:**
+- Backend API to actually update task status
+- Notification system to alert professional
+- Database tracking of rejection history
+
+**When you implement this task, you'll be adding:**
+1. Review visibility system (hide negative reviews until pattern)
+2. Scam reporting dialog and automated suspension
+3. Trust badges and safety indicators on profiles

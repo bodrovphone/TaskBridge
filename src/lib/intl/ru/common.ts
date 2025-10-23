@@ -50,4 +50,55 @@ export const common = {
   'error.network': 'Ошибка сети. Пожалуйста, проверьте ваше соединение.',
   'error.unauthorized':
     'Вам нужно войти в систему, чтобы получить доступ к этой странице.',
+
+  // Safety & Trust Indicators
+  'safety.phoneVerified': 'Телефон подтвержден',
+  'safety.emailVerified': 'Email подтвержден',
+  'safety.cleanRecord': 'Чистая репутация по безопасности',
+  'safety.hasNegativeReviews': 'Есть негативные отзывы',
+  'safety.multipleReports': 'Множественные жалобы',
+  'safety.negativeReviewsTooltip': 'Этот специалист получил множественные негативные отзывы. Пожалуйста, будьте осторожны.',
+  'safety.multipleReportsTooltip': 'Этот специалист получил множественные жалобы по безопасности от разных пользователей.',
+  'safety.negativeReviewsWarning': 'Этот специалист получил множественные негативные отзывы',
+  'safety.negativeReviewsWarningMessage': 'Множественные клиенты сообщили о проблемах с качеством услуг. Пожалуйста, внимательно изучите отзывы и будьте осторожны при найме.',
+  'safety.multipleReportsWarning': 'Предупреждение о безопасности: Множественные жалобы',
+  'safety.multipleReportsWarningMessage': 'Этот специалист получил множественные жалобы по безопасности от разных клиентов. Мы рекомендуем проявить дополнительную осторожность или выбрать другого специалиста.',
+
+  // Review Visibility
+  'reviews.hiddenReviewsNotice': 'Некоторые отзывы скрыты до проверки',
+  'reviews.hiddenReviewsTooltip': 'Низко оцененные отзывы скрываются до обнаружения шаблона, чтобы защититься от несправедливых единичных отзывов.',
+  'reviews.hiddenCountSingular': '1 скрытый отзыв',
+  'reviews.hiddenCountPlural': '{{count}} скрытых отзыва',
+  'reviews.patternDetected': 'Обнаружен шаблон негативных отзывов',
+  'reviews.allNegativeVisible': 'Все негативные отзывы теперь видимы из-за шаблона проблем.',
+
+  // Scam Reporting
+  'report.button': 'Сообщить о проблеме',
+  'report.dialogTitle': 'Сообщение о нарушении безопасности',
+  'report.dialogDescription': 'Помогите нам поддерживать безопасное сообщество, сообщая о подозрительном поведении или нарушениях.',
+  'report.typeLabel': 'Тип проблемы',
+  'report.descriptionLabel': 'Описание',
+  'report.descriptionPlaceholder': 'Пожалуйста, предоставьте конкретные детали о проблеме...',
+  'report.evidenceLabel': 'Доказательства (Необязательно)',
+  'report.evidenceHint': 'Загрузите скриншоты или фотографии в поддержку вашего сообщения',
+  'report.submitButton': 'Отправить сообщение',
+  'report.cancelButton': 'Отмена',
+  'report.successMessage': 'Сообщение успешно отправлено. Наша команда рассмотрит его в ближайшее время.',
+  'report.errorMessage': 'Не удалось отправить сообщение. Пожалуйста, попробуйте еще раз.',
+  'report.falseReportWarning': 'Ложные сообщения могут привести к действиям против вашего аккаунта. Пожалуйста, сообщайте только о реальных проблемах безопасности.',
+
+  // Report Types
+  'report.type.fraud_scam': 'Мошенничество или попытка обмана',
+  'report.type.threatening_behavior': 'Угрожающее или агрессивное поведение',
+  'report.type.harassment': 'Преследование или травля',
+  'report.type.identity_theft': 'Поддельный профиль или кража личных данных',
+  'report.type.poor_quality': 'Постоянно низкое качество работы',
+  'report.type.no_show': 'Повторяющиеся неявки',
+  'report.type.other': 'Другая проблема безопасности',
+
+  // Suspension
+  'suspension.accountSuspended': 'Аккаунт заблокирован',
+  'suspension.message': 'Этот аккаунт временно заблокирован из-за множественных жалоб по безопасности.',
+  'suspension.appeal': 'Если вы считаете, что это ошибка, вы можете подать апелляцию по электронной почте.',
+  'suspension.contactEmail': 'Контакт: support@taskbridge.com',
 };

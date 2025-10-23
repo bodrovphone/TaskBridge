@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@nextui-org/react";
-import { MessageSquare, Heart, FileText } from "lucide-react";
+import { MessageSquare, Heart, FileText, AlertTriangle } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 
 interface Professional {
@@ -56,8 +56,9 @@ export default function ActionButtonsRow({
      </Button>
     </div>
 
-    {/* Right Column - Save to Favorites */}
+    {/* Right Column */}
     <div className="flex flex-col gap-3">
+     {/* Save to Favorites */}
      <Button
       size="md"
       variant="bordered"

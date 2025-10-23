@@ -1,3 +1,5 @@
+import type { SafetyStatus } from '../components/safety-indicators';
+
 export interface Professional {
   id: string
   name: string
@@ -16,6 +18,10 @@ export interface Professional {
   skills?: string[]
   certifications?: string[]
   languages?: string[]
+  safetyStatus: SafetyStatus
+  // Suspension fields
+  isSuspended?: boolean
+  suspensionReason?: string
 }
 
 export const mockProfessionals: Professional[] = [
@@ -33,10 +39,17 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 25 лв/час",
     description: "Професионално почистване с внимание към детайлите. Използвам екологични препарати и модерна техника за перфектни резултати. Специализирам се в генерално почистване, почистване след ремонт и поддръжка на офиси.",
     verified: true,
-    featured: true
+    featured: true,
+    safetyStatus: {
+      phoneVerified: true,
+      emailVerified: true,
+      cleanSafetyRecord: true,
+      hasNegativeReviews: false,
+      multipleReports: false
+    }
   },
   {
-    id: "2", 
+    id: "2",
     name: "Георги Иванов",
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
     rating: 4.8,
@@ -49,7 +62,14 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 40 лв/час",
     description: "Майстор с богат опит в ВиК и електрически инсталации. Гарантирам качествена работа.",
     verified: true,
-    featured: true
+    featured: true,
+    safetyStatus: {
+      phoneVerified: true,
+      emailVerified: false,
+      cleanSafetyRecord: false,
+      hasNegativeReviews: true,
+      multipleReports: false
+    }
   },
   {
     id: "3",
@@ -68,7 +88,14 @@ export const mockProfessionals: Professional[] = [
     featured: true,
     skills: ["Cambridge Preparation", "Business English", "IELTS/TOEFL"],
     certifications: ["TEFL Certificate", "Cambridge CELTA"],
-    languages: ["Български", "English", "Deutsch"]
+    languages: ["Български", "English", "Deutsch"],
+    safetyStatus: {
+      phoneVerified: true,
+      emailVerified: true,
+      cleanSafetyRecord: true,
+      hasNegativeReviews: false,
+      multipleReports: false
+    }
   },
   {
     id: "4",
@@ -84,7 +111,14 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 35 лв/час",
     description: "Майстор дърводелец и боядисвач с дългогодишен опит. Специализирам се в изработка на мебели по поръчка, вградени шкафове, кухненски мебели и реставрация на антикварни предмети. Използвам само високококачествени материали.",
     verified: true,
-    featured: false
+    featured: false,
+    safetyStatus: {
+      phoneVerified: true,
+      emailVerified: true,
+      cleanSafetyRecord: true,
+      hasNegativeReviews: false,
+      multipleReports: false
+    }
   },
   {
     id: "5",
@@ -102,7 +136,14 @@ export const mockProfessionals: Professional[] = [
     verified: true,
     featured: false,
     skills: ["Сватбена фотография", "Портрети", "Продуктова фотография", "Видеомонтаж"],
-    certifications: ["Adobe Certified Expert"]
+    certifications: ["Adobe Certified Expert"],
+    safetyStatus: {
+      phoneVerified: true,
+      emailVerified: true,
+      cleanSafetyRecord: true,
+      hasNegativeReviews: false,
+      multipleReports: false
+    }
   },
   {
     id: "6",
@@ -118,7 +159,14 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 1 лв/км",
     description: "Бърза и надеждна доставка и преместване. Разполагам с товарен автомобил и помощници.",
     verified: false,
-    featured: false
+    featured: false,
+    safetyStatus: {
+      phoneVerified: false,
+      emailVerified: false,
+      cleanSafetyRecord: false,
+      hasNegativeReviews: false,
+      multipleReports: true
+    }
   },
   {
     id: "7",
@@ -134,6 +182,38 @@ export const mockProfessionals: Professional[] = [
     priceRange: "от 20 лв/час",
     description: "Опитна детегледачка и преподавател. Работя с деца от всички възрасти с много търпение и грижа.",
     verified: true,
-    featured: false
+    featured: false,
+    safetyStatus: {
+      phoneVerified: true,
+      emailVerified: false,
+      cleanSafetyRecord: true,
+      hasNegativeReviews: false,
+      multipleReports: false
+    }
+  },
+  {
+    id: "11",
+    name: "Стефан Маринов",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+    rating: 3.2,
+    reviewsCount: 15,
+    completedJobs: 23,
+    categories: ["delivery", "moving"],
+    location: "София, Надежда",
+    experience: "2 години",
+    availability: "Недостъпен",
+    priceRange: "от 20 лв/час",
+    description: "Акаунтът е временно спрян поради множество сигнали за безопасност.",
+    verified: false,
+    featured: false,
+    isSuspended: true,
+    suspensionReason: "Този акаунт е временно спрян поради множество сигнали за безопасност.",
+    safetyStatus: {
+      phoneVerified: false,
+      emailVerified: false,
+      cleanSafetyRecord: false,
+      hasNegativeReviews: true,
+      multipleReports: true
+    }
   }
 ]

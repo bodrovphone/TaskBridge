@@ -57,6 +57,12 @@ export const users = pgTable('users', {
   ),
   totalReviews: integer('total_reviews').default(0),
   isActive: boolean('is_active').default(true),
+  // Safety & Suspension fields
+  isSuspended: boolean('is_suspended').default(false),
+  suspendedAt: timestamp('suspended_at'),
+  suspensionReason: text('suspension_reason'),
+  safetyReportsCount: integer('safety_reports_count').default(0),
+  canAppealSuspension: boolean('can_appeal_suspension').default(true),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -118,6 +124,37 @@ export const applications = pgTable('applications', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const safetyReports = pgTable('safety_reports', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  reporterId: varchar('reporter_id')
+    .notNull()
+    .references(() => users.id),
+  reportedUserId: varchar('reported_user_id')
+    .notNull()
+    .references(() => users.id),
+  reportType: varchar('report_type', {
+    enum: [
+      'fraud_scam',
+      'threatening_behavior',
+      'harassment',
+      'identity_theft',
+      'off_platform_payment',
+      'poor_quality',
+      'no_show',
+      'other'
+    ],
+  }).notNull(),
+  description: text('description').notNull(),
+  evidenceUrls: text('evidence_urls').array(), // URLs to uploaded evidence images
+  relatedTaskId: uuid('related_task_id').references(() => tasks.id), // Optional task reference
+  status: varchar('status', {
+    enum: ['pending', 'reviewed', 'dismissed', 'action_taken'],
+  }).default('pending'),
+  adminNotes: text('admin_notes'), // For post-MVP manual review
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 export const reviews = pgTable('reviews', {
   id: uuid('id').primaryKey().defaultRandom(),
   taskId: uuid('task_id')
@@ -138,6 +175,15 @@ export const reviews = pgTable('reviews', {
   overallRating: integer('overall_rating').notNull(),
   writtenReview: text('written_review'),
   isPublished: boolean('is_published').default(false),
+  // Review visibility fields for negative review pattern detection
+  isVisible: boolean('is_visible').default(true),
+  visibilityReason: varchar('visibility_reason', {
+    enum: [
+      'visible_high_rating',      // ≥4 stars, always visible
+      'visible_pattern_detected',  // ≤3 stars, pattern of 3+ negatives found
+      'hidden_pending_pattern',    // ≤3 stars, hidden until pattern emerges
+    ],
+  }).default('visible_high_rating'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -149,6 +195,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   applications: many(applications),
   givenReviews: many(reviews, { relationName: 'givenReviews' }),
   receivedReviews: many(reviews, { relationName: 'receivedReviews' }),
+  submittedReports: many(safetyReports, { relationName: 'submittedReports' }),
+  receivedReports: many(safetyReports, { relationName: 'receivedReports' }),
 }));
 
 export const tasksRelations = relations(tasks, ({ one, many }) => ({
@@ -194,6 +242,23 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
   }),
 }));
 
+export const safetyReportsRelations = relations(safetyReports, ({ one }) => ({
+  reporter: one(users, {
+    fields: [safetyReports.reporterId],
+    references: [users.id],
+    relationName: 'submittedReports',
+  }),
+  reportedUser: one(users, {
+    fields: [safetyReports.reportedUserId],
+    references: [users.id],
+    relationName: 'receivedReports',
+  }),
+  relatedTask: one(tasks, {
+    fields: [safetyReports.relatedTaskId],
+    references: [tasks.id],
+  }),
+}));
+
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
@@ -218,6 +283,12 @@ export const insertReviewSchema = createInsertSchema(reviews).omit({
   updatedAt: true,
 });
 
+export const insertSafetyReportSchema = createInsertSchema(safetyReports).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type UpsertUser = typeof users.$inferInsert;
@@ -231,6 +302,9 @@ export type InsertApplication = z.infer<typeof insertApplicationSchema>;
 
 export type Review = typeof reviews.$inferSelect;
 export type InsertReview = z.infer<typeof insertReviewSchema>;
+
+export type SafetyReport = typeof safetyReports.$inferSelect;
+export type InsertSafetyReport = z.infer<typeof insertSafetyReportSchema>;
 
 // Task categories
 export const TASK_CATEGORIES = {

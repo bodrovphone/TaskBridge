@@ -49,4 +49,55 @@ export const common = {
   'error.generic': 'Something went wrong. Please try again.',
   'error.network': 'Network error. Please check your connection.',
   'error.unauthorized': 'You need to log in to access this page.',
+
+  // Safety & Trust Indicators
+  'safety.phoneVerified': 'Phone Verified',
+  'safety.emailVerified': 'Email Verified',
+  'safety.cleanRecord': 'Clean Safety Record',
+  'safety.hasNegativeReviews': 'Has Negative Reviews',
+  'safety.multipleReports': 'Multiple Reports',
+  'safety.negativeReviewsTooltip': 'This professional has received multiple negative reviews. Please exercise caution.',
+  'safety.multipleReportsTooltip': 'This professional has received multiple safety reports from different users.',
+  'safety.negativeReviewsWarning': 'This professional has received multiple negative reviews',
+  'safety.negativeReviewsWarningMessage': 'Multiple customers have reported issues with service quality. Please review feedback carefully and exercise caution when hiring.',
+  'safety.multipleReportsWarning': 'Safety Alert: Multiple Reports',
+  'safety.multipleReportsWarningMessage': 'This professional has received multiple safety reports from different customers. We recommend proceeding with extra caution or choosing another professional.',
+
+  // Review Visibility
+  'reviews.hiddenReviewsNotice': 'Some reviews are hidden pending verification',
+  'reviews.hiddenReviewsTooltip': 'Low-rated reviews are hidden until a pattern is detected to protect against unfair single reviews.',
+  'reviews.hiddenCountSingular': '1 review hidden',
+  'reviews.hiddenCountPlural': '{{count}} reviews hidden',
+  'reviews.patternDetected': 'Pattern of negative reviews detected',
+  'reviews.allNegativeVisible': 'All negative reviews are now visible due to a pattern of issues.',
+
+  // Scam Reporting
+  'report.button': 'Report Issue',
+  'report.dialogTitle': 'Report Safety Concern',
+  'report.dialogDescription': 'Help us maintain a safe community by reporting suspicious behavior or policy violations.',
+  'report.typeLabel': 'Type of Issue',
+  'report.descriptionLabel': 'Description',
+  'report.descriptionPlaceholder': 'Please provide specific details about the issue...',
+  'report.evidenceLabel': 'Evidence (Optional)',
+  'report.evidenceHint': 'Upload screenshots or photos to support your report',
+  'report.submitButton': 'Submit Report',
+  'report.cancelButton': 'Cancel',
+  'report.successMessage': 'Report submitted successfully. Our team will review it promptly.',
+  'report.errorMessage': 'Failed to submit report. Please try again.',
+  'report.falseReportWarning': 'False reports may result in action against your account. Please only report genuine safety concerns.',
+
+  // Report Types
+  'report.type.fraud_scam': 'Fraud or Scam Attempt',
+  'report.type.threatening_behavior': 'Threatening or Aggressive Behavior',
+  'report.type.harassment': 'Harassment or Bullying',
+  'report.type.identity_theft': 'Fake Profile or Identity Theft',
+  'report.type.poor_quality': 'Consistently Poor Work Quality',
+  'report.type.no_show': 'Repeated No-Shows',
+  'report.type.other': 'Other Safety Concern',
+
+  // Suspension
+  'suspension.accountSuspended': 'Account Suspended',
+  'suspension.message': 'This account has been temporarily suspended due to multiple safety reports.',
+  'suspension.appeal': 'If you believe this is a mistake, you can appeal via email.',
+  'suspension.contactEmail': 'Contact: support@taskbridge.com',
 };

@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle } from 'lucide-react'
+import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
+import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
+import { CancelTaskDialog } from '@/components/tasks/cancel-task-dialog'
 
 interface PostedTaskCardProps {
   id: string
@@ -43,6 +45,12 @@ function PostedTaskCard({
   const { t } = useTranslation()
   const router = useRouter()
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [showReportDialog, setShowReportDialog] = useState(false)
+  const [showCancelDialog, setShowCancelDialog] = useState(false)
+
+  // @todo INTEGRATION: Fetch from user's profile/stats
+  const cancellationsThisMonth = 0 // Mock data
+  const maxCancellationsPerMonth = 1 // As per PRD
 
   const getStatusColor = (taskStatus: typeof status) => {
     switch (taskStatus) {
@@ -93,16 +101,34 @@ function PostedTaskCard({
     router.refresh()
   }
 
+  const handleCancelTask = (reason: string, description?: string) => {
+    console.log('Cancelling task:', id, { reason, description })
+    // @todo INTEGRATION: Call API to cancel task (status = 'cancelled')
+    // @todo INTEGRATION: Increment user's cancellationsThisMonth counter
+    // @todo INTEGRATION: If exceeds limit, trigger account action/review
+    setShowCancelDialog(false)
+    router.refresh()
+  }
+
+  const handleReopenTask = () => {
+    if (confirm(t('postedTasks.reopenTaskConfirm'))) {
+      console.log('Reopening task:', id)
+      // @todo: Call API to reopen task (status = 'open', clear selectedProfessionalId)
+      router.refresh()
+    }
+  }
+
   return (
     <Card
-      isPressable
-      onPress={() => router.push(`/${lang}/tasks/${id}`)}
-      className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] h-full flex flex-col"
+      className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-all duration-300 h-full flex flex-col cursor-default"
     >
       <CardBody className="p-6 flex flex-col h-full">
         {/* Header with title and status */}
         <div className="flex items-start justify-between gap-3 mb-3">
-          <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 flex-1">
+          <h3
+            className="text-xl font-semibold text-gray-900 line-clamp-2 flex-1 cursor-pointer hover:text-primary transition-colors"
+            onClick={() => router.push(`/${lang}/tasks/${id}`)}
+          >
             {title}
           </h3>
           <Chip
@@ -177,19 +203,105 @@ function PostedTaskCard({
         </div>
 
         {/* Action buttons */}
-        <div className="flex gap-2 mt-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex gap-2 mt-auto">
           {status === 'pending_customer_confirmation' ? (
-            <Button
-              size="sm"
-              color="success"
-              startContent={<CheckCircle className="w-4 h-4" />}
-              onPress={() => setShowConfirmDialog(true)}
-              className="flex-1 font-semibold"
-            >
-              {t('taskCompletion.confirmCompletion')}
-            </Button>
+            <>
+              {/* Awaiting Confirmation - Confirm button */}
+              <Button
+                size="sm"
+                color="success"
+                startContent={<CheckCircle className="w-4 h-4" />}
+                onPress={() => setShowConfirmDialog(true)}
+                className="flex-1 font-semibold"
+              >
+                {t('taskCompletion.confirmCompletion')}
+              </Button>
+              {acceptedApplication && (
+                <Button
+                  size="sm"
+                  variant="light"
+                  color="danger"
+                  startContent={<ShieldAlert className="w-4 h-4" />}
+                  onPress={() => setShowReportDialog(true)}
+                >
+                  {t('postedTasks.reportIssue')}
+                </Button>
+              )}
+            </>
+          ) : status === 'in_progress' ? (
+            <>
+              {/* In Progress - View Details + Cancel Task + Report */}
+              <Button
+                size="sm"
+                variant="flat"
+                color="primary"
+                startContent={<Eye className="w-4 h-4" />}
+                onPress={() => router.push(`/${lang}/tasks/${id}`)}
+                className="flex-1"
+              >
+                {t('postedTasks.viewDetails')}
+              </Button>
+              <Button
+                size="sm"
+                variant="flat"
+                color="default"
+                startContent={<XCircle className="w-4 h-4" />}
+                onPress={() => setShowCancelDialog(true)}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700"
+              >
+                {t('postedTasks.cancelTask')}
+              </Button>
+              {acceptedApplication && (
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="danger"
+                  startContent={<ShieldAlert className="w-4 h-4" />}
+                  onPress={() => setShowReportDialog(true)}
+                  className="bg-red-50 hover:bg-red-100 text-red-600"
+                >
+                  {t('postedTasks.reportIssue')}
+                </Button>
+              )}
+            </>
+          ) : status === 'completed' || status === 'cancelled' ? (
+            <>
+              {/* Completed/Cancelled - View Details + Reopen */}
+              <Button
+                size="sm"
+                variant="flat"
+                color="primary"
+                startContent={<Eye className="w-4 h-4" />}
+                onPress={() => router.push(`/${lang}/tasks/${id}`)}
+                className="flex-1"
+              >
+                {t('postedTasks.viewDetails')}
+              </Button>
+              <Button
+                size="sm"
+                variant="bordered"
+                color="secondary"
+                startContent={<RotateCcw className="w-4 h-4" />}
+                onPress={handleReopenTask}
+              >
+                {t('postedTasks.reopenTask')}
+              </Button>
+              {status === 'completed' && acceptedApplication && (
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="danger"
+                  startContent={<ShieldAlert className="w-4 h-4" />}
+                  onPress={() => setShowReportDialog(true)}
+                  className="bg-red-50 hover:bg-red-100 text-red-600"
+                >
+                  {t('postedTasks.reportIssue')}
+                </Button>
+              )}
+            </>
           ) : (
             <>
+              {/* Open - View Details + View Applications */}
               <Button
                 size="sm"
                 variant="flat"
@@ -223,8 +335,34 @@ function PostedTaskCard({
         onClose={() => setShowConfirmDialog(false)}
         onConfirm={handleConfirmComplete}
         onReject={handleRejectComplete}
+        onReportProfessional={() => {
+          setShowConfirmDialog(false)
+          setShowReportDialog(true)
+        }}
         professionalName={acceptedApplication?.professionalName || ''}
         taskTitle={title}
+      />
+
+      {/* Report Scam Dialog */}
+      {acceptedApplication && (
+        <ReportScamDialog
+          isOpen={showReportDialog}
+          onClose={() => setShowReportDialog(false)}
+          reportedUserId={acceptedApplication.professionalId}
+          reportedUserName={acceptedApplication.professionalName}
+          relatedTaskId={id}
+        />
+      )}
+
+      {/* Cancel Task Dialog */}
+      <CancelTaskDialog
+        isOpen={showCancelDialog}
+        onClose={() => setShowCancelDialog(false)}
+        onConfirm={handleCancelTask}
+        taskTitle={title}
+        professionalName={acceptedApplication?.professionalName}
+        cancellationsThisMonth={cancellationsThisMonth}
+        maxCancellationsPerMonth={maxCancellationsPerMonth}
       />
     </Card>
   )

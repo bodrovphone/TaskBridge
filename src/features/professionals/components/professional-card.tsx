@@ -13,6 +13,7 @@ import FallbackAvatar from "@/components/ui/fallback-avatar"
 import { getCategoryLabelBySlug } from '@/features/categories'
 import { LocaleLink } from '@/components/common/locale-link'
 import type { Professional } from '../lib/mock-professionals'
+import { SafetyIndicators } from './safety-indicators'
 
 interface ProfessionalCardProps {
  professional: Professional
@@ -70,6 +71,11 @@ export default function ProfessionalCard({ professional, featured = false }: Pro
          <span className="font-bold text-gray-900">{professional.rating}</span>
          <span className="text-gray-600 text-sm">({professional.reviewsCount})</span>
         </div>
+        {/* Safety Indicators - Compact Mode */}
+        <SafetyIndicators
+         safetyStatus={professional.safetyStatus}
+         mode="compact"
+        />
        </div>
        <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg">
         <Briefcase size={14} className="text-blue-500" />

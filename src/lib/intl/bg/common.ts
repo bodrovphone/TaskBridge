@@ -49,4 +49,55 @@ export const common = {
   'error.generic': 'Нещо се обърка. Моля, опитайте отново.',
   'error.network': 'Грешка в мрежата. Моля, проверете връзката си.',
   'error.unauthorized': 'Трябва да влезете, за да достъпите тази страница.',
+
+  // Safety & Trust Indicators
+  'safety.phoneVerified': 'Потвърден телефон',
+  'safety.emailVerified': 'Потвърден имейл',
+  'safety.cleanRecord': 'Чист профил за безопасност',
+  'safety.hasNegativeReviews': 'Има негативни отзиви',
+  'safety.multipleReports': 'Множество сигнали',
+  'safety.negativeReviewsTooltip': 'Този специалист е получил множество негативни отзиви. Моля, бъдете внимателни.',
+  'safety.multipleReportsTooltip': 'Този специалист е получил множество сигнали за безопасност от различни потребители.',
+  'safety.negativeReviewsWarning': 'Този специалист е получил множество негативни отзиви',
+  'safety.negativeReviewsWarningMessage': 'Множество клиенти са докладвали проблеми с качеството на услугата. Моля, прегледайте отзивите внимателно и бъдете предпазливи при наемане.',
+  'safety.multipleReportsWarning': 'Предупреждение за безопасност: Множество сигнали',
+  'safety.multipleReportsWarningMessage': 'Този специалист е получил множество сигнали за безопасност от различни клиенти. Препоръчваме да продължите с допълнително внимание или да изберете друг специалист.',
+
+  // Review Visibility
+  'reviews.hiddenReviewsNotice': 'Някои отзиви са скрити до потвърждение',
+  'reviews.hiddenReviewsTooltip': 'Ниско оценени отзиви се скриват докато не се открие модел, за да се защитят от несправедливи единични отзиви.',
+  'reviews.hiddenCountSingular': '1 скрит отзив',
+  'reviews.hiddenCountPlural': '{{count}} скрити отзива',
+  'reviews.patternDetected': 'Открит е модел на негативни отзиви',
+  'reviews.allNegativeVisible': 'Всички негативни отзиви сега са видими поради модел на проблеми.',
+
+  // Scam Reporting
+  'report.button': 'Докладвай проблем',
+  'report.dialogTitle': 'Докладване на опасност',
+  'report.dialogDescription': 'Помогнете ни да поддържаме безопасна общност, като докладвате подозрително поведение или нарушения.',
+  'report.typeLabel': 'Тип проблем',
+  'report.descriptionLabel': 'Описание',
+  'report.descriptionPlaceholder': 'Моля, предоставете конкретни детайли за проблема...',
+  'report.evidenceLabel': 'Доказателства (По избор)',
+  'report.evidenceHint': 'Качете екранни снимки или снимки в подкрепа на доклада',
+  'report.submitButton': 'Изпращане на доклад',
+  'report.cancelButton': 'Отказ',
+  'report.successMessage': 'Докладът е изпратен успешно. Екипът ни ще го прегледа незабавно.',
+  'report.errorMessage': 'Неуспешно изпращане на доклада. Моля, опитайте отново.',
+  'report.falseReportWarning': 'Неверни доклади могат да доведат до действия срещу вашия акаунт. Моля, докладвайте само истински проблеми с безопасността.',
+
+  // Report Types
+  'report.type.fraud_scam': 'Измама или опит за измама',
+  'report.type.threatening_behavior': 'Заплашително или агресивно поведение',
+  'report.type.harassment': 'Тормоз или тормозене',
+  'report.type.identity_theft': 'Фалшив профил или кражба на самоличност',
+  'report.type.poor_quality': 'Постоянно лошо качество на работата',
+  'report.type.no_show': 'Повтарящи се неявявания',
+  'report.type.other': 'Друга опасност',
+
+  // Suspension
+  'suspension.accountSuspended': 'Акаунт спрян',
+  'suspension.message': 'Този акаунт е временно спрян поради множество сигнали за безопасност.',
+  'suspension.appeal': 'Ако смятате, че това е грешка, можете да подадете жалба по имейл.',
+  'suspension.contactEmail': 'Контакт: support@taskbridge.com',
 };

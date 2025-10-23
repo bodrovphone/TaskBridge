@@ -67,6 +67,8 @@ export const taskCompletion = {
   'taskCompletion.reject.warning': 'Задачата ще се върне към "В процес". Можете да обсъдите със специалиста и той може да преработи.',
   'taskCompletion.reject.disclaimer': 'Тази задача ще се върне към статус "В процес" и може да стане видима отново за други специалисти, ако работата не може да бъде завършена с настоящия специалист.',
   'taskCompletion.reject.button': 'Отхвърли',
+  'taskCompletion.reject.seriousIssue': 'Преживяхте измама или проблем с безопасността?',
+  'taskCompletion.reject.reportHint': 'Докладвайте сериозни нарушения като измама, заплахи или агресивно поведение',
 
   // Pending Confirmation Banner
   'taskCompletion.pending.waitingCustomer': 'Изчаква потвърждение от клиента',

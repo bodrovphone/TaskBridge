@@ -67,6 +67,8 @@ export const taskCompletion = {
   'taskCompletion.reject.warning': 'Task will return to "In Progress". You can discuss with the professional and they can rework it.',
   'taskCompletion.reject.disclaimer': 'This task will return to "In Progress" status and may become visible to other professionals again if work cannot be completed with the current professional.',
   'taskCompletion.reject.button': 'Reject',
+  'taskCompletion.reject.seriousIssue': 'Experienced fraud or safety concerns?',
+  'taskCompletion.reject.reportHint': 'Report serious violations like fraud, scams, or threatening behavior',
 
   // Pending Confirmation Banner
   'taskCompletion.pending.waitingCustomer': 'Waiting for Customer Confirmation',

@@ -3,6 +3,8 @@
 import { Avatar, Badge, Chip } from "@nextui-org/react";
 import { Star, MapPin, Clock, CheckCircle, Shield, Phone, Users } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
+import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
 
 interface Professional {
  id: string;
@@ -21,6 +23,7 @@ interface Professional {
   id: boolean;
   address: boolean;
  };
+ safetyStatus: SafetyStatus;
 }
 
 interface ProfessionalHeaderProps {
@@ -30,9 +33,23 @@ interface ProfessionalHeaderProps {
 export default function ProfessionalHeader({ professional }: ProfessionalHeaderProps) {
  const { t } = useTranslation();
 
+ // Determine which warning to show (prioritize multiple reports over negative reviews)
+ const warningType: WarningType | null = professional.safetyStatus.multipleReports
+  ? 'multiple_reports'
+  : professional.safetyStatus.hasNegativeReviews
+  ? 'negative_reviews'
+  : null;
+
  return (
-  <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
-   <div className="flex flex-col md:flex-row gap-6">
+  <div className="space-y-4">
+   {/* Safety Warning Banner (if applicable) */}
+   {warningType && (
+    <SafetyWarningBanner type={warningType} />
+   )}
+
+   {/* Main Header Card */}
+   <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
+    <div className="flex flex-col md:flex-row gap-6">
     {/* Avatar and Online Status */}
     <div className="relative flex-shrink-0">
      {professional.isOnline ? (
@@ -63,40 +80,20 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
       {/* Name and Title */}
       <div>
-       <div className="flex items-center gap-3 mb-2">
-        <h1 className="text-3xl font-bold text-gray-900">
-         {professional.name}
-        </h1>
-        {/* Verification Badges */}
-        <div className="flex gap-1">
-         {professional.isVerified.phone && (
-          <Chip
-           startContent={<Phone size={12} />}
-           size="sm"
-           color="success"
-           variant="flat"
-           className="text-xs"
-          >
-           {t('professionalDetail.verified.phone')}
-          </Chip>
-         )}
-         {professional.isVerified.id && (
-          <Chip
-           startContent={<Shield size={12} />}
-           size="sm"
-           color="primary"
-           variant="flat"
-           className="text-xs"
-          >
-           {t('professionalDetail.verified.id')}
-          </Chip>
-         )}
-        </div>
-       </div>
-       
+       <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        {professional.name}
+       </h1>
+
        <p className="text-lg text-gray-600 mb-4">
         {professional.title}
        </p>
+
+       {/* Safety & Verification Indicators */}
+       <SafetyIndicators
+        safetyStatus={professional.safetyStatus}
+        mode="badges"
+        className="mb-4"
+       />
 
        {/* Rating and Location */}
        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
@@ -140,6 +137,7 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
       </div>
      </div>
     </div>
+   </div>
    </div>
   </div>
  );

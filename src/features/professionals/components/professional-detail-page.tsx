@@ -7,6 +7,8 @@ import ServicesSection from './sections/services-section';
 import PortfolioGallery from './sections/portfolio-gallery';
 import CompletedTasksSection from './sections/completed-tasks-section';
 import ReviewsSection from './sections/reviews-section';
+import { SuspensionBanner } from '@/components/safety/suspension-banner';
+import { mockProfessionals } from '../lib/mock-professionals';
 
 interface ProfessionalDetailPageProps {
  professionalId: string;
@@ -15,24 +17,245 @@ interface ProfessionalDetailPageProps {
 export default function ProfessionalDetailPage({ professionalId }: ProfessionalDetailPageProps) {
  const { t } = useTranslation();
 
+ // Find the professional from mock data, fallback to first one
+ const professionalFromList = mockProfessionals.find(p => p.id === professionalId) || mockProfessionals[0];
+
+ // Different review scenarios based on professional ID
+ const getReviewsForProfessional = (id: string) => {
+  // Professional #2 - Has hidden negative reviews (pattern not yet detected)
+  if (id === '2') {
+   return [
+    {
+     id: "1",
+     clientName: "Димитър В.",
+     rating: 5,
+     comment: "Отлична работа! Всичко беше свършено професионално и бързо.",
+     date: "преди 1 седмица",
+     verified: true,
+     anonymous: false,
+     isVisible: true,
+     visibilityReason: 'visible_high_rating' as const
+    },
+    {
+     id: "2",
+     clientName: "Анонимен потребител",
+     rating: 2,
+     comment: "Не дойде на уговореното време. Трябваше да го чакам 2 часа.",
+     date: "преди 2 седмици",
+     verified: true,
+     anonymous: true,
+     isVisible: false, // Hidden - only 1st negative review
+     visibilityReason: 'hidden_pending_pattern' as const
+    },
+    {
+     id: "3",
+     clientName: "Мария Н.",
+     rating: 4,
+     comment: "Добра работа, но можеше да бъде по-внимателен с детайлите.",
+     date: "преди 3 седмици",
+     verified: true,
+     anonymous: false,
+     isVisible: true,
+     visibilityReason: 'visible_high_rating' as const
+    },
+    {
+     id: "4",
+     clientName: "Анонимен потребител",
+     rating: 3,
+     comment: "Среднo качество. Очаквах повече за тази цена.",
+     date: "преди 1 месец",
+     verified: false,
+     anonymous: true,
+     isVisible: false, // Hidden - only 2nd negative review
+     visibilityReason: 'hidden_pending_pattern' as const
+    },
+    {
+     id: "5",
+     clientName: "Стефан К.",
+     rating: 5,
+     comment: "Много доволен! Професионално отношение и качествена работа.",
+     date: "преди 1 месец",
+     verified: true,
+     anonymous: false,
+     isVisible: true,
+     visibilityReason: 'visible_high_rating' as const
+    }
+   ];
+  }
+
+  // Professional #6 - Has pattern detected (3+ negative reviews, all visible)
+  if (id === '6') {
+   return [
+    {
+     id: "1",
+     clientName: "Иван С.",
+     rating: 5,
+     comment: "Добър шофьор, аккуратно шофиране.",
+     date: "преди 1 седмица",
+     verified: true,
+     anonymous: false,
+     isVisible: true,
+     visibilityReason: 'visible_high_rating' as const
+    },
+    {
+     id: "2",
+     clientName: "Анонимен потребител",
+     rating: 2,
+     comment: "Закъсня с 1 час и не се извини. Мебелите бяха повредени по време на преместването.",
+     date: "преди 2 седмици",
+     verified: true,
+     anonymous: true,
+     isVisible: true, // Visible - pattern detected
+     visibilityReason: 'visible_pattern_detected' as const
+    },
+    {
+     id: "3",
+     clientName: "Елена Д.",
+     rating: 1,
+     comment: "Много лош опит. Не се яви на уговореното време и не отговаряше на телефона.",
+     date: "преди 3 седмици",
+     verified: true,
+     anonymous: false,
+     isVisible: true, // Visible - pattern detected
+     visibilityReason: 'visible_pattern_detected' as const
+    },
+    {
+     id: "4",
+     clientName: "Георги М.",
+     rating: 3,
+     comment: "Работата беше свършена, но с много забавяне и не както се бяхме договорили.",
+     date: "преди 1 месец",
+     verified: true,
+     anonymous: false,
+     isVisible: true, // Visible - pattern detected
+     visibilityReason: 'visible_pattern_detected' as const
+    },
+    {
+     id: "5",
+     clientName: "Анонимен потребител",
+     rating: 4,
+     comment: "Добре, но можеше да бъде по-внимателен с нещата.",
+     date: "преди 1 месец",
+     verified: false,
+     anonymous: true,
+     isVisible: true,
+     visibilityReason: 'visible_high_rating' as const
+    },
+    {
+     id: "6",
+     clientName: "Петър В.",
+     rating: 2,
+     comment: "Не препоръчвам. Много неорганизиран и непрофесионален.",
+     date: "преди 2 месеца",
+     verified: true,
+     anonymous: false,
+     isVisible: true, // Visible - pattern detected (4th negative)
+     visibilityReason: 'visible_pattern_detected' as const
+    }
+   ];
+  }
+
+  // Default reviews for other professionals
+  return [
+   {
+    id: "1",
+    clientName: "Анна С.",
+    rating: 5,
+    comment: "Изключително доволна от услугата! Мария е много професионална и внимателна към детайлите.",
+    date: "преди 1 седмица",
+    verified: true,
+    anonymous: false,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   },
+   {
+    id: "2",
+    clientName: "Анонимен потребител",
+    rating: 5,
+    comment: "Перфектно почистване! Домът изглеждаше като нов. Мария дойде с всички необходими препарати и оборудване. Препоръчвам я на 100%!",
+    date: "преди 2 седмици",
+    verified: true,
+    anonymous: true,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   },
+   {
+    id: "3",
+    clientName: "Петър М.",
+    rating: 5,
+    comment: "Много сериозно отношение към работата. Дойде точно навреме, работи бързо и качествено. Ще я повиквам отново със сигурност.",
+    date: "преди 3 седмици",
+    verified: true,
+    anonymous: false,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   },
+   {
+    id: "4",
+    clientName: "Анонимен потребител",
+    rating: 4,
+    comment: "Добра работа в цялост. Единственото, което бих искал е малко повече внимание към банята, но иначе съм доволен.",
+    date: "преди 1 месец",
+    verified: false,
+    anonymous: true,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   },
+   {
+    id: "5",
+    clientName: "Елена Д.",
+    rating: 5,
+    comment: "Невероятна! Почисти места, които дори аз не знаех, че съществуват. Много внимателна и професионална. Благодаря!",
+    date: "преди 1 месец",
+    verified: true,
+    anonymous: false,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   },
+   {
+    id: "6",
+    clientName: "Анонимен потребител",
+    rating: 5,
+    comment: "Отлично обслужване и резултат. Цената беше справедлива за качеството на услугата. Определено ще я препоръчам на приятели.",
+    date: "преди 2 месеца",
+    verified: true,
+    anonymous: true,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   },
+   {
+    id: "7",
+    clientName: "Иван К.",
+    rating: 4,
+    comment: "Солидна работа. Дойде навреме, работи внимателно. Малко бавно, но крайният резултат беше много добър.",
+    date: "преди 2 месеца",
+    verified: true,
+    anonymous: false,
+    isVisible: true,
+    visibilityReason: 'visible_high_rating' as const
+   }
+  ];
+ };
+
  // Mock professional data - in real app would come from API/props
  const mockProfessional = {
   id: professionalId,
-  name: "Мария Петрова",
-  title: "Професионално почистване и домашни услуги", 
-  avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face",
-  rating: 4.9,
-  reviewCount: 127,
-  completedTasks: 89,
-  yearsExperience: 5,
+  name: professionalFromList.name,
+  title: professionalFromList.description.slice(0, 80), // Use first part of description as title
+  avatar: professionalFromList.avatar,
+  rating: professionalFromList.rating,
+  reviewCount: professionalFromList.reviewsCount,
+  completedTasks: professionalFromList.completedJobs,
+  yearsExperience: parseInt(professionalFromList.experience) || 5,
   responseTime: "2 часа",
-  location: "София",
+  location: professionalFromList.location,
   isOnline: true,
   isVerified: {
-   phone: true,
-   id: true,
+   phone: professionalFromList.safetyStatus.phoneVerified,
+   id: professionalFromList.verified,
    address: true
   },
+  safetyStatus: professionalFromList.safetyStatus,
   bio: "Професионален домашен помощник с 5 години опит. Специализирам се в дълбоко почистване, редовно поддържане на домове и офиси. Работя с екологично чисти препарати и собствено оборудване.",
   services: [
    {
@@ -90,71 +313,7 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
     tags: ["Прозорци", "Стъкла", "Бърза услуга"]
    }
   ],
-  reviews: [
-   {
-    id: "1",
-    clientName: "Анна С.",
-    rating: 5,
-    comment: "Изключително доволна от услугата! Мария е много професионална и внимателна към детайлите.",
-    date: "преди 1 седмица",
-    verified: true,
-    anonymous: false
-   },
-   {
-    id: "2",
-    clientName: "Анонимен потребител",
-    rating: 5,
-    comment: "Перфектно почистване! Домът изглеждаше като нов. Мария дойде с всички необходими препарати и оборудване. Препоръчвам я на 100%!",
-    date: "преди 2 седмици",
-    verified: true,
-    anonymous: true
-   },
-   {
-    id: "3",
-    clientName: "Петър М.",
-    rating: 5,
-    comment: "Много сериозно отношение към работата. Дойде точно навреме, работи бързо и качествено. Ще я повиквам отново със сигурност.",
-    date: "преди 3 седмици",
-    verified: true,
-    anonymous: false
-   },
-   {
-    id: "4",
-    clientName: "Анонимен потребител",
-    rating: 4,
-    comment: "Добра работа в цялост. Единственото, което бих искал е малко повече внимание към банята, но иначе съм доволен.",
-    date: "преди 1 месец",
-    verified: false,
-    anonymous: true
-   },
-   {
-    id: "5",
-    clientName: "Елена Д.",
-    rating: 5,
-    comment: "Невероятна! Почисти места, които дори аз не знаех, че съществуват. Много внимателна и професионална. Благодаря!",
-    date: "преди 1 месец",
-    verified: true,
-    anonymous: false
-   },
-   {
-    id: "6",
-    clientName: "Анонимен потребител",
-    rating: 5,
-    comment: "Отлично обслужване и резултат. Цената беше справедлива за качеството на услугата. Определено ще я препоръчам на приятели.",
-    date: "преди 2 месеца",
-    verified: true,
-    anonymous: true
-   },
-   {
-    id: "7",
-    clientName: "Иван К.",
-    rating: 4,
-    comment: "Солидна работа. Дойде навреме, работи внимателно. Малко бавно, но крайният резултат беше много добър.",
-    date: "преди 2 месеца",
-    verified: true,
-    anonymous: false
-   }
-  ],
+  reviews: getReviewsForProfessional(professionalId),
   contactSettings: {
    allowDirectContact: true,
    preferredHours: "9:00 - 18:00",
@@ -247,48 +406,53 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
  };
 
  return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
-   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div className="space-y-8">
-     {/* Professional Header */}
-     <ProfessionalHeader professional={mockProfessional} />
+   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+     <div className="space-y-8">
+      {/* Suspension Banner (if account is suspended) */}
+      {professionalFromList.isSuspended && (
+       <SuspensionBanner suspensionReason={professionalFromList.suspensionReason} />
+      )}
 
-     {/* Two Column Layout - Equal Height */}
-     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-stretch">
-      {/* Left Column - Action Buttons + Services */}
-      <div className="flex flex-col gap-8">
-       <ActionButtonsRow
-        professional={mockProfessional}
-        onProposeTask={() => console.log('Propose task clicked')}
-        onAskQuestion={() => console.log('Ask question clicked')}
-        onSaveToFavorites={() => console.log('Save to favorites clicked')}
-       />
-       <ServicesSection services={mockProfessional.services} />
+      {/* Professional Header */}
+      <ProfessionalHeader professional={mockProfessional} />
+
+      {/* Two Column Layout - Equal Height */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-stretch">
+       {/* Left Column - Action Buttons + Services */}
+       <div className="flex flex-col gap-8">
+        <ActionButtonsRow
+         professional={mockProfessional}
+         onProposeTask={() => console.log('Propose task clicked')}
+         onAskQuestion={() => console.log('Ask question clicked')}
+         onSaveToFavorites={() => console.log('Save to favorites clicked')}
+        />
+        <ServicesSection services={mockProfessional.services} />
+       </div>
+
+       {/* Right Column - About (Full Height) */}
+       <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
+        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+         {t('professionalDetail.about')}
+        </h3>
+        <p className="text-gray-700 leading-relaxed flex-1">
+         {mockProfessional.bio}
+        </p>
+       </div>
       </div>
 
-      {/* Right Column - About (Full Height) */}
-      <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
-       <h3 className="text-2xl font-bold text-gray-900 mb-4">
-        {t('professionalDetail.about')}
-       </h3>
-       <p className="text-gray-700 leading-relaxed flex-1">
-        {mockProfessional.bio}
-       </p>
+      {/* Reviews & Ratings - Centered Full Width */}
+      <div id="reviews-section">
+       <ReviewsSection reviews={mockProfessional.reviews} />
       </div>
+
+      {/* Portfolio Gallery - My Demos */}
+      <PortfolioGallery portfolio={mockProfessional.portfolio} />
+
+      {/* Completed Tasks */}
+      <CompletedTasksSection completedTasks={mockProfessional.completedTasksList} />
      </div>
-
-     {/* Reviews & Ratings - Centered Full Width */}
-     <div id="reviews-section">
-      <ReviewsSection reviews={mockProfessional.reviews} />
-     </div>
-
-     {/* Portfolio Gallery - My Demos */}
-     <PortfolioGallery portfolio={mockProfessional.portfolio} />
-
-     {/* Completed Tasks */}
-     <CompletedTasksSection completedTasks={mockProfessional.completedTasksList} />
     </div>
    </div>
-  </div>
  );
 }
