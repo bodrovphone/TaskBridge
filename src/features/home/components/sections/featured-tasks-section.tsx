@@ -1,11 +1,15 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
+import { Button as NextUIButton } from "@nextui-org/react";
 import TaskCard from "@/components/ui/task-card";
 import { LocaleLink } from "@/components/common/locale-link";
 import { useTranslation } from 'react-i18next';
 import { mockTasks } from '@/lib/mock-data';
-import { 
+import { useCreateTask } from '@/hooks/use-create-task';
+import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews';
+import AuthSlideOver from '@/components/ui/auth-slide-over';
+import {
  FileText,
  Plus,
  ArrowRight
@@ -13,6 +17,22 @@ import {
 
 export default function FeaturedTasksSection() {
  const { t } = useTranslation();
+
+ // Review enforcement hook
+ const {
+  handleCreateTask,
+  showAuthPrompt,
+  setShowAuthPrompt,
+  isEnforcementDialogOpen,
+  setIsEnforcementDialogOpen,
+  pendingReviewTasks,
+  currentReviewTaskIndex,
+  isReviewDialogOpen,
+  setIsReviewDialogOpen,
+  isSubmittingReview,
+  handleStartReviewing,
+  handleSubmitReview
+ } = useCreateTask();
  
  // Use first 3 tasks from shared mock data for display
  const featuredTasks = mockTasks.slice(0, 3);
@@ -73,15 +93,46 @@ export default function FeaturedTasksSection() {
        <FileText className="h-12 w-12 text-slate-400" />
       </div>
       <p className="text-slate-500 text-xl mb-6 font-light">{t('landing.featured.noTasks')}</p>
-      <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-4 rounded-xl font-semibold" asChild>
-       <LocaleLink href="/create-task" className="flex items-center">
-        <Plus className="mr-2 h-5 w-5" />
-        {t('landing.featured.postFirstTask')}
-       </LocaleLink>
-      </Button>
+      <NextUIButton
+       className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-4 rounded-xl font-semibold"
+       startContent={<Plus className="h-5 w-5" />}
+       onPress={handleCreateTask}
+       size="lg"
+      >
+       {t('landing.featured.postFirstTask')}
+      </NextUIButton>
      </div>
     )}
    </div>
+
+   {/* Auth Slide Over */}
+   <AuthSlideOver
+    isOpen={showAuthPrompt}
+    onClose={() => setShowAuthPrompt(false)}
+    action="create-task"
+   />
+
+   {/* Review Enforcement Dialog */}
+   <ReviewEnforcementDialog
+    isOpen={isEnforcementDialogOpen}
+    onClose={() => setIsEnforcementDialogOpen(false)}
+    blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
+    pendingTasks={pendingReviewTasks}
+    onReviewTask={handleStartReviewing}
+   />
+
+   {/* Review Dialog - Sequential Flow */}
+   {pendingReviewTasks.length > 0 && (
+    <ReviewDialog
+     isOpen={isReviewDialogOpen}
+     onClose={() => setIsReviewDialogOpen(false)}
+     onSubmit={handleSubmitReview}
+     task={pendingReviewTasks[currentReviewTaskIndex]}
+     isLoading={isSubmittingReview}
+     currentIndex={currentReviewTaskIndex}
+     totalCount={pendingReviewTasks.length}
+    />
+   )}
   </section>
  );
 }

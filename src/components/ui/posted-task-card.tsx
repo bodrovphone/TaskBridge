@@ -4,10 +4,13 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw } from 'lucide-react'
+import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
 import { CancelTaskDialog } from '@/components/tasks/cancel-task-dialog'
+import { ReviewDialog } from '@/features/reviews'
+import { mockSubmitReview } from '@/features/reviews'
+import { useToast } from '@/hooks/use-toast'
 
 interface PostedTaskCardProps {
   id: string
@@ -20,12 +23,15 @@ interface PostedTaskCardProps {
   acceptedApplication?: {
     professionalId: string
     professionalName: string
+    professionalAvatar?: string
   }
   location: {
     city: string
     neighborhood: string
   }
   createdAt: Date
+  completedAt?: Date
+  hasReview?: boolean
   lang: string
 }
 
@@ -40,13 +46,19 @@ function PostedTaskCard({
   acceptedApplication,
   location,
   createdAt,
+  completedAt,
+  hasReview = false,
   lang
 }: PostedTaskCardProps) {
   const { t } = useTranslation()
   const router = useRouter()
+  const { toast } = useToast()
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
+  const [showReviewDialog, setShowReviewDialog] = useState(false)
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+  const [taskHasReview, setTaskHasReview] = useState(hasReview)
 
   // @todo INTEGRATION: Fetch from user's profile/stats
   const cancellationsThisMonth = 0 // Mock data
@@ -115,6 +127,29 @@ function PostedTaskCard({
       console.log('Reopening task:', id)
       // @todo: Call API to reopen task (status = 'open', clear selectedProfessionalId)
       router.refresh()
+    }
+  }
+
+  const handleSubmitReview = async (data: { taskId: string; rating: number; reviewText?: string; actualPricePaid?: number }) => {
+    setIsSubmittingReview(true)
+    try {
+      await mockSubmitReview(data)
+
+      toast({
+        title: t('reviews.success'),
+        variant: 'success'
+      })
+
+      setTaskHasReview(true)
+      setShowReviewDialog(false)
+      // @todo INTEGRATION: Update task hasReview in backend
+    } catch (error) {
+      toast({
+        title: t('reviews.error'),
+        variant: 'destructive'
+      })
+    } finally {
+      setIsSubmittingReview(false)
     }
   }
 
@@ -203,7 +238,7 @@ function PostedTaskCard({
         </div>
 
         {/* Action buttons */}
-        <div className="flex gap-2 mt-auto">
+        <div className="flex flex-col sm:flex-row gap-2 mt-auto">
           {status === 'pending_customer_confirmation' ? (
             <>
               {/* Awaiting Confirmation - Confirm button */}
@@ -212,7 +247,7 @@ function PostedTaskCard({
                 color="success"
                 startContent={<CheckCircle className="w-4 h-4" />}
                 onPress={() => setShowConfirmDialog(true)}
-                className="flex-1 font-semibold"
+                className="w-full sm:flex-1 font-semibold"
               >
                 {t('taskCompletion.confirmCompletion')}
               </Button>
@@ -223,6 +258,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
+                  className="w-full sm:w-auto"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -237,7 +273,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="flex-1"
+                className="w-full sm:flex-1"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
@@ -247,7 +283,7 @@ function PostedTaskCard({
                 color="default"
                 startContent={<XCircle className="w-4 h-4" />}
                 onPress={() => setShowCancelDialog(true)}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700"
+                className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700"
               >
                 {t('postedTasks.cancelTask')}
               </Button>
@@ -258,7 +294,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="bg-red-50 hover:bg-red-100 text-red-600"
+                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -266,23 +302,36 @@ function PostedTaskCard({
             </>
           ) : status === 'completed' || status === 'cancelled' ? (
             <>
-              {/* Completed/Cancelled - View Details + Reopen */}
+              {/* Completed/Cancelled - View Details + Leave Review / Reopen */}
               <Button
                 size="sm"
                 variant="flat"
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="flex-1"
+                className="w-full sm:flex-1"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
+              {status === 'completed' && acceptedApplication && !taskHasReview && (
+                <Button
+                  size="sm"
+                  variant="solid"
+                  color="warning"
+                  startContent={<Star className="w-4 h-4" />}
+                  onPress={() => setShowReviewDialog(true)}
+                  className="w-full sm:w-auto font-semibold"
+                >
+                  {t('reviews.pending.leaveReviewButton')}
+                </Button>
+              )}
               <Button
                 size="sm"
                 variant="bordered"
                 color="secondary"
                 startContent={<RotateCcw className="w-4 h-4" />}
                 onPress={handleReopenTask}
+                className="w-full sm:w-auto"
               >
                 {t('postedTasks.reopenTask')}
               </Button>
@@ -293,7 +342,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="bg-red-50 hover:bg-red-100 text-red-600"
+                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -304,22 +353,22 @@ function PostedTaskCard({
               {/* Open - View Details + View Applications */}
               <Button
                 size="sm"
-                variant="flat"
+                variant="solid"
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="flex-1"
+                className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
               {applicationsCount > 0 && (
                 <Button
                   size="sm"
-                  variant="bordered"
-                  color="primary"
+                  variant="solid"
+                  color="secondary"
                   startContent={<FileText className="w-4 h-4" />}
                   onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
-                  className="flex-1"
+                  className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white"
                 >
                   {t('postedTasks.viewApplications')} ({applicationsCount})
                 </Button>
@@ -364,6 +413,27 @@ function PostedTaskCard({
         cancellationsThisMonth={cancellationsThisMonth}
         maxCancellationsPerMonth={maxCancellationsPerMonth}
       />
+
+      {/* Review Dialog */}
+      {status === 'completed' && acceptedApplication && (
+        <ReviewDialog
+          isOpen={showReviewDialog}
+          onClose={() => setShowReviewDialog(false)}
+          onSubmit={handleSubmitReview}
+          task={{
+            id: id,
+            title: title,
+            professionalId: acceptedApplication.professionalId,
+            professionalName: acceptedApplication.professionalName,
+            professionalAvatar: acceptedApplication.professionalAvatar,
+            completedAt: completedAt || new Date(),
+            daysAgo: completedAt
+              ? Math.floor((Date.now() - completedAt.getTime()) / (24 * 60 * 60 * 1000))
+              : 0
+          }}
+          isLoading={isSubmittingReview}
+        />
+      )}
     </Card>
   )
 }

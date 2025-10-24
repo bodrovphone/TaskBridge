@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { applications, tasks } from '@/database/schema'
-import { eq, and } from 'drizzle-orm'
+// @todo INTEGRATION: Uncomment when database is set up
+// import { db } from '@/lib/db'
+// import { applications, tasks } from '@/database/schema'
+// import { eq, and } from 'drizzle-orm'
 
 /**
  * GET /api/safety/can-report?userId={userId}&professionalId={professionalId}
@@ -10,6 +11,13 @@ import { eq, and } from 'drizzle-orm'
  * Returns true only if they have worked together through an accepted application
  */
 export async function GET(request: NextRequest) {
+  // @todo INTEGRATION: Implement when database is set up
+  return NextResponse.json(
+    { error: 'API not yet implemented' },
+    { status: 501 }
+  )
+
+  /* IMPLEMENTATION COMMENTED OUT - NO DATABASE YET
   try {
     const searchParams = request.nextUrl.searchParams
     const userId = searchParams.get('userId')
@@ -55,4 +63,5 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
+  */
 }

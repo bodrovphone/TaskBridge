@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab } from '@nextui-org/react'
 import { FileText, Plus } from 'lucide-react'
 import PostedTaskCard from '@/components/ui/posted-task-card'
+import { useCreateTask } from '@/hooks/use-create-task'
+import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
+import AuthSlideOver from '@/components/ui/auth-slide-over'
 
 interface PostedTasksPageContentProps {
   lang: string
@@ -24,12 +26,15 @@ interface PostedTask {
   acceptedApplication?: {
     professionalId: string
     professionalName: string
+    professionalAvatar?: string
   }
   location: {
     city: string
     neighborhood: string
   }
   createdAt: Date
+  completedAt?: Date
+  hasReview?: boolean
   deadline?: Date
 }
 
@@ -96,20 +101,38 @@ const mockPostedTasks: PostedTask[] = [
     applicationsCount: 3,
     acceptedApplication: {
       professionalId: 'prof-2',
-      professionalName: 'Ivan Georgiev'
+      professionalName: 'Ivan Georgiev',
+      professionalAvatar: undefined
     },
     location: {
       city: 'Sofia',
       neighborhood: 'Mladost'
     },
     createdAt: new Date('2024-10-05'),
+    completedAt: new Date('2024-10-20'),
+    hasReview: false, // Not reviewed yet - will show "Leave Review" button
   }
 ]
 
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const { t } = useTranslation()
-  const router = useRouter()
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('all')
+
+  // Review enforcement hook
+  const {
+    handleCreateTask,
+    showAuthPrompt,
+    setShowAuthPrompt,
+    isEnforcementDialogOpen,
+    setIsEnforcementDialogOpen,
+    pendingReviewTasks,
+    currentReviewTaskIndex,
+    isReviewDialogOpen,
+    setIsReviewDialogOpen,
+    isSubmittingReview,
+    handleStartReviewing,
+    handleSubmitReview
+  } = useCreateTask()
 
   const filteredTasks = mockPostedTasks.filter(task => {
     if (selectedStatus === 'all') return true
@@ -153,7 +176,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               color="primary"
               size="lg"
               startContent={<Plus className="w-5 h-5" />}
-              onPress={() => router.push(`/${lang}/create-task`)}
+              onPress={handleCreateTask}
               className="shadow-lg"
             >
               {t('postedTasks.createTask')}
@@ -246,7 +269,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 color="primary"
                 size="lg"
                 startContent={<Plus className="w-5 h-5" />}
-                onPress={() => router.push(`/${lang}/create-task`)}
+                onPress={handleCreateTask}
               >
                 {t('postedTasks.empty.createButton')}
               </Button>
@@ -267,12 +290,43 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 acceptedApplication={task.acceptedApplication}
                 location={task.location}
                 createdAt={task.createdAt}
+                completedAt={task.completedAt}
+                hasReview={task.hasReview}
                 lang={lang}
               />
             ))}
           </div>
         )}
       </div>
+
+      {/* Auth Slide Over */}
+      <AuthSlideOver
+        isOpen={showAuthPrompt}
+        onClose={() => setShowAuthPrompt(false)}
+        action="create-task"
+      />
+
+      {/* Review Enforcement Dialog */}
+      <ReviewEnforcementDialog
+        isOpen={isEnforcementDialogOpen}
+        onClose={() => setIsEnforcementDialogOpen(false)}
+        blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
+        pendingTasks={pendingReviewTasks}
+        onReviewTask={handleStartReviewing}
+      />
+
+      {/* Review Dialog - Sequential Flow */}
+      {pendingReviewTasks.length > 0 && (
+        <ReviewDialog
+          isOpen={isReviewDialogOpen}
+          onClose={() => setIsReviewDialogOpen(false)}
+          onSubmit={handleSubmitReview}
+          task={pendingReviewTasks[currentReviewTaskIndex]}
+          isLoading={isSubmittingReview}
+          currentIndex={currentReviewTaskIndex}
+          totalCount={pendingReviewTasks.length}
+        />
+      )}
     </div>
   )
 }

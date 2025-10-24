@@ -1,0 +1,55 @@
+// Review system translations
+export const reviews = {
+  // Review Dialog
+  'review.dialog.title': 'Leave a Review',
+  'review.dialog.subtitle': 'Share your experience with {{professionalName}}',
+  'review.dialog.taskLabel': 'Task',
+  'review.dialog.completedLabel': 'Completed',
+  'review.dialog.ratingLabel': 'Rating',
+  'review.dialog.ratingRequired': 'Please select a star rating',
+  'review.dialog.reviewTextLabel': 'Your Review',
+  'review.dialog.reviewTextPlaceholder': 'Share details about your experience...',
+  'review.dialog.minCharacters': 'At least {{min}} characters recommended',
+  'review.dialog.charCount': '{{count}} / {{max}} characters',
+  'review.dialog.actualPriceLabel': 'Final Price Paid',
+  'review.dialog.actualPricePlaceholder': '0.00',
+  'review.dialog.submitButton': 'Submit Review',
+  'review.dialog.cancelButton': 'Cancel',
+  'review.dialog.submitting': 'Submitting...',
+
+  // Pending Reviews List
+  'reviews.pending.title': '{{count}} Task Needs Your Review',
+  'reviews.pending.title_plural': '{{count}} Tasks Need Your Review',
+  'reviews.pending.completedDaysAgo': 'Completed {{count}} day ago',
+  'reviews.pending.completedDaysAgo_plural': 'Completed {{count}} days ago',
+  'reviews.pending.completedWeeksAgo': 'Completed {{count}} week ago',
+  'reviews.pending.completedWeeksAgo_plural': 'Completed {{count}} weeks ago',
+  'reviews.pending.completedMonthsAgo': 'Completed {{count}} month ago',
+  'reviews.pending.completedMonthsAgo_plural': 'Completed {{count}} months ago',
+  'reviews.pending.leaveReviewButton': 'Leave Review',
+  'reviews.pending.empty': 'No Pending Reviews',
+  'reviews.pending.emptyMessage': 'You\'re all caught up! All your completed tasks have been reviewed.',
+
+  // Enforcement Dialog - Hard Block
+  'reviews.enforcement.hardBlock.title': 'Action Required',
+  'reviews.enforcement.hardBlock.message': 'A professional has marked your task as complete and is waiting for your confirmation. Please confirm or reject the completion before creating a new task.',
+  'reviews.enforcement.hardBlock.confirmButton': 'Review & Confirm',
+  'reviews.enforcement.hardBlock.viewButton': 'View Details',
+
+  // Enforcement Dialog - Soft Block
+  'reviews.enforcement.softBlock.title': 'Reviews Required',
+  'reviews.enforcement.softBlock.message': 'You\'ve created {{count}} tasks without reviewing previous work.',
+  'reviews.enforcement.softBlock.pleaseReview': 'Please review your completed tasks before creating more:',
+  'reviews.enforcement.softBlock.leaveReviewsButton': 'Leave Reviews',
+  'reviews.enforcement.softBlock.cancelButton': 'Cancel',
+
+  // Progress
+  'reviews.progress.reviewing': 'Reviewing {{current}} of {{total}}',
+  'reviews.progress.allDone': 'All reviews submitted!',
+  'reviews.progress.multipleReviews': '{{count}} tasks need your review. You\'ll review them one at a time.',
+
+  // Success/Error Toasts
+  'reviews.success': 'Review submitted successfully!',
+  'reviews.successWithRemaining': 'Review submitted! {{remaining}} more to go.',
+  'reviews.error': 'Failed to submit review. Please try again.',
+};

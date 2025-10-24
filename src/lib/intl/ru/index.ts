@@ -9,6 +9,7 @@ import { categories } from './categories';
 import { auth } from './auth';
 import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
+import { reviews } from './reviews';
 
 export const ru = {
   ...common,
@@ -22,6 +23,7 @@ export const ru = {
   ...auth,
   ...taskCompletion,
   ...notifications,
+  ...reviews,
 };
 
 export default ru;

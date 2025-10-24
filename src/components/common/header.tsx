@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useRouter, useParams, usePathname } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
@@ -11,6 +11,9 @@ import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
 import { Plus, Handshake, FileText, Send, Briefcase } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
+import { useToast } from "@/hooks/use-toast"
+import { ReviewDialog, ReviewEnforcementDialog } from "@/features/reviews"
+import { mockCanCreateTask, mockSubmitReview, type PendingReviewTask } from "@/features/reviews"
 import {
  Navbar,
  NavbarBrand,
@@ -32,12 +35,25 @@ function Header() {
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'en'
+ const { toast } = useToast()
+
+ // Review enforcement state
+ const [isEnforcementDialogOpen, setIsEnforcementDialogOpen] = useState(false)
+ const [pendingReviewTasks, setPendingReviewTasks] = useState<PendingReviewTask[]>([])
+ const [currentReviewTaskIndex, setCurrentReviewTaskIndex] = useState(0)
+ const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
+ const [isSubmittingReview, setIsSubmittingReview] = useState(false)
 
  // Check if we're on the index/landing page
  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
 
  // Dynamic categories link based on current page
  const categoriesHref = isIndexPage ? "/#categories" : "/categories"
+
+ // Explicit handler for menu state
+ const handleMenuOpenChange = useCallback((open: boolean) => {
+  setIsMenuOpen(open)
+ }, [])
 
  const navigation = [
   { name: t('nav.browseTasks'), href: "/browse-tasks" },
@@ -46,27 +62,81 @@ function Header() {
   { name: t('nav.forProfessionals'), href: "/professionals" },
  ]
 
- const handleCreateTask = () => {
-  if (isAuthenticated) {
-   // If authenticated, navigate directly to create task
-   router.push(`/${lang}/create-task`)
-  } else {
+ const handleCreateTask = useCallback(() => {
+  if (!isAuthenticated) {
    // If not authenticated, show auth slide-over
    setIsAuthSlideOverOpen(true)
+   return
   }
- }
+
+  // Check for pending reviews (mock function - will be replaced with API in Phase 2)
+  const { canCreate, blockType, pendingTasks } = mockCanCreateTask()
+
+  if (!canCreate && pendingTasks.length > 0) {
+   // User has pending reviews - show enforcement dialog
+   setPendingReviewTasks(pendingTasks)
+   setCurrentReviewTaskIndex(0)
+   setIsEnforcementDialogOpen(true)
+  } else {
+   // All clear - proceed to create task
+   router.push(`/${lang}/create-task`)
+  }
+ }, [isAuthenticated, lang, router])
+
+ const handleStartReviewing = useCallback(() => {
+  setIsEnforcementDialogOpen(false)
+  setCurrentReviewTaskIndex(0)
+  setIsReviewDialogOpen(true)
+ }, [])
+
+ const handleSubmitReview = useCallback(async (data: { taskId: string; rating: number; reviewText?: string; actualPricePaid?: number }) => {
+  setIsSubmittingReview(true)
+  try {
+   await mockSubmitReview(data)
+
+   const remainingCount = pendingReviewTasks.length - 1
+
+   if (currentReviewTaskIndex < pendingReviewTasks.length - 1) {
+    // More reviews to go
+    toast({
+     title: t('reviews.successWithRemaining', { remaining: remainingCount }),
+     variant: 'success'
+    })
+    setCurrentReviewTaskIndex(prev => prev + 1)
+   } else {
+    // All reviews done!
+    toast({
+     title: t('reviews.success'),
+     variant: 'success'
+    })
+    setIsReviewDialogOpen(false)
+    setPendingReviewTasks([])
+    setCurrentReviewTaskIndex(0)
+
+    // Now proceed to create task
+    router.push(`/${lang}/create-task`)
+   }
+  } catch (error) {
+   toast({
+    title: t('reviews.error'),
+    variant: 'destructive'
+   })
+  } finally {
+   setIsSubmittingReview(false)
+  }
+ }, [pendingReviewTasks, currentReviewTaskIndex, t, toast, router, lang])
 
  return (
-  <Navbar
-   maxWidth="full"
-   position="sticky"
-   className="bg-white shadow-sm border-b border-gray-100 z-50"
-   height="5rem"
-   isBordered
-   isMenuOpen={isMenuOpen}
-   onMenuOpenChange={setIsMenuOpen}
-   style={{ isolation: 'isolate' }}
-  >
+  <>
+   <Navbar
+    maxWidth="full"
+    position="sticky"
+    className="bg-white shadow-sm border-b border-gray-100 z-50"
+    height="5rem"
+    isBordered
+    isMenuOpen={isMenuOpen}
+    onMenuOpenChange={handleMenuOpenChange}
+   >
    {/* Logo/Brand */}
    <NavbarBrand>
     <LocaleLink href="/" className="flex items-center">
@@ -158,7 +228,7 @@ function Header() {
        href={item.href}
        className="w-full text-gray-900 hover:text-primary font-medium py-2"
        size="lg"
-       onClick={() => setIsMenuOpen(false)}
+       onPress={() => setIsMenuOpen(false)}
       >
        {item.name}
       </NextUILink>
@@ -181,7 +251,7 @@ function Header() {
         href="/tasks/posted"
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onClick={() => setIsMenuOpen(false)}
+        onPress={() => setIsMenuOpen(false)}
        >
         <FileText size={18} className="text-gray-500" />
         {t('nav.myPostedTasks')}
@@ -201,7 +271,7 @@ function Header() {
         href="/tasks/applications"
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onClick={() => setIsMenuOpen(false)}
+        onPress={() => setIsMenuOpen(false)}
        >
         <Send size={18} className="text-gray-500" />
         {t('nav.myApplications')}
@@ -213,7 +283,7 @@ function Header() {
         href="/tasks/work"
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onClick={() => setIsMenuOpen(false)}
+        onPress={() => setIsMenuOpen(false)}
        >
         <Briefcase size={18} className="text-gray-500" />
         {t('nav.myWork')}
@@ -229,9 +299,12 @@ function Header() {
        variant="solid"
        startContent={<Plus size={16} />}
        className="w-full font-medium"
-       onClick={() => {
+       onPress={() => {
         setIsMenuOpen(false)
-        handleCreateTask()
+        // Small delay to let menu close animation complete before showing dialogs
+        setTimeout(() => {
+         handleCreateTask()
+        }, 150)
        }}
       >
        {t('nav.createTask')}
@@ -240,15 +313,39 @@ function Header() {
     </NavbarMenuItem>
    </NavbarMenu>
 
-   <AuthSlideOver
-    isOpen={isAuthSlideOverOpen}
-    onClose={() => setIsAuthSlideOverOpen(false)}
-    action="create-task"
-   />
-
    {/* Notification Center */}
    <NotificationCenter />
   </Navbar>
+
+  {/* Auth Slide Over */}
+  <AuthSlideOver
+   isOpen={isAuthSlideOverOpen}
+   onClose={() => setIsAuthSlideOverOpen(false)}
+   action="create-task"
+  />
+
+  {/* Review Enforcement Dialog */}
+  <ReviewEnforcementDialog
+   isOpen={isEnforcementDialogOpen}
+   onClose={() => setIsEnforcementDialogOpen(false)}
+   blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
+   pendingTasks={pendingReviewTasks}
+   onReviewTask={handleStartReviewing}
+  />
+
+  {/* Review Dialog - Sequential Flow */}
+  {pendingReviewTasks.length > 0 && (
+   <ReviewDialog
+    isOpen={isReviewDialogOpen}
+    onClose={() => setIsReviewDialogOpen(false)}
+    onSubmit={handleSubmitReview}
+    task={pendingReviewTasks[currentReviewTaskIndex]}
+    isLoading={isSubmittingReview}
+    currentIndex={currentReviewTaskIndex}
+    totalCount={pendingReviewTasks.length}
+   />
+  )}
+ </>
  )
 }
 

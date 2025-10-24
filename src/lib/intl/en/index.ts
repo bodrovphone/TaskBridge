@@ -10,6 +10,7 @@ import { categories } from './categories';
 import { auth } from './auth';
 import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
+import { reviews } from './reviews';
 
 // Combine all chunks into single translation object
 export const en = {
@@ -24,6 +25,7 @@ export const en = {
   ...auth,
   ...taskCompletion,
   ...notifications,
+  ...reviews,
 };
 
 export default en;

@@ -1,5 +1,24 @@
 # Task Completion & Review Enforcement System
 
+> **⚠️ IMPLEMENTATION PLAN:**
+> - **Phase 1 (NOW):** Frontend UI/UX components with mock data - **ESTIMATED: 3-4 hours**
+> - **Phase 2 (LATER - Backend):** Real enforcement logic, API endpoints, database schema - **ESTIMATED: 3-4 hours**
+> - See "BACKEND IMPLEMENTATION SECTION" (line ~527+) for complete Phase 2 requirements
+>
+> **CURRENT SCOPE (Phase 1):**
+> 1. Create Review Dialog component (star rating, text, price fields)
+> 2. Create Pending Reviews List component (shows tasks needing reviews)
+> 3. Create Blocking Dialog (shown when trying to create task with pending reviews)
+> 4. Add mock data for testing the complete user flow
+> 5. Add translations for all new UI strings (EN/BG/RU)
+> 6. Mobile-responsive design
+>
+> **NOT IN CURRENT SCOPE (Phase 2 - Backend):**
+> - Database schema changes (3 new columns)
+> - API endpoints (3 new routes)
+> - Business logic enforcement (grace period, blocking logic)
+> - Real data integration
+
 ## Task Description
 Implement a two-tier enforcement system for task completions and reviews:
 
@@ -306,37 +325,50 @@ async function submitReview(userId: string, reviewData: ReviewData) {
 4. **Gentle messaging** - "Help others by sharing your experience" vs "You must review"
 5. **Quick skip button** - Allow 1-2 free skips per month for edge cases
 
-## Acceptance Criteria
+## Acceptance Criteria (FRONTEND PHASE - CURRENT)
 
-### Phase 1: Detection & Notification
-- [ ] Backend tracks `reviewedByCustomer` field on tasks
-- [ ] API endpoint checks for pending reviews before task creation
-- [ ] Notification center shows "Reviews Needed" tab
-- [ ] Badge count shows number of pending reviews
-- [ ] Task creation blocked when pending reviews exist
-
-### Phase 2: Review Dialog
-- [ ] Standalone review dialog component created
-- [ ] Star rating field (required)
-- [ ] Review text field (optional, 50-500 chars)
+### Phase 1: Review Dialog Component
+- [ ] Create standalone review dialog component
+- [ ] Star rating field (required, 1-5 stars)
+- [ ] Review text field (optional, 50-500 chars with counter)
 - [ ] Actual price paid field (optional)
-- [ ] Dialog shows task and professional info
-- [ ] Submit action saves review and marks task as reviewed
+- [ ] Display task title and professional info
+- [ ] Submit button with loading state
+- [ ] Cancel/close button
+- [ ] Form validation (rating required)
+- [ ] Success/error toast messages
 
-### Phase 3: User Flow Integration
-- [ ] "Create Task" button checks for pending reviews
-- [ ] Blocking dialog shows list of tasks needing review
-- [ ] Click "Review Now" opens review dialog
-- [ ] After all reviews submitted, proceeds to task creation
-- [ ] Notification center "Reviews Needed" tab functional
+### Phase 2: Pending Reviews List Component
+- [ ] Create list component showing tasks needing reviews
+- [ ] Display task title, professional name, completion date
+- [ ] "Leave Review" button for each task
+- [ ] Empty state when no pending reviews
+- [ ] Loading state while fetching
 
-### Phase 4: Translations
-- [ ] All new strings translated (EN/BG/RU)
-- [ ] Notification messages localized
-- [ ] Dialog content localized
-- [ ] Error messages localized
+### Phase 3: Blocking Dialog/Banner
+- [ ] Create blocking dialog component (Option B from spec)
+- [ ] OR notification center integration (Option A from spec)
+- [ ] Show count of pending reviews
+- [ ] Display list of tasks needing review
+- [ ] "Review Now" button opens review dialog
+- [ ] "Cancel" button to dismiss
+- [ ] Progress indicator (e.g., "1 of 3 reviews completed")
 
-### Phase 5: Polish
+### Phase 4: Mock Data & Integration
+- [ ] Create mock pending reviews data
+- [ ] Hook up "Create Task" button to show blocking dialog
+- [ ] Implement sequential review flow (review → next → review → done)
+- [ ] Add mock delay/loading states for realistic feel
+- [ ] Test full user flow with mock data
+
+### Phase 5: Translations
+- [ ] Review dialog strings (EN/BG/RU)
+- [ ] Blocking dialog/banner strings (EN/BG/RU)
+- [ ] Notification messages (EN/BG/RU)
+- [ ] Error/success messages (EN/BG/RU)
+- [ ] All button labels and placeholders (EN/BG/RU)
+
+### Phase 6: Polish & Mobile Responsive
 - [ ] Smooth animations for dialog transitions
 - [ ] Progress indicator for multiple reviews
 - [ ] Success toast after each review submitted
@@ -421,13 +453,19 @@ interface Notification {
 **High** - Critical for building robust review ecosystem and ensuring professional feedback
 
 ## Estimated Effort
-**4-6 hours**
-- Backend review tracking: 1 hour
-- Pending review detection API: 1 hour
+
+### Phase 1 (Frontend - Current): **3-4 hours**
 - Review dialog component: 1.5 hours
-- Task creation blocking flow: 1 hour
-- Notification center integration: 1 hour
+- Pending reviews list component: 0.5 hours
+- Blocking dialog/banner: 1 hour
+- Mock data integration: 0.5 hours
 - Translations: 0.5 hours
+
+### Phase 2 (Backend - Later): **3-4 hours**
+- Database migrations: 0.5 hours
+- Backend review tracking logic: 1 hour
+- API endpoints (can-create, pending, submit): 1.5 hours
+- Testing & debugging: 1 hour
 
 ## Dependencies
 - Task completion flow already implemented ✅
@@ -503,3 +541,323 @@ Suggested PRD update (Section 3.4 - Rating & Review System):
 - Maintains platform trust and quality
 - Gentle enforcement (not immediate blocking)
 ```
+
+---
+
+# 🔧 BACKEND IMPLEMENTATION SECTION (PHASE 2 - TO BE DONE LATER)
+
+> **⚠️ IMPORTANT:** This section contains all backend requirements that need to be implemented
+> after the frontend UI is complete. Do NOT skip this section when building the backend!
+
+## Database Schema Changes
+
+### 1. Tasks Table Updates
+```sql
+-- Add review tracking fields to tasks table
+ALTER TABLE tasks ADD COLUMN reviewed_by_customer BOOLEAN DEFAULT FALSE;
+ALTER TABLE tasks ADD COLUMN reviewed_by_professional BOOLEAN DEFAULT FALSE;
+ALTER TABLE tasks ADD COLUMN completed_at TIMESTAMP;
+
+-- Add index for faster queries
+CREATE INDEX idx_tasks_reviewed_by_customer ON tasks(customer_id, reviewed_by_customer);
+CREATE INDEX idx_tasks_status_customer ON tasks(customer_id, status);
+```
+
+### 2. Users Table Updates
+```sql
+-- Add grace period counter to users table
+ALTER TABLE users ADD COLUMN tasks_created_since_last_review INTEGER DEFAULT 0;
+
+-- Add index for faster queries
+CREATE INDEX idx_users_grace_period ON users(id, tasks_created_since_last_review);
+```
+
+### 3. Reviews Table (verify exists)
+```sql
+-- Ensure reviews table has all required fields
+-- If not exists, create:
+CREATE TABLE reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL REFERENCES tasks(id),
+  reviewer_id VARCHAR NOT NULL REFERENCES users(id),
+  reviewee_id VARCHAR NOT NULL REFERENCES users(id),
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  review_text TEXT,
+  actual_price_paid DECIMAL(10, 2),
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_reviews_task ON reviews(task_id);
+CREATE INDEX idx_reviews_reviewee ON reviews(reviewee_id);
+```
+
+## Business Logic Implementation
+
+### Core Enforcement Function
+**Location:** `/src/app/api/tasks/can-create/route.ts` (new file)
+
+```typescript
+import { db } from '@/database/db';
+import { tasks, users } from '@/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { NextResponse } from 'next/server';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
+
+  if (!userId) {
+    return NextResponse.json({ error: 'User ID required' }, { status: 400 });
+  }
+
+  try {
+    // PRIORITY 1: Check for pending confirmations (HARD BLOCK)
+    const pendingConfirmations = await db.query.tasks.findMany({
+      where: and(
+        eq(tasks.customerId, userId),
+        eq(tasks.status, 'pending_customer_confirmation')
+      ),
+      with: {
+        selectedProfessional: true
+      }
+    });
+
+    if (pendingConfirmations.length > 0) {
+      return NextResponse.json({
+        canCreate: false,
+        blockType: 'pending_confirmation',
+        blockingTasks: pendingConfirmations.map(task => ({
+          taskId: task.id,
+          taskTitle: task.title,
+          professionalName: task.selectedProfessional?.firstName + ' ' + task.selectedProfessional?.lastName,
+          professionalId: task.selectedProfessionalId,
+          completedAt: task.completedAt
+        }))
+      });
+    }
+
+    // PRIORITY 2: Check for missing reviews (SOFT BLOCK with grace)
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId)
+    });
+
+    const unreviewedTasks = await db.query.tasks.findMany({
+      where: and(
+        eq(tasks.customerId, userId),
+        eq(tasks.status, 'completed'),
+        eq(tasks.reviewedByCustomer, false)
+      ),
+      with: {
+        selectedProfessional: true
+      }
+    });
+
+    // Check grace period
+    if (unreviewedTasks.length > 0 && user!.tasksCreatedSinceLastReview >= 3) {
+      return NextResponse.json({
+        canCreate: false,
+        blockType: 'missing_reviews',
+        blockingTasks: unreviewedTasks.map(task => ({
+          taskId: task.id,
+          taskTitle: task.title,
+          professionalName: task.selectedProfessional?.firstName + ' ' + task.selectedProfessional?.lastName,
+          professionalId: task.selectedProfessionalId,
+          completedAt: task.completedAt
+        }))
+      });
+    }
+
+    // Allow task creation
+    return NextResponse.json({
+      canCreate: true,
+      blockType: null,
+      blockingTasks: [],
+      gracePeriodUsed: user!.tasksCreatedSinceLastReview,
+      unreviewedCount: unreviewedTasks.length
+    });
+
+  } catch (error) {
+    console.error('Error checking task creation eligibility:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+```
+
+### Grace Period Counter Management
+
+**Update Task Creation Endpoint:**
+**Location:** `/src/app/api/tasks/route.ts` (modify existing)
+
+```typescript
+// In POST handler, after successful task creation:
+await db.update(users)
+  .set({
+    tasksCreatedSinceLastReview: sql`${users.tasksCreatedSinceLastReview} + 1`
+  })
+  .where(eq(users.id, userId));
+```
+
+**Update Review Submission Endpoint:**
+**Location:** `/src/app/api/reviews/route.ts` (create new or modify existing)
+
+```typescript
+// In POST handler, after successful review submission:
+await db.update(users)
+  .set({
+    tasksCreatedSinceLastReview: 0
+  })
+  .where(eq(users.id, userId));
+
+// Also mark task as reviewed
+await db.update(tasks)
+  .set({
+    reviewedByCustomer: true
+  })
+  .where(eq(tasks.id, reviewData.taskId));
+```
+
+## API Endpoints to Implement
+
+### 1. Check Task Creation Eligibility
+```typescript
+GET /api/tasks/can-create?userId={userId}
+
+Response: {
+  canCreate: boolean
+  blockType: 'pending_confirmation' | 'missing_reviews' | null
+  blockingTasks: Array<{
+    taskId: string
+    taskTitle: string
+    professionalName: string
+    professionalId: string
+    completedAt: Date
+  }>
+  gracePeriodUsed?: number  // 0-3
+  unreviewedCount?: number
+}
+```
+
+### 2. Get Pending Reviews
+```typescript
+GET /api/reviews/pending?userId={userId}
+
+Response: {
+  hasPendingReviews: boolean
+  pendingReviews: Array<{
+    taskId: string
+    taskTitle: string
+    professionalName: string
+    professionalId: string
+    completedAt: Date
+    daysAgo: number
+  }>
+}
+```
+
+### 3. Submit Review
+```typescript
+POST /api/reviews
+Body: {
+  taskId: string
+  rating: number  // 1-5, required
+  reviewText?: string
+  actualPricePaid?: number
+}
+
+Response: {
+  success: boolean
+  review: Review
+  remainingUnreviewed: number
+}
+```
+
+## Integration with Frontend
+
+### Frontend Hook: `use-can-create-task.ts`
+```typescript
+export function useCanCreateTask(userId: string) {
+  return useQuery({
+    queryKey: ['can-create-task', userId],
+    queryFn: async () => {
+      const res = await fetch(`/api/tasks/can-create?userId=${userId}`);
+      if (!res.ok) throw new Error('Failed to check eligibility');
+      return res.json();
+    },
+    enabled: !!userId
+  });
+}
+```
+
+### Frontend Hook: `use-pending-reviews.ts`
+```typescript
+export function usePendingReviews(userId: string) {
+  return useQuery({
+    queryKey: ['pending-reviews', userId],
+    queryFn: async () => {
+      const res = await fetch(`/api/reviews/pending?userId=${userId}`);
+      if (!res.ok) throw new Error('Failed to fetch pending reviews');
+      return res.json();
+    },
+    enabled: !!userId
+  });
+}
+```
+
+## Testing Checklist
+
+### Backend Tests
+- [ ] Database migrations run successfully
+- [ ] Hard block works: pending_customer_confirmation blocks task creation
+- [ ] Soft block works: 3-task grace period enforced correctly
+- [ ] Grace counter increments on task creation
+- [ ] Grace counter resets on review submission
+- [ ] API returns correct blockType and blockingTasks
+- [ ] Multiple pending confirmations handled correctly
+- [ ] Multiple unreviewed tasks handled correctly
+
+### Integration Tests
+- [ ] Frontend receives correct blocking data from API
+- [ ] Review submission updates database correctly
+- [ ] Task creation updates counter correctly
+- [ ] Edge case: User at exactly 3 tasks grace period
+- [ ] Edge case: User with 0 unreviewed tasks can create freely
+
+### Load Tests
+- [ ] API performance with 100+ unreviewed tasks
+- [ ] Concurrent task creation requests handled correctly
+- [ ] Database indexes improve query performance
+
+## Deployment Checklist
+
+- [ ] Run database migrations on staging
+- [ ] Test full flow on staging environment
+- [ ] Verify no existing users are incorrectly blocked
+- [ ] Monitor error logs for first 24 hours
+- [ ] Run database migrations on production
+- [ ] Enable feature flag (if using feature flags)
+- [ ] Monitor user complaints/support tickets
+- [ ] Adjust grace period if needed based on feedback
+
+## Notes for Backend Implementation
+
+### Data Migration Considerations
+- Existing tasks should default `reviewedByCustomer: false`
+- Existing users should default `tasksCreatedSinceLastReview: 0`
+- Consider backfilling completed tasks with review status based on existing reviews table
+
+### Performance Considerations
+- Add database indexes as shown above
+- Consider caching pending reviews count in Redis
+- Batch update operations where possible
+- Monitor query performance on tasks/reviews tables
+
+### Feature Flag (Optional)
+Consider adding a feature flag to disable enforcement if issues arise:
+```typescript
+const REVIEW_ENFORCEMENT_ENABLED = process.env.REVIEW_ENFORCEMENT_ENABLED === 'true';
+```
+
+---
+
+**END OF BACKEND IMPLEMENTATION SECTION**

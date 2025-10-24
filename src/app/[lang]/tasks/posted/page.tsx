@@ -1,11 +1,12 @@
 import { PostedTasksPageContent } from './components/posted-tasks-page-content'
 
 interface PostedTasksPageProps {
-  params: {
+  params: Promise<{
     lang: string
-  }
+  }>
 }
 
-export default function PostedTasksPage({ params }: PostedTasksPageProps) {
-  return <PostedTasksPageContent lang={params.lang} />
+export default async function PostedTasksPage({ params }: PostedTasksPageProps) {
+  const { lang } = await params
+  return <PostedTasksPageContent lang={lang} />
 }

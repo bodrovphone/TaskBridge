@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { safetyReports, users, applications, tasks } from '@/database/schema'
-import { eq, and, or, count } from 'drizzle-orm'
+// @todo INTEGRATION: Uncomment when database is set up
+// import { db } from '@/lib/db'
+// import { safetyReports, users, applications, tasks } from '@/database/schema'
+// import { eq, and, or, count } from 'drizzle-orm'
 
 /**
  * POST /api/safety/report
@@ -17,6 +18,13 @@ import { eq, and, or, count } from 'drizzle-orm'
  * - This prevents abuse from random users/bots
  */
 export async function POST(request: NextRequest) {
+  // @todo INTEGRATION: Implement when database is set up
+  return NextResponse.json(
+    { error: 'API not yet implemented' },
+    { status: 501 }
+  )
+
+  /* IMPLEMENTATION COMMENTED OUT - NO DATABASE YET
   try {
     const body = await request.json()
     const { reporterId, reportedUserId, reportType, description, evidenceUrls, relatedTaskId } = body
@@ -127,6 +135,7 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+  */
 }
 
 /**
@@ -140,6 +149,7 @@ export async function POST(request: NextRequest) {
  * @param reportedUserId - User being reported
  * @returns true if they have worked together, false otherwise
  */
+/* COMMENTED OUT - NO DATABASE YET
 async function verifyTaskInteraction(
   reporterId: string,
   reportedUserId: string
@@ -189,3 +199,4 @@ async function verifyTaskInteraction(
     return false // Fail closed - deny if verification fails
   }
 }
+*/

@@ -8,10 +8,29 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { getMainCategoriesWithSubcategories } from '@/features/categories'
 import { CategorySearch } from '@/components/common/category-search'
+import { useCreateTask } from '@/hooks/use-create-task'
+import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
+import AuthSlideOver from '@/components/ui/auth-slide-over'
 
 function CategoriesPage() {
  const { t, i18n } = useTranslation()
  const router = useRouter()
+
+ // Review enforcement hook
+ const {
+  handleCreateTask,
+  showAuthPrompt,
+  setShowAuthPrompt,
+  isEnforcementDialogOpen,
+  setIsEnforcementDialogOpen,
+  pendingReviewTasks,
+  currentReviewTaskIndex,
+  isReviewDialogOpen,
+  setIsReviewDialogOpen,
+  isSubmittingReview,
+  handleStartReviewing,
+  handleSubmitReview
+ } = useCreateTask()
 
  // Get main categories with subcategories from centralized feature
  const mainCategories = useMemo(() => {
@@ -96,12 +115,42 @@ function CategoriesPage() {
       <Button
        size="lg"
        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold"
+       onClick={handleCreateTask}
       >
        {t('nav.createTask', 'Create Task')} <ArrowRight className="ml-2" size={16} />
       </Button>
      </div>
     </div>
    </section>
+
+   {/* Auth Slide Over */}
+   <AuthSlideOver
+    isOpen={showAuthPrompt}
+    onClose={() => setShowAuthPrompt(false)}
+    action="create-task"
+   />
+
+   {/* Review Enforcement Dialog */}
+   <ReviewEnforcementDialog
+    isOpen={isEnforcementDialogOpen}
+    onClose={() => setIsEnforcementDialogOpen(false)}
+    blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
+    pendingTasks={pendingReviewTasks}
+    onReviewTask={handleStartReviewing}
+   />
+
+   {/* Review Dialog - Sequential Flow */}
+   {pendingReviewTasks.length > 0 && (
+    <ReviewDialog
+     isOpen={isReviewDialogOpen}
+     onClose={() => setIsReviewDialogOpen(false)}
+     onSubmit={handleSubmitReview}
+     task={pendingReviewTasks[currentReviewTaskIndex]}
+     isLoading={isSubmittingReview}
+     currentIndex={currentReviewTaskIndex}
+     totalCount={pendingReviewTasks.length}
+    />
+   )}
   </div>
  )
 }
