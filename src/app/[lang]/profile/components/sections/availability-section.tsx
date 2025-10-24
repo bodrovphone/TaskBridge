@@ -11,7 +11,7 @@ interface AvailabilitySectionProps {
   serviceArea: string[]
   languages: string[]
   onSave: (data: { availability: string; responseTime: string; serviceArea: string[] }) => Promise<void>
-  onLanguageChange: (languages: string[]) => void
+  onLanguageChange: (data: string[]) => void
 }
 
 const responseTimeOptions = [

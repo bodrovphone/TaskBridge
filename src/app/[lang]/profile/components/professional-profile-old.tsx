@@ -2,25 +2,19 @@
 
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Chip, Badge, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter } from 'next/navigation'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
 import {
  Briefcase,
  Star,
- Calendar,
- MapPin,
  Award,
- TrendingUp,
  Plus,
- Eye,
- CheckCircle,
  Edit,
  Save,
  X,
- Settings,
- Banknote
+ Settings
 } from 'lucide-react'
 import { SkillsSelector } from './skills-selector'
 
@@ -36,16 +30,6 @@ interface User {
 
 interface ProfessionalProfileProps {
  user: User
-}
-
-interface ProfessionalFormData {
- title: string
- description: string
- hourlyRate: number
- experience: string
- availability: string
- skills: string[]
- portfolio: string
 }
 
 interface BusinessSettings {

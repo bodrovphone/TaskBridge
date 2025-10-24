@@ -22,14 +22,6 @@ interface CustomerProfileProps {
  user: User
 }
 
-interface PersonalFormData {
- name: string
- email: string
- phone: string
- location: string
-}
-
-
 export function CustomerProfile({ user }: CustomerProfileProps) {
  const { t } = useTranslation()
  const [isEditing, setIsEditing] = useState(false)

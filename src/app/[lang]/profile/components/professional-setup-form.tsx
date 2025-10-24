@@ -4,39 +4,24 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 import {
- Card,
- CardBody,
- CardHeader,
  Button,
  Input,
  Textarea,
  Select,
  SelectItem,
- Chip,
  Modal,
  ModalContent,
  ModalHeader,
  ModalBody,
- ModalFooter,
- useDisclosure
+ ModalFooter
 } from '@nextui-org/react'
-import { X, Plus, Briefcase } from 'lucide-react'
+import { Briefcase } from 'lucide-react'
 import { SkillsSelector } from './skills-selector'
 
 interface ProfessionalSetupFormProps {
  isOpen: boolean
  onClose: () => void
  onSuccess: () => void
-}
-
-interface ProfessionalFormData {
- title: string
- description: string
- hourlyRate: number
- availability: string
- skills: string[]
- experience: string
- portfolio: string
 }
 
 const availabilityOptions = [

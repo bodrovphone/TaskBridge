@@ -8,7 +8,7 @@ import { Camera, Upload, X, Check } from 'lucide-react'
 interface AvatarUploadProps {
  currentAvatar?: string | null
  userName: string
- onAvatarChange: (newAvatar: string) => void
+ onAvatarChange: (value: string) => void
  size?: 'sm' | 'md' | 'lg'
  className?: string
 }
@@ -80,7 +80,7 @@ export function AvatarUpload({
 
    setIsModalOpen(false)
    setPreviewImage(null)
-  } catch (error) {
+  } catch {
    setError(t('profile.avatar.uploadError'))
   } finally {
    setIsLoading(false)

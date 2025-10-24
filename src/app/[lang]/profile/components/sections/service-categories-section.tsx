@@ -8,7 +8,7 @@ import { ServiceCategoriesSelector } from '../service-categories-selector'
 
 interface ServiceCategoriesSectionProps {
   serviceCategories: string[]
-  onSave: (categories: string[]) => void
+  onSave: (data: string[]) => void
 }
 
 export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceCategoriesSectionProps) {

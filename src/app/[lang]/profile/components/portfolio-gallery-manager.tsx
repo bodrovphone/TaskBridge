@@ -18,7 +18,7 @@ interface PortfolioItem {
 
 interface PortfolioGalleryManagerProps {
  items: PortfolioItem[]
- onChange: (items: PortfolioItem[]) => void
+ onChange: (value: PortfolioItem[]) => void
  maxItems?: number
 }
 
