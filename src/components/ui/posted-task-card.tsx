@@ -4,13 +4,15 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star } from 'lucide-react'
+import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
 import { CancelTaskDialog } from '@/components/tasks/cancel-task-dialog'
 import { ReviewDialog } from '@/features/reviews'
 import { mockSubmitReview } from '@/features/reviews'
 import { useToast } from '@/hooks/use-toast'
+import { TaskHintBanner } from '@/components/ui/task-hint-banner'
+import { useTaskHints } from '@/hooks/use-task-hints'
 
 interface PostedTaskCardProps {
   id: string
@@ -63,6 +65,19 @@ function PostedTaskCard({
   // @todo INTEGRATION: Fetch from user's profile/stats
   const cancellationsThisMonth = 0 // Mock data
   const maxCancellationsPerMonth = 1 // As per PRD
+
+  // Task hints hook
+  const taskHintsData = useTaskHints({
+    id,
+    title,
+    description,
+    category,
+    budget,
+    location,
+    createdAt,
+    applicationsCount,
+    status
+  })
 
   const getStatusColor = (taskStatus: typeof status) => {
     switch (taskStatus) {
@@ -182,6 +197,16 @@ function PostedTaskCard({
             {t(category)}
           </Chip>
         </div>
+
+        {/* Task Hints Banner */}
+        {taskHintsData.shouldShow && (
+          <TaskHintBanner
+            taskId={id}
+            taskAge={taskHintsData.taskAge}
+            hints={taskHintsData.hints}
+            onDismiss={taskHintsData.dismiss}
+          />
+        )}
 
         {/* Description */}
         <p className="text-gray-600 text-sm line-clamp-2 mb-4 flex-grow">
@@ -350,7 +375,7 @@ function PostedTaskCard({
             </>
           ) : (
             <>
-              {/* Open - View Details + View Applications */}
+              {/* Open - View Details + Edit Task + View Applications */}
               <Button
                 size="sm"
                 variant="solid"
@@ -360,6 +385,16 @@ function PostedTaskCard({
                 className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {t('postedTasks.viewDetails')}
+              </Button>
+              <Button
+                size="sm"
+                variant="bordered"
+                color="primary"
+                startContent={<Edit className="w-4 h-4" />}
+                onPress={() => router.push(`/${lang}/tasks/${id}/edit`)}
+                className="w-full sm:w-auto"
+              >
+                {t('postedTasks.editTask')}
               </Button>
               {applicationsCount > 0 && (
                 <Button

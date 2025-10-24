@@ -71,6 +71,7 @@ export const notifications = {
   'postedTasks.applicationsCount': '{{count}} заявок',
   'postedTasks.viewApplications': 'Посмотреть заявки',
   'postedTasks.viewDetails': 'Посмотреть детали',
+  'postedTasks.editTask': 'Редактировать задачу',
   'postedTasks.acceptedProfessional': 'Принятый специалист',
   'postedTasks.awaitingYourConfirmation': 'Ожидает вашего подтверждения',
   'postedTasks.markedComplete': 'отметил эту задачу как завершённую',
@@ -103,4 +104,26 @@ export const notifications = {
   'cancelTask.rateLimit.lastWarning': 'Это ваша последняя бесплатная отмена в этом месяце. Используйте её с умом!',
   'cancelTask.limitExceeded.title': 'Достигнут месячный лимит отмен',
   'cancelTask.limitExceeded.message': 'Вы достигли лимита отмен на этот месяц. Частые отмены могут повлиять на репутацию вашего аккаунта. Пожалуйста, свяжитесь с поддержкой, если нужна помощь.',
+
+  // Edit Task Page
+  'editTask.title': 'Редактировать задачу',
+  'editTask.subtitle': 'Обновите детали задачи, чтобы привлечь больше специалистов',
+  'editTask.editingBanner': 'Редактирование: {{title}}',
+  'editTask.editingSubtext': 'Внесите изменения, чтобы улучшить свою задачу',
+  'editTask.help': 'Нужна помощь? Свяжитесь с нашей службой поддержки',
+  'editTask.savingChanges': 'Сохранение изменений...',
+  'editTask.saveChanges': 'Сохранить изменения',
+  'editTask.cancelEdit': 'Отмена',
+  'editTask.successMessage': 'Задача успешно обновлена!',
+  'editTask.errorMessage': 'Ошибка при обновлении задачи. Пожалуйста, попробуйте снова.',
+
+  // Task Hints System
+  'taskHints.noApplications.title': 'Пока нет заявок? Ваша задача открыта уже {{days}} дней',
+  'taskHints.improveTask': 'Улучшить задачу',
+  'taskHints.dismiss': 'Закрыть',
+  'taskHints.suggestions.budgetLow': 'Бюджет может быть слишком низким (средний для этой категории: {{average}} лв)',
+  'taskHints.suggestions.budgetVeryLow': 'Бюджет значительно ниже среднего ({{current}} лв против {{average}} лв в среднем)',
+  'taskHints.suggestions.descriptionShort': 'Добавьте больше деталей в описание, чтобы привлечь специалистов',
+  'taskHints.suggestions.locationMissing': 'Укажите точное местоположение (город и район), чтобы помочь специалистам найти вас',
+  'taskHints.suggestions.urgencyUnrealistic': 'Рассмотрите более гибкий срок выполнения, чтобы получить больше заявок',
 };

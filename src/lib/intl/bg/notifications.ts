@@ -71,6 +71,7 @@ export const notifications = {
   'postedTasks.applicationsCount': '{{count}} кандидатури',
   'postedTasks.viewApplications': 'Виж кандидатурите',
   'postedTasks.viewDetails': 'Виж детайлите',
+  'postedTasks.editTask': 'Редактирай задача',
   'postedTasks.acceptedProfessional': 'Приет специалист',
   'postedTasks.awaitingYourConfirmation': 'Очаква вашето потвърждение',
   'postedTasks.markedComplete': 'маркира тази задача като завършена',
@@ -103,4 +104,26 @@ export const notifications = {
   'cancelTask.rateLimit.lastWarning': 'Това е последният ви безплатен отказ този месец. Използвайте го мъдро!',
   'cancelTask.limitExceeded.title': 'Достигнат месечен лимит на отказвания',
   'cancelTask.limitExceeded.message': 'Достигнахте лимита на отказвания за този месец. Честите отказвания могат да повлияят на репутацията на вашия акаунт. Моля, свържете се с поддръжката ако имате нужда от помощ.',
+
+  // Edit Task Page
+  'editTask.title': 'Редактиране на задача',
+  'editTask.subtitle': 'Актуализирайте детайлите на задачата, за да привлечете повече специалисти',
+  'editTask.editingBanner': 'Редактиране: {{title}}',
+  'editTask.editingSubtext': 'Направете промени, за да подобрите задачата си',
+  'editTask.help': 'Нуждаете се от помощ? Свържете се с нашия екип за поддръжка',
+  'editTask.savingChanges': 'Запазване на промените...',
+  'editTask.saveChanges': 'Запази промените',
+  'editTask.cancelEdit': 'Отказ',
+  'editTask.successMessage': 'Задачата е актуализирана успешно!',
+  'editTask.errorMessage': 'Грешка при актуализиране на задачата. Моля, опитайте отново.',
+
+  // Task Hints System
+  'taskHints.noApplications.title': 'Все още няма кандидатури? Вашата задача е отворена от {{days}} дни',
+  'taskHints.improveTask': 'Подобри задачата',
+  'taskHints.dismiss': 'Затвори',
+  'taskHints.suggestions.budgetLow': 'Бюджетът може да е твърде нисък (средно за тази категория: {{average}} лв)',
+  'taskHints.suggestions.budgetVeryLow': 'Бюджетът е значително под средния ({{current}} лв срещу {{average}} лв средно)',
+  'taskHints.suggestions.descriptionShort': 'Добавете повече детайли към описанието, за да привлечете специалисти',
+  'taskHints.suggestions.locationMissing': 'Посочете точното си местоположение (град и квартал), за да помогнете на специалистите да ви намерят',
+  'taskHints.suggestions.urgencyUnrealistic': 'Помислете за по-гъвкав краен срок, за да получите повече кандидатури',
 };

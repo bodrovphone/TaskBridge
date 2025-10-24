@@ -70,6 +70,7 @@ export const notifications = {
   'postedTasks.applicationsCount': '{{count}} applications',
   'postedTasks.viewApplications': 'View Applications',
   'postedTasks.viewDetails': 'View Details',
+  'postedTasks.editTask': 'Edit Task',
   'postedTasks.acceptedProfessional': 'Accepted Professional',
   'postedTasks.awaitingYourConfirmation': 'Awaiting Your Confirmation',
   'postedTasks.markedComplete': 'marked this task as complete',
@@ -102,4 +103,26 @@ export const notifications = {
   'cancelTask.rateLimit.lastWarning': 'This is your last free cancellation this month. Use it wisely!',
   'cancelTask.limitExceeded.title': 'Monthly cancellation limit reached',
   'cancelTask.limitExceeded.message': 'You\'ve reached your cancellation limit for this month. Frequent cancellations may affect your account standing. Please contact support if you need assistance.',
+
+  // Edit Task Page
+  'editTask.title': 'Edit Task',
+  'editTask.subtitle': 'Update your task details to attract more professionals',
+  'editTask.editingBanner': 'Editing: {{title}}',
+  'editTask.editingSubtext': 'Make changes to improve your task',
+  'editTask.help': 'Need help? Contact our support team',
+  'editTask.savingChanges': 'Saving changes...',
+  'editTask.saveChanges': 'Save Changes',
+  'editTask.cancelEdit': 'Cancel',
+  'editTask.successMessage': 'Task updated successfully!',
+  'editTask.errorMessage': 'Error updating task. Please try again.',
+
+  // Task Hints System
+  'taskHints.noApplications.title': 'No applications yet? Your task has been open for {{days}} days',
+  'taskHints.improveTask': 'Improve Task',
+  'taskHints.dismiss': 'Dismiss',
+  'taskHints.suggestions.budgetLow': 'Budget might be too low (avg. for this category: {{average}} лв)',
+  'taskHints.suggestions.budgetVeryLow': 'Budget is significantly below average ({{current}} лв vs {{average}} лв avg.)',
+  'taskHints.suggestions.descriptionShort': 'Add more details to your description to attract professionals',
+  'taskHints.suggestions.locationMissing': 'Specify your exact location (city and neighborhood) to help professionals find you',
+  'taskHints.suggestions.urgencyUnrealistic': 'Consider making the deadline more flexible to receive more applications',
 };

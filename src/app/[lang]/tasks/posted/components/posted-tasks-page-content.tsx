@@ -56,6 +56,21 @@ const mockPostedTasks: PostedTask[] = [
     deadline: new Date('2024-10-25')
   },
   {
+    id: '0',
+    title: 'Почистване на апартамент',
+    description: 'Трябва почистване',
+    category: 'categories.houseCleaning',
+    budget: 50, // Low budget - will trigger hint
+    status: 'open',
+    applicationsCount: 0, // No applications - will trigger hint
+    location: {
+      city: '', // Missing location - will trigger hint
+      neighborhood: ''
+    },
+    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), // 8 days ago - will show hints
+    deadline: new Date('2024-11-01')
+  },
+  {
     id: '2',
     title: 'Kitchen sink plumbing repair',
     description: 'Professional completed the work and is waiting for your confirmation',
