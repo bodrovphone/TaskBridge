@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { Button as NextUIButton } from "@nextui-org/react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/features/auth";
 import { useTranslation } from 'react-i18next';
 
 interface AuthSlideOverProps {
@@ -15,11 +15,15 @@ interface AuthSlideOverProps {
 }
 
 export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
- const { login } = useAuth();
+ const { signIn, signUp, signInWithGoogle, signInWithFacebook } = useAuth();
  const { t } = useTranslation();
+ const [mode, setMode] = useState<'login' | 'signup'>('login');
+ const [fullName, setFullName] = useState("");
  const [email, setEmail] = useState("");
  const [password, setPassword] = useState("");
+ const [confirmPassword, setConfirmPassword] = useState("");
  const [isLoading, setIsLoading] = useState(false);
+ const [error, setError] = useState<string | null>(null);
  const [mounted, setMounted] = useState(false);
 
  useEffect(() => {
@@ -30,21 +34,56 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
 
  const handleLogin = async () => {
   if (!email || !password) return;
-  
+
   setIsLoading(true);
-  try {
-   await login(email, password);
-   onClose(); // Close the slide-over after successful login
-  } catch (error) {
-   console.error('Login failed:', error);
-  } finally {
+  setError(null);
+
+  const result = await signIn(email, password);
+
+  if (result.error) {
+   setError(result.error);
    setIsLoading(false);
+  } else {
+   onClose();
   }
  };
 
- const handleRegister = () => {
-  // TODO: Handle register logic - for now just simulate login
-  handleLogin();
+ const handleSignUp = async () => {
+  if (!email || !password || !fullName) return;
+
+  if (password !== confirmPassword) {
+   setError('Passwords do not match');
+   return;
+  }
+
+  if (password.length < 6) {
+   setError('Password must be at least 6 characters');
+   return;
+  }
+
+  setIsLoading(true);
+  setError(null);
+
+  const result = await signUp(email, password, fullName);
+
+  if (result.error) {
+   setError(result.error);
+   setIsLoading(false);
+  } else {
+   onClose();
+  }
+ };
+
+ const handleGoogleAuth = async () => {
+  setIsLoading(true);
+  setError(null);
+  await signInWithGoogle();
+ };
+
+ const handleFacebookAuth = async () => {
+  setIsLoading(true);
+  setError(null);
+  await signInWithFacebook();
  };
 
  return createPortal(
@@ -100,8 +139,30 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </p>
        </div>
 
-       {/* Login Form */}
+       {/* Error Message */}
+       {error && (
+        <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
+         {error}
+        </div>
+       )}
+
+       {/* Auth Form */}
        <div className="space-y-4">
+        {mode === 'signup' && (
+         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+           Full Name
+          </label>
+          <input
+           type="text"
+           value={fullName}
+           onChange={(e) => setFullName(e.target.value)}
+           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+           placeholder="John Doe"
+          />
+         </div>
+        )}
+
         <div>
          <label className="block text-sm font-medium text-gray-700 mb-2">
           {t('auth.email')}
@@ -114,7 +175,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           placeholder="your@email.com"
          />
         </div>
-        
+
         <div>
          <label className="block text-sm font-medium text-gray-700 mb-2">
           {t('auth.password')}
@@ -128,27 +189,44 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          />
         </div>
 
-        <div className="flex items-center justify-between text-sm">
-         <label className="flex items-center">
-          <input type="checkbox" className="mr-2 rounded" />
-          {t('auth.rememberMe')}
-         </label>
-         <Link href="/forgot-password" className="text-blue-600 hover:text-blue-800">
-          {t('auth.forgotPassword')}
-         </Link>
-        </div>
+        {mode === 'signup' && (
+         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+           Confirm Password
+          </label>
+          <input
+           type="password"
+           value={confirmPassword}
+           onChange={(e) => setConfirmPassword(e.target.value)}
+           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+           placeholder="••••••••"
+          />
+         </div>
+        )}
+
+        {mode === 'login' && (
+         <div className="flex items-center justify-between text-sm">
+          <label className="flex items-center">
+           <input type="checkbox" className="mr-2 rounded" />
+           {t('auth.rememberMe')}
+          </label>
+          <Link href="/forgot-password" className="text-blue-600 hover:text-blue-800">
+           {t('auth.forgotPassword')}
+          </Link>
+         </div>
+        )}
        </div>
 
-       {/* Login Button */}
-       <NextUIButton 
-        color="primary" 
-        size="lg" 
+       {/* Submit Button */}
+       <NextUIButton
+        color="primary"
+        size="lg"
         className="w-full"
-        onClick={handleLogin}
+        onClick={mode === 'login' ? handleLogin : handleSignUp}
         isLoading={isLoading}
-        isDisabled={!email || !password}
+        isDisabled={mode === 'login' ? (!email || !password) : (!email || !password || !fullName || !confirmPassword)}
        >
-        {t('auth.login')}
+        {mode === 'login' ? t('auth.login') : t('auth.createAccount')}
        </NextUIButton>
 
        {/* Social Login */}
@@ -157,6 +235,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          variant="bordered"
          size="lg"
          className="w-full"
+         onPress={handleGoogleAuth}
+         isDisabled={isLoading}
          startContent={
           <svg className="w-5 h-5" viewBox="0 0 24 24">
            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -173,6 +253,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          variant="bordered"
          size="lg"
          className="w-full"
+         onPress={handleFacebookAuth}
+         isDisabled={isLoading}
          startContent={
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#1877F2">
            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -193,33 +275,35 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </div>
        </div>
 
-       {/* Register Section */}
+       {/* Toggle Mode */}
        <div className="text-center">
-        <p className="text-sm text-gray-600 mb-4">
-         {t('auth.noAccount')}
+        <p className="text-sm text-gray-600">
+         {mode === 'login' ? t('auth.noAccount') : 'Already have an account?'}
+         {' '}
+         <button
+          onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
+          className="text-blue-600 hover:text-blue-800 font-medium"
+          disabled={isLoading}
+         >
+          {mode === 'login' ? t('auth.createAccount') : t('auth.login')}
+         </button>
         </p>
-        <NextUIButton 
-         variant="bordered" 
-         size="lg" 
-         className="w-full"
-         onClick={handleRegister}
-        >
-         {t('auth.createAccount')}
-        </NextUIButton>
        </div>
 
        {/* Benefits */}
-       <div className="bg-gray-50 p-4 rounded-lg">
-        <h4 className="font-medium text-gray-900 mb-2">
-         🚀 {t('auth.whyRegister')}
-        </h4>
-        <ul className="text-sm text-gray-600 space-y-1">
-         <li>{t('auth.benefit1')}</li>
-         <li>{t('auth.benefit2')}</li>
-         <li>{t('auth.benefit3')}</li>
-         <li>{t('auth.benefit4')}</li>
-        </ul>
-       </div>
+       {mode === 'signup' && (
+        <div className="bg-gray-50 p-4 rounded-lg">
+         <h4 className="font-medium text-gray-900 mb-2">
+          🚀 {t('auth.whyRegister')}
+         </h4>
+         <ul className="text-sm text-gray-600 space-y-1">
+          <li>{t('auth.benefit1')}</li>
+          <li>{t('auth.benefit2')}</li>
+          <li>{t('auth.benefit3')}</li>
+          <li>{t('auth.benefit4')}</li>
+         </ul>
+        </div>
+       )}
       </div>
      </div>
     </div>

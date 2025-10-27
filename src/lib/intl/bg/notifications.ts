@@ -57,6 +57,34 @@ export const notifications = {
   'taskDetail.yourReply': 'Вашия отговор:',
   'taskDetail.price': 'Цена:',
   'taskDetail.tasks': 'задачи',
+  'taskDetail.cancel': 'Отмени',
+  'taskDetail.writeReply': 'Напишете вашия отговор...',
+  'taskDetail.sendReply': 'Изпрати отговор',
+
+  // Ask Question Dialog
+  'taskDetail.askQuestionDialog.title': 'Задайте въпрос',
+  'taskDetail.askQuestionDialog.placeholder': 'Какво бихте искали да знаете за тази задача?',
+  'taskDetail.askQuestionDialog.submit': 'Публикувай въпрос',
+  'taskDetail.askQuestionDialog.characterCount': '{{current}}/{{max}} знака',
+  'taskDetail.askQuestionDialog.minLength': 'Въпросът трябва да бъде поне {{min}} знака',
+  'taskDetail.askQuestionDialog.maxLength': 'Въпросът трябва да бъде най-много {{max}} знака',
+
+  // Questions Section
+  'taskDetail.questions.empty.title': 'Все още няма въпроси',
+  'taskDetail.questions.empty.message': 'Бъдете първият, който ще зададе въпрос относно тази задача!',
+  'taskDetail.questions.unanswered': 'Без отговор',
+  'taskDetail.questions.answered': 'Отговорено',
+  'taskDetail.questions.loading': 'Зареждане на въпроси...',
+
+  // Answer Dialog
+  'taskDetail.answerDialog.title': 'Отговори на въпрос',
+  'taskDetail.answerDialog.placeholder': 'Напишете вашия отговор...',
+
+  // Success/Error Messages
+  'taskDetail.questionPosted': 'Вашият въпрос беше публикуван успешно!',
+  'taskDetail.questionError': 'Неуспешно публикуване на въпрос. Моля, опитайте отново.',
+  'taskDetail.answerPosted': 'Вашият отговор беше публикуван успешно!',
+  'taskDetail.answerError': 'Неуспешно публикуване на отговор. Моля, опитайте отново.',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Моите публикувани задачи',

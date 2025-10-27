@@ -56,6 +56,34 @@ export const notifications = {
   'taskDetail.yourReply': 'Your reply:',
   'taskDetail.price': 'Price:',
   'taskDetail.tasks': 'tasks',
+  'taskDetail.cancel': 'Cancel',
+  'taskDetail.writeReply': 'Write your reply...',
+  'taskDetail.sendReply': 'Send Reply',
+
+  // Ask Question Dialog
+  'taskDetail.askQuestionDialog.title': 'Ask a Question',
+  'taskDetail.askQuestionDialog.placeholder': 'What would you like to know about this task?',
+  'taskDetail.askQuestionDialog.submit': 'Post Question',
+  'taskDetail.askQuestionDialog.characterCount': '{{current}}/{{max}} characters',
+  'taskDetail.askQuestionDialog.minLength': 'Question must be at least {{min}} characters',
+  'taskDetail.askQuestionDialog.maxLength': 'Question must be at most {{max}} characters',
+
+  // Questions Section
+  'taskDetail.questions.empty.title': 'No questions yet',
+  'taskDetail.questions.empty.message': 'Be the first to ask a question about this task!',
+  'taskDetail.questions.unanswered': 'Unanswered',
+  'taskDetail.questions.answered': 'Answered',
+  'taskDetail.questions.loading': 'Loading questions...',
+
+  // Answer Dialog
+  'taskDetail.answerDialog.title': 'Answer Question',
+  'taskDetail.answerDialog.placeholder': 'Write your answer...',
+
+  // Success/Error Messages
+  'taskDetail.questionPosted': 'Your question has been posted successfully!',
+  'taskDetail.questionError': 'Failed to post question. Please try again.',
+  'taskDetail.answerPosted': 'Your answer has been posted successfully!',
+  'taskDetail.answerError': 'Failed to post answer. Please try again.',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'My Posted Tasks',

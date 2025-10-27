@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { DEFAULT_LOCALE } from '@/lib/constants/locales';
-import type { Task } from "@/database/schema";
 import {
  Card,
  CardBody,
@@ -17,6 +16,21 @@ import {
  Chip,
  Avatar
 } from "@nextui-org/react";
+
+// Task type definition (to be moved to global types later)
+interface Task {
+ id: string;
+ title: string;
+ description: string;
+ category: string;
+ city: string;
+ neighborhood?: string;
+ budgetType: 'fixed' | 'hourly' | 'negotiable';
+ budgetMin?: number;
+ budgetMax?: number;
+ deadline?: Date | string;
+ createdAt: Date | string;
+}
 
 interface TaskCardProps {
  task: Task & {

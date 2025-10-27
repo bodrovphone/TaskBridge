@@ -57,6 +57,34 @@ export const notifications = {
   'taskDetail.yourReply': 'Ваш ответ:',
   'taskDetail.price': 'Цена:',
   'taskDetail.tasks': 'задач',
+  'taskDetail.cancel': 'Отмена',
+  'taskDetail.writeReply': 'Напишите ваш ответ...',
+  'taskDetail.sendReply': 'Отправить ответ',
+
+  // Ask Question Dialog
+  'taskDetail.askQuestionDialog.title': 'Задать вопрос',
+  'taskDetail.askQuestionDialog.placeholder': 'Что бы вы хотели узнать об этой задаче?',
+  'taskDetail.askQuestionDialog.submit': 'Опубликовать вопрос',
+  'taskDetail.askQuestionDialog.characterCount': '{{current}}/{{max}} символов',
+  'taskDetail.askQuestionDialog.minLength': 'Вопрос должен содержать не менее {{min}} символов',
+  'taskDetail.askQuestionDialog.maxLength': 'Вопрос должен содержать не более {{max}} символов',
+
+  // Questions Section
+  'taskDetail.questions.empty.title': 'Вопросов пока нет',
+  'taskDetail.questions.empty.message': 'Станьте первым, кто задаст вопрос об этой задаче!',
+  'taskDetail.questions.unanswered': 'Без ответа',
+  'taskDetail.questions.answered': 'Отвечено',
+  'taskDetail.questions.loading': 'Загрузка вопросов...',
+
+  // Answer Dialog
+  'taskDetail.answerDialog.title': 'Ответить на вопрос',
+  'taskDetail.answerDialog.placeholder': 'Напишите ваш ответ...',
+
+  // Success/Error Messages
+  'taskDetail.questionPosted': 'Ваш вопрос успешно опубликован!',
+  'taskDetail.questionError': 'Не удалось опубликовать вопрос. Пожалуйста, попробуйте снова.',
+  'taskDetail.answerPosted': 'Ваш ответ успешно опубликован!',
+  'taskDetail.answerError': 'Не удалось опубликовать ответ. Пожалуйста, попробуйте снова.',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Мои опубликованные задачи',

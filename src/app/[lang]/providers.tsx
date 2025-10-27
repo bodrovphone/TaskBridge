@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { NextUIProvider } from '@nextui-org/react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { type SupportedLocale } from '@/lib/constants/locales'
+import { AuthProvider } from '@/features/auth'
 
 interface LocaleProvidersProps {
  children: React.ReactNode
@@ -121,8 +122,10 @@ function LocaleProviders({ children, locale }: LocaleProvidersProps) {
    <NextUIProvider>
     <QueryClientProvider client={queryClient}>
      <I18nextProvider i18n={i18n}>
-      {children}
-      <Toaster />
+      <AuthProvider>
+       {children}
+       <Toaster />
+      </AuthProvider>
      </I18nextProvider>
     </QueryClientProvider>
    </NextUIProvider>

@@ -3,43 +3,47 @@ import type { NextRequest } from 'next/server'
 import { LOCALE_COOKIE, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { detectUserLocale } from '@/lib/utils/locale-detection'
 import { pathnameHasLocale, addLocaleToPathname } from '@/lib/utils/url-locale'
+import { updateSession } from '@/lib/supabase/middleware'
 
 /**
- * Patterns for routes that should skip middleware processing
+ * Patterns for routes that should skip locale processing (but still get session refresh)
  */
-const SKIP_MIDDLEWARE_PATTERNS = [
+const SKIP_LOCALE_PATTERNS = [
   /^\/_next/, // Next.js internal files
-  /^\/api/,   // API routes
+  /^\/api/,   // API routes (need session but not locale)
   /\./,       // Files with extensions
   /^\/favicon\.ico$/ // Favicon
 ] as const
 
 /**
- * Checks if the request should skip middleware processing
+ * Checks if the request should skip locale processing (but still gets session refresh)
  * @param pathname - Request pathname
- * @returns True if middleware should be skipped
+ * @returns True if locale processing should be skipped
  */
-function shouldSkipMiddleware(pathname: string): boolean {
-  return SKIP_MIDDLEWARE_PATTERNS.some(pattern => pattern.test(pathname))
+function shouldSkipLocaleProcessing(pathname: string): boolean {
+  return SKIP_LOCALE_PATTERNS.some(pattern => pattern.test(pathname))
 }
 
 /**
- * Main middleware function for locale detection and redirection
+ * Main middleware function for Supabase auth + locale detection
  * Optimized for minimal execution cost on returning users
  * @param request - Next.js request object
  * @returns Next.js response or redirect
  */
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+
+  // First, update Supabase session (required for auth to work on ALL routes)
+  const supabaseResponse = await updateSession(request)
 
   // ✅ EARLY RETURN #1: Already has locale in URL - minimal cost for returning users!
   if (pathnameHasLocale(pathname)) {
-    return NextResponse.next() // No processing needed
+    return supabaseResponse // Return with updated session
   }
 
-  // ✅ EARLY RETURN #2: Static assets and API routes
-  if (shouldSkipMiddleware(pathname)) {
-    return NextResponse.next() // Skip static files entirely
+  // ✅ EARLY RETURN #2: Static assets and API routes (skip locale, but session was already refreshed)
+  if (shouldSkipLocaleProcessing(pathname)) {
+    return supabaseResponse // Return with updated session
   }
 
   // 🔍 EXPENSIVE OPERATIONS - Only for new users or root URLs
@@ -75,9 +79,10 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Only run middleware on routes that need locale detection
+  // Run middleware on routes that need auth session refresh + locale detection
   matcher: [
-    // Skip all internal paths (_next, api) and files with extensions
-    '/((?!_next/static|_next/image|favicon.ico|api).*)',
+    // Skip all internal paths (_next) and files with extensions
+    // Keep /api and /auth to handle Supabase auth callbacks
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ]
 }

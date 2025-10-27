@@ -9,34 +9,40 @@ TaskBridge (branded as "Trudify") is a Bulgarian freelance platform that connect
 ## Tech Stack
 
 - **Frontend**: Next.js 15 with App Router
-- **Backend**: Next.js API Routes
-- **Database**: PostgreSQL with Drizzle ORM
-- **UI Components**: 
+- **Backend**: Next.js API Routes + Supabase
+- **Database**: Supabase PostgreSQL (with pgvector for semantic search)
+- **Authentication**: Supabase Auth (Google, Facebook, Phone)
+- **Storage**: Supabase Storage (images, documents, avatars)
+- **Real-time**: Supabase Realtime (WebSocket subscriptions)
+- **UI Components**:
   - **Radix UI** (via shadcn/ui) - Headless, accessible components
   - **NextUI** - Modern React UI library with beautiful components
   - Both libraries work together, use NextUI for new components and keep Radix for existing ones
 - **Styling**: Tailwind CSS
 - **Routing**: Next.js App Router
 - **State Management**: TanStack Query (React Query)
-- **Authentication**: Currently disabled (no auth required)
 - **Internationalization**: Smart multilingual routing with i18next
   - **URL Structure**: `/en/`, `/bg/`, `/ru/` for SEO-friendly locales
   - **Smart Detection**: Cookie preference → Browser language → English default
   - **Cost-Optimized**: Middleware with early returns (minimal execution for returning users)
 - **Animations**: Framer Motion (included with NextUI)
-- **Deployment**: Configured for Vercel deployment
+- **Deployment**: Vercel with Supabase integration
 
 ## Key Commands
 
 ```bash
+# Development
+npm run dev             # Start Next.js development server
+
 # Building
-npm run build           # Build Next.js application for production  
+npm run build           # Build Next.js application for production
 npm run start           # Start production server
 npm run lint            # Run ESLint
 npm run type-check      # Run TypeScript type checking
 
-# Database
-npm run db:push         # Push schema changes to database using Drizzle
+# Database (Supabase)
+# See /docs/infrastructure/supabase-vercel-setup.md for setup instructions
+# Database migrations managed via Supabase Dashboard or CLI
 ```
 
 ## Architecture
@@ -69,9 +75,11 @@ TaskBridge follows a modern `/src/` structure for better organization and scalab
 ├── components/           # 🧩 Technical UI organization
 │   ├── ui/              # Design system primitives (shadcn/ui)
 │   └── common/          # Shared layout components (Header, Footer, etc.)
-├── database/            # 🗃️ Database schema and configurations
-│   └── schema.ts        # Database schema with Drizzle ORM
 ├── lib/                 # 🔧 Global utilities and configurations
+│   ├── supabase/        # Supabase client configurations
+│   │   ├── client.ts    # Client-side Supabase client
+│   │   ├── server.ts    # Server-side Supabase client
+│   │   └── middleware.ts # Middleware session management
 │   ├── constants/       # Application constants (locales, categories)
 │   └── utils/           # Utility functions (locale detection, URL manipulation)
 ├── hooks/               # 🎣 Global custom React hooks
@@ -85,18 +93,29 @@ TaskBridge follows a modern `/src/` structure for better organization and scalab
 - **🔧 Separation of Concerns** - Global utilities separate from feature-specific logic
 - **⚡ Next.js Compatibility** - Full support for App Router with `/src/` directory
 
-### Database Schema
-The application has four main entities:
+### Database Architecture (Supabase PostgreSQL)
+
+**Infrastructure**: Supabase-hosted PostgreSQL with Row Level Security (RLS)
+
+The application has seven main tables:
 - **users** - Customer and professional profiles with verification fields
 - **tasks** - Service requests with location, budget, and status tracking
 - **applications** - Professional bids on tasks
 - **reviews** - Bidirectional rating system
+- **messages** - Task-specific communication between users
+- **notifications** - User notification system
+- **safety_reports** - User safety reporting and moderation
 
-Key features include:
-- User verification (phone, VAT)
+**Key Features**:
+- User verification (phone, email, VAT number via Supabase Auth)
 - Task categorization with Bulgarian service categories
-- Location-based matching (city/neighborhood)
+- Location-based matching (city/neighborhood + PostGIS for future features)
 - Professional portfolio and rating systems
+- Real-time updates via Supabase Realtime
+- Row Level Security (RLS) for data privacy
+- File storage via Supabase Storage (avatars, task images, documents)
+
+**Database Schema Documentation**: See `/docs/infrastructure/supabase-vercel-setup.md` for complete schema, RLS policies, and setup instructions.
 
 ### Feature-Based Architecture
 Each business domain is organized as a self-contained feature with all related code co-located:
@@ -190,12 +209,38 @@ All paths are configured to point to the `/src/` directory:
 - `@/lib/*` points to `./src/lib/*`
 - `@/hooks/*` points to `./src/hooks/*`
 - `@/features/*` points to `./src/features/*`
-- `@/database/*` points to `./src/database/*`
 
-### Database Operations
-- Use Drizzle ORM for all database operations
-- Schema is defined in `/src/database/schema.ts` with Zod validation
-- Run `npm run db:push` after schema changes
+### Database & Backend Operations (Supabase)
+
+**Infrastructure Setup**: See `/docs/infrastructure/supabase-vercel-setup.md` for complete guide
+
+**Client Usage**:
+```typescript
+// Client Components (browser)
+import { createClient } from '@/lib/supabase/client'
+const supabase = createClient()
+
+// Server Components & API Routes
+import { createClient } from '@/lib/supabase/server'
+const supabase = await createClient()
+```
+
+**Key Operations**:
+- **Queries**: Use Supabase client for type-safe database queries
+- **Mutations**: All writes go through Supabase client with RLS validation
+- **Auth**: Managed via Supabase Auth (Google, Facebook, Phone)
+- **Storage**: File uploads via Supabase Storage buckets
+- **Real-time**: Subscribe to table changes via Supabase Realtime
+
+**Schema Management**:
+- Database schema defined in Supabase Dashboard SQL Editor
+- Apply migrations via Supabase CLI or Dashboard
+- Generate TypeScript types: `npx supabase gen types typescript --linked > src/types/supabase.ts`
+
+**Security**:
+- Row Level Security (RLS) policies enforce data access rules
+- Service role key for admin operations (server-only, keep secret!)
+- Anon key for client operations (safe to expose)
 
 ### Component Development Architecture
 
@@ -409,20 +454,102 @@ Translation keys follow a hierarchical namespace pattern organized by chunks:
 - **task-completion.ts**: Task status & completion (taskCompletion.*, taskStatus.*)
 - **notifications.ts**: Notifications & detail pages (notifications.*, taskDetail.*, postedTasks.*)
 
-### Authentication
-- **Currently disabled** - no authentication required to access pages
-- Authentication system was removed during Next.js migration
-- Pages are publicly accessible
+### Authentication (Supabase Auth)
 
-### API Migration Status
-- **Express API routes need migration** to Next.js API routes
-- Original Express routes were in `/server/routes.ts` (now deleted)
-- API routes should be created in `/app/api/` directory
+**Status**: Supabase Auth infrastructure configured, ready for implementation
+
+**Available Providers**:
+- **Email/Password**: Built-in (enabled by default)
+- **Google OAuth**: Configure in Supabase Dashboard → Authentication → Providers
+- **Facebook Login**: Configure in Supabase Dashboard → Authentication → Providers
+- **Phone (SMS)**: Configure with Twilio/Vonage integration
+
+**Implementation**:
+```typescript
+// Client-side auth example
+import { createClient } from '@/lib/supabase/client'
+
+const supabase = createClient()
+
+// Sign up
+await supabase.auth.signUp({ email, password })
+
+// Sign in
+await supabase.auth.signInWithPassword({ email, password })
+
+// OAuth
+await supabase.auth.signInWithOAuth({
+  provider: 'google',
+  options: { redirectTo: `${location.origin}/auth/callback` }
+})
+
+// Sign out
+await supabase.auth.signOut()
+```
+
+**OAuth Callback**: `/app/auth/callback/route.ts` handles OAuth redirects
+
+**Middleware**: Automatically refreshes user sessions via `/middleware.ts`
+
+**User Context**: Access current user in Server Components:
+```typescript
+import { createClient } from '@/lib/supabase/server'
+
+const supabase = await createClient()
+const { data: { user } } = await supabase.auth.getUser()
+```
+
+**Documentation**: See `/docs/infrastructure/supabase-client-setup.md` for auth implementation examples
+
+### API Routes
+
+**Status**: Ready to implement with Supabase client
+
+**Structure**: API routes in `/app/api/` directory use Supabase for data access
+
+**Example API Route**:
+```typescript
+// /app/api/tasks/route.ts
+import { createClient } from '@/lib/supabase/server'
+import { NextResponse } from 'next/server'
+
+export async function GET(request: Request) {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('*')
+    .eq('status', 'open')
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json(data)
+}
+```
+
+**Security**: RLS policies automatically enforce data access rules
 
 ### Deployment & Environment
-- Configured for Vercel deployment
-- Database connection via `DATABASE_URL` environment variable
-- Static assets served by Next.js
+
+**Platform**: Vercel with Supabase integration
+
+**Required Environment Variables**:
+```bash
+# Supabase (get from https://supabase.com/dashboard/project/_/settings/api)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key # Server-only!
+```
+
+**Setup**:
+1. Create Supabase project at https://supabase.com/dashboard
+2. Apply database schema from `/docs/infrastructure/supabase-vercel-setup.md`
+3. Add environment variables to Vercel project settings
+4. Deploy to Vercel - environment syncs automatically
+
+**Optional**: Use Vercel-Supabase integration for automatic env sync
 
 ### Code Quality & Maintenance
 

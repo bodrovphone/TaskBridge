@@ -5,6 +5,7 @@ import { MessageCircle, Share2 } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import ApplicationDialog from "@/components/tasks/application-dialog";
+import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 
@@ -15,6 +16,7 @@ interface TaskActionsProps {
 export default function TaskActions({ task }: TaskActionsProps) {
  const { t } = useTranslation();
  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
+ const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);
 
  // Mock user ID (in real app, get from auth context)
  const userId = 'mock-user-123';
@@ -38,6 +40,7 @@ export default function TaskActions({ task }: TaskActionsProps) {
       size="lg"
       className="w-full"
       startContent={<MessageCircle size={20} />}
+      onPress={() => setIsQuestionDialogOpen(true)}
      >
       {t('taskDetail.askQuestion')}
      </NextUIButton>
@@ -63,6 +66,16 @@ export default function TaskActions({ task }: TaskActionsProps) {
      min: task.budgetMin,
      max: task.budgetMax,
     }}
+   />
+
+   {/* Ask Question Dialog */}
+   <AskQuestionDialog
+    isOpen={isQuestionDialogOpen}
+    onClose={() => setIsQuestionDialogOpen(false)}
+    taskId={task.id}
+    taskTitle={task.title}
+    taskAuthorId={task.authorId || 'task-author-123'}
+    currentUserId={userId}
    />
   </>
  );
