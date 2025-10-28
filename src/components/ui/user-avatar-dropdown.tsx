@@ -10,7 +10,7 @@ import {
  DropdownSection
 } from '@nextui-org/react'
 import UserAvatar from './user-avatar'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuth } from '@/features/auth'
 import {
  User,
  FileText,
@@ -33,7 +33,7 @@ export default function UserAvatarDropdown({
  className,
  onLoginClick
 }: UserAvatarDropdownProps) {
- const { user, logout } = useAuth()
+ const { profile, signOut } = useAuth()
  const { t } = useTranslation()
  const router = useRouter()
  const params = useParams()
@@ -63,13 +63,13 @@ export default function UserAvatarDropdown({
     router.push(`/${lang}/help`)
     break
    case 'logout':
-    logout()
+    signOut()
     break
   }
  }
 
  // For non-authenticated users, show a clickable avatar that triggers login
- if (!user) {
+ if (!profile) {
   return (
    <div className={className}>
     <UserAvatar
@@ -94,7 +94,7 @@ export default function UserAvatarDropdown({
    <DropdownTrigger>
     <div className={className}>
      <UserAvatar
-      user={user}
+      user={profile}
       size={size}
       isClickable
       className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
@@ -119,14 +119,12 @@ export default function UserAvatarDropdown({
       isReadOnly
      >
       <div className="flex gap-3 items-center">
-       <UserAvatar user={user} size="sm" />
+       <UserAvatar user={profile} size="sm" />
        <div className="flex flex-col">
         <p className="text-small font-semibold text-gray-900">
-         {user.firstName && user.lastName
-          ? `${user.firstName} ${user.lastName}`
-          : user.email}
+         {profile.fullName || profile.email}
         </p>
-        <p className="text-tiny text-gray-500">{user.email}</p>
+        <p className="text-tiny text-gray-500">{profile.email}</p>
        </div>
       </div>
      </DropdownItem>

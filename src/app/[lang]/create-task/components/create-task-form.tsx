@@ -3,7 +3,9 @@
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@nextui-org/react'
+import { useToast } from '@/hooks/use-toast'
 import { defaultFormValues } from '../lib/validation'
 import { CategorySelection } from './category-selection'
 import { TaskDetailsSection } from './task-details-section'
@@ -14,7 +16,12 @@ import { PhotosSection } from './photos-section'
 import { ReviewSection } from './review-section'
 
 export function CreateTaskForm() {
- const { t } = useTranslation()
+ const { t, i18n } = useTranslation()
+ const router = useRouter()
+ const params = useParams()
+ const { toast } = useToast()
+ const locale = (params?.lang as string) || i18n.language || 'en'
+
  const [isSubmitting, setIsSubmitting] = useState(false)
  const [category, setCategory] = useState('')
  const [budgetType, setBudgetType] = useState<'fixed' | 'range'>('range')
@@ -25,25 +32,40 @@ export function CreateTaskForm() {
   onSubmit: async ({ value }) => {
    try {
     setIsSubmitting(true)
-    console.log('Form data:', value)
 
-    // TODO: Implement API call
-    // const response = await fetch('/api/tasks', {
-    //  method: 'POST',
-    //  headers: { 'Content-Type': 'application/json' },
-    //  body: JSON.stringify(value),
-    // })
+    // Call task creation API
+    const response = await fetch('/api/tasks', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify(value),
+     credentials: 'include' // Include auth cookies
+    })
 
-    // if (!response.ok) throw new Error('Failed to create task')
+    const result = await response.json()
 
-    // const result = await response.json()
-    // router.push(`/${locale}/tasks/${result.task.id}`)
+    if (!response.ok) {
+     // Handle API errors
+     throw new Error(result.error || 'Failed to create task')
+    }
 
-    // Temporary: Just log the data
-    alert('Task created successfully! (Mock)')
-   } catch (error) {
+    // Success! Show toast notification
+    toast({
+     title: t('createTask.success', 'Task created successfully!'),
+     description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
+     variant: 'default'
+    })
+
+    // Redirect to posted tasks page
+    router.push(`/${locale}/tasks/posted`)
+   } catch (error: any) {
     console.error('Error creating task:', error)
-    alert('Error creating task. Please try again.')
+
+    // Show error toast
+    toast({
+     title: t('createTask.error', 'Error creating task'),
+     description: error.message || t('createTask.errorMessage', 'Please try again later.'),
+     variant: 'destructive'
+    })
    } finally {
     setIsSubmitting(false)
    }

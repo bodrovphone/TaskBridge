@@ -14,7 +14,7 @@ export const createTaskSchema = z.object({
     .min(10, 'createTask.errors.titleTooShort')
     .max(200, 'createTask.errors.titleTooLong'),
   description: z.string()
-    .min(50, 'createTask.errors.descriptionTooShort')
+    .min(20, 'createTask.errors.descriptionTooShort')
     .max(2000, 'createTask.errors.descriptionTooLong'),
   requirements: z.string().optional(),
 

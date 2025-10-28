@@ -7,7 +7,8 @@ import { LocaleLink } from "@/components/common/locale-link";
 import { useTranslation } from 'react-i18next';
 import { mockTasks } from '@/lib/mock-data';
 import { useCreateTask } from '@/hooks/use-create-task';
-import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews';
+// @todo FEATURE: Uncomment when reviews feature is built
+// import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews';
 import AuthSlideOver from '@/components/ui/auth-slide-over';
 import {
  FileText,
@@ -18,20 +19,12 @@ import {
 export default function FeaturedTasksSection() {
  const { t } = useTranslation();
 
- // Review enforcement hook
+ // Create task hook with auth
  const {
   handleCreateTask,
   showAuthPrompt,
-  setShowAuthPrompt,
-  isEnforcementDialogOpen,
-  setIsEnforcementDialogOpen,
-  pendingReviewTasks,
-  currentReviewTaskIndex,
-  isReviewDialogOpen,
-  setIsReviewDialogOpen,
-  isSubmittingReview,
-  handleStartReviewing,
-  handleSubmitReview
+  setShowAuthPrompt
+  // @todo FEATURE: Add review-related properties when reviews feature is built
  } = useCreateTask();
  
  // Use first 3 tasks from shared mock data for display
@@ -112,17 +105,17 @@ export default function FeaturedTasksSection() {
     action="create-task"
    />
 
-   {/* Review Enforcement Dialog */}
-   <ReviewEnforcementDialog
+   {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
+   {/* <ReviewEnforcementDialog
     isOpen={isEnforcementDialogOpen}
     onClose={() => setIsEnforcementDialogOpen(false)}
     blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
     pendingTasks={pendingReviewTasks}
     onReviewTask={handleStartReviewing}
-   />
+   /> */}
 
    {/* Review Dialog - Sequential Flow */}
-   {pendingReviewTasks.length > 0 && (
+   {/* {pendingReviewTasks.length > 0 && (
     <ReviewDialog
      isOpen={isReviewDialogOpen}
      onClose={() => setIsReviewDialogOpen(false)}
@@ -132,7 +125,7 @@ export default function FeaturedTasksSection() {
      currentIndex={currentReviewTaskIndex}
      totalCount={pendingReviewTasks.length}
     />
-   )}
+   )} */}
   </section>
  );
 }

@@ -30,12 +30,25 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
     </div>
 
    {/* Task Title */}
-   <form.Field name="title">
+   <form.Field
+    name="title"
+    validators={{
+     onBlur: ({ value }: any) => {
+      if (!value || value.length < 10) {
+       return 'createTask.errors.titleTooShort'
+      }
+      if (value.length > 200) {
+       return 'createTask.errors.titleTooLong'
+      }
+      return undefined
+     }
+    }}
+   >
     {(field: any) => (
      <div className="space-y-2">
       <div className="flex items-center justify-between">
        <label htmlFor="task-title" className="text-sm font-medium text-gray-700">
-        {t('createTask.details.titleLabel', 'Task Title')}
+        {t('createTask.details.titleLabel', 'Task Title')} <span className="text-red-500">*</span>
        </label>
        <span className="text-xs text-gray-400">
         {(field.state.value || '').length}/200
@@ -47,8 +60,9 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
        description={t('createTask.details.titleHelp', 'Be specific and clear (e.g., "Professional house cleaning for 2-bedroom apartment")')}
        value={field.state.value || ''}
        onValueChange={field.handleChange}
-       isInvalid={field.state.meta.errors.length > 0}
-       errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+       onBlur={field.handleBlur}
+       isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+       errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
        classNames={{
         input: 'text-base',
        }}
@@ -58,12 +72,25 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
    </form.Field>
 
    {/* Task Description */}
-   <form.Field name="description">
+   <form.Field
+    name="description"
+    validators={{
+     onBlur: ({ value }: any) => {
+      if (!value || value.length < 20) {
+       return 'createTask.errors.descriptionTooShort'
+      }
+      if (value.length > 2000) {
+       return 'createTask.errors.descriptionTooLong'
+      }
+      return undefined
+     }
+    }}
+   >
     {(field: any) => (
      <div className="space-y-2">
       <div className="flex items-center justify-between">
        <label htmlFor="task-description" className="text-sm font-medium text-gray-700">
-        {t('createTask.details.descriptionLabel', 'Description')}
+        {t('createTask.details.descriptionLabel', 'Description')} <span className="text-red-500">*</span>
        </label>
        <span className="text-xs text-gray-400">
         {(field.state.value || '').length}/2000
@@ -75,8 +102,9 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
        description={t('createTask.details.descriptionHelp', 'Include all important details: what needs to be done, any special requirements, tools/materials needed, etc.')}
        value={field.state.value || ''}
        onValueChange={field.handleChange}
-       isInvalid={field.state.meta.errors.length > 0}
-       errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+       onBlur={field.handleBlur}
+       isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+       errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
        minRows={6}
        disableAutosize
        classNames={{

@@ -43,11 +43,26 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        onBudgetTypeChange(value as 'fixed' | 'range')
       }}
       orientation="horizontal"
+      classNames={{
+       wrapper: 'gap-4'
+      }}
      >
-      <Radio value="fixed">
+      <Radio
+       value="fixed"
+       classNames={{
+        base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
+        label: 'text-gray-900 font-medium'
+       }}
+      >
        {t('createTask.budget.typeFixed', 'Fixed Price')}
       </Radio>
-      <Radio value="range">
+      <Radio
+       value="range"
+       classNames={{
+        base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
+        label: 'text-gray-900 font-medium'
+       }}
+      >
        {t('createTask.budget.typeRange', 'Price Range')}
       </Radio>
      </RadioGroup>
@@ -59,7 +74,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
     <form.Field
      name="budgetMax"
      validators={{
-      onChange: ({ value }: any) => {
+      onBlur: ({ value }: any) => {
        // Only validate if user has entered a value
        if (value !== undefined && value !== null && value !== '' && value <= 0) {
         return t('createTask.budget.mustBePositive', 'Budget must be positive')
@@ -95,7 +110,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMin"
       validators={{
-       onChange: ({ value }: any) => {
+       onBlur: ({ value }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
          return t('createTask.budget.mustBePositive', 'Budget must be positive')
@@ -129,7 +144,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMax"
       validators={{
-       onChange: ({ value }: any) => {
+       onBlur: ({ value }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
          return t('createTask.budget.mustBePositive', 'Budget must be positive')

@@ -1,0 +1,207 @@
+/**
+ * Task domain types
+ * Defines the structure of tasks in the system
+ */
+
+/**
+ * Input from create task form
+ * This matches the frontend form structure
+ */
+export interface CreateTaskInput {
+  // Required fields
+  category: string
+  title: string
+  description: string
+  city: string
+
+  // Optional fields
+  subcategory?: string
+  neighborhood?: string
+  exactAddress?: string
+
+  // Budget (optional)
+  budgetType?: 'fixed' | 'range'
+  budgetMin?: number
+  budgetMax?: number
+
+  // Timeline
+  urgency?: 'same_day' | 'within_week' | 'flexible'
+  deadline?: string // ISO date string
+
+  // Media
+  photoUrls?: string[]
+}
+
+/**
+ * Task entity (database representation)
+ */
+export interface Task {
+  id: string
+  created_at: string
+  updated_at: string
+
+  // Task details
+  title: string
+  description: string
+  category: string
+  subcategory: string | null
+
+  // Location
+  city: string
+  neighborhood: string | null
+  address: string | null
+  location_notes: string | null
+
+  // Budget
+  budget_min_bgn: number | null
+  budget_max_bgn: number | null
+  budget_type: 'fixed' | 'hourly' | 'negotiable'
+
+  // Timeline
+  deadline: string | null
+  estimated_duration_hours: number | null
+
+  // Status
+  status: TaskStatus
+
+  // Relationships
+  customer_id: string
+  selected_professional_id: string | null
+  accepted_application_id: string | null
+
+  // Completion tracking
+  completed_at: string | null
+  completed_by_professional_at: string | null
+  confirmed_by_customer_at: string | null
+  reviewed_by_customer: boolean
+  reviewed_by_professional: boolean
+
+  // Cancellation
+  cancelled_at: string | null
+  cancelled_by: string | null
+  cancellation_reason: string | null
+
+  // Media
+  images: string[]
+  documents: string[]
+
+  // Metadata
+  views_count: number
+  applications_count: number
+  is_urgent: boolean
+  requires_license: boolean
+  requires_insurance: boolean
+}
+
+/**
+ * Task status enum
+ */
+export type TaskStatus =
+  | 'draft'
+  | 'open'
+  | 'in_progress'
+  | 'pending_customer_confirmation'
+  | 'completed'
+  | 'cancelled'
+  | 'disputed'
+
+/**
+ * Database insert type
+ * Only includes fields needed for insertion
+ */
+export interface TaskDbInsert {
+  title: string
+  description: string
+  category: string
+  subcategory: string | null
+  city: string
+  neighborhood: string | null
+  address: string | null
+  budget_min_bgn: number | null
+  budget_max_bgn: number | null
+  budget_type: 'fixed' | 'hourly' | 'negotiable'
+  deadline: string | null
+  is_urgent: boolean
+  status: TaskStatus
+  customer_id: string
+  images: string[]
+}
+
+/**
+ * Task creation result
+ * What we return from the API
+ */
+export interface CreateTaskResult {
+  task: Task
+}
+
+/**
+ * Map form urgency to database fields
+ */
+export const calculateDeadline = (
+  urgency?: 'same_day' | 'within_week' | 'flexible',
+  customDeadline?: string
+): string | null => {
+  if (customDeadline) {
+    return new Date(customDeadline).toISOString()
+  }
+
+  if (!urgency || urgency === 'flexible') {
+    return null
+  }
+
+  const now = new Date()
+
+  switch (urgency) {
+    case 'same_day':
+      // End of today
+      now.setHours(23, 59, 59, 999)
+      return now.toISOString()
+
+    case 'within_week':
+      // 7 days from now
+      now.setDate(now.getDate() + 7)
+      return now.toISOString()
+
+    default:
+      return null
+  }
+}
+
+/**
+ * Map budget type from form to database
+ */
+export const mapBudgetType = (
+  budgetType?: 'fixed' | 'range'
+): 'fixed' | 'hourly' | 'negotiable' => {
+  if (budgetType === 'fixed') {
+    return 'fixed'
+  }
+  return 'negotiable'
+}
+
+/**
+ * Map form input to database insert
+ */
+export const mapCreateInputToDbInsert = (
+  input: CreateTaskInput,
+  customerId: string
+): TaskDbInsert => {
+  return {
+    title: input.title,
+    description: input.description,
+    category: input.category,
+    subcategory: input.subcategory || null,
+    city: input.city,
+    neighborhood: input.neighborhood || null,
+    address: input.exactAddress || null,
+    budget_min_bgn: input.budgetMin || null,
+    budget_max_bgn: input.budgetMax || null,
+    budget_type: mapBudgetType(input.budgetType),
+    deadline: calculateDeadline(input.urgency, input.deadline),
+    is_urgent: input.urgency === 'same_day',
+    status: 'open',
+    customer_id: customerId,
+    images: input.photoUrls || []
+  }
+}

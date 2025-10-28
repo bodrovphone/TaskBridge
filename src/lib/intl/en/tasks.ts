@@ -67,6 +67,9 @@ export const tasks = {
   'browseTasks.results.suggestedTasks': 'Popular Tasks You Might Like',
   'browseTasks.results.suggestedDescription':
     'Here are some popular tasks from our community',
+  'browseTasks.results.featuredTasks': 'Featured Tasks',
+  'browseTasks.results.featuredDescription':
+    'Check out these popular tasks from our community',
   'browseTasks.results.error.title': 'Oops! Our servers took a coffee break ☕',
   'browseTasks.results.error.description':
     'Looks like our hamsters stopped running on their wheels. Don\'t worry, we\'re giving them espresso shots!',
@@ -200,6 +203,7 @@ export const tasks = {
   'createTask.errors.tooManyPhotos': 'Maximum 5 photos allowed',
 
   'taskCard.apply': 'Apply',
+  'taskCard.seeDetails': 'See details',
   'taskCard.anonymous': 'Anonymous',
   'taskCard.budget.from': 'from',
   'taskCard.budget.to': 'up to',

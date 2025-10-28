@@ -31,7 +31,17 @@ export function LocationSection({ form }: LocationSectionProps) {
     </div>
 
    {/* City Selection */}
-   <form.Field name="city">
+   <form.Field
+    name="city"
+    validators={{
+     onBlur: ({ value }: any) => {
+      if (!value) {
+       return 'createTask.errors.cityRequired'
+      }
+      return undefined
+     }
+    }}
+   >
     {(field: any) => (
      <div className="space-y-2 max-w-md">
       <label htmlFor="task-city" className="text-sm font-medium text-gray-700">
@@ -40,12 +50,16 @@ export function LocationSection({ form }: LocationSectionProps) {
       <Select
        id="task-city"
        placeholder={t('createTask.location.cityPlaceholder', 'Select your city')}
-       isInvalid={field.state.meta.errors.length > 0}
-       errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+       isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+       errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
        selectedKeys={field.state.value ? [field.state.value] : []}
        onSelectionChange={(keys) => {
         const selectedCity = Array.from(keys)[0] as string
         field.handleChange(selectedCity)
+        field.handleBlur()
+       }}
+       onClose={() => {
+        field.handleBlur()
        }}
        startContent={<MapPin className="w-4 h-4 text-gray-400" />}
        classNames={{

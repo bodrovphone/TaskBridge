@@ -97,10 +97,9 @@ export const professionals = {
   'professionalDetail.stats.completedTasks': 'Задач',
   'professionalDetail.stats.yearsExperience': 'Лет',
   'professionalDetail.stats.responseTime': 'Ответ',
-  'professionalDetail.actions.proposeTask': 'Предложить задачу',
+  'professionalDetail.actions.inviteToApply': 'Предложить задачу',
   'professionalDetail.actions.contact': 'Связаться',
-  'professionalDetail.actions.askQuestion': 'Задать вопрос',
-  'professionalDetail.actions.saveToFavorites': 'В избранное',
+  'professionalDetail.actions.share': 'Поделиться',
   'professionalDetail.contactHours': 'Доступен',
   'professionalDetail.services.title': 'Услуги и цены',
   'professionalDetail.services.pricingNote.title': 'Информация о ценах',
@@ -114,9 +113,12 @@ export const professionals = {
   'professionalDetail.portfolio.showcase': 'Профессиональные примеры работ',
   'professionalDetail.completedTasks.title': 'Выполненные задачи',
   'professionalDetail.completedTasks.noTasks': 'Пока нет выполненных задач',
-  'professionalDetail.completedTasks.hugePotential': 'У этого специалиста огромный потенциал!',
-  'professionalDetail.completedTasks.comingSoon': 'Отличная работа скоро появится...',
-  'professionalDetail.completedTasks.watchThisSpace': 'Следите за этим местом для удивительных завершенных проектов!',
+  'professionalDetail.completedTasks.hugePotential':
+    'У этого специалиста огромный потенциал!',
+  'professionalDetail.completedTasks.comingSoon':
+    'Отличная работа скоро появится...',
+  'professionalDetail.completedTasks.watchThisSpace':
+    'Следите за этим местом для удивительных завершенных проектов!',
   'professionalDetail.completedTasks.viewTask': 'Посмотреть задачу',
   'professionalDetail.completedTasks.completedOn': 'Выполнено',
   'professionalDetail.reviews.title': 'Отзывы и рейтинги',

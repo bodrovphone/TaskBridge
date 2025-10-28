@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { Lock, User } from "lucide-react";
 import { Avatar } from "@nextui-org/react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/features/auth";
 import { useTranslation } from 'react-i18next';
 
 interface CustomerInfo {
@@ -22,8 +22,9 @@ interface PrivacyToggleProps {
 }
 
 export default function PrivacyToggle({ customer, children }: PrivacyToggleProps) {
- const { isAuthenticated } = useAuth();
- 
+ const { user, profile } = useAuth();
+ const isAuthenticated = !!user && !!profile;
+
  // Show full client info only if user is authenticated
  const showClientInfo = isAuthenticated;
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { MapPin, Clock, Wallet, Star } from "lucide-react";
+import { MapPin, Clock, Wallet } from "lucide-react";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";
@@ -13,8 +13,7 @@ import {
  CardBody,
  CardFooter,
  Button,
- Chip,
- Avatar
+ Chip
 } from "@nextui-org/react";
 
 // Task type definition (to be moved to global types later)
@@ -23,47 +22,159 @@ interface Task {
  title: string;
  description: string;
  category: string;
+ subcategory?: string | null;
  city: string;
  neighborhood?: string;
- budgetType: 'fixed' | 'hourly' | 'negotiable';
+ budgetType?: 'fixed' | 'hourly' | 'negotiable';
+ budget_type?: 'fixed' | 'hourly' | 'negotiable'; // Database field (snake_case)
  budgetMin?: number;
+ budget_min_bgn?: number; // Database field (snake_case)
  budgetMax?: number;
+ budget_max_bgn?: number; // Database field (snake_case)
  deadline?: Date | string;
- createdAt: Date | string;
+ createdAt?: Date | string;
+ created_at?: Date | string; // Database field (snake_case)
 }
 
 interface TaskCardProps {
- task: Task & {
-  customer?: {
-   firstName?: string;
-   lastName?: string;
-   profileImageUrl?: string;
-   averageRating?: string;
-   totalReviews?: number;
-  };
- };
+ task: Task;
  onApply?: (taskId: string) => void;
  showApplyButton?: boolean;
 }
 
-// Rich badge colors matching the original design
-const categoryColors = {
- "home_repair": "bg-blue-100 text-blue-800 border-blue-200",
- "delivery_transport": "bg-green-100 text-green-800 border-green-200",
- "personal_care": "bg-purple-100 text-purple-800 border-purple-200",
- "personal_assistant": "bg-orange-100 text-orange-800 border-orange-200",
- "learning_fitness": "bg-pink-100 text-pink-800 border-pink-200",
- "other": "bg-gray-100 text-gray-800 border-gray-200"
-} as const;
+// Map subcategories to main categories, then to colors
+const getCategoryColor = (category: string): string => {
+ // Subcategory to main category mapping
+ const subcategoryToMain: Record<string, string> = {
+  // Handyman subcategories
+  'plumber': 'handyman',
+  'electrician': 'handyman',
+  'handyman-service': 'handyman',
+  'carpenter': 'handyman',
+  'locksmith': 'handyman',
+
+  // Appliance repair subcategories
+  'large-appliance-repair': 'appliance-repair',
+  'small-appliance-repair': 'appliance-repair',
+  'computer-help': 'appliance-repair',
+  'digital-tech-repair': 'appliance-repair',
+  'phone-repair': 'appliance-repair',
+
+  // Courier services subcategories
+  'courier-delivery': 'courier-services',
+  'grocery-delivery': 'courier-services',
+  'food-delivery': 'courier-services',
+  'document-delivery': 'courier-services',
+
+  // Logistics subcategories
+  'moving': 'logistics',
+  'cargo-transport': 'logistics',
+  'furniture-assembly': 'logistics',
+
+  // Cleaning services subcategories
+  'house-cleaning': 'cleaning-services',
+  'office-cleaning': 'cleaning-services',
+  'window-cleaning': 'cleaning-services',
+  'carpet-cleaning': 'cleaning-services',
+
+  // Pet services subcategories
+  'dog-walking': 'pet-services',
+  'pet-sitting': 'pet-services',
+  'pet-grooming': 'pet-services',
+
+  // Beauty & health subcategories
+  'massage': 'beauty-health',
+  'hairdresser': 'beauty-health',
+  'manicure': 'beauty-health',
+  'makeup': 'beauty-health',
+
+  // Tutoring subcategories
+  'language-tutoring': 'tutoring',
+  'math-tutoring': 'tutoring',
+  'music-lessons': 'tutoring',
+
+  // Add more as needed...
+ };
+
+ // Get main category (either directly or via subcategory mapping)
+ const mainCategory = subcategoryToMain[category] || category;
+
+ // Main category color mappings
+ const mainCategoryColors: Record<string, string> = {
+  // Home & Repair Services (Blue)
+  'handyman': 'bg-blue-100 text-blue-800 border-blue-200',
+  'appliance-repair': 'bg-blue-100 text-blue-800 border-blue-200',
+  'finishing-work': 'bg-blue-100 text-blue-800 border-blue-200',
+  'furniture-work': 'bg-blue-100 text-blue-800 border-blue-200',
+  'construction-work': 'bg-blue-100 text-blue-800 border-blue-200',
+  'auto-repair': 'bg-blue-100 text-blue-800 border-blue-200',
+  'home_repair': 'bg-blue-100 text-blue-800 border-blue-200', // Legacy
+
+  // Delivery & Logistics (Green)
+  'courier-services': 'bg-green-100 text-green-800 border-green-200',
+  'logistics': 'bg-green-100 text-green-800 border-green-200',
+  'delivery_transport': 'bg-green-100 text-green-800 border-green-200', // Legacy
+
+  // Personal Services (Purple)
+  'pet-services': 'bg-purple-100 text-purple-800 border-purple-200',
+  'beauty-health': 'bg-purple-100 text-purple-800 border-purple-200',
+  'cleaning-services': 'bg-purple-100 text-purple-800 border-purple-200',
+  'household-services': 'bg-purple-100 text-purple-800 border-purple-200',
+  'personal_care': 'bg-purple-100 text-purple-800 border-purple-200', // Legacy
+
+  // Professional Services (Orange)
+  'business-services': 'bg-orange-100 text-orange-800 border-orange-200',
+  'event-planning': 'bg-orange-100 text-orange-800 border-orange-200',
+  'advertising-distribution': 'bg-orange-100 text-orange-800 border-orange-200',
+  'personal_assistant': 'bg-orange-100 text-orange-800 border-orange-200', // Legacy
+
+  // Learning & Creative (Pink)
+  'tutoring': 'bg-pink-100 text-pink-800 border-pink-200',
+  'trainer-services': 'bg-pink-100 text-pink-800 border-pink-200',
+  'photo-video': 'bg-pink-100 text-pink-800 border-pink-200',
+  'design': 'bg-pink-100 text-pink-800 border-pink-200',
+  'learning_fitness': 'bg-pink-100 text-pink-800 border-pink-200', // Legacy
+
+  // Digital Services (Indigo)
+  'web-development': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  'digital-marketing': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  'online-advertising': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  'online-work': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  'ai-services': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+
+  // Translation Services (Teal)
+  'translation-services': 'bg-teal-100 text-teal-800 border-teal-200',
+
+  // Volunteer (Emerald)
+  'volunteer-help': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+ };
+
+ return mainCategoryColors[mainCategory] || 'bg-gray-100 text-gray-800 border-gray-200';
+};
 
 function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  const { t, i18n } = useTranslation();
  const router = useRouter();
  const pathname = usePathname();
  
- const getCategoryName = (category: string) => {
+ const getCategoryName = (category: string, subcategory?: string | null) => {
+  // If subcategory exists, use it for display
+  if (subcategory) {
+   // Convert kebab-case to camelCase for translation key
+   const camelCase = subcategory.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+   const subcategoryKey = `categories.sub.${camelCase}`;
+   const translated = t(subcategoryKey, '');
+   // If translation exists, use it; otherwise fall back to formatted subcategory
+   if (translated) return translated;
+   // Format subcategory as fallback (e.g., "courier-delivery" → "Courier Delivery")
+   return subcategory.split('-').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1)
+   ).join(' ');
+  }
+
+  // Fall back to main category
   const categoryKey = `taskCard.category.${category}`;
-  return t(categoryKey, category); // fallback to category if translation not found
+  return t(categoryKey, category);
  };
 
  const getDateLocale = () => {
@@ -102,23 +213,33 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   return imageMap[category as keyof typeof imageMap] || imageMap.other;
  };
 
- const timeAgo = formatDistanceToNow(new Date(task.createdAt || new Date()), {
+ // Parse timestamp safely - check both camelCase and snake_case
+ const timestamp = task.createdAt || task.created_at;
+ const createdDate = timestamp ? new Date(timestamp) : new Date();
+ const timeAgo = formatDistanceToNow(createdDate, {
   addSuffix: true,
   locale: getDateLocale(),
  });
 
- const categoryColor = categoryColors[task.category as keyof typeof categoryColors] || categoryColors.other;
- const categoryName = getCategoryName(task.category);
+ // Use subcategory for color if it exists, otherwise use category
+ const displayCategory = task.subcategory || task.category;
+ const categoryColor = getCategoryColor(displayCategory);
+ const categoryName = getCategoryName(task.category, task.subcategory);
 
  const formatBudget = () => {
-  if (task.budgetType === "fixed" && task.budgetMax) {
-   return `${task.budgetMax} лв`;
-  } else if (task.budgetMin && task.budgetMax) {
-   return `${task.budgetMin}-${task.budgetMax} лв`;
-  } else if (task.budgetMin) {
-   return `${t('taskCard.budget.from')} ${task.budgetMin} лв`;
-  } else if (task.budgetMax) {
-   return `${t('taskCard.budget.to')} ${task.budgetMax} лв`;
+  // Support both camelCase and snake_case from database
+  const budgetType = task.budgetType || task.budget_type;
+  const budgetMin = task.budgetMin || task.budget_min_bgn;
+  const budgetMax = task.budgetMax || task.budget_max_bgn;
+
+  if (budgetType === "fixed" && budgetMax) {
+   return `${budgetMax} лв`;
+  } else if (budgetMin && budgetMax) {
+   return `${budgetMin}-${budgetMax} лв`;
+  } else if (budgetMin) {
+   return `${t('taskCard.budget.from')} ${budgetMin} лв`;
+  } else if (budgetMax) {
+   return `${t('taskCard.budget.to')} ${budgetMax} лв`;
   }
   return t('taskCard.budget.negotiable');
  };
@@ -143,7 +264,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  return (
   <Card
    isPressable
-   className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-200 hover:border-primary-200 cursor-pointer"
+   className="w-full h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-200 hover:border-primary-200 cursor-pointer"
    shadow="md"
    radius="lg"
    onPress={handleCardPress}
@@ -200,43 +321,33 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
 
    {/* Footer with clear separator */}
    <CardFooter className="px-6 pb-4 pt-4 border-t border-gray-100 mt-auto">
-    <div className="flex justify-between items-center w-full">
-     <div className="flex items-center space-x-2">
-      <Avatar
-       src={task.customer?.profileImageUrl || ""}
-       name={task.customer?.firstName?.[0] || "?"}
-       size="sm"
-       className="w-6 h-6"
-      />
-      <span className="text-sm text-gray-600">
-       {task.customer?.firstName ?
-        `${task.customer.firstName} ${task.customer.lastName?.[0] || ""}.` :
-        t('taskCard.anonymous')
-       }
-      </span>
-      {task.customer?.averageRating && Number(task.customer.averageRating) > 0 && (
-       <div className="flex items-center">
-        <Star size={12} className="text-yellow-400 fill-current" />
-        <span className="text-xs text-gray-600 ml-1">
-         {Number(task.customer.averageRating).toFixed(1)}
-        </span>
-       </div>
-      )}
-     </div>
+    <div className="flex gap-3 w-full">
+     <Button
+      variant="bordered"
+      size="sm"
+      className="flex-1"
+      onClick={(e) => {
+       e.preventDefault();
+       e.stopPropagation();
+       handleCardPress();
+      }}
+     >
+      {t('taskCard.seeDetails', 'See details')}
+     </Button>
 
      {showApplyButton && onApply && (
       <Button
        color="success"
        variant="solid"
        size="sm"
-       className="font-semibold px-6 shadow-md hover:shadow-lg transition-shadow"
+       className="flex-1 font-semibold shadow-md hover:shadow-lg transition-shadow"
        onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
         onApply(task.id);
        }}
       >
-       {t('taskCard.apply')}
+       {t('taskCard.apply', 'Apply')}
       </Button>
      )}
     </div>

@@ -68,6 +68,9 @@ export const tasks = {
     'Популярни задачи, които може да ви харесат',
   'browseTasks.results.suggestedDescription':
     'Ето някои популярни задачи от нашата общност',
+  'browseTasks.results.featuredTasks': 'Препоръчани задачи',
+  'browseTasks.results.featuredDescription':
+    'Разгледайте тези популярни задачи от нашата общност',
   'browseTasks.results.error.title': 'Опа! Нашите сървъри си взеха кафе пауза ☕',
   'browseTasks.results.error.description':
     'Изглежда хомстерите спряха да тичат на колелата си. Не се притеснявайте, даваме им еспресо шотове!',
@@ -201,6 +204,7 @@ export const tasks = {
   'createTask.errors.tooManyPhotos': 'Разрешени са максимум 5 снимки',
 
   'taskCard.apply': 'Кандидатствай',
+  'taskCard.seeDetails': 'Виж детайли',
   'taskCard.anonymous': 'Анонимен',
   'taskCard.budget.from': 'от',
   'taskCard.budget.to': 'до',

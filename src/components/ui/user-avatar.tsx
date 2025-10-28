@@ -3,18 +3,18 @@
 import { useState } from 'react'
 import { User } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { UserProfile } from '@/server/domain/user/user.types'
 
-// User type from auth hook
-interface User {
+// Simplified user type for avatar display
+interface AvatarUser {
  id: string
  email: string
- firstName: string
- lastName: string
- profileImageUrl?: string
+ fullName?: string | null
+ avatarUrl?: string | null
 }
 
 export interface UserAvatarProps {
- user?: User | null
+ user?: UserProfile | AvatarUser | null
  size?: 'sm' | 'md' | 'lg'
  showOnlineStatus?: boolean
  className?: string
@@ -45,15 +45,16 @@ export default function UserAvatar({
  const [imageError, setImageError] = useState(false)
 
  // Generate initials from user name
- const getInitials = (user: User): string => {
-  if (!user.firstName && !user.lastName) {
-   return user.email?.charAt(0)?.toUpperCase() || '?'
+ const getInitials = (user: UserProfile | AvatarUser): string => {
+  if (user.fullName) {
+   const names = user.fullName.trim().split(/\s+/)
+   if (names.length === 1) {
+    return names[0].charAt(0).toUpperCase()
+   }
+   return names[0].charAt(0).toUpperCase() + names[names.length - 1].charAt(0).toUpperCase()
   }
 
-  const firstInitial = user.firstName?.charAt(0)?.toUpperCase() || ''
-  const lastInitial = user.lastName?.charAt(0)?.toUpperCase() || ''
-
-  return firstInitial + lastInitial
+  return user.email?.charAt(0)?.toUpperCase() || '?'
  }
 
  // Generate a consistent color based on user ID
@@ -77,7 +78,7 @@ export default function UserAvatar({
   return colors[Math.abs(hash) % colors.length]
  }
 
- const hasValidImage = user?.profileImageUrl && !imageError
+ const hasValidImage = user?.avatarUrl && !imageError
  const initials = user ? getInitials(user) : ''
  const avatarColor = user ? getAvatarColor(user.id) : 'bg-gray-400'
 
@@ -103,8 +104,8 @@ export default function UserAvatar({
    >
     {hasValidImage ? (
      <img
-      src={user.profileImageUrl}
-      alt={`${user.firstName} ${user.lastName}`.trim() || user.email}
+      src={user.avatarUrl!}
+      alt={user.fullName || user.email}
       className="w-full h-full rounded-full object-cover"
       onError={() => setImageError(true)}
      />

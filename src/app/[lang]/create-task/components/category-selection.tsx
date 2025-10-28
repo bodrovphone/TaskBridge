@@ -6,7 +6,7 @@ import { Badge as ShadcnBadge } from '@/components/ui/badge'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoriesWithSubcategories } from '@/features/categories'
+import { MAIN_CATEGORIES, getSubcategoriesByMainCategory, getMainCategoriesWithSubcategories, getSubcategoryBySlug } from '@/features/categories'
 import MainCategoryCard from '@/components/ui/main-category-card'
 
 interface CategorySelectionProps {
@@ -71,15 +71,25 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
  }, [searchQuery, allSubcategories, t])
 
  const handleSubcategorySelect = useCallback((slug: string) => {
-  form.setFieldValue('category', slug)
-  setSelectedCategory(slug)
-  onCategoryChange(slug)
+  // Get subcategory to find its main category
+  const subcategory = getSubcategoryBySlug(slug)
+
+  if (subcategory) {
+   // Save main category to 'category' field
+   form.setFieldValue('category', subcategory.mainCategoryId)
+   // Save subcategory to 'subcategory' field
+   form.setFieldValue('subcategory', slug)
+   setSelectedCategory(slug)
+   onCategoryChange(slug)
+  }
+
   setSearchQuery('') // Clear search after selection
  }, [form, onCategoryChange])
 
  const handleReset = useCallback(() => {
   setSelectedMainCategory(null)
   form.setFieldValue('category', '')
+  form.setFieldValue('subcategory', '')
   setSelectedCategory('')
   onCategoryChange('')
   setSearchQuery('')

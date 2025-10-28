@@ -9,27 +9,20 @@ import { ArrowRight } from "lucide-react"
 import { getMainCategoriesWithSubcategories } from '@/features/categories'
 import { CategorySearch } from '@/components/common/category-search'
 import { useCreateTask } from '@/hooks/use-create-task'
-import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
+// @todo FEATURE: Uncomment when reviews feature is built
+// import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
 
 function CategoriesPage() {
  const { t, i18n } = useTranslation()
  const router = useRouter()
 
- // Review enforcement hook
+ // Create task hook with auth
  const {
   handleCreateTask,
   showAuthPrompt,
-  setShowAuthPrompt,
-  isEnforcementDialogOpen,
-  setIsEnforcementDialogOpen,
-  pendingReviewTasks,
-  currentReviewTaskIndex,
-  isReviewDialogOpen,
-  setIsReviewDialogOpen,
-  isSubmittingReview,
-  handleStartReviewing,
-  handleSubmitReview
+  setShowAuthPrompt
+  // @todo FEATURE: Add review-related properties when reviews feature is built
  } = useCreateTask()
 
  // Get main categories with subcategories from centralized feature
@@ -130,17 +123,17 @@ function CategoriesPage() {
     action="create-task"
    />
 
-   {/* Review Enforcement Dialog */}
-   <ReviewEnforcementDialog
+   {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
+   {/* <ReviewEnforcementDialog
     isOpen={isEnforcementDialogOpen}
     onClose={() => setIsEnforcementDialogOpen(false)}
     blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
     pendingTasks={pendingReviewTasks}
     onReviewTask={handleStartReviewing}
-   />
+   /> */}
 
    {/* Review Dialog - Sequential Flow */}
-   {pendingReviewTasks.length > 0 && (
+   {/* {pendingReviewTasks.length > 0 && (
     <ReviewDialog
      isOpen={isReviewDialogOpen}
      onClose={() => setIsReviewDialogOpen(false)}
@@ -150,7 +143,7 @@ function CategoriesPage() {
      currentIndex={currentReviewTaskIndex}
      totalCount={pendingReviewTasks.length}
     />
-   )}
+   )} */}
   </div>
  )
 }

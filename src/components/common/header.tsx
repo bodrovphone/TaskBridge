@@ -10,10 +10,11 @@ import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
 import { Plus, Handshake, FileText, Send, Briefcase } from "lucide-react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
-import { ReviewDialog, ReviewEnforcementDialog } from "@/features/reviews"
-import { mockCanCreateTask, mockSubmitReview, type PendingReviewTask } from "@/features/reviews"
+// @todo FEATURE: Uncomment when reviews feature is built
+// import { ReviewDialog, ReviewEnforcementDialog } from "@/features/reviews"
+// import { mockCanCreateTask, mockSubmitReview, type PendingReviewTask } from "@/features/reviews"
 import {
  Navbar,
  NavbarBrand,
@@ -29,7 +30,8 @@ import {
 function Header() {
  const pathname = usePathname()
  const { t } = useTranslation()
- const { isAuthenticated } = useAuth()
+ const { user, profile } = useAuth()
+ const isAuthenticated = !!user && !!profile
  const [isMenuOpen, setIsMenuOpen] = useState(false)
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
  const router = useRouter()
@@ -37,12 +39,12 @@ function Header() {
  const lang = params?.lang as string || 'en'
  const { toast } = useToast()
 
- // Review enforcement state
- const [isEnforcementDialogOpen, setIsEnforcementDialogOpen] = useState(false)
- const [pendingReviewTasks, setPendingReviewTasks] = useState<PendingReviewTask[]>([])
- const [currentReviewTaskIndex, setCurrentReviewTaskIndex] = useState(0)
- const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
- const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+ // @todo FEATURE: Review enforcement (commented out until reviews feature is built)
+ // const [isEnforcementDialogOpen, setIsEnforcementDialogOpen] = useState(false)
+ // const [pendingReviewTasks, setPendingReviewTasks] = useState<PendingReviewTask[]>([])
+ // const [currentReviewTaskIndex, setCurrentReviewTaskIndex] = useState(0)
+ // const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
+ // const [isSubmittingReview, setIsSubmittingReview] = useState(false)
 
  // Check if we're on the index/landing page
  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
@@ -69,62 +71,41 @@ function Header() {
    return
   }
 
-  // Check for pending reviews (mock function - will be replaced with API in Phase 2)
-  const { canCreate, blockType, pendingTasks } = mockCanCreateTask()
+  // @todo FEATURE: Add review enforcement when reviews feature is built
+  // Check for pending reviews and show ReviewEnforcementDialog if needed
 
-  if (!canCreate && pendingTasks.length > 0) {
-   // User has pending reviews - show enforcement dialog
-   setPendingReviewTasks(pendingTasks)
-   setCurrentReviewTaskIndex(0)
-   setIsEnforcementDialogOpen(true)
-  } else {
-   // All clear - proceed to create task
-   router.push(`/${lang}/create-task`)
-  }
+  // All clear - proceed to create task
+  router.push(`/${lang}/create-task`)
  }, [isAuthenticated, lang, router])
 
- const handleStartReviewing = useCallback(() => {
-  setIsEnforcementDialogOpen(false)
-  setCurrentReviewTaskIndex(0)
-  setIsReviewDialogOpen(true)
- }, [])
+ // @todo FEATURE: Review handlers (commented out until reviews feature is built)
+ // const handleStartReviewing = useCallback(() => {
+ //  setIsEnforcementDialogOpen(false)
+ //  setCurrentReviewTaskIndex(0)
+ //  setIsReviewDialogOpen(true)
+ // }, [])
 
- const handleSubmitReview = useCallback(async (data: { taskId: string; rating: number; reviewText?: string; actualPricePaid?: number }) => {
-  setIsSubmittingReview(true)
-  try {
-   await mockSubmitReview(data)
-
-   const remainingCount = pendingReviewTasks.length - 1
-
-   if (currentReviewTaskIndex < pendingReviewTasks.length - 1) {
-    // More reviews to go
-    toast({
-     title: t('reviews.successWithRemaining', { remaining: remainingCount }),
-     variant: 'success'
-    })
-    setCurrentReviewTaskIndex(prev => prev + 1)
-   } else {
-    // All reviews done!
-    toast({
-     title: t('reviews.success'),
-     variant: 'success'
-    })
-    setIsReviewDialogOpen(false)
-    setPendingReviewTasks([])
-    setCurrentReviewTaskIndex(0)
-
-    // Now proceed to create task
-    router.push(`/${lang}/create-task`)
-   }
-  } catch (error) {
-   toast({
-    title: t('reviews.error'),
-    variant: 'destructive'
-   })
-  } finally {
-   setIsSubmittingReview(false)
-  }
- }, [pendingReviewTasks, currentReviewTaskIndex, t, toast, router, lang])
+ // const handleSubmitReview = useCallback(async (data: { taskId: string; rating: number; reviewText?: string; actualPricePaid?: number }) => {
+ //  setIsSubmittingReview(true)
+ //  try {
+ //   await mockSubmitReview(data)
+ //   const remainingCount = pendingReviewTasks.length - 1
+ //   if (currentReviewTaskIndex < pendingReviewTasks.length - 1) {
+ //    toast({ title: t('reviews.successWithRemaining', { remaining: remainingCount }), variant: 'success' })
+ //    setCurrentReviewTaskIndex(prev => prev + 1)
+ //   } else {
+ //    toast({ title: t('reviews.success'), variant: 'success' })
+ //    setIsReviewDialogOpen(false)
+ //    setPendingReviewTasks([])
+ //    setCurrentReviewTaskIndex(0)
+ //    router.push(`/${lang}/create-task`)
+ //   }
+ //  } catch (error) {
+ //   toast({ title: t('reviews.error'), variant: 'destructive' })
+ //  } finally {
+ //   setIsSubmittingReview(false)
+ //  }
+ // }, [pendingReviewTasks, currentReviewTaskIndex, t, toast, router, lang])
 
  return (
   <>
@@ -324,17 +305,17 @@ function Header() {
    action="create-task"
   />
 
-  {/* Review Enforcement Dialog */}
-  <ReviewEnforcementDialog
+  {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
+  {/* <ReviewEnforcementDialog
    isOpen={isEnforcementDialogOpen}
    onClose={() => setIsEnforcementDialogOpen(false)}
    blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
    pendingTasks={pendingReviewTasks}
    onReviewTask={handleStartReviewing}
-  />
+  /> */}
 
-  {/* Review Dialog - Sequential Flow */}
-  {pendingReviewTasks.length > 0 && (
+  {/* <ReviewDialog - Sequential Flow */}
+  {/* {pendingReviewTasks.length > 0 && (
    <ReviewDialog
     isOpen={isReviewDialogOpen}
     onClose={() => setIsReviewDialogOpen(false)}
@@ -344,7 +325,7 @@ function Header() {
     currentIndex={currentReviewTaskIndex}
     totalCount={pendingReviewTasks.length}
    />
-  )}
+  )} */}
  </>
  )
 }

@@ -113,15 +113,16 @@ export default function ResultsSection({
        {t('browseTasks.results.suggestedDescription')}
       </p>
       
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
        {recommendedTasks.map((task: any, index: number) => (
         <motion.div
          key={task.id}
          initial={{ opacity: 0, y: 30 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ delay: index * 0.1 }}
+         className="w-full"
         >
-         <TaskCard 
+         <TaskCard
           task={task}
           onApply={onApplyToTask}
          />
@@ -131,13 +132,14 @@ export default function ResultsSection({
      </div>
     </div>
    ) : isLoading ? (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
      {[1, 2, 3, 4, 5, 6].map((i) => (
       <motion.div
        key={i}
        initial={{ opacity: 0, y: 20 }}
        animate={{ opacity: 1, y: 0 }}
        transition={{ delay: i * 0.1 }}
+       className="w-full"
       >
        <NextUICard className="animate-pulse">
         <div className="p-6 space-y-4">
@@ -153,50 +155,86 @@ export default function ResultsSection({
      ))}
     </div>
    ) : tasks.length > 0 ? (
-    <>
-     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {tasks.map((task: any, index: number) => (
+    <div className="space-y-12">
+     {/* Main Task Results */}
+     <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+       {tasks.map((task: any, index: number) => (
+        <motion.div
+         key={task.id}
+         initial={{ opacity: 0, y: 30 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ delay: index * 0.1 }}
+         className="w-full"
+        >
+         <TaskCard
+          task={task}
+          onApply={onApplyToTask}
+         />
+        </motion.div>
+       ))}
+      </div>
+
+      {/* Pagination */}
+      {tasks.length === pageSize && (
        <motion.div
-        key={task.id}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="flex justify-center mt-8"
        >
-        <TaskCard 
-         task={task}
-         onApply={onApplyToTask}
-        />
+        <div className="flex space-x-2">
+         <NextUIButton
+          variant="bordered"
+          onClick={() => onSetCurrentPage(Math.max(0, currentPage - 1))}
+          isDisabled={currentPage === 0}
+         >
+          {t('browseTasks.pagination.previous')}
+         </NextUIButton>
+         <NextUIButton
+          variant="bordered"
+          onClick={() => onSetCurrentPage(currentPage + 1)}
+          isDisabled={tasks.length < pageSize}
+         >
+          {t('browseTasks.pagination.next')}
+         </NextUIButton>
+        </div>
        </motion.div>
-      ))}
+      )}
      </div>
 
-     {/* Pagination */}
-     {tasks.length === pageSize && (
-      <motion.div 
-       initial={{ opacity: 0 }}
-       animate={{ opacity: 1 }}
-       transition={{ delay: 0.5 }}
-       className="flex justify-center mt-8"
-      >
-       <div className="flex space-x-2">
-        <NextUIButton
-         variant="bordered"
-         onClick={() => onSetCurrentPage(Math.max(0, currentPage - 1))}
-         isDisabled={currentPage === 0}
-        >
-         {t('browseTasks.pagination.previous')}
-        </NextUIButton>
-        <NextUIButton
-         variant="bordered"
-         onClick={() => onSetCurrentPage(currentPage + 1)}
-         isDisabled={tasks.length < pageSize}
-        >
-         {t('browseTasks.pagination.next')}
-        </NextUIButton>
+     {/* Featured Tasks - Always show at bottom */}
+     {recommendedTasks.length > 0 && (
+      <div className="border-t border-gray-200 pt-12">
+       <div className="flex items-center gap-2 mb-6">
+        <Sparkles className="text-blue-500" size={24} />
+        <h3 className="text-2xl font-bold text-gray-900">
+         {t('browseTasks.results.featuredTasks')}
+        </h3>
        </div>
-      </motion.div>
+       <p className="text-gray-600 mb-6">
+        {t('browseTasks.results.featuredDescription')}
+       </p>
+
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {recommendedTasks.map((task: any, index: number) => (
+         <motion.div
+          key={task.id}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+          className="w-full"
+         >
+          <TaskCard
+           task={task}
+           onApply={onApplyToTask}
+          />
+         </motion.div>
+        ))}
+       </div>
+      </div>
      )}
-    </>
+    </div>
    ) : (
     <NextUICard className="bg-white shadow-lg">
      <div className="p-12 text-center">

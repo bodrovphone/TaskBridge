@@ -1,0 +1,171 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import type { TaskSortOption } from '@/server/tasks/task.query-types'
+
+/**
+ * Task filter state
+ */
+export interface TaskFilters {
+  category?: string
+  city?: string
+  budgetMin?: number
+  budgetMax?: number
+  urgency?: 'same_day' | 'within_week' | 'flexible'
+  search?: string
+  sortBy?: TaskSortOption
+  page?: number
+}
+
+/**
+ * Hook for managing task filters with URL synchronization
+ */
+export function useTaskFilters() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // Initialize filters from URL
+  const [filters, setFilters] = useState<TaskFilters>(() => {
+    return {
+      category: searchParams.get('category') || undefined,
+      city: searchParams.get('city') || undefined,
+      budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
+      budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
+      urgency: (searchParams.get('urgency') as any) || undefined,
+      search: searchParams.get('search') || undefined,
+      sortBy: (searchParams.get('sortBy') as TaskSortOption) || 'newest',
+      page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+    }
+  })
+
+  // Sync filters with URL changes
+  useEffect(() => {
+    const newFilters: TaskFilters = {
+      category: searchParams.get('category') || undefined,
+      city: searchParams.get('city') || undefined,
+      budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
+      budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
+      urgency: (searchParams.get('urgency') as any) || undefined,
+      search: searchParams.get('search') || undefined,
+      sortBy: (searchParams.get('sortBy') as TaskSortOption) || 'newest',
+      page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+    }
+    setFilters(newFilters)
+  }, [searchParams])
+
+  /**
+   * Update a single filter and sync with URL
+   */
+  const updateFilter = useCallback((key: keyof TaskFilters, value: any, skipUrlUpdate = false) => {
+    const newFilters = { ...filters, [key]: value }
+
+    // Reset to page 1 when filters change (except when changing page)
+    if (key !== 'page') {
+      newFilters.page = 1
+    }
+
+    setFilters(newFilters)
+
+    // Skip URL update if debouncing (e.g., for search)
+    if (skipUrlUpdate) return
+
+    // Build URL params
+    const params = new URLSearchParams()
+    Object.entries(newFilters).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') {
+        params.set(k, String(v))
+      }
+    })
+
+    // Update URL
+    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [filters, pathname, router])
+
+  // Debounce search filter updates (500ms delay)
+  useEffect(() => {
+    if (filters.search === undefined) return
+
+    const timeoutId = setTimeout(() => {
+      // Build URL params with current filters
+      const params = new URLSearchParams()
+      Object.entries(filters).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') {
+          params.set(k, String(v))
+        }
+      })
+      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [filters.search])
+
+  /**
+   * Update multiple filters at once
+   */
+  const updateFilters = useCallback((updates: Partial<TaskFilters>) => {
+    const newFilters = { ...filters, ...updates, page: 1 }
+    setFilters(newFilters)
+
+    // Build URL params
+    const params = new URLSearchParams()
+    Object.entries(newFilters).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') {
+        params.set(k, String(v))
+      }
+    })
+
+    // Update URL
+    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [filters, pathname, router])
+
+  /**
+   * Reset all filters to defaults
+   */
+  const resetFilters = useCallback(() => {
+    const defaultFilters: TaskFilters = {
+      sortBy: 'newest',
+      page: 1,
+    }
+    setFilters(defaultFilters)
+    router.push(pathname, { scroll: false })
+  }, [pathname, router])
+
+  /**
+   * Build API query string
+   */
+  const buildApiQuery = useCallback(() => {
+    const params = new URLSearchParams()
+    params.set('mode', 'browse')
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params.set(key, String(value))
+      }
+    })
+
+    return params.toString()
+  }, [filters])
+
+  /**
+   * Count active filters (excluding sort and page)
+   */
+  const activeFilterCount = Object.entries(filters).filter(
+    ([key, value]) =>
+      key !== 'sortBy' &&
+      key !== 'page' &&
+      value !== undefined &&
+      value !== null &&
+      value !== ''
+  ).length
+
+  return {
+    filters,
+    updateFilter,
+    updateFilters,
+    resetFilters,
+    buildApiQuery,
+    activeFilterCount,
+  }
+}

@@ -7,8 +7,9 @@ import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-e
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
 import { useTranslation } from 'react-i18next';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
+import { useAuth } from '@/features/auth';
 import {
  Shield,
  Star,
@@ -21,8 +22,21 @@ import {
 export default function HeroSection() {
  const { t } = useTranslation();
  const pathname = usePathname();
+ const router = useRouter();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
+ const { user, profile } = useAuth();
+ const isAuthenticated = !!user && !!profile;
  const [isAuthOpen, setIsAuthOpen] = useState(false);
+
+ const handleCreateTask = () => {
+  if (isAuthenticated) {
+   // Already authenticated, go directly to create task
+   router.push(`/${currentLocale}/create-task`);
+  } else {
+   // Not authenticated, show auth slider
+   setIsAuthOpen(true);
+  }
+ };
 
  return (
   <section className="relative overflow-hidden py-20 lg:py-32 z-10">
@@ -102,7 +116,7 @@ export default function HeroSection() {
        <Button
         size="lg"
         className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
-        onClick={() => setIsAuthOpen(true)}
+        onClick={handleCreateTask}
        >
         <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
         {t('landing.hero.getStarted')}
@@ -201,7 +215,7 @@ export default function HeroSection() {
        <Button
         size="lg"
         className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
-        onClick={() => setIsAuthOpen(true)}
+        onClick={handleCreateTask}
        >
         <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
         {t('landing.hero.getStarted')}

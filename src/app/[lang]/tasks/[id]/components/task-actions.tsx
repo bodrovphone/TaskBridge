@@ -4,8 +4,10 @@ import { useState } from "react";
 import { MessageCircle, Share2 } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
+import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
+import AuthSlideOver from "./auth-slide-over";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 
@@ -15,14 +17,35 @@ interface TaskActionsProps {
 
 export default function TaskActions({ task }: TaskActionsProps) {
  const { t } = useTranslation();
+ const { user, profile } = useAuth();
+ const isAuthenticated = !!user && !!profile;
+
  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
  const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);
+ const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
+ const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
 
- // Mock user ID (in real app, get from auth context)
- const userId = 'mock-user-123';
-
- // Check if user has already applied
+ // @todo FEATURE: Replace mock with real API call to check user's application
+ const userId = profile?.id || 'mock-user-123';
  const userApplication = getUserApplication(task.id, userId);
+
+ const handleApplyClick = () => {
+  if (!isAuthenticated) {
+   setAuthAction('apply');
+   setIsAuthSlideOverOpen(true);
+   return;
+  }
+  setIsApplicationDialogOpen(true);
+ };
+
+ const handleAskQuestionClick = () => {
+  if (!isAuthenticated) {
+   setAuthAction('question');
+   setIsAuthSlideOverOpen(true);
+   return;
+  }
+  setIsQuestionDialogOpen(true);
+ };
 
  return (
   <>
@@ -31,7 +54,7 @@ export default function TaskActions({ task }: TaskActionsProps) {
      {/* Application Badge/Button */}
      <TaskApplicationBadge
       status={userApplication?.status}
-      onClick={() => setIsApplicationDialogOpen(true)}
+      onClick={handleApplyClick}
       className="w-full justify-center"
      />
 
@@ -40,7 +63,7 @@ export default function TaskActions({ task }: TaskActionsProps) {
       size="lg"
       className="w-full"
       startContent={<MessageCircle size={20} />}
-      onPress={() => setIsQuestionDialogOpen(true)}
+      onPress={handleAskQuestionClick}
      >
       {t('taskDetail.askQuestion')}
      </NextUIButton>
@@ -76,6 +99,13 @@ export default function TaskActions({ task }: TaskActionsProps) {
     taskTitle={task.title}
     taskAuthorId={task.authorId || 'task-author-123'}
     currentUserId={userId}
+   />
+
+   {/* Auth Slide Over */}
+   <AuthSlideOver
+    isOpen={isAuthSlideOverOpen}
+    onClose={() => setIsAuthSlideOverOpen(false)}
+    action={authAction}
    />
   </>
  );

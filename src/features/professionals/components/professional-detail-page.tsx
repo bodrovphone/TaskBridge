@@ -423,9 +423,9 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
        <div className="flex flex-col gap-8">
         <ActionButtonsRow
          professional={mockProfessional}
-         onProposeTask={() => console.log('Propose task clicked')}
-         onAskQuestion={() => console.log('Ask question clicked')}
-         onSaveToFavorites={() => console.log('Save to favorites clicked')}
+         onInviteToApply={() => console.log('Invite to apply clicked')}
+         onContact={() => console.log('Contact clicked')}
+         onShare={() => console.log('Share clicked')}
         />
         <ServicesSection services={mockProfessional.services} />
        </div>
