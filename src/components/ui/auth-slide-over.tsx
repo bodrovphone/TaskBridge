@@ -35,13 +35,19 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
  if (!isOpen || !mounted) return null;
 
  const handleAuthSuccess = () => {
-  onClose();
+  // Reset loading state before closing
+  setIsLoading(false);
 
-  // Redirect based on action
-  if (action === 'create-task') {
-   router.push(`/${i18n.language}/create-task`);
-  }
-  // For other actions (apply, question), the parent component will handle them
+  // Small delay to allow auth state to update
+  setTimeout(() => {
+   onClose();
+
+   // Redirect based on action
+   if (action === 'create-task') {
+    router.push(`/${i18n.language}/create-task`);
+   }
+   // For other actions (apply, question), the parent component will handle them
+  }, 100);
  };
 
  const handleLogin = async () => {
@@ -202,6 +208,11 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={(e) => {
+           if (e.key === 'Enter' && mode === 'login' && email && password) {
+            handleLogin();
+           }
+          }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="your@email.com"
          />
@@ -215,6 +226,11 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => {
+           if (e.key === 'Enter' && mode === 'login' && email && password) {
+            handleLogin();
+           }
+          }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="••••••••"
          />
@@ -229,6 +245,11 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
            type="password"
            value={confirmPassword}
            onChange={(e) => setConfirmPassword(e.target.value)}
+           onKeyDown={(e) => {
+            if (e.key === 'Enter' && mode === 'signup' && email && password && fullName && confirmPassword) {
+             handleSignUp();
+            }
+           }}
            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
            placeholder="••••••••"
           />
@@ -253,7 +274,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         color="primary"
         size="lg"
         className="w-full"
-        onClick={mode === 'login' ? handleLogin : handleSignUp}
+        onPress={mode === 'login' ? handleLogin : handleSignUp}
         isLoading={isLoading}
         isDisabled={mode === 'login' ? (!email || !password) : (!email || !password || !fullName || !confirmPassword)}
        >

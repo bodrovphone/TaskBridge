@@ -86,6 +86,17 @@ export const notifications = {
   'taskDetail.answerPosted': 'Ваш ответ успешно опубликован!',
   'taskDetail.answerError': 'Не удалось опубликовать ответ. Пожалуйста, попробуйте снова.',
 
+  // Not Found Page
+  'taskDetail.notFound.title': 'Задача не найдена',
+  'taskDetail.notFound.description': 'Задача, которую вы ищете, не существует или была удалена.',
+  'taskDetail.notFound.browseTasks': 'Просмотреть задачи',
+
+  // Error Page
+  'taskDetail.error.title': 'Что-то пошло не так!',
+  'taskDetail.error.description': 'Не удалось загрузить эту задачу. Возможно, это временная проблема.',
+  'taskDetail.error.retry': 'Попробовать снова',
+  'taskDetail.error.goHome': 'Перейти к просмотру',
+
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Мои опубликованные задачи',
   'postedTasks.subtitle': 'Управляйте созданными вами задачами',

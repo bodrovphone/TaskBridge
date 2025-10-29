@@ -85,6 +85,17 @@ export const notifications = {
   'taskDetail.answerPosted': 'Your answer has been posted successfully!',
   'taskDetail.answerError': 'Failed to post answer. Please try again.',
 
+  // Not Found Page
+  'taskDetail.notFound.title': 'Task Not Found',
+  'taskDetail.notFound.description': "The task you're looking for doesn't exist or has been removed.",
+  'taskDetail.notFound.browseTasks': 'Browse Tasks',
+
+  // Error Page
+  'taskDetail.error.title': 'Something went wrong!',
+  'taskDetail.error.description': "We couldn't load this task. This might be a temporary issue.",
+  'taskDetail.error.retry': 'Try Again',
+  'taskDetail.error.goHome': 'Go to Browse',
+
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'My Posted Tasks',
   'postedTasks.subtitle': 'Manage tasks you\'ve created',

@@ -2,39 +2,62 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ChevronLeft, MapPin, Clock, Wallet, Star, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
+import { ChevronLeft, MapPin, Clock, Wallet, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
 import { Card as NextUICard, CardBody, Chip, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
+import { useAuth } from "@/features/auth";
 import TaskGallery from "./task-gallery";
 import TaskActions from "./task-actions";
 import PrivacyToggle from "./privacy-toggle";
 import TaskActivity from "./task-activity";
 import { getUserApplication } from "@/components/tasks/mock-submit";
+import TaskCard from "@/components/ui/task-card";
 
 interface TaskDetailContentProps {
  task: any;
  similarTasks: any[];
+ applicationsCount?: number;
  lang: string;
 }
 
-const TASK_CATEGORIES = {
- "home_repair": "taskCard.category.home_repair",
- "delivery_transport": "taskCard.category.delivery_transport", 
- "personal_care": "taskCard.category.personal_care",
- "personal_assistant": "taskCard.category.personal_assistant",
- "learning_fitness": "taskCard.category.learning_fitness",
- "other": "taskCard.category.other"
-} as const;
+/**
+ * Get translated category name
+ * Handles both main categories and subcategories
+ */
+const getCategoryName = (t: any, category: string, subcategory?: string | null) => {
+ // If subcategory exists, use it for display
+ if (subcategory) {
+  // Convert kebab-case to camelCase for translation key
+  const camelCase = subcategory.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+  const subcategoryKey = `categories.sub.${camelCase}`;
+  const translated = t(subcategoryKey, '');
+  // If translation exists, use it; otherwise fall back to formatted subcategory
+  if (translated) return translated;
+  // Format subcategory as fallback (e.g., "courier-delivery" → "Courier Delivery")
+  return subcategory.split('-').map(word =>
+   word.charAt(0).toUpperCase() + word.slice(1)
+  ).join(' ');
+ }
+
+ // Fall back to main category
+ const categoryKey = `taskCard.category.${category}`;
+ return t(categoryKey, category);
+};
 
 function formatBudget(task: any, t: any) {
- if (task.budgetType === "fixed" && task.budgetMax) {
-  return `${task.budgetMax} лв`;
- } else if (task.budgetMin && task.budgetMax) {
-  return `${task.budgetMin}-${task.budgetMax} лв`;
- } else if (task.budgetMin) {
-  return `${t('taskCard.budget.from')} ${task.budgetMin} лв`;
- } else if (task.budgetMax) {
-  return `${t('taskCard.budget.to')} ${task.budgetMax} лв`;
+ // Support both camelCase (mock) and snake_case (database) field names
+ const budgetType = task.budgetType || task.budget_type;
+ const budgetMin = task.budgetMin || task.budget_min_bgn;
+ const budgetMax = task.budgetMax || task.budget_max_bgn;
+
+ if (budgetType === "fixed" && budgetMax) {
+  return `${budgetMax} лв`;
+ } else if (budgetMin && budgetMax) {
+  return `${budgetMin}-${budgetMax} лв`;
+ } else if (budgetMin) {
+  return `${t('taskCard.budget.from')} ${budgetMin} лв`;
+ } else if (budgetMax) {
+  return `${t('taskCard.budget.to')} ${budgetMax} лв`;
  }
  return t('taskDetail.negotiable');
 }
@@ -60,13 +83,37 @@ function getUrgencyColor(urgency: string) {
  }
 }
 
-function getUrgencyText(urgency: string, t: any) {
- switch (urgency) {
-  case 'same_day': return t('taskDetail.urgency.same_day');
-  case 'within_week': return t('taskDetail.urgency.within_week');
-  case 'flexible': return t('taskDetail.urgency.flexible');
-  default: return t('taskDetail.urgency.default');
+/**
+ * Calculate urgency text from deadline and is_urgent flag
+ * Database doesn't store urgency directly, so we reverse-engineer it
+ */
+function getUrgencyText(task: any, t: any) {
+ // Check if task has urgency field (mock data)
+ if (task.urgency) {
+  switch (task.urgency) {
+   case 'same_day': return t('taskDetail.urgency.same_day');
+   case 'within_week': return t('taskDetail.urgency.within_week');
+   case 'flexible': return t('taskDetail.urgency.flexible');
+   default: return t('taskDetail.urgency.default');
+  }
  }
+
+ // Reverse-engineer urgency from deadline (real database data)
+ if (task.is_urgent || task.isUrgent) {
+  return t('taskDetail.urgency.same_day');
+ }
+
+ if (task.deadline) {
+  const deadlineDate = new Date(task.deadline);
+  const now = new Date();
+  const diffDays = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+  if (diffDays <= 7) {
+   return t('taskDetail.urgency.within_week');
+  }
+ }
+
+ return t('taskDetail.urgency.flexible');
 }
 
 function getTaskStatus(taskId: string, taskStatus?: string) {
@@ -118,9 +165,14 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
  const { t } = useTranslation();
  const searchParams = useSearchParams();
+ const { user } = useAuth();
 
  // Get application ID from query params (for auto-opening application detail dialog)
  const applicationId = searchParams.get('application');
+
+ // Client-side ownership check (important for ISR caching)
+ // This ensures each user gets correct visibility regardless of cached pages
+ const isOwner = user?.id === task.customer_id;
 
  // Server-side time calculation for initial render
  const timeAgo = `${t('taskDetail.timeAgo')} 2 часа`; // TODO: Implement proper server-side time calculation
@@ -166,14 +218,14 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
            size="md"
            className="font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600"
           >
-           {t(TASK_CATEGORIES[task.category as keyof typeof TASK_CATEGORIES] || task.category)}
+           {getCategoryName(t, task.category, task.subcategory)}
           </Chip>
           <Chip
-           color={getUrgencyColor(task.urgency) as any}
+           color={getUrgencyColor(task.urgency || (task.is_urgent ? 'same_day' : task.deadline ? 'within_week' : 'flexible')) as any}
            variant="flat"
            size="sm"
           >
-           {getUrgencyText(task.urgency, t)}
+           {getUrgencyText(task, t)}
           </Chip>
           <span className="text-sm text-gray-500 ml-auto">{timeAgo}</span>
          </div>
@@ -285,11 +337,13 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
        </CardBody>
       </NextUICard>
 
-      {/* Task Activity - Questions and Applications
-        TODO: This component should only be visible to task authors (task creators/givers)
-        to manage applications and answer questions. For now, showing for all users for testing.
+      {/* Task Activity - Questions and Applications (Author Only)
+        Only visible to task authors to manage applications and answer questions.
+        Professionals can view their own applications at /tasks/applications
       */}
-      <TaskActivity taskId={task.id} initialApplicationId={applicationId || undefined} />
+      {isOwner && (
+        <TaskActivity taskId={task.id} initialApplicationId={applicationId || undefined} />
+      )}
      </div>
 
      {/* Sidebar */}
@@ -298,12 +352,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       <NextUICard className="bg-white/95 shadow-lg">
        <CardBody className="p-6">
         <PrivacyToggle customer={task.customer}>
-         <div className="flex items-center">
-          <Star className="text-yellow-500 fill-current" size={14} />
-          <span className="ml-1">
-           {task.customer.averageRating} ({task.customer.totalReviews} отзива)
-          </span>
-         </div>
+         <></>
         </PrivacyToggle>
        </CardBody>
       </NextUICard>
@@ -311,31 +360,25 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       {/* Action Buttons - Client Component */}
       <TaskActions task={task} />
 
-      {/* Similar Tasks - Server Rendered */}
-      <NextUICard className="bg-white/95 shadow-lg">
-       <CardBody className="p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">
-         {t('taskDetail.similarTasks')}
-        </h3>
-        <div className="space-y-4">
-         {similarTasks.map((similarTask) => (
-          <Link
-           key={similarTask.id}
-           href={`/${lang}/tasks/${similarTask.id}`}
-           className="block p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
-          >
-           <h4 className="font-medium text-gray-900 line-clamp-2">
-            {similarTask.title}
-           </h4>
-           <div className="flex items-center justify-between mt-2 text-sm text-gray-600">
-            <span>{similarTask.city}</span>
-            <span>{formatBudget(similarTask, t)}</span>
-           </div>
-          </Link>
-         ))}
-        </div>
-       </CardBody>
-      </NextUICard>
+      {/* Similar Tasks - Server Rendered (only show if tasks exist) */}
+      {similarTasks && similarTasks.length > 0 && (
+        <NextUICard className="bg-white/95 shadow-lg">
+         <CardBody className="p-6">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">
+           {t('taskDetail.similarTasks')}
+          </h3>
+          <div className="space-y-4">
+           {similarTasks.map((similarTask) => (
+            <TaskCard
+             key={similarTask.id}
+             task={similarTask}
+             showApplyButton={false}
+            />
+           ))}
+          </div>
+         </CardBody>
+        </NextUICard>
+      )}
      </div>
     </div>
    </div>

@@ -6,35 +6,43 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card as NextUICard, CardBody } from "@nextui-org/react";
 
 interface TaskGalleryProps {
- photos: string[];
+ photos?: string[] | null;
  title: string;
 }
 
 export default function TaskGallery({ photos, title }: TaskGalleryProps) {
  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+ // Handle undefined/null photos
+ const photoArray = photos || [];
+
  const nextImage = () => {
-  setCurrentImageIndex((prev) => (prev + 1) % photos.length);
+  setCurrentImageIndex((prev) => (prev + 1) % photoArray.length);
  };
 
  const previousImage = () => {
-  setCurrentImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  setCurrentImageIndex((prev) => (prev - 1 + photoArray.length) % photoArray.length);
  };
+
+ // Don't render if no photos
+ if (photoArray.length === 0) {
+  return null;
+ }
 
  return (
   <NextUICard className="bg-white/95 shadow-lg">
    <CardBody className="p-0">
     <div className="relative h-64 md:h-80 overflow-hidden rounded-lg">
-     {photos.length > 0 && (
+     {photoArray.length > 0 && (
       <>
        <Image
-        src={photos[currentImageIndex]}
+        src={photoArray[currentImageIndex]}
         alt={`${title} - image ${currentImageIndex + 1}`}
         fill
         className="object-cover"
         priority
        />
-       {photos.length > 1 && (
+       {photoArray.length > 1 && (
         <>
          <button
           onClick={previousImage}
@@ -50,10 +58,10 @@ export default function TaskGallery({ photos, title }: TaskGalleryProps) {
          >
           <ChevronRight size={20} />
          </button>
-         
+
          {/* Image indicators */}
          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {photos.map((_, index) => (
+          {photoArray.map((_, index) => (
            <button
             key={index}
             onClick={() => setCurrentImageIndex(index)}

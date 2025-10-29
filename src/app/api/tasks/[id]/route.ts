@@ -17,16 +17,19 @@ import { isAppError } from '@/server/shared/errors'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // 0. Await params (Next.js 15 requirement)
+    const { id } = await params
+
     // 1. Get current user (optional - for privacy filtering)
     const supabase = await createClient()
     const { data: { user: authUser } } = await supabase.auth.getUser()
 
     // 2. Get task
     const taskService = new TaskService()
-    const result = await taskService.getTaskDetail(params.id, authUser?.id)
+    const result = await taskService.getTaskDetail(id, authUser?.id)
 
     // 3. Handle result
     if (!result.success) {

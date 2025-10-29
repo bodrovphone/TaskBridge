@@ -3,7 +3,7 @@
  * Handles all database operations for tasks
  */
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { DatabaseError } from '../shared/errors'
 import { Result, ok, err } from '../shared/result'
 import type { Task, TaskDbInsert } from './task.types'
@@ -316,7 +316,7 @@ export class TaskRepository {
   }
 
   /**
-   * Find single task by ID with related counts
+   * Find single task by ID with related counts and customer data
    */
   async findByIdWithRelations(
     id: string
@@ -324,6 +324,7 @@ export class TaskRepository {
     try {
       const supabase = await createClient()
 
+      // 1. Get task with applications count
       const { data: task, error } = await supabase
         .from('tasks')
         .select(`
@@ -347,11 +348,29 @@ export class TaskRepository {
         )
       }
 
+      // 2. Get customer data separately using admin client (bypasses RLS)
+      let customerData = null
+      if (task.customer_id) {
+        const adminClient = createAdminClient()
+        const { data: customer, error: customerError } = await adminClient
+          .from('users')
+          .select('id, full_name, avatar_url, tasks_completed, created_at')
+          .eq('id', task.customer_id)
+          .single()
+
+        if (!customerError && customer) {
+          customerData = customer
+        } else {
+          console.warn('⚠️  Customer not found for task:', task.customer_id)
+        }
+      }
+
       // Extract applications count from nested query
       const applicationsCount = task?.applications?.[0]?.count || 0
 
       return ok({
         ...task,
+        customer: customerData,
         applicationsCount
       } as Task & { applicationsCount: number })
     } catch (error) {

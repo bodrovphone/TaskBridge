@@ -1,6 +1,11 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
+/**
+ * Create Supabase client with user session (respects RLS)
+ * Use this for operations that need to respect user permissions
+ */
 export async function createClient() {
   const cookieStore = await cookies()
 
@@ -33,4 +38,25 @@ export async function createClient() {
       },
     }
   )
+}
+
+/**
+ * Create Supabase admin client (bypasses RLS)
+ * Use this for server-side operations that need full database access
+ * IMPORTANT: Only use in server-side code, never expose to client
+ */
+export function createAdminClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!supabaseUrl || !supabaseServiceRoleKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
+
+  return createSupabaseClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  })
 }

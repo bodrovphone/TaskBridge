@@ -263,13 +263,14 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
 
  return (
   <Card
-   isPressable
-   className="w-full h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-200 hover:border-primary-200 cursor-pointer"
+   className="w-full h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-200 hover:border-primary-200"
    shadow="md"
    radius="lg"
-   onPress={handleCardPress}
   >
-   <CardBody className="p-0 flex-grow flex flex-col">
+   <CardBody
+    className="p-0 flex-grow flex flex-col cursor-pointer"
+    onClick={handleCardPress}
+   >
     {/* Image with loading background */}
     <div className="w-full h-48 bg-gray-200 overflow-hidden flex-shrink-0">
      <Image
@@ -326,11 +327,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
       variant="bordered"
       size="sm"
       className="flex-1"
-      onClick={(e) => {
-       e.preventDefault();
-       e.stopPropagation();
-       handleCardPress();
-      }}
+      onPress={handleCardPress}
      >
       {t('taskCard.seeDetails', 'See details')}
      </Button>
@@ -341,9 +338,8 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
        variant="solid"
        size="sm"
        className="flex-1 font-semibold shadow-md hover:shadow-lg transition-shadow"
-       onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+       onPress={(e) => {
+        e?.stopPropagation?.();
         onApply(task.id);
        }}
       >
