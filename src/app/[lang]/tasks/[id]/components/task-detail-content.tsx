@@ -205,7 +205,12 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
      {/* Main Content */}
      <div className="lg:col-span-2 space-y-6">
       {/* Photo Gallery - Client Component */}
-      <TaskGallery photos={task.photos} title={task.title} />
+      <TaskGallery
+       photos={task.photos}
+       title={task.title}
+       category={task.category}
+       subcategory={task.subcategory}
+      />
 
       {/* Task Details - Server Rendered */}
       <NextUICard className="bg-white/95 shadow-lg">

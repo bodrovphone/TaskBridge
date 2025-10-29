@@ -15,6 +15,7 @@ import {
  Button,
  Chip
 } from "@nextui-org/react";
+import DefaultTaskImage from "@/components/ui/default-task-image";
 
 // Task type definition (to be moved to global types later)
 interface Task {
@@ -34,6 +35,7 @@ interface Task {
  deadline?: Date | string;
  createdAt?: Date | string;
  created_at?: Date | string; // Database field (snake_case)
+ photos?: string[]; // Array of photo URLs
 }
 
 interface TaskCardProps {
@@ -271,15 +273,32 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
     className="p-0 flex-grow flex flex-col cursor-pointer"
     onClick={handleCardPress}
    >
-    {/* Image with loading background */}
-    <div className="w-full h-48 bg-gray-200 overflow-hidden flex-shrink-0">
-     <Image
-      src={(task as any).imageUrl || getCategoryImage(task.category, task.id)}
-      alt={task.title}
-      width={400}
-      height={192}
-      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-     />
+    {/* Image or Default Gradient */}
+    <div className="w-full h-48 overflow-hidden flex-shrink-0">
+     {task.photos && task.photos.length > 0 ? (
+      <Image
+       src={task.photos[0]}
+       alt={task.title}
+       width={400}
+       height={192}
+       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+      />
+     ) : (task as any).imageUrl ? (
+      // Backward compatibility with mock data
+      <Image
+       src={(task as any).imageUrl || getCategoryImage(task.category, task.id)}
+       alt={task.title}
+       width={400}
+       height={192}
+       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+      />
+     ) : (
+      // Show gradient default when no photos
+      <DefaultTaskImage
+       category={task.subcategory || task.category}
+       className="w-full h-full"
+      />
+     )}
     </div>
 
     {/* Content with better spacing */}
@@ -322,7 +341,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
 
    {/* Footer with clear separator */}
    <CardFooter className="px-6 pb-4 pt-4 border-t border-gray-100 mt-auto">
-    <div className="flex gap-3 w-full">
+    <div className="flex gap-3 w-full" onClick={(e) => e.stopPropagation()}>
      <Button
       variant="bordered"
       size="sm"
@@ -338,10 +357,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
        variant="solid"
        size="sm"
        className="flex-1 font-semibold shadow-md hover:shadow-lg transition-shadow"
-       onPress={(e) => {
-        e?.stopPropagation?.();
-        onApply(task.id);
-       }}
+       onPress={() => onApply(task.id)}
       >
        {t('taskCard.apply', 'Apply')}
       </Button>

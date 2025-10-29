@@ -273,7 +273,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
        <NextUIButton
         color="primary"
         size="lg"
-        className="w-full"
+        className="w-full font-semibold shadow-md border-2 border-blue-700"
         onPress={mode === 'login' ? handleLogin : handleSignUp}
         isLoading={isLoading}
         isDisabled={mode === 'login' ? (!email || !password) : (!email || !password || !fullName || !confirmPassword)}

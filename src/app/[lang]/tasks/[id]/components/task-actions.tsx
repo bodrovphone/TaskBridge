@@ -1,13 +1,14 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { MessageCircle, Share2 } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
-import AuthSlideOver from "./auth-slide-over";
+import AuthSlideOver from "@/components/ui/auth-slide-over";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 
@@ -17,6 +18,9 @@ interface TaskActionsProps {
 
 export default function TaskActions({ task }: TaskActionsProps) {
  const { t } = useTranslation();
+ const router = useRouter();
+ const pathname = usePathname();
+ const searchParams = useSearchParams();
  const { user, profile } = useAuth();
  const isAuthenticated = !!user && !!profile;
 
@@ -29,8 +33,33 @@ export default function TaskActions({ task }: TaskActionsProps) {
  const userId = profile?.id || 'mock-user-123';
  const userApplication = getUserApplication(task.id, userId);
 
+ // Auto-trigger dialog after successful authentication
+ useEffect(() => {
+  const action = searchParams.get('action');
+
+  if (isAuthenticated && action) {
+   // User just logged in and has a pending action
+   if (action === 'apply') {
+    setIsApplicationDialogOpen(true);
+   } else if (action === 'question') {
+    setIsQuestionDialogOpen(true);
+   }
+
+   // Clean up URL params using Next.js APIs
+   const params = new URLSearchParams(searchParams.toString());
+   params.delete('action');
+   const queryString = params.toString();
+   router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
+  }
+ }, [isAuthenticated, searchParams, router, pathname]);
+
  const handleApplyClick = () => {
   if (!isAuthenticated) {
+   // Add URL param to trigger action after login using Next.js APIs
+   const params = new URLSearchParams(searchParams.toString());
+   params.set('action', 'apply');
+   router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
    setAuthAction('apply');
    setIsAuthSlideOverOpen(true);
    return;
@@ -40,6 +69,11 @@ export default function TaskActions({ task }: TaskActionsProps) {
 
  const handleAskQuestionClick = () => {
   if (!isAuthenticated) {
+   // Add URL param to trigger action after login using Next.js APIs
+   const params = new URLSearchParams(searchParams.toString());
+   params.set('action', 'question');
+   router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
    setAuthAction('question');
    setIsAuthSlideOverOpen(true);
    return;

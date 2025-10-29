@@ -4,13 +4,16 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card as NextUICard, CardBody } from "@nextui-org/react";
+import DefaultTaskImage from "@/components/ui/default-task-image";
 
 interface TaskGalleryProps {
  photos?: string[] | null;
  title: string;
+ category?: string;
+ subcategory?: string | null;
 }
 
-export default function TaskGallery({ photos, title }: TaskGalleryProps) {
+export default function TaskGallery({ photos, title, category, subcategory }: TaskGalleryProps) {
  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
  // Handle undefined/null photos
@@ -24,9 +27,18 @@ export default function TaskGallery({ photos, title }: TaskGalleryProps) {
   setCurrentImageIndex((prev) => (prev - 1 + photoArray.length) % photoArray.length);
  };
 
- // Don't render if no photos
+ // Show default image if no photos
  if (photoArray.length === 0) {
-  return null;
+  return (
+   <NextUICard className="bg-white/95 shadow-lg">
+    <CardBody className="p-0">
+     <DefaultTaskImage
+      category={subcategory || category || 'other'}
+      className="h-64 md:h-80 rounded-lg"
+     />
+    </CardBody>
+   </NextUICard>
+  );
  }
 
  return (

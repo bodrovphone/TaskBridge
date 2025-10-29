@@ -47,8 +47,6 @@ export default async function DemoTaskDetailPage({ params }: DemoTaskDetailPageP
    <TaskDetailContent
     task={task}
     similarTasks={similarTasks}
-    isOwner={mockRelatedData.isOwner}
-    applicationsCount={mockRelatedData.applicationsCount}
     lang={lang}
    />
   </div>

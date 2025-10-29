@@ -1,11 +1,16 @@
 'use client'
 
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { mockTasks } from "@/lib/mock-data";
 import { useTaskFilters } from "@/app/[lang]/browse-tasks/hooks/use-task-filters";
 import { FilterBar } from "@/app/[lang]/browse-tasks/components/filter-bar";
 import { FiltersModal } from "@/app/[lang]/browse-tasks/components/filters-modal";
 import { BrowseTasksHeroSection, SearchFiltersSection, ResultsSection } from "./sections";
+import { useAuth } from "@/features/auth";
+import AuthSlideOver from "@/components/ui/auth-slide-over";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface PaginatedTasksResponse {
  tasks: any[];
@@ -21,6 +26,12 @@ interface PaginatedTasksResponse {
 
 export default function BrowseTasksPage() {
  const { filters, updateFilter, resetFilters, buildApiQuery } = useTaskFilters();
+ const { user } = useAuth();
+ const router = useRouter();
+ const { i18n } = useTranslation();
+
+ const [authSlideOverOpen, setAuthSlideOverOpen] = useState(false);
+ const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
  // Get recommended tasks from mock data (first 6 tasks)
  const recommendedTasks = mockTasks.slice(0, 6);
@@ -46,7 +57,14 @@ export default function BrowseTasksPage() {
  };
 
  const handleApplyToTask = (taskId: string) => {
-  window.location.href = `/tasks/${taskId}`;
+  if (!user) {
+   // User not authenticated - show auth slideover
+   setSelectedTaskId(taskId);
+   setAuthSlideOverOpen(true);
+  } else {
+   // User authenticated - navigate to task detail page where they can apply
+   router.push(`/${i18n.language}/tasks/${taskId}`);
+  }
  };
 
  const handleRetry = () => {
@@ -56,6 +74,15 @@ export default function BrowseTasksPage() {
  const handleSetCurrentPage = (page: number) => {
   updateFilter('page', page + 1); // Convert 0-based to 1-based
  };
+
+ // Handle redirect after successful authentication
+ useEffect(() => {
+  if (user && selectedTaskId && !authSlideOverOpen) {
+   // User just logged in and we have a pending task to redirect to
+   router.push(`/${i18n.language}/tasks/${selectedTaskId}`);
+   setSelectedTaskId(null); // Clear the selected task
+  }
+ }, [user, selectedTaskId, authSlideOverOpen, router, i18n.language]);
 
  return (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
@@ -103,6 +130,13 @@ export default function BrowseTasksPage() {
      onRetry={handleRetry}
     />
    </main>
+
+   {/* Auth Slide Over */}
+   <AuthSlideOver
+    isOpen={authSlideOverOpen}
+    onClose={() => setAuthSlideOverOpen(false)}
+    action="apply"
+   />
   </div>
  );
 }

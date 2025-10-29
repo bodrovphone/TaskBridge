@@ -17,8 +17,9 @@ import type { PaginatedTasksResponse } from "@/server/tasks/task.query-types";
  *
  * @todo Implement on-demand revalidation when tasks are edited for instant updates
  */
-export const dynamic = process.env.NODE_ENV === 'development' ? 'force-dynamic' : 'auto'
-export const revalidate = process.env.NODE_ENV === 'development' ? 0 : 3600
+// Force dynamic in development, auto in production
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 interface TaskDetailPageProps {
  params: Promise<{
