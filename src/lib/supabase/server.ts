@@ -49,20 +49,8 @@ export function createAdminClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-  // TEMPORARY: Debug logging
-  console.log('createAdminClient called:', {
-    hasUrl: !!supabaseUrl,
-    hasKey: !!supabaseServiceRoleKey,
-    keyPrefix: supabaseServiceRoleKey?.substring(0, 20) + '...'
-  })
-
   if (!supabaseUrl || !supabaseServiceRoleKey) {
-    const error = new Error('Missing Supabase environment variables')
-    console.error('Missing env vars:', {
-      NEXT_PUBLIC_SUPABASE_URL: !!supabaseUrl,
-      SUPABASE_SERVICE_ROLE_KEY: !!supabaseServiceRoleKey
-    })
-    throw error
+    throw new Error('Missing Supabase environment variables')
   }
 
   return createSupabaseClient(supabaseUrl, supabaseServiceRoleKey, {
