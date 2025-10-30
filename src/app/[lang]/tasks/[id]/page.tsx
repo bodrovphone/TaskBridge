@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import TaskDetailContent from "./components/task-detail-content";
 import type { TaskDetailResponse } from "@/server/tasks/task.query-types";
 import type { PaginatedTasksResponse } from "@/server/tasks/task.query-types";
@@ -110,12 +111,18 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   );
 
   return (
-   <TaskDetailContent
-    task={data.task}
-    similarTasks={similarTasks}
-    applicationsCount={data.relatedData.applicationsCount}
-    lang={lang}
-   />
+   <Suspense fallback={
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+   }>
+    <TaskDetailContent
+     task={data.task}
+     similarTasks={similarTasks}
+     applicationsCount={data.relatedData.applicationsCount}
+     lang={lang}
+    />
+   </Suspense>
   );
  } catch (error) {
   // Let Next.js error boundary handle this
