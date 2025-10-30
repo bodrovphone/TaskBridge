@@ -87,7 +87,15 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   // Note: ISR-cached pages don't need auth cookies since TaskActivity
   // visibility is determined client-side via useAuth() hook
   const baseUrl = getBaseUrl();
-  const response = await fetch(`${baseUrl}/api/tasks/${id}`, {
+  const fullUrl = `${baseUrl}/api/tasks/${id}`;
+
+  // TEMPORARY: Log the URL being fetched during SSR
+  console.log('🌐 Fetching task from URL:', fullUrl);
+  console.log('🔧 Base URL:', baseUrl);
+  console.log('🌍 VERCEL_URL:', process.env.VERCEL_URL);
+  console.log('🌍 NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
+
+  const response = await fetch(fullUrl, {
    next: { revalidate: 3600 }, // Cache for 1 hour
   });
 
