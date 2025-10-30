@@ -166,16 +166,15 @@ export const tasks = {
   'createTask.timeline.deadlineHelp': 'Оставете празно, ако нямате конкретен краен срок',
 
   // Photos Section
-  'createTask.photos.title': 'Добавете снимки (по избор)',
-  'createTask.photos.help': 'Снимките помагат на професионалистите да разберат по-добре задачата ви',
-  'createTask.photos.dragDrop': 'Плъзнете и пуснете изображения тук',
+  'createTask.photos.title': 'Добавете снимка (по избор)',
+  'createTask.photos.help': 'Снимката помага на професионалистите да разберат по-добре задачата ви',
+  'createTask.photos.dragDrop': 'Плъзнете и пуснете изображение тук',
   'createTask.photos.orBrowse': 'или кликнете за преглед',
-  'createTask.photos.maxFiles': 'Максимум 5 изображения',
-  'createTask.photos.maxSize': '5MB на изображение',
+  'createTask.photos.takePhoto': 'Направете снимка',
+  'createTask.photos.maxSize': 'Максимум 1MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
-  'createTask.photos.addMore': 'Добавете още',
-  'createTask.photos.uploading': 'Качване на снимки...',
-  'createTask.photos.fileTooLarge': 'Файлът е твърде голям. Максималният размер е 5MB',
+  'createTask.photos.uploading': 'Качване на снимка...',
+  'createTask.photos.fileTooLarge': 'Файлът е твърде голям. Максималният размер е 1MB',
   'createTask.photos.invalidType': 'Файлът не е поддържан формат на изображение',
   'createTask.photos.uploadError': 'Неуспешно качване на снимки. Моля, опитайте отново.',
 
@@ -201,7 +200,8 @@ export const tasks = {
   'createTask.errors.descriptionTooLong': 'Описанието не може да бъде повече от 2000 символа',
   'createTask.errors.cityRequired': 'Градът е задължителен',
   'createTask.errors.budgetInvalid': 'Максимумът трябва да бъде по-голям от минимума',
-  'createTask.errors.tooManyPhotos': 'Разрешени са максимум 5 снимки',
+
+  'createTask.imageUpload.error': 'Неуспешно качване на изображението',
 
   'taskCard.apply': 'Кандидатствай',
   'taskCard.seeDetails': 'Виж детайли',
@@ -219,4 +219,12 @@ export const tasks = {
   'taskCard.category.personal_assistant': 'Личен асистент',
   'taskCard.category.learning_fitness': 'Обучение и фитнес',
   'taskCard.category.other': 'Други',
+  // Subcategories
+  'taskCard.category.courier-services': 'Куриерски услуги',
+  'taskCard.category.logistics': 'Логистика',
+  'taskCard.category.handyman': 'Майстор',
+  'taskCard.category.plumbing': 'Водопровод',
+  'taskCard.category.electrical': 'Електричество',
+  'taskCard.category.cleaning-services': 'Почистване',
+  'taskCard.category.house-cleaning': 'Почистване на дома',
 };

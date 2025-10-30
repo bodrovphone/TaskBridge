@@ -170,14 +170,14 @@ export function shouldShowTaskHints(task: Task): boolean {
     return false
   }
 
-  // Task must be at least 7 days old
+  // Task must be at least 2 days old (reduced from 7 for development/MVP)
   const taskAgeDays = Math.floor((Date.now() - task.createdAt.getTime()) / (24 * 60 * 60 * 1000))
-  if (taskAgeDays < 7) {
+  if (taskAgeDays < 2) {
     return false
   }
 
-  // Task must have zero applications
-  if (task.applicationsCount > 0) {
+  // Show hints if task has few applications (0-2)
+  if (task.applicationsCount > 2) {
     return false
   }
 

@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { useToast } from '@/hooks/use-toast'
+import { useAuth } from '@/features/auth/hooks/use-auth'
+import { uploadTaskImage } from '@/lib/utils/image-upload'
 import { defaultFormValues } from '../lib/validation'
 import { CategorySelection } from './category-selection'
 import { TaskDetailsSection } from './task-details-section'
@@ -20,6 +22,7 @@ export function CreateTaskForm() {
  const router = useRouter()
  const params = useParams()
  const { toast } = useToast()
+ const { user } = useAuth()
  const locale = (params?.lang as string) || i18n.language || 'en'
 
  const [isSubmitting, setIsSubmitting] = useState(false)
@@ -33,11 +36,42 @@ export function CreateTaskForm() {
    try {
     setIsSubmitting(true)
 
+    // Upload image if present
+    let imageUrl = null
+    if (value.photoFile && user) {
+     // Generate a temporary task ID for the upload
+     const tempTaskId = `temp-${Date.now()}`
+
+     const { url, error } = await uploadTaskImage(
+      tempTaskId,
+      user.id,
+      value.photoFile
+     )
+
+     if (error) {
+      toast({
+       title: t('createTask.imageUpload.error', 'Image upload failed'),
+       description: error,
+       variant: 'destructive'
+      })
+      return // Stop submission if upload fails
+     }
+
+     imageUrl = url
+    }
+
+    // Prepare task data with image URL
+    const taskData = {
+     ...value,
+     photoUrls: imageUrl ? [imageUrl] : [], // Use photoUrls field
+     photoFile: undefined // Remove file from payload
+    }
+
     // Call task creation API
     const response = await fetch('/api/tasks', {
      method: 'POST',
      headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify(value),
+     body: JSON.stringify(taskData),
      credentials: 'include' // Include auth cookies
     })
 

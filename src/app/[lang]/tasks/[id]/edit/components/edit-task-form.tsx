@@ -30,7 +30,7 @@ interface EditTaskFormProps {
     budgetMax?: number | null
     urgency: 'same_day' | 'within_week' | 'flexible'
     deadline?: Date
-    photos?: string[]
+    images?: string[]
     requirements?: string
   }
 }
@@ -76,7 +76,7 @@ export function EditTaskForm({ taskData }: EditTaskFormProps) {
       budgetMax: taskData.budgetMax,
       urgency: taskData.urgency,
       deadline: taskData.deadline,
-      photos: taskData.photos || [],
+      photos: taskData.images || [],
     },
     onSubmit: async ({ value }) => {
       try {

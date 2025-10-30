@@ -166,16 +166,15 @@ export const tasks = {
   'createTask.timeline.deadlineHelp': 'Оставьте пустым, если у вас нет конкретного срока',
 
   // Photos Section
-  'createTask.photos.title': 'Добавьте фотографии (по желанию)',
-  'createTask.photos.help': 'Фотографии помогают профессионалам лучше понять вашу задачу',
-  'createTask.photos.dragDrop': 'Перетащите изображения сюда',
+  'createTask.photos.title': 'Добавьте фотографию (по желанию)',
+  'createTask.photos.help': 'Фотография помогает профессионалам лучше понять вашу задачу',
+  'createTask.photos.dragDrop': 'Перетащите изображение сюда',
   'createTask.photos.orBrowse': 'или кликните для обзора',
-  'createTask.photos.maxFiles': 'Максимум 5 изображений',
-  'createTask.photos.maxSize': '5MB на изображение',
+  'createTask.photos.takePhoto': 'Сделать фото',
+  'createTask.photos.maxSize': 'Максимум 1MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
-  'createTask.photos.addMore': 'Добавить еще',
-  'createTask.photos.uploading': 'Загрузка фотографий...',
-  'createTask.photos.fileTooLarge': 'Файл слишком большой. Максимальный размер 5MB',
+  'createTask.photos.uploading': 'Загрузка фотографии...',
+  'createTask.photos.fileTooLarge': 'Файл слишком большой. Максимальный размер 1MB',
   'createTask.photos.invalidType': 'Файл не является поддерживаемым форматом изображения',
   'createTask.photos.uploadError': 'Не удалось загрузить фотографии. Пожалуйста, попробуйте еще раз.',
 
@@ -201,7 +200,8 @@ export const tasks = {
   'createTask.errors.descriptionTooLong': 'Описание не может быть более 2000 символов',
   'createTask.errors.cityRequired': 'Пожалуйста, выберите город',
   'createTask.errors.budgetInvalid': 'Максимальный бюджет должен быть больше минимального',
-  'createTask.errors.tooManyPhotos': 'Разрешено максимум 5 фотографий',
+
+  'createTask.imageUpload.error': 'Не удалось загрузить изображение',
 
   'taskCard.apply': 'Откликнуться',
   'taskCard.seeDetails': 'Подробнее',
@@ -219,4 +219,12 @@ export const tasks = {
   'taskCard.category.personal_assistant': 'Личный помощник',
   'taskCard.category.learning_fitness': 'Обучение и фитнес',
   'taskCard.category.other': 'Другое',
+  // Subcategories
+  'taskCard.category.courier-services': 'Курьерские услуги',
+  'taskCard.category.logistics': 'Логистика',
+  'taskCard.category.handyman': 'Мастер',
+  'taskCard.category.plumbing': 'Водопровод',
+  'taskCard.category.electrical': 'Электрика',
+  'taskCard.category.cleaning-services': 'Уборка',
+  'taskCard.category.house-cleaning': 'Уборка дома',
 };

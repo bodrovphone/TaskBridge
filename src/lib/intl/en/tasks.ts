@@ -165,16 +165,15 @@ export const tasks = {
   'createTask.timeline.deadlineHelp': "Leave empty if you don't have a specific deadline",
 
   // Photos Section
-  'createTask.photos.title': 'Add photos (optional)',
-  'createTask.photos.help': 'Photos help professionals understand your task better',
-  'createTask.photos.dragDrop': 'Drag and drop images here',
+  'createTask.photos.title': 'Add a photo (optional)',
+  'createTask.photos.help': 'A photo helps professionals understand your task better',
+  'createTask.photos.dragDrop': 'Drag and drop an image here',
   'createTask.photos.orBrowse': 'or click to browse',
-  'createTask.photos.maxFiles': 'Maximum 5 images',
-  'createTask.photos.maxSize': '5MB per image',
+  'createTask.photos.takePhoto': 'Take a Photo',
+  'createTask.photos.maxSize': '1MB maximum',
   'createTask.photos.formats': 'JPG, PNG, WebP',
-  'createTask.photos.addMore': 'Add more',
-  'createTask.photos.uploading': 'Uploading photos...',
-  'createTask.photos.fileTooLarge': 'File is too large. Maximum size is 5MB',
+  'createTask.photos.uploading': 'Uploading photo...',
+  'createTask.photos.fileTooLarge': 'File is too large. Maximum size is 1MB',
   'createTask.photos.invalidType': 'File is not a supported image format',
   'createTask.photos.uploadError': 'Failed to upload photos. Please try again.',
 
@@ -200,7 +199,8 @@ export const tasks = {
   'createTask.errors.descriptionTooLong': 'Description must be less than 2000 characters',
   'createTask.errors.cityRequired': 'City is required',
   'createTask.errors.budgetInvalid': 'Maximum must be greater than minimum',
-  'createTask.errors.tooManyPhotos': 'Maximum 5 photos allowed',
+
+  'createTask.imageUpload.error': 'Image upload failed',
 
   'taskCard.apply': 'Apply',
   'taskCard.seeDetails': 'See details',
@@ -218,4 +218,12 @@ export const tasks = {
   'taskCard.category.personal_assistant': 'Personal Assistant',
   'taskCard.category.learning_fitness': 'Learning & Fitness',
   'taskCard.category.other': 'Other',
+  // Subcategories
+  'taskCard.category.courier-services': 'Courier Services',
+  'taskCard.category.logistics': 'Logistics',
+  'taskCard.category.handyman': 'Handyman',
+  'taskCard.category.plumbing': 'Plumbing',
+  'taskCard.category.electrical': 'Electrical',
+  'taskCard.category.cleaning-services': 'Cleaning',
+  'taskCard.category.house-cleaning': 'House Cleaning',
 };

@@ -16,6 +16,7 @@ import {
  Chip
 } from "@nextui-org/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
+import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category';
 
 // Task type definition (to be moved to global types later)
 interface Task {
@@ -35,7 +36,7 @@ interface Task {
  deadline?: Date | string;
  createdAt?: Date | string;
  created_at?: Date | string; // Database field (snake_case)
- photos?: string[]; // Array of photo URLs
+ images?: string[]; // Array of photo URLs (database field)
 }
 
 interface TaskCardProps {
@@ -44,175 +45,20 @@ interface TaskCardProps {
  showApplyButton?: boolean;
 }
 
-// Map subcategories to main categories, then to colors
-const getCategoryColor = (category: string): string => {
- // Subcategory to main category mapping
- const subcategoryToMain: Record<string, string> = {
-  // Handyman subcategories
-  'plumber': 'handyman',
-  'electrician': 'handyman',
-  'handyman-service': 'handyman',
-  'carpenter': 'handyman',
-  'locksmith': 'handyman',
-
-  // Appliance repair subcategories
-  'large-appliance-repair': 'appliance-repair',
-  'small-appliance-repair': 'appliance-repair',
-  'computer-help': 'appliance-repair',
-  'digital-tech-repair': 'appliance-repair',
-  'phone-repair': 'appliance-repair',
-
-  // Courier services subcategories
-  'courier-delivery': 'courier-services',
-  'grocery-delivery': 'courier-services',
-  'food-delivery': 'courier-services',
-  'document-delivery': 'courier-services',
-
-  // Logistics subcategories
-  'moving': 'logistics',
-  'cargo-transport': 'logistics',
-  'furniture-assembly': 'logistics',
-
-  // Cleaning services subcategories
-  'house-cleaning': 'cleaning-services',
-  'office-cleaning': 'cleaning-services',
-  'window-cleaning': 'cleaning-services',
-  'carpet-cleaning': 'cleaning-services',
-
-  // Pet services subcategories
-  'dog-walking': 'pet-services',
-  'pet-sitting': 'pet-services',
-  'pet-grooming': 'pet-services',
-
-  // Beauty & health subcategories
-  'massage': 'beauty-health',
-  'hairdresser': 'beauty-health',
-  'manicure': 'beauty-health',
-  'makeup': 'beauty-health',
-
-  // Tutoring subcategories
-  'language-tutoring': 'tutoring',
-  'math-tutoring': 'tutoring',
-  'music-lessons': 'tutoring',
-
-  // Add more as needed...
- };
-
- // Get main category (either directly or via subcategory mapping)
- const mainCategory = subcategoryToMain[category] || category;
-
- // Main category color mappings
- const mainCategoryColors: Record<string, string> = {
-  // Home & Repair Services (Blue)
-  'handyman': 'bg-blue-100 text-blue-800 border-blue-200',
-  'appliance-repair': 'bg-blue-100 text-blue-800 border-blue-200',
-  'finishing-work': 'bg-blue-100 text-blue-800 border-blue-200',
-  'furniture-work': 'bg-blue-100 text-blue-800 border-blue-200',
-  'construction-work': 'bg-blue-100 text-blue-800 border-blue-200',
-  'auto-repair': 'bg-blue-100 text-blue-800 border-blue-200',
-  'home_repair': 'bg-blue-100 text-blue-800 border-blue-200', // Legacy
-
-  // Delivery & Logistics (Green)
-  'courier-services': 'bg-green-100 text-green-800 border-green-200',
-  'logistics': 'bg-green-100 text-green-800 border-green-200',
-  'delivery_transport': 'bg-green-100 text-green-800 border-green-200', // Legacy
-
-  // Personal Services (Purple)
-  'pet-services': 'bg-purple-100 text-purple-800 border-purple-200',
-  'beauty-health': 'bg-purple-100 text-purple-800 border-purple-200',
-  'cleaning-services': 'bg-purple-100 text-purple-800 border-purple-200',
-  'household-services': 'bg-purple-100 text-purple-800 border-purple-200',
-  'personal_care': 'bg-purple-100 text-purple-800 border-purple-200', // Legacy
-
-  // Professional Services (Orange)
-  'business-services': 'bg-orange-100 text-orange-800 border-orange-200',
-  'event-planning': 'bg-orange-100 text-orange-800 border-orange-200',
-  'advertising-distribution': 'bg-orange-100 text-orange-800 border-orange-200',
-  'personal_assistant': 'bg-orange-100 text-orange-800 border-orange-200', // Legacy
-
-  // Learning & Creative (Pink)
-  'tutoring': 'bg-pink-100 text-pink-800 border-pink-200',
-  'trainer-services': 'bg-pink-100 text-pink-800 border-pink-200',
-  'photo-video': 'bg-pink-100 text-pink-800 border-pink-200',
-  'design': 'bg-pink-100 text-pink-800 border-pink-200',
-  'learning_fitness': 'bg-pink-100 text-pink-800 border-pink-200', // Legacy
-
-  // Digital Services (Indigo)
-  'web-development': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-  'digital-marketing': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-  'online-advertising': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-  'online-work': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-  'ai-services': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-
-  // Translation Services (Teal)
-  'translation-services': 'bg-teal-100 text-teal-800 border-teal-200',
-
-  // Volunteer (Emerald)
-  'volunteer-help': 'bg-emerald-100 text-emerald-800 border-emerald-200',
- };
-
- return mainCategoryColors[mainCategory] || 'bg-gray-100 text-gray-800 border-gray-200';
-};
+// @note: getCategoryColor, getCategoryName, getCategoryImage moved to @/lib/utils/category - see line 19 for import
 
 function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  const { t, i18n } = useTranslation();
  const router = useRouter();
  const pathname = usePathname();
- 
- const getCategoryName = (category: string, subcategory?: string | null) => {
-  // If subcategory exists, use it for display
-  if (subcategory) {
-   // Convert kebab-case to camelCase for translation key
-   const camelCase = subcategory.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-   const subcategoryKey = `categories.sub.${camelCase}`;
-   const translated = t(subcategoryKey, '');
-   // If translation exists, use it; otherwise fall back to formatted subcategory
-   if (translated) return translated;
-   // Format subcategory as fallback (e.g., "courier-delivery" → "Courier Delivery")
-   return subcategory.split('-').map(word =>
-    word.charAt(0).toUpperCase() + word.slice(1)
-   ).join(' ');
-  }
-
-  // Fall back to main category
-  const categoryKey = `taskCard.category.${category}`;
-  return t(categoryKey, category);
- };
 
  const getDateLocale = () => {
   switch (i18n.language) {
    case 'bg': return bg;
    case 'ru': return ru;
-   case 'en': 
+   case 'en':
    default: return enUS;
   }
- };
-
- const getCategoryImage = (category: string, taskId?: string) => {
-  // Specific images for mock tasks based on task ID and content
-  if (taskId === "1") {
-   // Dog walking task
-   return 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop&crop=center'; // Person walking dog
-  }
-  if (taskId === "2") {
-   // Balcony repair task
-   return 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=300&fit=crop&crop=center'; // Home construction/repair
-  }
-  if (taskId === "3") {
-   // Apartment cleaning task
-   return 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center'; // Professional cleaning
-  }
-  
-  // Default category-based images
-  const imageMap = {
-   'home_repair': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400&h=300&fit=crop&crop=center', // Tools and repair work
-   'delivery_transport': 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop&crop=center', // Delivery person with packages
-   'personal_care': 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop&crop=center', // Dog walking/pet care
-   'personal_assistant': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center', // Cleaning services
-   'learning_fitness': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center', // Fitness training
-   'other': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop&crop=center' // General services/business
-  };
-  return imageMap[category as keyof typeof imageMap] || imageMap.other;
  };
 
  // Parse timestamp safely - check both camelCase and snake_case
@@ -226,7 +72,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  // Use subcategory for color if it exists, otherwise use category
  const displayCategory = task.subcategory || task.category;
  const categoryColor = getCategoryColor(displayCategory);
- const categoryName = getCategoryName(task.category, task.subcategory);
+ const categoryName = getCategoryName(t, task.category, task.subcategory);
 
  const formatBudget = () => {
   // Support both camelCase and snake_case from database
@@ -275,9 +121,9 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
    >
     {/* Image or Default Gradient */}
     <div className="w-full h-48 overflow-hidden flex-shrink-0">
-     {task.photos && task.photos.length > 0 ? (
+     {task.images && task.images.length > 0 ? (
       <Image
-       src={task.photos[0]}
+       src={task.images[0]}
        alt={task.title}
        width={400}
        height={192}
@@ -312,7 +158,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
      </div>
 
      {/* Title with better contrast */}
-     <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 line-clamp-2 transition-colors">
+     <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
       {task.title}
      </h3>
 

@@ -54,7 +54,7 @@ export type CreateTaskFormData = z.infer<typeof createTaskSchema>
 /**
  * Default form values
  */
-export const defaultFormValues: Partial<CreateTaskFormData> = {
+export const defaultFormValues: Partial<CreateTaskFormData> & { photoFile?: File | null } = {
   category: '',
   subcategory: '',
   title: '',
@@ -66,6 +66,7 @@ export const defaultFormValues: Partial<CreateTaskFormData> = {
   budgetType: 'range',
   urgency: 'flexible',
   photos: [],
+  photoFile: null, // Temporary storage for file upload (not sent to API)
 }
 
 /**

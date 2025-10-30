@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, Button, Chip, Tabs, Tab } from '@nextui-org/react'
-import { FileText, Plus } from 'lucide-react'
+import { Card, CardBody, Button, Chip, Tabs, Tab, Spinner } from '@nextui-org/react'
+import { FileText, Plus, Filter } from 'lucide-react'
 import PostedTaskCard from '@/components/ui/posted-task-card'
+import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'
 import { useCreateTask } from '@/hooks/use-create-task'
 // @todo FEATURE: Uncomment when reviews feature is built
 // import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
+import { useAuth } from '@/features/auth/hooks/use-auth'
 
 interface PostedTasksPageContentProps {
   lang: string
@@ -37,15 +39,17 @@ interface PostedTask {
   completedAt?: Date
   hasReview?: boolean
   deadline?: Date
+  images?: string[]
 }
 
-// Mock data for development
+// @todo DEMO: Mock data for development - Remove when all features are integrated
+// This showcases all task statuses and UI states for demo purposes
 const mockPostedTasks: PostedTask[] = [
   {
     id: '1',
     title: 'Electrical outlet installation in living room',
     description: 'Need to install 3 additional power outlets in the living room',
-    category: 'categories.electrical', // Translation key
+    category: 'electrical',
     budget: 150,
     status: 'open',
     applicationsCount: 5,
@@ -60,7 +64,7 @@ const mockPostedTasks: PostedTask[] = [
     id: '0',
     title: 'Почистване на апартамент',
     description: 'Трябва почистване',
-    category: 'categories.houseCleaning',
+    category: 'house-cleaning',
     budget: 50, // Low budget - will trigger hint
     status: 'open',
     applicationsCount: 0, // No applications - will trigger hint
@@ -68,14 +72,14 @@ const mockPostedTasks: PostedTask[] = [
       city: '', // Missing location - will trigger hint
       neighborhood: ''
     },
-    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), // 8 days ago - will show hints
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago - will show hints
     deadline: new Date('2024-11-01')
   },
   {
     id: '2',
     title: 'Kitchen sink plumbing repair',
     description: 'Professional completed the work and is waiting for your confirmation',
-    category: 'categories.plumbing',
+    category: 'plumbing',
     budget: 120,
     status: 'pending_customer_confirmation',
     applicationsCount: 4,
@@ -93,7 +97,7 @@ const mockPostedTasks: PostedTask[] = [
     id: '2b',
     title: 'Weekly apartment cleaning',
     description: 'Looking for regular cleaning service every Tuesday',
-    category: 'categories.houseCleaning', // Translation key
+    category: 'house-cleaning',
     budget: 80,
     status: 'in_progress',
     applicationsCount: 8,
@@ -111,7 +115,7 @@ const mockPostedTasks: PostedTask[] = [
     id: '3',
     title: 'Plumbing repair - leaking sink',
     description: 'Kitchen sink is leaking, needs urgent repair',
-    category: 'categories.plumbing', // Translation key
+    category: 'plumbing',
     budget: 100,
     status: 'completed',
     applicationsCount: 3,
@@ -127,12 +131,30 @@ const mockPostedTasks: PostedTask[] = [
     createdAt: new Date('2024-10-05'),
     completedAt: new Date('2024-10-20'),
     hasReview: false, // Not reviewed yet - will show "Leave Review" button
+  },
+  {
+    id: '4',
+    title: 'Furniture assembly service',
+    description: 'Need help assembling IKEA furniture - bed frame, wardrobe, and desk',
+    category: 'furniture-assembly',
+    budget: 200,
+    status: 'cancelled',
+    applicationsCount: 12,
+    location: {
+      city: 'Sofia',
+      neighborhood: 'Studentski Grad'
+    },
+    createdAt: new Date('2024-09-28'),
   }
 ]
 
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('all')
+  const [tasks, setTasks] = useState<PostedTask[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   // Create task hook with auth
   const {
@@ -142,14 +164,112 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
     // @todo FEATURE: Add review-related properties when reviews feature is built
   } = useCreateTask()
 
-  const filteredTasks = mockPostedTasks.filter(task => {
+  // Fetch real tasks from API
+  useEffect(() => {
+    async function fetchTasks() {
+      // @todo DEMO: Remove this when authentication is enforced
+      // For demo purposes, show mock tasks if user is not logged in
+      if (!user) {
+        setIsLoading(false)
+        setTasks(mockPostedTasks)
+        return
+      }
+
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/tasks?mode=posted', {
+          credentials: 'include'
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch tasks')
+        }
+
+        const data = await response.json()
+
+        // Map API data to PostedTask format and mix in mock UI elements
+        const mappedTasks: PostedTask[] = data.tasks.map((task: any, index: number) => {
+          // Calculate days since creation for stale task detection
+          const daysSinceCreation = Math.floor((Date.now() - new Date(task.created_at).getTime()) / (1000 * 60 * 60 * 24))
+          const isStale = daysSinceCreation > 7 && task.status === 'open' && task.applicationsCount === 0
+
+          // For completed/in_progress tasks without a selected professional, add mock professional data
+          const needsMockProfessional = (task.status === 'completed' || task.status === 'in_progress' || task.status === 'pending_customer_confirmation') && !task.selected_professional_id
+
+          return {
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            category: task.category,
+            budget: task.budget_max_bgn || task.budget_min_bgn || 0,
+            status: task.status,
+            applicationsCount: task.applicationsCount || 0,
+            acceptedApplication: task.selected_professional_id ? {
+              professionalId: task.selected_professional_id,
+              professionalName: 'Professional', // @todo: Fetch professional details
+              professionalAvatar: undefined
+            } : needsMockProfessional ? {
+              // Add mock professional for demo purposes
+              professionalId: `mock-prof-${index}`,
+              professionalName: index % 2 === 0 ? 'Ivan Georgiev' : 'Maria Petrova',
+              professionalAvatar: undefined
+            } : undefined,
+            location: {
+              city: task.city,
+              neighborhood: task.neighborhood || ''
+            },
+            createdAt: new Date(task.created_at),
+            completedAt: task.completed_at ? new Date(task.completed_at) : undefined,
+            // Mix in mock UI elements: 50% of completed tasks need review
+            hasReview: task.status === 'completed' ? (index % 2 === 0 ? false : true) : undefined,
+            deadline: task.deadline ? new Date(task.deadline) : undefined,
+            images: task.images || [], // Task images from database
+          }
+        })
+
+        // @todo DEMO: Remove mock tasks when all features are integrated
+        // For demo purposes, append mock tasks below real tasks to showcase all UI states
+        const mockTasksWithPrefix = mockPostedTasks.map(task => ({
+          ...task,
+          id: `mock-${task.id}` // Prefix IDs to avoid conflicts with real tasks
+        }))
+
+        const allTasks = [...mappedTasks, ...mockTasksWithPrefix]
+
+        setTasks(allTasks)
+        setError(null)
+
+        // Debug: Log task statuses and counts
+        console.log('📊 Posted Tasks Status Summary:', {
+          total: allTasks.length,
+          real: mappedTasks.length,
+          mock: mockTasksWithPrefix.length,
+          byStatus: allTasks.reduce((acc, task) => {
+            acc[task.status] = (acc[task.status] || 0) + 1
+            return acc
+          }, {} as Record<string, number>)
+        })
+      } catch (err) {
+        console.error('Error fetching tasks:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load tasks')
+        // Fallback to mock data on error
+        setTasks(mockPostedTasks)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTasks()
+  }, [user])
+
+  const filteredTasks = tasks.filter(task => {
     if (selectedStatus === 'all') return true
     return task.status === selectedStatus
   })
 
   const getTaskCountByStatus = (status: TaskStatus) => {
-    if (status === 'all') return mockPostedTasks.length
-    return mockPostedTasks.filter(task => task.status === status).length
+    if (status === 'all') return tasks.length
+    return tasks.filter(task => task.status === status).length
   }
 
   return (
@@ -211,7 +331,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.all')}</span>
-                    <Chip size="sm" variant="flat">{getTaskCountByStatus('all')}</Chip>
+                    <Chip size="sm" variant="flat" color="default">{getTaskCountByStatus('all')}</Chip>
                   </div>
                 }
               />
@@ -220,7 +340,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.open')}</span>
-                    <Chip size="sm" variant="flat" color="primary">{getTaskCountByStatus('open')}</Chip>
+                    <Chip size="sm" variant="solid" color="primary">{getTaskCountByStatus('open')}</Chip>
                   </div>
                 }
               />
@@ -229,7 +349,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.inProgress')}</span>
-                    <Chip size="sm" variant="flat" color="warning">{getTaskCountByStatus('in_progress')}</Chip>
+                    <Chip size="sm" variant="solid" color="warning">{getTaskCountByStatus('in_progress')}</Chip>
                   </div>
                 }
               />
@@ -238,7 +358,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.awaitingConfirmation')}</span>
-                    <Chip size="sm" variant="flat" color="secondary">{getTaskCountByStatus('pending_customer_confirmation')}</Chip>
+                    <Chip size="sm" variant="solid" color="secondary">{getTaskCountByStatus('pending_customer_confirmation')}</Chip>
                   </div>
                 }
               />
@@ -247,7 +367,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.completed')}</span>
-                    <Chip size="sm" variant="flat" color="success">{getTaskCountByStatus('completed')}</Chip>
+                    <Chip size="sm" variant="solid" color="success">{getTaskCountByStatus('completed')}</Chip>
                   </div>
                 }
               />
@@ -256,7 +376,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.cancelled')}</span>
-                    <Chip size="sm" variant="flat" color="danger">{getTaskCountByStatus('cancelled')}</Chip>
+                    <Chip size="sm" variant="solid" color="danger">{getTaskCountByStatus('cancelled')}</Chip>
                   </div>
                 }
               />
@@ -265,24 +385,56 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
         </Card>
 
         {/* Tasks List */}
-        {filteredTasks.length === 0 ? (
+        {isLoading ? (
           <Card className="shadow-xl border border-white/20 bg-white/95">
             <CardBody className="p-12 text-center">
-              <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+              <Spinner size="lg" className="mb-4" />
+              <p className="text-gray-600">{t('loading', 'Loading...')}</p>
+            </CardBody>
+          </Card>
+        ) : error ? (
+          <Card className="shadow-xl border border-white/20 bg-white/95">
+            <CardBody className="p-12 text-center">
+              <FileText className="w-16 h-16 mx-auto mb-4 text-red-300" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                {t('postedTasks.empty.title')}
+                {t('error', 'Error loading tasks')}
               </h3>
-              <p className="text-gray-500 mb-6">{t('postedTasks.empty.message')}</p>
+              <p className="text-gray-500 mb-6">{error}</p>
               <Button
                 color="primary"
                 size="lg"
-                startContent={<Plus className="w-5 h-5" />}
-                onPress={handleCreateTask}
+                onPress={() => window.location.reload()}
               >
-                {t('postedTasks.empty.createButton')}
+                {t('retry', 'Try Again')}
               </Button>
             </CardBody>
           </Card>
+        ) : filteredTasks.length === 0 ? (
+          // Check if truly empty (no tasks at all) or just filtered empty
+          tasks.length === 0 ? (
+            // No tasks at all - show creative empty state
+            <EmptyPostedTasks />
+          ) : (
+            // Tasks exist but current filter shows none
+            <Card className="shadow-xl border border-white/20 bg-white/95">
+              <CardBody className="p-12 text-center">
+                <Filter className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  {t('common.noResults', 'No tasks found')}
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  {t('common.noResultsFilter', 'Try selecting a different status filter')}
+                </p>
+                <Button
+                  variant="bordered"
+                  size="lg"
+                  onPress={() => setSelectedStatus('all')}
+                >
+                  {t('common.clearFilters', 'View All Tasks')}
+                </Button>
+              </CardBody>
+            </Card>
+          )
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredTasks.map((task) => (
@@ -301,6 +453,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 completedAt={task.completedAt}
                 hasReview={task.hasReview}
                 lang={lang}
+                images={task.images}
               />
             ))}
           </div>

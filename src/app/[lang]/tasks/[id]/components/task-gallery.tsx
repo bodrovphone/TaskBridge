@@ -7,28 +7,28 @@ import { Card as NextUICard, CardBody } from "@nextui-org/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
 
 interface TaskGalleryProps {
- photos?: string[] | null;
+ images?: string[] | null;
  title: string;
  category?: string;
  subcategory?: string | null;
 }
 
-export default function TaskGallery({ photos, title, category, subcategory }: TaskGalleryProps) {
+export default function TaskGallery({ images, title, category, subcategory }: TaskGalleryProps) {
  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
- // Handle undefined/null photos
- const photoArray = photos || [];
+ // Handle undefined/null images
+ const imageArray = images || [];
 
  const nextImage = () => {
-  setCurrentImageIndex((prev) => (prev + 1) % photoArray.length);
+  setCurrentImageIndex((prev) => (prev + 1) % imageArray.length);
  };
 
  const previousImage = () => {
-  setCurrentImageIndex((prev) => (prev - 1 + photoArray.length) % photoArray.length);
+  setCurrentImageIndex((prev) => (prev - 1 + imageArray.length) % imageArray.length);
  };
 
- // Show default image if no photos
- if (photoArray.length === 0) {
+ // Show default image if no images
+ if (imageArray.length === 0) {
   return (
    <NextUICard className="bg-white/95 shadow-lg">
     <CardBody className="p-0">
@@ -45,16 +45,16 @@ export default function TaskGallery({ photos, title, category, subcategory }: Ta
   <NextUICard className="bg-white/95 shadow-lg">
    <CardBody className="p-0">
     <div className="relative h-64 md:h-80 overflow-hidden rounded-lg">
-     {photoArray.length > 0 && (
+     {imageArray.length > 0 && (
       <>
        <Image
-        src={photoArray[currentImageIndex]}
+        src={imageArray[currentImageIndex]}
         alt={`${title} - image ${currentImageIndex + 1}`}
         fill
         className="object-cover"
         priority
        />
-       {photoArray.length > 1 && (
+       {imageArray.length > 1 && (
         <>
          <button
           onClick={previousImage}
@@ -73,7 +73,7 @@ export default function TaskGallery({ photos, title, category, subcategory }: Ta
 
          {/* Image indicators */}
          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {photoArray.map((_, index) => (
+          {imageArray.map((_, index) => (
            <button
             key={index}
             onClick={() => setCurrentImageIndex(index)}

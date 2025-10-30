@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Card, CardBody, Button, Chip } from '@nextui-org/react'
 import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
@@ -13,6 +14,8 @@ import { mockSubmitReview } from '@/features/reviews'
 import { useToast } from '@/hooks/use-toast'
 import { TaskHintBanner } from '@/components/ui/task-hint-banner'
 import { useTaskHints } from '@/hooks/use-task-hints'
+import DefaultTaskImage from '@/components/ui/default-task-image'
+import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category'
 
 interface PostedTaskCardProps {
   id: string
@@ -35,6 +38,7 @@ interface PostedTaskCardProps {
   completedAt?: Date
   hasReview?: boolean
   lang: string
+  images?: string[]
 }
 
 function PostedTaskCard({
@@ -50,7 +54,8 @@ function PostedTaskCard({
   createdAt,
   completedAt,
   hasReview = false,
-  lang
+  lang,
+  images
 }: PostedTaskCardProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -170,8 +175,30 @@ function PostedTaskCard({
 
   return (
     <Card
-      className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-all duration-300 h-full flex flex-col cursor-default"
+      className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-all duration-300 h-full flex flex-col cursor-default overflow-hidden"
     >
+      {/* Task Image */}
+      <div
+        className="w-full h-48 overflow-hidden flex-shrink-0 cursor-pointer"
+        onClick={() => router.push(`/${lang}/tasks/${id}`)}
+      >
+        {images && images.length > 0 ? (
+          <Image
+            src={images[0]}
+            alt={title}
+            width={400}
+            height={192}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          // Show category-based default when no photos
+          <DefaultTaskImage
+            category={category}
+            className="w-full h-full"
+          />
+        )}
+      </div>
+
       <CardBody className="p-6 flex flex-col h-full">
         {/* Header with title and status */}
         <div className="flex items-start justify-between gap-3 mb-3">
@@ -193,8 +220,8 @@ function PostedTaskCard({
 
         {/* Category chip */}
         <div className="mb-3">
-          <Chip size="sm" variant="bordered" className="text-xs">
-            {t(category)}
+          <Chip size="sm" variant="bordered" className={`text-xs ${getCategoryColor(category)}`}>
+            {getCategoryName(t, category)}
           </Chip>
         </div>
 

@@ -12,6 +12,7 @@ import PrivacyToggle from "./privacy-toggle";
 import TaskActivity from "./task-activity";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 import TaskCard from "@/components/ui/task-card";
+import { getCategoryName } from '@/lib/utils/category';
 
 interface TaskDetailContentProps {
  task: any;
@@ -20,29 +21,7 @@ interface TaskDetailContentProps {
  lang: string;
 }
 
-/**
- * Get translated category name
- * Handles both main categories and subcategories
- */
-const getCategoryName = (t: any, category: string, subcategory?: string | null) => {
- // If subcategory exists, use it for display
- if (subcategory) {
-  // Convert kebab-case to camelCase for translation key
-  const camelCase = subcategory.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-  const subcategoryKey = `categories.sub.${camelCase}`;
-  const translated = t(subcategoryKey, '');
-  // If translation exists, use it; otherwise fall back to formatted subcategory
-  if (translated) return translated;
-  // Format subcategory as fallback (e.g., "courier-delivery" → "Courier Delivery")
-  return subcategory.split('-').map(word =>
-   word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ');
- }
-
- // Fall back to main category
- const categoryKey = `taskCard.category.${category}`;
- return t(categoryKey, category);
-};
+// @note: getCategoryName moved to @/lib/utils/category for reusability - see line 15 for import
 
 function formatBudget(task: any, t: any) {
  // Support both camelCase (mock) and snake_case (database) field names
@@ -206,7 +185,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
      <div className="lg:col-span-2 space-y-6">
       {/* Photo Gallery - Client Component */}
       <TaskGallery
-       photos={task.photos}
+       images={task.images}
        title={task.title}
        category={task.category}
        subcategory={task.subcategory}

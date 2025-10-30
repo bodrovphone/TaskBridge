@@ -118,9 +118,11 @@ export const notifications = {
   'postedTasks.cancelTaskConfirm': 'Are you sure you want to cancel this task? The professional will be notified.',
   'postedTasks.reopenTask': 'Reopen Task',
   'postedTasks.reopenTaskConfirm': 'Reopen this task to find a new professional? This will remove the current assignment.',
-  'postedTasks.empty.title': 'No tasks posted yet',
-  'postedTasks.empty.message': 'You haven\'t posted any tasks yet. Create your first task!',
-  'postedTasks.empty.createButton': 'Create Task',
+  'postedTasks.empty.title': 'Got an idea? Let\'s make it happen! 💡',
+  'postedTasks.empty.description': 'Your task board is empty and ready for action. From home repairs to creative projects, professionals are waiting to help.',
+  'postedTasks.empty.subtext': 'Post your first task in under 2 minutes. It\'s free, simple, and you\'ll start receiving applications right away!',
+  'postedTasks.empty.createButton': 'Create Your First Task',
+  'postedTasks.empty.hint': '✨ Tip: The more details you provide, the better applications you\'ll receive',
 
   // Cancel Task Dialog
   'cancelTask.title': 'Cancel Task',

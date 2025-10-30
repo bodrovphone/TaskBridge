@@ -91,35 +91,34 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
    </form.Field>
 
    {/* Specific Deadline (Optional) - Hidden for same_day urgency */}
-   {urgency !== 'same_day' && (
-    <form.Field name="deadline" key="deadline-field">
-     {(field: any) => (
-      <DatePicker
-       key="deadline-picker"
-       label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
-       description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
-       value={field.state.value ? parseDate(field.state.value.toISOString().split('T')[0]) : null}
-       onChange={(date: any) => {
-        if (date) {
-         // Create date at noon UTC to avoid timezone issues
-         const jsDate = new Date(Date.UTC(date.year, date.month - 1, date.day, 12, 0, 0))
-         field.handleChange(jsDate)
-        } else {
-         field.handleChange(undefined)
-        }
-       }}
-       minValue={parseDate(new Date().toISOString().split('T')[0])}
-       showMonthAndYearPickers
-       labelPlacement="outside"
-       classNames={{
-        base: 'max-w-md',
-        popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
-        calendar: 'bg-white shadow-sm',
-       }}
-      />
-     )}
-    </form.Field>
-   )}
+   <form.Field name="deadline" key="deadline-field">
+    {(field: any) => (
+     <DatePicker
+      key="deadline-picker"
+      label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
+      description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
+      value={field.state.value ? parseDate(field.state.value.toISOString().split('T')[0]) : null}
+      onChange={(date: any) => {
+       if (date) {
+        // Create date at noon UTC to avoid timezone issues
+        const jsDate = new Date(Date.UTC(date.year, date.month - 1, date.day, 12, 0, 0))
+        field.handleChange(jsDate)
+       } else {
+        field.handleChange(undefined)
+       }
+      }}
+      minValue={parseDate(new Date().toISOString().split('T')[0])}
+      showMonthAndYearPickers
+      labelPlacement="outside"
+      isDisabled={urgency === 'same_day'}
+      classNames={{
+       base: 'max-w-md',
+       popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
+       calendar: 'bg-white shadow-sm',
+      }}
+     />
+    )}
+   </form.Field>
    </CardBody>
   </Card>
  )

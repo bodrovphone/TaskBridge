@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { Button, Card, CardBody } from '@nextui-org/react'
-import { Upload, X, Image as ImageIcon } from 'lucide-react'
+import { Upload, X, Image as ImageIcon, Camera } from 'lucide-react'
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 
@@ -14,62 +14,49 @@ export function PhotosSection({ form }: PhotosSectionProps) {
  const { t } = useTranslation()
  const [isUploading, setIsUploading] = useState(false)
  const fileInputRef = useRef<HTMLInputElement>(null)
- const [photos, setPhotos] = useState<string[]>([])
+ const cameraInputRef = useRef<HTMLInputElement>(null)
+ const [photo, setPhoto] = useState<File | null>(null) // MVP: Single image only
+ const [photoPreview, setPhotoPreview] = useState<string | null>(null)
 
- const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  const files = event.target.files
-  if (!files || files.length === 0) return
+ const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0]
+  if (!file) return
 
-  // Validate file count
-  if (photos.length + files.length > 5) {
-   alert(t('createTask.errors.tooManyPhotos', 'Maximum 5 photos allowed'))
+  // Validate file size (1MB max for MVP)
+  if (file.size > 1024 * 1024) {
+   alert(t('createTask.photos.fileTooLarge', `File is too large. Maximum size is 1MB`))
    return
   }
 
-  setIsUploading(true)
+  // Validate file type
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+   alert(t('createTask.photos.invalidType', `File is not a supported image format (JPG, PNG, WebP)`))
+   return
+  }
 
-  try {
-   const newPhotoUrls: string[] = []
+  // Store file for later upload (will be uploaded when form is submitted)
+  setPhoto(file)
 
-   for (const file of Array.from(files)) {
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-     alert(t('createTask.photos.fileTooLarge', `File ${file.name} is too large. Maximum size is 5MB`))
-     continue
-    }
+  // Create preview
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    setPhotoPreview(e.target?.result as string)
+  }
+  reader.readAsDataURL(file)
 
-    // Validate file type
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-     alert(t('createTask.photos.invalidType', `File ${file.name} is not a supported image format`))
-     continue
-    }
+  // Store file in form for submission
+  form.setFieldValue('photoFile', file)
 
-    // TODO: Upload to cloud storage (Cloudinary/AWS S3)
-    // For now, create a local object URL as placeholder
-    const objectUrl = URL.createObjectURL(file)
-    newPhotoUrls.push(objectUrl)
-   }
-
-   // Update form with new photo URLs
-   const updatedPhotos = [...photos, ...newPhotoUrls]
-   form.setFieldValue('photos', updatedPhotos)
-   setPhotos(updatedPhotos)
-  } catch (error) {
-   console.error('Error uploading photos:', error)
-   alert(t('createTask.photos.uploadError', 'Failed to upload photos. Please try again.'))
-  } finally {
-   setIsUploading(false)
-   // Reset file input
-   if (fileInputRef.current) {
-    fileInputRef.current.value = ''
-   }
+  // Reset file input
+  if (fileInputRef.current) {
+   fileInputRef.current.value = ''
   }
  }
 
- const removePhoto = (index: number) => {
-  const newPhotos = photos.filter((_: any, i: number) => i !== index)
-  form.setFieldValue('photos', newPhotos)
-  setPhotos(newPhotos)
+ const removePhoto = () => {
+  setPhoto(null)
+  setPhotoPreview(null)
+  form.setFieldValue('photoFile', null)
  }
 
  return (
@@ -90,86 +77,93 @@ export function PhotosSection({ form }: PhotosSectionProps) {
    </div>
 
    {/* Upload Zone */}
-   {photos.length < 5 && (
-    <Card
-     isPressable
-     onPress={() => fileInputRef.current?.click()}
-     className="border-2 border-dashed border-gray-300 hover:border-primary transition-colors"
-    >
-     <CardBody className="p-8 text-center">
-      <div className="flex flex-col items-center gap-3">
-       <div className="p-4 bg-primary-50 rounded-full">
-        <Upload className="w-8 h-8 text-primary" />
+   {!photoPreview && (
+    <div className="space-y-4">
+     <Card
+      isPressable
+      onPress={() => fileInputRef.current?.click()}
+      className="border-2 border-dashed border-gray-300 hover:border-primary transition-colors"
+     >
+      <CardBody className="p-8 text-center">
+       <div className="flex flex-col items-center gap-3">
+        <div className="p-4 bg-primary-50 rounded-full">
+         <Upload className="w-8 h-8 text-primary" />
+        </div>
+        <div>
+         <p className="font-semibold text-gray-900">
+          {t('createTask.photos.dragDrop', 'Drag and drop an image here')}
+         </p>
+         <p className="text-sm text-gray-500">
+          {t('createTask.photos.orBrowse', 'or click to browse')}
+         </p>
+        </div>
+        <div className="text-xs text-gray-400 space-y-1">
+         <p>{t('createTask.photos.maxSize', '1MB maximum')}</p>
+         <p>{t('createTask.photos.formats', 'JPG, PNG, WebP')}</p>
+        </div>
        </div>
-       <div>
-        <p className="font-semibold text-gray-900">
-         {t('createTask.photos.dragDrop', 'Drag and drop images here')}
-        </p>
-        <p className="text-sm text-gray-500">
-         {t('createTask.photos.orBrowse', 'or click to browse')}
-        </p>
-       </div>
-       <div className="text-xs text-gray-400 space-y-1">
-        <p>{t('createTask.photos.maxFiles', 'Maximum 5 images')}</p>
-        <p>{t('createTask.photos.maxSize', '5MB per image')}</p>
-        <p>{t('createTask.photos.formats', 'JPG, PNG, WebP')}</p>
-       </div>
-      </div>
-     </CardBody>
-    </Card>
+      </CardBody>
+     </Card>
+
+     {/* Camera Button (Mobile) */}
+     <div className="text-center">
+      <Button
+       color="secondary"
+       variant="bordered"
+       size="lg"
+       startContent={<Camera className="w-5 h-5" />}
+       onPress={() => cameraInputRef.current?.click()}
+       className="w-full sm:w-auto"
+      >
+       {t('createTask.photos.takePhoto', 'Take a Photo')}
+      </Button>
+     </div>
+    </div>
    )}
 
-   {/* Hidden File Input */}
+   {/* Hidden File Input - Gallery */}
    <input
     ref={fileInputRef}
     type="file"
     accept="image/jpeg,image/png,image/webp"
-    multiple
     onChange={handleFileSelect}
     className="hidden"
    />
 
-   {/* Photo Previews */}
-   {photos.length > 0 && (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-     {photos.map((photoUrl: string, index: number) => (
-      <div key={index} className="relative group">
-       <Card>
-        <CardBody className="p-0 aspect-square">
-         <Image
-          src={photoUrl}
-          alt={`Photo ${index + 1}`}
-          fill
-          className="object-cover rounded-lg"
-         />
-        </CardBody>
-       </Card>
-       <Button
-        isIconOnly
-        size="sm"
-        color="danger"
-        variant="solid"
-        className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        onPress={() => removePhoto(index)}
-       >
-        <X className="w-4 h-4" />
-       </Button>
-      </div>
-     ))}
+   {/* Hidden File Input - Camera (Mobile) */}
+   <input
+    ref={cameraInputRef}
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+    capture="environment"
+    onChange={handleFileSelect}
+    className="hidden"
+   />
 
-     {/* Add More Button */}
-     {photos.length < 5 && (
-      <button
-       type="button"
-       onClick={() => fileInputRef.current?.click()}
-       className="aspect-square border-2 border-dashed border-gray-300 rounded-lg hover:border-primary transition-colors flex flex-col items-center justify-center gap-2 text-gray-400 hover:text-primary"
-      >
-       <ImageIcon className="w-8 h-8" />
-       <span className="text-sm font-medium">
-        {t('createTask.photos.addMore', 'Add more')}
-       </span>
-      </button>
-     )}
+   {/* Photo Preview */}
+   {photoPreview && (
+    <div className="relative group">
+     <Card>
+      <CardBody className="p-0">
+       <Image
+        src={photoPreview}
+        alt="Task photo"
+        width={600}
+        height={400}
+        className="w-full h-64 object-cover rounded-lg"
+       />
+      </CardBody>
+     </Card>
+     <Button
+      isIconOnly
+      size="sm"
+      color="danger"
+      variant="solid"
+      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+      onPress={removePhoto}
+     >
+      <X className="w-4 h-4" />
+     </Button>
     </div>
    )}
 
