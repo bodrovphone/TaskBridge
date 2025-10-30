@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import TaskDetailContent from "./components/task-detail-content";
 import type { TaskDetailResponse } from "@/server/tasks/task.query-types";
 import type { PaginatedTasksResponse } from "@/server/tasks/task.query-types";
+import { TaskService } from "@/server/tasks/task.service";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * ISR Configuration - Incremental Static Regeneration
@@ -30,21 +32,15 @@ interface TaskDetailPageProps {
 }
 
 /**
- * Get the base URL for API calls
- * Works in all environments: local, preview, production
+ * Get the base URL for API calls (used for similar tasks fetch)
  */
 function getBaseUrl() {
-  // Vercel automatically sets VERCEL_URL
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-
-  // Custom domain (production)
   if (process.env.NEXT_PUBLIC_BASE_URL) {
     return process.env.NEXT_PUBLIC_BASE_URL;
   }
-
-  // Local development
   return 'http://localhost:3000';
 }
 
@@ -83,41 +79,29 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
  const { id, lang } = await params;
 
  try {
-  // Fetch task detail from API with caching
-  // Note: ISR-cached pages don't need auth cookies since TaskActivity
-  // visibility is determined client-side via useAuth() hook
-  const baseUrl = getBaseUrl();
-  const fullUrl = `${baseUrl}/api/tasks/${id}`;
+  // ✅ FIXED: Call service directly instead of making HTTP request to ourselves
+  // This avoids issues with Vercel preview URLs and is the recommended Next.js pattern
+  const supabase = await createClient();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
-  // TEMPORARY: Log the URL being fetched during SSR
-  console.log('🌐 Fetching task from URL:', fullUrl);
-  console.log('🔧 Base URL:', baseUrl);
-  console.log('🌍 VERCEL_URL:', process.env.VERCEL_URL);
-  console.log('🌍 NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
+  const taskService = new TaskService();
+  const result = await taskService.getTaskDetail(id, authUser?.id);
 
-  const response = await fetch(fullUrl, {
-   next: { revalidate: 3600 }, // Cache for 1 hour
-  });
+  // Handle errors
+  if (!result.success) {
+   const error = result.error as Error;
 
-  // Handle 404 - task not found
-  if (response.status === 404) {
-   notFound();
+   // Check if it's a not found error
+   if ('statusCode' in error && (error as any).statusCode === 404) {
+    notFound();
+   }
+
+   // Log and throw other errors
+   console.error('Error fetching task detail:', error);
+   throw new Error(`Failed to fetch task: ${error.message}`);
   }
 
-  // Handle other errors
-  if (!response.ok) {
-   // TEMPORARY: Read error response body for debugging
-   const errorData = await response.json().catch(() => ({}));
-   console.error('Task detail fetch error:', {
-    status: response.status,
-    statusText: response.statusText,
-    errorData,
-    fullError: JSON.stringify(errorData, null, 2)
-   });
-   throw new Error(`Failed to fetch task: ${response.statusText} - ${JSON.stringify(errorData)}`);
-  }
-
-  const data: TaskDetailResponse = await response.json();
+  const data: TaskDetailResponse = result.data;
 
   // Fetch similar tasks in parallel (don't block on this)
   const similarTasks = await fetchSimilarTasks(
