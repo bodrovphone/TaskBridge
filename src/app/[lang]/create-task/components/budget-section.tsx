@@ -14,6 +14,24 @@ interface BudgetSectionProps {
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
  const { t } = useTranslation()
 
+ const handleBudgetTypeChange = (newType: 'fixed' | 'range' | 'unclear') => {
+  // Clear budget field values and errors when switching types
+  if (newType === 'unclear') {
+   // Clear all budget values when "not sure" is selected
+   form.setFieldValue('budgetMin', undefined)
+   form.setFieldValue('budgetMax', undefined)
+  } else if (newType === 'fixed') {
+   // Clear min when switching to fixed
+   form.setFieldValue('budgetMin', undefined)
+  } else if (newType === 'range') {
+   // Ensure both min and max are ready for input
+   // Don't clear anything, just switch
+  }
+
+  // Call the parent handler
+  onBudgetTypeChange(newType)
+ }
+
  return (
   <Card className="shadow-md border border-gray-100">
    <CardBody className="p-6 md:p-8 space-y-6">
@@ -40,7 +58,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       value={field.state.value || 'unclear'}
       onValueChange={(value: any) => {
        field.handleChange(value as 'fixed' | 'range' | 'unclear')
-       onBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
+       handleBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
       }}
       orientation="horizontal"
       classNames={{
@@ -83,6 +101,13 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
     <form.Field
      name="budgetMax"
      validators={{
+      onChange: ({ value }: any) => {
+       // Only validate if user has entered a value
+       if (value !== undefined && value !== null && value !== '' && value <= 0) {
+        return t('createTask.budget.mustBePositive', 'Budget must be positive')
+       }
+       return undefined
+      },
       onBlur: ({ value }: any) => {
        // Only validate if user has entered a value
        if (value !== undefined && value !== null && value !== '' && value <= 0) {
@@ -119,6 +144,13 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMin"
       validators={{
+       onChange: ({ value }: any) => {
+        // Only validate if user has entered a value
+        if (value !== undefined && value !== null && value !== '' && value <= 0) {
+         return t('createTask.budget.mustBePositive', 'Budget must be positive')
+        }
+        return undefined
+       },
        onBlur: ({ value }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
@@ -153,6 +185,18 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMax"
       validators={{
+       onChange: ({ value, fieldApi }: any) => {
+        // Only validate if user has entered a value
+        if (value !== undefined && value !== null && value !== '' && value <= 0) {
+         return t('createTask.budget.mustBePositive', 'Budget must be positive')
+        }
+        // Check if max is greater than min when both are provided
+        const minValue = fieldApi.form.getFieldValue('budgetMin')
+        if (value && minValue && value <= minValue) {
+         return 'createTask.errors.budgetInvalid'
+        }
+        return undefined
+       },
        onBlur: ({ value, fieldApi }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {

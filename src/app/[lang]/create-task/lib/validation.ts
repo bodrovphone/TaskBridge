@@ -24,7 +24,7 @@ export const createTaskSchema = z.object({
   exactAddress: z.string().optional(),
 
   // Budget (completely optional)
-  budgetType: z.enum(['fixed', 'range']).optional().default('range'),
+  budgetType: z.enum(['fixed', 'range', 'unclear']).optional().default('unclear'),
   budgetMin: z.number().positive().optional().nullable(),
   budgetMax: z.number().positive().optional().nullable(),
 
@@ -63,7 +63,7 @@ export const defaultFormValues: Partial<CreateTaskFormData> & { photoFile?: File
   city: '',
   neighborhood: '',
   exactAddress: '',
-  budgetType: 'range',
+  budgetType: 'unclear',
   urgency: 'flexible',
   photos: [],
   photoFile: null, // Temporary storage for file upload (not sent to API)

@@ -19,6 +19,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
  const [photo, setPhoto] = useState<File | null>(null) // MVP: Single image only
  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
  const [hasInitialized, setHasInitialized] = useState(false)
+ const [imageError, setImageError] = useState<string | null>(null)
 
  // Initialize with existing image if in edit mode (only once)
  useEffect(() => {
@@ -32,16 +33,19 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
   const file = event.target.files?.[0]
   if (!file) return
 
-  // Validate file size (1MB max for MVP)
-  if (file.size > 1024 * 1024) {
-   alert(t('createTask.photos.fileTooLarge', `File is too large. Maximum size is 1MB`))
+  // Clear previous errors
+  setImageError(null)
+
+  // Validate file type first
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+   setImageError(t('createTask.photos.invalidType', `File is not a supported image format (JPG, PNG, WebP)`))
    return
   }
 
-  // Validate file type
-  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-   alert(t('createTask.photos.invalidType', `File is not a supported image format (JPG, PNG, WebP)`))
-   return
+  // Check file size (1MB max for MVP)
+  const isOversized = file.size > 1024 * 1024
+  if (isOversized) {
+   setImageError(t('createTask.photos.fileTooLarge', `Image is too large (max 1MB). This image will not be uploaded. You can change it now or edit the task later.`))
   }
 
   // Store file for later upload (will be uploaded when form is submitted)
@@ -54,8 +58,9 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
   }
   reader.readAsDataURL(file)
 
-  // Store file in form for submission
-  form.setFieldValue('photoFile', file)
+  // Store file in form for submission (or null if oversized)
+  form.setFieldValue('photoFile', isOversized ? null : file)
+  form.setFieldValue('imageOversized', isOversized)
 
   // Reset file input
   if (fileInputRef.current) {
@@ -66,8 +71,10 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
  const removePhoto = () => {
   setPhoto(null)
   setPhotoPreview(null)
+  setImageError(null)
   form.setFieldValue('photoFile', null)
   form.setFieldValue('photos', [])
+  form.setFieldValue('imageOversized', false)
  }
 
  return (
@@ -153,28 +160,39 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
 
    {/* Photo Preview */}
    {photoPreview && (
-    <div className="relative group">
-     <Card>
-      <CardBody className="p-0">
-       <Image
-        src={photoPreview}
-        alt="Task photo"
-        width={600}
-        height={400}
-        className="w-full h-64 object-cover rounded-lg"
-       />
-      </CardBody>
-     </Card>
-     <Button
-      isIconOnly
-      size="sm"
-      color="danger"
-      variant="solid"
-      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-      onPress={removePhoto}
-     >
-      <X className="w-4 h-4" />
-     </Button>
+    <div className="space-y-3">
+     <div className="relative group">
+      <Card>
+       <CardBody className="p-0">
+        <Image
+         src={photoPreview}
+         alt="Task photo"
+         width={600}
+         height={400}
+         className="w-full h-64 object-cover rounded-lg"
+        />
+       </CardBody>
+      </Card>
+      <Button
+       isIconOnly
+       size="sm"
+       color="danger"
+       variant="solid"
+       className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+       onPress={removePhoto}
+      >
+       <X className="w-4 h-4" />
+      </Button>
+     </div>
+
+     {/* Error Message */}
+     {imageError && (
+      <div className="p-3 bg-warning-50 border border-warning-200 rounded-lg">
+       <p className="text-sm text-warning-800">
+        ⚠️ {imageError}
+       </p>
+      </div>
+     )}
     </div>
    )}
 

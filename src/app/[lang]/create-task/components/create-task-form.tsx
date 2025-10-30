@@ -36,9 +36,12 @@ export function CreateTaskForm() {
    try {
     setIsSubmitting(true)
 
-    // Upload image if present
+    // Track if image was skipped due to size
+    const imageSkipped = value.imageOversized === true
+
+    // Upload image if present and not oversized
     let imageUrl = null
-    if (value.photoFile && user) {
+    if (value.photoFile && user && !imageSkipped) {
      // Generate a temporary task ID for the upload
      const tempTaskId = `temp-${Date.now()}`
 
@@ -64,7 +67,8 @@ export function CreateTaskForm() {
     const taskData = {
      ...value,
      photoUrls: imageUrl ? [imageUrl] : [], // Use photoUrls field
-     photoFile: undefined // Remove file from payload
+     photoFile: undefined, // Remove file from payload
+     imageOversized: undefined // Remove flag from payload
     }
 
     // Call task creation API
@@ -83,11 +87,19 @@ export function CreateTaskForm() {
     }
 
     // Success! Show toast notification
-    toast({
-     title: t('createTask.success', 'Task created successfully!'),
-     description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
-     variant: 'default'
-    })
+    if (imageSkipped) {
+     toast({
+      title: t('createTask.success', 'Task created successfully!'),
+      description: t('createTask.successWithoutImage', 'Your task has been posted without an image. You can add or change the image by editing the task.'),
+      variant: 'default'
+     })
+    } else {
+     toast({
+      title: t('createTask.success', 'Task created successfully!'),
+      description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
+      variant: 'default'
+     })
+    }
 
     // Redirect to posted tasks page
     router.push(`/${locale}/tasks/posted`)
