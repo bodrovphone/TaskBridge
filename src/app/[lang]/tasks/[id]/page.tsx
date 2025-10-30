@@ -98,7 +98,16 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
 
   // Handle other errors
   if (!response.ok) {
-   throw new Error(`Failed to fetch task: ${response.statusText}`);
+   // TEMPORARY: Read error response body for debugging
+   const errorData = await response.json().catch(() => ({}));
+   console.error('Task detail fetch error:', {
+    status: response.status,
+    statusText: response.statusText,
+    errorData
+   });
+   throw new Error(`Failed to fetch task: ${response.statusText}`, {
+    cause: errorData
+   });
   }
 
   const data: TaskDetailResponse = await response.json();
