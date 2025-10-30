@@ -35,18 +35,34 @@ export async function GET(
     if (!result.success) {
       const error = result.error as Error
 
+      // TEMPORARY: Log full error details for debugging
+      console.error('Task detail error:', {
+        message: error.message,
+        code: (error as any).code,
+        statusCode: (error as any).statusCode,
+        stack: error.stack,
+        fullError: error
+      })
+
       if (isAppError(error)) {
         return NextResponse.json(
           {
             error: error.message,
-            code: (error as any).code
+            code: (error as any).code,
+            // TEMPORARY: Include stack trace in development
+            ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
           },
           { status: (error as any).statusCode }
         )
       }
 
       return NextResponse.json(
-        { error: 'message' in error ? error.message : 'Failed to fetch task' },
+        {
+          error: 'message' in error ? error.message : 'Failed to fetch task',
+          // TEMPORARY: Include more details for debugging
+          details: error.toString(),
+          ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+        },
         { status: 500 }
       )
     }
@@ -56,7 +72,11 @@ export async function GET(
   } catch (error) {
     console.error('Get task error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        // TEMPORARY: Include error details for debugging
+        details: error instanceof Error ? error.message : String(error)
+      },
       { status: 500 }
     )
   }
