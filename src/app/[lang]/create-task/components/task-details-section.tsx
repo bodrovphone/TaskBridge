@@ -76,7 +76,7 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
     name="description"
     validators={{
      onBlur: ({ value }: any) => {
-      if (!value || value.length < 20) {
+      if (!value || value.length < 30) {
        return 'createTask.errors.descriptionTooShort'
       }
       if (value.length > 2000) {
@@ -127,7 +127,22 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
        placeholder={t('createTask.details.requirementsPlaceholder', '• Requirement 1\n• Requirement 2\n• Requirement 3')}
        description={t('createTask.details.requirementsHelp', 'List any special skills, certifications, or equipment needed (one per line)')}
        value={field.state.value || ''}
-       onValueChange={field.handleChange}
+       onValueChange={(val) => {
+        // Ensure value starts with bullet point if not empty
+        if (val && !val.startsWith('• ')) {
+         field.handleChange('• ' + val)
+        } else {
+         field.handleChange(val)
+        }
+       }}
+       onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+         e.preventDefault()
+         const currentValue = field.state.value || ''
+         // Add new line with bullet point
+         field.handleChange(currentValue + '\n• ')
+        }
+       }}
        minRows={4}
        maxRows={4}
        classNames={{

@@ -13,6 +13,8 @@ import { TimelineSection } from '@/app/[lang]/create-task/components/timeline-se
 import { PhotosSection } from '@/app/[lang]/create-task/components/photos-section'
 import { ReviewSection } from '@/app/[lang]/create-task/components/review-section'
 import { useToast } from '@/hooks/use-toast'
+import { useAuth } from '@/features/auth/hooks/use-auth'
+import { uploadTaskImage, deleteTaskImage } from '@/lib/utils/image-upload'
 import { CategoryDisplay } from './category-display'
 
 interface EditTaskFormProps {
@@ -25,7 +27,7 @@ interface EditTaskFormProps {
     city: string
     neighborhood?: string
     exactAddress?: string
-    budgetType: 'fixed' | 'range'
+    budgetType: 'fixed' | 'range' | 'unclear'
     budgetMin?: number | null
     budgetMax?: number | null
     urgency: 'same_day' | 'within_week' | 'flexible'
@@ -41,11 +43,12 @@ export function EditTaskForm({ taskData }: EditTaskFormProps) {
   const params = useParams()
   const lang = params?.lang as string
   const { toast } = useToast()
+  const { user } = useAuth()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [category, setCategory] = useState(taskData.category)
   const [showCategoryPicker, setShowCategoryPicker] = useState(false) // Toggle between display and picker
-  const [budgetType, setBudgetType] = useState<'fixed' | 'range'>(taskData.budgetType)
+  const [budgetType, setBudgetType] = useState<'fixed' | 'range' | 'unclear'>(taskData.budgetType)
   const [urgency, setUrgency] = useState<'same_day' | 'within_week' | 'flexible'>(taskData.urgency)
 
   // Handle category change - update state
@@ -81,32 +84,79 @@ export function EditTaskForm({ taskData }: EditTaskFormProps) {
     onSubmit: async ({ value }) => {
       try {
         setIsSubmitting(true)
-        console.log('Saving task changes:', value)
 
-        // TODO: Implement API call
-        // const response = await fetch(`/api/tasks/${taskData.id}`, {
-        //   method: 'PUT',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(value),
-        // })
+        // Handle image upload if there's a new file
+        let imageUrl = null
+        if (value.photoFile && user) {
+          // Upload new image
+          const { url, error } = await uploadTaskImage(
+            taskData.id,
+            user.id,
+            value.photoFile
+          )
 
-        // if (!response.ok) throw new Error('Failed to update task')
+          if (error) {
+            toast({
+              title: t('editTask.imageUpload.error', 'Image upload failed'),
+              description: error,
+              variant: 'destructive'
+            })
+            return // Stop submission if upload fails
+          }
 
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000))
+          imageUrl = url
 
-        // Show success toast
+          // Delete old image from storage if it exists and is different
+          if (taskData.images && taskData.images.length > 0 && taskData.images[0] !== imageUrl) {
+            await deleteTaskImage(taskData.images[0])
+          }
+        } else if (!value.photos || value.photos.length === 0) {
+          // User removed the image - delete from storage
+          if (taskData.images && taskData.images.length > 0) {
+            await deleteTaskImage(taskData.images[0])
+          }
+        }
+
+        // Transform the form data: convert null to undefined, handle photo URLs
+        const payload = {
+          ...value,
+          budgetMin: value.budgetMin ?? undefined,
+          budgetMax: value.budgetMax ?? undefined,
+          photoUrls: imageUrl ? [imageUrl] : (value.photos || []),
+          photos: undefined, // Remove photos field
+          photoFile: undefined, // Remove photoFile field
+        }
+
+        // Call API to update task
+        const response = await fetch(`/api/tasks/${taskData.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          credentials: 'include' // Include auth cookies
+        })
+
+        const result = await response.json()
+
+        if (!response.ok) {
+          // Handle API errors
+          throw new Error(result.error || 'Failed to update task')
+        }
+
+        // Show success toast with caching info
         toast({
           title: t('editTask.successMessage', 'Task updated successfully!'),
-          variant: 'success'
+          description: t('editTask.cachingNotice', 'Note: Changes may take up to 1 hour to appear on the public task page due to performance optimization.'),
+          variant: 'success',
+          duration: 8000, // Show longer to ensure user reads the caching notice
         })
 
         // Redirect back to posted tasks
         router.push(`/${lang}/tasks/posted`)
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error updating task:', error)
         toast({
           title: t('editTask.errorMessage', 'Error updating task. Please try again.'),
+          description: error.message,
           variant: 'destructive'
         })
       } finally {
@@ -151,7 +201,7 @@ export function EditTaskForm({ taskData }: EditTaskFormProps) {
               <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
 
               {/* Photos */}
-              <PhotosSection form={form} />
+              <PhotosSection form={form} initialImages={taskData.images} />
 
               {/* Review & Submit */}
               <ReviewSection form={form} />

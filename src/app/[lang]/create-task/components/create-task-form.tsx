@@ -27,7 +27,7 @@ export function CreateTaskForm() {
 
  const [isSubmitting, setIsSubmitting] = useState(false)
  const [category, setCategory] = useState('')
- const [budgetType, setBudgetType] = useState<'fixed' | 'range'>('range')
+ const [budgetType, setBudgetType] = useState<'fixed' | 'range' | 'unclear'>('unclear')
  const [urgency, setUrgency] = useState<'same_day' | 'within_week' | 'flexible'>('flexible')
 
  const form = useForm({
@@ -151,7 +151,7 @@ export function CreateTaskForm() {
          isLoading={isSubmitting}
          isDisabled={isSubmitting || !canSubmit}
          className={`min-w-[300px] h-16 font-bold text-xl transition-all duration-300 ${
-          !canSubmit
+          !canSubmit && !isSubmitting
            ? 'bg-orange-500 hover:bg-orange-600 text-white border-2 border-orange-600'
            : 'bg-green-600 hover:bg-green-700 text-white border-2 border-green-700 shadow-xl hover:shadow-green-500/50 hover:scale-105'
          }`}
@@ -159,7 +159,7 @@ export function CreateTaskForm() {
         >
          {isSubmitting ? t('loading', 'Loading...') : t('createTask.review.submit')}
         </Button>
-        {!canSubmit && (
+        {!canSubmit && !isSubmitting && (
          <div className="flex flex-col gap-1 items-center">
           <p className="text-sm font-semibold text-orange-600 text-center">
            ⚠️ {t('createTask.review.fillRequired', 'Please fill in all required fields to submit')}

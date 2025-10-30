@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { Chip } from '@nextui-org/react'
-import { X } from 'lucide-react'
+import { getCategoryName } from '@/lib/utils/category'
 
 interface CategoryDisplayProps {
   category: string
@@ -37,7 +37,7 @@ export function CategoryDisplay({ category, onReset }: CategoryDisplayProps) {
             closeButton: "text-gray-500 hover:text-gray-700"
           }}
         >
-          {t(`categories.${category}`, category)}
+          {getCategoryName(t, category)}
         </Chip>
       </div>
     </div>

@@ -6,7 +6,7 @@
 import { z } from 'zod'
 import { ValidationError } from '../shared/errors'
 import { Result, ok, err } from '../shared/result'
-import type { CreateTaskInput } from './task.types'
+import type { CreateTaskInput, UpdateTaskInput } from './task.types'
 
 /**
  * Validation schema for task creation
@@ -20,7 +20,7 @@ export const createTaskSchema = z.object({
     .max(200, 'Title must be less than 200 characters'),
   description: z
     .string()
-    .min(20, 'Description must be at least 20 characters')
+    .min(30, 'Description must be at least 30 characters')
     .max(2000, 'Description must be less than 2000 characters'),
   city: z.string().min(1, 'City is required'),
 
@@ -28,9 +28,10 @@ export const createTaskSchema = z.object({
   subcategory: z.string().optional(),
   neighborhood: z.string().optional(),
   exactAddress: z.string().optional(),
+  requirements: z.string().optional(),
 
   // Budget (optional)
-  budgetType: z.enum(['fixed', 'range']).optional(),
+  budgetType: z.enum(['fixed', 'range', 'unclear']).optional(),
   budgetMin: z.number().positive().optional(),
   budgetMax: z.number().positive().optional(),
 
@@ -55,12 +56,87 @@ export const createTaskSchema = z.object({
 )
 
 /**
+ * Validation schema for task update
+ * All fields are optional since we only update what changed
+ */
+export const updateTaskSchema = z.object({
+  // Task details
+  category: z.string().min(1, 'Category is required').optional(),
+  subcategory: z.string().optional(),
+  title: z
+    .string()
+    .min(10, 'Title must be at least 10 characters')
+    .max(200, 'Title must be less than 200 characters')
+    .optional(),
+  description: z
+    .string()
+    .min(30, 'Description must be at least 30 characters')
+    .max(2000, 'Description must be less than 2000 characters')
+    .optional(),
+  requirements: z.string().optional(),
+
+  // Location
+  city: z.string().min(1, 'City is required').optional(),
+  neighborhood: z.string().optional(),
+  exactAddress: z.string().optional(),
+
+  // Budget
+  budgetType: z.enum(['fixed', 'range', 'unclear']).optional(),
+  budgetMin: z.number().positive().optional(),
+  budgetMax: z.number().positive().optional(),
+
+  // Timeline
+  urgency: z.enum(['same_day', 'within_week', 'flexible']).optional(),
+  deadline: z.string().optional(),
+
+  // Media
+  photoUrls: z.array(z.string().url()).max(5, 'Maximum 5 photos allowed').optional()
+}).refine(
+  (data) => {
+    // If budget type is 'range' and both values provided, max must be > min
+    if (data.budgetType === 'range' && data.budgetMin && data.budgetMax) {
+      return data.budgetMax > data.budgetMin
+    }
+    return true
+  },
+  {
+    message: 'Maximum budget must be greater than minimum budget',
+    path: ['budgetMax']
+  }
+)
+
+/**
  * Validate task creation input
  */
 export const validateCreateTaskInput = (
   input: unknown
 ): Result<CreateTaskInput, ValidationError> => {
   const result = createTaskSchema.safeParse(input)
+
+  if (!result.success) {
+    const errors = result.error.errors.reduce((acc, error) => {
+      const path = error.path.join('.')
+      acc[path] = error.message
+      return acc
+    }, {} as Record<string, string>)
+
+    return err(
+      new ValidationError('Validation failed', {
+        errors
+      })
+    )
+  }
+
+  return ok(result.data)
+}
+
+/**
+ * Validate task update input
+ */
+export const validateUpdateTaskInput = (
+  input: unknown
+): Result<UpdateTaskInput, ValidationError> => {
+  const result = updateTaskSchema.safeParse(input)
 
   if (!result.success) {
     const errors = result.error.errors.reduce((acc, error) => {

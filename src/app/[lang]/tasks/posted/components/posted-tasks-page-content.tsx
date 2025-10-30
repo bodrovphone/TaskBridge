@@ -24,6 +24,7 @@ interface PostedTask {
   description: string
   category: string
   budget: number
+  budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
   status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
   applicationsCount: number
   acceptedApplication?: {
@@ -74,6 +75,22 @@ const mockPostedTasks: PostedTask[] = [
     },
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago - will show hints
     deadline: new Date('2024-11-01')
+  },
+  {
+    id: '0b',
+    title: 'Garden landscaping consultation',
+    description: 'Not sure about the budget, need professional advice first',
+    category: 'gardening',
+    budget: 0,
+    budgetType: 'unclear',
+    status: 'open',
+    applicationsCount: 2,
+    location: {
+      city: 'Sofia',
+      neighborhood: 'Vitosha'
+    },
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+    deadline: new Date('2024-11-15')
   },
   {
     id: '2',
@@ -202,6 +219,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             description: task.description,
             category: task.category,
             budget: task.budget_max_bgn || task.budget_min_bgn || 0,
+            budgetType: task.budget_type,
             status: task.status,
             applicationsCount: task.applicationsCount || 0,
             acceptedApplication: task.selected_professional_id ? {
@@ -445,6 +463,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 description={task.description}
                 category={task.category}
                 budget={task.budget}
+                budgetType={task.budgetType}
                 status={task.status}
                 applicationsCount={task.applicationsCount}
                 acceptedApplication={task.acceptedApplication}

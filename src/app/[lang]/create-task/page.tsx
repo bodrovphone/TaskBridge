@@ -64,11 +64,6 @@ export default function CreateTaskPage() {
     <div className="space-y-6 mb-12">
      <CreateTaskForm />
     </div>
-
-    {/* Help Text */}
-    <p className="text-center text-sm text-gray-500">
-     {t('createTask.hero.help', 'Need help? Contact our support team')}
-    </p>
    </div>
   </div>
  )

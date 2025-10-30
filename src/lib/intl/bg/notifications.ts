@@ -157,6 +157,8 @@ export const notifications = {
   'editTask.cancelEdit': 'Отказ',
   'editTask.successMessage': 'Задачата е актуализирана успешно!',
   'editTask.errorMessage': 'Грешка при актуализиране на задачата. Моля, опитайте отново.',
+  'editTask.cachingNotice': 'Забележка: Промените могат да отнемат до 1 час, за да се появят на публичната страница на задачата поради оптимизация на производителността.',
+  'editTask.imageUpload.error': 'Качването на изображението е неуспешно',
 
   // Task Hints System
   'taskHints.noApplications.title': 'Все още няма кандидатури? Вашата задача е отворена от {{days}} дни',

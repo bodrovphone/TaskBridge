@@ -6,9 +6,9 @@ import { Wallet, Info } from 'lucide-react'
 
 interface BudgetSectionProps {
  form: any
- budgetType: 'fixed' | 'range' | undefined
+ budgetType: 'fixed' | 'range' | 'unclear' | undefined
  // eslint-disable-next-line no-unused-vars
- onBudgetTypeChange: (type: 'fixed' | 'range') => void
+ onBudgetTypeChange: (type: 'fixed' | 'range' | 'unclear') => void
 }
 
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
@@ -37,10 +37,10 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
    <form.Field name="budgetType">
     {(field: any) => (
      <RadioGroup
-      value={field.state.value || 'range'}
+      value={field.state.value || 'unclear'}
       onValueChange={(value: any) => {
-       field.handleChange(value as 'fixed' | 'range')
-       onBudgetTypeChange(value as 'fixed' | 'range')
+       field.handleChange(value as 'fixed' | 'range' | 'unclear')
+       onBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
       }}
       orientation="horizontal"
       classNames={{
@@ -65,11 +65,20 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       >
        {t('createTask.budget.typeRange', 'Price Range')}
       </Radio>
+      <Radio
+       value="unclear"
+       classNames={{
+        base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
+        label: 'text-gray-900 font-medium'
+       }}
+      >
+       {t('createTask.budget.typeUnclear', "I'm not sure about the budget")}
+      </Radio>
      </RadioGroup>
     )}
    </form.Field>
 
-   {/* Budget Input(s) */}
+   {/* Budget Input(s) - Only show if budget type is fixed or range */}
    {budgetType === 'fixed' ? (
     <form.Field
      name="budgetMax"
@@ -105,7 +114,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       </div>
      )}
     </form.Field>
-   ) : (
+   ) : budgetType === 'range' ? (
     <div className="grid grid-cols-2 gap-4">
      <form.Field
       name="budgetMin"
@@ -144,10 +153,15 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMax"
       validators={{
-       onBlur: ({ value }: any) => {
+       onBlur: ({ value, fieldApi }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
          return t('createTask.budget.mustBePositive', 'Budget must be positive')
+        }
+        // Check if max is greater than min when both are provided
+        const minValue = fieldApi.form.getFieldValue('budgetMin')
+        if (value && minValue && value <= minValue) {
+         return 'createTask.errors.budgetInvalid'
         }
         return undefined
        }
@@ -176,21 +190,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       )}
      </form.Field>
     </div>
-   )}
-
-   {/* Optional "Not Sure" Chip */}
-   <Chip
-    variant="flat"
-    color="default"
-    size="sm"
-    className="cursor-pointer"
-    onClick={() => {
-     form.setFieldValue('budgetMin', undefined)
-     form.setFieldValue('budgetMax', undefined)
-    }}
-   >
-    {t('createTask.budget.notSure', "I'm not sure about the budget")}
-   </Chip>
+   ) : null}
    </CardBody>
   </Card>
  )

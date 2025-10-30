@@ -29,7 +29,9 @@ function formatBudget(task: any, t: any) {
  const budgetMin = task.budgetMin || task.budget_min_bgn;
  const budgetMax = task.budgetMax || task.budget_max_bgn;
 
- if (budgetType === "fixed" && budgetMax) {
+ if (budgetType === "unclear") {
+  return t('taskCard.budget.unclear');
+ } else if (budgetType === "fixed" && budgetMax) {
   return `${budgetMax} лв`;
  } else if (budgetMin && budgetMax) {
   return `${budgetMin}-${budgetMax} лв`;

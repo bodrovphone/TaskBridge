@@ -157,6 +157,8 @@ export const notifications = {
   'editTask.cancelEdit': 'Отмена',
   'editTask.successMessage': 'Задача успешно обновлена!',
   'editTask.errorMessage': 'Ошибка при обновлении задачи. Пожалуйста, попробуйте снова.',
+  'editTask.cachingNotice': 'Примечание: Изменения могут занять до 1 часа, чтобы появиться на публичной странице задачи из-за оптимизации производительности.',
+  'editTask.imageUpload.error': 'Не удалось загрузить изображение',
 
   // Task Hints System
   'taskHints.noApplications.title': 'Пока нет заявок? Ваша задача открыта уже {{days}} дней',

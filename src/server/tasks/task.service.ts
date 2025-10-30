@@ -6,13 +6,14 @@
 import { TaskRepository } from './task.repository'
 import {
   validateCreateTaskInput,
+  validateUpdateTaskInput,
   canUserCreateTask,
   validateImageUrls
 } from './task.validation'
-import { mapCreateInputToDbInsert } from './task.types'
+import { mapCreateInputToDbInsert, mapUpdateInputToDbUpdate } from './task.types'
 import { Result, ok, err } from '../shared/result'
-import { ValidationError, DatabaseError } from '../shared/errors'
-import type { CreateTaskInput, Task, CreateTaskResult } from './task.types'
+import { ValidationError, DatabaseError, ForbiddenError, NotFoundError } from '../shared/errors'
+import type { CreateTaskInput, UpdateTaskInput, Task, CreateTaskResult } from './task.types'
 
 export class TaskService {
   private repository: TaskRepository
@@ -101,16 +102,66 @@ export class TaskService {
 
   /**
    * Update task
-   * Future: Add authorization check
+   *
+   * Business flow:
+   * 1. Validate input data
+   * 2. Check if task exists
+   * 3. Verify user is the task owner (authorization)
+   * 4. Map input to database format
+   * 5. Update in database
+   * 6. Return updated task
    */
   async updateTask(
     id: string,
-    updates: Partial<Task>,
+    input: UpdateTaskInput,
     userId: string
-  ): Promise<Result<Task, DatabaseError | ValidationError>> {
-    // TODO: Add authorization check (only owner can update)
+  ): Promise<Result<Task, DatabaseError | ValidationError | ForbiddenError | NotFoundError>> {
+    // 1. Validate input
+    const validationResult = validateUpdateTaskInput(input)
+    if (!validationResult.success) {
+      return err(validationResult.error)
+    }
+    const validatedInput = validationResult.data
 
-    return await this.repository.update(id, updates)
+    // 2. Check if task exists
+    const taskResult = await this.repository.findById(id)
+    if (!taskResult.success) {
+      return err(taskResult.error)
+    }
+
+    const task = taskResult.data
+    if (!task) {
+      return err(new NotFoundError('Task', id))
+    }
+
+    // 3. Authorization check - only owner can update
+    if (task.customer_id !== userId) {
+      return err(
+        new ForbiddenError(
+          'You do not have permission to update this task'
+        )
+      )
+    }
+
+    // 4. Validate image URLs if provided
+    if (validatedInput.photoUrls && validatedInput.photoUrls.length > 0) {
+      const imageValidation = validateImageUrls(validatedInput.photoUrls)
+      if (!imageValidation.success) {
+        return err(imageValidation.error)
+      }
+    }
+
+    // 5. Map to database format
+    const dbUpdates = mapUpdateInputToDbUpdate(validatedInput)
+
+    // 6. Update in database
+    const updateResult = await this.repository.update(id, dbUpdates)
+    if (!updateResult.success) {
+      return err(updateResult.error)
+    }
+
+    // 7. Return updated task
+    return ok(updateResult.data)
   }
 
   /**

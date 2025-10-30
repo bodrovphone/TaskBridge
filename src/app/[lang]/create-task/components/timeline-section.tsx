@@ -110,7 +110,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
       minValue={parseDate(new Date().toISOString().split('T')[0])}
       showMonthAndYearPickers
       labelPlacement="outside"
-      isDisabled={urgency === 'same_day'}
+      isDisabled={urgency === 'same_day' ? true : false}
       classNames={{
        base: 'max-w-md',
        popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',

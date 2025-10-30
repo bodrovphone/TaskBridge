@@ -18,9 +18,40 @@ export interface CreateTaskInput {
   subcategory?: string
   neighborhood?: string
   exactAddress?: string
+  requirements?: string
 
   // Budget (optional)
-  budgetType?: 'fixed' | 'range'
+  budgetType?: 'fixed' | 'range' | 'unclear'
+  budgetMin?: number
+  budgetMax?: number
+
+  // Timeline
+  urgency?: 'same_day' | 'within_week' | 'flexible'
+  deadline?: string // ISO date string
+
+  // Media
+  photoUrls?: string[]
+}
+
+/**
+ * Input from edit task form
+ * Same structure as CreateTaskInput but all fields are optional
+ */
+export interface UpdateTaskInput {
+  // Task details
+  category?: string
+  subcategory?: string
+  title?: string
+  description?: string
+  requirements?: string
+
+  // Location
+  city?: string
+  neighborhood?: string
+  exactAddress?: string
+
+  // Budget
+  budgetType?: 'fixed' | 'range' | 'unclear'
   budgetMin?: number
   budgetMax?: number
 
@@ -55,7 +86,7 @@ export interface Task {
   // Budget
   budget_min_bgn: number | null
   budget_max_bgn: number | null
-  budget_type: 'fixed' | 'hourly' | 'negotiable'
+  budget_type: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
 
   // Timeline
   deadline: string | null
@@ -117,9 +148,10 @@ export interface TaskDbInsert {
   city: string
   neighborhood: string | null
   address: string | null
+  location_notes: string | null
   budget_min_bgn: number | null
   budget_max_bgn: number | null
-  budget_type: 'fixed' | 'hourly' | 'negotiable'
+  budget_type: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
   deadline: string | null
   is_urgent: boolean
   status: TaskStatus
@@ -172,10 +204,13 @@ export const calculateDeadline = (
  * Map budget type from form to database
  */
 export const mapBudgetType = (
-  budgetType?: 'fixed' | 'range'
-): 'fixed' | 'hourly' | 'negotiable' => {
+  budgetType?: 'fixed' | 'range' | 'unclear'
+): 'fixed' | 'hourly' | 'negotiable' | 'unclear' => {
   if (budgetType === 'fixed') {
     return 'fixed'
+  }
+  if (budgetType === 'unclear') {
+    return 'unclear'
   }
   return 'negotiable'
 }
@@ -195,6 +230,7 @@ export const mapCreateInputToDbInsert = (
     city: input.city,
     neighborhood: input.neighborhood || null,
     address: input.exactAddress || null,
+    location_notes: input.requirements || null,
     budget_min_bgn: input.budgetMin || null,
     budget_max_bgn: input.budgetMax || null,
     budget_type: mapBudgetType(input.budgetType),
@@ -204,4 +240,40 @@ export const mapCreateInputToDbInsert = (
     customer_id: customerId,
     images: input.photoUrls || []
   }
+}
+
+/**
+ * Map update input to database update
+ * Only includes fields that are actually being updated
+ */
+export const mapUpdateInputToDbUpdate = (
+  input: UpdateTaskInput
+): Partial<Task> => {
+  const updates: Partial<Task> = {}
+
+  // Only add fields that are present in the input
+  if (input.title !== undefined) updates.title = input.title
+  if (input.description !== undefined) updates.description = input.description
+  if (input.category !== undefined) updates.category = input.category
+  if (input.subcategory !== undefined) updates.subcategory = input.subcategory || null
+  if (input.city !== undefined) updates.city = input.city
+  if (input.neighborhood !== undefined) updates.neighborhood = input.neighborhood || null
+  if (input.exactAddress !== undefined) updates.address = input.exactAddress || null
+  if (input.requirements !== undefined) updates.location_notes = input.requirements || null
+
+  // Budget fields
+  if (input.budgetMin !== undefined) updates.budget_min_bgn = input.budgetMin || null
+  if (input.budgetMax !== undefined) updates.budget_max_bgn = input.budgetMax || null
+  if (input.budgetType !== undefined) updates.budget_type = mapBudgetType(input.budgetType)
+
+  // Timeline fields
+  if (input.urgency !== undefined || input.deadline !== undefined) {
+    updates.deadline = calculateDeadline(input.urgency, input.deadline)
+    updates.is_urgent = input.urgency === 'same_day'
+  }
+
+  // Media
+  if (input.photoUrls !== undefined) updates.images = input.photoUrls
+
+  return updates
 }

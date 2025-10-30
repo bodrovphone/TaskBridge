@@ -45,6 +45,22 @@ npm run type-check      # Run TypeScript type checking
 # Database migrations managed via Supabase Dashboard or CLI
 ```
 
+## Development Workflow
+
+**IMPORTANT: Do NOT run `npm run build` after making changes**
+
+- ❌ **NEVER** run `npm run build` automatically after code changes
+- ❌ Running builds breaks the local development server
+- ✅ The user has `npm run dev` running - changes are hot-reloaded automatically
+- ✅ TypeScript errors will show in the terminal and browser during development
+- ✅ Only run builds if explicitly requested by the user
+
+**Rationale:**
+- Next.js dev server provides instant feedback with hot reload
+- Production builds are slow and interrupt the development flow
+- Running builds kills the local server and disrupts the user's workflow
+- TypeScript type checking happens automatically in the IDE and dev server
+
 ## Architecture
 
 ### Clean `/src/` Directory Structure

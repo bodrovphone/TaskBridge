@@ -156,6 +156,8 @@ export const notifications = {
   'editTask.cancelEdit': 'Cancel',
   'editTask.successMessage': 'Task updated successfully!',
   'editTask.errorMessage': 'Error updating task. Please try again.',
+  'editTask.cachingNotice': 'Note: Changes may take up to 1 hour to appear on the public task page due to performance optimization.',
+  'editTask.imageUpload.error': 'Image upload failed',
 
   // Task Hints System
   'taskHints.noApplications.title': 'No applications yet? Your task has been open for {{days}} days',

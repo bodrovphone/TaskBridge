@@ -23,6 +23,7 @@ interface PostedTaskCardProps {
   description: string
   category: string
   budget: number
+  budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
   status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
   applicationsCount: number
   acceptedApplication?: {
@@ -47,6 +48,7 @@ function PostedTaskCard({
   description,
   category,
   budget,
+  budgetType,
   status,
   applicationsCount,
   acceptedApplication,
@@ -244,7 +246,9 @@ function PostedTaskCard({
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="flex items-center gap-2 text-sm">
             <Banknote className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <span className="font-semibold text-gray-700">{budget} лв</span>
+            <span className="font-semibold text-gray-700">
+              {budgetType === 'unclear' ? t('taskCard.budget.unclear') : `${budget} лв`}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />

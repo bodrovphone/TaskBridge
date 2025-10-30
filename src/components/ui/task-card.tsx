@@ -27,8 +27,8 @@ interface Task {
  subcategory?: string | null;
  city: string;
  neighborhood?: string;
- budgetType?: 'fixed' | 'hourly' | 'negotiable';
- budget_type?: 'fixed' | 'hourly' | 'negotiable'; // Database field (snake_case)
+ budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear';
+ budget_type?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'; // Database field (snake_case)
  budgetMin?: number;
  budget_min_bgn?: number; // Database field (snake_case)
  budgetMax?: number;
@@ -80,7 +80,9 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const budgetMin = task.budgetMin || task.budget_min_bgn;
   const budgetMax = task.budgetMax || task.budget_max_bgn;
 
-  if (budgetType === "fixed" && budgetMax) {
+  if (budgetType === "unclear") {
+   return t('taskCard.budget.unclear');
+  } else if (budgetType === "fixed" && budgetMax) {
    return `${budgetMax} лв`;
   } else if (budgetMin && budgetMax) {
    return `${budgetMin}-${budgetMax} лв`;

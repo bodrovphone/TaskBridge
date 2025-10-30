@@ -3,20 +3,30 @@
 import { useTranslation } from 'react-i18next'
 import { Button, Card, CardBody } from '@nextui-org/react'
 import { Upload, X, Image as ImageIcon, Camera } from 'lucide-react'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 
 interface PhotosSectionProps {
  form: any
+ initialImages?: string[] // Support existing images in edit mode
 }
 
-export function PhotosSection({ form }: PhotosSectionProps) {
+export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
  const { t } = useTranslation()
  const [isUploading, setIsUploading] = useState(false)
  const fileInputRef = useRef<HTMLInputElement>(null)
  const cameraInputRef = useRef<HTMLInputElement>(null)
  const [photo, setPhoto] = useState<File | null>(null) // MVP: Single image only
  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+ const [hasInitialized, setHasInitialized] = useState(false)
+
+ // Initialize with existing image if in edit mode (only once)
+ useEffect(() => {
+   if (initialImages && initialImages.length > 0 && !hasInitialized) {
+     setPhotoPreview(initialImages[0])
+     setHasInitialized(true)
+   }
+ }, [initialImages, hasInitialized])
 
  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0]
@@ -57,6 +67,7 @@ export function PhotosSection({ form }: PhotosSectionProps) {
   setPhoto(null)
   setPhotoPreview(null)
   form.setFieldValue('photoFile', null)
+  form.setFieldValue('photos', [])
  }
 
  return (
