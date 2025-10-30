@@ -214,7 +214,9 @@ export class TaskRepository {
     options: import('./task.query-types').TaskQueryOptions
   ): Promise<Result<import('./task.query-types').PaginatedTasksResponse<Task>, DatabaseError>> {
     try {
-      const supabase = await createClient()
+      // Use admin client to bypass RLS for public task viewing
+      // Privacy filtering is applied at service layer via applyPrivacyFilter()
+      const supabase = createAdminClient()
 
       // Start query builder with count
       let query = supabase
@@ -322,7 +324,9 @@ export class TaskRepository {
     id: string
   ): Promise<Result<Task & { applicationsCount: number }, DatabaseError>> {
     try {
-      const supabase = await createClient()
+      // Use admin client to bypass RLS for public task viewing
+      // Privacy filtering is applied at service layer via applyPrivacyFilter()
+      const supabase = createAdminClient()
 
       // 1. Get task with applications count
       const { data: task, error } = await supabase
