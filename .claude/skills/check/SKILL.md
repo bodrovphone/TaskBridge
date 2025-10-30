@@ -1,3 +1,8 @@
+---
+name: check
+description: Run TypeScript type-check and ESLint, then fix any errors found. Use when you need to validate code quality or fix linting issues.
+---
+
 # TypeScript and ESLint Check & Fix
 
 Run TypeScript type-check and ESLint, then fix any errors found.

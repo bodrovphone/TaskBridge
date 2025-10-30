@@ -1,3 +1,8 @@
+---
+name: refactor
+description: Hunt for code smells, anti-patterns, and refactoring opportunities in the TaskBridge codebase using React/Next.js best practices. Fixes ONE issue at a time. Use when you want to improve code quality, extract utilities, or reorganize components.
+---
+
 # Code Refactoring Agent
 
 Hunt for code smells, anti-patterns, and refactoring opportunities in the TaskBridge codebase using React/Next.js principal engineering best practices.

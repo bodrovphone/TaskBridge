@@ -1,3 +1,8 @@
+---
+name: task
+description: Manage TaskBridge development tasks using the structured todo workflow. Use when creating, listing, completing, or updating task files in todo_tasks/ directory.
+---
+
 # Task Management
 
 Manage TaskBridge development tasks using the structured todo workflow.
