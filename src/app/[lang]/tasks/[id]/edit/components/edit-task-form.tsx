@@ -87,12 +87,14 @@ export function EditTaskForm({ taskData }: EditTaskFormProps) {
 
         // Handle image upload if there's a new file
         let imageUrl = null
-        if (value.photoFile && user) {
+        const photoFile = (value as any).photoFile // Type assertion for photoFile from PhotosSection
+
+        if (photoFile && user) {
           // Upload new image
           const { url, error } = await uploadTaskImage(
             taskData.id,
             user.id,
-            value.photoFile
+            photoFile
           )
 
           if (error) {
