@@ -23,6 +23,9 @@ export async function GET(
     // 0. Await params (Next.js 15 requirement)
     const { id } = await params
 
+    // TEMPORARY: Log that API route was reached
+    console.log('📍 API route /api/tasks/[id] reached for ID:', id)
+
     // 1. Get current user (optional - for privacy filtering)
     const supabase = await createClient()
     const { data: { user: authUser } } = await supabase.auth.getUser()

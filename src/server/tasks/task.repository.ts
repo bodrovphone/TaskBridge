@@ -216,7 +216,19 @@ export class TaskRepository {
     try {
       // Use admin client to bypass RLS for public task viewing
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
-      const supabase = createAdminClient()
+
+      // TEMPORARY: Add defensive error handling around admin client creation
+      let supabase
+      try {
+        console.log('🔍 Attempting to create admin client (findMany)...')
+        supabase = createAdminClient()
+        console.log('✅ Admin client created successfully (findMany)')
+      } catch (adminClientError) {
+        console.error('❌ Failed to create admin client (findMany):', adminClientError)
+        return err(new DatabaseError('Failed to initialize database client', {
+          message: adminClientError instanceof Error ? adminClientError.message : String(adminClientError)
+        }))
+      }
 
       // Start query builder with count
       let query = supabase
@@ -326,7 +338,19 @@ export class TaskRepository {
     try {
       // Use admin client to bypass RLS for public task viewing
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
-      const supabase = createAdminClient()
+
+      // TEMPORARY: Add defensive error handling around admin client creation
+      let supabase
+      try {
+        console.log('🔍 Attempting to create admin client...')
+        supabase = createAdminClient()
+        console.log('✅ Admin client created successfully')
+      } catch (adminClientError) {
+        console.error('❌ Failed to create admin client:', adminClientError)
+        return err(new DatabaseError('Failed to initialize database client', {
+          message: adminClientError instanceof Error ? adminClientError.message : String(adminClientError)
+        }))
+      }
 
       // 1. Get task with applications count
       const { data: task, error } = await supabase
