@@ -34,6 +34,7 @@ function Header() {
  const isAuthenticated = !!user && !!profile
  const [isMenuOpen, setIsMenuOpen] = useState(false)
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
+ const [authAction, setAuthAction] = useState<'apply' | 'question' | 'create-task' | 'join-professional' | null>(null)
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'en'
@@ -66,7 +67,8 @@ function Header() {
 
  const handleCreateTask = useCallback(() => {
   if (!isAuthenticated) {
-   // If not authenticated, show auth slide-over
+   // If not authenticated, show auth slide-over with create-task action
+   setAuthAction('create-task')
    setIsAuthSlideOverOpen(true)
    return
   }
@@ -171,7 +173,10 @@ function Header() {
      ) : (
       <UserAvatarDropdown
        size="md"
-       onLoginClick={() => setIsAuthSlideOverOpen(true)}
+       onLoginClick={() => {
+        setAuthAction(null)
+        setIsAuthSlideOverOpen(true)
+       }}
       />
      )}
     </NavbarItem>
@@ -193,7 +198,10 @@ function Header() {
      ) : (
       <UserAvatarDropdown
        size="sm"
-       onLoginClick={() => setIsAuthSlideOverOpen(true)}
+       onLoginClick={() => {
+        setAuthAction(null)
+        setIsAuthSlideOverOpen(true)
+       }}
       />
      )}
     </NavbarItem>
@@ -302,7 +310,7 @@ function Header() {
   <AuthSlideOver
    isOpen={isAuthSlideOverOpen}
    onClose={() => setIsAuthSlideOverOpen(false)}
-   action="create-task"
+   action={authAction}
   />
 
   {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}

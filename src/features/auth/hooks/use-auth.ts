@@ -105,7 +105,7 @@ export function useAuth(): UseAuthReturn {
     try {
       setError(null)
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -120,8 +120,24 @@ export function useAuth(): UseAuthReturn {
         return { error: error.message }
       }
 
-      // Profile will be created automatically by onAuthStateChange listener
-      // once the session is established with proper cookies
+      // Explicitly create profile in users table
+      // This ensures the profile exists even if email confirmation is required
+      if (data.session) {
+        try {
+          await fetch('/api/auth/profile', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fullName: fullName,
+            }),
+          })
+        } catch (err) {
+          console.error('Failed to create profile after signup:', err)
+          // Profile will be created by onAuthStateChange listener as fallback
+        }
+      }
 
       return { error: null }
     } catch (err) {

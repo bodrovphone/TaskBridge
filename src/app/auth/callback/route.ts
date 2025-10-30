@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code)
   }
 
-  // Redirect to home page or user profile
-  // You can customize this based on where you want users to go after auth
+  // Redirect to home page
+  // @todo FUTURE: Add OAuth redirect support when implementing Google/Facebook login
   return NextResponse.redirect(`${origin}/en`)
 }
