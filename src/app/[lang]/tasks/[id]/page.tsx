@@ -3,8 +3,6 @@ import { Suspense } from "react";
 import TaskDetailContent from "./components/task-detail-content";
 import type { TaskDetailResponse } from "@/server/tasks/task.query-types";
 import type { PaginatedTasksResponse } from "@/server/tasks/task.query-types";
-import { TaskService } from "@/server/tasks/task.service";
-import { createClient } from "@/lib/supabase/server";
 
 /**
  * ISR Configuration - Incremental Static Regeneration
@@ -79,29 +77,27 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
  const { id, lang } = await params;
 
  try {
-  // ✅ FIXED: Call service directly instead of making HTTP request to ourselves
-  // This avoids issues with Vercel preview URLs and is the recommended Next.js pattern
-  const supabase = await createClient();
-  const { data: { user: authUser } } = await supabase.auth.getUser();
+  // Fetch task detail from API
+  // Using environment variable for base URL (set in Vercel)
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const response = await fetch(`${baseUrl}/api/tasks/${id}`, {
+   next: { revalidate: 3600 }, // Cache for 1 hour
+   cache: 'force-cache', // Use ISR caching
+  });
 
-  const taskService = new TaskService();
-  const result = await taskService.getTaskDetail(id, authUser?.id);
-
-  // Handle errors
-  if (!result.success) {
-   const error = result.error as Error;
-
-   // Check if it's a not found error
-   if ('statusCode' in error && (error as any).statusCode === 404) {
-    notFound();
-   }
-
-   // Log and throw other errors
-   console.error('Error fetching task detail:', error);
-   throw new Error(`Failed to fetch task: ${error.message}`);
+  // Handle 404 - task not found
+  if (response.status === 404) {
+   notFound();
   }
 
-  const data: TaskDetailResponse = result.data;
+  // Handle other errors
+  if (!response.ok) {
+   const errorText = await response.text();
+   console.error('Failed to fetch task:', response.status, errorText);
+   throw new Error(`Failed to fetch task: ${response.statusText}`);
+  }
+
+  const data: TaskDetailResponse = await response.json();
 
   // Fetch similar tasks in parallel (don't block on this)
   const similarTasks = await fetchSimilarTasks(
