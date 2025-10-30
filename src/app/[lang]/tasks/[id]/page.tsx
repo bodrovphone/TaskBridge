@@ -103,11 +103,10 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
    console.error('Task detail fetch error:', {
     status: response.status,
     statusText: response.statusText,
-    errorData
+    errorData,
+    fullError: JSON.stringify(errorData, null, 2)
    });
-   throw new Error(`Failed to fetch task: ${response.statusText}`, {
-    cause: errorData
-   });
+   throw new Error(`Failed to fetch task: ${response.statusText} - ${JSON.stringify(errorData)}`);
   }
 
   const data: TaskDetailResponse = await response.json();
