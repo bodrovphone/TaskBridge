@@ -29,12 +29,31 @@ interface TaskDetailPageProps {
 }
 
 /**
+ * Get the base URL for API calls
+ * Works in all environments: local, preview, production
+ */
+function getBaseUrl() {
+  // Vercel automatically sets VERCEL_URL
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  // Custom domain (production)
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL;
+  }
+
+  // Local development
+  return 'http://localhost:3000';
+}
+
+/**
  * Fetch similar tasks based on category
  * Uses the browse tasks API with category filter
  */
 async function fetchSimilarTasks(category: string, excludeId: string, limit: number = 3) {
  try {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = getBaseUrl();
   const response = await fetch(
    `${baseUrl}/api/tasks?category=${category}&limit=${limit + 1}&status=open`,
    {
@@ -66,7 +85,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   // Fetch task detail from API with caching
   // Note: ISR-cached pages don't need auth cookies since TaskActivity
   // visibility is determined client-side via useAuth() hook
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = getBaseUrl();
   const response = await fetch(`${baseUrl}/api/tasks/${id}`, {
    next: { revalidate: 3600 }, // Cache for 1 hour
   });
