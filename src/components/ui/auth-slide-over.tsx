@@ -8,7 +8,7 @@ import { X } from "lucide-react";
 import { Button as NextUIButton } from "@nextui-org/react";
 import { useAuth } from "@/features/auth";
 import { useTranslation } from 'react-i18next';
-import TelegramLoginButton from 'react-telegram-login';
+import TelegramLoginButton, { type TelegramUser } from 'react-telegram-login';
 
 interface AuthSlideOverProps {
  isOpen: boolean;
@@ -107,7 +107,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   // Redirect happens automatically
  };
 
- const handleTelegramAuth = async (user: any) => {
+ const handleTelegramAuth = async (user: TelegramUser) => {
   setIsLoading(true);
   setError(null);
 

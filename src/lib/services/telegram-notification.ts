@@ -189,7 +189,8 @@ export async function sendTemplatedNotification(
     return { success: false, error: 'Unknown notification type' };
   }
 
-  const { message, parseMode } = template(...templateArgs);
+  // Type assertion: we know template is a function that returns { message, parseMode }
+  const { message, parseMode } = (template as (...args: any[]) => { message: string; parseMode: 'HTML' })(...templateArgs);
 
   return sendTelegramNotification({
     userId,
