@@ -8,6 +8,7 @@ import { X } from "lucide-react";
 import { Button as NextUIButton } from "@nextui-org/react";
 import { useAuth } from "@/features/auth";
 import { useTranslation } from 'react-i18next';
+import TelegramLoginButton from 'react-telegram-login';
 
 interface AuthSlideOverProps {
  isOpen: boolean;
@@ -104,6 +105,37 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   setError(null);
   await signInWithFacebook();
   // Redirect happens automatically
+ };
+
+ const handleTelegramAuth = async (user: any) => {
+  setIsLoading(true);
+  setError(null);
+
+  try {
+   const response = await fetch('/api/auth/telegram', {
+    method: 'POST',
+    headers: {
+     'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+   });
+
+   const data = await response.json();
+
+   if (!response.ok) {
+    setError(data.error || 'Failed to authenticate with Telegram');
+    setIsLoading(false);
+    return;
+   }
+
+   // Success! User is now in database
+   console.log('Telegram auth successful:', data.user);
+   handleAuthSuccess();
+  } catch (err) {
+   console.error('Telegram auth error:', err);
+   setError('Failed to authenticate with Telegram');
+   setIsLoading(false);
+  }
  };
 
 
@@ -315,6 +347,21 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         >
          {t('auth.continueWith')} Facebook
         </NextUIButton>
+
+        {/* Telegram Login Button */}
+        <div className="w-full flex justify-center">
+         {typeof window !== 'undefined' && (
+          <TelegramLoginButton
+           dataOnauth={handleTelegramAuth}
+           botName="Trudify_bot"
+           buttonSize="large"
+           cornerRadius={8}
+           requestAccess="write"
+           usePic={false}
+           lang="en"
+          />
+         )}
+        </div>
        </div>
 
        {/* Toggle Mode */}
