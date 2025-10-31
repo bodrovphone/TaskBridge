@@ -113,7 +113,7 @@ export default function ResultsSection({
        {t('browseTasks.results.suggestedDescription')}
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
        {recommendedTasks.map((task: any, index: number) => (
         <motion.div
          key={task.id}
@@ -132,7 +132,7 @@ export default function ResultsSection({
      </div>
     </div>
    ) : isLoading ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
      {[1, 2, 3, 4, 5, 6].map((i) => (
       <motion.div
        key={i}
@@ -158,7 +158,7 @@ export default function ResultsSection({
     <div className="space-y-12">
      {/* Main Task Results */}
      <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
        {tasks.map((task: any, index: number) => (
         <motion.div
          key={task.id}
@@ -216,7 +216,7 @@ export default function ResultsSection({
         {t('browseTasks.results.featuredDescription')}
        </p>
 
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+       <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
         {recommendedTasks.map((task: any, index: number) => (
          <motion.div
           key={task.id}

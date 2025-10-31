@@ -1,34 +1,67 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Button as NextUIButton } from "@nextui-org/react";
 import TaskCard from "@/components/ui/task-card";
 import { LocaleLink } from "@/components/common/locale-link";
 import { useTranslation } from 'react-i18next';
-import { mockTasks } from '@/lib/mock-data';
-import { useCreateTask } from '@/hooks/use-create-task';
-// @todo FEATURE: Uncomment when reviews feature is built
-// import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews';
-import AuthSlideOver from '@/components/ui/auth-slide-over';
+import { usePathname, useRouter } from 'next/navigation';
+import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
+import { DEFAULT_LOCALE } from '@/lib/constants/locales';
 import {
  FileText,
  Plus,
  ArrowRight
 } from "lucide-react";
 
-export default function FeaturedTasksSection() {
- const { t } = useTranslation();
+interface Task {
+  id: string
+  title: string
+  description: string
+  category: string
+  subcategory: string
+  budget_min: number
+  budget_max: number
+  budget_type: string
+  city: string
+  neighborhood: string
+  deadline: string
+  urgency: string
+  requirements: string
+  images: string[] // Database field name
+  status: string
+  created_at: string
+  applications_count?: number
+}
 
- // Create task hook with auth
- const {
-  handleCreateTask,
-  showAuthPrompt,
-  setShowAuthPrompt
-  // @todo FEATURE: Add review-related properties when reviews feature is built
- } = useCreateTask();
- 
- // Use first 3 tasks from shared mock data for display
- const featuredTasks = mockTasks.slice(0, 3);
+interface FeaturedTasksSectionProps {
+  tasks: Task[]
+}
+
+export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProps) {
+ const { t } = useTranslation();
+ const router = useRouter();
+ const pathname = usePathname();
+
+ // Transform database format to TaskCard format
+ const featuredTasks = tasks.map(task => ({
+  ...task,
+  budgetMin: task.budget_min,
+  budgetMax: task.budget_max,
+  budgetType: task.budget_type as 'fixed' | 'hourly' | 'negotiable' | 'unclear',
+  createdAt: task.created_at,
+  // Ensure images is always an array (handle null/undefined from database)
+  images: Array.isArray(task.images) ? task.images : [],
+  // Truncate description to 50 characters for featured cards
+  description: task.description.length > 50
+    ? task.description.substring(0, 50) + '...'
+    : task.description,
+ }));
+
+ const handleApply = (taskId: string) => {
+  // Redirect to task detail page with locale
+  const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
+  router.push(`/${currentLocale}/tasks/${taskId}`);
+ };
 
  return (
   <section id="browse-tasks" className="py-24 relative overflow-hidden">
@@ -63,17 +96,18 @@ export default function FeaturedTasksSection() {
      <div className="overflow-x-auto">
       <div className="flex gap-8 pb-6" style={{ width: 'max-content' }}>
        {featuredTasks.map((task: any, index: number) => (
-        <div 
-         key={task.id} 
-         className="flex-shrink-0 w-80 hover:scale-105 transition-transform duration-300"
+        <div
+         key={task.id}
+         className="flex-shrink-0 w-80 h-[580px] hover:scale-105 transition-transform duration-300"
          style={{
           animationDelay: `${index * 100}ms`,
          }}
         >
-         <div className="bg-white/70 rounded-2xl p-1 shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200">
-          <TaskCard 
-           task={task} 
-           showApplyButton={false}
+         <div className="bg-white/70 rounded-2xl p-1 shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 h-full">
+          <TaskCard
+           task={task}
+           showApplyButton={true}
+           onApply={handleApply}
           />
          </div>
         </div>
@@ -86,46 +120,18 @@ export default function FeaturedTasksSection() {
        <FileText className="h-12 w-12 text-slate-400" />
       </div>
       <p className="text-slate-500 text-xl mb-6 font-light">{t('landing.featured.noTasks')}</p>
-      <NextUIButton
-       className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-4 rounded-xl font-semibold"
-       startContent={<Plus className="h-5 w-5" />}
-       onPress={handleCreateTask}
-       size="lg"
+      <Button
+       className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-6 rounded-xl font-semibold text-lg"
+       asChild
       >
-       {t('landing.featured.postFirstTask')}
-      </NextUIButton>
+       <LocaleLink href="/create-task" className="flex items-center gap-2">
+        <Plus className="h-5 w-5" />
+        {t('landing.featured.postFirstTask')}
+       </LocaleLink>
+      </Button>
      </div>
     )}
    </div>
-
-   {/* Auth Slide Over */}
-   <AuthSlideOver
-    isOpen={showAuthPrompt}
-    onClose={() => setShowAuthPrompt(false)}
-    action="create-task"
-   />
-
-   {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
-   {/* <ReviewEnforcementDialog
-    isOpen={isEnforcementDialogOpen}
-    onClose={() => setIsEnforcementDialogOpen(false)}
-    blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
-    pendingTasks={pendingReviewTasks}
-    onReviewTask={handleStartReviewing}
-   /> */}
-
-   {/* Review Dialog - Sequential Flow */}
-   {/* {pendingReviewTasks.length > 0 && (
-    <ReviewDialog
-     isOpen={isReviewDialogOpen}
-     onClose={() => setIsReviewDialogOpen(false)}
-     onSubmit={handleSubmitReview}
-     task={pendingReviewTasks[currentReviewTaskIndex]}
-     isLoading={isSubmittingReview}
-     currentIndex={currentReviewTaskIndex}
-     totalCount={pendingReviewTasks.length}
-    />
-   )} */}
   </section>
  );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 import { MessageCircle, Share2, Edit3, XCircle } from "lucide-react";
-import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
+import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
@@ -11,6 +11,7 @@ import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
 import { getUserApplication } from "@/components/tasks/mock-submit";
+import { canEditTask, canApplyToTask, canAskQuestions, canCancelTask, getDisabledReason, type TaskStatus } from "@/lib/utils/task-permissions";
 
 interface TaskActionsProps {
  task: any;
@@ -96,32 +97,55 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   }
  };
 
+ // Get task status permissions
+ const taskStatus = (task.status || 'open') as TaskStatus;
+ const canEdit = canEditTask(taskStatus);
+ const canApply = canApplyToTask(taskStatus);
+ const canAsk = canAskQuestions(taskStatus);
+ const canCancel = canCancelTask(taskStatus);
+
  // If owner, show Edit and Cancel buttons instead of Apply/Question
  if (isOwner) {
   return (
    <NextUICard className="bg-white/95 shadow-lg">
     <CardBody className="p-6 space-y-3">
-     <NextUIButton
-      color="primary"
-      variant="bordered"
-      size="lg"
-      className="w-full"
-      startContent={<Edit3 size={20} />}
-      onPress={handleEditClick}
+     <Tooltip
+      content={!canEdit ? getDisabledReason('edit', taskStatus) : ''}
+      isDisabled={canEdit}
      >
-      {t('taskDetail.editTask')}
-     </NextUIButton>
+      <div>
+       <NextUIButton
+        color="primary"
+        variant="bordered"
+        size="lg"
+        className="w-full"
+        startContent={<Edit3 size={20} />}
+        onPress={handleEditClick}
+        isDisabled={!canEdit}
+       >
+        {t('taskDetail.editTask')}
+       </NextUIButton>
+      </div>
+     </Tooltip>
 
-     <NextUIButton
-      color="danger"
-      variant="bordered"
-      size="lg"
-      className="w-full"
-      startContent={<XCircle size={20} />}
-      onPress={handleCancelClick}
+     <Tooltip
+      content={!canCancel ? getDisabledReason('cancel', taskStatus) : ''}
+      isDisabled={canCancel}
      >
-      {t('taskDetail.cancelTask')}
-     </NextUIButton>
+      <div>
+       <NextUIButton
+        color="danger"
+        variant="bordered"
+        size="lg"
+        className="w-full"
+        startContent={<XCircle size={20} />}
+        onPress={handleCancelClick}
+        isDisabled={!canCancel}
+       >
+        {t('taskDetail.cancelTask')}
+       </NextUIButton>
+      </div>
+     </Tooltip>
 
      <NextUIButton
       color="warning"
@@ -143,21 +167,42 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
    <NextUICard className="bg-white/95 shadow-lg">
     <CardBody className="p-6 space-y-3">
      {/* Application Badge/Button */}
-     <TaskApplicationBadge
-      status={userApplication?.status}
-      onClick={handleApplyClick}
-      className="w-full justify-center"
-     />
+     {canApply ? (
+      <TaskApplicationBadge
+       status={userApplication?.status}
+       onClick={handleApplyClick}
+       className="w-full justify-center"
+      />
+     ) : (
+      <Tooltip content={getDisabledReason('apply', taskStatus)}>
+       <div>
+        <TaskApplicationBadge
+         status={userApplication?.status}
+         onClick={handleApplyClick}
+         className="w-full justify-center"
+         isDisabled={true}
+        />
+       </div>
+      </Tooltip>
+     )}
 
-     <NextUIButton
-      variant="bordered"
-      size="lg"
-      className="w-full"
-      startContent={<MessageCircle size={20} />}
-      onPress={handleAskQuestionClick}
+     <Tooltip
+      content={!canAsk ? getDisabledReason('ask', taskStatus) : ''}
+      isDisabled={canAsk}
      >
-      {t('taskDetail.askQuestion')}
-     </NextUIButton>
+      <div>
+       <NextUIButton
+        variant="bordered"
+        size="lg"
+        className="w-full"
+        startContent={<MessageCircle size={20} />}
+        onPress={handleAskQuestionClick}
+        isDisabled={!canAsk}
+       >
+        {t('taskDetail.askQuestion')}
+       </NextUIButton>
+      </div>
+     </Tooltip>
 
      <NextUIButton
       color="warning"

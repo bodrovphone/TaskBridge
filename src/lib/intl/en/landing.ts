@@ -61,7 +61,7 @@ export const landing = {
   'landing.featured.viewAll': 'View All Tasks',
   'landing.featured.professionalDesc': 'Find your next opportunity',
   'landing.featured.customerDesc': 'See what others are posting',
-  'landing.featured.noTasks': 'No tasks available at the moment.',
+  'landing.featured.noTasks': 'No tasks yet? Be the first to create one! 😢',
   'landing.featured.postFirstTask': 'Post the first task',
 
   'landing.howItWorks.badge': 'Simple Process',

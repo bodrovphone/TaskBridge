@@ -17,6 +17,7 @@ import {
 } from "@nextui-org/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category';
+import { canApplyToTask, getDisabledReason, type TaskStatus } from '@/lib/utils/task-permissions';
 
 // Task type definition (to be moved to global types later)
 interface Task {
@@ -37,6 +38,7 @@ interface Task {
  createdAt?: Date | string;
  created_at?: Date | string; // Database field (snake_case)
  images?: string[]; // Array of photo URLs (database field)
+ status?: TaskStatus; // Task status for permissions
 }
 
 interface TaskCardProps {
@@ -110,6 +112,11 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
   router.push(`/${currentLocale}/tasks/${task.id}`);
  };
+
+ // Check if apply button should be enabled based on task status
+ const taskStatus = (task.status || 'open') as TaskStatus;
+ const canApply = canApplyToTask(taskStatus);
+ const applyDisabledReason = !canApply ? getDisabledReason('apply', taskStatus) : '';
 
  return (
   <Card
@@ -189,11 +196,11 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
 
    {/* Footer with clear separator */}
    <CardFooter className="px-6 pb-4 pt-4 border-t border-gray-100 mt-auto">
-    <div className="flex gap-3 w-full" onClick={(e) => e.stopPropagation()}>
+    <div className="flex flex-col min-[590px]:flex-row gap-3 w-full" onClick={(e) => e.stopPropagation()}>
      <Button
       variant="bordered"
       size="sm"
-      className="flex-1"
+      className="flex-1 w-full"
       onPress={handleCardPress}
      >
       {t('taskCard.seeDetails', 'See details')}
@@ -204,8 +211,10 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
        color="success"
        variant="solid"
        size="sm"
-       className="flex-1 font-semibold shadow-md hover:shadow-lg transition-shadow"
+       className="flex-1 w-full font-semibold shadow-md hover:shadow-lg transition-shadow"
        onPress={() => onApply(task.id)}
+       isDisabled={!canApply}
+       title={applyDisabledReason}
       >
        {t('taskCard.apply', 'Apply')}
       </Button>

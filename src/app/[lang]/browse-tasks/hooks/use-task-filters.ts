@@ -134,10 +134,17 @@ export function useTaskFilters() {
 
   /**
    * Build API query string
+   *
+   * IMPORTANT: Browse mode always filters to status='open' only
+   * Professionals should only see available tasks, not in-progress/completed/cancelled
    */
   const buildApiQuery = useCallback(() => {
     const params = new URLSearchParams()
     params.set('mode', 'browse')
+
+    // HARDCODED: Only show open tasks on browse page
+    // This ensures professionals only see available tasks they can apply to
+    params.set('status', 'open')
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {

@@ -62,7 +62,7 @@ export const landing = {
   'landing.featured.viewAll': 'Вижте всички задачи',
   'landing.featured.professionalDesc': 'Намерете следващата си възможност',
   'landing.featured.customerDesc': 'Вижте какво публикуват други',
-  'landing.featured.noTasks': 'Няма налични задачи в момента.',
+  'landing.featured.noTasks': 'Все още няма задачи? Бъдете първият, който ще създаде! 😢',
   'landing.featured.postFirstTask': 'Публикувай първата задача',
 
   'landing.howItWorks.badge': 'Лесен процес',

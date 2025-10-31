@@ -15,6 +15,30 @@ import Image from 'next/image';
 import LandingSkeleton from "@/components/ui/landing-skeleton";
 import { HeroSection, FeaturedTasksSection } from "./sections";
 
+interface Task {
+  id: string
+  title: string
+  description: string
+  category: string
+  subcategory: string
+  budget_min: number
+  budget_max: number
+  budget_type: string
+  city: string
+  neighborhood: string
+  deadline: string
+  urgency: string
+  requirements: string
+  images: string[] // Database field name
+  status: string
+  created_at: string
+  applications_count?: number
+}
+
+interface LandingPageProps {
+  featuredTasks: Task[]
+}
+
 // @todo REFACTORING: Continue extracting remaining sections (see ./sections/index.ts)
 import { 
  Home, 
@@ -32,7 +56,7 @@ import {
  Handshake
 } from "lucide-react";
 
-function Landing() {
+function Landing({ featuredTasks }: LandingPageProps) {
  const { t, ready } = useTranslation();
  const pathname = usePathname();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
@@ -168,7 +192,7 @@ function Landing() {
    
    <HeroSection />
 
-   <FeaturedTasksSection />
+   <FeaturedTasksSection tasks={featuredTasks} />
 
    {/* Popular Categories */}
    <section id="categories" className="py-16 relative">
