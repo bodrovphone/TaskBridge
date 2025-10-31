@@ -47,6 +47,10 @@ export const notifications = {
   'taskDetail.appliedTooltip': 'Вие сте кандидатствали за тази задача. Клиентът може да приеме или отхвърли вашата кандидатура.',
 
   'taskDetail.share': 'Сподели',
+  'taskDetail.editTask': 'Редактирай задачата',
+  'taskDetail.cancelTask': 'Отмени задачата',
+  'taskDetail.confirmCancel': 'Сигурни ли сте, че искате да отмените тази задача?',
+  'taskDetail.cancelSuccess': 'Функцията за отмяна на задачата идва скоро!',
   'taskDetail.activity': 'Активност по задачата',
   'taskDetail.applications': 'Кандидатури',
   'taskDetail.questions': 'Въпроси',

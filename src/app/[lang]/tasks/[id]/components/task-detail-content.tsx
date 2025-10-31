@@ -344,7 +344,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       </NextUICard>
 
       {/* Action Buttons - Client Component */}
-      <TaskActions task={task} />
+      <TaskActions task={task} isOwner={isOwner} />
 
       {/* Similar Tasks - Server Rendered (only show if tasks exist) */}
       {similarTasks && similarTasks.length > 0 && (

@@ -25,6 +25,8 @@ export const professionals = {
   'professionals.popularCategories': 'Популярные категории',
   'professionals.refineSearch': 'Уточните результаты поиска',
   'professionals.professionalsAvailable': 'доступных профессионалов',
+  'professionals.noProfessionalsFound': 'Профессионалы не найдены',
+  'professionals.tryAdjustingFilters': 'Попробуйте изменить фильтры или условия поиска, чтобы найти больше профессионалов.',
   'professionals.noMatchingResults':
     'Нет профессионалов, соответствующих вашим критериям. Попробуйте расширить поиск.',
   'professionals.mostActive': 'Наиболее активные',

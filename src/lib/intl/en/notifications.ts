@@ -46,6 +46,10 @@ export const notifications = {
   'taskDetail.appliedTooltip': 'You have applied to this task. The client may accept or reject your application.',
 
   'taskDetail.share': 'Share',
+  'taskDetail.editTask': 'Edit Task',
+  'taskDetail.cancelTask': 'Cancel Task',
+  'taskDetail.confirmCancel': 'Are you sure you want to cancel this task?',
+  'taskDetail.cancelSuccess': 'Task cancellation feature coming soon!',
   'taskDetail.activity': 'Task Activity',
   'taskDetail.applications': 'Applications',
   'taskDetail.questions': 'Questions',

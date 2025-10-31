@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { MessageCircle, Share2 } from "lucide-react";
+import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
+import { MessageCircle, Share2, Edit3, XCircle } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "@/features/auth";
@@ -14,15 +14,18 @@ import { getUserApplication } from "@/components/tasks/mock-submit";
 
 interface TaskActionsProps {
  task: any;
+ isOwner?: boolean;
 }
 
-export default function TaskActions({ task }: TaskActionsProps) {
+export default function TaskActions({ task, isOwner = false }: TaskActionsProps) {
  const { t } = useTranslation();
  const router = useRouter();
+ const params = useParams();
  const pathname = usePathname();
  const searchParams = useSearchParams();
  const { user, profile } = useAuth();
  const isAuthenticated = !!user && !!profile;
+ const lang = params?.lang as string || 'en';
 
  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
  const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);
@@ -81,6 +84,60 @@ export default function TaskActions({ task }: TaskActionsProps) {
   setIsQuestionDialogOpen(true);
  };
 
+ const handleEditClick = () => {
+  router.push(`/${lang}/tasks/${task.id}/edit`);
+ };
+
+ const handleCancelClick = () => {
+  // @todo FEATURE: Implement cancel task functionality
+  // For now, just show an alert
+  if (window.confirm(t('taskDetail.confirmCancel', 'Are you sure you want to cancel this task?'))) {
+   alert(t('taskDetail.cancelSuccess', 'Task cancellation feature coming soon!'));
+  }
+ };
+
+ // If owner, show Edit and Cancel buttons instead of Apply/Question
+ if (isOwner) {
+  return (
+   <NextUICard className="bg-white/95 shadow-lg">
+    <CardBody className="p-6 space-y-3">
+     <NextUIButton
+      color="primary"
+      variant="bordered"
+      size="lg"
+      className="w-full"
+      startContent={<Edit3 size={20} />}
+      onPress={handleEditClick}
+     >
+      {t('taskDetail.editTask')}
+     </NextUIButton>
+
+     <NextUIButton
+      color="danger"
+      variant="bordered"
+      size="lg"
+      className="w-full"
+      startContent={<XCircle size={20} />}
+      onPress={handleCancelClick}
+     >
+      {t('taskDetail.cancelTask')}
+     </NextUIButton>
+
+     <NextUIButton
+      color="warning"
+      variant="flat"
+      size="lg"
+      className="w-full"
+      startContent={<Share2 size={20} />}
+     >
+      {t('taskDetail.share')}
+     </NextUIButton>
+    </CardBody>
+   </NextUICard>
+  );
+ }
+
+ // Non-owner view: Apply and Ask Question buttons
  return (
   <>
    <NextUICard className="bg-white/95 shadow-lg">
@@ -103,7 +160,8 @@ export default function TaskActions({ task }: TaskActionsProps) {
      </NextUIButton>
 
      <NextUIButton
-      variant="light"
+      color="warning"
+      variant="flat"
       size="lg"
       className="w-full"
       startContent={<Share2 size={20} />}

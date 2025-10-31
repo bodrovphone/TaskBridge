@@ -47,6 +47,10 @@ export const notifications = {
   'taskDetail.appliedTooltip': 'Вы откликнулись на эту задачу. Клиент может принять или отклонить вашу заявку.',
 
   'taskDetail.share': 'Поделиться',
+  'taskDetail.editTask': 'Редактировать задачу',
+  'taskDetail.cancelTask': 'Отменить задачу',
+  'taskDetail.confirmCancel': 'Вы уверены, что хотите отменить эту задачу?',
+  'taskDetail.cancelSuccess': 'Функция отмены задачи скоро появится!',
   'taskDetail.activity': 'Активность по задаче',
   'taskDetail.applications': 'Заявки',
   'taskDetail.questions': 'Вопросы',

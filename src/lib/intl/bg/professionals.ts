@@ -26,6 +26,8 @@ export const professionals = {
   'professionals.popularCategories': 'Популярни категории',
   'professionals.refineSearch': 'Прецизирайте резултатите от търсенето',
   'professionals.professionalsAvailable': 'достъпни професионалисти',
+  'professionals.noProfessionalsFound': 'Не са намерени професионалисти',
+  'professionals.tryAdjustingFilters': 'Опитайте да промените филтрите или термините за търсене, за да намерите повече професионалисти.',
   'professionals.noMatchingResults':
     'Няма професионалисти, които да отговарят на вашите критерии. Опитайте да разширите търсенето.',
   'professionals.mostActive': 'Най-активни',
