@@ -183,7 +183,7 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile/Tablet Actions Section */}
-   <NavbarContent justify="end" className="lg:hidden gap-4">
+   <NavbarContent justify="end" className="lg:hidden gap-2">
     <NavbarItem>
      <LanguageSwitcher />
     </NavbarItem>
@@ -192,6 +192,19 @@ function Header() {
       <NotificationBell />
      </NavbarItem>
     )}
+    {/* Mobile Create Task Button - Circular with Plus icon */}
+    <NavbarItem>
+     <Button
+      isIconOnly
+      color="primary"
+      variant="solid"
+      className="font-medium shadow-lg"
+      onClick={handleCreateTask}
+      aria-label={t('nav.createTask')}
+     >
+      <Plus size={20} />
+     </Button>
+    </NavbarItem>
     <NavbarItem>
      {isAuthenticated ? (
       <UserAvatarDropdown size="sm" />
@@ -282,12 +295,13 @@ function Header() {
     )}
 
     <NavbarMenuItem>
-     <div className="pt-4 border-t border-gray-200 w-full">
+     <div className="pt-6 pb-2 border-t border-gray-200 w-full">
       <Button
        color="primary"
        variant="solid"
-       startContent={<Plus size={16} />}
-       className="w-full font-medium"
+       startContent={<Plus size={20} />}
+       size="lg"
+       className="w-full font-semibold shadow-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
        onPress={() => {
         setIsMenuOpen(false)
         // Small delay to let menu close animation complete before showing dialogs
