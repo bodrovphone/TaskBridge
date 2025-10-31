@@ -7,12 +7,13 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { verifyTelegramAuth, formatTelegramUser, type TelegramAuthData } from '@/lib/auth/telegram';
+import { verifyTelegramAuth, formatTelegramUser } from '@/lib/auth/telegram';
 import { sendTemplatedNotification } from '@/lib/services/telegram-notification';
+import type { TelegramUserData } from '@telegram-auth/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const authData: TelegramAuthData = await request.json();
+    const authData: TelegramUserData = await request.json();
 
     // Verify Telegram authentication data
     const botToken = process.env.TG_BOT_TOKEN;
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isValid = verifyTelegramAuth(authData, botToken);
+    const isValid = await verifyTelegramAuth(authData, botToken);
     if (!isValid) {
       return NextResponse.json(
         { error: 'Invalid Telegram authentication data' },

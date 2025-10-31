@@ -161,6 +161,24 @@ export const profile = {
 
   // Settings Modal
   'profile.settings.description': 'Manage your account preferences and privacy settings',
+
+  // Telegram Connection
+  'profile.telegramNotifications': 'Telegram Notifications',
+  'profile.telegramDescription': 'Connect your Telegram account to receive instant, free notifications',
+  'profile.connected': 'Connected',
+  'profile.notConnected': 'Not Connected',
+  'profile.connectedAs': 'Connected as',
+  'profile.benefits': 'Benefits',
+  'profile.instantNotifications': 'Instant notifications (no delays)',
+  'profile.freeForever': 'Free forever (no SMS costs)',
+  'profile.noEmailSpam': 'No email spam',
+  'profile.richMessages': 'Rich messages with buttons and links',
+  'profile.connectTelegram': 'Connect Telegram',
+  'profile.disconnectTelegram': 'Disconnect Telegram',
+  'profile.telegramInstructions': 'Telegram will open in a new window. Click the button in the bot message to complete connection.',
+  'profile.telegramConnectError': 'Failed to connect Telegram. Please try again.',
+  'profile.telegramDisconnectConfirm': 'Are you sure you want to disconnect Telegram? You will no longer receive instant notifications.',
+  'profile.telegramDisconnectError': 'Failed to disconnect Telegram. Please try again.',
   'profile.settings.notifications': 'Notifications',
   'profile.settings.emailNotifications': 'Email Notifications',
   'profile.settings.emailNotificationsDesc': 'Receive updates about your tasks and account',

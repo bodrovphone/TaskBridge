@@ -33,4 +33,5 @@ export const auth = {
   'auth.benefit3': '• Проследявайте историята си',
   'auth.benefit4': '• Получавайте известия за нови задачи',
   'auth.continueWith': 'Продължи с',
+  'auth.telegramHint': 'Отваря Telegram приложението или десктоп клиента',
 };

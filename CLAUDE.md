@@ -521,143 +521,79 @@ const { data: { user } } = await supabase.auth.getUser()
 
 **Status**: ✅ Fully implemented and ready for production
 
-TaskBridge uses Telegram as the primary authentication and notification channel, providing instant, cost-free communication with users.
+**Product Details**: See `/PRD.md` Section 3.1 for complete authentication flows and notification system
 
-#### Authentication Flow
+**Implementation Guide:**
 
-**How it works:**
-1. User clicks "Login with Telegram" in auth slide-over
-2. Telegram app opens (or web widget) asking for authorization confirmation
-3. User approves → Telegram returns authenticated user data
-4. System verifies cryptographic hash (prevents spoofing)
-5. Creates user profile in database OR signs in existing user
-6. Sends instant welcome notification via Telegram bot
+#### Quick Start - Sending Notifications
 
-**Implementation:**
 ```typescript
-// Auth verification utility
-import { verifyTelegramAuth } from '@/lib/auth/telegram';
+// Import notification service
+import { sendTemplatedNotification } from '@/lib/services/telegram-notification';
 
-// Verify Telegram authentication data
-const isValid = verifyTelegramAuth(authData, process.env.TG_BOT_TOKEN);
+// Send a notification using pre-built template
+await sendTemplatedNotification(
+  userId,
+  'applicationReceived',  // template name
+  'Fix My Laptop',        // taskTitle
+  'Ivan Petrov'           // professionalName
+);
 
-// Auth API route
-// POST /api/auth/telegram
-// Handles user creation/login and stores Telegram credentials
-```
+// Or send custom notification
+import { sendTelegramNotification } from '@/lib/services/telegram-notification';
 
-**Database Fields:**
-- `telegram_id` - Telegram user ID (used for sending notifications)
-- `telegram_username` - @username
-- `telegram_first_name`, `telegram_last_name` - User profile data
-- `telegram_photo_url` - Profile photo
-- `preferred_notification_channel` - User's notification preference (telegram/email/sms/viber)
-
-**UI Component:**
-```typescript
-// In auth slide-over
-import TelegramLoginButton from 'react-telegram-login';
-
-<TelegramLoginButton
-  dataOnauth={handleTelegramAuth}
-  botName="Trudify_bot"
-  buttonSize="large"
-/>
-```
-
-#### Notification System
-
-**Cost:** 🎉 **100% FREE** - Telegram Bot API has no per-message costs
-
-**Architecture:**
-```typescript
-// Service layer
-import { sendTelegramNotification, sendTemplatedNotification } from '@/lib/services/telegram-notification';
-
-// Send custom notification
 await sendTelegramNotification({
   userId: user.id,
-  message: '<b>Your task has an update!</b>',
+  message: '<b>Custom notification!</b>\n\nYour task has an update.',
   notificationType: 'task_update',
   parseMode: 'HTML'
 });
-
-// Send templated notification
-await sendTemplatedNotification(
-  userId,
-  'applicationReceived',
-  'Fix My Laptop',  // taskTitle
-  'Ivan Petrov'     // professionalName
-);
-
-// Via API route (from anywhere)
-await fetch('/api/notifications/telegram', {
-  method: 'POST',
-  body: JSON.stringify({
-    userId: user.id,
-    templateName: 'welcome',
-    templateArgs: ['Alex']
-  })
-});
 ```
 
-**Available Notification Templates:**
-- `welcome` - New user registration
-- `applicationReceived` - Professional applied to task
-- `applicationAccepted` - Application accepted by customer
-- `applicationRejected` - Application rejected
-- `messageReceived` - New message in task chat
-- `taskCompleted` - Task marked as complete
-- `paymentReceived` - Payment processed
+#### Database Fields (users table)
 
-**Notification Tracking:**
-All notifications are logged in `notification_logs` table with:
-- Delivery status (sent/delivered/failed)
-- Cost tracking (Telegram = €0)
-- Error messages if failed
-- Metadata (message ID, delivery time)
-
-**Configuration:**
-```bash
-# Environment variables
-TG_BOT_TOKEN=your_bot_token_from_botfather
-TG_BOT_USERNAME=Trudify_bot
-
-# Vercel deployment
-# Add these in: Vercel Dashboard → Settings → Environment Variables
+```sql
+telegram_id BIGINT             -- Telegram user ID for notifications
+telegram_username TEXT         -- @username
+telegram_first_name TEXT       -- User's first name
+telegram_last_name TEXT        -- User's last name
+telegram_photo_url TEXT        -- Profile photo URL
+preferred_notification_channel -- telegram/email/sms/viber
 ```
 
-**Bot Setup:**
-1. Created via @BotFather on Telegram
-2. Domain configured: `task-bridge-chi.vercel.app` (production) or `trudify.bg` (custom domain)
-3. Commands: `/setdomain` to configure allowed domains
+#### Available Notification Templates
 
-**Benefits:**
-- ✅ Zero cost (saves €10,000-16,000/year vs WhatsApp/Viber)
-- ✅ 97% open rate within 3 minutes
-- ✅ Instant delivery
-- ✅ No rate limits for notifications
-- ✅ Rich HTML formatting support
-- ✅ Deep linking to app from notifications
+See `/src/lib/services/telegram-notification.ts` for all templates:
+- `welcome`, `applicationReceived`, `applicationAccepted`, `applicationRejected`
+- `messageReceived`, `taskCompleted`, `paymentReceived`
 
-**Files:**
+#### Key Implementation Files
+
 - `/src/lib/auth/telegram.ts` - Auth verification utilities
-- `/src/lib/services/telegram-notification.ts` - Notification service
+- `/src/lib/services/telegram-notification.ts` - Notification service with templates
 - `/src/app/api/auth/telegram/route.ts` - Authentication endpoint
-- `/src/app/api/notifications/telegram/route.ts` - Notification endpoint
+- `/src/app/api/notifications/telegram/route.ts` - Notification API
 - `/src/components/ui/auth-slide-over.tsx` - Login UI with Telegram button
 - `/supabase/migrations/add_telegram_fields_to_users.sql` - Database schema
 
-**Testing:**
+#### Configuration
+
 ```bash
-# Test notification to a user
+# Required environment variables
+TG_BOT_TOKEN=your_bot_token_from_botfather
+TG_BOT_USERNAME=Trudify_bot
+
+# Add to Vercel: Dashboard → Settings → Environment Variables
+```
+
+#### Testing
+
+```bash
+# Test notification delivery
 npx tsx scripts/test-telegram-notification.ts <user_id>
 ```
 
-**Future Expansion:**
-- WhatsApp Business API (Phase 2) - for users without Telegram
-- Viber Business API (Phase 3) - if justified by usage data
-- Multi-channel fallback: Telegram → Email → SMS
+**Cost Savings**: €10,000-16,000/year vs WhatsApp/Viber/SMS alternatives
 
 ### API Routes
 

@@ -33,4 +33,5 @@ export const auth = {
   'auth.benefit3': '• Track your history',
   'auth.benefit4': '• Get notifications for new tasks',
   'auth.continueWith': 'Continue with',
+  'auth.telegramHint': 'Opens Telegram app or desktop client',
 };

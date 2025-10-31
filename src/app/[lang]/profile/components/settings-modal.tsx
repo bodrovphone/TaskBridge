@@ -20,6 +20,7 @@ import {
  Shield,
  Trash2
 } from 'lucide-react'
+import { TelegramConnection } from './telegram-connection'
 
 interface NotificationSettings {
  emailNotifications: boolean
@@ -33,9 +34,20 @@ interface NotificationSettings {
 interface SettingsModalProps {
  isOpen: boolean
  onClose: () => void
+ userId?: string
+ telegramConnected?: boolean
+ telegramUsername?: string | null
+ telegramFirstName?: string | null
 }
 
-export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export function SettingsModal({
+ isOpen,
+ onClose,
+ userId = '00000000-0000-0000-0000-000000000001', // Mock UUID for development
+ telegramConnected = false,
+ telegramUsername = null,
+ telegramFirstName = null
+}: SettingsModalProps) {
  const { t } = useTranslation()
 
  // Comprehensive notification settings state
@@ -81,6 +93,14 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
     <ModalBody>
      <div className="space-y-6">
+      {/* Telegram Connection */}
+      <TelegramConnection
+       userId={userId}
+       telegramConnected={telegramConnected}
+       telegramUsername={telegramUsername}
+       telegramFirstName={telegramFirstName}
+      />
+
       {/* Notifications */}
       <Card>
        <CardBody className="p-4">

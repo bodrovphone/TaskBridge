@@ -755,6 +755,25 @@ export const profile = {
 
   // Settings Modal
   'profile.settings.description': 'Управляйте предпочтениями аккаунта и настройками конфиденциальности',
+
+  // Telegram Connection
+  'profile.telegramNotifications': 'Telegram Уведомления',
+  'profile.telegramDescription': 'Подключите ваш Telegram аккаунт для получения мгновенных, бесплатных уведомлений',
+  'profile.connected': 'Подключен',
+  'profile.notConnected': 'Не подключен',
+  'profile.connectedAs': 'Подключен как',
+  'profile.benefits': 'Преимущества',
+  'profile.instantNotifications': 'Мгновенные уведомления (без задержек)',
+  'profile.freeForever': 'Бесплатно навсегда (без SMS расходов)',
+  'profile.noEmailSpam': 'Без email спама',
+  'profile.richMessages': 'Богатые сообщения с кнопками и ссылками',
+  'profile.connectTelegram': 'Подключить Telegram',
+  'profile.disconnectTelegram': 'Отключить Telegram',
+  'profile.telegramInstructions': 'Telegram откроется в новом окне. Нажмите кнопку в сообщении бота для завершения подключения.',
+  'profile.telegramConnectError': 'Не удалось подключить Telegram. Пожалуйста, попробуйте снова.',
+  'profile.telegramDisconnectConfirm': 'Вы уверены, что хотите отключить Telegram? Вы больше не будете получать мгновенные уведомления.',
+  'profile.telegramDisconnectError': 'Не удалось отключить Telegram. Пожалуйста, попробуйте снова.',
+
   'profile.settings.notifications': 'Уведомления',
   'profile.settings.emailNotifications': 'Email уведомления',
   'profile.settings.emailNotificationsDesc': 'Получать обновления о ваших задачах и аккаунте',

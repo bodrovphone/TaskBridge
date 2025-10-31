@@ -8,7 +8,8 @@ import { X } from "lucide-react";
 import { Button as NextUIButton } from "@nextui-org/react";
 import { useAuth } from "@/features/auth";
 import { useTranslation } from 'react-i18next';
-import TelegramLoginButton, { type TelegramUser } from 'react-telegram-login';
+import { LoginButton } from '@telegram-auth/react';
+import type { TelegramUserData } from '@telegram-auth/server';
 
 interface AuthSlideOverProps {
  isOpen: boolean;
@@ -107,7 +108,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   // Redirect happens automatically
  };
 
- const handleTelegramAuth = async (user: TelegramUser) => {
+ const handleTelegramAuth = async (data: TelegramUserData) => {
   setIsLoading(true);
   setError(null);
 
@@ -117,19 +118,19 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
     headers: {
      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(data),
    });
 
-   const data = await response.json();
+   const result = await response.json();
 
    if (!response.ok) {
-    setError(data.error || 'Failed to authenticate with Telegram');
+    setError(result.error || 'Failed to authenticate with Telegram');
     setIsLoading(false);
     return;
    }
 
    // Success! User is now in database
-   console.log('Telegram auth successful:', data.user);
+   console.log('Telegram auth successful:', result.user);
    handleAuthSuccess();
   } catch (err) {
    console.error('Telegram auth error:', err);
@@ -349,17 +350,21 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </NextUIButton>
 
         {/* Telegram Login Button */}
-        <div className="w-full flex justify-center">
+        <div className="w-full flex flex-col items-center gap-2">
          {typeof window !== 'undefined' && (
-          <TelegramLoginButton
-           dataOnauth={handleTelegramAuth}
-           botName="Trudify_bot"
-           buttonSize="large"
-           cornerRadius={8}
-           requestAccess="write"
-           usePic={false}
-           lang="en"
-          />
+          <>
+           <LoginButton
+            botUsername="Trudify_bot"
+            onAuthCallback={handleTelegramAuth}
+            buttonSize="large"
+            cornerRadius={8}
+            showAvatar={false}
+            lang={i18n.language === 'bg' ? 'bg' : i18n.language === 'ru' ? 'ru' : 'en'}
+           />
+           <p className="text-xs text-gray-500 text-center">
+            {t('auth.telegramHint') || 'Opens Telegram app or desktop client'}
+           </p>
+          </>
          )}
         </div>
        </div>

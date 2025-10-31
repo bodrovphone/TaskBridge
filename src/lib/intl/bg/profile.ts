@@ -161,6 +161,25 @@ export const profile = {
 
   // Settings Modal
   'profile.settings.description': 'Управлявайте предпочитанията и настройките за поверителност на акаунта си',
+
+  // Telegram Connection
+  'profile.telegramNotifications': 'Telegram Известия',
+  'profile.telegramDescription': 'Свържете вашия Telegram акаунт за получаване на мигновени, безплатни известия',
+  'profile.connected': 'Свързан',
+  'profile.notConnected': 'Не е свързан',
+  'profile.connectedAs': 'Свързан като',
+  'profile.benefits': 'Предимства',
+  'profile.instantNotifications': 'Мигновени известия (без забавяне)',
+  'profile.freeForever': 'Безплатно завинаги (без SMS разходи)',
+  'profile.noEmailSpam': 'Без имейл спам',
+  'profile.richMessages': 'Богати съобщения с бутони и връзки',
+  'profile.connectTelegram': 'Свържи Telegram',
+  'profile.disconnectTelegram': 'Прекъсни Telegram',
+  'profile.telegramInstructions': 'Telegram ще се отвори в нов прозорец. Натиснете бутона в бот съобщението за завършване на свързването.',
+  'profile.telegramConnectError': 'Неуспешно свързване с Telegram. Моля, опитайте отново.',
+  'profile.telegramDisconnectConfirm': 'Сигурни ли сте, че искате да прекъснете Telegram? Няма да получавате повече мигновени известия.',
+  'profile.telegramDisconnectError': 'Неуспешно прекъсване на Telegram. Моля, опитайте отново.',
+
   'profile.settings.notifications': 'Известия',
   'profile.settings.emailNotifications': 'Имейл известия',
   'profile.settings.emailNotificationsDesc': 'Получавайте актуализации за задачите и акаунта си',
