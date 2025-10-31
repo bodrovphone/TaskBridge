@@ -171,12 +171,15 @@ export const tasks = {
   'createTask.photos.dragDrop': 'Drag and drop an image here',
   'createTask.photos.orBrowse': 'or click to browse',
   'createTask.photos.takePhoto': 'Take a Photo',
-  'createTask.photos.maxSize': '1MB maximum',
+  'createTask.photos.maxSize': '5MB maximum',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Uploading photo...',
-  'createTask.photos.fileTooLarge': 'File is too large. Maximum size is 1MB',
+  'createTask.photos.fileTooLarge': 'File is too large. Maximum size is 5MB',
   'createTask.photos.invalidType': 'File is not a supported image format',
   'createTask.photos.uploadError': 'Failed to upload photos. Please try again.',
+  'createTask.photos.optimizing': 'Optimizing image for faster upload...',
+  'createTask.photos.optimized': 'Image optimized successfully',
+  'createTask.photos.smaller': 'smaller',
 
   // Review Section
   'createTask.review.title': 'Review your task',

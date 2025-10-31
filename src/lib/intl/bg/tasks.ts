@@ -172,12 +172,15 @@ export const tasks = {
   'createTask.photos.dragDrop': 'Плъзнете и пуснете изображение тук',
   'createTask.photos.orBrowse': 'или кликнете за преглед',
   'createTask.photos.takePhoto': 'Направете снимка',
-  'createTask.photos.maxSize': 'Максимум 1MB',
+  'createTask.photos.maxSize': 'Максимум 5MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Качване на снимка...',
-  'createTask.photos.fileTooLarge': 'Файлът е твърде голям. Максималният размер е 1MB',
+  'createTask.photos.fileTooLarge': 'Файлът е твърде голям. Максималният размер е 5MB',
   'createTask.photos.invalidType': 'Файлът не е поддържан формат на изображение',
   'createTask.photos.uploadError': 'Неуспешно качване на снимки. Моля, опитайте отново.',
+  'createTask.photos.optimizing': 'Оптимизиране на изображението за по-бързо качване...',
+  'createTask.photos.optimized': 'Изображението е оптимизирано успешно',
+  'createTask.photos.smaller': 'по-малко',
 
   // Review Section
   'createTask.review.title': 'Прегледайте вашата задача',

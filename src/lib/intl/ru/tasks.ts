@@ -172,12 +172,15 @@ export const tasks = {
   'createTask.photos.dragDrop': 'Перетащите изображение сюда',
   'createTask.photos.orBrowse': 'или кликните для обзора',
   'createTask.photos.takePhoto': 'Сделать фото',
-  'createTask.photos.maxSize': 'Максимум 1MB',
+  'createTask.photos.maxSize': 'Максимум 5MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Загрузка фотографии...',
-  'createTask.photos.fileTooLarge': 'Файл слишком большой. Максимальный размер 1MB',
+  'createTask.photos.fileTooLarge': 'Файл слишком большой. Максимальный размер 5MB',
   'createTask.photos.invalidType': 'Файл не является поддерживаемым форматом изображения',
   'createTask.photos.uploadError': 'Не удалось загрузить фотографии. Пожалуйста, попробуйте еще раз.',
+  'createTask.photos.optimizing': 'Оптимизация изображения для более быстрой загрузки...',
+  'createTask.photos.optimized': 'Изображение успешно оптимизировано',
+  'createTask.photos.smaller': 'меньше',
 
   // Review Section
   'createTask.review.title': 'Проверьте вашу задачу',

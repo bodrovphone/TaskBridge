@@ -1,10 +1,11 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Button, Card, CardBody } from '@nextui-org/react'
-import { Upload, X, Image as ImageIcon, Camera } from 'lucide-react'
+import { Button, Card, CardBody, Progress } from '@nextui-org/react'
+import { Upload, X, Image as ImageIcon, Camera, CheckCircle2 } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
+import { compressImageAdvanced, formatBytes } from '@/lib/utils/advanced-image-compression'
 
 interface PhotosSectionProps {
  form: any
@@ -13,13 +14,19 @@ interface PhotosSectionProps {
 
 export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
  const { t } = useTranslation()
- const [isUploading, setIsUploading] = useState(false)
+ const [isCompressing, setIsCompressing] = useState(false)
+ const [compressionProgress, setCompressionProgress] = useState(0)
  const fileInputRef = useRef<HTMLInputElement>(null)
  const cameraInputRef = useRef<HTMLInputElement>(null)
  const [photo, setPhoto] = useState<File | null>(null) // MVP: Single image only
  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
  const [hasInitialized, setHasInitialized] = useState(false)
  const [imageError, setImageError] = useState<string | null>(null)
+
+ // Compression statistics
+ const [originalSize, setOriginalSize] = useState<number>(0)
+ const [compressedSize, setCompressedSize] = useState<number>(0)
+ const [savingsPercent, setSavingsPercent] = useState<number>(0)
 
  // Initialize with existing image if in edit mode (only once)
  useEffect(() => {
@@ -29,12 +36,15 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
    }
  }, [initialImages, hasInitialized])
 
- const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+ const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0]
   if (!file) return
 
-  // Clear previous errors
+  // Clear previous state
   setImageError(null)
+  setOriginalSize(0)
+  setCompressedSize(0)
+  setSavingsPercent(0)
 
   // Validate file type first
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
@@ -42,29 +52,74 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
    return
   }
 
-  // Check file size (1MB max for MVP)
-  const isOversized = file.size > 1024 * 1024
+  // Check file size (5MB max)
+  const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+  const isOversized = file.size > MAX_SIZE
   if (isOversized) {
-   setImageError(t('createTask.photos.fileTooLarge', `Image is too large (max 1MB). This image will not be uploaded. You can change it now or edit the task later.`))
+   setImageError(t('createTask.photos.fileTooLarge', `Image is too large (max 5MB). This image will not be uploaded. You can change it now or edit the task later.`))
+   // Show preview even for oversized files, but don't compress/upload
+   setOriginalSize(file.size)
+   const reader = new FileReader()
+   reader.onload = (e) => {
+     setPhotoPreview(e.target?.result as string)
+   }
+   reader.readAsDataURL(file)
+   form.setFieldValue('photoFile', null)
+   form.setFieldValue('imageOversized', true)
+   return
   }
 
-  // Store file for later upload (will be uploaded when form is submitted)
+  // Store original file
   setPhoto(file)
+  setOriginalSize(file.size)
 
-  // Create preview
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    setPhotoPreview(e.target?.result as string)
+  // Start compression
+  setIsCompressing(true)
+  setCompressionProgress(0)
+
+  try {
+    // Compress image with progress callback
+    const result = await compressImageAdvanced(
+      file,
+      {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        initialQuality: 0.85,
+      },
+      (progress) => {
+        setCompressionProgress(progress)
+      }
+    )
+
+    // Store compression results
+    setCompressedSize(result.compressedSize)
+    setSavingsPercent(result.savingsPercent)
+
+    // Create preview from compressed blob
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setPhotoPreview(e.target?.result as string)
+    }
+    reader.readAsDataURL(result.blob)
+
+    // Store compressed blob in form for submission
+    form.setFieldValue('photoFile', result.blob)
+    form.setFieldValue('imageOversized', false)
+  } catch (error) {
+    console.error('Compression error:', error)
+    setImageError('Failed to optimize image. Please try another image.')
+    form.setFieldValue('photoFile', null)
+  } finally {
+    setIsCompressing(false)
+    setCompressionProgress(0)
   }
-  reader.readAsDataURL(file)
-
-  // Store file in form for submission (or null if oversized)
-  form.setFieldValue('photoFile', isOversized ? null : file)
-  form.setFieldValue('imageOversized', isOversized)
 
   // Reset file input
   if (fileInputRef.current) {
    fileInputRef.current.value = ''
+  }
+  if (cameraInputRef.current) {
+   cameraInputRef.current.value = ''
   }
  }
 
@@ -72,6 +127,9 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
   setPhoto(null)
   setPhotoPreview(null)
   setImageError(null)
+  setOriginalSize(0)
+  setCompressedSize(0)
+  setSavingsPercent(0)
   form.setFieldValue('photoFile', null)
   form.setFieldValue('photos', [])
   form.setFieldValue('imageOversized', false)
@@ -116,7 +174,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
          </p>
         </div>
         <div className="text-xs text-gray-400 space-y-1">
-         <p>{t('createTask.photos.maxSize', '1MB maximum')}</p>
+         <p>{t('createTask.photos.maxSize', '5MB maximum')}</p>
          <p>{t('createTask.photos.formats', 'JPG, PNG, WebP')}</p>
         </div>
        </div>
@@ -158,8 +216,32 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
     className="hidden"
    />
 
+   {/* Compression Progress */}
+   {isCompressing && (
+    <div className="space-y-3">
+     <Card className="border-2 border-blue-200 bg-blue-50">
+      <CardBody className="p-4">
+       <div className="flex items-center gap-3 mb-2">
+        <div className="animate-spin">
+         <ImageIcon className="w-5 h-5 text-blue-600" />
+        </div>
+        <p className="text-sm font-medium text-blue-800">
+         {t('createTask.photos.optimizing', 'Optimizing image for faster upload...')}
+        </p>
+       </div>
+       <Progress
+        value={compressionProgress}
+        color="primary"
+        size="sm"
+        className="max-w-full"
+       />
+      </CardBody>
+     </Card>
+    </div>
+   )}
+
    {/* Photo Preview */}
-   {photoPreview && (
+   {photoPreview && !isCompressing && (
     <div className="space-y-3">
      <div className="relative group">
       <Card>
@@ -185,6 +267,35 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
       </Button>
      </div>
 
+     {/* Compression Success Message */}
+     {compressedSize > 0 && savingsPercent > 0 && !imageError && (
+      <Card className="border-2 border-green-200 bg-green-50">
+       <CardBody className="p-4">
+        <div className="flex items-center justify-between">
+         <div className="flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 text-green-600" />
+          <div>
+           <p className="text-sm font-medium text-green-800">
+            {t('createTask.photos.optimized', 'Image optimized successfully')}
+           </p>
+           <p className="text-xs text-green-600">
+            {formatBytes(originalSize)} → {formatBytes(compressedSize)}
+           </p>
+          </div>
+         </div>
+         <div className="text-right">
+          <p className="text-xl font-bold text-green-700">
+           {savingsPercent}%
+          </p>
+          <p className="text-xs text-green-600">
+           {t('createTask.photos.smaller', 'smaller')}
+          </p>
+         </div>
+        </div>
+       </CardBody>
+      </Card>
+     )}
+
      {/* Error Message */}
      {imageError && (
       <div className="p-3 bg-warning-50 border border-warning-200 rounded-lg">
@@ -193,13 +304,6 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
        </p>
       </div>
      )}
-    </div>
-   )}
-
-   {/* Upload Progress */}
-   {isUploading && (
-    <div className="text-center text-sm text-gray-500">
-     {t('createTask.photos.uploading', 'Uploading photos...')}
     </div>
    )}
   </div>

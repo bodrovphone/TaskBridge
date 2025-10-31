@@ -57,9 +57,10 @@ export async function uploadTaskImage(
       return { url: null, error: 'Invalid file type. Use JPG, PNG, or WEBP.' }
     }
 
-    // Validate file size (1MB max)
-    if (file.size > 1024 * 1024) {
-      return { url: null, error: 'File too large. Maximum 1MB allowed.' }
+    // Validate file size (5MB max)
+    const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+    if (file.size > MAX_SIZE) {
+      return { url: null, error: 'File too large. Maximum 5MB allowed.' }
     }
 
     // Compress image

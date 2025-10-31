@@ -29,7 +29,8 @@ export default function TaskImageUpload({
       return
     }
 
-    if (file.size > 1024 * 1024) {
+    const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+    if (file.size > MAX_SIZE) {
       alert(t('createTask.imageUpload.tooLarge'))
       return
     }
@@ -87,7 +88,7 @@ export default function TaskImageUpload({
             {t('createTask.imageUpload.dragDrop')}
           </p>
           <p className="text-xs text-gray-500">
-            {t('createTask.imageUpload.formats')} (max 1MB)
+            {t('createTask.imageUpload.formats')} (max 5MB)
           </p>
 
           <input
