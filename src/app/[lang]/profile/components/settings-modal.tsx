@@ -34,7 +34,7 @@ interface NotificationSettings {
 interface SettingsModalProps {
  isOpen: boolean
  onClose: () => void
- userId?: string
+ userId: string // Required - real user ID from auth
  telegramConnected?: boolean
  telegramUsername?: string | null
  telegramFirstName?: string | null
@@ -43,7 +43,7 @@ interface SettingsModalProps {
 export function SettingsModal({
  isOpen,
  onClose,
- userId = '00000000-0000-0000-0000-000000000001', // Mock UUID for development
+ userId, // Required - must be passed from parent
  telegramConnected = false,
  telegramUsername = null,
  telegramFirstName = null

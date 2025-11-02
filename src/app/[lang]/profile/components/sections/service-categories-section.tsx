@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, CardHeader, Button, Chip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
 import { FileText, Edit, X, Save } from 'lucide-react'
 import { ServiceCategoriesSelector } from '../service-categories-selector'
+import { getCategoryColor, getCategoryName } from '@/lib/utils/category'
 
 interface ServiceCategoriesSectionProps {
   serviceCategories: string[]
@@ -59,11 +60,18 @@ export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceC
         <CardBody className="space-y-4 px-4 md:px-6 py-6">
           {serviceCategories.length > 0 ? (
             <div className="flex flex-wrap gap-2">
-              {serviceCategories.map(category => (
-                <Chip key={category} variant="flat" color="primary" className="shadow-sm">
-                  {category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </Chip>
-              ))}
+              {serviceCategories.map(category => {
+                const categoryColor = getCategoryColor(category)
+                const categoryName = getCategoryName(t, category)
+                return (
+                  <span
+                    key={category}
+                    className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border shadow-sm ${categoryColor}`}
+                  >
+                    {categoryName}
+                  </span>
+                )
+              })}
             </div>
           ) : (
             // Empty state - Call to Action

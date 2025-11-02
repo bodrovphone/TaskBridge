@@ -29,7 +29,7 @@ export function StatisticsSection({
         </div>
       </CardHeader>
       <CardBody className="px-4 md:px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50">
             <div className="text-3xl font-bold text-primary mb-1">{completedTasks}</div>
             <div className="text-sm text-gray-600">Completed Tasks</div>
@@ -38,15 +38,16 @@ export function StatisticsSection({
           <div className="text-center p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-amber-100/50">
             <div className="text-3xl font-bold text-yellow-600 mb-1 flex items-center justify-center gap-1">
               <Star className="w-6 h-6 fill-current" />
-              {averageRating}
+              {averageRating.toFixed(1)}
             </div>
             <div className="text-sm text-gray-600">Average Rating</div>
           </div>
 
-          <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100/50">
-            <div className="text-3xl font-bold text-green-600 mb-1">€{totalEarnings.toLocaleString()}</div>
+          {/* Total Earnings - Skipped for MVP (needs calculation from completed tasks) */}
+          {/* <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100/50">
+            <div className="text-3xl font-bold text-green-600 mb-1">€{totalEarnings?.toLocaleString() || 0}</div>
             <div className="text-sm text-gray-600">Total Earned</div>
-          </div>
+          </div> */}
 
           <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/50">
             <div className="text-3xl font-bold text-purple-600 mb-1">{profileViews}</div>

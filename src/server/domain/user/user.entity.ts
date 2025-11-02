@@ -9,7 +9,11 @@ import {
   UserProfile,
   CreateUserProfileDto,
   PreferredLanguage,
-  PreferredContact
+  PreferredContact,
+  AvailabilityStatus,
+  WorkingHours,
+  NotificationPreferences,
+  PrivacySettings
 } from './user.types'
 import { BusinessRuleError } from '@/server/shared/errors/base.error'
 
@@ -27,6 +31,10 @@ export class User {
     public isEmailVerified: boolean,
     public phoneVerifiedAt: Date | null,
     public emailVerifiedAt: Date | null,
+    // Customer-specific
+    public totalSpentBgn: number,
+    // Professional info
+    public professionalTitle: string | null,
     public vatNumber: string | null,
     public isVatVerified: boolean,
     public vatVerifiedAt: Date | null,
@@ -34,15 +42,35 @@ export class User {
     public yearsExperience: number | null,
     public hourlyRateBgn: number | null,
     public serviceCategories: string[],
+    public availabilityStatus: AvailabilityStatus,
+    public serviceAreaCities: string[],
+    public paymentMethods: string[],
+    public languages: string[],
+    public weekdayHours: WorkingHours,
+    public weekendHours: WorkingHours,
+    public totalEarningsBgn: number,
+    public profileViews: number,
+    // Statistics
     public tasksCompleted: number,
     public averageRating: number | null,
     public totalReviews: number,
     public responseTimeHours: number | null,
     public acceptanceRate: number | null,
+    // Settings
     public preferredLanguage: PreferredLanguage,
     public preferredContact: PreferredContact,
     public bio: string | null,
     public avatarUrl: string | null,
+    public notificationPreferences: NotificationPreferences,
+    public privacySettings: PrivacySettings,
+    // Telegram Integration
+    public telegramId: bigint | null,
+    public telegramUsername: string | null,
+    public telegramFirstName: string | null,
+    public telegramLastName: string | null,
+    public telegramPhotoUrl: string | null,
+    public preferredNotificationChannel: 'email' | 'telegram' | 'both' | null,
+    // Status
     public isBanned: boolean,
     public banReason: string | null,
     public bannedAt: Date | null,
@@ -70,6 +98,8 @@ export class User {
       false, // isEmailVerified
       null, // phoneVerifiedAt
       null, // emailVerifiedAt
+      0, // totalSpentBgn
+      null, // professionalTitle
       null, // vatNumber
       false, // isVatVerified
       null, // vatVerifiedAt
@@ -77,6 +107,14 @@ export class User {
       null, // yearsExperience
       null, // hourlyRateBgn
       [], // serviceCategories
+      'available', // availabilityStatus
+      [], // serviceAreaCities
+      ['cash', 'bank_transfer'], // paymentMethods
+      [dto.preferredLanguage || 'bg'], // languages
+      { start: '08:00', end: '18:00' }, // weekdayHours
+      { start: '09:00', end: '14:00' }, // weekendHours
+      0, // totalEarningsBgn
+      0, // profileViews
       0, // tasksCompleted
       null, // averageRating
       0, // totalReviews
@@ -86,6 +124,14 @@ export class User {
       'email', // preferredContact
       null, // bio
       null, // avatarUrl
+      { email: true, sms: true, push: true, telegram: true, taskUpdates: true, weeklyDigest: false, marketing: false }, // notificationPreferences
+      { profileVisible: true, showPhone: false, showEmail: false, showContactInfo: true }, // privacySettings
+      null, // telegramId
+      null, // telegramUsername
+      null, // telegramFirstName
+      null, // telegramLastName
+      null, // telegramPhotoUrl
+      null, // preferredNotificationChannel
       false, // isBanned
       null, // banReason
       null, // bannedAt
@@ -112,6 +158,8 @@ export class User {
       profile.isEmailVerified,
       profile.phoneVerifiedAt,
       profile.emailVerifiedAt,
+      profile.totalSpentBgn,
+      profile.professionalTitle,
       profile.vatNumber,
       profile.isVatVerified,
       profile.vatVerifiedAt,
@@ -119,6 +167,14 @@ export class User {
       profile.yearsExperience,
       profile.hourlyRateBgn,
       profile.serviceCategories,
+      profile.availabilityStatus,
+      profile.serviceAreaCities,
+      profile.paymentMethods,
+      profile.languages,
+      profile.weekdayHours,
+      profile.weekendHours,
+      profile.totalEarningsBgn,
+      profile.profileViews,
       profile.tasksCompleted,
       profile.averageRating,
       profile.totalReviews,
@@ -128,6 +184,14 @@ export class User {
       profile.preferredContact,
       profile.bio,
       profile.avatarUrl,
+      profile.notificationPreferences,
+      profile.privacySettings,
+      profile.telegramId,
+      profile.telegramUsername,
+      profile.telegramFirstName,
+      profile.telegramLastName,
+      profile.telegramPhotoUrl,
+      profile.preferredNotificationChannel,
       profile.isBanned,
       profile.banReason,
       profile.bannedAt,
@@ -154,6 +218,8 @@ export class User {
       isEmailVerified: this.isEmailVerified,
       phoneVerifiedAt: this.phoneVerifiedAt,
       emailVerifiedAt: this.emailVerifiedAt,
+      totalSpentBgn: this.totalSpentBgn,
+      professionalTitle: this.professionalTitle,
       vatNumber: this.vatNumber,
       isVatVerified: this.isVatVerified,
       vatVerifiedAt: this.vatVerifiedAt,
@@ -161,6 +227,14 @@ export class User {
       yearsExperience: this.yearsExperience,
       hourlyRateBgn: this.hourlyRateBgn,
       serviceCategories: this.serviceCategories,
+      availabilityStatus: this.availabilityStatus,
+      serviceAreaCities: this.serviceAreaCities,
+      paymentMethods: this.paymentMethods,
+      languages: this.languages,
+      weekdayHours: this.weekdayHours,
+      weekendHours: this.weekendHours,
+      totalEarningsBgn: this.totalEarningsBgn,
+      profileViews: this.profileViews,
       tasksCompleted: this.tasksCompleted,
       averageRating: this.averageRating,
       totalReviews: this.totalReviews,
@@ -170,6 +244,14 @@ export class User {
       preferredContact: this.preferredContact,
       bio: this.bio,
       avatarUrl: this.avatarUrl,
+      notificationPreferences: this.notificationPreferences,
+      privacySettings: this.privacySettings,
+      telegramId: this.telegramId,
+      telegramUsername: this.telegramUsername,
+      telegramFirstName: this.telegramFirstName,
+      telegramLastName: this.telegramLastName,
+      telegramPhotoUrl: this.telegramPhotoUrl,
+      preferredNotificationChannel: this.preferredNotificationChannel,
       isBanned: this.isBanned,
       banReason: this.banReason,
       bannedAt: this.bannedAt,

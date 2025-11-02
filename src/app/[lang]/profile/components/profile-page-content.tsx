@@ -11,6 +11,7 @@ import { ProfessionalProfile } from './professional-profile'
 import { SettingsModal } from './settings-modal'
 import { StatisticsModal } from './statistics-modal'
 import { AvatarUpload } from './avatar-upload'
+import { ProfileDataProvider } from './profile-data-provider'
 
 interface ProfilePageContentProps {
  lang: string
@@ -18,31 +19,48 @@ interface ProfilePageContentProps {
 
 export function ProfilePageContent({ lang }: ProfilePageContentProps) {
  const { t } = useTranslation()
- const { user } = useAuth()
+ const { user, profile } = useAuth()
  const router = useRouter()
  const [selectedTab, setSelectedTab] = useState('customer')
  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
  const [isStatisticsOpen, setIsStatisticsOpen] = useState(false)
- const [userAvatar, setUserAvatar] = useState<string | null>(null)
 
- // Mock user data for development (since authentication is currently disabled)
- const mockUser = {
-  id: '1',
-  name: 'Alexander Bodrov',
-  email: 'alex@example.com',
-  avatar: userAvatar,
-  isVerified: true,
-  isProfessional: false,
-  completionRate: 0.5 // 50% profile completion
+ // Redirect if not authenticated
+ if (!user || !profile) {
+  return (
+   <div className="min-h-screen flex items-center justify-center">
+    <div className="text-center">
+     <p className="text-gray-600">Loading profile...</p>
+    </div>
+   </div>
+  )
  }
 
- const handleAvatarChange = (newAvatar: string) => {
-  setUserAvatar(newAvatar)
-  // In real implementation, this would also update the global user state
-  console.log('Avatar updated:', newAvatar)
+ // Calculate profile completion
+ const calculateCompletion = () => {
+  let completed = 0
+  let total = 10
+
+  if (profile.fullName) completed++
+  if (profile.phoneNumber) completed++
+  if (profile.city) completed++
+  if (profile.bio) completed++
+  if (profile.avatarUrl) completed++
+  if (profile.isEmailVerified) completed++
+  if (profile.isPhoneVerified) completed++
+  if (profile.preferredLanguage) completed++
+  if (profile.preferredContact) completed++
+  if (profile.serviceCategories?.length > 0) completed++
+
+  return Math.round((completed / total) * 100)
  }
 
- const completionPercentage = Math.round(mockUser.completionRate * 100)
+ const completionPercentage = calculateCompletion()
+
+ const handleAvatarChange = async (newAvatar: string) => {
+  // TODO: Upload avatar and update profile
+  console.log('Avatar update not yet implemented:', newAvatar)
+ }
 
  return (
   <div
@@ -77,8 +95,8 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
       <div className="relative z-10">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
        <AvatarUpload
-        currentAvatar={mockUser.avatar}
-        userName={mockUser.name}
+        currentAvatar={profile.avatarUrl}
+        userName={profile.fullName || profile.email}
         onAvatarChange={handleAvatarChange}
         size="lg"
         className=""
@@ -86,8 +104,10 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
 
        <div className="flex-1">
         <div className="flex items-center gap-3 mb-2">
-         <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">{mockUser.name}</h1>
-         {mockUser.isVerified && (
+         <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
+          {profile.fullName || profile.email}
+         </h1>
+         {(profile.isEmailVerified && profile.isPhoneVerified) && (
           <Chip
            color="success"
            variant="flat"
@@ -102,7 +122,7 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
 
         <p className="text-gray-600 mb-4 flex items-center gap-2">
          <Bell className="w-4 h-4 text-gray-400" />
-         {mockUser.email}
+         {profile.email}
         </p>
 
         {/* Profile completion with visual indicator */}
@@ -183,7 +203,7 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
        classNames={{
         base: "w-full",
         tabList: "gap-2 w-full relative rounded-none p-3 bg-gray-50/50",
-        cursor: "bg-white shadow-md rounded-lg",
+        cursor: "bg-white shadow-md rounded-lg border-2 border-blue-600",
         tab: "h-11 px-6 data-[hover-unselected=true]:opacity-80",
         tabContent: "group-data-[selected=true]:text-primary group-data-[selected=true]:font-semibold text-gray-500"
        }}
@@ -198,7 +218,16 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
      }
     >
      <div className="p-3 md:p-8">
-      <CustomerProfile user={mockUser} />
+      <ProfileDataProvider>
+       {({ profile: currentProfile, updateProfile }) => (
+        currentProfile && (
+         <CustomerProfile
+          profile={currentProfile}
+          onProfileUpdate={updateProfile}
+         />
+        )
+       )}
+      </ProfileDataProvider>
      </div>
     </Tab>
 
@@ -212,7 +241,16 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
      }
     >
      <div className="p-3 md:p-8">
-      <ProfessionalProfile user={mockUser} />
+      <ProfileDataProvider>
+       {({ profile: currentProfile, updateProfile }) => (
+        currentProfile && (
+         <ProfessionalProfile
+          profile={currentProfile}
+          onProfileUpdate={updateProfile}
+         />
+        )
+       )}
+      </ProfileDataProvider>
      </div>
     </Tab>
    </Tabs>
@@ -224,13 +262,17 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
    <SettingsModal
     isOpen={isSettingsOpen}
     onClose={() => setIsSettingsOpen(false)}
+    userId={profile.id}
+    telegramConnected={!!profile.telegramId}
+    telegramUsername={profile.telegramUsername}
+    telegramFirstName={profile.telegramFirstName}
    />
 
    {/* Statistics Modal */}
    <StatisticsModal
     isOpen={isStatisticsOpen}
     onClose={() => setIsStatisticsOpen(false)}
-    userRole={mockUser.isProfessional ? 'professional' : 'customer'}
+    userRole={profile.userType === 'professional' || profile.userType === 'both' ? 'professional' : 'customer'}
    />
    </div>
   </div>

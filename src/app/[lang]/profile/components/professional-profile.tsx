@@ -11,72 +11,73 @@ import { VerificationSection } from './sections/verification-section'
 import { AvailabilitySection } from './sections/availability-section'
 import { BusinessSettingsSection } from './sections/business-settings-section'
 import { StatisticsSection } from './sections/statistics-section'
-
-interface User {
-  id: string
-  name: string
-  email: string
-  avatar?: string | null
-  isVerified: boolean
-  isProfessional: boolean
-  completionRate: number
-}
+import { UserProfile } from '@/server/domain/user/user.types'
 
 interface ProfessionalProfileProps {
-  user: User
+  profile: UserProfile
+  onProfileUpdate: (updates: Partial<UserProfile>) => Promise<void>
 }
 
-export function ProfessionalProfile({ }: ProfessionalProfileProps) {
+export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalProfileProps) {
   const { t } = useTranslation()
+  const [error, setError] = useState<string | null>(null)
 
-  // Mock professional data
-  const [professionalData, setProfessionalData] = useState({
-    title: 'Professional Cleaning & Home Services',
-    bio: 'Experienced home service professional with 5 years of expertise. I specialize in deep cleaning, regular maintenance, and use eco-friendly products with my own equipment.',
-    yearsExperience: '5-10',
-    serviceCategories: [] as string[], // Empty for new professionals - shows CTA
-    availability: 'available' as 'available' | 'busy' | 'unavailable',
-    responseTime: '2h',
-    serviceArea: ['Sofia', 'Plovdiv'],
-    isPhoneVerified: true,
-    paymentMethods: ['cash', 'bank_transfer', 'card'],
-    languages: ['bg', 'en'],
-    weekdayHours: { start: '08:00', end: '18:00' },
-    weekendHours: { start: '09:00', end: '14:00' },
-    // Portfolio
-    portfolio: [
-      {
-        id: '1',
-        title: 'Deep apartment cleaning - 2 bedroom',
-        beforeImage: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400',
-        afterImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400',
-        description: 'Complete deep cleaning of a 2-bedroom apartment including kitchen and bathroom.',
-        duration: '4 hours',
-        tags: ['deep_cleaning', 'house_cleaning']
-      }
-    ],
-    // Statistics (read-only)
-    completedTasks: 89,
-    averageRating: 4.9,
-    totalEarnings: 3200,
-    profileViews: 156,
-    memberSince: '2023-01-15'
-  })
+  // Format years experience for display (matches dropdown options)
+  const formatYearsExperience = (years: number | null): string => {
+    if (!years || years <= 1) return '0-1'
+    if (years <= 5) return '2-5'
+    if (years <= 10) return '5-10'
+    return '10+'
+  }
+
+  // Parse years experience from string to number for DB
+  const parseYearsExperience = (rangeString: string): number => {
+    const map: { [key: string]: number } = {
+      '0-1': 1,
+      '2-5': 3,
+      '5-10': 7,
+      '10+': 15
+    }
+    return map[rangeString] || 1
+  }
+
+  // Format response time for display (hours to string)
+  const formatResponseTime = (hours: number | null): string => {
+    if (!hours) return '24h'
+    if (hours < 1) return '30m'
+    if (hours <= 2) return `${Math.round(hours)}h`
+    if (hours <= 24) return `${Math.round(hours)}h`
+    return '24h+'
+  }
 
   // Handlers for each section
   const handleIdentitySave = async (data: { title: string; bio: string; yearsExperience: string }) => {
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    console.log('Saving identity:', data)
-    setProfessionalData(prev => ({ ...prev, ...data }))
+    setError(null)
+    try {
+      await onProfileUpdate({
+        professionalTitle: data.title,
+        bio: data.bio,
+        yearsExperience: parseYearsExperience(data.yearsExperience)
+      })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save professional identity')
+      throw err
+    }
   }
 
-  const handleCategoriesSave = (categories: string[]) => {
-    setProfessionalData(prev => ({ ...prev, serviceCategories: categories }))
+  const handleCategoriesSave = async (categories: string[]) => {
+    setError(null)
+    try {
+      await onProfileUpdate({ serviceCategories: categories })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save service categories')
+      throw err
+    }
   }
 
   const handleVerifyPhone = () => {
-    console.log('Verify phone clicked')
-    // TODO: Implement phone verification
+    console.log('Phone verification not yet implemented')
+    // TODO: Implement phone verification flow
   }
 
   const handleAvailabilitySave = async (data: {
@@ -84,74 +85,102 @@ export function ProfessionalProfile({ }: ProfessionalProfileProps) {
     responseTime: string
     serviceArea: string[]
   }) => {
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    console.log('Saving availability:', data)
-    setProfessionalData(prev => ({
-      ...prev,
-      availability: data.availability as 'available' | 'busy' | 'unavailable',
-      responseTime: data.responseTime,
-      serviceArea: data.serviceArea
-    }))
+    setError(null)
+    try {
+      await onProfileUpdate({
+        availabilityStatus: data.availability as 'available' | 'busy' | 'unavailable',
+        responseTimeHours: parseFloat(data.responseTime) || null,
+        serviceAreaCities: data.serviceArea
+      })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save availability settings')
+      throw err
+    }
   }
 
-  const handleLanguageChange = (languages: string[]) => {
-    setProfessionalData(prev => ({ ...prev, languages }))
+  const handleLanguageChange = async (languages: string[]) => {
+    setError(null)
+    try {
+      await onProfileUpdate({ languages })
+    } catch (err: any) {
+      setError(err.message || 'Failed to update languages')
+      throw err
+    }
   }
 
-  const handleBusinessSettingsSave = (data: {
+  const handleBusinessSettingsSave = async (data: {
     paymentMethods: string[]
     weekdayHours: { start: string; end: string }
     weekendHours: { start: string; end: string }
   }) => {
-    setProfessionalData(prev => ({ ...prev, ...data }))
+    setError(null)
+    try {
+      await onProfileUpdate({
+        paymentMethods: data.paymentMethods,
+        weekdayHours: data.weekdayHours,
+        weekendHours: data.weekendHours
+      })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save business settings')
+      throw err
+    }
   }
 
   const handlePortfolioChange = (items: any[]) => {
-    setProfessionalData(prev => ({ ...prev, portfolio: items }))
+    console.log('Portfolio changes not yet implemented:', items)
+    // TODO: Implement when portfolio feature is ready
   }
 
   return (
     <div className="space-y-4 md:space-y-6">
+      {/* Error Message */}
+      {error && (
+        <div className="p-4 rounded-lg bg-danger-50 border border-danger-200 text-danger-700">
+          {error}
+        </div>
+      )}
+
       {/* 1. Professional Identity */}
       <ProfessionalIdentitySection
-        title={professionalData.title}
-        bio={professionalData.bio}
-        yearsExperience={professionalData.yearsExperience}
+        title={profile.professionalTitle || ''}
+        bio={profile.bio || ''}
+        yearsExperience={formatYearsExperience(profile.yearsExperience)}
         onSave={handleIdentitySave}
       />
 
       {/* 2. Service Categories */}
       <ServiceCategoriesSection
-        serviceCategories={professionalData.serviceCategories}
+        serviceCategories={profile.serviceCategories || []}
         onSave={handleCategoriesSave}
       />
 
       {/* 3. Verification & Trust */}
       <VerificationSection
-        isPhoneVerified={professionalData.isPhoneVerified}
+        phoneNumber={profile.phoneNumber}
+        isPhoneVerified={profile.isPhoneVerified}
         onVerifyPhone={handleVerifyPhone}
       />
 
       {/* 4. Availability & Preferences */}
       <AvailabilitySection
-        availability={professionalData.availability}
-        responseTime={professionalData.responseTime}
-        serviceArea={professionalData.serviceArea}
-        languages={professionalData.languages}
+        availability={profile.availabilityStatus}
+        responseTime={formatResponseTime(profile.responseTimeHours)}
+        serviceArea={profile.serviceAreaCities || []}
+        languages={profile.languages || []}
         onSave={handleAvailabilitySave}
         onLanguageChange={handleLanguageChange}
       />
 
       {/* 5. Business Settings */}
       <BusinessSettingsSection
-        paymentMethods={professionalData.paymentMethods}
-        weekdayHours={professionalData.weekdayHours}
-        weekendHours={professionalData.weekendHours}
+        paymentMethods={profile.paymentMethods || []}
+        weekdayHours={profile.weekdayHours || { start: '08:00', end: '18:00' }}
+        weekendHours={profile.weekendHours || { start: '09:00', end: '14:00' }}
         onSave={handleBusinessSettingsSave}
       />
 
-      {/* 6. Portfolio Gallery */}
-      <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
+      {/* 6. Portfolio Gallery - Skipped for MVP */}
+      {/* <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
         <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-4 md:px-6">
           <div className="flex items-center gap-2 md:gap-3">
             <div className="p-2 rounded-lg bg-gradient-to-br from-pink-500/10 to-rose-100 flex-shrink-0">
@@ -165,20 +194,20 @@ export function ProfessionalProfile({ }: ProfessionalProfileProps) {
         </CardHeader>
         <CardBody className="px-4 md:px-6">
           <PortfolioGalleryManager
-            items={professionalData.portfolio}
+            items={[]}
             onChange={handlePortfolioChange}
             maxItems={6}
           />
         </CardBody>
-      </Card>
+      </Card> */}
 
       {/* 7. Statistics (Read-Only) */}
       <StatisticsSection
-        completedTasks={professionalData.completedTasks}
-        averageRating={professionalData.averageRating}
-        totalEarnings={professionalData.totalEarnings}
-        profileViews={professionalData.profileViews}
-        memberSince={professionalData.memberSince}
+        completedTasks={profile.tasksCompleted}
+        averageRating={profile.averageRating || 0}
+        totalEarnings={profile.totalEarningsBgn}
+        profileViews={profile.profileViews}
+        memberSince={new Date(profile.createdAt).toISOString().split('T')[0]}
       />
     </div>
   )

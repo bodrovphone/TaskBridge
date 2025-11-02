@@ -5,10 +5,16 @@
  * Run: npx tsx scripts/setup-telegram-webhook.ts
  */
 
+import { config } from 'dotenv';
+import { resolve } from 'path';
+
+// Load environment variables from .env.local
+config({ path: resolve(process.cwd(), '.env.local') });
+
 const botToken = process.env.TG_BOT_TOKEN;
-const webhookSecret = process.env.TG_WEBHOOK_SECRET || 'your_random_secret_here';
-const webhookUrl = process.env.NEXT_PUBLIC_APP_URL
-  ? `${process.env.NEXT_PUBLIC_APP_URL}/api/telegram/webhook`
+const webhookSecret = process.env.TG_WEBHOOK_SECRET || 'trudify_webhook_secret_2025';
+const webhookUrl = process.env.NEXT_PUBLIC_BASE_URL
+  ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/telegram/webhook`
   : 'https://task-bridge-chi.vercel.app/api/telegram/webhook';
 
 if (!botToken) {

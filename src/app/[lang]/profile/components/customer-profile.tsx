@@ -7,75 +7,69 @@ import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter } from 'next/navigation'
 import { MapPin, Phone, Mail, Calendar, Star, CheckCircle, Save, X, Edit, User as UserIcon, Shield, Globe, MessageSquare } from 'lucide-react'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
-
-interface User {
- id: string
- name: string
- email: string
- avatar?: string | null
- isVerified: boolean
- isProfessional: boolean
- completionRate: number
-}
+import { UserProfile } from '@/server/domain/user/user.types'
 
 interface CustomerProfileProps {
- user: User
+ profile: UserProfile
+ onProfileUpdate: (updates: Partial<UserProfile>) => Promise<void>
 }
 
-export function CustomerProfile({ user }: CustomerProfileProps) {
+export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfileProps) {
  const { t } = useTranslation()
  const [isEditing, setIsEditing] = useState(false)
  const [isLoading, setIsLoading] = useState(false)
+ const [error, setError] = useState<string | null>(null)
  const router = useRouter()
  const pathname = usePathname()
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'en'
 
- // Mock customer data
- const customerData = {
-  location: 'Sofia, Bulgaria',
-  phone: '+359 88 123 4567',
-  memberSince: '2023-01-15',
-  tasksPosted: 12,
-  tasksCompleted: 8,
-  averageRating: 4.8,
-  totalSpent: 2450,
-  isEmailVerified: true,
-  isPhoneVerified: false,
-  preferredLanguage: 'en' as 'en' | 'bg' | 'ru',
-  preferredContact: 'email' as 'email' | 'phone' | 'sms'
- }
-
  // Form for personal information editing
  const personalForm = useForm({
   defaultValues: {
-   name: user.name,
-   email: user.email,
-   phone: customerData.phone,
-   location: customerData.location,
-   preferredLanguage: customerData.preferredLanguage,
-   preferredContact: customerData.preferredContact,
+   name: profile.fullName || '',
+   email: profile.email,
+   phone: profile.phoneNumber || '',
+   location: profile.city || '',
+   preferredLanguage: profile.preferredLanguage,
+   preferredContact: profile.preferredContact,
   },
   onSubmit: async ({ value }) => {
    setIsLoading(true)
+   setError(null)
 
-   // Simulate API call
-   await new Promise(resolve => setTimeout(resolve, 1500))
-
-   console.log('Saving personal info:', value)
-   setIsLoading(false)
-   setIsEditing(false)
-
-   // TODO: Update user data in global state/context
+   try {
+     await onProfileUpdate({
+       fullName: value.name,
+       phoneNumber: value.phone,
+       city: value.location,
+       preferredLanguage: value.preferredLanguage,
+       preferredContact: value.preferredContact,
+     })
+     setIsEditing(false)
+   } catch (err: any) {
+     setError(err.message || 'Failed to save profile')
+     console.error('Profile update error:', err)
+   } finally {
+     setIsLoading(false)
+   }
   }
  })
 
  const handleCancel = () => {
   personalForm.reset()
   setIsEditing(false)
+  setError(null)
  }
 
  return (
   <div className="space-y-4 md:space-y-6">
+   {/* Error Message */}
+   {error && (
+    <div className="p-4 rounded-lg bg-danger-50 border border-danger-200 text-danger-700">
+     {error}
+    </div>
+   )}
+
    {/* Personal Information */}
    <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
     <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-3 md:px-6 py-3 md:py-4">
@@ -97,8 +91,8 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
         <div className="flex-1 min-w-0">
          <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.email')}</p>
          <div className="flex items-center gap-2 flex-wrap">
-          <p className="font-semibold text-gray-900 truncate">{user.email}</p>
-          {customerData.isEmailVerified && (
+          <p className="font-semibold text-gray-900 truncate">{profile.email}</p>
+          {profile.isEmailVerified && (
            <Chip size="sm" variant="flat" color="success" startContent={<Shield className="w-3 h-3" />} className="flex-shrink-0">
             Verified
            </Chip>
@@ -114,8 +108,8 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
         <div className="flex-1 min-w-0">
          <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.phone')}</p>
          <div className="flex items-center gap-2 flex-wrap">
-          <p className="font-semibold text-gray-900">{customerData.phone}</p>
-          {customerData.isPhoneVerified ? (
+          <p className="font-semibold text-gray-900">{profile.phoneNumber || 'Not set'}</p>
+          {profile.isPhoneVerified ? (
            <Chip size="sm" variant="flat" color="success" startContent={<Shield className="w-3 h-3" />} className="flex-shrink-0">
             Verified
            </Chip>
@@ -134,7 +128,7 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
         </div>
         <div>
          <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.location')}</p>
-         <p className="font-semibold text-gray-900">{customerData.location}</p>
+         <p className="font-semibold text-gray-900">{profile.city ? `${profile.city}, ${profile.country}` : 'Not set'}</p>
         </div>
        </div>
 
@@ -144,7 +138,9 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
         </div>
         <div>
          <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.memberSince')}</p>
-         <p className="font-semibold text-gray-900">{new Date(customerData.memberSince).toLocaleDateString()}</p>
+         <p className="font-semibold text-gray-900">
+          {new Date(profile.createdAt).toLocaleDateString()}
+         </p>
         </div>
        </div>
 
@@ -155,9 +151,9 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
         <div>
          <p className="text-xs text-gray-500 uppercase tracking-wider">Language</p>
          <p className="font-semibold text-gray-900">
-          {customerData.preferredLanguage === 'en' && 'English'}
-          {customerData.preferredLanguage === 'bg' && 'Български'}
-          {customerData.preferredLanguage === 'ru' && 'Русский'}
+          {profile.preferredLanguage === 'en' && 'English'}
+          {profile.preferredLanguage === 'bg' && 'Български'}
+          {profile.preferredLanguage === 'ru' && 'Русский'}
          </p>
         </div>
        </div>
@@ -168,7 +164,7 @@ export function CustomerProfile({ user }: CustomerProfileProps) {
         </div>
         <div>
          <p className="text-xs text-gray-500 uppercase tracking-wider">Preferred Contact</p>
-         <p className="font-semibold text-gray-900 capitalize">{customerData.preferredContact}</p>
+         <p className="font-semibold text-gray-900 capitalize">{profile.preferredContact}</p>
         </div>
        </div>
       </div>

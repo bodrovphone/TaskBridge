@@ -51,21 +51,27 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 ### 3.1 User Registration & Authentication
 
-**Status**: ✅ Telegram authentication fully implemented and ready for production
+**Status**: ✅ Telegram authentication and notification system **IMPLEMENTED** - Ready for deployment testing
+
+**Implementation Date:** October 31, 2025
+**Package Used:** `@telegram-auth/react` + `@telegram-auth/server`
 
 #### Authentication Methods
 
-**Primary Method: Telegram Login (Implemented)**
+**Primary Method: Telegram Login (✅ Implemented)**
 - One-click authentication via Telegram Login Widget
 - Instant account creation with Telegram profile data
 - Automatic welcome notification via Telegram bot
 - Zero-cost authentication (no SMS/email verification costs)
-- 97% user engagement rate for notifications
 - Benefits:
   - ✅ Fastest onboarding (1-click if Telegram installed)
-  - ✅ Instant notifications via Telegram bot (free)
+  - ✅ Instant notifications via Telegram bot (free, €10k-16k/year savings)
   - ✅ High trust (verified Telegram account)
   - ✅ No password management needed
+
+**Dual Connection Methods Implemented:**
+- **Method A (Direct Login):** Login with Telegram button in auth slide-over → Immediate account creation
+- **Method B (Post-Login Connection):** Email/password login → Profile Settings → Connect Telegram → Enable notifications
 
 **Secondary Methods: Traditional Auth (Existing)**
 - Email/password registration
@@ -114,7 +120,26 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 #### Notification System (Telegram Bot)
 
+**Implementation Status:** ✅ **Core Infrastructure Complete** - Bot handler, webhook, token system implemented
+**Deployment Status:** ⏸️ Requires Vercel deployment + webhook configuration
+
 **Cost**: 🎉 **100% FREE** - Telegram Bot API has no per-message costs (saves €10,000-16,000/year vs SMS/Email)
+
+**Telegram Bot Details:**
+- Bot Username: `@Trudify_bot`
+- Bot Token: Configured in `.env.local` (TG_BOT_TOKEN)
+- Webhook URL: `https://task-bridge-chi.vercel.app/api/telegram/webhook`
+- Connection Tokens: 15-minute expiry, single-use, stored in `telegram_connection_tokens` table
+
+**Implementation Files:**
+- `/src/lib/services/telegram-bot-handler.ts` - Bot command processor
+- `/src/lib/services/telegram-notification.ts` - Notification templates
+- `/src/app/api/telegram/webhook/route.ts` - Webhook receiver
+- `/src/app/api/telegram/generate-connection-token/route.ts` - Token generation
+- `/src/app/api/auth/telegram/route.ts` - Telegram authentication
+- `/src/app/[lang]/profile/components/telegram-connection.tsx` - UI component
+- `/scripts/setup-telegram-webhook.ts` - Webhook setup script
+- `/docs/telegram-setup-migration.md` - Database migration guide
 
 **Available Notifications:**
 - 📬 Welcome message on registration
@@ -698,9 +723,38 @@ General:
 
 -----
 
-**Document Version:** 2.6
-**Last Updated:** October 23, 2024
-**Next Review:** November 2024
+**Document Version:** 2.7
+**Last Updated:** October 31, 2025
+**Next Review:** November 2025
+
+**Major Changes in v2.7:**
+- ✅ **Telegram Authentication & Notification System - FULLY IMPLEMENTED**
+  - **Package Upgrade:** Migrated from `react-telegram-login` to `@telegram-auth/react` (actively maintained, better TypeScript support)
+  - **Dual Connection Methods:**
+    - Method A: Direct Telegram login in auth slide-over (browser-based with phone verification)
+    - Method B: Post-login connection via Profile Settings → Connect Telegram button
+  - **Bot Infrastructure:**
+    - Bot `/start` command handler with deep link support (`t.me/Trudify_bot?start=connect_{token}`)
+    - Webhook API route at `/api/telegram/webhook` (receives bot updates)
+    - Secure token system (15-min expiry, single-use, cryptographically verified)
+  - **Database:**
+    - `telegram_connection_tokens` table for secure account linking
+    - `notification_preferences` JSONB column in users table
+    - All Telegram user fields (telegram_id, username, first_name, last_name, photo_url)
+  - **UI Components:**
+    - TelegramConnection component in Profile Settings with connection status
+    - Full i18n support (EN/BG/RU) - 17 new translation keys
+    - Benefits display, error handling, loading states
+  - **Deployment Ready:**
+    - Webhook setup script: `/scripts/setup-telegram-webhook.ts`
+    - Database migration guide: `/docs/telegram-setup-migration.md`
+    - Environment variables configured
+  - **Remaining Tasks:**
+    - ⏳ Notification preferences UI (enable/disable specific notification types)
+    - ⏳ Full end-to-end testing after Vercel deployment + webhook configuration
+  - **Documentation:**
+    - Implementation task: `/todo_tasks/telegram-bot-connection-for-notifications.md`
+    - UX improvement task: `/todo_tasks/telegram-connection-visibility-improvement.md`
 
 **Major Changes in v2.6:**
 - ✅ **Safety Indicators UI Implementation** - Phase 4 Complete

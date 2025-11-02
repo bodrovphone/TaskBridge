@@ -5,11 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { Shield, Phone, CheckCircle } from 'lucide-react'
 
 interface VerificationSectionProps {
+  phoneNumber: string | null
   isPhoneVerified: boolean
   onVerifyPhone: () => void
 }
 
-export function VerificationSection({ isPhoneVerified, onVerifyPhone }: VerificationSectionProps) {
+export function VerificationSection({ phoneNumber, isPhoneVerified, onVerifyPhone }: VerificationSectionProps) {
   const { t } = useTranslation()
 
   return (
@@ -25,32 +26,50 @@ export function VerificationSection({ isPhoneVerified, onVerifyPhone }: Verifica
         </div>
       </CardHeader>
       <CardBody className="px-4 md:px-6">
-        {/* Phone Verification */}
+        {/* Phone Verification - Reuses same phone number from customer profile */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl bg-gray-50/50">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="p-2 rounded-lg bg-green-100 flex-shrink-0">
               <Phone className="w-5 h-5 text-green-600" />
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <p className="text-sm font-medium">{t('profile.professional.phoneVerification')}</p>
-              <p className="text-xs text-gray-500">{t('profile.professional.phoneVerificationRequired')}</p>
+              <div className="flex items-center gap-2 flex-wrap mt-1">
+                <p className="text-sm text-gray-900 font-semibold">{phoneNumber || 'Not set'}</p>
+                {phoneNumber && (
+                  isPhoneVerified ? (
+                    <Chip
+                      size="sm"
+                      color="success"
+                      variant="flat"
+                      startContent={<CheckCircle className="w-3 h-3" />}
+                      className="flex-shrink-0"
+                    >
+                      {t('profile.professional.verified')}
+                    </Chip>
+                  ) : (
+                    <Chip
+                      size="sm"
+                      color="warning"
+                      variant="flat"
+                      className="flex-shrink-0"
+                    >
+                      Not Verified
+                    </Chip>
+                  )
+                )}
+              </div>
+              {phoneNumber && !isPhoneVerified && (
+                <p className="text-xs text-gray-500 mt-1">{t('profile.professional.phoneVerificationRequired')}</p>
+              )}
             </div>
           </div>
-          {isPhoneVerified ? (
-            <Chip
-              color="success"
-              variant="flat"
-              startContent={<CheckCircle className="w-3 h-3" />}
-              className="self-start sm:self-auto"
-            >
-              {t('profile.professional.verified')}
-            </Chip>
-          ) : (
+          {phoneNumber && !isPhoneVerified && (
             <Button
               size="sm"
               color="primary"
               variant="flat"
-              className="self-start sm:self-auto"
+              className="self-start sm:self-auto flex-shrink-0"
               onPress={onVerifyPhone}
             >
               {t('profile.professional.verifyPhone')}

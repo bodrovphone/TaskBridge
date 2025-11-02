@@ -7,7 +7,35 @@ export type UserType = 'customer' | 'professional' | 'both'
 
 export type PreferredLanguage = 'en' | 'bg' | 'ru'
 
-export type PreferredContact = 'email' | 'phone' | 'sms'
+export type PreferredContact = 'email' | 'phone' | 'sms' | 'telegram'
+
+export type AvailabilityStatus = 'available' | 'busy' | 'unavailable'
+
+export interface WorkingHours {
+  start: string // Format: "HH:MM" (24-hour)
+  end: string   // Format: "HH:MM" (24-hour)
+}
+
+// @todo FEATURE: Portfolio system - Implement portfolio gallery for professionals
+// Options: JSONB field vs separate professional_portfolio table
+// See: /docs/profile-crud-audit-and-plan.md
+
+export interface NotificationPreferences {
+  email: boolean
+  sms: boolean
+  push: boolean
+  telegram: boolean
+  taskUpdates: boolean
+  weeklyDigest: boolean
+  marketing: boolean
+}
+
+export interface PrivacySettings {
+  profileVisible: boolean
+  showPhone: boolean
+  showEmail: boolean
+  showContactInfo: boolean
+}
 
 export interface CreateUserProfileDto {
   authUserId: string  // From Supabase auth.users.id
@@ -21,6 +49,7 @@ export interface CreateUserProfileDto {
 }
 
 export interface UpdateUserProfileDto {
+  // Basic Info
   fullName?: string
   phoneNumber?: string
   city?: string
@@ -29,13 +58,34 @@ export interface UpdateUserProfileDto {
   bio?: string
   preferredLanguage?: PreferredLanguage
   preferredContact?: PreferredContact
+  avatarUrl?: string
 
   // Professional-specific
+  professionalTitle?: string
   companyName?: string
   vatNumber?: string
   yearsExperience?: number
   hourlyRateBgn?: number
   serviceCategories?: string[]
+  availabilityStatus?: AvailabilityStatus
+  responseTimeHours?: number | null
+  serviceAreaCities?: string[]
+  paymentMethods?: string[]
+  languages?: string[]
+  weekdayHours?: WorkingHours
+  weekendHours?: WorkingHours
+
+  // Settings
+  notificationPreferences?: NotificationPreferences
+  privacySettings?: PrivacySettings
+
+  // Telegram Integration
+  telegramId?: bigint | null
+  telegramUsername?: string | null
+  telegramFirstName?: string | null
+  telegramLastName?: string | null
+  telegramPhotoUrl?: string | null
+  preferredNotificationChannel?: 'email' | 'telegram' | 'both' | null
 }
 
 export interface UserProfile {
@@ -56,7 +106,11 @@ export interface UserProfile {
   phoneVerifiedAt: Date | null
   emailVerifiedAt: Date | null
 
+  // Customer-specific
+  totalSpentBgn: number
+
   // Professional info
+  professionalTitle: string | null
   vatNumber: string | null
   isVatVerified: boolean
   vatVerifiedAt: Date | null
@@ -64,6 +118,14 @@ export interface UserProfile {
   yearsExperience: number | null
   hourlyRateBgn: number | null
   serviceCategories: string[]
+  availabilityStatus: AvailabilityStatus
+  serviceAreaCities: string[]
+  paymentMethods: string[]
+  languages: string[]
+  weekdayHours: WorkingHours
+  weekendHours: WorkingHours
+  totalEarningsBgn: number
+  profileViews: number
 
   // Statistics
   tasksCompleted: number
@@ -77,6 +139,16 @@ export interface UserProfile {
   preferredContact: PreferredContact
   bio: string | null
   avatarUrl: string | null
+  notificationPreferences: NotificationPreferences
+  privacySettings: PrivacySettings
+
+  // Telegram Integration
+  telegramId: bigint | null
+  telegramUsername: string | null
+  telegramFirstName: string | null
+  telegramLastName: string | null
+  telegramPhotoUrl: string | null
+  preferredNotificationChannel: 'email' | 'telegram' | 'both' | null
 
   // Status
   isBanned: boolean

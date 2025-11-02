@@ -190,6 +190,12 @@ export class UserRepository {
       isEmailVerified: raw.is_email_verified,
       phoneVerifiedAt: raw.phone_verified_at ? new Date(raw.phone_verified_at) : null,
       emailVerifiedAt: raw.email_verified_at ? new Date(raw.email_verified_at) : null,
+
+      // Customer-specific
+      totalSpentBgn: raw.total_spent_bgn ? parseFloat(raw.total_spent_bgn) : 0,
+
+      // Professional info
+      professionalTitle: raw.professional_title,
       vatNumber: raw.vat_number,
       isVatVerified: raw.is_vat_verified,
       vatVerifiedAt: raw.vat_verified_at ? new Date(raw.vat_verified_at) : null,
@@ -197,19 +203,58 @@ export class UserRepository {
       yearsExperience: raw.years_experience,
       hourlyRateBgn: raw.hourly_rate_bgn ? parseFloat(raw.hourly_rate_bgn) : null,
       serviceCategories: raw.service_categories || [],
+      availabilityStatus: raw.availability_status || 'available',
+      serviceAreaCities: raw.service_area_cities || [],
+      paymentMethods: raw.payment_methods || ['cash', 'bank_transfer'],
+      languages: raw.languages || [raw.preferred_language || 'bg'],
+      weekdayHours: raw.weekday_hours || { start: '08:00', end: '18:00' },
+      weekendHours: raw.weekend_hours || { start: '09:00', end: '14:00' },
+      totalEarningsBgn: raw.total_earnings_bgn ? parseFloat(raw.total_earnings_bgn) : 0,
+      profileViews: raw.profile_views || 0,
+
+      // Statistics
       tasksCompleted: raw.tasks_completed || 0,
       averageRating: raw.average_rating ? parseFloat(raw.average_rating) : null,
       totalReviews: raw.total_reviews || 0,
       responseTimeHours: raw.response_time_hours ? parseFloat(raw.response_time_hours) : null,
       acceptanceRate: raw.acceptance_rate ? parseFloat(raw.acceptance_rate) : null,
+
+      // Settings
       preferredLanguage: raw.preferred_language || 'bg',
       preferredContact: raw.preferred_contact || 'email',
       bio: raw.bio,
       avatarUrl: raw.avatar_url,
+      notificationPreferences: raw.notification_preferences || {
+        email: true,
+        sms: true,
+        push: true,
+        telegram: true,
+        taskUpdates: true,
+        weeklyDigest: false,
+        marketing: false
+      },
+      privacySettings: raw.privacy_settings || {
+        profileVisible: true,
+        showPhone: false,
+        showEmail: false,
+        showContactInfo: true
+      },
+
+      // Telegram Integration
+      telegramId: raw.telegram_id,
+      telegramUsername: raw.telegram_username,
+      telegramFirstName: raw.telegram_first_name,
+      telegramLastName: raw.telegram_last_name,
+      telegramPhotoUrl: raw.telegram_photo_url,
+      preferredNotificationChannel: raw.preferred_notification_channel,
+
+      // Status
       isBanned: raw.is_banned || false,
       banReason: raw.ban_reason,
       bannedAt: raw.banned_at ? new Date(raw.banned_at) : null,
       lastActiveAt: raw.last_active_at ? new Date(raw.last_active_at) : null,
+
+      // Timestamps
       createdAt: new Date(raw.created_at),
       updatedAt: new Date(raw.updated_at),
     }
@@ -234,6 +279,12 @@ export class UserRepository {
       is_email_verified: user.isEmailVerified,
       phone_verified_at: user.phoneVerifiedAt?.toISOString(),
       email_verified_at: user.emailVerifiedAt?.toISOString(),
+
+      // Customer-specific
+      total_spent_bgn: user.totalSpentBgn,
+
+      // Professional info
+      professional_title: user.professionalTitle,
       vat_number: user.vatNumber,
       is_vat_verified: user.isVatVerified,
       vat_verified_at: user.vatVerifiedAt?.toISOString(),
@@ -241,19 +292,45 @@ export class UserRepository {
       years_experience: user.yearsExperience,
       hourly_rate_bgn: user.hourlyRateBgn,
       service_categories: user.serviceCategories,
+      availability_status: user.availabilityStatus,
+      service_area_cities: user.serviceAreaCities,
+      payment_methods: user.paymentMethods,
+      languages: user.languages,
+      weekday_hours: user.weekdayHours,
+      weekend_hours: user.weekendHours,
+      total_earnings_bgn: user.totalEarningsBgn,
+      profile_views: user.profileViews,
+
+      // Statistics
       tasks_completed: user.tasksCompleted,
       average_rating: user.averageRating,
       total_reviews: user.totalReviews,
       response_time_hours: user.responseTimeHours,
       acceptance_rate: user.acceptanceRate,
+
+      // Settings
       preferred_language: user.preferredLanguage,
       preferred_contact: user.preferredContact,
       bio: user.bio,
       avatar_url: user.avatarUrl,
+      notification_preferences: user.notificationPreferences,
+      privacy_settings: user.privacySettings,
+
+      // Telegram Integration
+      telegram_id: user.telegramId,
+      telegram_username: user.telegramUsername,
+      telegram_first_name: user.telegramFirstName,
+      telegram_last_name: user.telegramLastName,
+      telegram_photo_url: user.telegramPhotoUrl,
+      preferred_notification_channel: user.preferredNotificationChannel,
+
+      // Status
       is_banned: user.isBanned,
       ban_reason: user.banReason,
       banned_at: user.bannedAt?.toISOString(),
       last_active_at: user.lastActiveAt?.toISOString(),
+
+      // Timestamps
       created_at: user.createdAt.toISOString(),
       updated_at: user.updatedAt.toISOString(),
     }
