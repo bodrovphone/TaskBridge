@@ -53,10 +53,22 @@ export function TelegramConnection({
 
       // Open Telegram with deep link
       const deepLink = `https://t.me/Trudify_bot?start=connect_${token}`;
-      window.open(deepLink, '_blank');
 
-      // Show instructions
-      alert(t('profile.telegramInstructions'));
+      // Mobile-friendly approach: Create a temporary link and click it
+      // This works better than window.open() on mobile (avoids popup blockers)
+      // and opens in new tab on desktop
+      const link = document.createElement('a');
+      link.href = deepLink;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Small delay, then show success message
+      setTimeout(() => {
+        setError(null);
+      }, 500);
     } catch (err) {
       console.error('Error connecting Telegram:', err);
       setError(t('profile.telegramConnectError'));

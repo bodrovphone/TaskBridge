@@ -10,6 +10,7 @@ export const common = {
   edit: 'Редактировать',
   delete: 'Удалить',
   cancel: 'Отмена',
+  dismiss: 'Может быть позже',
   important: 'Важно',
   save: 'Сохранить',
   submit: 'Отправить',

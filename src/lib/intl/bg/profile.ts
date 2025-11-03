@@ -165,6 +165,9 @@ export const profile = {
   // Telegram Connection
   'profile.telegramNotifications': 'Telegram Известия',
   'profile.telegramDescription': 'Свържете вашия Telegram акаунт за получаване на мигновени, безплатни известия',
+  'profile.telegram.promptTitle': 'Получавайте мигновени известия!',
+  'profile.telegram.promptDescription': 'Свържете вашия Telegram акаунт, за да получавате актуализации в реално време за вашите задачи, кандидатури и съобщения.',
+  'profile.telegram.connectNow': 'Свържи Telegram',
   'profile.connected': 'Свързан',
   'profile.notConnected': 'Не е свързан',
   'profile.connectedAs': 'Свързан като',

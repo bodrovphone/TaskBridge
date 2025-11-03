@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Tabs, Tab, Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { User, Briefcase, Settings, Bell, Shield, BarChart3, FileText, ClipboardList } from 'lucide-react'
+import { User, Briefcase, Settings, Bell, Shield, BarChart3, FileText, ClipboardList, Send } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { CustomerProfile } from './customer-profile'
 import { ProfessionalProfile } from './professional-profile'
@@ -12,6 +12,7 @@ import { SettingsModal } from './settings-modal'
 import { StatisticsModal } from './statistics-modal'
 import { AvatarUpload } from './avatar-upload'
 import { ProfileDataProvider } from './profile-data-provider'
+import { TelegramPromptBanner } from './telegram-prompt-banner'
 
 interface ProfilePageContentProps {
  lang: string
@@ -24,6 +25,13 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
  const [selectedTab, setSelectedTab] = useState('customer')
  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
  const [isStatisticsOpen, setIsStatisticsOpen] = useState(false)
+ const [isTelegramBannerDismissed, setIsTelegramBannerDismissed] = useState(() => {
+  // Check if user previously dismissed the banner
+  if (typeof window !== 'undefined') {
+   return localStorage.getItem('telegram-banner-dismissed') === 'true'
+  }
+  return false
+ })
 
  // Redirect if not authenticated
  if (!user || !profile) {
@@ -61,6 +69,19 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
   // TODO: Upload avatar and update profile
   console.log('Avatar update not yet implemented:', newAvatar)
  }
+
+ const handleTelegramConnect = () => {
+  // Open settings modal (Telegram section is at the top)
+  setIsSettingsOpen(true)
+ }
+
+ const handleTelegramBannerDismiss = () => {
+  setIsTelegramBannerDismissed(true)
+  localStorage.setItem('telegram-banner-dismissed', 'true')
+ }
+
+ // Show banner if: not connected AND not dismissed
+ const shouldShowTelegramBanner = !profile.telegramId && !isTelegramBannerDismissed
 
  return (
   <div
@@ -162,6 +183,20 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
          >
           {t('profile.settings')}
          </Button>
+
+         {/* Telegram Connection Button - Shows if not connected */}
+         {!profile.telegramId && (
+          <Button
+           size="sm"
+           variant="flat"
+           color="primary"
+           startContent={<Send className="w-4 h-4" />}
+           onPress={handleTelegramConnect}
+           className="hover:scale-105 transition-transform shadow-md font-semibold bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
+          >
+           {t('profile.telegram.connectNow')}
+          </Button>
+         )}
         </div>
        </div>
       </div>
@@ -169,6 +204,16 @@ export function ProfilePageContent({ lang }: ProfilePageContentProps) {
      </CardBody>
     </Card>
    </div>
+
+   {/* Telegram Connection Prompt Banner */}
+   {shouldShowTelegramBanner && (
+    <div className="mb-6">
+     <TelegramPromptBanner
+      onConnect={handleTelegramConnect}
+      onDismiss={handleTelegramBannerDismiss}
+     />
+    </div>
+   )}
 
    {/* Quick Action Buttons */}
    <div className="mb-4 flex gap-2">
