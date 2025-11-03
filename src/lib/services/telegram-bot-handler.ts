@@ -5,7 +5,7 @@
  * Deep link format: t.me/Trudify_bot?start=connect_{token}
  */
 
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 
 export interface TelegramUpdate {
   update_id: number;
@@ -59,7 +59,13 @@ async function handleConnectionRequest(
   telegramId: number,
   telegramUser: NonNullable<TelegramUpdate['message']>['from']
 ) {
-  const supabase = await createClient();
+  console.log('[Telegram] Processing connection request:', {
+    token: token.substring(0, 10) + '...',
+    telegramId,
+    username: telegramUser.username
+  });
+
+  const supabase = createAdminClient();
 
   // Verify token
   const { data: tokenData, error: tokenError } = await supabase
@@ -71,6 +77,7 @@ async function handleConnectionRequest(
     .single();
 
   if (tokenError || !tokenData) {
+    console.error('[Telegram] Token validation failed:', tokenError);
     // Token invalid or expired
     await sendTelegramMessage(
       telegramId,
@@ -79,6 +86,8 @@ async function handleConnectionRequest(
     );
     return;
   }
+
+  console.log('[Telegram] Token validated for user:', tokenData.user_id);
 
   // Mark token as used
   await supabase
@@ -100,7 +109,7 @@ async function handleConnectionRequest(
     .eq('id', tokenData.user_id);
 
   if (updateError) {
-    console.error('Error updating user with Telegram credentials:', updateError);
+    console.error('[Telegram] Error updating user with Telegram credentials:', updateError);
     await sendTelegramMessage(
       telegramId,
       '❌ <b>Connection Failed</b>\n\nPlease try again or contact support.',
@@ -108,6 +117,8 @@ async function handleConnectionRequest(
     );
     return;
   }
+
+  console.log('[Telegram] Successfully connected user:', tokenData.user_id);
 
   // Success! Send confirmation
   await sendTelegramMessage(
