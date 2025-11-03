@@ -32,24 +32,50 @@ export interface TelegramUpdate {
 }
 
 export async function handleTelegramBotUpdate(update: TelegramUpdate) {
+  console.log('[Telegram Handler] Processing update:', {
+    update_id: update.update_id,
+    has_message: !!update.message,
+    message_text: update.message?.text
+  });
+
   const message = update.message;
-  if (!message || !message.text) return;
+  if (!message || !message.text) {
+    console.log('[Telegram Handler] No message or text, skipping');
+    return;
+  }
 
   // Check if it's a /start command
-  if (!message.text.startsWith('/start')) return;
+  if (!message.text.startsWith('/start')) {
+    console.log('[Telegram Handler] Not a /start command, skipping');
+    return;
+  }
 
   const text = message.text;
   const chatId = message.chat.id;
   const telegramUserId = message.from.id;
 
+  console.log('[Telegram Handler] Processing /start command:', {
+    text,
+    chatId,
+    telegramUserId,
+    username: message.from.username
+  });
+
   // Parse command: /start connect_{token}
   if (text.includes('connect_')) {
     const token = text.split('connect_')[1]?.trim();
+    console.log('[Telegram Handler] Found connection token:', {
+      hasToken: !!token,
+      tokenLength: token?.length
+    });
     if (token) {
       await handleConnectionRequest(token, telegramUserId, message.from);
+    } else {
+      console.error('[Telegram Handler] Token parsing failed from text:', text);
     }
   } else {
     // Regular /start - welcome message
+    console.log('[Telegram Handler] Sending welcome message to chatId:', chatId);
     await sendWelcomeMessage(chatId);
   }
 }
