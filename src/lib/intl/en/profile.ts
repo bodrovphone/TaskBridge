@@ -168,6 +168,7 @@ export const profile = {
   'profile.telegram.promptTitle': 'Get Instant Notifications!',
   'profile.telegram.promptDescription': 'Connect your Telegram account to receive real-time updates about your tasks, applications, and messages.',
   'profile.telegram.connectNow': 'Connect Telegram',
+  'profile.telegram.openTelegram': 'Open Telegram to Connect',
   'profile.connected': 'Connected',
   'profile.notConnected': 'Not Connected',
   'profile.connectedAs': 'Connected as',

@@ -22,6 +22,7 @@ export function TelegramConnection({
   const [isConnecting, setIsConnecting] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [telegramLink, setTelegramLink] = useState<string | null>(null);
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -51,24 +52,12 @@ export function TelegramConnection({
 
       const { token } = await response.json();
 
-      // Open Telegram with deep link
+      // Generate Telegram deep link
       const deepLink = `https://t.me/Trudify_bot?start=connect_${token}`;
 
-      // Mobile-friendly approach: Create a temporary link and click it
-      // This works better than window.open() on mobile (avoids popup blockers)
-      // and opens in new tab on desktop
-      const link = document.createElement('a');
-      link.href = deepLink;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // Small delay, then show success message
-      setTimeout(() => {
-        setError(null);
-      }, 500);
+      // Store the link - will show a clickable button/link that user clicks
+      // This is iOS Safari friendly - real user click, not programmatic
+      setTelegramLink(deepLink);
     } catch (err) {
       console.error('Error connecting Telegram:', err);
       setError(t('profile.telegramConnectError'));
@@ -194,7 +183,27 @@ export function TelegramConnection({
           >
             {t('profile.disconnectTelegram')}
           </Button>
+        ) : telegramLink ? (
+          // Show clickable link after token is generated (iOS Safari friendly)
+          <Button
+            as="a"
+            href={telegramLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="success"
+            size="sm"
+            fullWidth
+            className="animate-pulse"
+            startContent={
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
+              </svg>
+            }
+          >
+            {t('profile.telegram.openTelegram', 'Open Telegram to Connect')}
+          </Button>
         ) : (
+          // Initial button to generate token
           <Button
             color="primary"
             size="sm"

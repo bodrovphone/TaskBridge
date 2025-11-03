@@ -762,6 +762,7 @@ export const profile = {
   'profile.telegram.promptTitle': 'Получайте мгновенные уведомления!',
   'profile.telegram.promptDescription': 'Подключите ваш Telegram аккаунт, чтобы получать обновления в реальном времени о ваших задачах, заявках и сообщениях.',
   'profile.telegram.connectNow': 'Подключить Telegram',
+  'profile.telegram.openTelegram': 'Открыть Telegram для подключения',
   'profile.connected': 'Подключен',
   'profile.notConnected': 'Не подключен',
   'profile.connectedAs': 'Подключен как',
