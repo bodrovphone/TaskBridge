@@ -1,11 +1,12 @@
 import { ApplicationsPageContent } from './components/applications-page-content'
 
 interface ApplicationsPageProps {
-  params: {
+  params: Promise<{
     lang: string
-  }
+  }>
 }
 
-export default function ApplicationsPage({ params }: ApplicationsPageProps) {
-  return <ApplicationsPageContent lang={params.lang} />
+export default async function ApplicationsPage({ params }: ApplicationsPageProps) {
+  const { lang } = await params
+  return <ApplicationsPageContent lang={lang} />
 }

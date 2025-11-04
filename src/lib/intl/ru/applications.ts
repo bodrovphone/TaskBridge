@@ -9,6 +9,7 @@ export const applications = {
   'application.timeline3days': 'В течение 3 дней',
   'application.timelineWeek': 'В течение недели',
   'application.timelineFlexible': 'Гибкий',
+  'application.hoursShort': 'ч',
   'application.message': 'Почему вы лучше всего подходите?',
   'application.messagePlaceholder': 'Поделитесь своим опытом и почему вы идеально подходите для этой задачи...',
   'application.messageInfo': 'Сосредоточьтесь на навыках и опыте. Контактной информацией можно обменяться после принятия заявки.',

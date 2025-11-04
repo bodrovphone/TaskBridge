@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 /**
  * POST - Submit new application to a task
@@ -170,8 +170,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
+    // Use admin client to bypass RLS and fetch customer data
+    const adminClient = createAdminClient();
+
     // Build query
-    let query = supabase
+    let query = adminClient
       .from('applications')
       .select(`
         id,
@@ -191,8 +194,8 @@ export async function GET(request: NextRequest) {
           title,
           description,
           category,
-          budget_min,
-          budget_max,
+          budget_min_bgn,
+          budget_max_bgn,
           city,
           neighborhood,
           status,

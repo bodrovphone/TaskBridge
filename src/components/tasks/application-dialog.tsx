@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import {
@@ -138,11 +138,6 @@ export default function ApplicationDialog({
   router.push(`/${currentLang}/tasks/applications`)
  }
 
- // Character count for message
- const messageLength = form.state.values.message?.length || 0
- const messageMax = 500
- const messageProgress = (messageLength / messageMax) * 100
-
  // Validation helpers
  const containsPhoneNumber = (text: string): boolean => {
   // Matches various phone formats: +359, 0888, 359888, etc.
@@ -165,22 +160,44 @@ export default function ApplicationDialog({
   return emailRegex.test(text) || atRegex.test(text)
  }
 
+ // Track form state for button validation
+ const [formValues, setFormValues] = useState({
+   proposedPrice: 0,
+   timeline: '',
+   message: ''
+ })
+
+ // Update tracked values when form changes
+ useEffect(() => {
+   const unsubscribe = form.store.subscribe(() => {
+     setFormValues(form.state.values)
+   })
+   return unsubscribe
+ }, [form.store, form.state.values])
+
+ // Character count for message
+ const messageLength = formValues.message?.length || 0
+ const messageMax = 500
+ const messageProgress = (messageLength / messageMax) * 100
+
  // Button state logic
- const hasPrice = form.state.values.proposedPrice > 0
- const hasTimeline = form.state.values.timeline.length > 0
+ // Price must be explicitly set (not initial 0) OR be a non-zero value OR be exactly 0 if field was touched
+ // For simplicity: just check if timeline is filled (price has default 0 which is valid for volunteering)
+ const hasTimeline = formValues.timeline.length > 0
+ const hasValidPrice = typeof formValues.proposedPrice === 'number' && formValues.proposedPrice >= 0
  // Message is optional - just check it's not too long and doesn't contain forbidden content
  const hasValidMessage = messageLength <= 500 &&
-   !containsPhoneNumber(form.state.values.message || '') &&
-   !containsUrl(form.state.values.message || '') &&
-   !containsEmail(form.state.values.message || '')
+   !containsPhoneNumber(formValues.message || '') &&
+   !containsUrl(formValues.message || '') &&
+   !containsEmail(formValues.message || '')
 
- const isFormValid = hasPrice && hasTimeline && hasValidMessage
+ const isFormValid = hasValidPrice && hasTimeline && hasValidMessage
 
  // Button color based on form state
  const getButtonColor = () => {
   if (alreadyApplied) return 'default'
   if (isFormValid) return 'success' // Green when all valid
-  if (hasPrice || hasTimeline || messageLength > 0) return 'warning' // Orange when partially filled
+  if (hasValidPrice || hasTimeline || messageLength > 0) return 'warning' // Orange when partially filled
   return 'danger' // Red when empty
  }
 
@@ -299,7 +316,7 @@ export default function ApplicationDialog({
           name="proposedPrice"
           validators={{
            onChange: ({ value }) => {
-            if (value <= 0) {
+            if (value < 0) {
              return t('application.errors.priceMin')
             }
             return undefined
@@ -336,12 +353,17 @@ export default function ApplicationDialog({
              }}
              variant="bordered"
             />
-            {taskBudget && (taskBudget.min || taskBudget.max) && (
-             <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
-              <Zap className="w-3 h-3" />
-              {t('application.tipClientBudget', { min: taskBudget.min || 0, max: taskBudget.max || 0 })}
+            <div className="space-y-1">
+             {taskBudget && (taskBudget.min || taskBudget.max) && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
+               <Zap className="w-3 h-3" />
+               {t('application.tipClientBudget', { min: taskBudget.min || 0, max: taskBudget.max || 0 })}
+              </p>
+             )}
+             <p className="text-xs text-gray-400 dark:text-gray-500 pl-1">
+              {t('application.tipVolunteering', 'Tip: Enter 0 if you want to volunteer for free')}
              </p>
-            )}
+            </div>
            </div>
           )}
          </form.Field>
@@ -565,12 +587,9 @@ export default function ApplicationDialog({
          <Check className="text-green-600 dark:text-green-400 w-10 h-10 stroke-[3]" />
         </motion.div>
         <div className="text-center">
-         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+         <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
           {t('application.success')}
          </h2>
-         <p className="text-gray-600 dark:text-gray-400">
-          Application #{applicationId?.slice(0, 8)}
-         </p>
         </div>
        </ModalHeader>
 

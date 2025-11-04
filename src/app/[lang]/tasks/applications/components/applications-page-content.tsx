@@ -122,6 +122,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
 
         if (response.ok) {
           const data = await response.json()
+
           // Map API data to component format
           const mapped = data.applications.map((app: any) => ({
             id: app.id,
@@ -131,12 +132,14 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
             customerName: app.task.customer?.full_name || 'Unknown',
             customerAvatar: app.task.customer?.avatar_url,
             proposedPrice: app.proposed_price_bgn,
-            timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : 'Flexible',
+            timeline: app.estimated_duration_hours
+              ? `${app.estimated_duration_hours}${t('application.hoursShort')}`
+              : t('application.timelineFlexible'),
             message: app.message,
             status: app.status,
             submittedAt: new Date(app.created_at),
             task: {
-              budget: app.task.budget_max || 0,
+              budget: app.task.budget_max_bgn || 0,
               category: app.task.category,
               location: {
                 city: app.task.city || '',
@@ -155,6 +158,9 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
 
     fetchApplications()
   }, [user, selectedStatus])
+
+  // @todo FEATURE: Remove mock applications once all sub-features are implemented (accept/reject/message actions)
+  const mockApplications = getMockApplications(t)
 
   const filteredApplications = applications
 
@@ -322,13 +328,15 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
             </CardBody>
           </Card>
         ) : (
-          <div className="space-y-4">
-            {filteredApplications.map((application) => (
-              <Card
-                key={application.id}
-                className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-shadow"
-              >
-                <CardBody className="p-6">
+          <div className="space-y-6">
+            {/* Real applications from API */}
+            <div className="space-y-4">
+              {filteredApplications.map((application) => (
+                <Card
+                  key={application.id}
+                  className="shadow-lg border-2 border-orange-200 bg-orange-50/50 hover:shadow-xl transition-shadow"
+                >
+                  <CardBody className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-start gap-4 flex-1">
                       <Avatar
@@ -393,7 +401,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Calendar className="w-4 h-4 text-gray-400" />
-                      <span>{t('myApplications.submitted')}: {application.submittedAt.toLocaleDateString()}</span>
+                      <span>{t('myApplications.submitted')}: {application.submittedAt.toLocaleDateString(lang)}</span>
                     </div>
                   </div>
 
@@ -401,8 +409,8 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   <div className="flex justify-between items-center gap-2 pt-4 border-t border-gray-200">
                     <Button
                       size="sm"
-                      variant="flat"
-                      color="primary"
+                      variant="bordered"
+                      color="success"
                       onPress={() => router.push(`/${lang}/tasks/${application.taskId}`)}
                     >
                       {t('myApplications.viewTask')}
@@ -422,6 +430,120 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                 </CardBody>
               </Card>
             ))}
+            </div>
+
+            {/* @todo FEATURE: Mock applications for UI reference - remove once accept/reject/message actions are implemented */}
+            {mockApplications.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 px-4">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-orange-300 to-transparent"></div>
+                  <span className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
+                    Mock Applications (For UI Reference)
+                  </span>
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-orange-300 to-transparent"></div>
+                </div>
+
+                {mockApplications.map((application) => (
+                  <Card
+                    key={application.id}
+                    className="shadow-lg border-2 border-orange-200 bg-orange-50/50 hover:shadow-xl transition-shadow"
+                  >
+                    <CardBody className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-start gap-4 flex-1">
+                          <Avatar
+                            name={application.customerName}
+                            src={application.customerAvatar}
+                            size="md"
+                            className="flex-shrink-0"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-start gap-3 mb-2">
+                              <h3 className="text-xl font-semibold text-gray-900">
+                                {application.taskTitle}
+                              </h3>
+                              <Chip
+                                color={getStatusColor(application.status)}
+                                variant="flat"
+                                size="sm"
+                              >
+                                {getStatusLabel(application.status)}
+                              </Chip>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">
+                              <User className="w-4 h-4 inline mr-1" />
+                              {application.customerName}
+                            </p>
+                            <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                              {application.taskDescription}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Application Details */}
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 className="text-sm font-semibold text-blue-900 mb-2">
+                          {t('myApplications.yourProposal')}
+                        </h4>
+                        <div className="space-y-2 mb-3">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Banknote className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                            <span className="font-semibold text-blue-900">
+                              {application.proposedPrice} лв
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2 text-sm text-blue-800">
+                            <Calendar className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                            <span className="break-words">{application.timeline}</span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-blue-900 italic">&quot;{application.message}&quot;</p>
+                      </div>
+
+                      {/* Task Info */}
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <span className="font-medium">{t('myApplications.taskBudget')}:</span>
+                          <span className="font-semibold">{application.task.budget} BGN</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <MapPin className="w-4 h-4 text-gray-400" />
+                          <span>{application.task.location.city}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Calendar className="w-4 h-4 text-gray-400" />
+                          <span>{t('myApplications.submitted')}: {application.submittedAt.toLocaleDateString(lang)}</span>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex justify-between items-center gap-2 pt-4 border-t border-gray-200">
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          color="primary"
+                          onPress={() => router.push(`/${lang}/tasks/${application.taskId}`)}
+                        >
+                          {t('myApplications.viewTask')}
+                        </Button>
+                        {application.status === 'pending' && (
+                          <Button
+                            size="sm"
+                            variant="bordered"
+                            color="danger"
+                            startContent={<X className="w-4 h-4" />}
+                            onPress={() => console.log('Mock withdraw:', application.id)}
+                          >
+                            {t('myApplications.withdraw')}
+                          </Button>
+                        )}
+                      </div>
+                    </CardBody>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

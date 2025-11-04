@@ -9,6 +9,7 @@ export const applications = {
   'application.timeline3days': 'Within 3 days',
   'application.timelineWeek': 'Within a week',
   'application.timelineFlexible': 'Flexible',
+  'application.hoursShort': 'h',
   'application.message': 'Why are you the best fit?',
   'application.messagePlaceholder': 'Share your relevant experience and why you\'re perfect for this task...',
   'application.messageInfo': 'Focus on your skills and experience. Contact details can be shared after your application is accepted.',

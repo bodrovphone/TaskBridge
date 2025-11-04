@@ -199,8 +199,8 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
     <div className="flex flex-col min-[590px]:flex-row gap-3 w-full" onClick={(e) => e.stopPropagation()}>
      <Button
       variant="bordered"
-      size="sm"
-      className="flex-1 w-full"
+      size="md"
+      className="flex-1 w-full py-6"
       onPress={handleCardPress}
      >
       {t('taskCard.seeDetails', 'See details')}
@@ -210,8 +210,8 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
       <Button
        color="success"
        variant="solid"
-       size="sm"
-       className="flex-1 w-full font-semibold shadow-md hover:shadow-lg transition-shadow"
+       size="md"
+       className="flex-1 w-full py-6 font-semibold shadow-md hover:shadow-lg transition-shadow"
        onPress={() => onApply(task.id)}
        isDisabled={!canApply}
        title={applyDisabledReason}
