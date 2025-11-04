@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
-import { Send, Calendar, Banknote, MapPin, User, X } from 'lucide-react'
+import { Send, Calendar, Banknote, MapPin, User, X, Loader2 } from 'lucide-react'
+import { useAuth } from '@/features/auth'
 
 interface ApplicationsPageContentProps {
   lang: string
@@ -104,15 +105,58 @@ const getMockApplications = (t: (key: string) => string): MyApplication[] => [
 export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) {
   const { t } = useTranslation()
   const router = useRouter()
+  const { user } = useAuth()
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('all')
+  const [applications, setApplications] = useState<MyApplication[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Get mock applications with localized timelines
-  const mockApplications = getMockApplications(t)
+  // Fetch applications from API
+  useEffect(() => {
+    if (!user) return
 
-  const filteredApplications = mockApplications.filter(app => {
-    if (selectedStatus === 'all') return true
-    return app.status === selectedStatus
-  })
+    const fetchApplications = async () => {
+      setIsLoading(true)
+      try {
+        const statusParam = selectedStatus === 'all' ? '' : `?status=${selectedStatus}`
+        const response = await fetch(`/api/applications${statusParam}`)
+
+        if (response.ok) {
+          const data = await response.json()
+          // Map API data to component format
+          const mapped = data.applications.map((app: any) => ({
+            id: app.id,
+            taskId: app.task.id,
+            taskTitle: app.task.title,
+            taskDescription: app.task.description,
+            customerName: app.task.customer?.full_name || 'Unknown',
+            customerAvatar: app.task.customer?.avatar_url,
+            proposedPrice: app.proposed_price_bgn,
+            timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : 'Flexible',
+            message: app.message,
+            status: app.status,
+            submittedAt: new Date(app.created_at),
+            task: {
+              budget: app.task.budget_max || 0,
+              category: app.task.category,
+              location: {
+                city: app.task.city || '',
+                neighborhood: app.task.neighborhood || ''
+              }
+            }
+          }))
+          setApplications(mapped)
+        }
+      } catch (error) {
+        console.error('[Applications] Error fetching:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchApplications()
+  }, [user, selectedStatus])
+
+  const filteredApplications = applications
 
   const getStatusColor = (status: MyApplication['status']) => {
     switch (status) {
@@ -145,8 +189,8 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   }
 
   const getApplicationCountByStatus = (status: ApplicationStatus) => {
-    if (status === 'all') return getMockApplications(t).length
-    return getMockApplications(t).filter(app => app.status === status).length
+    if (status === 'all') return applications.length
+    return applications.filter(app => app.status === status).length
   }
 
   const handleWithdrawApplication = (appId: string) => {

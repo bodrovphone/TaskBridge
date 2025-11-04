@@ -30,7 +30,8 @@ import {
 } from 'lucide-react'
 import type { ApplicationFormData } from './types'
 import { TIMELINE_OPTIONS } from './types'
-import { submitApplication, storeApplicationLocally, hasUserApplied } from './mock-submit'
+import { useAuth } from '@/features/auth'
+import { useRouter } from 'next/navigation'
 
 interface ApplicationDialogProps {
  isOpen: boolean
@@ -55,16 +56,14 @@ export default function ApplicationDialog({
  taskTitle,
  taskBudget,
 }: ApplicationDialogProps) {
- const { t } = useTranslation()
+ const { t, i18n } = useTranslation()
+ const router = useRouter()
+ const { user } = useAuth()
  const [isSubmitting, setIsSubmitting] = useState(false)
  const [isSuccess, setIsSuccess] = useState(false)
  const [applicationId, setApplicationId] = useState<string | null>(null)
-
- // Mock user ID (in real app, get from auth context)
- const userId = 'mock-user-123'
-
- // Check if user already applied
- const alreadyApplied = hasUserApplied(taskId, userId)
+ const [error, setError] = useState<string | null>(null)
+ const [alreadyApplied, setAlreadyApplied] = useState(false)
 
  const form = useForm({
   defaultValues: {
@@ -74,18 +73,42 @@ export default function ApplicationDialog({
   },
   onSubmit: async ({ value }: { value: ApplicationFormData }) => {
    setIsSubmitting(true)
-   try {
-    // Submit application
-    const response = await submitApplication(value)
+   setError(null)
 
-    // Store locally
-    storeApplicationLocally(taskId, userId, response.applicationId, value)
+   try {
+    // Convert timeline to estimated hours
+    const timelineHoursMap: Record<string, number> = {
+      'today': 8,
+      'within-3-days': 24,
+      'within-week': 40,
+      'flexible': 80
+    }
+
+    const response = await fetch('/api/applications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        taskId,
+        proposedPrice: value.proposedPrice,
+        estimatedDurationHours: timelineHoursMap[value.timeline] || null,
+        message: value.message || 'Looking forward to working on this task!',
+      })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to submit application')
+    }
 
     // Show success
-    setApplicationId(response.applicationId)
+    setApplicationId(data.application.id)
     setIsSuccess(true)
-   } catch (error) {
-    console.error('Application submission error:', error)
+   } catch (err) {
+    console.error('Application submission error:', err)
+    setError(err instanceof Error ? err.message : 'Failed to submit application')
    } finally {
     setIsSubmitting(false)
    }
@@ -97,18 +120,22 @@ export default function ApplicationDialog({
    form.reset()
    setIsSuccess(false)
    setApplicationId(null)
+   setError(null)
+   setAlreadyApplied(false)
    onClose()
   }
  }
 
  const handleBrowseOther = () => {
   handleClose()
-  // Navigate to browse tasks (will be implemented with router)
+  const currentLang = i18n.language || 'en'
+  router.push(`/${currentLang}/browse-tasks`)
  }
 
  const handleViewApplication = () => {
   handleClose()
-  // Navigate to my applications (will be implemented with router)
+  const currentLang = i18n.language || 'en'
+  router.push(`/${currentLang}/tasks/applications`)
  }
 
  // Character count for message
@@ -241,6 +268,19 @@ export default function ApplicationDialog({
          }}
          className="space-y-6"
         >
+         {error && (
+          <motion.div
+           initial={{ opacity: 0, scale: 0.95 }}
+           animate={{ opacity: 1, scale: 1 }}
+           className="bg-gradient-to-r from-red-50 to-red-50 dark:from-red-900/20 dark:to-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start gap-3"
+          >
+           <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+           <p className="text-sm text-red-800 dark:text-red-200 font-medium">
+            {error}
+           </p>
+          </motion.div>
+         )}
+
          {alreadyApplied && (
           <motion.div
            initial={{ opacity: 0, scale: 0.95 }}

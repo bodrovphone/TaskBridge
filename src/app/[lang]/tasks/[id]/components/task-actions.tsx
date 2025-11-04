@@ -10,8 +10,8 @@ import ApplicationDialog from "@/components/tasks/application-dialog";
 import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
-import { getUserApplication } from "@/components/tasks/mock-submit";
 import { canEditTask, canApplyToTask, canAskQuestions, canCancelTask, getDisabledReason, type TaskStatus } from "@/lib/utils/task-permissions";
+import type { ApplicationStatus } from "@/components/tasks/types";
 
 interface TaskActionsProps {
  task: any;
@@ -32,10 +32,32 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
  const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
+ const [userApplication, setUserApplication] = useState<{ status: ApplicationStatus } | null>(null);
+ const [isLoadingApplication, setIsLoadingApplication] = useState(false);
 
- // @todo FEATURE: Replace mock with real API call to check user's application
- const userId = profile?.id || 'mock-user-123';
- const userApplication = getUserApplication(task.id, userId);
+ // Fetch user's application for this task
+ useEffect(() => {
+  if (!user || !profile) return;
+
+  const fetchUserApplication = async () => {
+   setIsLoadingApplication(true);
+   try {
+    const response = await fetch(`/api/applications?status=all`);
+    if (response.ok) {
+     const data = await response.json();
+     // Find application for this specific task
+     const app = data.applications?.find((a: any) => a.task.id === task.id);
+     setUserApplication(app || null);
+    }
+   } catch (error) {
+    console.error('[TaskActions] Error fetching application:', error);
+   } finally {
+    setIsLoadingApplication(false);
+   }
+  };
+
+  fetchUserApplication();
+ }, [user, profile, task.id]);
 
  // Auto-trigger dialog after successful authentication
  useEffect(() => {
@@ -219,7 +241,19 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
    {/* Application Dialog */}
    <ApplicationDialog
     isOpen={isApplicationDialogOpen}
-    onClose={() => setIsApplicationDialogOpen(false)}
+    onClose={() => {
+     setIsApplicationDialogOpen(false);
+     // Refresh application status after closing
+     if (user && profile) {
+      fetch(`/api/applications?status=all`)
+       .then(r => r.json())
+       .then(data => {
+        const app = data.applications?.find((a: any) => a.task.id === task.id);
+        setUserApplication(app || null);
+       })
+       .catch(console.error);
+     }
+    }}
     taskId={task.id}
     taskTitle={task.title}
     taskBudget={{
@@ -235,7 +269,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     taskId={task.id}
     taskTitle={task.title}
     taskAuthorId={task.authorId || 'task-author-123'}
-    currentUserId={userId}
+    currentUserId={user?.id || ''}
    />
 
    {/* Auth Slide Over */}
