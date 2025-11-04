@@ -784,7 +784,11 @@ export const profile = {
   'profile.telegram.enterId': 'Введите ваш Telegram ID',
   'profile.telegram.connect': 'Подключить',
   'profile.telegram.invalidIdFormat': 'Пожалуйста, введите действительный Telegram ID (только цифры)',
+  'profile.telegram.alreadyConnected': 'Этот Telegram аккаунт уже подключен к другому профилю Trudify. Пожалуйста, сначала отключите его или используйте другой Telegram аккаунт.',
   'profile.telegram.openBot': 'Открыть Telegram бот',
+  'profile.telegram.toast.title': 'Подключите Telegram для мгновенных уведомлений',
+  'profile.telegram.toast.description': 'Получайте обновления в реальном времени о ваших задачах, заявках и сообщениях. Бесплатно и всегда вовремя!',
+  'profile.telegram.toast.action': 'Подключить сейчас',
 
   'profile.settings.notifications': 'Уведомления',
   'profile.settings.emailNotifications': 'Email уведомления',

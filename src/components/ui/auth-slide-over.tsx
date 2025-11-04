@@ -349,8 +349,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          {t('auth.continueWith')} Facebook
         </NextUIButton>
 
-        {/* Telegram Login Button */}
-        <div className="w-full flex flex-col items-center gap-2">
+        {/* Telegram Login Button - COMMENTED OUT - Will be re-enabled later */}
+        {/* <div className="w-full flex flex-col items-center gap-2">
          {typeof window !== 'undefined' && (
           <>
            <LoginButton
@@ -366,7 +366,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
            </p>
           </>
          )}
-        </div>
+        </div> */}
        </div>
 
        {/* Toggle Mode */}

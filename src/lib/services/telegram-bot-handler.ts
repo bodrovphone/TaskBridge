@@ -60,9 +60,13 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
 
     console.log('[Telegram] ✅ /start command detected, triggering handleStartCommand');
 
-    // Simple flow: Send telegram_id with greeting in user's language
+    // Extract locale from /start parameter (e.g., "/start ru" -> "ru")
+    // This locale comes from the app URL the user was on when they clicked "Open Bot"
+    const startParam = text.split(' ')[1] || 'en'; // Default to 'en' if no parameter
+
+    // Simple flow: Send telegram_id with greeting in app's language
     // Note: We await this to prevent Vercel from killing the function before message sends
-    await handleStartCommand(telegramUserId, message.from, chatId);
+    await handleStartCommand(telegramUserId, message.from, chatId, startParam);
 
     console.log('[Telegram] ⏱️ Webhook handler completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
@@ -75,37 +79,49 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
 async function handleStartCommand(
   telegramId: number,
   telegramUser: NonNullable<TelegramUpdate['message']>['from'],
-  chatId: number
+  chatId: number,
+  localeParam: string = 'en'
 ) {
   const startTime = Date.now();
   console.log('[Telegram] 🚀 handleStartCommand started for user:', telegramId);
 
   try {
-    // Detect user's language (default to English)
-    const languageCode = telegramUser.language_code?.toLowerCase() || 'en';
+    // Use app locale from start parameter, normalize to supported languages
+    const lang = localeParam.startsWith('bg') ? 'bg' : localeParam.startsWith('ru') ? 'ru' : 'en';
 
-    // Map Telegram language codes to our supported languages
-    let lang = 'en'; // default
-    if (languageCode.startsWith('bg')) lang = 'bg';
-    else if (languageCode.startsWith('ru')) lang = 'ru';
+    console.log('[Telegram] 🌍 Using app locale:', lang, '(from start parameter:', localeParam + ')');
 
-    console.log('[Telegram] 🌍 Detected language:', lang, '(code:', languageCode + ')');
-
-    // Greeting messages in different languages
+    // Greeting messages in different languages (without telegram_id)
     const greetings: Record<string, string> = {
-      en: `👋 <b>Welcome to Trudify!</b>\n\n✨ <b>Connect Your Account</b>\n\nTo receive instant notifications about your tasks, applications, and messages:\n\n<b>1.</b> Copy your Telegram ID below\n<b>2.</b> Go to your Trudify profile\n<b>3.</b> Click "Connect Telegram"\n<b>4.</b> Paste your Telegram ID\n\n🆔 <b>Your Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Tap to copy, then paste it in your profile.</i>`,
+      en: `👋 <b>Welcome to Trudify!</b>\n\n✨ <b>Connect Your Account</b>\n\nTo receive instant notifications about your tasks, applications, and messages:\n\n<b>1.</b> Copy your Telegram ID from the next message\n<b>2.</b> Go to your Trudify profile\n<b>3.</b> Click "Connect Telegram"\n<b>4.</b> Paste your Telegram ID`,
 
-      bg: `👋 <b>Добре дошли в Trudify!</b>\n\n✨ <b>Свържете вашия акаунт</b>\n\nЗа да получавате мигновени известия за задачите, приложенията и съобщенията си:\n\n<b>1.</b> Копирайте вашия Telegram ID по-долу\n<b>2.</b> Отидете в профила си в Trudify\n<b>3.</b> Натиснете "Свържи Telegram"\n<b>4.</b> Поставете вашия Telegram ID\n\n🆔 <b>Вашият Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Докоснете за копиране, след това го поставете в профила си.</i>`,
+      bg: `👋 <b>Добре дошли в Trudify!</b>\n\n✨ <b>Свържете вашия акаунт</b>\n\nЗа да получавате мигновени известия за задачите, приложенията и съобщенията си:\n\n<b>1.</b> Копирайте вашия Telegram ID от следващото съобщение\n<b>2.</b> Отидете в профила си в Trudify\n<b>3.</b> Натиснете "Свържи Telegram"\n<b>4.</b> Поставете вашия Telegram ID`,
 
-      ru: `👋 <b>Добро пожаловать в Trudify!</b>\n\n✨ <b>Подключите ваш аккаунт</b>\n\nЧтобы получать мгновенные уведомления о ваших задачах, заявках и сообщениях:\n\n<b>1.</b> Скопируйте ваш Telegram ID ниже\n<b>2.</b> Перейдите в ваш профиль Trudify\n<b>3.</b> Нажмите "Подключить Telegram"\n<b>4.</b> Вставьте ваш Telegram ID\n\n🆔 <b>Ваш Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Нажмите для копирования, затем вставьте в профиль.</i>`
+      ru: `👋 <b>Добро пожаловать в Trudify!</b>\n\n✨ <b>Подключите ваш аккаунт</b>\n\nЧтобы получать мгновенные уведомления о ваших задачах, заявках и сообщениях:\n\n<b>1.</b> Скопируйте ваш Telegram ID из следующего сообщения\n<b>2.</b> Перейдите в ваш профиль Trudify\n<b>3.</b> Нажмите "Подключить Telegram"\n<b>4.</b> Вставьте ваш Telegram ID`
+    };
+
+    // Code messages in different languages (separate message for easy copying)
+    const codeMessages: Record<string, string> = {
+      en: `🆔 <b>Your Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>👆 Tap the code above to copy it</i>`,
+      bg: `🆔 <b>Вашият Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>👆 Докоснете кода по-горе, за да го копирате</i>`,
+      ru: `🆔 <b>Ваш Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>👆 Нажмите на код выше, чтобы скопировать его</i>`
     };
 
     console.log('[Telegram] 📤 Sending greeting message to chatId:', chatId);
 
-    // Send greeting with telegram_id (await to prevent function termination)
+    // Send greeting first
     await sendTelegramMessage(
       chatId,
       greetings[lang],
+      'HTML'
+    );
+
+    console.log('[Telegram] 📤 Sending code message to chatId:', chatId);
+
+    // Send code in separate message for easy copying
+    await sendTelegramMessage(
+      chatId,
+      codeMessages[lang],
       'HTML'
     );
 

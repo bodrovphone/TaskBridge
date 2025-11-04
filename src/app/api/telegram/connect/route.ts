@@ -10,7 +10,7 @@ import { createAdminClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { telegramId, userId } = await request.json();
+    const { telegramId, userId, locale = 'en' } = await request.json();
 
     if (!telegramId || !userId) {
       return NextResponse.json(
@@ -65,8 +65,8 @@ export async function POST(request: NextRequest) {
 
     console.log('[Telegram] Successfully connected user:', userId, 'to telegram_id:', telegramIdNumber);
 
-    // Send confirmation message to Telegram user
-    await sendConfirmationMessage(telegramIdNumber);
+    // Send confirmation message to Telegram user in the app's locale
+    await sendConfirmationMessage(telegramIdNumber, locale);
 
     return NextResponse.json({
       success: true,
@@ -82,12 +82,24 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function sendConfirmationMessage(telegramId: number) {
+async function sendConfirmationMessage(telegramId: number, locale: string = 'en') {
   const botToken = process.env.TG_BOT_TOKEN;
   if (!botToken) {
     console.error('[Telegram] TG_BOT_TOKEN not configured');
     return;
   }
+
+  // Normalize locale to supported language
+  const lang = locale.startsWith('bg') ? 'bg' : locale.startsWith('ru') ? 'ru' : 'en';
+
+  // Multilingual confirmation messages
+  const confirmationMessages: Record<string, string> = {
+    en: `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
+
+    bg: `✅ <b>Успешно свързване!</b>\n\nВашият Telegram акаунт вече е свързан с Trudify.\n\n<b>Ще получавате мигновени известия за:</b>\n• Нови кандидатури за вашите задачи\n• Актуализации на статуса на кандидатури\n• Нови съобщения от клиенти/специалисти\n• Потвърждения за завършване на задачи\n• Известия за плащания\n\nМожете да управлявате предпочитанията за известия в настройките на профила си на уебсайта.`,
+
+    ru: `✅ <b>Успешно подключено!</b>\n\nВаш Telegram аккаунт теперь подключен к Trudify.\n\n<b>Вы будете получать мгновенные уведомления о:</b>\n• Новых заявках на ваши задачи\n• Обновлениях статуса заявок\n• Новых сообщениях от клиентов/специалистов\n• Подтверждениях завершения задач\n• Уведомлениях о платежах\n\nВы можете управлять настройками уведомлений в настройках профиля на сайте.`
+  };
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -100,7 +112,7 @@ async function sendConfirmationMessage(telegramId: number) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: telegramId,
-        text: `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
+        text: confirmationMessages[lang],
         parse_mode: 'HTML'
       }),
       signal: controller.signal

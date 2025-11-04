@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { MessageCircle, CheckCircle2, XCircle, Send } from 'lucide-react';
 
 interface TelegramConnectionProps {
   userId: string;
@@ -18,7 +18,7 @@ export function TelegramConnection({
   telegramUsername,
   telegramFirstName
 }: TelegramConnectionProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,8 +26,9 @@ export function TelegramConnection({
   const [showInstructions, setShowInstructions] = useState(false);
 
   const handleOpenBot = () => {
-    // Open Telegram bot
-    const botLink = 'https://t.me/Trudify_bot';
+    // Get current app locale and pass it to the bot via start parameter
+    const locale = i18n.language || 'en';
+    const botLink = `https://t.me/Trudify_bot?start=${locale}`;
     window.open(botLink, '_blank');
 
     // Show the input field and instructions
@@ -51,17 +52,27 @@ export function TelegramConnection({
     setError(null);
 
     try {
+      // Get current app locale from i18next
+      const locale = i18n.language || 'en';
+
       const response = await fetch('/api/telegram/connect', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ telegramId, userId })
+        body: JSON.stringify({ telegramId, userId, locale })
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to connect');
+
+        // Handle duplicate telegram_id error
+        if (response.status === 409) {
+          setError(t('profile.telegram.alreadyConnected'));
+        } else {
+          setError(errorData.error || t('profile.telegramConnectError'));
+        }
+        return;
       }
 
       // Success! Reload to show connected status
@@ -255,16 +266,13 @@ export function TelegramConnection({
           </Button>
         ) : !showInstructions ? (
           <Button
-            color="primary"
             size="lg"
+            variant="flat"
+            color="primary"
             fullWidth
+            startContent={<Send className="w-5 h-5" />}
             onPress={handleOpenBot}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg"
-            startContent={
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
-              </svg>
-            }
+            className="hover:scale-105 transition-transform shadow-md font-semibold bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
           >
             {t('profile.telegram.openBot')}
           </Button>

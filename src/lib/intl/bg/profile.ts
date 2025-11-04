@@ -190,7 +190,11 @@ export const profile = {
   'profile.telegram.enterId': 'Въведете вашия Telegram ID',
   'profile.telegram.connect': 'Свържи',
   'profile.telegram.invalidIdFormat': 'Моля, въведете валиден Telegram ID (само цифри)',
+  'profile.telegram.alreadyConnected': 'Този Telegram акаунт вече е свързан с друг Trudify профил. Моля, първо го прекъснете или използвайте друг Telegram акаунт.',
   'profile.telegram.openBot': 'Отвори Telegram бот',
+  'profile.telegram.toast.title': 'Свържете Telegram за мигновени известия',
+  'profile.telegram.toast.description': 'Получавайте актуализации в реално време за вашите задачи, кандидатури и съобщения. Безплатно и винаги навреме!',
+  'profile.telegram.toast.action': 'Свържи сега',
 
   'profile.settings.notifications': 'Известия',
   'profile.settings.emailNotifications': 'Имейл известия',

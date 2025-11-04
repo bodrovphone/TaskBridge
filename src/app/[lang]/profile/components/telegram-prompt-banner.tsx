@@ -30,25 +30,16 @@ export function TelegramPromptBanner({ onConnect, onDismiss }: TelegramPromptBan
             <p className="text-sm text-gray-600 mb-3">
               {t('profile.telegram.promptDescription', 'Connect your Telegram account to receive real-time updates about your tasks, applications, and messages.')}
             </p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                size="sm"
-                color="primary"
-                onPress={onConnect}
-                className="font-semibold shadow-md"
-                startContent={<Send className="w-4 h-4" />}
-              >
-                {t('profile.telegram.connectNow', 'Connect Telegram')}
-              </Button>
-              <Button
-                size="sm"
-                variant="light"
-                onPress={onDismiss}
-                className="text-gray-600"
-              >
-                {t('common.dismiss', 'Maybe Later')}
-              </Button>
-            </div>
+            <Button
+              size="sm"
+              variant="flat"
+              color="primary"
+              startContent={<Send className="w-4 h-4" />}
+              onPress={onConnect}
+              className="hover:scale-105 transition-transform shadow-md font-semibold bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
+            >
+              {t('profile.telegram.connectNow', 'Connect Telegram')}
+            </Button>
           </div>
 
           {/* Close Button */}

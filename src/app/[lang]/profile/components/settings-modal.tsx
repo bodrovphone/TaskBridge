@@ -75,6 +75,10 @@ export function SettingsModal({
    onClose={onClose}
    size="2xl"
    scrollBehavior="inside"
+   classNames={{
+     base: "max-h-[95vh] md:max-h-[90vh]",
+     body: "max-h-[calc(95vh-8rem)] md:max-h-[calc(90vh-8rem)]"
+   }}
   >
    <ModalContent>
     <ModalHeader className="flex flex-col gap-1">

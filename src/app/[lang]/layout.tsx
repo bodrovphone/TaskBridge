@@ -4,6 +4,8 @@ import { LocaleProviders } from './providers'
 import { Header, Footer } from '@/components/common'
 import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { validateLocale } from '@/lib/utils/locale-detection'
+import { Toaster } from '@/components/ui/toaster'
+import { TelegramConnectionToast } from '@/components/telegram-connection-toast'
 
 interface LocaleLayoutProps {
  children: ReactNode
@@ -43,6 +45,8 @@ async function LocaleLayout({
     </main>
     <Footer />
    </div>
+   <TelegramConnectionToast />
+   <Toaster />
   </LocaleProviders>
  )
 }
