@@ -30,22 +30,45 @@ export interface TelegramUpdate {
 }
 
 export async function handleTelegramBotUpdate(update: TelegramUpdate) {
+  const startTime = Date.now();
+  console.log('[Telegram] ⏱️ Webhook received at:', new Date().toISOString());
+
   try {
     const message = update.message;
-    if (!message || !message.text) return;
+    if (!message || !message.text) {
+      console.log('[Telegram] ⚠️ No message or text, ignoring');
+      return;
+    }
 
     const text = message.text;
     const chatId = message.chat.id;
     const telegramUserId = message.from.id;
 
-    // Check if it's a /start command
-    if (!message.text.startsWith('/start')) return;
+    console.log('[Telegram] 📨 Message received:', {
+      text,
+      chatId,
+      telegramUserId,
+      username: message.from.username,
+      elapsedMs: Date.now() - startTime
+    });
 
-    // Simple flow: Send telegram_id with greeting in user's language
-    await handleStartCommand(telegramUserId, message.from, chatId);
+    // Check if it's a /start command
+    if (!message.text.startsWith('/start')) {
+      console.log('[Telegram] ⚠️ Not a /start command, ignoring');
+      return;
+    }
+
+    console.log('[Telegram] ✅ /start command detected, triggering handleStartCommand (fire-and-forget)');
+
+    // Simple flow: Send telegram_id with greeting in user's language (fire-and-forget)
+    handleStartCommand(telegramUserId, message.from, chatId)
+      .catch(err => console.error('[Telegram] ❌ Error in handleStartCommand:', err));
+
+    console.log('[Telegram] ⏱️ Webhook handler completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
-    console.error('[Telegram Handler] FATAL EXCEPTION:', error);
+    console.error('[Telegram Handler] ❌ FATAL EXCEPTION:', error);
     console.error('[Telegram Handler] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('[Telegram Handler] ⏱️ Failed after:', Date.now() - startTime, 'ms');
   }
 }
 
@@ -54,6 +77,9 @@ async function handleStartCommand(
   telegramUser: NonNullable<TelegramUpdate['message']>['from'],
   chatId: number
 ) {
+  const startTime = Date.now();
+  console.log('[Telegram] 🚀 handleStartCommand started for user:', telegramId);
+
   try {
     // Detect user's language (default to English)
     const languageCode = telegramUser.language_code?.toLowerCase() || 'en';
@@ -63,7 +89,7 @@ async function handleStartCommand(
     if (languageCode.startsWith('bg')) lang = 'bg';
     else if (languageCode.startsWith('ru')) lang = 'ru';
 
-    console.log('[Telegram] Start command from user:', telegramId, 'language:', lang);
+    console.log('[Telegram] 🌍 Detected language:', lang, '(code:', languageCode + ')');
 
     // Greeting messages in different languages
     const greetings: Record<string, string> = {
@@ -74,15 +100,19 @@ async function handleStartCommand(
       ru: `👋 <b>Добро пожаловать в Trudify!</b>\n\n✨ <b>Подключите ваш аккаунт</b>\n\nЧтобы получать мгновенные уведомления о ваших задачах, заявках и сообщениях:\n\n<b>1.</b> Скопируйте ваш Telegram ID ниже\n<b>2.</b> Перейдите в ваш профиль Trudify\n<b>3.</b> Нажмите "Подключить Telegram"\n<b>4.</b> Вставьте ваш Telegram ID\n\n🆔 <b>Ваш Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Нажмите для копирования, затем вставьте в профиль.</i>`
     };
 
+    console.log('[Telegram] 📤 Sending greeting message to chatId:', chatId);
+
     // Send greeting with telegram_id (fire-and-forget)
     sendTelegramMessage(
       chatId,
       greetings[lang],
       'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send greeting:', err));
+    ).catch(err => console.error('[Telegram] ❌ Failed to send greeting:', err));
 
+    console.log('[Telegram] ⏱️ handleStartCommand completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
-    console.error('[Telegram] Exception in start command:', error);
+    console.error('[Telegram] ❌ Exception in start command:', error);
+    console.error('[Telegram] ⏱️ Failed after:', Date.now() - startTime, 'ms');
   }
 }
 
@@ -91,18 +121,24 @@ async function sendTelegramMessage(
   text: string,
   parseMode: 'HTML' | 'Markdown' = 'HTML'
 ) {
+  const startTime = Date.now();
+  console.log('[Telegram] 📨 sendTelegramMessage started for chatId:', chatId);
+
   const botToken = process.env.TG_BOT_TOKEN;
   if (!botToken) {
-    console.error('[Telegram] TG_BOT_TOKEN not configured');
+    console.error('[Telegram] ❌ TG_BOT_TOKEN not configured');
     return false;
   }
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   try {
-    // Add 10 second timeout to prevent hanging
+    // Add 30 second timeout to prevent hanging
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    console.log('[Telegram] 🌐 Sending POST to Telegram API...');
+    const fetchStart = Date.now();
 
     const response = await fetch(url, {
       method: 'POST',
@@ -116,26 +152,30 @@ async function sendTelegramMessage(
     });
 
     clearTimeout(timeoutId);
+    console.log('[Telegram] 🌐 Telegram API responded in:', Date.now() - fetchStart, 'ms');
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('[Telegram] API error response:', {
+      console.error('[Telegram] ❌ API error response:', {
         status: response.status,
         statusText: response.statusText,
-        error: errorText
+        error: errorText,
+        elapsedMs: Date.now() - startTime
       });
       return false;
     }
 
+    console.log('[Telegram] ✅ Message sent successfully in:', Date.now() - startTime, 'ms');
     return true;
   } catch (error) {
     // Check if it was a timeout
     const isTimeout = error instanceof Error && error.name === 'AbortError';
-    console.error('[Telegram] Exception sending message:', {
+    console.error('[Telegram] ❌ Exception sending message:', {
       error: error instanceof Error ? error.message : String(error),
       isTimeout,
       chatId,
-      textPreview: text.substring(0, 50) + '...'
+      textPreview: text.substring(0, 50) + '...',
+      elapsedMs: Date.now() - startTime
     });
     return false;
   }
