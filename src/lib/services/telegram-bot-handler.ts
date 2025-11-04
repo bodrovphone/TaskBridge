@@ -236,8 +236,49 @@ async function handleConnectionByCode(
 
   console.log('[Telegram] Found matching token for user:', tokenData.user_id);
 
-  // Use the existing connection handler with the full token
-  await handleConnectionRequest(tokenData.token, telegramId, telegramUser);
+  // Mark token as used
+  const { error: updateTokenError } = await supabase
+    .from('telegram_connection_tokens')
+    .update({ used: true })
+    .eq('token', tokenData.token);
+
+  if (updateTokenError) {
+    console.error('[Telegram] Error marking token as used:', updateTokenError);
+  } else {
+    console.log('[Telegram] Token marked as used');
+  }
+
+  // Update user with Telegram credentials directly (we already have user_id!)
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({
+      telegram_id: telegramId,
+      telegram_username: telegramUser?.username || null,
+      telegram_first_name: telegramUser?.first_name,
+      telegram_last_name: telegramUser?.last_name || null,
+      preferred_notification_channel: 'telegram',
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', tokenData.user_id);
+
+  if (updateError) {
+    console.error('[Telegram] Error updating user with Telegram credentials:', updateError);
+    await sendTelegramMessage(
+      telegramId,
+      '❌ <b>Connection Failed</b>\n\nDatabase error. Please try again or contact support.',
+      'HTML'
+    );
+    return;
+  }
+
+  console.log('[Telegram] Successfully connected user:', tokenData.user_id);
+
+  // Success! Send confirmation
+  await sendTelegramMessage(
+    telegramId,
+    `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
+    'HTML'
+  );
 }
 
 async function sendWelcomeMessage(chatId: number) {
