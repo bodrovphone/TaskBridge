@@ -33,33 +33,16 @@ export interface TelegramUpdate {
 
 export async function handleTelegramBotUpdate(update: TelegramUpdate) {
   try {
-    console.log('[Telegram Handler] Processing update:', {
-      update_id: update.update_id,
-      has_message: !!update.message,
-      message_text: update.message?.text
-    });
-
     const message = update.message;
-    if (!message || !message.text) {
-      console.log('[Telegram Handler] No message or text, skipping');
-      return;
-    }
+    if (!message || !message.text) return;
 
     const text = message.text;
     const chatId = message.chat.id;
     const telegramUserId = message.from.id;
 
-    console.log('[Telegram Handler] Processing command:', {
-      text,
-      chatId,
-      telegramUserId,
-      username: message.from.username
-    });
-
     // Handle /connect CODE command (manual code entry)
     if (text.startsWith('/connect ')) {
       const code = text.split('/connect ')[1]?.trim().toUpperCase();
-      console.log('[Telegram Handler] Processing /connect command with code:', code);
       if (code && code.length === 8) {
         await handleConnectionByCode(code, telegramUserId, message.from);
       } else {
@@ -73,28 +56,18 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
     }
 
   // Check if it's a /start command
-  if (!message.text.startsWith('/start')) {
-    console.log('[Telegram Handler] Unknown command, skipping');
-    return;
-  }
-
-  console.log('[Telegram Handler] Processing /start command');
+  if (!message.text.startsWith('/start')) return;
 
   // Parse command: /start connect_{token}
   if (text.includes('connect_')) {
     const token = text.split('connect_')[1]?.trim();
-    console.log('[Telegram Handler] Found connection token:', {
-      hasToken: !!token,
-      tokenLength: token?.length
-    });
     if (token) {
       await handleConnectionRequest(token, telegramUserId, message.from);
     } else {
-      console.error('[Telegram Handler] Token parsing failed from text:', text);
+      console.error('[Telegram] Token parsing failed from /start command');
     }
   } else {
     // Regular /start - welcome message
-    console.log('[Telegram Handler] Sending welcome message to chatId:', chatId);
     await sendWelcomeMessage(chatId);
   }
   } catch (error) {
@@ -182,19 +155,11 @@ async function handleConnectionByCode(
   telegramId: number,
   telegramUser: NonNullable<TelegramUpdate['message']>['from']
 ) {
-  console.log('[Telegram] Processing connection by code:', {
-    code,
-    telegramId,
-    username: telegramUser.username
-  });
-
   let supabase;
   try {
-    console.log('[Telegram] Creating admin client...');
     supabase = createAdminClient();
-    console.log('[Telegram] Admin client created successfully');
   } catch (error) {
-    console.error('[Telegram] FATAL: Failed to create admin client:', error);
+    console.error('[Telegram] Failed to create admin client:', error);
     await sendTelegramMessage(
       telegramId,
       '❌ <b>Server Configuration Error</b>\n\nPlease contact support.',
@@ -203,11 +168,9 @@ async function handleConnectionByCode(
     return;
   }
 
-  // Find token that starts with this code (case-insensitive)
-  // Token is 64 chars, code is first 8 chars uppercase
+  // Find token that starts with this code
   let tokens, tokenError;
   try {
-    console.log('[Telegram] Querying tokens...');
     const result = await supabase
       .from('telegram_connection_tokens')
       .select('*')
@@ -216,18 +179,8 @@ async function handleConnectionByCode(
 
     tokens = result.data;
     tokenError = result.error;
-
-    console.log('[Telegram] Token query result:', {
-      error: tokenError,
-      tokenCount: tokens?.length || 0,
-      tokens: tokens?.map(t => ({
-        prefix: t.token.substring(0, 8).toUpperCase(),
-        used: t.used,
-        expires: t.expires_at
-      }))
-    });
   } catch (error) {
-    console.error('[Telegram] EXCEPTION during token query:', error);
+    console.error('[Telegram] Exception during token query:', error);
     await sendTelegramMessage(
       telegramId,
       '❌ <b>Database Error</b>\n\nPlease try again or contact support.',
@@ -237,7 +190,7 @@ async function handleConnectionByCode(
   }
 
   if (tokenError) {
-    console.error('[Telegram] Error querying tokens:', tokenError);
+    console.error('[Telegram] Token query error:', tokenError);
     await sendTelegramMessage(
       telegramId,
       '❌ <b>Connection Failed</b>\n\nDatabase error. Please try again or contact support.',
@@ -251,14 +204,7 @@ async function handleConnectionByCode(
     t.token.substring(0, 8).toUpperCase() === code
   );
 
-  console.log('[Telegram] Token match result:', {
-    code,
-    found: !!tokenData,
-    matchedToken: tokenData ? tokenData.token.substring(0, 16) + '...' : null
-  });
-
   if (!tokenData) {
-    console.log('[Telegram] No matching token found for code:', code);
     await sendTelegramMessage(
       telegramId,
       '❌ <b>Invalid or Expired Code</b>\n\nThis connection code is invalid or has expired. Please generate a new code from your profile settings on Trudify website.',
@@ -267,23 +213,14 @@ async function handleConnectionByCode(
     return;
   }
 
-  console.log('[Telegram] Found matching token for user:', tokenData.user_id);
-
   // Mark token as used
-  const { error: updateTokenError } = await supabase
+  await supabase
     .from('telegram_connection_tokens')
     .update({ used: true })
     .eq('token', tokenData.token);
 
-  if (updateTokenError) {
-    console.error('[Telegram] Error marking token as used:', updateTokenError);
-  } else {
-    console.log('[Telegram] Token marked as used');
-  }
-
-  // Update user with Telegram credentials directly (we already have user_id!)
+  // Update user with Telegram credentials
   try {
-    console.log('[Telegram] Updating user in database...');
     const { error: updateError } = await supabase
       .from('users')
       .update({
@@ -297,7 +234,7 @@ async function handleConnectionByCode(
       .eq('id', tokenData.user_id);
 
     if (updateError) {
-      console.error('[Telegram] Error updating user with Telegram credentials:', updateError);
+      console.error('[Telegram] User update error:', updateError);
       await sendTelegramMessage(
         telegramId,
         '❌ <b>Connection Failed</b>\n\nDatabase error. Please try again or contact support.',
@@ -306,9 +243,9 @@ async function handleConnectionByCode(
       return;
     }
 
-    console.log('[Telegram] Successfully connected user:', tokenData.user_id);
+    console.log('[Telegram] User connected successfully:', tokenData.user_id);
   } catch (error) {
-    console.error('[Telegram] EXCEPTION during user update:', error);
+    console.error('[Telegram] Exception during user update:', error);
     await sendTelegramMessage(
       telegramId,
       '❌ <b>Connection Failed</b>\n\nPlease try again or contact support.',
@@ -318,11 +255,13 @@ async function handleConnectionByCode(
   }
 
   // Success! Send confirmation
+  console.log('[Telegram] Sending success message to user:', telegramId);
   await sendTelegramMessage(
     telegramId,
     `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
     'HTML'
   );
+  console.log('[Telegram] Success message sent');
 }
 
 async function sendWelcomeMessage(chatId: number) {
@@ -340,7 +279,7 @@ async function sendTelegramMessage(
 ) {
   const botToken = process.env.TG_BOT_TOKEN;
   if (!botToken) {
-    console.error('TG_BOT_TOKEN not configured');
+    console.error('[Telegram] TG_BOT_TOKEN not configured');
     return;
   }
 
@@ -358,10 +297,22 @@ async function sendTelegramMessage(
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Telegram API error:', error);
+      const errorText = await response.text();
+      console.error('[Telegram] API error response:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText
+      });
+      return false;
     }
+
+    return true;
   } catch (error) {
-    console.error('Error sending Telegram message:', error);
+    console.error('[Telegram] Exception sending message:', {
+      error: error instanceof Error ? error.message : String(error),
+      chatId,
+      textPreview: text.substring(0, 50) + '...'
+    });
+    return false;
   }
 }

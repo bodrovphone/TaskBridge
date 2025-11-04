@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button, Card, CardBody, Chip, Divider } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { MessageCircle, CheckCircle2, XCircle, Copy, Check } from 'lucide-react';
 
 interface TelegramConnectionProps {
   userId: string;
@@ -24,6 +24,18 @@ export function TelegramConnection({
   const [error, setError] = useState<string | null>(null);
   const [telegramLink, setTelegramLink] = useState<string | null>(null);
   const [connectionCode, setConnectionCode] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopyCommand = () => {
+    if (!connectionCode) return;
+
+    const command = `/connect ${connectionCode}`;
+    navigator.clipboard.writeText(command);
+    setIsCopied(true);
+
+    // Reset copied state after 2 seconds
+    setTimeout(() => setIsCopied(false), 2000);
+  };
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -196,10 +208,20 @@ export function TelegramConnection({
                 <li>Open Telegram and find <strong>@Trudify_bot</strong></li>
                 <li>Send this command:</li>
               </ol>
-              <div className="mt-2 bg-white border border-gray-300 rounded p-3 font-mono text-center">
+              <div className="mt-2 bg-white border border-gray-300 rounded p-3 font-mono flex items-center justify-between">
                 <code className="text-lg font-bold text-blue-600">
                   /connect {connectionCode}
                 </code>
+                <Button
+                  isIconOnly
+                  size="sm"
+                  variant="flat"
+                  color={isCopied ? 'success' : 'default'}
+                  onPress={handleCopyCommand}
+                  className="ml-2"
+                >
+                  {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                </Button>
               </div>
               <p className="text-xs text-gray-500 mt-2">
                 Code expires in 10 minutes
