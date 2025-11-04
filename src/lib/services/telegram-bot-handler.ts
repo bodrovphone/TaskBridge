@@ -44,22 +44,40 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
     return;
   }
 
-  // Check if it's a /start command
-  if (!message.text.startsWith('/start')) {
-    console.log('[Telegram Handler] Not a /start command, skipping');
-    return;
-  }
-
   const text = message.text;
   const chatId = message.chat.id;
   const telegramUserId = message.from.id;
 
-  console.log('[Telegram Handler] Processing /start command:', {
+  console.log('[Telegram Handler] Processing command:', {
     text,
     chatId,
     telegramUserId,
     username: message.from.username
   });
+
+  // Handle /connect CODE command (manual code entry)
+  if (text.startsWith('/connect ')) {
+    const code = text.split('/connect ')[1]?.trim().toUpperCase();
+    console.log('[Telegram Handler] Processing /connect command with code:', code);
+    if (code && code.length === 8) {
+      await handleConnectionByCode(code, telegramUserId, message.from);
+    } else {
+      await sendTelegramMessage(
+        chatId,
+        '❌ <b>Invalid Code</b>\n\nPlease use the format: <code>/connect ABCD1234</code>\n\nGet your connection code from your profile settings on Trudify website.',
+        'HTML'
+      );
+    }
+    return;
+  }
+
+  // Check if it's a /start command
+  if (!message.text.startsWith('/start')) {
+    console.log('[Telegram Handler] Unknown command, skipping');
+    return;
+  }
+
+  console.log('[Telegram Handler] Processing /start command');
 
   // Parse command: /start connect_{token}
   if (text.includes('connect_')) {
@@ -152,6 +170,58 @@ async function handleConnectionRequest(
     `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
     'HTML'
   );
+}
+
+async function handleConnectionByCode(
+  code: string,
+  telegramId: number,
+  telegramUser: NonNullable<TelegramUpdate['message']>['from']
+) {
+  console.log('[Telegram] Processing connection by code:', {
+    code,
+    telegramId,
+    username: telegramUser.username
+  });
+
+  const supabase = createAdminClient();
+
+  // Find token that starts with this code (case-insensitive)
+  // Token is 64 chars, code is first 8 chars uppercase
+  const { data: tokens, error: tokenError } = await supabase
+    .from('telegram_connection_tokens')
+    .select('*')
+    .eq('used', false)
+    .gt('expires_at', new Date().toISOString());
+
+  if (tokenError) {
+    console.error('[Telegram] Error querying tokens:', tokenError);
+    await sendTelegramMessage(
+      telegramId,
+      '❌ <b>Connection Failed</b>\n\nDatabase error. Please try again or contact support.',
+      'HTML'
+    );
+    return;
+  }
+
+  // Find token matching the code (first 8 chars)
+  const tokenData = tokens?.find(t =>
+    t.token.substring(0, 8).toUpperCase() === code
+  );
+
+  if (!tokenData) {
+    console.log('[Telegram] No matching token found for code:', code);
+    await sendTelegramMessage(
+      telegramId,
+      '❌ <b>Invalid or Expired Code</b>\n\nThis connection code is invalid or has expired. Please generate a new code from your profile settings on Trudify website.',
+      'HTML'
+    );
+    return;
+  }
+
+  console.log('[Telegram] Found matching token for user:', tokenData.user_id);
+
+  // Use the existing connection handler with the full token
+  await handleConnectionRequest(tokenData.token, telegramId, telegramUser);
 }
 
 async function sendWelcomeMessage(chatId: number) {

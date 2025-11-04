@@ -23,6 +23,7 @@ export function TelegramConnection({
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [telegramLink, setTelegramLink] = useState<string | null>(null);
+  const [connectionCode, setConnectionCode] = useState<string | null>(null);
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -52,11 +53,12 @@ export function TelegramConnection({
 
       const { token } = await response.json();
 
-      // Generate Telegram deep link
-      const deepLink = `https://t.me/Trudify_bot?start=connect_${token}`;
+      // Generate short connection code (first 8 chars of token for easy typing)
+      const shortCode = token.substring(0, 8).toUpperCase();
+      setConnectionCode(shortCode);
 
-      // Store the link - will show a clickable button/link that user clicks
-      // This is iOS Safari friendly - real user click, not programmatic
+      // Also keep deep link as fallback
+      const deepLink = `https://t.me/Trudify_bot?start=connect_${token}`;
       setTelegramLink(deepLink);
     } catch (err) {
       console.error('Error connecting Telegram:', err);
@@ -183,25 +185,55 @@ export function TelegramConnection({
           >
             {t('profile.disconnectTelegram')}
           </Button>
-        ) : telegramLink ? (
-          // Show clickable link after token is generated (iOS Safari friendly)
-          <Button
-            as="a"
-            href={telegramLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            color="success"
-            size="sm"
-            fullWidth
-            className="animate-pulse"
-            startContent={
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
-              </svg>
-            }
-          >
-            {t('profile.telegram.openTelegram', 'Open Telegram to Connect')}
-          </Button>
+        ) : connectionCode ? (
+          // Show connection instructions with code
+          <div className="space-y-3">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-gray-900 mb-2">
+                Follow these steps:
+              </p>
+              <ol className="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                <li>Open Telegram and find <strong>@Trudify_bot</strong></li>
+                <li>Send this command:</li>
+              </ol>
+              <div className="mt-2 bg-white border border-gray-300 rounded p-3 font-mono text-center">
+                <code className="text-lg font-bold text-blue-600">
+                  /connect {connectionCode}
+                </code>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Code expires in 10 minutes
+              </p>
+            </div>
+
+            <Button
+              as="a"
+              href={telegramLink!}
+              rel="noopener noreferrer"
+              color="primary"
+              size="sm"
+              fullWidth
+              startContent={
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
+                </svg>
+              }
+            >
+              Open Telegram Bot
+            </Button>
+
+            <Button
+              variant="flat"
+              size="sm"
+              fullWidth
+              onPress={() => {
+                setConnectionCode(null);
+                setTelegramLink(null);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         ) : (
           // Initial button to generate token
           <Button
