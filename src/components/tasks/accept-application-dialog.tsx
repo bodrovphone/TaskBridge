@@ -15,6 +15,7 @@ import {
 import { CheckCircle, Wallet, Calendar, AlertTriangle, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
+import { getTimelineLabel } from '@/lib/utils/timeline'
 
 interface AcceptApplicationDialogProps {
   application: Application | null
@@ -40,6 +41,7 @@ export default function AcceptApplicationDialog({
   if (!application) return null
 
   const { professional, proposedPrice, currency, timeline } = application
+  const readableTimeline = getTimelineLabel(timeline, t)
 
   const allAgreed = agreements.priceTimeline && agreements.contactSharing && agreements.otherApplications
 
@@ -130,7 +132,7 @@ export default function AcceptApplicationDialog({
                     <Calendar className="w-4 h-4" />
                     <span className="text-sm font-medium">{t('acceptApplication.timeline')}</span>
                   </div>
-                  <div className="text-xl font-bold text-blue-900">{timeline}</div>
+                  <div className="text-xl font-bold text-blue-900">{readableTimeline}</div>
                 </div>
               </div>
 
@@ -173,7 +175,7 @@ export default function AcceptApplicationDialog({
                   {t('acceptApplication.agreement.priceTimeline', {
                     price: proposedPrice,
                     currency,
-                    timeline
+                    timeline: readableTimeline
                   })}
                 </Checkbox>
 

@@ -140,9 +140,12 @@ export default function ApplicationDialog({
 
  // Validation helpers
  const containsPhoneNumber = (text: string): boolean => {
-  // Matches various phone formats: +359, 0888, 359888, etc.
-  const phoneRegex = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{3,4}|\b\d{9,10}\b/g
-  return phoneRegex.test(text)
+  // Remove all common separators to catch formatted numbers like "0 88 44 892 89"
+  const normalized = text.replace(/[\s\-._*()\[\]]/g, '')
+
+  // Match phone numbers: 10 digits (Bulgaria), or +359 followed by 9 digits, or other patterns
+  const phoneRegex = /(\+?\d{1,3}\d{9,11})|\b0\d{9}\b|\b\d{10}\b/g
+  return phoneRegex.test(normalized)
  }
 
  const containsUrl = (text: string): boolean => {

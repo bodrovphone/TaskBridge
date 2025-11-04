@@ -41,6 +41,8 @@ interface PostedTask {
   hasReview?: boolean
   deadline?: Date
   images?: string[]
+  isStale?: boolean
+  daysSinceCreation?: number
 }
 
 // @todo DEMO: Mock data for development - Remove when all features are integrated
@@ -208,7 +210,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
         const mappedTasks: PostedTask[] = data.tasks.map((task: any, index: number) => {
           // Calculate days since creation for stale task detection
           const daysSinceCreation = Math.floor((Date.now() - new Date(task.created_at).getTime()) / (1000 * 60 * 60 * 24))
-          const isStale = daysSinceCreation > 7 && task.status === 'open' && task.applicationsCount === 0
+          const isStale = daysSinceCreation >= 2 && task.status === 'open' && (task.applicationsCount === 0 || task.applicationsCount === null)
 
           // For completed/in_progress tasks without a selected professional, add mock professional data
           const needsMockProfessional = (task.status === 'completed' || task.status === 'in_progress' || task.status === 'pending_customer_confirmation') && !task.selected_professional_id
@@ -242,6 +244,8 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             hasReview: task.status === 'completed' ? (index % 2 === 0 ? false : true) : undefined,
             deadline: task.deadline ? new Date(task.deadline) : undefined,
             images: task.images || [], // Task images from database
+            isStale,
+            daysSinceCreation
           }
         })
 

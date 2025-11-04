@@ -80,8 +80,9 @@ Ivan Petrov has applied to your task:
 ```
 
 **Integration point:**
-- `/api/applications` POST endpoint
+- ✅ `/api/applications` POST endpoint - **IMPLEMENTED**
 - After application inserted into `applications` table
+- **TODO**: Add notification call after successful application creation
 
 ---
 
@@ -114,8 +115,9 @@ Next steps:
 ```
 
 **Integration point:**
-- `/api/applications/[id]/accept` endpoint
+- ✅ `/api/applications/[id]/accept` endpoint - **IMPLEMENTED**
 - After updating application status to 'accepted'
+- **TODO**: Add notification call after successful acceptance
 
 ---
 
@@ -142,8 +144,9 @@ Don't worry! There are many other opportunities:
 ```
 
 **Integration point:**
-- `/api/applications/[id]/reject` endpoint
+- ✅ `/api/applications/[id]/reject` endpoint - **IMPLEMENTED**
 - After updating application status to 'rejected'
+- **TODO**: Add notification call after successful rejection (optional - consider professional's feelings)
 
 ---
 

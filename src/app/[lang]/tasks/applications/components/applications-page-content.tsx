@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
-import { Send, Calendar, Banknote, MapPin, User, X, Loader2 } from 'lucide-react'
+import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem, Textarea } from '@nextui-org/react'
+import { Send, Calendar, Banknote, MapPin, User, X, Loader2, AlertCircle } from 'lucide-react'
 import { useAuth } from '@/features/auth'
+import ApplicationDetailView from '@/features/applications/components/application-detail-view'
+import type { MyApplication as MyApplicationType } from '@/features/applications/lib/types'
 
 interface ApplicationsPageContentProps {
   lang: string
@@ -106,9 +108,36 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   const { t } = useTranslation()
   const router = useRouter()
   const { user } = useAuth()
-  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('all')
+  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('pending')
   const [applications, setApplications] = useState<MyApplication[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [withdrawDialog, setWithdrawDialog] = useState<{
+    isOpen: boolean
+    applicationId: string | null
+    taskTitle: string | null
+  }>({
+    isOpen: false,
+    applicationId: null,
+    taskTitle: null
+  })
+  const [withdrawReason, setWithdrawReason] = useState('')
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
+
+  // Detail modal state
+  const [selectedDetailApplication, setSelectedDetailApplication] = useState<MyApplicationType | null>(null)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+
+  // Helper function to convert hours to user-friendly timeline text
+  const formatTimeline = (hours: number | null | undefined): string => {
+    if (!hours) return t('application.timelineFlexible')
+
+    if (hours <= 24) return t('application.timelineToday')
+    if (hours <= 72) return t('application.timeline3days')
+    if (hours <= 168) return t('application.timelineWeek')
+
+    // For custom durations, show hours with unit
+    return `${hours}${t('application.hoursShort')}`
+  }
 
   // Fetch applications from API
   useEffect(() => {
@@ -132,9 +161,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
             customerName: app.task.customer?.full_name || 'Unknown',
             customerAvatar: app.task.customer?.avatar_url,
             proposedPrice: app.proposed_price_bgn,
-            timeline: app.estimated_duration_hours
-              ? `${app.estimated_duration_hours}${t('application.hoursShort')}`
-              : t('application.timelineFlexible'),
+            timeline: formatTimeline(app.estimated_duration_hours),
             message: app.message,
             status: app.status,
             submittedAt: new Date(app.created_at),
@@ -199,10 +226,95 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
     return applications.filter(app => app.status === status).length
   }
 
-  const handleWithdrawApplication = (appId: string) => {
-    // This would call an API to withdraw the application
-    console.log('Withdrawing application:', appId)
-    // TODO: Implement withdrawal logic
+  const handleWithdrawApplication = (appId: string, taskTitle: string) => {
+    setWithdrawDialog({
+      isOpen: true,
+      applicationId: appId,
+      taskTitle
+    })
+  }
+
+  // Mapper function to convert API response to ApplicationDetailView format
+  const mapToDetailFormat = (app: MyApplication): MyApplicationType => {
+    return {
+      id: app.id,
+      taskId: app.taskId,
+      task: {
+        id: app.taskId,
+        title: app.taskTitle,
+        description: app.taskDescription,
+        category: app.task.category,
+        budget: {
+          min: app.task.budget * 0.8, // Estimate min as 80% of max
+          max: app.task.budget,
+          type: 'fixed' as const
+        },
+        location: {
+          city: app.task.location.city,
+          neighborhood: app.task.location.neighborhood
+        },
+        status: 'open' as const
+      },
+      customer: {
+        id: 'customer-id', // TODO: Get from API
+        name: app.customerName,
+        avatar: app.customerAvatar,
+        rating: undefined,
+        reviewsCount: undefined
+      },
+      myProposal: {
+        price: app.proposedPrice,
+        currency: 'BGN',
+        timeline: app.timeline,
+        message: app.message
+      },
+      status: app.status,
+      appliedAt: app.submittedAt,
+      respondedAt: undefined // TODO: Get from API
+    }
+  }
+
+  const handleViewDetails = (application: MyApplication) => {
+    const mapped = mapToDetailFormat(application)
+    setSelectedDetailApplication(mapped)
+    setIsDetailModalOpen(true)
+  }
+
+  const confirmWithdraw = async () => {
+    if (!withdrawDialog.applicationId) return
+
+    setIsWithdrawing(true)
+    try {
+      const response = await fetch(`/api/applications/${withdrawDialog.applicationId}/withdraw`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          reason: withdrawReason || undefined
+        })
+      })
+
+      if (response.ok) {
+        // Update applications list
+        setApplications(prev => prev.map(app =>
+          app.id === withdrawDialog.applicationId
+            ? { ...app, status: 'withdrawn' as const }
+            : app
+        ))
+        // Close dialog
+        setWithdrawDialog({ isOpen: false, applicationId: null, taskTitle: null })
+        setWithdrawReason('')
+      } else {
+        const error = await response.json()
+        alert(error.error || t('myApplications.withdrawError', 'Failed to withdraw application'))
+      }
+    } catch (error) {
+      console.error('[Applications] Error withdrawing:', error)
+      alert(t('myApplications.withdrawError', 'Failed to withdraw application'))
+    } finally {
+      setIsWithdrawing(false)
+    }
   }
 
   return (
@@ -260,15 +372,6 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
               }}
             >
               <Tab
-                key="all"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('myApplications.filter.all')}</span>
-                    <Chip size="sm" variant="flat">{getApplicationCountByStatus('all')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
                 key="pending"
                 title={
                   <div className="flex items-center gap-2">
@@ -301,6 +404,15 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   <div className="flex items-center gap-2">
                     <span>{t('myApplications.filter.withdrawn')}</span>
                     <Chip size="sm" variant="flat">{getApplicationCountByStatus('withdrawn')}</Chip>
+                  </div>
+                }
+              />
+              <Tab
+                key="all"
+                title={
+                  <div className="flex items-center gap-2">
+                    <span>{t('myApplications.filter.all')}</span>
+                    <Chip size="sm" variant="flat">{getApplicationCountByStatus('all')}</Chip>
                   </div>
                 }
               />
@@ -407,21 +519,31 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
 
                   {/* Actions */}
                   <div className="flex justify-between items-center gap-2 pt-4 border-t border-gray-200">
-                    <Button
-                      size="sm"
-                      variant="bordered"
-                      color="success"
-                      onPress={() => router.push(`/${lang}/tasks/${application.taskId}`)}
-                    >
-                      {t('myApplications.viewTask')}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="bordered"
+                        color="primary"
+                        onPress={() => handleViewDetails(application)}
+                      >
+                        {t('myApplications.viewDetails', 'View Details')}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="bordered"
+                        color="success"
+                        onPress={() => router.push(`/${lang}/tasks/${application.taskId}`)}
+                      >
+                        {t('myApplications.viewTask')}
+                      </Button>
+                    </div>
                     {application.status === 'pending' && (
                       <Button
                         size="sm"
                         variant="bordered"
                         color="danger"
                         startContent={<X className="w-4 h-4" />}
-                        onPress={() => handleWithdrawApplication(application.id)}
+                        onPress={() => handleWithdrawApplication(application.id, application.taskTitle)}
                       >
                         {t('myApplications.withdraw')}
                       </Button>
@@ -547,6 +669,114 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
           </div>
         )}
       </div>
+
+      {/* Withdraw Application Dialog */}
+      <Modal
+        isOpen={withdrawDialog.isOpen}
+        onClose={() => {
+          setWithdrawDialog({ isOpen: false, applicationId: null, taskTitle: null })
+          setWithdrawReason('')
+        }}
+        size="lg"
+        placement="center"
+        classNames={{
+          base: "bg-white",
+          backdrop: "bg-black/80",
+          wrapper: "items-center"
+        }}
+      >
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1 border-b">
+            <div className="flex items-center gap-2 text-danger">
+              <AlertCircle className="w-5 h-5" />
+              <h3 className="text-xl font-bold">{t('myApplications.withdrawDialog.title')}</h3>
+            </div>
+          </ModalHeader>
+          <ModalBody className="py-6">
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                {t('myApplications.withdrawDialog.description', {
+                  taskTitle: withdrawDialog.taskTitle || ''
+                })}
+              </p>
+
+              {/* Reason Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('myApplications.withdrawDialog.reason')}
+                </label>
+                <Select
+                  placeholder={t('myApplications.withdrawDialog.selectReason', 'Select a reason (optional)')}
+                  selectedKeys={withdrawReason ? [withdrawReason] : []}
+                  onChange={(e) => setWithdrawReason(e.target.value)}
+                  classNames={{
+                    trigger: "bg-white border-gray-300"
+                  }}
+                >
+                  <SelectItem key="unavailable" value="unavailable">
+                    {t('myApplications.withdrawDialog.reasonUnavailable')}
+                  </SelectItem>
+                  <SelectItem key="found-work" value="found-work">
+                    {t('myApplications.withdrawDialog.reasonFoundWork')}
+                  </SelectItem>
+                  <SelectItem key="changed" value="changed">
+                    {t('myApplications.withdrawDialog.reasonChanged')}
+                  </SelectItem>
+                  <SelectItem key="price" value="price">
+                    {t('myApplications.withdrawDialog.reasonPrice')}
+                  </SelectItem>
+                  <SelectItem key="other" value="other">
+                    {t('myApplications.withdrawDialog.reasonOther')}
+                  </SelectItem>
+                </Select>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  {t('myApplications.withdrawDialog.warning', 'Once withdrawn, you cannot reapply to this task.')}
+                </p>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter className="border-t">
+            <Button
+              variant="light"
+              onPress={() => {
+                setWithdrawDialog({ isOpen: false, applicationId: null, taskTitle: null })
+                setWithdrawReason('')
+              }}
+              isDisabled={isWithdrawing}
+            >
+              {t('myApplications.withdrawDialog.cancel')}
+            </Button>
+            <Button
+              color="danger"
+              onPress={confirmWithdraw}
+              isLoading={isWithdrawing}
+              startContent={!isWithdrawing && <X className="w-4 h-4" />}
+            >
+              {t('myApplications.withdrawDialog.confirm')}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Application Detail Modal */}
+      <ApplicationDetailView
+        application={selectedDetailApplication}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false)
+          setSelectedDetailApplication(null)
+        }}
+        onWithdraw={(app) => {
+          handleWithdrawApplication(app.id, app.task.title)
+          setIsDetailModalOpen(false)
+        }}
+        onViewTask={(app) => {
+          router.push(`/${lang}/tasks/${app.taskId}`)
+        }}
+      />
     </div>
   )
 }

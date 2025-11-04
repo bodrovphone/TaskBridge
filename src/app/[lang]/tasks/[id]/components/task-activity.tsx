@@ -9,32 +9,96 @@ import { useState, useEffect, useRef } from "react";
 import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
 import { MessageCircle, User } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import { QuestionsSection } from "./sections";
-import ApplicationsList from '@/components/tasks/applications-list';
+import { ApplicationsSection, QuestionsSection, TaskInProgressState } from "./sections";
 import ApplicationDetail from '@/components/tasks/application-detail';
 import AcceptApplicationDialog from '@/components/tasks/accept-application-dialog';
 import RejectApplicationDialog from '@/components/tasks/reject-application-dialog';
-import { getApplicationsForTask } from '@/lib/mock-data/applications';
 import { Application } from '@/types/applications';
 import { getTaskQuestions, updateQuestionAnswer, getRelativeTime } from '@/components/tasks/mock-questions';
 import type { Question } from '@/types/questions';
+import { normalizeCategoryKeys } from '@/lib/utils/categories';
+import { useToast } from '@/hooks/use-toast';
 
 interface TaskActivityProps {
   taskId: string;
-  initialApplicationId?: string;  // Auto-open application detail for this ID
 }
 
-export default function TaskActivity({ taskId, initialApplicationId }: TaskActivityProps) {
+export default function TaskActivity({ taskId }: TaskActivityProps) {
  const { t, i18n } = useTranslation();
+ const { toast } = useToast();
  const [selectedTab, setSelectedTab] = useState("applications");
  const applicationsRef = useRef<HTMLDivElement>(null);
 
- // State for applications - filter by task ID
- const [applications, setApplications] = useState<Application[]>(getApplicationsForTask(taskId));
+ // State for applications - fetch from API
+ const [applications, setApplications] = useState<Application[]>([]);
+ const [isLoadingApplications, setIsLoadingApplications] = useState(true);
+ const [applicationsError, setApplicationsError] = useState<string | null>(null);
 
  // State for questions - load from mock service
  const [questions, setQuestions] = useState<Question[]>([]);
  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+
+ // Fetch applications from API
+ useEffect(() => {
+  const fetchApplications = async () => {
+   setIsLoadingApplications(true);
+   setApplicationsError(null);
+
+   try {
+    const response = await fetch(`/api/tasks/${taskId}/applications`);
+
+    if (!response.ok) {
+     if (response.status === 403) {
+      setApplicationsError('You do not have permission to view these applications');
+     } else if (response.status === 404) {
+      setApplicationsError('Task not found');
+     } else {
+      setApplicationsError('Failed to load applications');
+     }
+     setIsLoadingApplications(false);
+     return;
+    }
+
+    const data = await response.json();
+
+    // Map API response to Application type
+    const mappedApplications: Application[] = (data.applications || []).map((app: any) => ({
+     id: app.id,
+     taskId: taskId,
+     professional: {
+      id: app.professional?.id || '',
+      name: app.professional?.full_name || 'Unknown',
+      avatar: app.professional?.avatar_url || null,
+      rating: app.professional?.average_rating || 0,
+      completedTasks: app.professional?.tasks_completed || 0,
+      skills: normalizeCategoryKeys(app.professional?.service_categories),
+      hourlyRate: app.professional?.hourly_rate_bgn || null,
+      bio: app.professional?.bio || null,
+      city: app.professional?.city || null,
+     },
+     proposedPrice: app.proposed_price_bgn,
+     currency: 'BGN',  // Bulgarian Lev
+     timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : t('common.flexible', 'Flexible'),
+     message: app.message,
+     status: app.status,
+     createdAt: new Date(app.created_at),
+     updatedAt: new Date(app.updated_at),
+     rejectionReason: app.rejection_reason || undefined,
+     withdrawnAt: app.withdrawn_at ? new Date(app.withdrawn_at) : undefined,
+     withdrawalReason: app.withdrawal_reason || undefined,
+    }));
+
+    setApplications(mappedApplications);
+   } catch (error) {
+    console.error('[TaskActivity] Error fetching applications:', error);
+    setApplicationsError('Failed to load applications');
+   } finally {
+    setIsLoadingApplications(false);
+   }
+  };
+
+  fetchApplications();
+ }, [taskId]);
 
  // Load questions when component mounts or taskId changes
  useEffect(() => {
@@ -63,19 +127,6 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
  const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
 
- // Auto-open application detail dialog if initialApplicationId is provided
- useEffect(() => {
-  if (initialApplicationId) {
-   const app = applications.find(a => a.id === initialApplicationId);
-   if (app) {
-    setSelectedApplication(app);
-    setIsDetailOpen(true);
-    // Ensure we're on the applications tab
-    setSelectedTab("applications");
-   }
-  }
- }, [initialApplicationId, applications]);
-
  // Handlers
  const handleViewDetails = (id: string) => {
   const app = applications.find(a => a.id === id);
@@ -101,30 +152,89 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
   }
  };
 
- const handleAcceptConfirm = (id: string) => {
-  // Update application status: accept selected, reject all others
-  setApplications(prev => prev.map(app =>
-   app.id === id
-    ? { ...app, status: 'accepted' as const, updatedAt: new Date() }
-    : app.status === 'pending'
-     ? { ...app, status: 'rejected' as const, updatedAt: new Date() }
-     : app
-  ));
-  setIsAcceptDialogOpen(false);
-  setIsDetailOpen(false);
-  console.log('✅ Application accepted:', id);
+ const handleAcceptConfirm = async (id: string) => {
+  try {
+   // Call API to accept application
+   const response = await fetch(`/api/applications/${id}/accept`, {
+    method: 'PATCH'
+   });
+
+   if (!response.ok) {
+    const error = await response.json();
+    toast({
+     title: t('common.error', 'Error'),
+     description: error.error || t('common.error', 'An error occurred'),
+     variant: 'destructive'
+    });
+    return;
+   }
+
+   // Get the accepted application for the toast
+   const acceptedApp = applications.find(app => app.id === id);
+
+   // Update application status: accept selected, reject all others
+   setApplications(prev => prev.map(app =>
+    app.id === id
+     ? { ...app, status: 'accepted' as const, updatedAt: new Date() }
+     : app.status === 'pending'
+      ? { ...app, status: 'rejected' as const, updatedAt: new Date() }
+      : app
+   ));
+
+   setIsAcceptDialogOpen(false);
+   setIsDetailOpen(false);
+
+   // Show success toast
+   toast({
+    title: t('acceptApplication.successTitle', '🎉 Application Accepted!'),
+    description: t('acceptApplication.successDescription', 'You are now working with {{name}}. All other applications have been automatically rejected.', {
+     name: acceptedApp?.professional.name || 'the professional'
+    }),
+    variant: 'default'
+   });
+
+   console.log('✅ Application accepted:', id);
+  } catch (error) {
+   console.error('[TaskActivity] Error accepting application:', error);
+   toast({
+    title: t('common.error', 'Error'),
+    description: t('common.error', 'An error occurred'),
+    variant: 'destructive'
+   });
+  }
  };
 
- const handleRejectConfirm = (id: string, reason?: string) => {
-  // Update application status
-  setApplications(prev => prev.map(app =>
-   app.id === id
-    ? { ...app, status: 'rejected' as const, rejectionReason: reason, updatedAt: new Date() }
-    : app
-  ));
-  setIsRejectDialogOpen(false);
-  setIsDetailOpen(false);
-  console.log('❌ Application rejected:', id, 'Reason:', reason || 'Not specified');
+ const handleRejectConfirm = async (id: string, reason?: string) => {
+  try {
+   // Call API to reject application
+   const response = await fetch(`/api/applications/${id}/reject`, {
+    method: 'PATCH',
+    headers: {
+     'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ reason })
+   });
+
+   if (!response.ok) {
+    const error = await response.json();
+    alert(error.error || t('common.error', 'An error occurred'));
+    return;
+   }
+
+   // Update application status
+   setApplications(prev => prev.map(app =>
+    app.id === id
+     ? { ...app, status: 'rejected' as const, rejectionReason: reason, updatedAt: new Date() }
+     : app
+   ));
+
+   setIsRejectDialogOpen(false);
+   setIsDetailOpen(false);
+   console.log('❌ Application rejected:', id, 'Reason:', reason || 'Not specified');
+  } catch (error) {
+   console.error('[TaskActivity] Error rejecting application:', error);
+   alert(t('common.error', 'An error occurred'));
+  }
  };
 
  const handleReplyToQuestion = (questionId: string, reply: string) => {
@@ -137,6 +247,9 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
 
   console.log("Reply posted to question:", questionId);
  };
+
+ // Check if there's an accepted application
+ const acceptedApplication = applications.find(app => app.status === 'accepted');
 
  return (
   <div id="applications" ref={applicationsRef}>
@@ -168,12 +281,38 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
        }
       >
        <div className="mt-4">
-        <ApplicationsList
-         applications={applications}
-         onAccept={handleAcceptClick}
-         onReject={handleRejectClick}
-         onViewDetails={handleViewDetails}
-        />
+        {isLoadingApplications ? (
+         <div className="flex justify-center py-8">
+          <div className="text-gray-500">{t('common.loading', 'Loading...')}</div>
+         </div>
+        ) : applicationsError ? (
+         <div className="flex justify-center py-8">
+          <div className="text-red-500">{applicationsError}</div>
+         </div>
+        ) : acceptedApplication ? (
+         <TaskInProgressState acceptedApplication={acceptedApplication} />
+        ) : (
+         <ApplicationsSection
+          applications={applications.map(app => ({
+           id: app.id,
+           user: {
+            name: app.professional.name,
+            avatar: app.professional.avatar || '',
+            rating: app.professional.rating,
+            completedTasks: app.professional.completedTasks,
+            skills: app.professional.skills
+           },
+           proposal: app.message,
+           price: `${app.proposedPrice} ${app.currency}`,
+           timeline: app.timeline,
+           timestamp: getRelativeTime(app.createdAt, i18n.language),
+           status: app.status
+          }))}
+          onAcceptApplication={handleAcceptClick}
+          onRejectApplication={handleRejectClick}
+          onViewDetails={handleViewDetails}
+         />
+        )}
        </div>
       </Tab>
 

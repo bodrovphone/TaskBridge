@@ -88,15 +88,7 @@ export async function PATCH(
       );
     }
 
-    // Update task applications count (decrement)
-    const { error: updateError } = await supabase.rpc('decrement_applications_count', {
-      task_id: application.task_id
-    });
-
-    if (updateError) {
-      console.error('[Applications] Error updating task count:', updateError);
-      // Don't fail the request - count can be fixed later
-    }
+    // TODO: Update task applications count (decrement) - needs RPC function or trigger
 
     console.log('[Applications] Application withdrawn:', {
       applicationId,

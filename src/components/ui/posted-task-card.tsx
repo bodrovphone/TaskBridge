@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -85,6 +85,29 @@ function PostedTaskCard({
     applicationsCount,
     status
   })
+
+  // First application celebration
+  const [showFirstApplicationBanner, setShowFirstApplicationBanner] = useState(false)
+
+  useEffect(() => {
+    // Show banner only for open tasks with exactly 1 application
+    if (status === 'open' && applicationsCount === 1) {
+      // Check if it was dismissed
+      const dismissalKey = `firstApp_${id}`
+      const dismissed = localStorage.getItem(dismissalKey)
+      if (!dismissed) {
+        setShowFirstApplicationBanner(true)
+      }
+    } else {
+      setShowFirstApplicationBanner(false)
+    }
+  }, [id, status, applicationsCount])
+
+  const handleDismissFirstApplication = () => {
+    const dismissalKey = `firstApp_${id}`
+    localStorage.setItem(dismissalKey, 'true')
+    setShowFirstApplicationBanner(false)
+  }
 
   const getStatusColor = (taskStatus: typeof status) => {
     switch (taskStatus) {
@@ -227,6 +250,32 @@ function PostedTaskCard({
           </Chip>
         </div>
 
+        {/* First Application Success Banner */}
+        {showFirstApplicationBanner && (
+          <div className="mb-3 bg-green-50 border-2 border-green-300 rounded-lg p-3">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start gap-2 flex-1">
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-green-900">
+                    {t('postedTasks.firstApplication.title', 'Great news! You have your first application')}
+                  </p>
+                  <p className="text-xs text-green-700 mt-0.5">
+                    {t('postedTasks.firstApplication.message', 'Check the application details and respond to the professional')}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleDismissFirstApplication}
+                className="text-green-600 hover:text-green-800 p-1 rounded hover:bg-green-100 transition-colors flex-shrink-0"
+                aria-label={t('taskHints.dismiss', 'Dismiss')}
+              >
+                <XCircle className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Task Hints Banner */}
         {taskHintsData.shouldShow && (
           <TaskHintBanner
@@ -294,7 +343,7 @@ function PostedTaskCard({
         </div>
 
         {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row gap-2 mt-auto">
+        <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-auto ${(status === 'open' || status === 'pending_customer_confirmation') ? 'sm:justify-start' : ''}`}>
           {status === 'pending_customer_confirmation' ? (
             <>
               {/* Awaiting Confirmation - Confirm button */}
@@ -303,7 +352,7 @@ function PostedTaskCard({
                 color="success"
                 startContent={<CheckCircle className="w-4 h-4" />}
                 onPress={() => setShowConfirmDialog(true)}
-                className="w-full sm:flex-1 font-semibold"
+                className="w-full sm:w-auto font-semibold"
               >
                 {t('taskCompletion.confirmCompletion')}
               </Button>
@@ -413,7 +462,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {t('postedTasks.viewDetails')}
               </Button>

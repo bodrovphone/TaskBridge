@@ -328,7 +328,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
         Professionals can view their own applications at /tasks/applications
       */}
       {isOwner && (
-        <TaskActivity taskId={task.id} initialApplicationId={applicationId || undefined} />
+        <TaskActivity taskId={task.id} />
       )}
      </div>
 

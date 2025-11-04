@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 export async function GET(
   request: NextRequest,
@@ -49,8 +49,11 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
+    // Use admin client to bypass RLS for fetching applications with professional details
+    const adminClient = createAdminClient();
+
     // Build query
-    let query = supabase
+    let query = adminClient
       .from('applications')
       .select(`
         id,
@@ -63,17 +66,19 @@ export async function GET(
         status,
         responded_at,
         rejection_reason,
+        withdrawn_at,
+        withdrawal_reason,
         professional:users!applications_professional_id_fkey (
           id,
           full_name,
           avatar_url,
           bio,
           hourly_rate_bgn,
-          rating_average,
-          rating_count,
-          completed_tasks_count,
+          average_rating,
+          total_reviews,
+          tasks_completed,
           city,
-          skills
+          service_categories
         )
       `)
       .eq('task_id', taskId)

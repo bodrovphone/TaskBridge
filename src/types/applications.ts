@@ -17,13 +17,16 @@ export interface ProfessionalReview {
 export interface ApplicationProfessional {
   id: string
   name: string
-  avatar: string
+  avatar: string | null
   rating: number
   completedTasks: number
-  specializations: string[]
-  reviews: ProfessionalReview[]
+  skills: string[]  // Maps to service_categories in database
+  hourlyRate: number | null
+  bio: string | null
+  city: string | null
+  reviews?: ProfessionalReview[]
   yearsOfExperience?: number
-  verified: boolean
+  verified?: boolean
 }
 
 export interface Application {

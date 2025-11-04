@@ -57,7 +57,7 @@ export default function ApplicationCard({
             {/* Avatar with Rating centered below */}
             <div className="flex flex-col items-center gap-1 flex-shrink-0">
               <Avatar
-                src={professional.avatar}
+                src={professional.avatar || undefined}
                 name={professional.name}
                 size="lg"
                 className="flex-shrink-0"
@@ -76,7 +76,9 @@ export default function ApplicationCard({
                 )}
               </div>
               <div className="text-sm text-gray-600 space-y-0.5">
-                <div className="truncate">{t(professional.specializations[0])}</div>
+                <div className="truncate">
+                  {professional.skills?.[0] ? t(professional.skills[0]) : t('common.professional', 'Professional')}
+                </div>
                 <div className="text-gray-500">{professional.completedTasks} {t('applications.tasksCompleted', 'tasks completed')}</div>
               </div>
             </div>
@@ -113,11 +115,11 @@ export default function ApplicationCard({
           </div>
         </div>
 
-        {/* Specializations */}
+        {/* Skills/Categories */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {professional.specializations.map((spec, index) => (
+          {professional.skills?.map((skill, index) => (
             <Chip key={index} variant="flat" size="sm" color="primary">
-              {t(spec)}
+              {t(skill)}
             </Chip>
           ))}
         </div>

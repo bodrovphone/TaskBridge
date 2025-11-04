@@ -74,7 +74,7 @@ export default function ApplicationDetail({
 
                     {/* Avatar */}
                     <Avatar
-                      src={professional.avatar}
+                      src={professional.avatar || undefined}
                       name={professional.name}
                       className="w-20 h-20 flex-shrink-0"
                     />
@@ -102,16 +102,16 @@ export default function ApplicationDetail({
                       </div>
                     )}
 
-                    {/* Specializations */}
+                    {/* Skills/Categories */}
                     <div className="flex flex-wrap gap-2">
-                      {professional.specializations.map((spec, index) => (
+                      {professional.skills?.map((skill, index) => (
                         <Chip
                           key={index}
                           size="sm"
                           variant="solid"
                           className="bg-white text-gray-900 font-medium"
                         >
-                          {spec}
+                          {t(skill)}
                         </Chip>
                       ))}
                     </div>

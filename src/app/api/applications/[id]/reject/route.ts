@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 export async function PATCH(
   request: NextRequest,
@@ -27,8 +27,11 @@ export async function PATCH(
     const body = await request.json().catch(() => ({}));
     const { reason } = body;
 
+    // Use admin client for database operations
+    const adminClient = createAdminClient();
+
     // Get application with task details
-    const { data: application, error: appError } = await supabase
+    const { data: application, error: appError } = await adminClient
       .from('applications')
       .select(`
         id,
@@ -71,7 +74,7 @@ export async function PATCH(
     }
 
     // Update application status to rejected
-    const { error: rejectError } = await supabase
+    const { error: rejectError } = await adminClient
       .from('applications')
       .update({
         status: 'rejected',

@@ -33,17 +33,17 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validate required fields
-    if (!taskId || !proposedPrice || !message) {
+    if (!taskId || typeof proposedPrice !== 'number' || !message) {
       return NextResponse.json(
         { error: 'Missing required fields: taskId, proposedPrice, message' },
         { status: 400 }
       );
     }
 
-    // Validate proposed price is positive
-    if (proposedPrice <= 0) {
+    // Validate proposed price is not negative (0 is allowed for volunteering)
+    if (proposedPrice < 0) {
       return NextResponse.json(
-        { error: 'Proposed price must be greater than 0' },
+        { error: 'Proposed price cannot be negative' },
         { status: 400 }
       );
     }

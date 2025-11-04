@@ -58,7 +58,8 @@ export const notifications = {
   'taskDetail.message': 'Message',
   'taskDetail.reply': 'Reply',
   'taskDetail.yourReply': 'Your reply:',
-  'taskDetail.price': 'Price:',
+  'taskDetail.price': 'Price',
+  'taskDetail.timeline': 'Timeline',
   'taskDetail.tasks': 'tasks',
   'taskDetail.cancel': 'Cancel',
   'taskDetail.writeReply': 'Write your reply...',
@@ -127,6 +128,8 @@ export const notifications = {
   'postedTasks.empty.subtext': 'Post your first task in under 2 minutes. It\'s free, simple, and you\'ll start receiving applications right away!',
   'postedTasks.empty.createButton': 'Create Your First Task',
   'postedTasks.empty.hint': '✨ Tip: The more details you provide, the better applications you\'ll receive',
+  'postedTasks.firstApplication.title': 'Great news! You have your first application',
+  'postedTasks.firstApplication.message': 'Check the application details and respond to the professional',
 
   // Cancel Task Dialog
   'cancelTask.title': 'Cancel Task',
@@ -167,9 +170,9 @@ export const notifications = {
   'taskHints.noApplications.title': 'No applications yet? Your task has been open for {{days}} days',
   'taskHints.improveTask': 'Improve Task',
   'taskHints.dismiss': 'Dismiss',
-  'taskHints.suggestions.budgetLow': 'Budget might be too low (avg. for this category: {{average}} лв)',
-  'taskHints.suggestions.budgetVeryLow': 'Budget is significantly below average ({{current}} лв vs {{average}} лв avg.)',
-  'taskHints.suggestions.descriptionShort': 'Add more details to your description to attract professionals',
-  'taskHints.suggestions.locationMissing': 'Specify your exact location (city and neighborhood) to help professionals find you',
-  'taskHints.suggestions.urgencyUnrealistic': 'Consider making the deadline more flexible to receive more applications',
+  'taskHints.suggestions.increasePrice': 'Try increasing your budget to attract more professionals',
+  'taskHints.suggestions.addPhotos': 'Add or update photos to better showcase what needs to be done',
+  'taskHints.suggestions.improveDescription': 'Add more details to your description to make it clearer',
+  'taskHints.suggestions.adjustDeadline': 'Consider making the deadline more flexible',
+  'taskHints.suggestions.updateTask': 'Review and update your task details to make it more appealing',
 };

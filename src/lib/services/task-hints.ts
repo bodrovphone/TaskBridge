@@ -36,31 +36,39 @@ interface Task {
 
 /**
  * Generate improvement hints for a task based on its data
+ * Now using general, always-applicable suggestions
  */
 export function generateTaskHints(task: Task, t: (key: string, params?: any) => string): TaskHint[] {
-  const hints: TaskHint[] = []
+  // Return general suggestions that are always applicable
+  const hints: TaskHint[] = [
+    {
+      type: 'increase_price',
+      priority: 'high',
+      message: t('taskHints.suggestions.increasePrice')
+    },
+    {
+      type: 'add_photos',
+      priority: 'high',
+      message: t('taskHints.suggestions.addPhotos')
+    },
+    {
+      type: 'improve_description',
+      priority: 'medium',
+      message: t('taskHints.suggestions.improveDescription')
+    },
+    {
+      type: 'adjust_deadline',
+      priority: 'medium',
+      message: t('taskHints.suggestions.adjustDeadline')
+    },
+    {
+      type: 'update_task',
+      priority: 'low',
+      message: t('taskHints.suggestions.updateTask')
+    }
+  ]
 
-  // Budget analysis
-  const budgetHints = analyzeBudget(task, t)
-  hints.push(...budgetHints)
-
-  // Description quality
-  const descriptionHints = analyzeDescription(task, t)
-  hints.push(...descriptionHints)
-
-  // Location completeness
-  const locationHints = analyzeLocation(task, t)
-  hints.push(...locationHints)
-
-  // Timeline realism
-  const timelineHints = analyzeTimeline(task, t)
-  hints.push(...timelineHints)
-
-  // Sort by priority (high -> medium -> low)
-  const priorityWeight = { high: 1, medium: 2, low: 3 }
-  hints.sort((a, b) => priorityWeight[a.priority] - priorityWeight[b.priority])
-
-  // Return max 3 hints (highest priority)
+  // Return max 3 hints for cleaner UI
   return hints.slice(0, 3)
 }
 
@@ -176,8 +184,8 @@ export function shouldShowTaskHints(task: Task): boolean {
     return false
   }
 
-  // Show hints if task has few applications (0-2)
-  if (task.applicationsCount > 2) {
+  // Show hints only if task has 0 applications
+  if (task.applicationsCount > 0) {
     return false
   }
 

@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 export async function PATCH(
   request: NextRequest,
@@ -23,8 +23,11 @@ export async function PATCH(
       );
     }
 
+    // Use admin client for database operations
+    const adminClient = createAdminClient();
+
     // Get application with task details
-    const { data: application, error: appError } = await supabase
+    const { data: application, error: appError } = await adminClient
       .from('applications')
       .select(`
         id,
@@ -77,7 +80,7 @@ export async function PATCH(
 
     // Start transaction: Accept application and update task
     // 1. Update application status to accepted
-    const { error: acceptError } = await supabase
+    const { error: acceptError } = await adminClient
       .from('applications')
       .update({
         status: 'accepted',
@@ -95,12 +98,11 @@ export async function PATCH(
     }
 
     // 2. Update task: assign to professional and mark as in progress
-    const { error: taskError } = await supabase
+    const { error: taskError } = await adminClient
       .from('tasks')
       .update({
         status: 'in_progress',
         selected_professional_id: application.professional_id,
-        accepted_application_id: applicationId,
         updated_at: new Date().toISOString()
       })
       .eq('id', application.task_id);
@@ -108,7 +110,7 @@ export async function PATCH(
     if (taskError) {
       console.error('[Applications] Error updating task:', taskError);
       // Rollback application acceptance
-      await supabase
+      await adminClient
         .from('applications')
         .update({
           status: 'pending',
@@ -123,7 +125,7 @@ export async function PATCH(
     }
 
     // 3. Reject all other pending applications for this task
-    const { error: rejectError } = await supabase
+    const { error: rejectError } = await adminClient
       .from('applications')
       .update({
         status: 'rejected',
