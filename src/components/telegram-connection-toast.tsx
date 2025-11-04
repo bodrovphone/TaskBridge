@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
-import { MessageCircle } from 'lucide-react';
 
 const TELEGRAM_TOAST_DISMISSED_KEY = 'telegram-toast-dismissed';
 const TOAST_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -52,26 +51,13 @@ export function TelegramConnectionToast() {
 
       const toastInstance = toast({
         duration: 10000, // Show for 10 seconds
-        className: 'border-l-4 border-blue-500 bg-gradient-to-r from-blue-50 to-white',
-        title: (
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900">{t('profile.telegram.toast.title')}</p>
-            </div>
-          </div>
-        ),
-        description: (
-          <div className="mt-2 ml-13 text-sm text-gray-600">
-            {t('profile.telegram.toast.description')}
-          </div>
-        ),
+        className: 'border-l-4 border-blue-500 bg-gradient-to-r from-blue-50 to-white p-6',
+        title: `📱 ${t('profile.telegram.toast.title')}`,
+        description: t('profile.telegram.toast.description'),
         action: (
           <Button
             size="sm"
-            className="ml-13 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm"
             onClick={() => {
               // Mark as dismissed
               localStorage.setItem(TELEGRAM_TOAST_DISMISSED_KEY, Date.now().toString());
