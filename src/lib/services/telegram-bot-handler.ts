@@ -280,12 +280,16 @@ async function sendTelegramMessage(
   const botToken = process.env.TG_BOT_TOKEN;
   if (!botToken) {
     console.error('[Telegram] TG_BOT_TOKEN not configured');
-    return;
+    return false;
   }
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   try {
+    // Add 10 second timeout to prevent hanging
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -293,8 +297,11 @@ async function sendTelegramMessage(
         chat_id: chatId,
         text,
         parse_mode: parseMode
-      })
+      }),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -308,8 +315,11 @@ async function sendTelegramMessage(
 
     return true;
   } catch (error) {
+    // Check if it was a timeout
+    const isTimeout = error instanceof Error && error.name === 'AbortError';
     console.error('[Telegram] Exception sending message:', {
       error: error instanceof Error ? error.message : String(error),
+      isTimeout,
       chatId,
       textPreview: text.substring(0, 50) + '...'
     });

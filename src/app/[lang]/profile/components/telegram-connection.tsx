@@ -208,7 +208,9 @@ export function TelegramConnection({
                 <li>Open Telegram and find <strong>@Trudify_bot</strong></li>
                 <li>Send this command:</li>
               </ol>
-              <div className="mt-2 bg-white border border-gray-300 rounded p-3 font-mono flex items-center justify-between">
+
+              {/* Desktop: Code with icon button */}
+              <div className="mt-2 hidden md:flex bg-white border border-gray-300 rounded p-3 font-mono items-center justify-between">
                 <code className="text-lg font-bold text-blue-600">
                   /connect {connectionCode}
                 </code>
@@ -223,6 +225,26 @@ export function TelegramConnection({
                   {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>
+
+              {/* Mobile: Code + Full-width copy button */}
+              <div className="mt-2 md:hidden space-y-2">
+                <div className="bg-white border border-gray-300 rounded p-3 font-mono text-center">
+                  <code className="text-lg font-bold text-blue-600">
+                    /connect {connectionCode}
+                  </code>
+                </div>
+                <Button
+                  size="lg"
+                  variant="flat"
+                  color={isCopied ? 'success' : 'primary'}
+                  onPress={handleCopyCommand}
+                  fullWidth
+                  startContent={isCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                >
+                  {isCopied ? 'Copied!' : 'Copy Command'}
+                </Button>
+              </div>
+
               <p className="text-xs text-gray-500 mt-2">
                 Code expires in 10 minutes
               </p>
