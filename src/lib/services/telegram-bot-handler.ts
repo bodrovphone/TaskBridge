@@ -138,6 +138,13 @@ async function sendTelegramMessage(
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     console.log('[Telegram] 🌐 Sending POST to Telegram API...');
+    console.log('[Telegram] 🔍 Request details:', {
+      url: url.substring(0, 50) + '...',
+      chatId,
+      textLength: text.length,
+      parseMode
+    });
+
     const fetchStart = Date.now();
 
     const response = await fetch(url, {
@@ -149,6 +156,9 @@ async function sendTelegramMessage(
         parse_mode: parseMode
       }),
       signal: controller.signal
+    }).catch(err => {
+      console.error('[Telegram] 🔥 Fetch threw exception:', err);
+      throw err;
     });
 
     clearTimeout(timeoutId);
