@@ -58,11 +58,11 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
       return;
     }
 
-    console.log('[Telegram] ✅ /start command detected, triggering handleStartCommand (fire-and-forget)');
+    console.log('[Telegram] ✅ /start command detected, triggering handleStartCommand');
 
-    // Simple flow: Send telegram_id with greeting in user's language (fire-and-forget)
-    handleStartCommand(telegramUserId, message.from, chatId)
-      .catch(err => console.error('[Telegram] ❌ Error in handleStartCommand:', err));
+    // Simple flow: Send telegram_id with greeting in user's language
+    // Note: We await this to prevent Vercel from killing the function before message sends
+    await handleStartCommand(telegramUserId, message.from, chatId);
 
     console.log('[Telegram] ⏱️ Webhook handler completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
@@ -102,12 +102,12 @@ async function handleStartCommand(
 
     console.log('[Telegram] 📤 Sending greeting message to chatId:', chatId);
 
-    // Send greeting with telegram_id (fire-and-forget)
-    sendTelegramMessage(
+    // Send greeting with telegram_id (await to prevent function termination)
+    await sendTelegramMessage(
       chatId,
       greetings[lang],
       'HTML'
-    ).catch(err => console.error('[Telegram] ❌ Failed to send greeting:', err));
+    );
 
     console.log('[Telegram] ⏱️ handleStartCommand completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
