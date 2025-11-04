@@ -25,12 +25,10 @@ export async function POST(request: NextRequest) {
       from: update.message?.from?.username
     });
 
-    // Handle the update asynchronously (don't await to respond quickly to Telegram)
-    handleTelegramBotUpdate(update).catch(error => {
-      console.error('[Telegram Webhook] Error handling update:', error);
-    });
+    // Handle the update (await to ensure message sends before function terminates)
+    await handleTelegramBotUpdate(update);
 
-    // Return 200 immediately (Telegram requirement - must respond within 60 seconds)
+    // Return 200 (Telegram requirement - must respond within 60 seconds)
     return NextResponse.json({ ok: true });
 
   } catch (error) {
