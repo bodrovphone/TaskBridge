@@ -1,11 +1,9 @@
 /**
  * Telegram Bot Command Handler
  *
- * Handles /start command with connection token
- * Deep link format: t.me/Trudify_bot?start=connect_{token}
+ * Handles /start command and sends user their telegram_id
+ * Simple flow: Bot sends ID → User pastes into website
  */
-
-import { createAdminClient } from '@/lib/supabase/server';
 
 export interface TelegramUpdate {
   update_id: number;
@@ -40,27 +38,11 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
     const chatId = message.chat.id;
     const telegramUserId = message.from.id;
 
-    // Handle /connect CODE command (manual code entry)
-    if (text.startsWith('/connect ')) {
-      const code = text.split('/connect ')[1]?.trim().toUpperCase();
-      if (code && code.length === 8) {
-        await handleConnectionByCode(code, telegramUserId, message.from);
-      } else {
-        // Fire-and-forget invalid code message
-        sendTelegramMessage(
-          chatId,
-          '❌ <b>Invalid Code</b>\n\nPlease use the format: <code>/connect ABCD1234</code>\n\nGet your connection code from your profile settings on Trudify website.',
-          'HTML'
-        ).catch(err => console.error('[Telegram] Failed to send invalid code format message:', err));
-      }
-      return;
-    }
+    // Check if it's a /start command
+    if (!message.text.startsWith('/start')) return;
 
-  // Check if it's a /start command
-  if (!message.text.startsWith('/start')) return;
-
-  // Simple flow: Send telegram_id with greeting in user's language
-  await handleStartCommand(telegramUserId, message.from, chatId);
+    // Simple flow: Send telegram_id with greeting in user's language
+    await handleStartCommand(telegramUserId, message.from, chatId);
   } catch (error) {
     console.error('[Telegram Handler] FATAL EXCEPTION:', error);
     console.error('[Telegram Handler] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
