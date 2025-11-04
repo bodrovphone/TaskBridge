@@ -200,6 +200,13 @@ The Phase 1 MVP focuses on core marketplace functionality without payment proces
 - Automated status update notifications
 - Communication preferences and privacy settings
 
+**Telegram Integration** ✅ **Implemented**
+- Instant notifications via Telegram bot (@Trudify_bot)
+- User connects Telegram account via simple ID paste flow
+- Multilingual bot support (EN/BG/RU)
+- Real-time task updates, new applications, and messages
+- See [Telegram Integration Documentation](./telegram-integration.md) for complete implementation details
+
 #### 5.1.6 Trust & Safety System
 **Dispute Resolution**
 - Built-in dispute reporting system
