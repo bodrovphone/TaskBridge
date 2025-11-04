@@ -171,26 +171,47 @@ async function handleConnectionByCode(
     return;
   }
 
-  // Find token that starts with this code
+  // Find token that starts with this code - with retry logic
   let tokens, tokenError;
-  try {
-    const result = await supabase
-      .from('telegram_connection_tokens')
-      .select('*')
-      .eq('used', false)
-      .gt('expires_at', new Date().toISOString());
+  let retries = 3;
 
-    tokens = result.data;
-    tokenError = result.error;
-  } catch (error) {
-    console.error('[Telegram] Exception during token query:', error);
-    // Fire-and-forget error message
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Database Error</b>\n\nPlease try again or contact support.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send db error message:', err));
-    return;
+  while (retries > 0) {
+    try {
+      const result = await supabase
+        .from('telegram_connection_tokens')
+        .select('*')
+        .eq('used', false)
+        .gt('expires_at', new Date().toISOString());
+
+      tokens = result.data;
+      tokenError = result.error;
+
+      // If successful or non-network error, break
+      if (!tokenError || tokenError.message !== 'TypeError: fetch failed') {
+        break;
+      }
+
+      retries--;
+      if (retries > 0) {
+        console.log(`[Telegram] Token query failed, retrying... (${retries} attempts left)`);
+        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
+      }
+    } catch (error) {
+      retries--;
+      if (retries > 0) {
+        console.log(`[Telegram] Exception during token query, retrying... (${retries} attempts left)`);
+        await new Promise(resolve => setTimeout(resolve, 500));
+      } else {
+        console.error('[Telegram] Exception during token query after retries:', error);
+        // Fire-and-forget error message
+        sendTelegramMessage(
+          telegramId,
+          '❌ <b>Database Error</b>\n\nPlease try again or contact support.',
+          'HTML'
+        ).catch(err => console.error('[Telegram] Failed to send db error message:', err));
+        return;
+      }
+    }
   }
 
   if (tokenError) {
