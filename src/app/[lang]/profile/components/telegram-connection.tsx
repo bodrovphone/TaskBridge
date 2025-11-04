@@ -235,10 +235,10 @@ export function TelegramConnection({
                 </div>
                 <Button
                   size="lg"
-                  variant="flat"
                   color={isCopied ? 'success' : 'primary'}
                   onPress={handleCopyCommand}
                   fullWidth
+                  className={isCopied ? '' : 'bg-blue-600 text-white font-semibold shadow-lg'}
                   startContent={isCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                 >
                   {isCopied ? 'Copied!' : 'Copy Command'}
