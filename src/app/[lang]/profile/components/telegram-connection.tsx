@@ -72,6 +72,12 @@ export function TelegramConnection({
       // Also keep deep link as fallback
       const deepLink = `https://t.me/Trudify_bot?start=connect_${token}`;
       setTelegramLink(deepLink);
+
+      // Warm up the webhook endpoint (fire-and-forget)
+      // This eliminates cold start delay when user actually connects
+      fetch('/api/telegram/webhook', { method: 'GET' }).catch(() => {
+        // Silently ignore errors - this is just for warmup
+      });
     } catch (err) {
       console.error('Error connecting Telegram:', err);
       setError(t('profile.telegramConnectError'));
