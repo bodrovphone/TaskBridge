@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Card, CardBody, Chip, Divider } from '@nextui-org/react';
+import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, CheckCircle2, XCircle, Copy, Check } from 'lucide-react';
+import { MessageCircle, CheckCircle2, XCircle } from 'lucide-react';
 
 interface TelegramConnectionProps {
   userId: string;
@@ -22,65 +22,53 @@ export function TelegramConnection({
   const [isConnecting, setIsConnecting] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [telegramLink, setTelegramLink] = useState<string | null>(null);
-  const [connectionCode, setConnectionCode] = useState<string | null>(null);
-  const [isCopied, setIsCopied] = useState(false);
+  const [telegramId, setTelegramId] = useState('');
+  const [showInstructions, setShowInstructions] = useState(false);
 
-  const handleCopyCommand = () => {
-    if (!connectionCode) return;
+  const handleOpenBot = () => {
+    // Open Telegram bot
+    const botLink = 'https://t.me/Trudify_bot';
+    window.open(botLink, '_blank');
 
-    const command = `/connect ${connectionCode}`;
-    navigator.clipboard.writeText(command);
-    setIsCopied(true);
-
-    // Reset copied state after 2 seconds
-    setTimeout(() => setIsCopied(false), 2000);
+    // Show the input field and instructions
+    setShowInstructions(true);
+    setError(null);
   };
 
   const handleConnect = async () => {
+    if (!telegramId || telegramId.trim() === '') {
+      setError(t('profile.telegram.invalidIdFormat'));
+      return;
+    }
+
+    // Validate it's a number
+    if (!/^\d+$/.test(telegramId)) {
+      setError(t('profile.telegram.invalidIdFormat'));
+      return;
+    }
+
     setIsConnecting(true);
     setError(null);
 
     try {
-      // Generate connection token
-      const response = await fetch('/api/telegram/generate-connection-token', {
+      const response = await fetch('/api/telegram/connect', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({ telegramId, userId })
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Token generation failed:', errorData);
-
-        // Show helpful message for development
-        if (errorData.error === 'User not found') {
-          throw new Error('Development Mode: Mock user not found in database. This feature requires real authentication.');
-        }
-
-        throw new Error(errorData.error || 'Failed to generate connection token');
+        throw new Error(errorData.error || 'Failed to connect');
       }
 
-      const { token } = await response.json();
-
-      // Generate short connection code (first 8 chars of token for easy typing)
-      const shortCode = token.substring(0, 8).toUpperCase();
-      setConnectionCode(shortCode);
-
-      // Also keep deep link as fallback
-      const deepLink = `https://t.me/Trudify_bot?start=connect_${token}`;
-      setTelegramLink(deepLink);
-
-      // Warm up the webhook endpoint (fire-and-forget)
-      // This eliminates cold start delay when user actually connects
-      fetch('/api/telegram/webhook', { method: 'GET' }).catch(() => {
-        // Silently ignore errors - this is just for warmup
-      });
+      // Success! Reload to show connected status
+      window.location.reload();
     } catch (err) {
       console.error('Error connecting Telegram:', err);
-      setError(t('profile.telegramConnectError'));
+      setError(err instanceof Error ? err.message : t('profile.telegramConnectError'));
     } finally {
       setIsConnecting(false);
     }
@@ -164,7 +152,7 @@ export function TelegramConnection({
           </>
         )}
 
-        {!telegramConnected && (
+        {!telegramConnected && !showInstructions && (
           <>
             <Divider className="my-3" />
             <div className="bg-blue-50 p-3 rounded-lg mb-3">
@@ -177,6 +165,68 @@ export function TelegramConnection({
                 <li>• {t('profile.noEmailSpam')}</li>
                 <li>• {t('profile.richMessages')}</li>
               </ul>
+            </div>
+          </>
+        )}
+
+        {!telegramConnected && showInstructions && (
+          <>
+            <Divider className="my-3" />
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-3">
+              <p className="text-sm font-semibold text-gray-900 mb-3">
+                {t('profile.telegram.steps')}:
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                    1
+                  </div>
+                  <p className="text-sm text-gray-700 flex-1">
+                    {t('profile.telegram.step1')}
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                    2
+                  </div>
+                  <p className="text-sm text-gray-700 flex-1">
+                    {t('profile.telegram.step2')}
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                    3
+                  </div>
+                  <p className="text-sm text-gray-700 flex-1">
+                    {t('profile.telegram.step3')}
+                  </p>
+                </div>
+              </div>
+
+              <Input
+                type="text"
+                label={t('profile.telegram.enterId')}
+                placeholder="5108679736"
+                value={telegramId}
+                onChange={(e) => setTelegramId(e.target.value.replace(/\D/g, ''))}
+                size="lg"
+                className="mb-3"
+                classNames={{
+                  input: 'text-center text-xl font-bold tracking-wide'
+                }}
+              />
+
+              <Button
+                color="primary"
+                size="lg"
+                fullWidth
+                onPress={handleConnect}
+                isLoading={isConnecting}
+                isDisabled={!telegramId || telegramId.trim() === ''}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold"
+              >
+                {t('profile.telegram.connect')}
+              </Button>
             </div>
           </>
         )}
@@ -203,104 +253,29 @@ export function TelegramConnection({
           >
             {t('profile.disconnectTelegram')}
           </Button>
-        ) : connectionCode ? (
-          // Show connection instructions with code
-          <div className="space-y-3">
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-              <p className="text-sm font-semibold text-gray-900 mb-2">
-                Follow these steps:
-              </p>
-              <ol className="text-sm text-gray-700 space-y-2 list-decimal list-inside">
-                <li>Open Telegram and find <strong>@Trudify_bot</strong></li>
-                <li>Send this command:</li>
-              </ol>
-
-              {/* Desktop: Code with icon button */}
-              <div className="mt-2 hidden md:flex bg-white border border-gray-300 rounded p-3 font-mono items-center justify-between">
-                <code className="text-lg font-bold text-blue-600">
-                  /connect {connectionCode}
-                </code>
-                <Button
-                  isIconOnly
-                  size="sm"
-                  variant="flat"
-                  color={isCopied ? 'success' : 'default'}
-                  onPress={handleCopyCommand}
-                  className="ml-2"
-                >
-                  {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                </Button>
-              </div>
-
-              {/* Mobile: Code + Full-width copy button */}
-              <div className="mt-2 md:hidden space-y-2">
-                <div className="bg-white border border-gray-300 rounded p-3 font-mono text-center">
-                  <code className="text-lg font-bold text-blue-600">
-                    /connect {connectionCode}
-                  </code>
-                </div>
-                <Button
-                  size="lg"
-                  color={isCopied ? 'success' : 'primary'}
-                  onPress={handleCopyCommand}
-                  fullWidth
-                  className={isCopied ? '' : 'bg-blue-600 text-white font-semibold shadow-lg'}
-                  startContent={isCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                >
-                  {isCopied ? 'Copied!' : 'Copy Command'}
-                </Button>
-              </div>
-
-              <p className="text-xs text-gray-500 mt-2">
-                Code expires in 10 minutes
-              </p>
-            </div>
-
-            <Button
-              as="a"
-              href={telegramLink!}
-              rel="noopener noreferrer"
-              color="primary"
-              size="sm"
-              fullWidth
-              startContent={
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
-                </svg>
-              }
-            >
-              Open Telegram Bot
-            </Button>
-
-            <Button
-              variant="flat"
-              size="sm"
-              fullWidth
-              onPress={() => {
-                setConnectionCode(null);
-                setTelegramLink(null);
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-        ) : (
-          // Initial button to generate token
+        ) : !showInstructions ? (
           <Button
             color="primary"
-            size="sm"
-            onPress={handleConnect}
-            isLoading={isConnecting}
+            size="lg"
             fullWidth
+            onPress={handleOpenBot}
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg"
             startContent={
-              !isConnecting && (
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
-                </svg>
-              )
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.764 8.317c-.132.589-.482.732-.979.455l-2.7-1.988-1.303 1.255c-.144.144-.264.264-.542.264l.193-2.74 4.994-4.512c.217-.193-.047-.3-.336-.107l-6.17 3.883-2.66-.832c-.578-.18-.589-.578.12-.857l10.393-4.006c.482-.18.902.107.744.857z"/>
+              </svg>
             }
           >
-            {t('profile.connectTelegram')}
+            {t('profile.telegram.openBot')}
+          </Button>
+        ) : (
+          <Button
+            variant="flat"
+            size="sm"
+            fullWidth
+            onPress={() => setShowInstructions(false)}
+          >
+            {t('common.cancel')}
           </Button>
         )}
       </CardBody>

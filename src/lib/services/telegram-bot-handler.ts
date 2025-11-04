@@ -59,247 +59,49 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
   // Check if it's a /start command
   if (!message.text.startsWith('/start')) return;
 
-  // Parse command: /start connect_{token}
-  if (text.includes('connect_')) {
-    const token = text.split('connect_')[1]?.trim();
-    if (token) {
-      await handleConnectionRequest(token, telegramUserId, message.from);
-    } else {
-      console.error('[Telegram] Token parsing failed from /start command');
-    }
-  } else {
-    // Regular /start - welcome message (fire-and-forget)
-    sendWelcomeMessage(chatId);
-  }
+  // Simple flow: Send telegram_id with greeting in user's language
+  await handleStartCommand(telegramUserId, message.from, chatId);
   } catch (error) {
     console.error('[Telegram Handler] FATAL EXCEPTION:', error);
     console.error('[Telegram Handler] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
   }
 }
 
-async function handleConnectionRequest(
-  token: string,
+async function handleStartCommand(
   telegramId: number,
-  telegramUser: NonNullable<TelegramUpdate['message']>['from']
+  telegramUser: NonNullable<TelegramUpdate['message']>['from'],
+  chatId: number
 ) {
-  console.log('[Telegram] Processing connection request:', {
-    token: token.substring(0, 10) + '...',
-    telegramId,
-    username: telegramUser.username
-  });
-
-  const supabase = createAdminClient();
-
-  // Verify token
-  const { data: tokenData, error: tokenError } = await supabase
-    .from('telegram_connection_tokens')
-    .select('*')
-    .eq('token', token)
-    .eq('used', false)
-    .gt('expires_at', new Date().toISOString())
-    .single();
-
-  if (tokenError || !tokenData) {
-    console.error('[Telegram] Token validation failed:', tokenError);
-    // Token invalid or expired - fire-and-forget
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Connection Link Expired</b>\n\nPlease generate a new connection link from your profile settings on Trudify website.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send expired token message:', err));
-    return;
-  }
-
-  console.log('[Telegram] Token validated for user:', tokenData.user_id);
-
-  // Mark token as used
-  await supabase
-    .from('telegram_connection_tokens')
-    .update({ used: true })
-    .eq('token', token);
-
-  // Update user with Telegram credentials
-  const { error: updateError } = await supabase
-    .from('users')
-    .update({
-      telegram_id: telegramId,
-      telegram_username: telegramUser?.username || null,
-      telegram_first_name: telegramUser?.first_name,
-      telegram_last_name: telegramUser?.last_name || null,
-      preferred_notification_channel: 'telegram',
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', tokenData.user_id);
-
-  if (updateError) {
-    console.error('[Telegram] Error updating user with Telegram credentials:', updateError);
-    // Fire-and-forget error message
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Connection Failed</b>\n\nPlease try again or contact support.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send error message:', err));
-    return;
-  }
-
-  console.log('[Telegram] Successfully connected user:', tokenData.user_id);
-
-  // Success! Send confirmation - fire-and-forget
-  sendTelegramMessage(
-    telegramId,
-    `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
-    'HTML'
-  ).catch(err => console.error('[Telegram] Failed to send success message:', err));
-}
-
-async function handleConnectionByCode(
-  code: string,
-  telegramId: number,
-  telegramUser: NonNullable<TelegramUpdate['message']>['from']
-) {
-  let supabase;
   try {
-    supabase = createAdminClient();
+    // Detect user's language (default to English)
+    const languageCode = telegramUser.language_code?.toLowerCase() || 'en';
+
+    // Map Telegram language codes to our supported languages
+    let lang = 'en'; // default
+    if (languageCode.startsWith('bg')) lang = 'bg';
+    else if (languageCode.startsWith('ru')) lang = 'ru';
+
+    console.log('[Telegram] Start command from user:', telegramId, 'language:', lang);
+
+    // Greeting messages in different languages
+    const greetings: Record<string, string> = {
+      en: `👋 <b>Welcome to Trudify!</b>\n\n✨ <b>Connect Your Account</b>\n\nTo receive instant notifications about your tasks, applications, and messages:\n\n<b>1.</b> Copy your Telegram ID below\n<b>2.</b> Go to your Trudify profile\n<b>3.</b> Click "Connect Telegram"\n<b>4.</b> Paste your Telegram ID\n\n🆔 <b>Your Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Tap to copy, then paste it in your profile.</i>`,
+
+      bg: `👋 <b>Добре дошли в Trudify!</b>\n\n✨ <b>Свържете вашия акаунт</b>\n\nЗа да получавате мигновени известия за задачите, приложенията и съобщенията си:\n\n<b>1.</b> Копирайте вашия Telegram ID по-долу\n<b>2.</b> Отидете в профила си в Trudify\n<b>3.</b> Натиснете "Свържи Telegram"\n<b>4.</b> Поставете вашия Telegram ID\n\n🆔 <b>Вашият Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Докоснете за копиране, след това го поставете в профила си.</i>`,
+
+      ru: `👋 <b>Добро пожаловать в Trudify!</b>\n\n✨ <b>Подключите ваш аккаунт</b>\n\nЧтобы получать мгновенные уведомления о ваших задачах, заявках и сообщениях:\n\n<b>1.</b> Скопируйте ваш Telegram ID ниже\n<b>2.</b> Перейдите в ваш профиль Trudify\n<b>3.</b> Нажмите "Подключить Telegram"\n<b>4.</b> Вставьте ваш Telegram ID\n\n🆔 <b>Ваш Telegram ID:</b>\n<code>${telegramId}</code>\n\n<i>Нажмите для копирования, затем вставьте в профиль.</i>`
+    };
+
+    // Send greeting with telegram_id (fire-and-forget)
+    sendTelegramMessage(
+      chatId,
+      greetings[lang],
+      'HTML'
+    ).catch(err => console.error('[Telegram] Failed to send greeting:', err));
+
   } catch (error) {
-    console.error('[Telegram] Failed to create admin client:', error);
-    // Fire-and-forget error message
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Server Configuration Error</b>\n\nPlease contact support.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send config error message:', err));
-    return;
+    console.error('[Telegram] Exception in start command:', error);
   }
-
-  // Find token that starts with this code - with retry logic
-  let tokens, tokenError;
-  let retries = 3;
-
-  while (retries > 0) {
-    try {
-      const result = await supabase
-        .from('telegram_connection_tokens')
-        .select('*')
-        .eq('used', false)
-        .gt('expires_at', new Date().toISOString());
-
-      tokens = result.data;
-      tokenError = result.error;
-
-      // If successful or non-network error, break
-      if (!tokenError || tokenError.message !== 'TypeError: fetch failed') {
-        break;
-      }
-
-      retries--;
-      if (retries > 0) {
-        console.log(`[Telegram] Token query failed, retrying... (${retries} attempts left)`);
-        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
-      }
-    } catch (error) {
-      retries--;
-      if (retries > 0) {
-        console.log(`[Telegram] Exception during token query, retrying... (${retries} attempts left)`);
-        await new Promise(resolve => setTimeout(resolve, 500));
-      } else {
-        console.error('[Telegram] Exception during token query after retries:', error);
-        // Fire-and-forget error message
-        sendTelegramMessage(
-          telegramId,
-          '❌ <b>Database Error</b>\n\nPlease try again or contact support.',
-          'HTML'
-        ).catch(err => console.error('[Telegram] Failed to send db error message:', err));
-        return;
-      }
-    }
-  }
-
-  if (tokenError) {
-    console.error('[Telegram] Token query error:', tokenError);
-    // Fire-and-forget error message
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Connection Failed</b>\n\nDatabase error. Please try again or contact support.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send query error message:', err));
-    return;
-  }
-
-  // Find token matching the code (first 8 chars)
-  const tokenData = tokens?.find(t =>
-    t.token.substring(0, 8).toUpperCase() === code
-  );
-
-  if (!tokenData) {
-    // Fire-and-forget: Don't wait for message to send
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Invalid or Expired Code</b>\n\nThis connection code is invalid or has expired. Please generate a new code from your profile settings on Trudify website.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send invalid code message:', err));
-    return;
-  }
-
-  // Mark token as used
-  await supabase
-    .from('telegram_connection_tokens')
-    .update({ used: true })
-    .eq('token', tokenData.token);
-
-  // Update user with Telegram credentials
-  try {
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({
-        telegram_id: telegramId,
-        telegram_username: telegramUser?.username || null,
-        telegram_first_name: telegramUser?.first_name,
-        telegram_last_name: telegramUser?.last_name || null,
-        preferred_notification_channel: 'telegram',
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', tokenData.user_id);
-
-    if (updateError) {
-      console.error('[Telegram] User update error:', updateError);
-      // Fire-and-forget: Don't wait for error message
-      sendTelegramMessage(
-        telegramId,
-        '❌ <b>Connection Failed</b>\n\nDatabase error. Please try again or contact support.',
-        'HTML'
-      ).catch(err => console.error('[Telegram] Failed to send error message:', err));
-      return;
-    }
-
-    console.log('[Telegram] User connected successfully:', tokenData.user_id);
-  } catch (error) {
-    console.error('[Telegram] Exception during user update:', error);
-    // Fire-and-forget: Don't wait for error message
-    sendTelegramMessage(
-      telegramId,
-      '❌ <b>Connection Failed</b>\n\nPlease try again or contact support.',
-      'HTML'
-    ).catch(err => console.error('[Telegram] Failed to send error message:', err));
-    return;
-  }
-
-  // Success! Send confirmation (fire-and-forget)
-  console.log('[Telegram] Sending success message to user:', telegramId);
-  sendTelegramMessage(
-    telegramId,
-    `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
-    'HTML'
-  ).catch(err => console.error('[Telegram] Failed to send success message:', err));
-  console.log('[Telegram] Success message queued (not waiting for response)');
-}
-
-async function sendWelcomeMessage(chatId: number) {
-  // Fire-and-forget: Send welcome message without waiting
-  sendTelegramMessage(
-    chatId,
-    `👋 <b>Welcome to Trudify!</b>\n\nTrudify connects customers with verified professionals for various services in Bulgaria.\n\n<b>To connect your Telegram account:</b>\n1. Login to Trudify website (task-bridge-chi.vercel.app)\n2. Go to Profile → Settings\n3. Click "Connect Telegram"\n4. Follow the link that opens\n\nThis will enable instant notifications for all your tasks and applications!`,
-    'HTML'
-  ).catch(err => console.error('[Telegram] Failed to send welcome message:', err));
 }
 
 async function sendTelegramMessage(
