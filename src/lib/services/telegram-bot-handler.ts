@@ -193,6 +193,16 @@ async function handleConnectionByCode(
     .eq('used', false)
     .gt('expires_at', new Date().toISOString());
 
+  console.log('[Telegram] Token query result:', {
+    error: tokenError,
+    tokenCount: tokens?.length || 0,
+    tokens: tokens?.map(t => ({
+      prefix: t.token.substring(0, 8).toUpperCase(),
+      used: t.used,
+      expires: t.expires_at
+    }))
+  });
+
   if (tokenError) {
     console.error('[Telegram] Error querying tokens:', tokenError);
     await sendTelegramMessage(
@@ -207,6 +217,12 @@ async function handleConnectionByCode(
   const tokenData = tokens?.find(t =>
     t.token.substring(0, 8).toUpperCase() === code
   );
+
+  console.log('[Telegram] Token match result:', {
+    code,
+    found: !!tokenData,
+    matchedToken: tokenData ? tokenData.token.substring(0, 16) + '...' : null
+  });
 
   if (!tokenData) {
     console.log('[Telegram] No matching token found for code:', code);
