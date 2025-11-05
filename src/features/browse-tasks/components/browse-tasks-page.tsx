@@ -6,6 +6,7 @@ import { mockTasks } from "@/lib/mock-data";
 import { useTaskFilters } from "@/app/[lang]/browse-tasks/hooks/use-task-filters";
 import { FilterBar } from "@/app/[lang]/browse-tasks/components/filter-bar";
 import { FiltersModal } from "@/app/[lang]/browse-tasks/components/filters-modal";
+import { ActiveFilters } from "@/app/[lang]/browse-tasks/components/active-filters";
 import { BrowseTasksHeroSection, SearchFiltersSection, ResultsSection } from "./sections";
 import { useAuth } from "@/features/auth";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
@@ -49,13 +50,6 @@ export default function BrowseTasksPage() {
  const tasks = data?.tasks || [];
  const pagination = data?.pagination;
 
- const handleFilterChange = (key: string, value: string) => {
-  if (key === 'search') {
-   // Use skipUrlUpdate to enable debouncing
-   updateFilter('search', value, true);
-  }
- };
-
  const handleApplyToTask = (taskId: string) => {
   if (!user) {
    // User not authenticated - show auth slideover
@@ -91,20 +85,12 @@ export default function BrowseTasksPage() {
    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
     {/* Search Section */}
     <SearchFiltersSection
-     filters={{
-      search: filters.search || '',
-      category: filters.category || '',
-      city: filters.city || '',
-      budgetMin: filters.budgetMin?.toString() || '',
-      budgetMax: filters.budgetMax?.toString() || '',
-      deadline: '',
-      status: 'open',
-      sortBy: filters.sortBy || 'newest'
-     }}
-     onFilterChange={handleFilterChange}
      tasksCount={pagination?.total || tasks.length}
      isLoading={isLoading}
     />
+
+    {/* Active Filters Display */}
+    <ActiveFilters />
 
     {/* Filters - Desktop (hidden on mobile) */}
     <div className="hidden md:block mb-6">

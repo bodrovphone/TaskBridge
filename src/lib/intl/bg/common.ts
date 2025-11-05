@@ -11,6 +11,7 @@ export const common = {
   delete: 'Изтриване',
   cancel: 'Отказ',
   dismiss: 'Може би по-късно',
+  ignore: 'Игнорирай',
   important: 'Важно',
   save: 'Запазване',
   submit: 'Изпращане',
@@ -42,6 +43,14 @@ export const common = {
   'locations.burgas': 'Бургас',
   'locations.ruse': 'Русе',
   'locations.staraZagora': 'Стара Загора',
+
+  // Cities (top 6 supported)
+  'cities.sofia': 'София',
+  'cities.plovdiv': 'Пловдив',
+  'cities.varna': 'Варна',
+  'cities.burgas': 'Бургас',
+  'cities.ruse': 'Русе',
+  'cities.staraZagora': 'Стара Загора',
 
   // Common messages
   'message.taskCreated': 'Задачата е създадена успешно!',

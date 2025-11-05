@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, CheckCircle2, XCircle, Send } from 'lucide-react';
+import { CheckCircle2, XCircle } from 'lucide-react';
+import Image from 'next/image';
 
 interface TelegramConnectionProps {
   userId: string;
@@ -121,7 +122,12 @@ export function TelegramConnection({
       <CardBody className="p-4">
         <div className="flex items-start gap-3 mb-4">
           <div className="p-2 rounded-lg bg-blue-100">
-            <MessageCircle className="w-5 h-5 text-blue-600" />
+            <Image
+              src="/icons/telegram-logo.svg"
+              alt="Telegram"
+              width={20}
+              height={20}
+            />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
@@ -270,7 +276,14 @@ export function TelegramConnection({
             variant="flat"
             color="primary"
             fullWidth
-            startContent={<Send className="w-5 h-5" />}
+            startContent={
+              <Image
+                src="/icons/telegram-logo.svg"
+                alt="Telegram"
+                width={20}
+                height={20}
+              />
+            }
             onPress={handleOpenBot}
             className="hover:scale-105 transition-transform shadow-md font-semibold bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
           >

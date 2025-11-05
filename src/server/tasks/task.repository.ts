@@ -248,13 +248,6 @@ export class TaskRepository {
         query = query.eq('neighborhood', options.filters.neighborhood)
       }
 
-      if (options.filters.search) {
-        // Full-text search in title and description
-        query = query.or(
-          `title.ilike.%${options.filters.search}%,description.ilike.%${options.filters.search}%`
-        )
-      }
-
       if (options.filters.isUrgent !== undefined) {
         query = query.eq('is_urgent', options.filters.isUrgent)
       }

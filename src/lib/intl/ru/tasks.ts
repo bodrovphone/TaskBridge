@@ -35,6 +35,10 @@ export const tasks = {
   'browseTasks.search.placeholder':
     'Поиск задач по ключевым словам, категории или городу...',
   'browseTasks.search.popular': 'Популярные',
+  'browseTasks.search.searchingCategories': 'Поиск категорий...',
+  'browseTasks.search.suggestedCategories': 'Предлагаемые категории',
+  'browseTasks.search.categories': 'Категории',
+  'browseTasks.search.cities': 'Города',
   'browseTasks.filters.title': 'Фильтрация и сортировка',
   'browseTasks.filters.advanced': 'Расширенные фильтры',
   'browseTasks.filters.quick': 'Быстрый фильтр',
@@ -72,6 +76,10 @@ export const tasks = {
   'browseTasks.filters.flexible': 'Гибко',
   'browseTasks.filters.searchCity': 'Поиск города...',
   'browseTasks.filters.noCitiesFound': 'Города не найдены',
+  'browseTasks.filters.searchCategory': 'Поиск категорий...',
+  'browseTasks.filters.noCategoriesFound': 'Категории не найдены',
+  'browseTasks.filters.activeFilters': 'Активные фильтры',
+  'browseTasks.filters.clearAll': 'Очистить все',
   'browseTasks.sort.newest': 'Сначала новые',
   'browseTasks.sort.urgent': 'Сначала срочные',
   'browseTasks.sort.budgetHigh': 'Самый высокий бюджет',
@@ -224,8 +232,16 @@ export const tasks = {
   'createTask.errors.descriptionTooLong': 'Описание не может быть более 2000 символов',
   'createTask.errors.cityRequired': 'Пожалуйста, выберите город',
   'createTask.errors.budgetInvalid': 'Максимальный бюджет должен быть больше минимального',
+  'createTask.errors.deadlineInPast': 'Срок должен быть сегодня или в будущем',
 
   'createTask.imageUpload.error': 'Не удалось загрузить изображение',
+
+  // Success messages
+  'createTask.success': 'Задача успешно создана!',
+  'createTask.successMessage': 'Ваша задача опубликована и теперь видна профессионалам.',
+  'createTask.successWithoutImage': 'Ваша задача опубликована без изображения. Вы можете добавить или изменить изображение, отредактировав задачу.',
+  'createTask.error': 'Ошибка при создании задачи',
+  'createTask.errorMessage': 'Пожалуйста, попробуйте позже.',
 
   'taskCard.apply': 'Откликнуться',
   'taskCard.seeDetails': 'Подробнее',

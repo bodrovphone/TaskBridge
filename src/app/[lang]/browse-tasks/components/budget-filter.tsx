@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Popover, PopoverTrigger, PopoverContent, Chip } from '@nextui-org/react'
 import { Wallet, ChevronDown } from 'lucide-react'
@@ -23,6 +23,12 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [minInput, setMinInput] = useState(value?.min?.toString() || '')
   const [maxInput, setMaxInput] = useState(value?.max?.toString() || '')
+
+  // Sync local state with prop changes
+  useEffect(() => {
+    setMinInput(value?.min?.toString() || '')
+    setMaxInput(value?.max?.toString() || '')
+  }, [value?.min, value?.max])
 
   const handleApply = () => {
     const min = minInput ? Number(minInput) : undefined
@@ -49,11 +55,11 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
   const getDisplayText = () => {
     if (!hasValue) return t('browseTasks.filters.budget', 'Budget')
 
-    if (value?.min && value?.max) {
+    if (value?.min !== undefined && value?.max !== undefined) {
       return `${value.min}-${value.max} лв`
-    } else if (value?.min) {
+    } else if (value?.min !== undefined) {
       return `${value.min}+ лв`
-    } else if (value?.max) {
+    } else if (value?.max !== undefined) {
       return `< ${value.max} лв`
     }
     return t('browseTasks.filters.budget', 'Budget')
@@ -63,11 +69,14 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
     <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement="bottom-start">
       <PopoverTrigger>
         <Button
-          variant={hasValue ? 'flat' : 'bordered'}
-          color={hasValue ? 'primary' : 'default'}
+          variant="bordered"
           startContent={<Wallet className="w-4 h-4" />}
           endContent={<ChevronDown className="w-4 h-4" />}
-          className="justify-between"
+          className={`justify-between min-w-44 ${
+            hasValue
+              ? 'bg-blue-100 border-blue-500 text-blue-700 hover:bg-blue-200'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+          }`}
         >
           {getDisplayText()}
         </Button>
@@ -79,7 +88,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
               {t('browseTasks.filters.budget', 'Budget')}
             </h4>
             {hasValue && (
-              <Button size="sm" variant="light" onPress={handleClear}>
+              <Button size="sm" variant="light" className="text-red-600 hover:bg-red-50" onPress={handleClear}>
                 {t('browseTasks.filters.clear', 'Clear')}
               </Button>
             )}
@@ -91,9 +100,8 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
               <Chip
                 key={index}
                 onClick={() => handlePreset(preset)}
-                className="cursor-pointer"
+                className="cursor-pointer bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
                 variant="flat"
-                color="default"
               >
                 {preset.label}
               </Chip>
@@ -128,7 +136,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
           </div>
 
           {/* Apply Button */}
-          <Button color="primary" className="w-full" onPress={handleApply}>
+          <Button className="w-full bg-blue-600 text-white hover:bg-blue-700" onPress={handleApply}>
             {t('browseTasks.filters.apply', 'Apply')}
           </Button>
         </div>

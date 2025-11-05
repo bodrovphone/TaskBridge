@@ -32,7 +32,7 @@ const filterSections = [
 export function FiltersModal() {
   const { t } = useTranslation()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { filters, updateFilter, resetFilters, activeFilterCount } = useTaskFilters()
+  const { filters, updateFilter, updateFilters, resetFilters, activeFilterCount } = useTaskFilters()
 
   return (
     <>
@@ -48,9 +48,8 @@ export function FiltersModal() {
         {activeFilterCount > 0 && (
           <Chip
             size="sm"
-            color="primary"
             variant="solid"
-            className="absolute -top-2 -right-2 min-w-6 h-6"
+            className="absolute -top-2 -right-2 min-w-6 h-6 bg-orange-600 text-white"
           >
             {activeFilterCount}
           </Chip>
@@ -63,6 +62,7 @@ export function FiltersModal() {
         onOpenChange={onOpenChange}
         size="full"
         scrollBehavior="inside"
+        hideCloseButton={true}
         classNames={{
           base: 'md:hidden',
           wrapper: 'items-end',
@@ -104,7 +104,7 @@ export function FiltersModal() {
                       </h2>
                       {activeFilterCount > 0 && (
                         <div className="flex items-center gap-2 mt-0.5">
-                          <Chip size="sm" color="primary" variant="flat">
+                          <Chip size="sm" variant="flat" className="bg-orange-100 text-orange-700 border border-orange-300">
                             {activeFilterCount} {t('browseTasks.filters.active', 'active')}
                           </Chip>
                         </div>
@@ -159,8 +159,7 @@ export function FiltersModal() {
                           <BudgetFilter
                             value={{ min: filters.budgetMin, max: filters.budgetMax }}
                             onChange={(value) => {
-                              updateFilter('budgetMin', value.min)
-                              updateFilter('budgetMax', value.max)
+                              updateFilters({ budgetMin: value.min, budgetMax: value.max })
                             }}
                           />
                         )}
@@ -206,37 +205,40 @@ export function FiltersModal() {
                 </div>
               </ModalBody>
 
-              <ModalFooter className="border-t border-gray-100 bg-white gap-2">
-                <Button
-                  variant="light"
-                  size="lg"
-                  onPress={onClose}
-                  className="flex-1"
-                >
-                  {t('common.close', 'Close')}
-                </Button>
-                <Button
-                  variant="flat"
-                  size="lg"
-                  color="danger"
-                  startContent={<X className="w-4 h-4" />}
-                  onPress={() => {
-                    resetFilters()
-                  }}
-                  isDisabled={activeFilterCount === 0}
-                  className="flex-1"
-                >
-                  {t('browseTasks.filters.reset', 'Reset')}
-                </Button>
-                <Button
-                  color="primary"
-                  size="lg"
-                  variant="shadow"
-                  onPress={onClose}
-                  className="flex-1 font-semibold"
-                >
-                  {t('browseTasks.filters.showResults', 'Show Results')}
-                </Button>
+              <ModalFooter className="border-t border-gray-100 bg-white p-4">
+                <div className="flex flex-col w-full gap-2">
+                  {/* First row - Primary action */}
+                  <Button
+                    size="lg"
+                    onPress={onClose}
+                    className="w-full font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
+                  >
+                    {t('browseTasks.filters.showResults', 'Show Results')}
+                  </Button>
+
+                  {/* Second row - Secondary actions */}
+                  <div className="flex gap-2 w-full">
+                    <Button
+                      variant="bordered"
+                      size="lg"
+                      onPress={onClose}
+                      className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-100"
+                    >
+                      {t('common.close', 'Close')}
+                    </Button>
+                    <Button
+                      size="lg"
+                      startContent={<X className="w-4 h-4" />}
+                      onPress={() => {
+                        resetFilters()
+                      }}
+                      isDisabled={activeFilterCount === 0}
+                      className="flex-1 bg-red-500 text-white hover:bg-red-600 disabled:bg-gray-200 disabled:text-gray-400"
+                    >
+                      {t('browseTasks.filters.reset', 'Reset')}
+                    </Button>
+                  </div>
+                </div>
               </ModalFooter>
             </>
           )}

@@ -2,8 +2,9 @@
 
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, DatePicker } from '@nextui-org/react'
-import { parseDate } from '@internationalized/date'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import { Clock } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 interface TimelineSectionProps {
  form: any
@@ -13,7 +14,12 @@ interface TimelineSectionProps {
 }
 
 export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSectionProps) {
- const { t } = useTranslation()
+ const { t, i18n } = useTranslation()
+ const params = useParams()
+ const locale = (params?.lang as string) || i18n.language || 'en'
+
+ // Map app locale to date format locale (all use European dd/mm/yyyy format)
+ const dateLocale = locale === 'en' ? 'en-GB' : locale === 'bg' ? 'bg-BG' : 'ru-RU'
 
  const urgencyOptions = [
   {
@@ -92,32 +98,50 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
 
    {/* Specific Deadline (Optional) - Hidden for same_day urgency */}
    <form.Field name="deadline" key="deadline-field">
-    {(field: any) => (
-     <DatePicker
-      key="deadline-picker"
-      label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
-      description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
-      value={field.state.value ? parseDate(field.state.value.toISOString().split('T')[0]) : null}
-      onChange={(date: any) => {
-       if (date) {
-        // Create date at noon UTC to avoid timezone issues
-        const jsDate = new Date(Date.UTC(date.year, date.month - 1, date.day, 12, 0, 0))
-        field.handleChange(jsDate)
-       } else {
-        field.handleChange(undefined)
-       }
-      }}
-      minValue={parseDate(new Date().toISOString().split('T')[0])}
-      showMonthAndYearPickers
-      labelPlacement="outside"
-      isDisabled={urgency === 'same_day' ? true : false}
-      classNames={{
-       base: 'max-w-md',
-       popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
-       calendar: 'bg-white shadow-sm',
-      }}
-     />
-    )}
+    {(field: any) => {
+     // Get today's date in the user's local timezone
+     const todayDate = today(getLocalTimeZone())
+
+     // Convert stored JS Date to CalendarDate for display
+     const displayValue = field.state.value
+       ? (() => {
+           const date = new Date(field.state.value)
+           return {
+             year: date.getFullYear(),
+             month: date.getMonth() + 1,
+             day: date.getDate(),
+           }
+         })()
+       : null
+
+     return (
+      <DatePicker
+       key="deadline-picker"
+       label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
+       description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
+       value={displayValue}
+       onChange={(date: any) => {
+        if (date) {
+         // Create date at noon UTC to avoid timezone issues
+         const jsDate = new Date(Date.UTC(date.year, date.month - 1, date.day, 12, 0, 0))
+         field.handleChange(jsDate)
+        } else {
+         field.handleChange(undefined)
+        }
+       }}
+       minValue={todayDate}
+       showMonthAndYearPickers
+       labelPlacement="outside"
+       isDisabled={urgency === 'same_day'}
+       locale={dateLocale}
+       classNames={{
+        base: 'max-w-md',
+        popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
+        calendar: 'bg-white shadow-sm',
+       }}
+      />
+     )
+    }}
    </form.Field>
    </CardBody>
   </Card>

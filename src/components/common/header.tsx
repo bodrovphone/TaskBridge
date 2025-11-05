@@ -9,7 +9,7 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
-import { Plus, Handshake, FileText, Send, Briefcase } from "lucide-react"
+import { Plus, Handshake, FileText, Send, Briefcase, Search } from "lucide-react"
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
 // @todo FEATURE: Uncomment when reviews feature is built
@@ -192,19 +192,6 @@ function Header() {
       <NotificationBell />
      </NavbarItem>
     )}
-    {/* Mobile Create Task Button - Circular with Plus icon */}
-    <NavbarItem>
-     <Button
-      isIconOnly
-      color="primary"
-      variant="solid"
-      className="font-medium shadow-lg"
-      onClick={handleCreateTask}
-      aria-label={t('nav.createTask')}
-     >
-      <Plus size={20} />
-     </Button>
-    </NavbarItem>
     <NavbarItem>
      {isAuthenticated ? (
       <UserAvatarDropdown size="sm" />
@@ -326,6 +313,39 @@ function Header() {
    onClose={() => setIsAuthSlideOverOpen(false)}
    action={authAction}
   />
+
+  {/* Floating Action Buttons - Mobile Only */}
+  <div className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[100] flex flex-col gap-4">
+   {/* Browse Tasks Button - Hide on browse-tasks page */}
+   {!pathname.includes('/browse-tasks') && (
+    <Button
+     isIconOnly
+     color="success"
+     variant="solid"
+     size="lg"
+     className="w-16 h-16 rounded-full shadow-2xl font-medium bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transform transition-transform hover:scale-110 active:scale-95 pointer-events-auto"
+     onPress={() => router.push(`/${lang}/browse-tasks`)}
+     aria-label={t('nav.browseTasks')}
+    >
+     <Search size={28} strokeWidth={2.5} />
+    </Button>
+   )}
+
+   {/* Create Task Button - Hide on create-task page */}
+   {!pathname.includes('/create-task') && (
+    <Button
+     isIconOnly
+     color="primary"
+     variant="solid"
+     size="lg"
+     className="w-16 h-16 rounded-full shadow-2xl font-medium bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transform transition-transform hover:scale-110 active:scale-95 pointer-events-auto"
+     onPress={handleCreateTask}
+     aria-label={t('nav.createTask')}
+    >
+     <Plus size={28} strokeWidth={2.5} />
+    </Button>
+   )}
+  </div>
 
   {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
   {/* <ReviewEnforcementDialog

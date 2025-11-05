@@ -146,7 +146,6 @@ const applyModePresets = (
     subcategory: params.subcategory,
     city: params.city,
     neighborhood: params.neighborhood,
-    search: params.search,
     isUrgent,
     budgetMin,
     budgetMax

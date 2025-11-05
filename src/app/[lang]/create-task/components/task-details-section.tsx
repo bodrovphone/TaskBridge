@@ -144,7 +144,7 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
         }
        }}
        minRows={4}
-       maxRows={4}
+       disableAutosize
        classNames={{
         base: 'w-full',
         input: 'text-base resize-none',

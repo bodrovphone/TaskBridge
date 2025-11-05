@@ -13,7 +13,6 @@ export interface TaskFilters {
   budgetMin?: number
   budgetMax?: number
   urgency?: 'same_day' | 'within_week' | 'flexible'
-  search?: string
   sortBy?: TaskSortOption
   page?: number
 }
@@ -34,7 +33,6 @@ export function useTaskFilters() {
       budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
       budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
       urgency: (searchParams.get('urgency') as any) || undefined,
-      search: searchParams.get('search') || undefined,
       sortBy: (searchParams.get('sortBy') as TaskSortOption) || 'newest',
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
     }
@@ -48,7 +46,6 @@ export function useTaskFilters() {
       budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
       budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
       urgency: (searchParams.get('urgency') as any) || undefined,
-      search: searchParams.get('search') || undefined,
       sortBy: (searchParams.get('sortBy') as TaskSortOption) || 'newest',
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
     }
@@ -82,24 +79,6 @@ export function useTaskFilters() {
     // Update URL
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }, [filters, pathname, router])
-
-  // Debounce search filter updates (500ms delay)
-  useEffect(() => {
-    if (filters.search === undefined) return
-
-    const timeoutId = setTimeout(() => {
-      // Build URL params with current filters
-      const params = new URLSearchParams()
-      Object.entries(filters).forEach(([k, v]) => {
-        if (v !== undefined && v !== null && v !== '') {
-          params.set(k, String(v))
-        }
-      })
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
-    }, 500)
-
-    return () => clearTimeout(timeoutId)
-  }, [filters.search])
 
   /**
    * Update multiple filters at once
@@ -137,6 +116,9 @@ export function useTaskFilters() {
    *
    * IMPORTANT: Browse mode always filters to status='open' only
    * Professionals should only see available tasks, not in-progress/completed/cancelled
+   *
+   * IMPORTANT: In browse mode, 'category' filter actually represents subcategory slugs
+   * (e.g., 'fish-care', 'plumber'). We send these as 'subcategory' to match the DB schema.
    */
   const buildApiQuery = useCallback(() => {
     const params = new URLSearchParams()
@@ -148,7 +130,10 @@ export function useTaskFilters() {
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
-        params.set(key, String(value))
+        // In browse mode, 'category' filter is actually a subcategory slug
+        // Rename it to 'subcategory' for the API query to match DB schema
+        const apiKey = key === 'category' ? 'subcategory' : key
+        params.set(apiKey, String(value))
       }
     })
 

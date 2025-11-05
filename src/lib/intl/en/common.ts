@@ -11,6 +11,7 @@ export const common = {
   delete: 'Delete',
   cancel: 'Cancel',
   dismiss: 'Maybe Later',
+  ignore: 'Ignore',
   important: 'Important',
   save: 'Save',
   submit: 'Submit',
@@ -42,6 +43,14 @@ export const common = {
   'locations.burgas': 'Burgas',
   'locations.ruse': 'Ruse',
   'locations.staraZagora': 'Stara Zagora',
+
+  // Cities (top 6 supported)
+  'cities.sofia': 'Sofia',
+  'cities.plovdiv': 'Plovdiv',
+  'cities.varna': 'Varna',
+  'cities.burgas': 'Burgas',
+  'cities.ruse': 'Ruse',
+  'cities.staraZagora': 'Stara Zagora',
 
   // Common messages
   'message.taskCreated': 'Task created successfully!',

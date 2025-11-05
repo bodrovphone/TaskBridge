@@ -16,7 +16,6 @@ export interface TaskQueryParams {
   subcategory?: string
   city?: string
   neighborhood?: string
-  search?: string
   isUrgent?: boolean | string
   budgetMin?: string | number
   budgetMax?: string | number
@@ -44,7 +43,6 @@ export interface TaskQueryOptions {
     subcategory?: string
     city?: string
     neighborhood?: string
-    search?: string
     isUrgent?: boolean
     budgetMin?: number
     budgetMax?: number

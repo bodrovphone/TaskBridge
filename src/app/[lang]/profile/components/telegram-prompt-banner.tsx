@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { Card, CardBody, Button } from '@nextui-org/react'
-import { Send, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import Image from 'next/image'
 
 interface TelegramPromptBannerProps {
   onConnect: () => void
@@ -18,8 +19,13 @@ export function TelegramPromptBanner({ onConnect, onDismiss }: TelegramPromptBan
       <CardBody className="p-4 md:p-6">
         <div className="flex items-start gap-4">
           {/* Telegram Icon */}
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-            <Send className="w-6 h-6 text-white" />
+          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+            <Image
+              src="/icons/telegram-logo.svg"
+              alt="Telegram"
+              width={32}
+              height={32}
+            />
           </div>
 
           {/* Content */}
@@ -34,7 +40,14 @@ export function TelegramPromptBanner({ onConnect, onDismiss }: TelegramPromptBan
               size="sm"
               variant="flat"
               color="primary"
-              startContent={<Send className="w-4 h-4" />}
+              startContent={
+                <Image
+                  src="/icons/telegram-logo.svg"
+                  alt="Telegram"
+                  width={16}
+                  height={16}
+                />
+              }
               onPress={onConnect}
               className="hover:scale-105 transition-transform shadow-md font-semibold bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
             >

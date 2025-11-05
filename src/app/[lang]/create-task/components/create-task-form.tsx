@@ -91,13 +91,13 @@ export function CreateTaskForm() {
      toast({
       title: t('createTask.success', 'Task created successfully!'),
       description: t('createTask.successWithoutImage', 'Your task has been posted without an image. You can add or change the image by editing the task.'),
-      variant: 'default'
+      variant: 'success'
      })
     } else {
      toast({
       title: t('createTask.success', 'Task created successfully!'),
       description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
-      variant: 'default'
+      variant: 'success'
      })
     }
 

@@ -35,6 +35,10 @@ export const tasks = {
   'browseTasks.search.placeholder':
     'Търсете задачи по ключови думи, категория или град...',
   'browseTasks.search.popular': 'Популярни',
+  'browseTasks.search.searchingCategories': 'Търсене на категории...',
+  'browseTasks.search.suggestedCategories': 'Предложени категории',
+  'browseTasks.search.categories': 'Категории',
+  'browseTasks.search.cities': 'Градове',
   'browseTasks.filters.title': 'Филтриране и сортиране',
   'browseTasks.filters.advanced': 'Разширени филтри',
   'browseTasks.filters.quick': 'Бърз филтър',
@@ -72,6 +76,10 @@ export const tasks = {
   'browseTasks.filters.flexible': 'Гъвкаво',
   'browseTasks.filters.searchCity': 'Търси град...',
   'browseTasks.filters.noCitiesFound': 'Няма намерени градове',
+  'browseTasks.filters.searchCategory': 'Търси категории...',
+  'browseTasks.filters.noCategoriesFound': 'Няма намерени категории',
+  'browseTasks.filters.activeFilters': 'Активни филтри',
+  'browseTasks.filters.clearAll': 'Изчисти всички',
   'browseTasks.sort.newest': 'Най-нови първо',
   'browseTasks.sort.urgent': 'Спешни първо',
   'browseTasks.sort.budgetHigh': 'Най-висок бюджет',
@@ -224,8 +232,16 @@ export const tasks = {
   'createTask.errors.descriptionTooLong': 'Описанието не може да бъде повече от 2000 символа',
   'createTask.errors.cityRequired': 'Градът е задължителен',
   'createTask.errors.budgetInvalid': 'Максимумът трябва да бъде по-голям от минимума',
+  'createTask.errors.deadlineInPast': 'Крайният срок трябва да бъде днес или в бъдеще',
 
   'createTask.imageUpload.error': 'Неуспешно качване на изображението',
+
+  // Success messages
+  'createTask.success': 'Задачата е създадена успешно!',
+  'createTask.successMessage': 'Вашата задача е публикувана и вече е видима за професионалистите.',
+  'createTask.successWithoutImage': 'Вашата задача е публикувана без изображение. Можете да добавите или промените изображението чрез редактиране на задачата.',
+  'createTask.error': 'Грешка при създаване на задача',
+  'createTask.errorMessage': 'Моля, опитайте отново по-късно.',
 
   'taskCard.apply': 'Кандидатствай',
   'taskCard.seeDetails': 'Виж детайли',

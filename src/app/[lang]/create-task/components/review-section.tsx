@@ -161,7 +161,7 @@ export function ReviewSection({ form }: ReviewSectionProps) {
         <h4 className="font-semibold text-gray-900 mb-3">
          {t('createTask.review.photos', 'Photos')} ({deferredFormData.photos.length})
         </h4>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
          {deferredFormData.photos.map((photoUrl: string, index: number) => (
           <div key={index} className="aspect-square relative rounded-lg overflow-hidden">
            <Image

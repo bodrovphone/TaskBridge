@@ -3,8 +3,8 @@
 import { useTranslation } from 'react-i18next'
 import { Button, Popover, PopoverTrigger, PopoverContent, Input } from '@nextui-org/react'
 import { MapPin, ChevronDown, Search } from 'lucide-react'
-import { useState } from 'react'
-import { BULGARIAN_CITIES } from '@/app/[lang]/create-task/lib/validation'
+import { useState, useMemo } from 'react'
+import { getCitiesWithLabels } from '@/features/cities'
 
 interface CityFilterProps {
   value?: string
@@ -14,33 +14,50 @@ interface CityFilterProps {
 export function CityFilter({ value, onChange }: CityFilterProps) {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
 
-  const filteredCities = BULGARIAN_CITIES.filter(city =>
-    city.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Get all cities with translated labels
+  const allCities = useMemo(() => getCitiesWithLabels(t), [t])
 
-  const handleSelect = (city: string) => {
-    if (value === city) {
+  // Filter cities based on search
+  const filteredCities = useMemo(() => {
+    if (!searchQuery.trim()) return allCities
+
+    const lowerQuery = searchQuery.toLowerCase()
+    return allCities.filter(city =>
+      city.label.toLowerCase().includes(lowerQuery) ||
+      city.slug.toLowerCase().includes(lowerQuery)
+    )
+  }, [allCities, searchQuery])
+
+  const handleSelect = (citySlug: string) => {
+    if (value === citySlug) {
       onChange(undefined) // Deselect if clicking same city
     } else {
-      onChange(city)
+      onChange(citySlug)
     }
+    setSearchQuery('') // Reset search
+    setIsOpen(false)
   }
 
   const getDisplayText = () => {
     if (!value) return t('browseTasks.filters.city', 'City')
-    return value
+    const city = allCities.find(c => c.slug === value)
+    return city?.label || value
   }
 
   return (
-    <Popover placement="bottom-start">
+    <Popover placement="bottom-start" isOpen={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <Button
-          variant={value ? 'flat' : 'bordered'}
-          color={value ? 'primary' : 'default'}
+          variant="bordered"
           startContent={<MapPin className="w-4 h-4" />}
           endContent={<ChevronDown className="w-4 h-4" />}
-          className="justify-between"
+          className={`justify-between min-w-44 ${
+            value
+              ? 'bg-blue-100 border-blue-500 text-blue-700 hover:bg-blue-200'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+          }`}
         >
           {getDisplayText()}
         </Button>
@@ -62,17 +79,20 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
           {/* Cities List */}
           <div className="max-h-64 overflow-y-auto space-y-1">
             {filteredCities.map((city) => {
-              const isSelected = value === city
+              const isSelected = value === city.slug
 
               return (
                 <Button
-                  key={city}
-                  variant={isSelected ? 'flat' : 'light'}
-                  color={isSelected ? 'primary' : 'default'}
-                  className="w-full justify-start"
-                  onPress={() => handleSelect(city)}
+                  key={city.slug}
+                  variant="light"
+                  className={`w-full justify-start ${
+                    isSelected
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                  onPress={() => handleSelect(city.slug)}
                 >
-                  {city}
+                  {city.label}
                 </Button>
               )
             })}
@@ -91,7 +111,10 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
                 variant="light"
                 color="default"
                 className="w-full justify-start text-danger"
-                onPress={() => onChange(undefined)}
+                onPress={() => {
+                  onChange(undefined)
+                  setIsOpen(false)
+                }}
               >
                 {t('browseTasks.filters.clear', 'Clear')}
               </Button>

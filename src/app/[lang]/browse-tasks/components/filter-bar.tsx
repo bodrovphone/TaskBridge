@@ -12,7 +12,7 @@ import { useTaskFilters } from '../hooks/use-task-filters'
 
 export function FilterBar() {
   const { t } = useTranslation()
-  const { filters, updateFilter, resetFilters, activeFilterCount } = useTaskFilters()
+  const { filters, updateFilter, updateFilters, resetFilters, activeFilterCount } = useTaskFilters()
 
   return (
     <div className="bg-white border-b border-gray-200 py-4">
@@ -33,8 +33,7 @@ export function FilterBar() {
           <BudgetFilter
             value={{ min: filters.budgetMin, max: filters.budgetMax }}
             onChange={(value) => {
-              updateFilter('budgetMin', value.min)
-              updateFilter('budgetMax', value.max)
+              updateFilters({ budgetMin: value.min, budgetMax: value.max })
             }}
           />
 

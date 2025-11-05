@@ -35,6 +35,10 @@ export const tasks = {
   'browseTasks.search.placeholder':
     'Search tasks by keywords, category or city...',
   'browseTasks.search.popular': 'Popular',
+  'browseTasks.search.searchingCategories': 'Searching categories...',
+  'browseTasks.search.suggestedCategories': 'Suggested Categories',
+  'browseTasks.search.categories': 'Categories',
+  'browseTasks.search.cities': 'Cities',
   'browseTasks.filters.title': 'Filtering and sorting',
   'browseTasks.filters.advanced': 'Advanced filters',
   'browseTasks.filters.quick': 'Quick filter',
@@ -72,6 +76,10 @@ export const tasks = {
   'browseTasks.filters.flexible': 'Flexible',
   'browseTasks.filters.searchCity': 'Search city...',
   'browseTasks.filters.noCitiesFound': 'No cities found',
+  'browseTasks.filters.searchCategory': 'Search categories...',
+  'browseTasks.filters.noCategoriesFound': 'No categories found',
+  'browseTasks.filters.activeFilters': 'Active filters',
+  'browseTasks.filters.clearAll': 'Clear all',
   'browseTasks.sort.newest': 'Newest First',
   'browseTasks.sort.urgent': 'Urgent First',
   'browseTasks.sort.budgetHigh': 'Highest Budget',
@@ -223,8 +231,16 @@ export const tasks = {
   'createTask.errors.descriptionTooLong': 'Description must be less than 2000 characters',
   'createTask.errors.cityRequired': 'City is required',
   'createTask.errors.budgetInvalid': 'Maximum must be greater than minimum',
+  'createTask.errors.deadlineInPast': 'Deadline must be today or in the future',
 
   'createTask.imageUpload.error': 'Image upload failed',
+
+  // Success messages
+  'createTask.success': 'Task created successfully!',
+  'createTask.successMessage': 'Your task has been posted and is now visible to professionals.',
+  'createTask.successWithoutImage': 'Your task has been posted without an image. You can add or change the image by editing the task.',
+  'createTask.error': 'Error creating task',
+  'createTask.errorMessage': 'Please try again later.',
 
   'taskCard.apply': 'Apply',
   'taskCard.seeDetails': 'See details',

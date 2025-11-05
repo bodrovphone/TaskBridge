@@ -109,7 +109,6 @@ export async function POST(request: NextRequest) {
  * - status: Task status filter (comma-separated)
  * - category: Filter by category
  * - city: Filter by city
- * - search: Full-text search
  * - isUrgent: Filter urgent tasks
  * - budgetMin, budgetMax: Budget range
  * - sortBy: 'newest' | 'urgent' | 'budget_high' | 'budget_low' | 'deadline'
@@ -129,7 +128,6 @@ export async function GET(request: NextRequest) {
       subcategory: searchParams.get('subcategory') || undefined,
       city: searchParams.get('city') || undefined,
       neighborhood: searchParams.get('neighborhood') || undefined,
-      search: searchParams.get('search') || undefined,
       isUrgent: searchParams.get('isUrgent') || undefined,
       budgetMin: searchParams.get('budgetMin') || undefined,
       budgetMax: searchParams.get('budgetMax') || undefined,

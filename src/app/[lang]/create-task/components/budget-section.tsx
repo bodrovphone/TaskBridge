@@ -69,7 +69,9 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        value="fixed"
        classNames={{
         base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-        label: 'text-gray-900 font-medium'
+        label: 'text-gray-900 font-medium',
+        wrapper: 'group-data-[selected=true]:border-orange-600',
+        control: 'bg-orange-600'
        }}
       >
        {t('createTask.budget.typeFixed', 'Fixed Price')}
@@ -78,7 +80,9 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        value="range"
        classNames={{
         base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-        label: 'text-gray-900 font-medium'
+        label: 'text-gray-900 font-medium',
+        wrapper: 'group-data-[selected=true]:border-orange-600',
+        control: 'bg-orange-600'
        }}
       >
        {t('createTask.budget.typeRange', 'Price Range')}
@@ -87,7 +91,9 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        value="unclear"
        classNames={{
         base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-        label: 'text-gray-900 font-medium'
+        label: 'text-gray-900 font-medium',
+        wrapper: 'group-data-[selected=true]:border-orange-600',
+        control: 'bg-orange-600'
        }}
       >
        {t('createTask.budget.typeUnclear', "I'm not sure about the budget")}

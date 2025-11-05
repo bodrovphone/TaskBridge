@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next'
 import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { Clock, ChevronDown, Zap, Calendar, Sparkles } from 'lucide-react'
+import { useState } from 'react'
 
 interface UrgencyFilterProps {
   value?: 'same_day' | 'within_week' | 'flexible'
@@ -15,26 +16,30 @@ const URGENCY_OPTIONS = [
     labelKey: 'browseTasks.filters.urgentSameDay',
     label: 'Urgent (Same Day)',
     icon: Zap,
-    color: 'danger' as const,
+    bgColor: 'bg-red-600',
+    hoverColor: 'hover:bg-red-700',
   },
   {
     value: 'within_week' as const,
     labelKey: 'browseTasks.filters.thisWeek',
     label: 'This Week',
     icon: Calendar,
-    color: 'warning' as const,
+    bgColor: 'bg-orange-500',
+    hoverColor: 'hover:bg-orange-600',
   },
   {
     value: 'flexible' as const,
     labelKey: 'browseTasks.filters.flexible',
     label: 'Flexible',
     icon: Sparkles,
-    color: 'default' as const,
+    bgColor: 'bg-green-500',
+    hoverColor: 'hover:bg-green-600',
   },
 ]
 
 export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
   const { t } = useTranslation()
+  const [isOpen, setIsOpen] = useState(false)
 
   const selectedOption = URGENCY_OPTIONS.find(opt => opt.value === value)
 
@@ -44,6 +49,7 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
     } else {
       onChange(newValue)
     }
+    setIsOpen(false)
   }
 
   const getDisplayText = () => {
@@ -52,14 +58,17 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
   }
 
   return (
-    <Popover placement="bottom-start">
+    <Popover placement="bottom-start" isOpen={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <Button
-          variant={value ? 'flat' : 'bordered'}
-          color={value ? (selectedOption?.color || 'primary') : 'default'}
+          variant="bordered"
           startContent={<Clock className="w-4 h-4" />}
           endContent={<ChevronDown className="w-4 h-4" />}
-          className="justify-between"
+          className={`justify-between min-w-44 ${
+            value
+              ? 'bg-blue-100 border-blue-500 text-blue-700 hover:bg-blue-200'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+          }`}
         >
           {getDisplayText()}
         </Button>
@@ -73,9 +82,12 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
             return (
               <Button
                 key={option.value}
-                variant={isSelected ? 'flat' : 'light'}
-                color={isSelected ? option.color : 'default'}
-                className="w-full justify-start"
+                variant="light"
+                className={`w-full justify-start ${
+                  isSelected
+                    ? `${option.bgColor} text-white ${option.hoverColor}`
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
                 startContent={<Icon className="w-4 h-4" />}
                 onPress={() => handleSelect(option.value)}
               >
@@ -89,9 +101,11 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
               <div className="border-t border-divider my-2" />
               <Button
                 variant="light"
-                color="default"
-                className="w-full justify-start text-danger"
-                onPress={() => onChange(undefined)}
+                className="w-full justify-start text-red-600 hover:bg-red-50"
+                onPress={() => {
+                  onChange(undefined)
+                  setIsOpen(false)
+                }}
               >
                 {t('browseTasks.filters.clear', 'Clear')}
               </Button>
