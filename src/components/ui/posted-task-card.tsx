@@ -16,6 +16,7 @@ import { TaskHintBanner } from '@/components/ui/task-hint-banner'
 import { useTaskHints } from '@/hooks/use-task-hints'
 import DefaultTaskImage from '@/components/ui/default-task-image'
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface PostedTaskCardProps {
   id: string
@@ -301,7 +302,7 @@ function PostedTaskCard({
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <span className="truncate">{location.city}</span>
+            <span className="truncate">{getCityLabelBySlug(location.city, t)}</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />

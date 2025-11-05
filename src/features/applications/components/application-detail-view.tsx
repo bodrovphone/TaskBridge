@@ -30,6 +30,7 @@ import {
   Star
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface ApplicationDetailViewProps {
   application: MyApplication | null
@@ -173,7 +174,7 @@ export default function ApplicationDetailView({
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <MapPin className="w-4 h-4" />
-                      <span>{task.location.city}{task.location.neighborhood && `, ${task.location.neighborhood}`}</span>
+                      <span>{getCityLabelBySlug(task.location.city, t)}{task.location.neighborhood && `, ${task.location.neighborhood}`}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Wallet className="w-4 h-4" />

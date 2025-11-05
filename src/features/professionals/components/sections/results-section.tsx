@@ -16,6 +16,7 @@ import type { Professional } from '@/server/professionals/professional.types';
 interface ResultsSectionProps {
   // API Data
   professionals: Professional[];
+  featuredProfessionals: Professional[]; // Featured from API (ignores filters)
   isLoading: boolean;
   error: any;
 
@@ -32,10 +33,14 @@ interface ResultsSectionProps {
   // Actions
   onClearFilters: () => void;
   onRetry?: () => void;
+
+  // Filters
+  activeFilterCount?: number;
 }
 
 export default function ResultsSection({
   professionals,
+  featuredProfessionals,
   isLoading,
   error,
   mockProfessionals,
@@ -45,7 +50,8 @@ export default function ResultsSection({
   hasPrevious,
   onPageChange,
   onClearFilters,
-  onRetry
+  onRetry,
+  activeFilterCount = 0
 }: ResultsSectionProps) {
   const { t } = useTranslation();
 
@@ -139,24 +145,6 @@ export default function ResultsSection({
         /* Main Results - API Data */
         <>
           <div id="api-professionals-section">
-            {/* Section Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <Sparkles className="text-blue-500" size={28} />
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                  {t('professionals.results.liveTitle', '📡 Live Professionals')}
-                </h2>
-              </div>
-              <p className="text-gray-600 text-lg">
-                {t('professionals.results.liveDescription', 'Real-time data from our professional network')}
-              </p>
-              <div className="mt-3 inline-block bg-blue-50 border border-blue-200 px-4 py-2 rounded-full">
-                <span className="text-sm font-semibold text-blue-700">
-                  {professionals.length} {t('professionals.results.professionalsFound', 'professionals found')}
-                </span>
-              </div>
-            </div>
-
             {/* Professionals Grid */}
             <div className="masonry-grid">
               {professionals.map((professional, index) => (
@@ -252,32 +240,73 @@ export default function ResultsSection({
           )}
         </>
       ) : (
-        /* Empty State */
-        <NextUICard className="bg-white shadow-lg">
-          <div className="p-12 text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", bounce: 0.4 }}
-            >
-              <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            </motion.div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-2">
-              {t('professionals.results.noResults.title', 'No professionals found')}
-            </h3>
-            <p className="text-gray-600 mb-6 text-lg">
-              {t('professionals.results.noResults.description', 'Try adjusting your filters or search in a different area')}
-            </p>
-            <NextUIButton
-              variant="bordered"
-              onClick={onClearFilters}
-              size="lg"
-              className="font-semibold"
-            >
-              {t('professionals.results.noResults.clearFilters', 'Clear Filters')}
-            </NextUIButton>
-          </div>
-        </NextUICard>
+        /* Empty State with Featured Professionals */
+        <>
+          <NextUICard className="bg-gradient-to-br from-blue-50 to-indigo-50 shadow-lg border border-blue-100">
+            <div className="p-8 md:p-12 text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", bounce: 0.4 }}
+              >
+                <Search className="w-16 h-16 text-blue-400 mx-auto mb-6" />
+              </motion.div>
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                {t('professionals.results.noResults.title', 'No professionals found')}
+              </h3>
+              <p className="text-gray-700 mb-6 text-lg max-w-2xl mx-auto">
+                {t('professionals.results.noResults.description', 'Try adjusting your filters or search in a different area')}
+              </p>
+              {activeFilterCount > 0 && (
+                <NextUIButton
+                  color="primary"
+                  variant="shadow"
+                  onClick={onClearFilters}
+                  size="lg"
+                  className="font-semibold"
+                >
+                  {t('professionals.results.noResults.clearFilters', 'Clear Filters')}
+                </NextUIButton>
+              )}
+            </div>
+          </NextUICard>
+
+          {/* Featured Professionals Section - From API */}
+          {featuredProfessionals.length > 0 && (
+            <div className="mt-12">
+              {/* Section Header */}
+              <div className="mb-8 text-center">
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <Sparkles className="text-yellow-500" size={32} />
+                  <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+                    {t('professionals.results.featured.title', 'Featured Professionals')}
+                  </h2>
+                </div>
+                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                  {t('professionals.results.featured.description', 'Check out these top-rated professionals from our network')}
+                </p>
+              </div>
+
+              {/* Featured Professionals Grid */}
+              <div className="masonry-grid">
+                {featuredProfessionals.map((professional, index) => (
+                  <motion.div
+                    key={professional.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="masonry-item"
+                  >
+                    <ProfessionalCard
+                      professional={professional as any}
+                      featured={true}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

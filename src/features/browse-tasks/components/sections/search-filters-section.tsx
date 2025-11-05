@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
 import { Search } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
-import { searchCategories, getMainCategoriesWithLabels } from '@/features/categories';
+import { searchCategories, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
 import { searchCities, getCitiesWithLabels } from '@/features/cities';
 import { useTaskFilters } from '@/app/[lang]/browse-tasks/hooks/use-task-filters';
 
@@ -27,13 +27,30 @@ export default function SearchFiltersSection({
  const [isPaused, setIsPaused] = useState(false);
  const [showSuggestions, setShowSuggestions] = useState(false);
 
- // Get popular categories and cities, filtering out selected ones
- const popularCategories = useMemo(() =>
-  getMainCategoriesWithLabels(t)
-   .slice(0, 6)
-   .filter(cat => cat.slug !== filters.category), // Hide if selected
-  [t, filters.category]
- );
+ // Get popular subcategories (not main categories) since tasks store subcategories
+ // Note: 'category' filter actually stores subcategory slugs (see use-task-filters.ts)
+ const popularCategories = useMemo(() => {
+  const allSubcategories = getAllSubcategoriesWithLabels(t);
+  // Get most common task subcategories
+  const popularSlugs = [
+   'house-cleaning',
+   'plumbing',
+   'electrical-work',
+   'appliance-installation',
+   'painting',
+   'furniture-assembly'
+  ];
+
+  return allSubcategories
+   .filter(cat => popularSlugs.includes(cat.slug))
+   .filter(cat => cat.slug !== filters.category) // Hide if selected
+   .map(cat => ({
+    slug: cat.slug,
+    title: cat.label,
+    icon: getMainCategoryById(cat.mainCategoryId)?.icon,
+    color: getMainCategoryById(cat.mainCategoryId)?.color || 'blue'
+   }));
+ }, [t, filters.category]);
 
  const popularCities = useMemo(() =>
   getCitiesWithLabels(t)
@@ -254,7 +271,7 @@ export default function SearchFiltersSection({
             key={category.slug}
             onClick={() => handleCategorySelect(category.slug)}
             className={`cursor-pointer bg-gradient-to-r ${colorClasses} border font-medium transition-all duration-200 hover:scale-105 hover:shadow-md`}
-            startContent={<Icon className="w-4 h-4" />}
+            startContent={Icon ? <Icon className="w-4 h-4" /> : undefined}
             variant="flat"
            >
             {category.title}

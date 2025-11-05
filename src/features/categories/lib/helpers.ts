@@ -74,12 +74,23 @@ export const getCategoryOptions = (t: TFunction): CategoryOption[] => {
 
 /**
  * Get category label by slug (for active filters display)
+ * Checks both main categories and subcategories
  */
 export const getCategoryLabelBySlug = (slug: string, t: TFunction): string => {
+  // First check subcategories
   const subcategory = SUBCATEGORIES.find(cat => cat.slug === slug);
-  if (!subcategory) return slug;
+  if (subcategory) {
+    return t(subcategory.translationKey);
+  }
 
-  return t(subcategory.translationKey);
+  // Then check main categories
+  const mainCategory = MAIN_CATEGORIES.find(cat => cat.slug === slug);
+  if (mainCategory) {
+    return t(`${mainCategory.translationKey}.title`);
+  }
+
+  // Fallback to slug if not found
+  return slug;
 };
 
 /**

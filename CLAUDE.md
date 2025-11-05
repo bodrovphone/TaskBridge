@@ -226,6 +226,74 @@ All paths are configured to point to the `/src/` directory:
 - `@/hooks/*` points to `./src/hooks/*`
 - `@/features/*` points to `./src/features/*`
 
+### City Location Management System
+
+**Architecture**: Locale-independent slug-based system with translation layer
+
+**🎯 Key Principles:**
+- **Database Storage**: Store city slugs only (e.g., `burgas`, `sofia`, `plovdiv`)
+- **Display**: Always translate slugs to localized names via `getCityLabelBySlug()`
+- **Input**: Dropdown selection only (no free text input)
+- **Consistency**: Same slug works across all locales for filtering and routing
+
+**📍 Supported Cities (MVP - Top 8):**
+1. Sofia (`sofia`) - 1.2M population
+2. Plovdiv (`plovdiv`) - 340K
+3. Varna (`varna`) - 330K
+4. Burgas (`burgas`) - 200K
+5. Ruse (`ruse`) - 150K
+6. Stara Zagora (`stara-zagora`) - 140K
+7. Pleven (`pleven`) - 120K
+8. Sliven (`sliven`) - 90K
+
+**🔧 Implementation:**
+
+```typescript
+// Import the helper function
+import { getCityLabelBySlug } from '@/features/cities'
+
+// Display city (translated to user's locale)
+<span>{getCityLabelBySlug(task.city, t)}</span>
+
+// Dropdown input (stores slugs)
+import { getCitiesWithLabels } from '@/features/cities'
+const cities = useMemo(() => getCitiesWithLabels(t), [t])
+
+<Select
+  selectedKeys={field.state.value ? [field.state.value] : []}
+  onSelectionChange={(keys) => {
+    const selectedCity = Array.from(keys)[0] as string
+    field.handleChange(selectedCity)
+  }}
+>
+  {cities.map((city) => (
+    <SelectItem key={city.slug} value={city.slug}>
+      {city.label}
+    </SelectItem>
+  ))}
+</Select>
+```
+
+**✅ Benefits:**
+- Works identically across all locales (EN/BG/RU)
+- URL filtering always consistent: `/browse-tasks?city=burgas`
+- No locale-specific database queries
+- Easy to add new cities (just update translations)
+- Database CHECK constraints prevent invalid values
+
+**📝 Translation Keys:**
+All city names stored in `/src/lib/intl/[lang]/common.ts`:
+```typescript
+'cities.sofia': 'Sofia',      // EN: Sofia, BG: София, RU: София
+'cities.burgas': 'Burgas',    // EN: Burgas, BG: Бургас, RU: Бургас
+// ... etc
+```
+
+**⚠️ IMPORTANT:**
+- NEVER allow free text input for city selection
+- ALWAYS use `getCityLabelBySlug()` when displaying city names
+- NEVER display raw slugs to users
+
 ### Database & Backend Operations (Supabase)
 
 **Infrastructure Setup**: See `/docs/infrastructure/supabase-vercel-setup.md` for complete guide

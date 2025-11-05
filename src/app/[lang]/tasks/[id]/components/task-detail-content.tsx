@@ -48,7 +48,10 @@ function formatDeadline(deadline: string | undefined, t: any) {
  const deadlineDate = new Date(deadline);
  const now = new Date();
  const diffDays = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
- 
+
+ // If deadline has passed, show "As soon as possible"
+ if (diffDays < 0) return t('taskDetail.asap', 'As soon as possible');
+
  if (diffDays === 0) return t('taskDetail.today');
  if (diffDays === 1) return t('taskDetail.tomorrow');
  if (diffDays <= 7) return `${diffDays} ${t('taskDetail.days')}`;

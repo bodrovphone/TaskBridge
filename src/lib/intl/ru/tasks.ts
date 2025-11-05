@@ -27,11 +27,11 @@ export const tasks = {
   'tasks.sort.budgetLow': 'Низкий бюджет',
   'tasks.sort.deadline': 'По сроку',
 
-  'browseTasks.hero.badge': 'Найдите идеальных специалистов',
-  'browseTasks.hero.title1': 'Найдите идеальную',
-  'browseTasks.hero.title2': 'задачу для вас',
+  'browseTasks.hero.badge': 'Зарабатывайте сейчас',
+  'browseTasks.hero.title1': 'Найдите следующую',
+  'browseTasks.hero.title2': 'возможность',
   'browseTasks.hero.subtitle':
-    'Просмотрите сотни возможностей от проверенных клиентов. Начните работать сегодня.',
+    'Просматривайте проверенные задачи от реальных клиентов. Создавайте доход по своему графику.',
   'browseTasks.search.placeholder':
     'Поиск задач по ключевым словам, категории или городу...',
   'browseTasks.search.popular': 'Популярные',

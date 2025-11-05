@@ -16,9 +16,9 @@ import { SlidersHorizontal, Grid3X3, MapPin, Star, Briefcase, ArrowUpDown, Spark
 import { useTranslation } from 'react-i18next'
 import { CategoryFilter } from '@/app/[lang]/browse-tasks/components/category-filter'
 import { CityFilter } from '@/app/[lang]/browse-tasks/components/city-filter'
-import { SortDropdown } from '@/app/[lang]/browse-tasks/components/sort-dropdown'
 import { RatingFilter } from './rating-filter'
 import { CompletedJobsFilter } from './completed-jobs-filter'
+import { ProfessionalsSortDropdown } from './professionals-sort-dropdown'
 import { useProfessionalFilters } from '../../hooks/use-professional-filters'
 
 const filterSections = [
@@ -42,18 +42,20 @@ export function FiltersModal() {
         variant="bordered"
         size="lg"
         startContent={<SlidersHorizontal className="w-5 h-5" />}
-        className="md:hidden relative"
+        className="md:hidden"
       >
-        {t('professionals.filters.filters', 'Filters')}
-        {activeFilterCount > 0 && (
-          <Chip
-            size="sm"
-            variant="solid"
-            className="absolute -top-2 -right-2 min-w-6 h-6 bg-orange-600 text-white"
-          >
-            {activeFilterCount}
-          </Chip>
-        )}
+        <div className="flex items-center gap-2">
+          <span>{t('professionals.filters.filtersButton', 'Filters')}</span>
+          {activeFilterCount > 0 && (
+            <Chip
+              size="sm"
+              variant="solid"
+              className="bg-orange-600 text-white text-xs h-5 min-w-5 px-1"
+            >
+              {activeFilterCount}
+            </Chip>
+          )}
+        </div>
       </Button>
 
       {/* Modal */}
@@ -168,9 +170,9 @@ export function FiltersModal() {
                           />
                         )}
                         {key === 'sort' && (
-                          <SortDropdown
-                            value={filters.sortBy as any || 'featured'}
-                            onChange={(value) => updateFilter('sortBy', value as any)}
+                          <ProfessionalsSortDropdown
+                            value={(filters.sortBy as 'featured' | 'rating' | 'jobs') || 'featured'}
+                            onChange={(value) => updateFilter('sortBy', value)}
                           />
                         )}
                       </div>

@@ -70,6 +70,7 @@ export const applications = {
   'applications.statusPending': 'В ожидании',
   'applications.statusAccepted': 'Принята',
   'applications.statusRejected': 'Отклонена',
+  'applications.statusWithdrawn': 'Отозвана',
 
   // Application Detail Modal
   'applicationDetail.title': 'Детали заявки',

@@ -94,6 +94,7 @@ export interface ProfessionalRaw {
  */
 export interface PaginatedProfessionalsResponse {
   professionals: Professional[]
+  featuredProfessionals: Professional[] // Always returned - ignores user filters
   pagination: {
     page: number
     limit: number

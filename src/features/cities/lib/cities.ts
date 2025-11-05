@@ -1,5 +1,5 @@
 /**
- * Top 6 Bulgarian cities supported by TaskBridge
+ * Top 8 Bulgarian cities supported by TaskBridge (MVP)
  * Selected based on population and economic activity
  */
 export interface City {
@@ -38,6 +38,16 @@ export const CITIES: City[] = [
     slug: 'stara-zagora',
     translationKey: 'cities.staraZagora',
     population: 140_000,
+  },
+  {
+    slug: 'pleven',
+    translationKey: 'cities.pleven',
+    population: 120_000,
+  },
+  {
+    slug: 'sliven',
+    translationKey: 'cities.sliven',
+    population: 90_000,
   },
 ];
 

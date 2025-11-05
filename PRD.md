@@ -443,6 +443,172 @@ To ensure accountability and maintain platform trust, customers face restriction
 - Suspicious activity detection (multiple similar posts, etc.)
 - Community-driven safety through reporting system
 
+### 3.6 Location Management System
+
+**Status**: 🔄 **IN PROGRESS** - Architecture defined, migration in progress
+
+**Design Philosophy:** Locale-independent, slug-based city system that works consistently across all languages and features.
+
+#### Architecture Overview
+
+**Storage Format:**
+- Cities stored as **slugs** (e.g., `sofia`, `burgas`, `plovdiv`) in database
+- Slugs are locale-independent identifiers
+- Display labels translated via i18n system (`cities.sofia` → "София" / "Sofia" / "София")
+- URL structure matches storage: `?city=burgas` filters by slug
+
+**Benefits:**
+- ✅ **Locale Independence:** Works identically in EN/BG/RU
+- ✅ **Data Consistency:** No mismatches between translated city names
+- ✅ **Clean URLs:** `?city=burgas` instead of `?city=Бургас`
+- ✅ **Query Performance:** Simple exact-match queries on indexed column
+- ✅ **Scalability:** Easy to add new cities (add slug + translations)
+- ✅ **Future-Proof:** Ready for map picker integration
+
+#### Supported Cities (MVP - Top 8 Bulgarian Cities)
+
+Selected based on population and economic activity. All cities have:
+- Unique slug identifier
+- Translation keys for EN/BG/RU
+- Population data for sorting
+
+**City List:**
+1. **Sofia** (`sofia`) - Capital, 1.2M population
+2. **Plovdiv** (`plovdiv`) - 340k population
+3. **Varna** (`varna`) - Black Sea coast, 330k population
+4. **Burgas** (`burgas`) - Black Sea coast, 200k population
+5. **Ruse** (`ruse`) - Danube River, 150k population
+6. **Stara Zagora** (`stara-zagora`) - 140k population
+7. **Pleven** (`pleven`) - 120k population
+8. **Sliven** (`sliven`) - 90k population
+
+**Post-MVP Expansion:**
+- Additional major cities (Dobrich, Shumen, Pernik, etc.)
+- Neighborhood/district support for major cities
+- Interactive map picker with city boundaries
+
+#### User Interface
+
+**City Input Controls:**
+- **Dropdown selection** (no free text input)
+- Search/filter within dropdown for quick access
+- Displays translated city names
+- Sorted by population (largest first)
+- Stores slug value on selection
+
+**Locations Where City Selection Appears:**
+1. **Task Creation** - Required field, dropdown selection
+2. **Professional Profile** - Service area selection
+3. **Browse Tasks** - Filter by city dropdown
+4. **Browse Professionals** - Filter by city dropdown
+5. **User Profile** - Optional location field
+
+#### Database Schema
+
+**Tasks Table:**
+```sql
+city TEXT NOT NULL,  -- Stores slug: 'sofia', 'burgas', etc.
+neighborhood TEXT,   -- Optional, free text for now
+location_notes TEXT  -- Additional location details
+```
+
+**Users Table (Professionals):**
+```sql
+city TEXT,           -- Stores slug: 'sofia', 'burgas', etc.
+service_areas TEXT[] -- Array of city slugs (future: serve multiple cities)
+```
+
+**Indexes:**
+```sql
+CREATE INDEX idx_tasks_city ON tasks(city);
+CREATE INDEX idx_users_city ON users(city);
+```
+
+#### Migration Strategy
+
+**Phase 1: Data Normalization (Current)**
+- Audit existing city data in database
+- Create mapping: "Burgas"/"Бургас" → `burgas`
+- Run migration to normalize all city values to slugs
+- Add validation to prevent free-text input
+
+**Phase 2: Frontend Updates**
+- ✅ Update create-task form to use city dropdown (slugs only)
+- ✅ Update professional profile to use city dropdown
+- ✅ Update all filters to use slug-based queries
+- ✅ Ensure translations work across all locales
+
+**Phase 3: Validation & Constraints**
+- Add database constraint: `city IN ('sofia', 'plovdiv', 'varna', ...)`
+- Add TypeScript types: `CitySlug` union type
+- Add API validation: Reject non-slug city values
+
+#### Implementation Details
+
+**City Constants** (`/src/features/cities/lib/cities.ts`):
+```typescript
+export const CITIES: City[] = [
+  { slug: 'sofia', translationKey: 'cities.sofia', population: 1_200_000 },
+  { slug: 'plovdiv', translationKey: 'cities.plovdiv', population: 340_000 },
+  { slug: 'varna', translationKey: 'cities.varna', population: 330_000 },
+  { slug: 'burgas', translationKey: 'cities.burgas', population: 200_000 },
+  { slug: 'ruse', translationKey: 'cities.ruse', population: 150_000 },
+  { slug: 'stara-zagora', translationKey: 'cities.staraZagora', population: 140_000 },
+  { slug: 'pleven', translationKey: 'cities.pleven', population: 120_000 },
+  { slug: 'sliven', translationKey: 'cities.sliven', population: 90_000 },
+];
+```
+
+**Translation Keys** (all locales: EN/BG/RU):
+```typescript
+cities: {
+  sofia: 'София' / 'Sofia' / 'София',
+  plovdiv: 'Пловдив' / 'Plovdiv' / 'Пловдив',
+  varna: 'Варна' / 'Varna' / 'Варна',
+  burgas: 'Бургас' / 'Burgas' / 'Бургас',
+  ruse: 'Русе' / 'Ruse' / 'Русе',
+  staraZagora: 'Стара Загора' / 'Stara Zagora' / 'Стара Загора',
+  pleven: 'Плевен' / 'Pleven' / 'Плевен',
+  sliven: 'Сливен' / 'Sliven' / 'Сливен',
+}
+```
+
+**API Query Example:**
+```typescript
+// Browse tasks with city filter
+GET /api/tasks?city=burgas&category=plumbing
+
+// Backend repository query
+query = query.eq('city', params.city) // Exact slug match
+```
+
+**Display Example:**
+```typescript
+// Get translated label for display
+import { getCitiesWithLabels } from '@/features/cities'
+
+const cities = getCitiesWithLabels(t)
+// Returns: [{ slug: 'burgas', label: 'Бургас' }, ...]
+```
+
+#### Future Enhancements (Post-MVP)
+
+**Geographic Features:**
+- Interactive map picker with city boundaries
+- Neighborhood/district support for major cities
+- Distance-based search (show tasks within X km)
+- Service area radius for professionals
+
+**Advanced Filtering:**
+- Multi-city selection for professionals (serve multiple cities)
+- Cross-city search with distance indicators
+- Popular areas/neighborhoods as filter options
+
+**Data Quality:**
+- Geocoding integration (convert addresses to coordinates)
+- Location verification via Google Maps API
+- Automatic city detection from address input
+
 ## 4. Technical Requirements
 
 ### 4.1 Platform Architecture

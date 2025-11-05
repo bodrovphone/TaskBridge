@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar } from '@nextui-org/react'
 import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface MyWorkContentProps {
   lang: string
@@ -358,7 +359,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                   {/* Location */}
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    <span>{task.task.location.city}, {task.task.location.neighborhood}</span>
+                    <span>{getCityLabelBySlug(task.task.location.city, t)}, {task.task.location.neighborhood}</span>
                   </div>
 
                   {/* Actions */}

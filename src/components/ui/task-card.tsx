@@ -18,6 +18,7 @@ import {
 import DefaultTaskImage from "@/components/ui/default-task-image";
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category';
 import { canApplyToTask, getDisabledReason, type TaskStatus } from '@/lib/utils/task-permissions';
+import { getCityLabelBySlug } from '@/features/cities';
 
 // Task type definition (to be moved to global types later)
 interface Task {
@@ -180,7 +181,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
      <div className="space-y-2 mb-4 mt-auto">
       <div className="flex items-center text-sm text-gray-600">
        <MapPin size={16} className="mr-2 flex-shrink-0" />
-       <span className="truncate">{task.city}{task.neighborhood && `, ${task.neighborhood}`}</span>
+       <span className="truncate">{getCityLabelBySlug(task.city, t)}{task.neighborhood && `, ${task.neighborhood}`}</span>
       </div>
       <div className="flex items-center text-sm text-gray-600">
        <Clock size={16} className="mr-2 flex-shrink-0" />

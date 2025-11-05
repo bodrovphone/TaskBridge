@@ -25,9 +25,13 @@ export const common = {
   close: 'Закрыть',
 
   'common.optional': 'необязательно',
+  'common.close': 'Закрыть',
   'common.days': 'дней',
   'common.cancel': 'Отмена',
   'common.anonymous': 'Анонимный пользователь',
+
+  // Countries
+  'common.country.bulgaria': 'Болгария',
 
   'language.en': 'English',
   'language.bg': 'Български',
@@ -44,13 +48,15 @@ export const common = {
   'locations.ruse': 'Русе',
   'locations.staraZagora': 'Стара Загора',
 
-  // Cities (top 6 supported)
+  // Cities (top 8 supported - MVP)
   'cities.sofia': 'София',
   'cities.plovdiv': 'Пловдив',
   'cities.varna': 'Варна',
   'cities.burgas': 'Бургас',
   'cities.ruse': 'Русе',
   'cities.staraZagora': 'Стара Загора',
+  'cities.pleven': 'Плевен',
+  'cities.sliven': 'Сливен',
 
   // Common messages
   'message.taskCreated': 'Задача успешно создана!',

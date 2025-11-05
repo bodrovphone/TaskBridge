@@ -17,6 +17,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { formatDistanceToNow } from 'date-fns'
 import { bg, enUS, ru } from 'date-fns/locale'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface MyApplicationCardProps {
   application: MyApplication
@@ -126,7 +127,7 @@ export default function MyApplicationCard({
           )}
           <span>•</span>
           <MapPin className="w-3 h-3" />
-          <span>{application.task.location.city}{application.task.location.neighborhood && `, ${application.task.location.neighborhood}`}</span>
+          <span>{getCityLabelBySlug(application.task.location.city, t)}{application.task.location.neighborhood && `, ${application.task.location.neighborhood}`}</span>
         </div>
 
         {/* Proposal vs Budget */}

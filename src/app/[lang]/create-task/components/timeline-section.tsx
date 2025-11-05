@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, DatePicker } from '@nextui-org/react'
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date'
 import { Clock } from 'lucide-react'
 import { useParams } from 'next/navigation'
 
@@ -102,15 +102,51 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
      // Get today's date in the user's local timezone
      const todayDate = today(getLocalTimeZone())
 
-     // Convert stored JS Date to CalendarDate for display
+     // Convert stored value to CalendarDate format for DatePicker
      const displayValue = field.state.value
        ? (() => {
-           const date = new Date(field.state.value)
-           return {
-             year: date.getFullYear(),
-             month: date.getMonth() + 1,
-             day: date.getDate(),
-           } as any
+           try {
+             // Handle different value formats (Date object, string, or CalendarDate)
+             let date: Date
+
+             // If already a CalendarDate, return it
+             if (field.state.value instanceof CalendarDate) {
+               return field.state.value
+             }
+
+             // Convert to Date object first
+             if (field.state.value instanceof Date) {
+               date = field.state.value
+             } else if (typeof field.state.value === 'string') {
+               date = new Date(field.state.value)
+             } else if (field.state.value.year && field.state.value.month && field.state.value.day) {
+               // Plain object with date components - create CalendarDate
+               return new CalendarDate(
+                 field.state.value.year,
+                 field.state.value.month,
+                 field.state.value.day
+               )
+             } else {
+               // Fallback: try to parse it
+               date = new Date(field.state.value)
+             }
+
+             // Validate the date
+             if (isNaN(date.getTime())) {
+               console.warn('Invalid date value in deadline field:', field.state.value)
+               return null
+             }
+
+             // Create CalendarDate from Date object
+             return new CalendarDate(
+               date.getFullYear(),
+               date.getMonth() + 1,
+               date.getDate()
+             )
+           } catch (error) {
+             console.error('Error converting deadline value:', error)
+             return null
+           }
          })()
        : null
 

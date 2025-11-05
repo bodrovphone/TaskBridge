@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Button, Popover, PopoverTrigger, PopoverContent, Slider } from '@nextui-org/react'
+import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { Briefcase, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
@@ -10,35 +10,24 @@ interface CompletedJobsFilterProps {
   onChange: (value?: number) => void
 }
 
-const PRESETS = [
+const JOBS_OPTIONS = [
+  { value: 1, label: '1+' },
+  { value: 5, label: '5+' },
   { value: 10, label: '10+' },
-  { value: 50, label: '50+' },
-  { value: 100, label: '100+' },
-  { value: 200, label: '200+' },
+  { value: 20, label: '20+' },
 ]
 
 export function CompletedJobsFilter({ value, onChange }: CompletedJobsFilterProps) {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
-  const [localValue, setLocalValue] = useState(value || 0)
 
-  const handleApply = () => {
-    if (localValue > 0) {
-      onChange(localValue)
+  const handleSelect = (jobs: number) => {
+    if (value === jobs) {
+      onChange(undefined) // Deselect if clicking same value
     } else {
-      onChange(undefined)
+      onChange(jobs)
     }
     setIsOpen(false)
-  }
-
-  const handleClear = () => {
-    onChange(undefined)
-    setLocalValue(0)
-    setIsOpen(false)
-  }
-
-  const handlePreset = (presetValue: number) => {
-    setLocalValue(presetValue)
   }
 
   const getDisplayText = () => {
@@ -62,90 +51,45 @@ export function CompletedJobsFilter({ value, onChange }: CompletedJobsFilterProp
           {getDisplayText()}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-4">
-        <div className="space-y-4">
-          {/* Quick Presets */}
-          <div>
-            <span className="text-sm font-medium text-gray-700 mb-2 block">
-              {t('professionals.filters.quickSelect', 'Quick Select')}
-            </span>
-            <div className="grid grid-cols-4 gap-2">
-              {PRESETS.map((preset) => (
-                <Button
-                  key={preset.value}
-                  size="sm"
-                  variant={localValue === preset.value ? 'solid' : 'bordered'}
-                  color={localValue === preset.value ? 'success' : 'default'}
-                  onPress={() => handlePreset(preset.value)}
-                  className="font-medium"
-                >
-                  {preset.label}
-                </Button>
-              ))}
-            </div>
-          </div>
+      <PopoverContent className="w-64 p-2">
+        <div className="space-y-1">
+          {JOBS_OPTIONS.map((option) => {
+            const isSelected = value === option.value
 
-          {/* Custom Slider */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">
-                {t('professionals.filters.customValue', 'Custom Value')}
-              </span>
-              <span className="text-sm font-bold text-green-600 flex items-center gap-1">
-                <Briefcase className="w-4 h-4" />
-                {localValue}+ {t('professionals.filters.jobs', 'jobs')}
-              </span>
-            </div>
-
-            <Slider
-              size="sm"
-              step={10}
-              minValue={0}
-              maxValue={500}
-              value={localValue}
-              onChange={(val) => setLocalValue(val as number)}
-              classNames={{
-                base: "w-full",
-                track: "bg-gray-200",
-                filler: "bg-green-500",
-                thumb: "bg-green-600 border-2 border-green-700",
-              }}
-              renderThumb={(props) => (
-                <div
-                  {...props}
-                  className="group p-1 top-1/2 bg-green-600 border-2 border-green-700 shadow-medium rounded-full cursor-grab data-[dragging=true]:cursor-grabbing"
-                >
-                  <span className="transition-transform bg-gradient-to-br from-green-400 to-green-600 rounded-full w-4 h-4 block group-data-[dragging=true]:scale-80" />
+            return (
+              <Button
+                key={option.value}
+                variant="light"
+                className={`w-full justify-start h-auto py-3 ${
+                  isSelected
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                onPress={() => handleSelect(option.value)}
+              >
+                <div className="flex items-center gap-2">
+                  <Briefcase className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-green-600'}`} />
+                  <span className="font-medium text-lg">{option.label}</span>
                 </div>
-              )}
-            />
+              </Button>
+            )
+          })}
 
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>0</span>
-              <span>100</span>
-              <span>200</span>
-              <span>300</span>
-              <span>400</span>
-              <span>500</span>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant="bordered"
-              className="flex-1"
-              onPress={handleClear}
-            >
-              {t('professionals.filters.clear', 'Clear')}
-            </Button>
-            <Button
-              color="primary"
-              className="flex-1"
-              onPress={handleApply}
-            >
-              {t('professionals.filters.apply', 'Apply')}
-            </Button>
-          </div>
+          {value && (
+            <>
+              <div className="border-t border-divider my-1" />
+              <Button
+                variant="light"
+                className="w-full justify-start text-red-600 hover:bg-red-50"
+                onPress={() => {
+                  onChange(undefined)
+                  setIsOpen(false)
+                }}
+              >
+                {t('professionals.filters.clear', 'Clear')}
+              </Button>
+            </>
+          )}
         </div>
       </PopoverContent>
     </Popover>

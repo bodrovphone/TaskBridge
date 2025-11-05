@@ -42,18 +42,20 @@ export function FiltersModal() {
         variant="bordered"
         size="lg"
         startContent={<SlidersHorizontal className="w-5 h-5" />}
-        className="md:hidden relative"
+        className="md:hidden"
       >
-        {t('browseTasks.filters.filters', 'Filters')}
-        {activeFilterCount > 0 && (
-          <Chip
-            size="sm"
-            variant="solid"
-            className="absolute -top-2 -right-2 min-w-6 h-6 bg-orange-600 text-white"
-          >
-            {activeFilterCount}
-          </Chip>
-        )}
+        <div className="flex items-center gap-2">
+          <span>{t('browseTasks.filters.filters', 'Filters')}</span>
+          {activeFilterCount > 0 && (
+            <Chip
+              size="sm"
+              variant="solid"
+              className="bg-orange-600 text-white text-xs h-5 min-w-5 px-1"
+            >
+              {activeFilterCount}
+            </Chip>
+          )}
+        </div>
       </Button>
 
       {/* Modal */}

@@ -1,9 +1,10 @@
 'use client'
 
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Select, SelectItem, Card, CardBody } from '@nextui-org/react'
 import { Lock, MapPin } from 'lucide-react'
-import { BULGARIAN_CITIES } from '../lib/validation'
+import { getCitiesWithLabels } from '@/features/cities'
 
 interface LocationSectionProps {
  form: any
@@ -11,6 +12,9 @@ interface LocationSectionProps {
 
 export function LocationSection({ form }: LocationSectionProps) {
  const { t } = useTranslation()
+
+ // Get translated city options (sorted by population)
+ const cities = useMemo(() => getCitiesWithLabels(t), [t])
 
  return (
   <Card className="shadow-md border border-gray-100">
@@ -68,9 +72,9 @@ export function LocationSection({ form }: LocationSectionProps) {
         listbox: 'bg-white',
        }}
       >
-       {BULGARIAN_CITIES.map((cityName) => (
-        <SelectItem key={cityName} value={cityName}>
-         {cityName}
+       {cities.map((city) => (
+        <SelectItem key={city.slug} value={city.slug}>
+         {city.label}
         </SelectItem>
        ))}
       </Select>

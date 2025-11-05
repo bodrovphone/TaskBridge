@@ -57,8 +57,6 @@ export function ProfessionalSetupForm({ isOpen, onClose, onSuccess }: Profession
    // Simulate API call
    await new Promise(resolve => setTimeout(resolve, 2000))
 
-   console.log('Professional profile data:', value)
-
    setIsSubmitting(false)
    onSuccess()
    onClose()

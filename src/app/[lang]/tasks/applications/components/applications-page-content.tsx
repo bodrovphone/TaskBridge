@@ -8,6 +8,7 @@ import { Send, Calendar, Banknote, MapPin, User, X, Loader2, AlertCircle } from 
 import { useAuth } from '@/features/auth'
 import ApplicationDetailView from '@/features/applications/components/application-detail-view'
 import type { MyApplication as MyApplicationType } from '@/features/applications/lib/types'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface ApplicationsPageContentProps {
   lang: string
@@ -509,7 +510,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <MapPin className="w-4 h-4 text-gray-400" />
-                      <span>{application.task.location.city}</span>
+                      <span>{getCityLabelBySlug(application.task.location.city, t)}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Calendar className="w-4 h-4 text-gray-400" />
@@ -631,7 +632,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <MapPin className="w-4 h-4 text-gray-400" />
-                          <span>{application.task.location.city}</span>
+                          <span>{getCityLabelBySlug(application.task.location.city, t)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <Calendar className="w-4 h-4 text-gray-400" />

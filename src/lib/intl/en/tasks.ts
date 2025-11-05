@@ -27,11 +27,11 @@ export const tasks = {
   'tasks.sort.budgetLow': 'Lowest Budget',
   'tasks.sort.deadline': 'By Deadline',
 
-  'browseTasks.hero.badge': 'Find perfect professionals',
-  'browseTasks.hero.title1': 'Find your ideal',
-  'browseTasks.hero.title2': 'task for you',
+  'browseTasks.hero.badge': 'Earn Money Now',
+  'browseTasks.hero.title1': 'Find Your Next',
+  'browseTasks.hero.title2': 'Opportunity',
   'browseTasks.hero.subtitle':
-    'Browse hundreds of opportunities from verified clients. Start working today.',
+    'Browse verified tasks from real clients. Build your income on your schedule.',
   'browseTasks.search.placeholder':
     'Search tasks by keywords, category or city...',
   'browseTasks.search.popular': 'Popular',

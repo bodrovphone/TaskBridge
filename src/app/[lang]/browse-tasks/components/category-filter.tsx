@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Popover, PopoverTrigger, PopoverContent, Input } from '@nextui-org/react'
 import { Grid3X3, ChevronDown, Search } from 'lucide-react'
 import { useState, useMemo } from 'react'
-import { getMainCategoriesWithLabels, getCategoryLabelBySlug } from '@/features/categories'
+import { getAllSubcategoriesWithLabels, getMainCategoryById, getCategoryLabelBySlug } from '@/features/categories'
 
 interface CategoryFilterProps {
   value?: string
@@ -16,8 +16,22 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Get all main categories from centralized system
-  const allCategories = useMemo(() => getMainCategoriesWithLabels(t), [t])
+  // Get all subcategories (not main categories) since both tasks and professionals use subcategories
+  const allCategories = useMemo(() => {
+    const subcategories = getAllSubcategoriesWithLabels(t);
+
+    // Map subcategories with their parent main category's icon and color
+    return subcategories.map(sub => {
+      const mainCategory = getMainCategoryById(sub.mainCategoryId);
+      return {
+        slug: sub.slug,
+        title: sub.label,
+        description: '', // Subcategories don't have descriptions
+        icon: mainCategory?.icon,
+        color: mainCategory?.color || 'blue'
+      };
+    });
+  }, [t])
 
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
@@ -26,7 +40,7 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
     const lowerQuery = searchQuery.toLowerCase()
     return allCategories.filter(cat =>
       cat.title.toLowerCase().includes(lowerQuery) ||
-      cat.description.toLowerCase().includes(lowerQuery)
+      cat.slug.toLowerCase().includes(lowerQuery)
     )
   }, [allCategories, searchQuery])
 
@@ -104,17 +118,16 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   startContent={
-                    <div className={`p-2 rounded-lg ${isSelected ? 'bg-white/20' : getColorClasses(category.color)}`}>
-                      <Icon className="w-4 h-4" />
-                    </div>
+                    Icon ? (
+                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-white/20' : getColorClasses(category.color)}`}>
+                        <Icon className="w-4 h-4" />
+                      </div>
+                    ) : undefined
                   }
                   onPress={() => handleSelect(category.slug)}
                 >
                   <div className="flex flex-col items-start text-left">
                     <span className="font-medium">{category.title}</span>
-                    <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
-                      {category.description}
-                    </span>
                   </div>
                 </Button>
               )

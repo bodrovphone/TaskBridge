@@ -34,6 +34,7 @@ export const notifications = {
   'taskDetail.tomorrow': 'Завтра',
   'taskDetail.days': 'дней',
   'taskDetail.flexible': 'Гибкий',
+  'taskDetail.asap': 'Как можно скорее',
   'taskDetail.negotiable': 'По договоренности',
   'taskDetail.urgency.same_day': 'Срочно - сегодня',
   'taskDetail.urgency.within_week': 'В течение недели',

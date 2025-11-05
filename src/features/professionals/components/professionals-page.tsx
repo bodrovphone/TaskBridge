@@ -21,7 +21,7 @@ import type { PaginatedProfessionalsResponse } from '@/server/professionals/prof
 
 export default function ProfessionalsPage() {
   const { t } = useTranslation();
-  const { filters, resetFilters, buildApiQuery } = useProfessionalFilters();
+  const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
 
   // API Data State
   const [apiData, setApiData] = useState<PaginatedProfessionalsResponse | null>(null);
@@ -152,7 +152,7 @@ export default function ProfessionalsPage() {
               {t('professionals.hero.subtitle')}
             </motion.p>
 
-            {/* Trust indicators */}
+            {/* Trust indicators - Beta Version */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -160,9 +160,9 @@ export default function ProfessionalsPage() {
               className="flex flex-wrap justify-center gap-6 mt-12"
             >
               {[
-                { icon: '🔒', text: 'Verified Professionals', count: '2,000+' },
-                { icon: '⭐', text: 'Average Rating', count: '4.9/5' },
-                { icon: '✅', text: 'Completed Jobs', count: '10,000+' }
+                { icon: '✅', labelKey: 'professionals.hero.stats.verified.label', valueKey: 'professionals.hero.stats.verified.value' },
+                { icon: '⭐', labelKey: 'professionals.hero.stats.ratings.label', valueKey: 'professionals.hero.stats.ratings.value' },
+                { icon: '🚀', labelKey: 'professionals.hero.stats.jobs.label', valueKey: 'professionals.hero.stats.jobs.value' }
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -172,8 +172,8 @@ export default function ProfessionalsPage() {
                   className="bg-white/10 rounded-xl px-4 py-3 border border-white/20 text-center min-w-[140px]"
                 >
                   <div className="text-2xl mb-1">{item.icon}</div>
-                  <div className="text-lg font-bold text-white">{item.count}</div>
-                  <div className="text-sm text-blue-200">{item.text}</div>
+                  <div className="text-lg font-bold text-white">{t(item.valueKey)}</div>
+                  <div className="text-sm text-blue-200">{t(item.labelKey)}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -215,6 +215,7 @@ export default function ProfessionalsPage() {
           {/* Results Section (API + Mock Data) */}
           <ResultsSection
             professionals={apiData?.professionals || []}
+            featuredProfessionals={apiData?.featuredProfessionals || []}
             isLoading={isLoading}
             error={error}
             mockProfessionals={mockProfessionals}
@@ -225,6 +226,7 @@ export default function ProfessionalsPage() {
             onPageChange={handlePageChange}
             onClearFilters={resetFilters}
             onRetry={handleRetry}
+            activeFilterCount={activeFilterCount}
           />
         </div>
       </main>

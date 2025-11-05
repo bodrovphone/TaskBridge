@@ -14,6 +14,37 @@ import type { ProfessionalQueryParams } from './professional.query-types'
 import { QUERY_CONSTRAINTS } from './professional.query-types'
 
 /**
+ * Fetch featured professionals (ignores all user filters)
+ * Used as fallback when no results found
+ */
+async function getFeaturedProfessionals(limit: number = 8): Promise<Professional[]> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .not('professional_title', 'is', null)
+    .neq('professional_title', '')
+    .not('service_categories', 'is', null)
+    .gt('service_categories', '{}')
+    .or('is_banned.is.null,is_banned.eq.false')
+    .order('average_rating', { ascending: false, nullsFirst: false })
+    .order('tasks_completed', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('Featured professionals query error:', error)
+    return []
+  }
+
+  const professionalsRaw = (data as ProfessionalRaw[]) || []
+  return professionalsRaw.map((prof) => ({
+    ...prof,
+    featured: calculateFeaturedStatus(prof),
+  })) as any
+}
+
+/**
  * Fetch professionals from database with filters, sorting, and pagination
  */
 export async function getProfessionals(
@@ -146,8 +177,12 @@ export async function getProfessionals(
   const hasNext = currentPage < totalPages
   const hasPrevious = currentPage > 1
 
+  // === Fetch Featured Professionals (always, ignoring user filters) ===
+  const featuredProfessionals = await getFeaturedProfessionals(8)
+
   return {
     professionals: sortedProfessionals as any, // Will be privacy-filtered by service layer
+    featuredProfessionals: featuredProfessionals as any, // Will be privacy-filtered by service layer
     pagination: {
       page: currentPage,
       limit,

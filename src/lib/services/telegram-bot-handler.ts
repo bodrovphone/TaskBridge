@@ -30,13 +30,9 @@ export interface TelegramUpdate {
 }
 
 export async function handleTelegramBotUpdate(update: TelegramUpdate) {
-  const startTime = Date.now();
-  console.log('[Telegram] ⏱️ Webhook received at:', new Date().toISOString());
-
   try {
     const message = update.message;
     if (!message || !message.text) {
-      console.log('[Telegram] ⚠️ No message or text, ignoring');
       return;
     }
 
@@ -44,21 +40,10 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
     const chatId = message.chat.id;
     const telegramUserId = message.from.id;
 
-    console.log('[Telegram] 📨 Message received:', {
-      text,
-      chatId,
-      telegramUserId,
-      username: message.from.username,
-      elapsedMs: Date.now() - startTime
-    });
-
     // Check if it's a /start command
     if (!message.text.startsWith('/start')) {
-      console.log('[Telegram] ⚠️ Not a /start command, ignoring');
       return;
     }
-
-    console.log('[Telegram] ✅ /start command detected, triggering handleStartCommand');
 
     // Extract locale from /start parameter (e.g., "/start ru" -> "ru")
     // This locale comes from the app URL the user was on when they clicked "Open Bot"
@@ -67,12 +52,9 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
     // Simple flow: Send telegram_id with greeting in app's language
     // Note: We await this to prevent Vercel from killing the function before message sends
     await handleStartCommand(telegramUserId, message.from, chatId, startParam);
-
-    console.log('[Telegram] ⏱️ Webhook handler completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
     console.error('[Telegram Handler] ❌ FATAL EXCEPTION:', error);
     console.error('[Telegram Handler] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    console.error('[Telegram Handler] ⏱️ Failed after:', Date.now() - startTime, 'ms');
   }
 }
 
@@ -83,13 +65,9 @@ async function handleStartCommand(
   localeParam: string = 'en'
 ) {
   const startTime = Date.now();
-  console.log('[Telegram] 🚀 handleStartCommand started for user:', telegramId);
-
   try {
     // Use app locale from start parameter, normalize to supported languages
     const lang = localeParam.startsWith('bg') ? 'bg' : localeParam.startsWith('ru') ? 'ru' : 'en';
-
-    console.log('[Telegram] 🌍 Using app locale:', lang, '(from start parameter:', localeParam + ')');
 
     // Greeting messages in different languages (without telegram_id)
     const greetings: Record<string, string> = {

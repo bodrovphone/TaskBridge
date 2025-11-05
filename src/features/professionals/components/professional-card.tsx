@@ -11,6 +11,7 @@ import {
 import { Star, MapPin, Clock, Briefcase } from "lucide-react"
 import FallbackAvatar from "@/components/ui/fallback-avatar"
 import { getCategoryLabelBySlug } from '@/features/categories'
+import { getCityLabelBySlug } from '@/features/cities'
 import { LocaleLink } from '@/components/common/locale-link'
 import type { Professional as APIProfessional } from '@/server/professionals/professional.types'
 import type { Professional as MockProfessional } from '../lib/mock-professionals'
@@ -36,7 +37,12 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
  const getReviewsCount = () => ('total_reviews' in professional ? professional.total_reviews : professional.reviewsCount) || 0
  const getCompletedJobs = () => ('tasks_completed' in professional ? professional.tasks_completed : professional.completedJobs) || 0
  const getCategories = () => ('service_categories' in professional ? professional.service_categories : professional.categories) || []
- const getLocation = () => ('city' in professional ? professional.city : professional.location) || 'Unknown'
+ const getLocation = () => {
+   const citySlug = ('city' in professional ? professional.city : professional.location) || ''
+   // @todo REFACTOR: Replace hardcoded Bulgaria with dynamic country detection from user profile
+   // For now, show Bulgaria flag as default when city is not set
+   return citySlug ? getCityLabelBySlug(citySlug, t) : `${t('common.country.bulgaria', 'Bulgaria')} 🇧🇬`
+ }
  const getBio = () => ('bio' in professional ? professional.bio : professional.description) || ''
  const getVerified = () => {
    if ('is_phone_verified' in professional) {
@@ -112,8 +118,14 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
        </div>
        <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg">
         <Briefcase size={14} className="text-blue-500" />
-        <span className="font-semibold text-blue-600">{getCompletedJobs()}</span>
-        <span>completed jobs</span>
+        {getCompletedJobs() === 0 ? (
+          <span className="font-medium text-blue-600">{t('professionals.card.lookingForFirstTask', 'Looking to get first task from you')}</span>
+        ) : (
+          <>
+            <span className="font-semibold text-blue-600">{getCompletedJobs()}</span>
+            <span>{t('professionals.card.completedJobs', 'completed jobs')}</span>
+          </>
+        )}
        </div>
       </div>
      </div>

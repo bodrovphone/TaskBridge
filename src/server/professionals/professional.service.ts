@@ -47,45 +47,26 @@ export class ProfessionalService {
         }
       }
 
-      // 2. Log query for debugging (development only)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('🔍 Professional search query:', {
-          category: params.category,
-          city: params.city,
-          minRating: params.minRating,
-          verified: params.verified,
-          mostActive: params.mostActive,
-          sortBy: params.sortBy,
-          page: params.page,
-          limit: params.limit,
-        })
-      }
-
-      // 3. Fetch professionals from repository
+      // 2. Fetch professionals from repository
       const result = await getProfessionalsFromRepo(params)
 
-      // 4. Filter sensitive fields for privacy
+      // 3. Filter sensitive fields for privacy (both main results and featured)
       const filteredProfessionals = filterSensitiveFieldsBatch(
         result.professionals as any
       )
+      const filteredFeaturedProfessionals = filterSensitiveFieldsBatch(
+        result.featuredProfessionals as any
+      )
 
-      // 5. Validate no sensitive fields leaked (development only)
+      // 4. Validate no sensitive fields leaked (development only)
       warnIfSensitiveFields(filteredProfessionals, 'getProfessionals response')
+      warnIfSensitiveFields(filteredFeaturedProfessionals, 'getFeaturedProfessionals response')
 
-      // 6. Return success response
+      // 5. Return success response
       const response: PaginatedProfessionalsResponse = {
         professionals: filteredProfessionals,
+        featuredProfessionals: filteredFeaturedProfessionals,
         pagination: result.pagination,
-      }
-
-      // Log result counts (development only)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('✅ Found professionals:', {
-          count: filteredProfessionals.length,
-          total: result.pagination.total,
-          page: result.pagination.page,
-          totalPages: result.pagination.totalPages,
-        })
       }
 
       return {
