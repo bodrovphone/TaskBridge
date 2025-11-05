@@ -110,7 +110,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
              year: date.getFullYear(),
              month: date.getMonth() + 1,
              day: date.getDate(),
-           }
+           } as any
          })()
        : null
 
@@ -119,7 +119,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
        key="deadline-picker"
        label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
        description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
-       value={displayValue}
+       value={displayValue as any}
        onChange={(date: any) => {
         if (date) {
          // Create date at noon UTC to avoid timezone issues
@@ -133,7 +133,6 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
        showMonthAndYearPickers
        labelPlacement="outside"
        isDisabled={urgency === 'same_day'}
-       locale={dateLocale}
        classNames={{
         base: 'max-w-md',
         popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
