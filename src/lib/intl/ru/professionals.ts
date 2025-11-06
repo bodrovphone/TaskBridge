@@ -103,6 +103,31 @@ export const professionals = {
   'professionals.filters.showPerfectRating':
     'Показать только профессионалов с совершенным 5-звездным рейтингом',
 
+  // Results section
+  'professionals.results.showing': 'Показано {{count}} специалистов',
+  'professionals.results.loading': 'Загрузка специалистов...',
+  'professionals.results.noResults.title': 'Специалисты не найдены',
+  'professionals.results.noResults.description':
+    'Попробуйте изменить фильтры или поискать в другом районе',
+  'professionals.results.noResults.clearFilters': 'Очистить фильтры',
+  'professionals.results.error.title': 'Упс! Что-то пошло не так',
+  'professionals.results.error.description': 'Нашим серверам нужен кофе-брейк',
+  'professionals.results.error.subtext': 'Не волнуйтесь, мы уже работаем над этим!',
+  'professionals.results.error.retry': 'Попробовать снова',
+  'professionals.results.mockTitle': 'Примерные специалисты (Справка)',
+  'professionals.results.mockDescription':
+    'Образцы данных, демонстрирующие будущие функции: портфолио, сертификаты, особые случаи',
+  'professionals.results.mockBadge1': 'Для разработки',
+  'professionals.results.mockBadge2': 'Не реальные пользователи',
+  'professionals.results.featured.title': 'Рекомендуемые специалисты',
+  'professionals.results.featured.description':
+    'Ознакомьтесь с этими высококлассными специалистами из нашей сети',
+
+  // Pagination
+  'professionals.pagination.previous': 'Предыдущая',
+  'professionals.pagination.next': 'Следующая',
+  'professionals.pagination.pageOf': 'Страница {{current}} из {{total}}',
+
   'professionalDetail.about': 'О специалисте',
   'professionalDetail.reviews': 'отзывов',
   'professionalDetail.online': 'Онлайн',

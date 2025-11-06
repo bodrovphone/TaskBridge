@@ -103,6 +103,31 @@ export const professionals = {
   'professionals.filters.showPerfectRating':
     'Show only professionals with perfect 5-star ratings',
 
+  // Results section
+  'professionals.results.showing': 'Showing {{count}} professionals',
+  'professionals.results.loading': 'Loading professionals...',
+  'professionals.results.noResults.title': 'No professionals found',
+  'professionals.results.noResults.description':
+    'Try adjusting your filters or search in a different area',
+  'professionals.results.noResults.clearFilters': 'Clear Filters',
+  'professionals.results.error.title': 'Oops! Something went wrong',
+  'professionals.results.error.description': 'Our servers need a coffee break',
+  'professionals.results.error.subtext': "Don't worry, we're on it!",
+  'professionals.results.error.retry': 'Try Again',
+  'professionals.results.mockTitle': 'Mock Professionals (Reference)',
+  'professionals.results.mockDescription':
+    'Sample data showcasing future features: portfolios, certifications, edge cases',
+  'professionals.results.mockBadge1': 'For Development Reference',
+  'professionals.results.mockBadge2': 'Not Real Users',
+  'professionals.results.featured.title': 'Featured Professionals',
+  'professionals.results.featured.description':
+    'Check out these top-rated professionals from our network',
+
+  // Pagination
+  'professionals.pagination.previous': 'Previous',
+  'professionals.pagination.next': 'Next',
+  'professionals.pagination.pageOf': 'Page {{current}} of {{total}}',
+
   'professionalDetail.about': 'About the Professional',
   'professionalDetail.reviews': 'reviews',
   'professionalDetail.online': 'Online',

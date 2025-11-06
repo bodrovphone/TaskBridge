@@ -115,8 +115,8 @@ export default function ProfessionalsPage() {
       `}</style>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 -mt-16 pt-20 pb-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white min-h-[150px] md:min-h-[300px] flex items-center justify-center">
+      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 text-center text-white">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -181,54 +181,53 @@ export default function ProfessionalsPage() {
         </div>
       </div>
 
-      <main
-        className="relative"
-        style={{
-          backgroundImage: 'url(/images/cardboard.png)',
-          backgroundRepeat: 'repeat',
-          backgroundSize: 'auto'
-        }}
-      >
-        {/* Background overlay */}
-        <div className="absolute inset-0 bg-white/70"></div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative">
+        {/* Cardboard background - positioned absolutely */}
+        <div
+          className="fixed inset-0 -z-10"
+          style={{
+            backgroundImage: 'url(/images/cardboard.png)',
+            backgroundRepeat: 'repeat',
+            backgroundSize: 'auto',
+            opacity: 0.3
+          }}
+        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pb-16">
-          {/* Search Filters Section */}
-          <SearchFiltersSection
-            professionalsCount={apiData?.pagination.total || 0}
-            isLoading={isLoading}
-          />
+        {/* Search Filters Section */}
+        <SearchFiltersSection
+          professionalsCount={apiData?.pagination.total || 0}
+          isLoading={isLoading}
+        />
 
-          {/* Active Filters Display */}
-          <ActiveFilters />
-
-          {/* Desktop Filters (hidden on mobile) */}
-          <div className="hidden md:block mb-6">
-            <FilterBar />
-          </div>
-
-          {/* Mobile Filters (hidden on desktop) */}
-          <div className="md:hidden mb-6 flex justify-end">
-            <FiltersModal />
-          </div>
-
-          {/* Results Section (API + Mock Data) */}
-          <ResultsSection
-            professionals={apiData?.professionals || []}
-            featuredProfessionals={apiData?.featuredProfessionals || []}
-            isLoading={isLoading}
-            error={error}
-            mockProfessionals={mockProfessionals}
-            currentPage={apiData?.pagination.page || 1}
-            totalPages={apiData?.pagination.totalPages || 1}
-            hasNext={apiData?.pagination.hasNext || false}
-            hasPrevious={apiData?.pagination.hasPrevious || false}
-            onPageChange={handlePageChange}
-            onClearFilters={resetFilters}
-            onRetry={handleRetry}
-            activeFilterCount={activeFilterCount}
-          />
+        {/* Desktop Filters (hidden on mobile) */}
+        <div className="hidden md:block mb-6">
+          <FilterBar />
         </div>
+
+        {/* Mobile Filters (hidden on desktop) */}
+        <div className="md:hidden mb-6 flex justify-end">
+          <FiltersModal />
+        </div>
+
+        {/* Active Filters Display */}
+        <ActiveFilters />
+
+        {/* Results Section (API + Mock Data) */}
+        <ResultsSection
+          professionals={apiData?.professionals || []}
+          featuredProfessionals={apiData?.featuredProfessionals || []}
+          isLoading={isLoading}
+          error={error}
+          mockProfessionals={mockProfessionals}
+          currentPage={apiData?.pagination.page || 1}
+          totalPages={apiData?.pagination.totalPages || 1}
+          hasNext={apiData?.pagination.hasNext || false}
+          hasPrevious={apiData?.pagination.hasPrevious || false}
+          onPageChange={handlePageChange}
+          onClearFilters={resetFilters}
+          onRetry={handleRetry}
+          activeFilterCount={activeFilterCount}
+        />
       </main>
     </>
   );

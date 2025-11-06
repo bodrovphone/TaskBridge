@@ -35,14 +35,16 @@ export default function SearchFiltersSection({
   // Get popular subcategories (not main categories) since professionals select subcategories
   const popularCategories = useMemo(() => {
     const allSubcategories = getAllSubcategoriesWithLabels(t);
-    // Get most common subcategories (you can customize this list)
+    // Get most common subcategories (using actual slugs from subcategories.ts)
     const popularSlugs = [
-      'house-cleaning',
-      'plumbing',
-      'electrical-work',
-      'appliance-installation',
-      'painting',
-      'furniture-assembly'
+      'house-cleaning',           // Cleaning Services
+      'plumber',                  // Handyman
+      'electrician',              // Handyman
+      'apartment-renovation',     // Finishing Work
+      'computer-help',            // Appliance Repair
+      'furniture-assembly',       // Moving & Assembly
+      'large-appliance-repair',   // Appliance Repair
+      'language-tutoring'         // Lessons & Training
     ];
 
     return allSubcategories

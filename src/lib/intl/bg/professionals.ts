@@ -104,6 +104,31 @@ export const professionals = {
   'professionals.filters.showPerfectRating':
     'Покажи само професионалисти с пърфектни 5-звездни оценки',
 
+  // Results section
+  'professionals.results.showing': 'Показване на {{count}} професионалисти',
+  'professionals.results.loading': 'Зареждане на професионалисти...',
+  'professionals.results.noResults.title': 'Не са намерени професионалисти',
+  'professionals.results.noResults.description':
+    'Опитайте да промените филтрите или да търсите в друг район',
+  'professionals.results.noResults.clearFilters': 'Изчисти филтрите',
+  'professionals.results.error.title': 'Опа! Нещо се обърка',
+  'professionals.results.error.description': 'Сървърите ни имат нужда от почивка с кафе',
+  'professionals.results.error.subtext': 'Не се притеснявайте, работим по проблема!',
+  'professionals.results.error.retry': 'Опитай отново',
+  'professionals.results.mockTitle': 'Примерни професионалисти (Референция)',
+  'professionals.results.mockDescription':
+    'Примерни данни, показващи бъдещи функции: портфолиа, сертификати, специални случаи',
+  'professionals.results.mockBadge1': 'За разработка',
+  'professionals.results.mockBadge2': 'Не са истински потребители',
+  'professionals.results.featured.title': 'Препоръчани професионалисти',
+  'professionals.results.featured.description':
+    'Разгледайте тези най-високо оценени професионалисти от нашата мрежа',
+
+  // Pagination
+  'professionals.pagination.previous': 'Предишна',
+  'professionals.pagination.next': 'Следваща',
+  'professionals.pagination.pageOf': 'Страница {{current}} от {{total}}',
+
   'professionalDetail.about': 'За професионалиста',
   'professionalDetail.reviews': 'отзива',
   'professionalDetail.online': 'Онлайн',

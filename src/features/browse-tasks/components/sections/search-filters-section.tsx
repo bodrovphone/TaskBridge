@@ -31,14 +31,16 @@ export default function SearchFiltersSection({
  // Note: 'category' filter actually stores subcategory slugs (see use-task-filters.ts)
  const popularCategories = useMemo(() => {
   const allSubcategories = getAllSubcategoriesWithLabels(t);
-  // Get most common task subcategories
+  // Get most common task subcategories (using actual slugs from subcategories.ts)
   const popularSlugs = [
-   'house-cleaning',
-   'plumbing',
-   'electrical-work',
-   'appliance-installation',
-   'painting',
-   'furniture-assembly'
+   'house-cleaning',           // Cleaning Services
+   'plumber',                  // Handyman
+   'electrician',              // Handyman
+   'apartment-renovation',     // Finishing Work
+   'computer-help',            // Appliance Repair
+   'furniture-assembly',       // Moving & Assembly
+   'large-appliance-repair',   // Appliance Repair
+   'language-tutoring'         // Lessons & Training
   ];
 
   return allSubcategories
