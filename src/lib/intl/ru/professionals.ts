@@ -49,6 +49,7 @@ export const professionals = {
   'professionals.filters.minimumRating': 'Минимальный рейтинг',
   'professionals.filters.minRating': 'Мин. рейтинг',
   'professionals.filters.minJobs': 'Мин. работ',
+  'professionals.filters.jobs': 'работ',
   'professionals.filters.sortBy': 'Сортировать по',
   'professionals.filters.genderPreference': 'Предпочтение по полу',
   'professionals.filters.activityLevel': 'Уровень активности',

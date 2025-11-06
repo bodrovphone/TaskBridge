@@ -85,16 +85,12 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
    cache: 'force-cache', // Use ISR caching
   });
 
-  // Handle 404 - task not found
-  if (response.status === 404) {
-   notFound();
-  }
-
-  // Handle other errors
+  // Handle any error as not found (404, 500, etc.)
+  // This provides better UX than showing error pages
   if (!response.ok) {
    const errorText = await response.text();
    console.error('Failed to fetch task:', response.status, errorText);
-   throw new Error(`Failed to fetch task: ${response.statusText}`);
+   notFound();
   }
 
   const data: TaskDetailResponse = await response.json();

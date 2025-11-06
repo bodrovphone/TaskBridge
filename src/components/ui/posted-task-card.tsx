@@ -353,7 +353,7 @@ function PostedTaskCard({
                 color="success"
                 startContent={<CheckCircle className="w-4 h-4" />}
                 onPress={() => setShowConfirmDialog(true)}
-                className="w-full sm:w-auto font-semibold"
+                className="w-full sm:w-auto font-semibold py-6"
               >
                 {t('taskCompletion.confirmCompletion')}
               </Button>
@@ -364,7 +364,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:w-auto"
+                  className="w-full sm:w-auto py-6"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -379,7 +379,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:flex-1"
+                className="w-full sm:flex-1 py-6"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
@@ -389,7 +389,7 @@ function PostedTaskCard({
                 color="default"
                 startContent={<XCircle className="w-4 h-4" />}
                 onPress={() => setShowCancelDialog(true)}
-                className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700"
+                className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 py-6"
               >
                 {t('postedTasks.cancelTask')}
               </Button>
@@ -400,7 +400,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600"
+                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 py-6"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -415,7 +415,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:flex-1"
+                className="w-full sm:flex-1 py-6"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
@@ -426,7 +426,7 @@ function PostedTaskCard({
                   color="warning"
                   startContent={<Star className="w-4 h-4" />}
                   onPress={() => setShowReviewDialog(true)}
-                  className="w-full sm:w-auto font-semibold"
+                  className="w-full sm:w-auto font-semibold py-6"
                 >
                   {t('reviews.pending.leaveReviewButton')}
                 </Button>
@@ -437,7 +437,7 @@ function PostedTaskCard({
                 color="secondary"
                 startContent={<RotateCcw className="w-4 h-4" />}
                 onPress={handleReopenTask}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto py-6"
               >
                 {t('postedTasks.reopenTask')}
               </Button>
@@ -448,7 +448,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600"
+                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 py-6"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -463,7 +463,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Eye className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white py-6"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
@@ -473,7 +473,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Edit className="w-4 h-4" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}/edit`)}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto py-6"
               >
                 {t('postedTasks.editTask')}
               </Button>
@@ -484,7 +484,7 @@ function PostedTaskCard({
                   color="secondary"
                   startContent={<FileText className="w-4 h-4" />}
                   onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
-                  className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white"
+                  className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white py-6"
                 >
                   {t('postedTasks.viewApplications')} ({applicationsCount})
                 </Button>

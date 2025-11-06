@@ -35,7 +35,7 @@ export function VerificationSection({ phoneNumber, isPhoneVerified, onVerifyPhon
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium">{t('profile.professional.phoneVerification')}</p>
               <div className="flex items-center gap-2 flex-wrap mt-1">
-                <p className="text-sm text-gray-900 font-semibold">{phoneNumber || 'Not set'}</p>
+                <p className="text-sm text-gray-900 font-semibold">{phoneNumber || t('profile.professional.notSet')}</p>
                 {phoneNumber && (
                   isPhoneVerified ? (
                     <Chip
@@ -54,7 +54,7 @@ export function VerificationSection({ phoneNumber, isPhoneVerified, onVerifyPhon
                       variant="flat"
                       className="flex-shrink-0"
                     >
-                      Not Verified
+                      {t('profile.professional.notVerified')}
                     </Chip>
                   )
                 )}

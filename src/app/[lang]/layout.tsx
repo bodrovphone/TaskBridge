@@ -2,10 +2,12 @@ import { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
 import { LocaleProviders } from './providers'
 import { Header, Footer } from '@/components/common'
+import ProgressBar from '@/components/common/progress-bar'
 import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { Toaster } from '@/components/ui/toaster'
 import { TelegramConnectionToast } from '@/components/telegram-connection-toast'
+import '../nprogress.css'
 
 interface LocaleLayoutProps {
  children: ReactNode
@@ -38,6 +40,7 @@ async function LocaleLayout({
 
  return (
   <LocaleProviders locale={validatedLocale}>
+   <ProgressBar />
    <div className="min-h-screen flex flex-col overflow-x-hidden">
     <Header />
     <main className="flex-1 overflow-x-hidden">

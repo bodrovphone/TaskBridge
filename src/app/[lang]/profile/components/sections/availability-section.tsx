@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Select, SelectItem, RadioGroup, Radio, Chip } from '@nextui-org/react'
 import { Clock, CheckCircle, MapPinned, Languages, Edit, Save, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface AvailabilitySectionProps {
   availability: 'available' | 'busy' | 'unavailable'
@@ -35,6 +36,7 @@ export function AvailabilitySection({
   onSave,
   onLanguageChange
 }: AvailabilitySectionProps) {
+  const { t } = useTranslation()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentLanguages, setCurrentLanguages] = useState(languages)
@@ -65,7 +67,7 @@ export function AvailabilitySection({
           <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-100">
             <Clock className="w-4 h-4 md:w-5 md:h-5 text-indigo-600" />
           </div>
-          <h3 className="text-lg md:text-xl font-bold text-gray-900">Availability & Preferences</h3>
+          <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.professional.availabilityPreferences')}</h3>
         </div>
       </CardHeader>
       <CardBody className="space-y-4 px-4 md:px-6">
@@ -77,7 +79,7 @@ export function AvailabilitySection({
                 <CheckCircle className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">Status</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.status')}</p>
                 <p className="font-semibold text-gray-900 capitalize">{availability}</p>
               </div>
             </div>
@@ -87,7 +89,7 @@ export function AvailabilitySection({
                 <Clock className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">Response Time</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.responseTime')}</p>
                 <p className="font-semibold text-gray-900">{responseTime}</p>
               </div>
             </div>
@@ -97,7 +99,7 @@ export function AvailabilitySection({
                 <MapPinned className="w-5 h-5 text-orange-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">Service Area</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.serviceArea')}</p>
                 <p className="font-semibold text-gray-900">{serviceArea.join(', ')}</p>
               </div>
             </div>
@@ -107,7 +109,7 @@ export function AvailabilitySection({
                 <Languages className="w-5 h-5 text-purple-600" />
               </div>
               <div className="flex-1">
-                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Languages Spoken</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">{t('profile.professional.languagesSpoken')}</p>
                 {languages.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {languages.map(lang => (
@@ -117,7 +119,7 @@ export function AvailabilitySection({
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500 italic">No languages selected</p>
+                  <p className="text-sm text-gray-500 italic">{t('profile.professional.noLanguagesSelected')}</p>
                 )}
               </div>
             </div>
@@ -205,7 +207,7 @@ export function AvailabilitySection({
               onPress={() => setIsEditing(true)}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              Edit
+              {t('common.edit', 'Edit')}
             </Button>
           ) : (
             <>
@@ -220,7 +222,7 @@ export function AvailabilitySection({
                 }}
                 isDisabled={isLoading}
               >
-                Cancel
+                {t('common.cancel', 'Cancel')}
               </Button>
               <Button
                 color="primary"
@@ -229,7 +231,7 @@ export function AvailabilitySection({
                 onPress={() => form.handleSubmit()}
                 isLoading={isLoading}
               >
-                Save
+                {t('common.save', 'Save')}
               </Button>
             </>
           )}

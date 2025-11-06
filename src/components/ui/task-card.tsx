@@ -201,7 +201,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
      <Button
       variant="bordered"
       size="md"
-      className="flex-1 w-full py-6"
+      className="flex-1 w-full py-3"
       onPress={handleCardPress}
      >
       {t('taskCard.seeDetails', 'See details')}
@@ -212,7 +212,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
        color="success"
        variant="solid"
        size="md"
-       className="flex-1 w-full py-6 font-semibold shadow-md hover:shadow-lg transition-shadow"
+       className="flex-1 w-full py-3 font-semibold shadow-md hover:shadow-lg transition-shadow"
        onPress={() => onApply(task.id)}
        isDisabled={!canApply}
        title={applyDisabledReason}

@@ -1,10 +1,10 @@
 'use client'
 
-import { Button, Card, CardBody, Avatar } from "@nextui-org/react";
-import { CheckCircle, Bell, ClipboardList, Star } from "lucide-react";
+import { Card, CardBody, Avatar } from "@nextui-org/react";
+import { CheckCircle, Star } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import { useRouter, useParams } from 'next/navigation';
 import { Application } from '@/types/applications';
+import { getCityLabelBySlug } from '@/features/cities';
 
 interface TaskInProgressStateProps {
   acceptedApplication: Application;
@@ -12,20 +12,8 @@ interface TaskInProgressStateProps {
 
 export default function TaskInProgressState({ acceptedApplication }: TaskInProgressStateProps) {
   const { t } = useTranslation();
-  const router = useRouter();
-  const params = useParams();
-  const lang = params.lang as string;
 
   const { professional } = acceptedApplication;
-
-  const handleViewNotifications = () => {
-    // TODO: Navigate to notification center
-    console.log('Navigate to notifications');
-  };
-
-  const handleViewMyTasks = () => {
-    router.push(`/${lang}/tasks/posted`);
-  };
 
   return (
     <div className="space-y-6">
@@ -79,7 +67,7 @@ export default function TaskInProgressState({ acceptedApplication }: TaskInProgr
             )}
             {professional.city && (
               <div className="text-gray-700">
-                <span className="font-medium">{t('taskInProgress.location', 'Location')}:</span> {professional.city}
+                <span className="font-medium">{t('taskInProgress.location', 'Location')}:</span> {getCityLabelBySlug(professional.city, t)}
               </div>
             )}
             <div className="text-gray-700">
@@ -94,30 +82,6 @@ export default function TaskInProgressState({ acceptedApplication }: TaskInProgr
         <p className="text-sm text-blue-900">
           {t('taskInProgress.infoMessage', 'All other applications have been automatically rejected. You can track the progress of your task and communicate with the professional through your task management page.')}
         </p>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Button
-          color="primary"
-          variant="solid"
-          size="lg"
-          startContent={<ClipboardList className="w-5 h-5" />}
-          onClick={handleViewMyTasks}
-          className="flex-1"
-        >
-          {t('taskInProgress.viewMyTasks', 'View My Tasks')}
-        </Button>
-        <Button
-          color="default"
-          variant="bordered"
-          size="lg"
-          startContent={<Bell className="w-5 h-5" />}
-          onClick={handleViewNotifications}
-          className="flex-1"
-        >
-          {t('taskInProgress.viewNotifications', 'View Notifications')}
-        </Button>
       </div>
     </div>
   );

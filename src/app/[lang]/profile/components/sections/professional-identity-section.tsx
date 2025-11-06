@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
 import { Briefcase, Award, Edit, Save, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface ProfessionalIdentitySectionProps {
   title: string
@@ -25,6 +26,7 @@ export function ProfessionalIdentitySection({
   yearsExperience,
   onSave
 }: ProfessionalIdentitySectionProps) {
+  const { t } = useTranslation()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -45,7 +47,7 @@ export function ProfessionalIdentitySection({
           <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-blue-100">
             <Briefcase className="w-4 h-4 md:w-5 md:h-5 text-primary" />
           </div>
-          <h3 className="text-lg md:text-xl font-bold text-gray-900">Professional Identity</h3>
+          <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.professional.identitySection')}</h3>
         </div>
       </CardHeader>
       <CardBody className="space-y-4 px-4 md:px-6">
@@ -53,12 +55,12 @@ export function ProfessionalIdentitySection({
           // View Mode
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Professional Title</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{t('profile.professional.title')}</p>
               <p className="text-lg font-semibold text-gray-900">{title}</p>
             </div>
 
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Bio</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{t('profile.professional.bio')}</p>
               <p className="text-gray-700 leading-relaxed">{bio}</p>
             </div>
 
@@ -67,7 +69,7 @@ export function ProfessionalIdentitySection({
                 <Award className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">Years of Experience</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.yearsOfExperience')}</p>
                 <p className="font-semibold text-gray-900">{yearsExperience}</p>
               </div>
             </div>
@@ -79,8 +81,8 @@ export function ProfessionalIdentitySection({
               <form.Field name="title">
                 {(field) => (
                   <Input
-                    label="Professional Title"
-                    placeholder="e.g., Professional Cleaning & Home Services"
+                    label={t('profile.professional.title')}
+                    placeholder={t('profile.professional.titlePlaceholder')}
                     value={field.state.value}
                     onValueChange={field.handleChange}
                     startContent={<Briefcase className="w-4 h-4 text-gray-500" />}
@@ -91,8 +93,8 @@ export function ProfessionalIdentitySection({
               <form.Field name="bio">
                 {(field) => (
                   <Textarea
-                    label="Bio"
-                    placeholder="Tell customers about your experience, specializations, and approach..."
+                    label={t('profile.professional.bio')}
+                    placeholder={t('profile.professional.bioPlaceholder')}
                     value={field.state.value}
                     onValueChange={field.handleChange}
                     minRows={4}
@@ -104,7 +106,7 @@ export function ProfessionalIdentitySection({
               <form.Field name="yearsExperience">
                 {(field) => (
                   <Select
-                    label="Years of Experience"
+                    label={t('profile.professional.yearsOfExperience')}
                     selectedKeys={[field.state.value]}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
@@ -132,7 +134,7 @@ export function ProfessionalIdentitySection({
               onPress={() => setIsEditing(true)}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              Edit
+              {t('common.edit', 'Edit')}
             </Button>
           ) : (
             <>
@@ -143,7 +145,7 @@ export function ProfessionalIdentitySection({
                 onPress={() => { form.reset(); setIsEditing(false) }}
                 isDisabled={isLoading}
               >
-                Cancel
+                {t('common.cancel', 'Cancel')}
               </Button>
               <Button
                 color="primary"
@@ -152,7 +154,7 @@ export function ProfessionalIdentitySection({
                 onPress={() => form.handleSubmit()}
                 isLoading={isLoading}
               >
-                Save
+                {t('common.save', 'Save')}
               </Button>
             </>
           )}

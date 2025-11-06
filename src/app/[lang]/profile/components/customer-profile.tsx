@@ -157,11 +157,11 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
          <Globe className="w-5 h-5 text-indigo-600" />
         </div>
         <div>
-         <p className="text-xs text-gray-500 uppercase tracking-wider">Language</p>
+         <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.customer.language', 'Language')}</p>
          <p className="font-semibold text-gray-900">
-          {profile.preferredLanguage === 'en' && 'English'}
-          {profile.preferredLanguage === 'bg' && 'Български'}
-          {profile.preferredLanguage === 'ru' && 'Русский'}
+          {profile.preferredLanguage === 'en' && t('language.en', 'English')}
+          {profile.preferredLanguage === 'bg' && t('language.bg', 'Български')}
+          {profile.preferredLanguage === 'ru' && t('language.ru', 'Русский')}
          </p>
         </div>
        </div>
@@ -171,7 +171,7 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
          <MessageSquare className="w-5 h-5 text-pink-600" />
         </div>
         <div>
-         <p className="text-xs text-gray-500 uppercase tracking-wider">Preferred Contact</p>
+         <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.customer.preferredContact', 'Preferred Contact')}</p>
          <p className="font-semibold text-gray-900 capitalize">{profile.preferredContact}</p>
         </div>
        </div>
@@ -278,7 +278,7 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
         <personalForm.Field name="preferredLanguage">
          {(field) => (
           <Select
-           label="Preferred Language"
+           label={t('profile.customer.preferredLanguage', 'Preferred Language')}
            selectedKeys={[field.state.value]}
            onSelectionChange={(keys) => {
             const selected = Array.from(keys)[0] as 'en' | 'bg' | 'ru'
@@ -286,9 +286,9 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
            }}
            startContent={<Globe className="w-4 h-4 text-gray-500" />}
           >
-           <SelectItem key="en" value="en">English</SelectItem>
-           <SelectItem key="bg" value="bg">Български</SelectItem>
-           <SelectItem key="ru" value="ru">Русский</SelectItem>
+           <SelectItem key="en" value="en">{t('language.en', 'English')}</SelectItem>
+           <SelectItem key="bg" value="bg">{t('language.bg', 'Български')}</SelectItem>
+           <SelectItem key="ru" value="ru">{t('language.ru', 'Русский')}</SelectItem>
           </Select>
          )}
         </personalForm.Field>
@@ -297,7 +297,7 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
         <personalForm.Field name="preferredContact">
          {(field) => (
           <div className="md:col-span-2">
-           <label className="block text-sm font-medium mb-3">Preferred Contact Method</label>
+           <label className="block text-sm font-medium mb-3">{t('profile.customer.preferredContactMethod', 'Preferred Contact Method')}</label>
            <RadioGroup
             value={field.state.value}
             onValueChange={(value) => field.handleChange(value as any)}
@@ -317,7 +317,7 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
             >
              <div className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
-              <span>Email</span>
+              <span>{t('profile.email', 'Email')}</span>
              </div>
             </Radio>
             <Radio
@@ -331,7 +331,7 @@ export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfilePro
             >
              <div className="flex items-center gap-2">
               <Phone className="w-4 h-4" />
-              <span>Phone</span>
+              <span>{t('profile.phone', 'Phone')}</span>
              </div>
             </Radio>
             <Radio

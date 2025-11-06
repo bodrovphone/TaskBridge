@@ -192,6 +192,7 @@ export const tasks = {
   'createTask.timeline.flexibleDesc': "I'm flexible with timing",
   'createTask.timeline.deadlineLabel': 'Specific Deadline (Optional)',
   'createTask.timeline.deadlineHelp': "Leave empty if you don't have a specific deadline",
+  'createTask.timeline.pastDateWarning': 'This deadline is in the past. Please select a future date or clear this field.',
 
   // Photos Section
   'createTask.photos.title': 'Add a photo (optional)',
@@ -227,11 +228,28 @@ export const tasks = {
   'createTask.errors.categoryRequired': 'Please select a category',
   'createTask.errors.titleTooShort': 'Title must be at least 10 characters',
   'createTask.errors.titleTooLong': 'Title must be less than 200 characters',
-  'createTask.errors.descriptionTooShort': 'Description must be at least 30 characters',
+  'createTask.errors.descriptionTooShort': 'Description must be at least 15 characters',
   'createTask.errors.descriptionTooLong': 'Description must be less than 2000 characters',
   'createTask.errors.cityRequired': 'City is required',
   'createTask.errors.budgetInvalid': 'Maximum must be greater than minimum',
   'createTask.errors.deadlineInPast': 'Deadline must be today or in the future',
+
+  // Validation Dialog
+  'createTask.validationDialog.title': 'Please fix the following issues',
+  'createTask.validationDialog.subtitle': 'Some fields need your attention',
+  'createTask.validationDialog.fixButton': 'Fix These Issues',
+  'createTask.validationDialog.fieldName.category': 'Category',
+  'createTask.validationDialog.fieldName.subcategory': 'Subcategory',
+  'createTask.validationDialog.fieldName.title': 'Task Title',
+  'createTask.validationDialog.fieldName.description': 'Description',
+  'createTask.validationDialog.fieldName.requirements': 'Requirements',
+  'createTask.validationDialog.fieldName.city': 'City',
+  'createTask.validationDialog.fieldName.neighborhood': 'Neighborhood',
+  'createTask.validationDialog.fieldName.exactAddress': 'Exact Address',
+  'createTask.validationDialog.fieldName.budgetMin': 'Minimum Budget',
+  'createTask.validationDialog.fieldName.budgetMax': 'Maximum Budget',
+  'createTask.validationDialog.fieldName.urgency': 'Urgency',
+  'createTask.validationDialog.fieldName.deadline': 'Deadline',
 
   'createTask.imageUpload.error': 'Image upload failed',
 

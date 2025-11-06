@@ -40,58 +40,6 @@ interface WorkTask {
   }
 }
 
-// Mock data - only accepted applications
-const getMockWorkTasks = (t: (key: string) => string): WorkTask[] => [
-  {
-    id: 'work-1',
-    taskId: '3',
-    taskTitle: 'Apartment Deep Cleaning',
-    taskDescription: '3-bedroom apartment needs thorough deep cleaning before new tenants move in.',
-    customer: {
-      name: 'Maria Petrova',
-      avatar: undefined,
-      phone: '+359 888 123 456',
-      email: 'maria.p@example.com'
-    },
-    agreedPrice: 200,
-    timeline: '3 days',
-    startDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // Tomorrow
-    task: {
-      deadline: new Date('2025-01-19'),
-      category: 'Cleaning',
-      location: {
-        city: 'Plovdiv',
-        neighborhood: 'Center'
-      },
-      status: 'in_progress'
-    }
-  },
-  {
-    id: 'work-2',
-    taskId: 'task-dog-1',
-    taskTitle: 'Dog Walking - Golden Retriever',
-    taskDescription: 'Need someone to walk my friendly Golden Retriever twice daily for 2 weeks.',
-    customer: {
-      name: 'Georgi Ivanov',
-      avatar: undefined,
-      phone: '+359 887 654 321',
-      email: 'georgi.i@example.com'
-    },
-    agreedPrice: 250,
-    timeline: '2 weeks',
-    startDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Started 3 days ago
-    task: {
-      deadline: new Date('2025-01-25'),
-      category: 'Pet Care',
-      location: {
-        city: 'Sofia',
-        neighborhood: 'Mladost'
-      },
-      status: 'in_progress'
-    }
-  }
-]
-
 export function MyWorkContent({ lang }: MyWorkContentProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -99,7 +47,8 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false)
   const [selectedTaskForCompletion, setSelectedTaskForCompletion] = useState<WorkTask | null>(null)
 
-  const workTasks = getMockWorkTasks(t)
+  // @todo API: Fetch accepted applications from /api/applications?status=accepted
+  const workTasks: WorkTask[] = []
 
   const filteredTasks = workTasks.filter(task => {
     switch (selectedFilter) {

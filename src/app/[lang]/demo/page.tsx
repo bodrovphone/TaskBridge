@@ -29,12 +29,13 @@ export default async function DemoPage({ params }: DemoPageProps) {
    ]
   },
   {
-   title: 'Comparison Routes',
-   description: 'Compare mock data vs. real API data',
+   title: 'Task Management Pages (Future Integration)',
+   description: 'UI showcasing all task statuses and states - to be integrated with API',
    icon: List,
    routes: [
-    { label: 'Real Task #1 (API)', path: `/tasks/1`, external: true },
-    { label: 'Demo Task #1 (Mock)', path: `/demo/tasks/1` },
+    { label: 'Posted Tasks - All UI states (open, in progress, completed, etc.)', path: `/tasks/posted`, note: 'TODO: Currently uses empty state, mocks removed' },
+    { label: 'My Applications - Application statuses', path: `/tasks/applications`, note: 'TODO: Currently uses empty state, mocks removed' },
+    { label: 'My Work - Active work and confirmations', path: `/tasks/work`, note: 'TODO: Currently uses empty state, mocks removed' },
    ]
   },
  ];
@@ -77,19 +78,25 @@ export default async function DemoPage({ params }: DemoPageProps) {
        </CardHeader>
        <CardBody>
         <div className="space-y-2">
-         {section.routes.map((route, routeIdx) => (
-          <Link
-           key={routeIdx}
-           href={`/${lang}${route.path}`}
-           className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 transition-colors group"
-          >
-           <span className="text-gray-900 group-hover:text-primary-600 font-medium">
-            {route.label}
-           </span>
-           <ExternalLink
-            className={`w-4 h-4 ${route.external ? 'text-blue-600' : 'text-gray-400'} group-hover:text-primary-600`}
-           />
-          </Link>
+         {section.routes.map((route: any, routeIdx) => (
+          <div key={routeIdx}>
+           <Link
+            href={`/${lang}${route.path}`}
+            className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+           >
+            <span className="text-gray-900 group-hover:text-primary-600 font-medium">
+             {route.label}
+            </span>
+            <ExternalLink
+             className={`w-4 h-4 ${route.external ? 'text-blue-600' : 'text-gray-400'} group-hover:text-primary-600`}
+            />
+           </Link>
+           {route.note && (
+            <p className="text-xs text-gray-500 italic px-3 pb-2">
+             {route.note}
+            </p>
+           )}
+          </div>
          ))}
         </div>
        </CardBody>

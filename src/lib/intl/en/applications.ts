@@ -199,11 +199,6 @@ export const applications = {
   'myApplications.empty.message': 'You haven\'t applied to any tasks yet. Browse available tasks!',
   'myApplications.empty.browseButton': 'Browse Tasks',
 
-  // Mock Timeline Examples (for development)
-  'myApplications.mockTimeline.thisWeekend': 'This weekend (Oct 21-22)',
-  'myApplications.mockTimeline.nextWeek': 'Next week, flexible schedule',
-  'myApplications.mockTimeline.startMonday': 'Starting next Monday, Mon-Fri 7-8am',
-
   // My Work Page (Professional View - Accepted Applications Only)
   'myWork.title': 'My Work',
   'myWork.subtitle': 'Manage your active tasks and completed work',

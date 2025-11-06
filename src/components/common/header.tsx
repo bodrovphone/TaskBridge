@@ -314,8 +314,9 @@ function Header() {
    action={authAction}
   />
 
-  {/* Floating Action Buttons - Mobile Only */}
-  <div className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[100] flex flex-col gap-4">
+  {/* Floating Action Buttons - Mobile Only (hide when menu is open) */}
+  {!isMenuOpen && (
+  <div className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[45] flex flex-col gap-4">
    {/* Browse Tasks Button - Hide on browse-tasks page */}
    {!pathname.includes('/browse-tasks') && (
     <Button
@@ -346,6 +347,7 @@ function Header() {
     </Button>
    )}
   </div>
+  )}
 
   {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
   {/* <ReviewEnforcementDialog

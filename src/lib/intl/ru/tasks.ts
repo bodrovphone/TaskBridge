@@ -193,6 +193,7 @@ export const tasks = {
   'createTask.timeline.flexibleDesc': 'У меня гибкий график',
   'createTask.timeline.deadlineLabel': 'Конкретный срок (по желанию)',
   'createTask.timeline.deadlineHelp': 'Оставьте пустым, если у вас нет конкретного срока',
+  'createTask.timeline.pastDateWarning': 'Этот срок в прошлом. Пожалуйста, выберите будущую дату или очистите поле.',
 
   // Photos Section
   'createTask.photos.title': 'Добавьте фотографию (по желанию)',
@@ -228,11 +229,28 @@ export const tasks = {
   'createTask.errors.categoryRequired': 'Пожалуйста, выберите категорию',
   'createTask.errors.titleTooShort': 'Название должно быть не менее 10 символов',
   'createTask.errors.titleTooLong': 'Название не может быть более 200 символов',
-  'createTask.errors.descriptionTooShort': 'Описание должно быть не менее 30 символов',
+  'createTask.errors.descriptionTooShort': 'Описание должно быть не менее 15 символов',
   'createTask.errors.descriptionTooLong': 'Описание не может быть более 2000 символов',
   'createTask.errors.cityRequired': 'Пожалуйста, выберите город',
   'createTask.errors.budgetInvalid': 'Максимальный бюджет должен быть больше минимального',
   'createTask.errors.deadlineInPast': 'Срок должен быть сегодня или в будущем',
+
+  // Validation Dialog
+  'createTask.validationDialog.title': 'Пожалуйста, исправьте следующие проблемы',
+  'createTask.validationDialog.subtitle': 'Некоторые поля требуют вашего внимания',
+  'createTask.validationDialog.fixButton': 'Исправить эти проблемы',
+  'createTask.validationDialog.fieldName.category': 'Категория',
+  'createTask.validationDialog.fieldName.subcategory': 'Подкатегория',
+  'createTask.validationDialog.fieldName.title': 'Название задачи',
+  'createTask.validationDialog.fieldName.description': 'Описание',
+  'createTask.validationDialog.fieldName.requirements': 'Требования',
+  'createTask.validationDialog.fieldName.city': 'Город',
+  'createTask.validationDialog.fieldName.neighborhood': 'Район',
+  'createTask.validationDialog.fieldName.exactAddress': 'Точный адрес',
+  'createTask.validationDialog.fieldName.budgetMin': 'Минимальный бюджет',
+  'createTask.validationDialog.fieldName.budgetMax': 'Максимальный бюджет',
+  'createTask.validationDialog.fieldName.urgency': 'Срочность',
+  'createTask.validationDialog.fieldName.deadline': 'Крайний срок',
 
   'createTask.imageUpload.error': 'Не удалось загрузить изображение',
 

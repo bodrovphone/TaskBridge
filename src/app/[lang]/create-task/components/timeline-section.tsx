@@ -1,10 +1,12 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, DatePicker } from '@nextui-org/react'
-import { today, getLocalTimeZone, CalendarDate } from '@internationalized/date'
-import { Clock } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { Card, CardBody } from '@nextui-org/react'
+import { Clock, Calendar } from 'lucide-react'
+import DatePicker from 'react-datepicker'
+import { enGB, bg, ru } from 'date-fns/locale'
+import 'react-datepicker/dist/react-datepicker.css'
+import './timeline-section.css'
 
 interface TimelineSectionProps {
  form: any
@@ -15,11 +17,9 @@ interface TimelineSectionProps {
 
 export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSectionProps) {
  const { t, i18n } = useTranslation()
- const params = useParams()
- const locale = (params?.lang as string) || i18n.language || 'en'
 
- // Map app locale to date format locale (all use European dd/mm/yyyy format)
- const dateLocale = locale === 'en' ? 'en-GB' : locale === 'bg' ? 'bg-BG' : 'ru-RU'
+ // Map app language to date-fns locale
+ const dateLocale = i18n.language === 'bg' ? bg : i18n.language === 'ru' ? ru : enGB
 
  const urgencyOptions = [
   {
@@ -99,82 +99,72 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
    {/* Specific Deadline (Optional) - Hidden for same_day urgency */}
    <form.Field name="deadline" key="deadline-field">
     {(field: any) => {
-     // Get today's date in the user's local timezone
-     const todayDate = today(getLocalTimeZone())
-
-     // Convert stored value to CalendarDate format for DatePicker
-     const displayValue = field.state.value
+     // Convert stored value to Date object
+     const selectedDate = field.state.value
        ? (() => {
            try {
-             // Handle different value formats (Date object, string, or CalendarDate)
-             let date: Date
-
-             // If already a CalendarDate, return it
-             if (field.state.value instanceof CalendarDate) {
-               return field.state.value
-             }
-
-             // Convert to Date object first
              if (field.state.value instanceof Date) {
-               date = field.state.value
+               return field.state.value
              } else if (typeof field.state.value === 'string') {
-               date = new Date(field.state.value)
-             } else if (field.state.value.year && field.state.value.month && field.state.value.day) {
-               // Plain object with date components - create CalendarDate
-               return new CalendarDate(
-                 field.state.value.year,
-                 field.state.value.month,
-                 field.state.value.day
-               )
+               return new Date(field.state.value)
              } else {
-               // Fallback: try to parse it
-               date = new Date(field.state.value)
+               return new Date(field.state.value)
              }
-
-             // Validate the date
-             if (isNaN(date.getTime())) {
-               console.warn('Invalid date value in deadline field:', field.state.value)
-               return null
-             }
-
-             // Create CalendarDate from Date object
-             return new CalendarDate(
-               date.getFullYear(),
-               date.getMonth() + 1,
-               date.getDate()
-             )
            } catch (error) {
-             console.error('Error converting deadline value:', error)
              return null
            }
          })()
        : null
 
+     // Minimum date: 2 days from now (excluding today and tomorrow)
+     const minDate = new Date()
+     minDate.setDate(minDate.getDate() + 2)
+
+     // Check if selected date is in the past
+     const isPastDate = selectedDate && selectedDate < new Date()
+
      return (
-      <DatePicker
-       key="deadline-picker"
-       label={t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
-       description={t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
-       value={displayValue as any}
-       onChange={(date: any) => {
-        if (date) {
-         // Create date at noon UTC to avoid timezone issues
-         const jsDate = new Date(Date.UTC(date.year, date.month - 1, date.day, 12, 0, 0))
-         field.handleChange(jsDate)
-        } else {
-         field.handleChange(undefined)
-        }
-       }}
-       minValue={todayDate}
-       showMonthAndYearPickers
-       labelPlacement="outside"
-       isDisabled={urgency === 'same_day'}
-       classNames={{
-        base: 'max-w-md',
-        popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-xl p-4',
-        calendar: 'bg-white shadow-sm',
-       }}
-      />
+      <div className="max-w-md">
+       <label className="block text-sm font-medium text-foreground mb-1.5">
+        {t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
+       </label>
+       {isPastDate && (
+        <div className="mb-2 p-3 bg-amber-50 border border-amber-300 rounded-lg">
+         <p className="text-sm text-amber-800 font-medium">
+          ⚠️ {t('createTask.timeline.pastDateWarning', 'This deadline is in the past. Please select a future date or clear this field.')}
+         </p>
+        </div>
+       )}
+       <div className="relative">
+        <DatePicker
+         selected={selectedDate}
+         onChange={(date: Date | null) => {
+          if (date) {
+           // Create date at noon UTC to avoid timezone issues
+           const jsDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0))
+           field.handleChange(jsDate)
+          } else {
+           field.handleChange(undefined)
+          }
+         }}
+         minDate={minDate}
+         dateFormat="dd/MM/yyyy"
+         locale={dateLocale}
+         disabled={urgency === 'same_day'}
+         placeholderText="Select date"
+         calendarStartDay={1}
+         portalId="root-portal"
+         popperClassName="z-[9999]"
+         className="w-full h-10 px-3 py-2 text-sm rounded-xl border-2 border-default-200 hover:border-default-400 focus:border-primary focus:outline-none disabled:bg-default-100 disabled:cursor-not-allowed transition-colors bg-default-50"
+         calendarClassName="!border-2 !border-default-200 !rounded-xl !shadow-xl"
+         wrapperClassName="w-full"
+        />
+        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-default-400 pointer-events-none" />
+       </div>
+       <p className="text-xs text-default-500 mt-1.5">
+        {t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
+       </p>
+      </div>
      )
     }}
    </form.Field>

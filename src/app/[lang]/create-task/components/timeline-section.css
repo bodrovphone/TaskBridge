@@ -1,0 +1,92 @@
+/* Custom react-datepicker styling for responsive calendar size */
+
+/* Mobile: Default size (slightly bigger than default) */
+.react-datepicker {
+  font-size: 1rem !important;
+}
+
+.react-datepicker__header {
+  padding: 12px 0 !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  width: 2.2rem !important;
+  line-height: 2.2rem !important;
+  margin: 0.25rem !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header {
+  font-size: 1rem !important;
+  padding: 0.5rem !important;
+}
+
+.react-datepicker__navigation {
+  top: 14px !important;
+}
+
+/* Tablet: Medium size */
+@media (min-width: 768px) {
+  .react-datepicker {
+    font-size: 1.1rem !important;
+  }
+
+  .react-datepicker__day-name,
+  .react-datepicker__day,
+  .react-datepicker__time-name {
+    width: 2.5rem !important;
+    line-height: 2.5rem !important;
+    margin: 0.3rem !important;
+  }
+
+  .react-datepicker__current-month,
+  .react-datepicker-time__header {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Desktop: Nice and spacious (but not Trump-sized) */
+@media (min-width: 1024px) {
+  .react-datepicker {
+    font-size: 1.2rem !important;
+  }
+
+  .react-datepicker__header {
+    padding: 16px 0 !important;
+  }
+
+  .react-datepicker__day-name,
+  .react-datepicker__day,
+  .react-datepicker__time-name {
+    width: 3rem !important;
+    line-height: 3rem !important;
+    margin: 0.35rem !important;
+  }
+
+  .react-datepicker__current-month,
+  .react-datepicker-time__header {
+    font-size: 1.25rem !important;
+    padding: 0.75rem !important;
+  }
+
+  .react-datepicker__navigation {
+    top: 20px !important;
+  }
+}
+
+/* Hover states for better UX */
+.react-datepicker__day:hover {
+  background-color: #e5e7eb !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #0066cc !important;
+  color: white !important;
+}
+
+.react-datepicker__day--selected:hover {
+  background-color: #0052a3 !important;
+}

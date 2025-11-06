@@ -28,6 +28,8 @@ export const common = {
   'common.close': 'Close',
   'common.days': 'days',
   'common.cancel': 'Cancel',
+  'common.edit': 'Edit',
+  'common.save': 'Save',
   'common.anonymous': 'Anonymous User',
 
   // Countries

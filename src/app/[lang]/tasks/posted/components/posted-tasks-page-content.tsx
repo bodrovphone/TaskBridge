@@ -45,128 +45,6 @@ interface PostedTask {
   daysSinceCreation?: number
 }
 
-// @todo DEMO: Mock data for development - Remove when all features are integrated
-// This showcases all task statuses and UI states for demo purposes
-const mockPostedTasks: PostedTask[] = [
-  {
-    id: '1',
-    title: 'Electrical outlet installation in living room',
-    description: 'Need to install 3 additional power outlets in the living room',
-    category: 'electrical',
-    budget: 150,
-    status: 'open',
-    applicationsCount: 5,
-    location: {
-      city: 'Sofia',
-      neighborhood: 'Lozenets'
-    },
-    createdAt: new Date('2024-10-15'),
-    deadline: new Date('2024-10-25')
-  },
-  {
-    id: '0',
-    title: 'Почистване на апартамент',
-    description: 'Трябва почистване',
-    category: 'house-cleaning',
-    budget: 50, // Low budget - will trigger hint
-    status: 'open',
-    applicationsCount: 0, // No applications - will trigger hint
-    location: {
-      city: '', // Missing location - will trigger hint
-      neighborhood: ''
-    },
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago - will show hints
-    deadline: new Date('2024-11-01')
-  },
-  {
-    id: '0b',
-    title: 'Garden landscaping consultation',
-    description: 'Not sure about the budget, need professional advice first',
-    category: 'gardening',
-    budget: 0,
-    budgetType: 'unclear',
-    status: 'open',
-    applicationsCount: 2,
-    location: {
-      city: 'Sofia',
-      neighborhood: 'Vitosha'
-    },
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
-    deadline: new Date('2024-11-15')
-  },
-  {
-    id: '2',
-    title: 'Kitchen sink plumbing repair',
-    description: 'Professional completed the work and is waiting for your confirmation',
-    category: 'plumbing',
-    budget: 120,
-    status: 'pending_customer_confirmation',
-    applicationsCount: 4,
-    acceptedApplication: {
-      professionalId: 'prof-1',
-      professionalName: 'Ivan Georgiev'
-    },
-    location: {
-      city: 'Sofia',
-      neighborhood: 'Lozenets'
-    },
-    createdAt: new Date('2024-10-12'),
-  },
-  {
-    id: '2b',
-    title: 'Weekly apartment cleaning',
-    description: 'Looking for regular cleaning service every Tuesday',
-    category: 'house-cleaning',
-    budget: 80,
-    status: 'in_progress',
-    applicationsCount: 8,
-    acceptedApplication: {
-      professionalId: 'prof-2',
-      professionalName: 'Maria Petrova'
-    },
-    location: {
-      city: 'Sofia',
-      neighborhood: 'Center'
-    },
-    createdAt: new Date('2024-10-10'),
-  },
-  {
-    id: '3',
-    title: 'Plumbing repair - leaking sink',
-    description: 'Kitchen sink is leaking, needs urgent repair',
-    category: 'plumbing',
-    budget: 100,
-    status: 'completed',
-    applicationsCount: 3,
-    acceptedApplication: {
-      professionalId: 'prof-2',
-      professionalName: 'Ivan Georgiev',
-      professionalAvatar: undefined
-    },
-    location: {
-      city: 'Sofia',
-      neighborhood: 'Mladost'
-    },
-    createdAt: new Date('2024-10-05'),
-    completedAt: new Date('2024-10-20'),
-    hasReview: false, // Not reviewed yet - will show "Leave Review" button
-  },
-  {
-    id: '4',
-    title: 'Furniture assembly service',
-    description: 'Need help assembling IKEA furniture - bed frame, wardrobe, and desk',
-    category: 'furniture-assembly',
-    budget: 200,
-    status: 'cancelled',
-    applicationsCount: 12,
-    location: {
-      city: 'Sofia',
-      neighborhood: 'Studentski Grad'
-    },
-    createdAt: new Date('2024-09-28'),
-  }
-]
-
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const { t } = useTranslation()
   const { user } = useAuth()
@@ -186,11 +64,9 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   // Fetch real tasks from API
   useEffect(() => {
     async function fetchTasks() {
-      // @todo DEMO: Remove this when authentication is enforced
-      // For demo purposes, show mock tasks if user is not logged in
       if (!user) {
         setIsLoading(false)
-        setTasks(mockPostedTasks)
+        setTasks([])
         return
       }
 
@@ -249,24 +125,13 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
           }
         })
 
-        // @todo DEMO: Remove mock tasks when all features are integrated
-        // For demo purposes, append mock tasks below real tasks to showcase all UI states
-        const mockTasksWithPrefix = mockPostedTasks.map(task => ({
-          ...task,
-          id: `mock-${task.id}` // Prefix IDs to avoid conflicts with real tasks
-        }))
-
-        const allTasks = [...mappedTasks, ...mockTasksWithPrefix]
-
-        setTasks(allTasks)
+        setTasks(mappedTasks)
         setError(null)
 
         // Debug: Log task statuses and counts
         console.log('📊 Posted Tasks Status Summary:', {
-          total: allTasks.length,
-          real: mappedTasks.length,
-          mock: mockTasksWithPrefix.length,
-          byStatus: allTasks.reduce((acc, task) => {
+          total: mappedTasks.length,
+          byStatus: mappedTasks.reduce((acc, task) => {
             acc[task.status] = (acc[task.status] || 0) + 1
             return acc
           }, {} as Record<string, number>)
@@ -274,8 +139,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
       } catch (err) {
         console.error('Error fetching tasks:', err)
         setError(err instanceof Error ? err.message : 'Failed to load tasks')
-        // Fallback to mock data on error
-        setTasks(mockPostedTasks)
+        setTasks([])
       } finally {
         setIsLoading(false)
       }

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
-import { MessageCircle, Share2, Edit3, XCircle } from "lucide-react";
+import { MessageCircle, Share2, Edit3, XCircle, Check } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
+import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
@@ -34,6 +35,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
  const [userApplication, setUserApplication] = useState<{ status: ApplicationStatus } | null>(null);
  const [isLoadingApplication, setIsLoadingApplication] = useState(false);
+ const [isShareCopied, setIsShareCopied] = useState(false);
 
  // Fetch user's application for this task
  useEffect(() => {
@@ -119,6 +121,52 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   }
  };
 
+ const handleShareClick = async () => {
+  const taskUrl = `${window.location.origin}/${lang}/tasks/${task.id}`;
+  const shareData = {
+   title: task.title,
+   text: t('taskDetail.shareText', 'Check out this task on Trudify'),
+   url: taskUrl,
+  };
+
+  // Try to use Web Share API (native on mobile)
+  if (navigator.share) {
+   try {
+    await navigator.share(shareData);
+    toast({ title: t('taskDetail.shareSuccess', 'Shared successfully!') });
+   } catch (error: any) {
+    // User cancelled or error occurred
+    if (error.name !== 'AbortError') {
+     console.error('Error sharing:', error);
+     // Fallback to clipboard
+     await copyToClipboard(taskUrl);
+    }
+   }
+  } else {
+   // Fallback: Copy to clipboard
+   await copyToClipboard(taskUrl);
+  }
+ };
+
+ const copyToClipboard = async (text: string) => {
+  try {
+   await navigator.clipboard.writeText(text);
+   setIsShareCopied(true);
+   toast({ title: t('taskDetail.linkCopied', 'Link copied to clipboard!') });
+
+   // Reset icon after 2 seconds
+   setTimeout(() => {
+    setIsShareCopied(false);
+   }, 2000);
+  } catch (error) {
+   console.error('Failed to copy:', error);
+   toast({
+    title: t('taskDetail.copyError', 'Failed to copy link'),
+    variant: 'destructive',
+   });
+  }
+ };
+
  // Get task status permissions
  const taskStatus = (task.status || 'open') as TaskStatus;
  const canEdit = canEditTask(taskStatus);
@@ -174,7 +222,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
       variant="flat"
       size="lg"
       className="w-full"
-      startContent={<Share2 size={20} />}
+      startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+      onPress={handleShareClick}
      >
       {t('taskDetail.share')}
      </NextUIButton>
@@ -231,7 +280,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
       variant="flat"
       size="lg"
       className="w-full"
-      startContent={<Share2 size={20} />}
+      startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+      onPress={handleShareClick}
      >
       {t('taskDetail.share')}
      </NextUIButton>

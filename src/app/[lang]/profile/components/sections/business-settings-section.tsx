@@ -61,7 +61,7 @@ export function BusinessSettingsSection({
           <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500/10 to-amber-100">
             <Settings className="w-4 h-4 md:w-5 md:h-5 text-orange-600" />
           </div>
-          <h3 className="text-lg md:text-xl font-bold text-gray-900">Business Settings</h3>
+          <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.professional.businessSettings')}</h3>
         </div>
       </CardHeader>
       <CardBody className="space-y-4 px-4 md:px-6">
@@ -199,7 +199,7 @@ export function BusinessSettingsSection({
               onPress={() => setIsEditing(true)}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              Edit
+              {t('common.edit', 'Edit')}
             </Button>
           ) : (
             <>
@@ -209,7 +209,7 @@ export function BusinessSettingsSection({
                 startContent={<X className="w-4 h-4" />}
                 onPress={handleCancel}
               >
-                Cancel
+                {t('common.cancel', 'Cancel')}
               </Button>
               <Button
                 color="primary"
@@ -217,7 +217,7 @@ export function BusinessSettingsSection({
                 startContent={<Save className="w-4 h-4" />}
                 onPress={handleSave}
               >
-                Save
+                {t('common.save', 'Save')}
               </Button>
             </>
           )}

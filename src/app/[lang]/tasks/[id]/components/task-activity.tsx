@@ -252,10 +252,10 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
  const acceptedApplication = applications.find(app => app.status === 'accepted');
 
  return (
-  <div id="applications" ref={applicationsRef}>
+  <div id="applications" ref={applicationsRef} className="w-full overflow-hidden">
    <NextUICard className="bg-white/95 shadow-lg">
-    <CardBody className="p-6">
-     <h3 className="text-lg font-bold text-gray-900 mb-4">
+    <CardBody className="p-3 sm:p-6">
+     <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">
       {t('taskDetail.activity')}
      </h3>
 
@@ -269,18 +269,18 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
         setQuestions(updatedQuestions);
        }
       }}
-      className="w-full"
+      className="w-full overflow-hidden"
      >
       <Tab
        key="applications"
        title={
-        <div className="flex items-center gap-2">
-         <User size={16} />
-         <span>{t('taskDetail.applications')} ({applications.length})</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+         <User size={14} className="sm:w-4 sm:h-4" />
+         <span className="text-xs sm:text-sm">{t('taskDetail.applications')} ({applications.length})</span>
         </div>
        }
       >
-       <div className="mt-4">
+       <div className="mt-3 sm:mt-4 overflow-hidden">
         {isLoadingApplications ? (
          <div className="flex justify-center py-8">
           <div className="text-gray-500">{t('common.loading', 'Loading...')}</div>
@@ -319,9 +319,9 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
       <Tab
        key="questions"
        title={
-        <div className="flex items-center gap-2">
-         <MessageCircle size={16} />
-         <span>{t('taskDetail.questions')} ({questions.length})</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+         <MessageCircle size={14} className="sm:w-4 sm:h-4" />
+         <span className="text-xs sm:text-sm">{t('taskDetail.questions')} ({questions.length})</span>
         </div>
        }
       >

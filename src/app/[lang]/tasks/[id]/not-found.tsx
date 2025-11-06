@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next';
 
 export default function TaskNotFound() {
  const router = useRouter();
- const { t } = useTranslation();
+ const { t, i18n } = useTranslation();
+ const locale = i18n.language || 'en';
 
  return (
   <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4">
@@ -43,7 +44,7 @@ export default function TaskNotFound() {
      </Button>
      <Button
       color="primary"
-      onClick={() => router.push('/browse-tasks')}
+      onClick={() => router.push(`/${locale}/browse-tasks`)}
      >
       {t('taskDetail.notFound.browseTasks', 'Browse Tasks')}
      </Button>

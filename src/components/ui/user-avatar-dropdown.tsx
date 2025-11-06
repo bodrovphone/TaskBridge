@@ -91,25 +91,25 @@ export default function UserAvatarDropdown({
     content: "py-1 px-1 border border-gray-200"
    }}
   >
-   <DropdownTrigger>
-    <div className={className}>
-     <UserAvatar
-      user={profile}
-      size={size}
-      isClickable
-      className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
-     />
-    </div>
-   </DropdownTrigger>
+    <DropdownTrigger>
+     <div className={className}>
+      <UserAvatar
+       user={profile}
+       size={size}
+       isClickable
+       className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
+      />
+     </div>
+    </DropdownTrigger>
 
-   <DropdownMenu
-    aria-label="User menu"
-    onAction={(key) => handleMenuAction(key as string)}
-    variant="flat"
-    classNames={{
-     list: "gap-1"
-    }}
-   >
+    <DropdownMenu
+     aria-label="User menu"
+     onAction={(key) => handleMenuAction(key as string)}
+     variant="flat"
+     classNames={{
+      list: "gap-1"
+     }}
+    >
     {/* User Info Section */}
     <DropdownSection showDivider>
      <DropdownItem

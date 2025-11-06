@@ -1,0 +1,37 @@
+/* NProgress custom styles - Brand blue gradient */
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: linear-gradient(90deg, #0066CC, #4F46E5) !important; /* Blue to indigo gradient */
+  position: fixed !important;
+  z-index: 99999 !important; /* Higher than everything */
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 5px !important;
+  box-shadow: 0 0 10px rgba(0, 102, 204, 0.6) !important; /* Blue glow */
+}
+
+#nprogress .peg {
+  display: block !important;
+  position: absolute !important;
+  right: 0px !important;
+  width: 100px !important;
+  height: 100% !important;
+  box-shadow: 0 0 15px #0066CC, 0 0 8px #0066CC !important; /* Blue glow on leading edge */
+  opacity: 1.0 !important;
+  transform: rotate(3deg) translate(0px, -4px) !important;
+}
+
+/* Smooth fade-in animation */
+#nprogress .bar {
+  animation: nprogress-fade-in 0.2s ease-in !important;
+}
+
+@keyframes nprogress-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}

@@ -39,24 +39,24 @@ export default function ApplicationsSection({
  return (
   <div className="space-y-4 mt-4">
    {applications.map((application) => (
-    <div key={application.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+    <div key={application.id} className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:border-blue-300 transition-colors">
      {/* User Header */}
-     <div className="flex items-center justify-between mb-3">
-      <div className="flex items-center gap-3">
+     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3">
+      <div className="flex items-center gap-3 min-w-0">
        <Avatar
         src={application.user.avatar}
         name={application.user.name}
-        className="w-12 h-12"
+        className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0"
        />
-       <div>
-        <h4 className="font-semibold text-gray-900">{application.user.name}</h4>
+       <div className="min-w-0 flex-1">
+        <h4 className="font-semibold text-gray-900 truncate">{application.user.name}</h4>
         {/* Specialization */}
         {application.user.skills?.[0] && (
-         <div className="text-sm text-gray-600 mb-1">
+         <div className="text-sm text-gray-600 mb-1 truncate">
           {t(application.user.skills[0])}
          </div>
         )}
-        <div className="flex items-center gap-3 text-sm text-gray-600">
+        <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 flex-wrap">
          {/* Rating with fresh professional tooltip */}
          {application.user.rating === 0 ? (
           <Tooltip
@@ -64,13 +64,13 @@ export default function ApplicationsSection({
            placement="top"
           >
            <div className="flex items-center gap-1 cursor-help">
-            <Star className="w-4 h-4 fill-gray-300 text-gray-300" />
+            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-gray-300 text-gray-300" />
             <span className="text-gray-500">{t('applications.new', 'New')}</span>
            </div>
           </Tooltip>
          ) : (
           <div className="flex items-center gap-1">
-           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+           <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
            <span>{application.user.rating}</span>
           </div>
          )}
@@ -78,51 +78,52 @@ export default function ApplicationsSection({
          {application.user.completedTasks > 0 && (
           <>
            <span>•</span>
-           <span>{application.user.completedTasks} {t('taskDetail.completedTasks')}</span>
+           <span className="whitespace-nowrap">{application.user.completedTasks} {t('taskDetail.completedTasks')}</span>
           </>
          )}
         </div>
        </div>
       </div>
-      <span className="text-sm text-gray-500">{application.timestamp}</span>
+      <span className="text-xs sm:text-sm text-gray-500 self-start sm:self-auto">{application.timestamp}</span>
      </div>
 
      {/* Skills/Categories */}
-     <div className="flex gap-2 mb-3">
+     <div className="flex flex-wrap gap-2 mb-3">
       {application.user.skills?.map((skill, index) => (
-       <Chip key={index} size="sm" variant="flat" color="primary">
+       <Chip key={index} size="sm" variant="flat" color="primary" className="text-xs">
         {t(skill)}
        </Chip>
       ))}
      </div>
 
      {/* Proposal */}
-     <p className="text-gray-700 mb-4 leading-relaxed">
+     <p className="text-sm sm:text-base text-gray-700 mb-4 leading-relaxed break-words">
       {application.proposal}
      </p>
 
      {/* Price & Timeline */}
-     <div className="flex items-center justify-between mb-4">
-      <div className="flex gap-6">
-       <div>
-        <span className="text-sm text-gray-500">{t('taskDetail.price')}</span>
-        <span className="ml-2 font-semibold text-green-600">{application.price}</span>
+     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
+       <div className="flex items-center gap-2">
+        <span className="text-xs sm:text-sm text-gray-500">{t('taskDetail.price')}:</span>
+        <span className="font-semibold text-green-600 whitespace-nowrap">{application.price}</span>
        </div>
-       <div>
-        <span className="text-sm text-gray-500">{t('taskDetail.timeline')}</span>
-        <span className="ml-2 font-medium text-gray-900">{getTimelineLabel(application.timeline, t)}</span>
+       <div className="flex items-center gap-2">
+        <span className="text-xs sm:text-sm text-gray-500">{t('taskDetail.timeline')}:</span>
+        <span className="font-medium text-gray-900">{getTimelineLabel(application.timeline, t)}</span>
        </div>
       </div>
      </div>
 
      {/* Action Buttons */}
-     <div className="flex gap-3">
+     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
       <NextUIButton
        color="primary"
        variant="bordered"
        size="sm"
-       startContent={<Eye size={16} />}
+       startContent={<Eye size={14} />}
        onClick={() => onViewDetails(application.id)}
+       className="w-full sm:w-auto text-xs sm:text-sm"
       >
        {t('applications.viewDetails', 'View Details')}
       </NextUIButton>
@@ -133,8 +134,9 @@ export default function ApplicationsSection({
          color="success"
          variant="solid"
          size="sm"
-         startContent={<CheckCircle size={16} />}
+         startContent={<CheckCircle size={14} />}
          onClick={() => onAcceptApplication(application.id)}
+         className="w-full sm:w-auto text-xs sm:text-sm"
         >
          {t('taskDetail.accept')}
         </NextUIButton>
@@ -142,8 +144,9 @@ export default function ApplicationsSection({
          color="danger"
          variant="bordered"
          size="sm"
-         startContent={<X size={16} />}
+         startContent={<X size={14} />}
          onClick={() => onRejectApplication(application.id)}
+         className="w-full sm:w-auto text-xs sm:text-sm"
         >
          {t('taskDetail.reject')}
         </NextUIButton>

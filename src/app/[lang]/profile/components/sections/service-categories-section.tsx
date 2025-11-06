@@ -5,7 +5,8 @@ import { Card, CardBody, CardHeader, Button, Modal, ModalContent, ModalHeader, M
 import { useTranslation } from 'react-i18next'
 import { FileText, Edit, X, Save } from 'lucide-react'
 import { ServiceCategoriesSelector } from '../service-categories-selector'
-import { getCategoryColor, getCategoryName } from '@/lib/utils/category'
+import { getCategoryColor } from '@/lib/utils/category'
+import { getSubcategoryBySlug } from '@/features/categories/lib/subcategories'
 
 interface ServiceCategoriesSectionProps {
   serviceCategories: string[]
@@ -52,7 +53,7 @@ export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceC
                 onPress={openModal}
                 className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800 flex-shrink-0 text-xs md:text-sm"
               >
-                Edit
+                {t('common.edit', 'Edit')}
               </Button>
             )}
           </div>
@@ -60,12 +61,13 @@ export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceC
         <CardBody className="space-y-4 px-4 md:px-6 py-6">
           {serviceCategories.length > 0 ? (
             <div className="flex flex-wrap gap-2">
-              {serviceCategories.map(category => {
-                const categoryColor = getCategoryColor(category)
-                const categoryName = getCategoryName(t, category)
+              {serviceCategories.map(categorySlug => {
+                const categoryColor = getCategoryColor(categorySlug)
+                const subcategory = getSubcategoryBySlug(categorySlug)
+                const categoryName = subcategory ? t(subcategory.translationKey) : categorySlug
                 return (
                   <span
-                    key={category}
+                    key={categorySlug}
                     className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border shadow-sm ${categoryColor}`}
                   >
                     {categoryName}
@@ -126,14 +128,14 @@ export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceC
               onPress={cancelModal}
               startContent={<X className="w-4 h-4" />}
             >
-              Cancel
+              {t('common.cancel', 'Cancel')}
             </Button>
             <Button
               color="primary"
               onPress={saveModal}
               startContent={<Save className="w-4 h-4" />}
             >
-              Save Categories
+              {t('profile.serviceCategories.saveCategories', 'Save Categories')}
             </Button>
           </ModalFooter>
         </ModalContent>

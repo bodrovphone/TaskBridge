@@ -38,73 +38,6 @@ interface MyApplication {
   }
 }
 
-// Mock data for development - timeline keys reference translation keys
-const getMockApplications = (t: (key: string) => string): MyApplication[] => [
-  {
-    id: 'app-1',
-    taskId: 'task-1',
-    taskTitle: 'Office relocation assistance needed',
-    taskDescription: 'Need help moving office equipment to new location',
-    customerName: 'Peter Ivanov',
-    customerAvatar: undefined,
-    proposedPrice: 250,
-    timeline: t('myApplications.mockTimeline.thisWeekend'),
-    message: 'I have experience with office relocations and own a van. Can complete this efficiently.',
-    status: 'pending',
-    submittedAt: new Date('2024-10-18'),
-    task: {
-      budget: 300,
-      category: 'Moving & Transport',
-      location: {
-        city: 'Sofia',
-        neighborhood: 'Business Park'
-      }
-    }
-  },
-  {
-    id: 'app-2',
-    taskId: 'task-2',
-    taskTitle: 'Bathroom tile repair',
-    taskDescription: 'Several tiles need to be replaced in bathroom',
-    customerName: 'Elena Dimitrova',
-    customerAvatar: undefined,
-    proposedPrice: 180,
-    timeline: t('myApplications.mockTimeline.nextWeek'),
-    message: 'Professional tiler with 10 years experience. Can provide references.',
-    status: 'accepted',
-    submittedAt: new Date('2024-10-16'),
-    task: {
-      budget: 200,
-      category: 'Home Repair',
-      location: {
-        city: 'Sofia',
-        neighborhood: 'Lyulin'
-      }
-    }
-  },
-  {
-    id: 'app-3',
-    taskId: 'task-3',
-    taskTitle: 'Dog walking - morning shifts',
-    taskDescription: 'Need someone to walk my dog every morning',
-    customerName: 'Georgi Petrov',
-    customerAvatar: undefined,
-    proposedPrice: 15,
-    timeline: t('myApplications.mockTimeline.startMonday'),
-    message: 'Dog lover with experience walking large breeds. Available every morning.',
-    status: 'rejected',
-    submittedAt: new Date('2024-10-14'),
-    task: {
-      budget: 20,
-      category: 'Pet Care',
-      location: {
-        city: 'Sofia',
-        neighborhood: 'Borisova Gradina'
-      }
-    }
-  }
-]
-
 export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) {
   const { t } = useTranslation()
   const router = useRouter()
@@ -186,9 +119,6 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
 
     fetchApplications()
   }, [user, selectedStatus])
-
-  // @todo FEATURE: Remove mock applications once all sub-features are implemented (accept/reject/message actions)
-  const mockApplications = getMockApplications(t)
 
   const filteredApplications = applications
 

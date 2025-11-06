@@ -199,11 +199,6 @@ export const applications = {
   'myApplications.empty.message': 'Все още не сте кандидатствали за задачи. Разгледайте наличните задачи!',
   'myApplications.empty.browseButton': 'Разгледай задачи',
 
-  // Mock Timeline Examples (for development)
-  'myApplications.mockTimeline.thisWeekend': 'Този уикенд (21-22 окт)',
-  'myApplications.mockTimeline.nextWeek': 'Следваща седмица, гъвкав график',
-  'myApplications.mockTimeline.startMonday': 'Започвам следващия понеделник, Пон-Пет 7-8ч',
-
   // My Work Page (Professional View - Accepted Applications Only)
   'myWork.title': 'Моята работа',
   'myWork.subtitle': 'Управлявайте активните и завършени задачи',
