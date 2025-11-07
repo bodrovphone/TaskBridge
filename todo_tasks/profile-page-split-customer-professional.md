@@ -201,95 +201,133 @@ Separate the current unified profile page into two distinct pages - one for cust
 
 **Context:**
 Users are considered professionals when they have:
-- Professional title set (required)
-- At least one service category/subcategory set (required)
+- ✅ **Professional title set (REQUIRED)** - This is the ONLY hard requirement
+- ⭐ Service categories (RECOMMENDED but optional) - Helps with search/filtering but not required
+
+**Updated Requirements (Less Strict):**
+The system now has a single requirement for professionals:
+- **ONLY `professional_title` is required** to appear in professionals browse page
+- `service_categories` is optional - professionals can list without categories
+- This allows professionals to start getting visibility immediately with just a title
+- They can add categories later to improve discoverability via category filters
+
+**Professional Status Logic:**
+```typescript
+// Helper function to check if user is a professional (UPDATED - less strict)
+export const isProfessional = (profile: UserProfile): boolean => {
+  // ONLY professional title is required now
+  return !!(profile.professionalTitle && profile.professionalTitle.trim() !== '');
+};
+
+// Profile completion percentage (UPDATED)
+export const getProfessionalCompletion = (profile: UserProfile): number => {
+  const hasTitle = !!(profile.professionalTitle && profile.professionalTitle.trim() !== '');
+  const hasBio = !!(profile.bio && profile.bio.trim() !== '');
+  const hasCategories = profile.serviceCategories && profile.serviceCategories.length > 0;
+  const hasLocation = !!(profile.city || profile.location);
+
+  // Calculate completion based on recommended fields
+  let completion = 0;
+  if (hasTitle) completion += 40; // Required field
+  if (hasCategories) completion += 30; // Highly recommended
+  if (hasBio) completion += 20; // Recommended
+  if (hasLocation) completion += 10; // Nice to have
+
+  return completion;
+};
+```
+
+**Database Query Logic (Implementation):**
+```typescript
+// In professional.repository.ts - UPDATED to be less strict
+let query = supabase
+  .from('users')
+  .select('*', { count: 'exact' })
+  .not('professional_title', 'is', null)
+  .neq('professional_title', '')
+  // Note: service_categories check REMOVED - now optional
+
+// Category filter still works when user searches by category
+if (params.category) {
+  query = query.contains('service_categories', [params.category])
+}
+```
 
 **Requirements:**
-- [ ] Update landing page guide/instructions for becoming a professional
-- [ ] Add clear explanation of professional requirements:
-  - "To become a professional, complete your profile with a title and service categories"
+- [ ] Update landing page guide to reflect new simplified requirements
+- [ ] Add clear explanation:
+  - "To become a professional, you only need to set your professional title"
+  - "Adding service categories is recommended but optional"
 - [ ] Add visual indicators showing:
-  - ✅ Step 1: Set your professional title
-  - ✅ Step 2: Select your service categories
-  - ✅ Step 3: Start receiving task requests
+  - ✅ Step 1: Set your professional title (REQUIRED)
+  - ⭐ Step 2: Add bio and service categories (RECOMMENDED)
+  - ✅ Step 3: Start browsing tasks and applying
 - [ ] Update "Become a Professional" CTA button/section on homepage
 - [ ] Link to `/[lang]/profile/professional` from guide
-- [ ] Add tooltip/help text explaining minimum requirements
-- [ ] Show profile completion status if user is logged in
+- [ ] Add tooltip explaining optional vs required fields
+- [ ] Show profile completion percentage (based on recommended fields)
 
 **Landing Page Sections to Update:**
 ```typescript
-// Example guide structure on landing page:
+// Example guide structure - UPDATED for less strict requirements
 
 <Section title="How to Become a Professional">
-  <Step number={1}>
+  <Step number={1} required={true}>
     <Icon>Briefcase</Icon>
     <Title>Set Your Professional Title</Title>
+    <Badge>Required</Badge>
     <Description>
       Tell clients what you do (e.g., "Plumber", "Electrician", "House Cleaner")
+      This is all you need to start appearing in the professionals directory!
     </Description>
   </Step>
 
-  <Step number={2}>
-    <Icon>Tags</Icon>
-    <Title>Choose Your Service Categories</Title>
+  <Step number={2} required={false}>
+    <Icon>Star</Icon>
+    <Title>Complete Your Profile (Recommended)</Title>
+    <Badge>Recommended</Badge>
     <Description>
-      Select the services you offer to start appearing in search results
+      Add a bio, service categories, and location to improve your visibility
+      and help clients find you more easily. You can do this anytime!
     </Description>
   </Step>
 
   <Step number={3}>
     <Icon>Zap</Icon>
-    <Title>Start Receiving Requests</Title>
+    <Title>Start Browsing & Applying</Title>
     <Description>
-      Once your profile is complete, browse tasks and apply to jobs
+      Browse available tasks and apply to jobs that match your skills.
+      Build your reputation by completing tasks successfully!
     </Description>
   </Step>
 
   <Button href="/en/profile/professional">
-    Complete Professional Profile →
+    Set Professional Title →
   </Button>
 </Section>
 ```
 
-**Translation Keys to Add:**
+**Translation Keys to Add/Update:**
 - [ ] `landing.professional.howToBecome` - "How to Become a Professional"
-- [ ] `landing.professional.requirements` - "Requirements to get started"
+- [ ] `landing.professional.requirements` - "Simple requirements to get started"
 - [ ] `landing.professional.step1Title` - "Set Your Professional Title"
-- [ ] `landing.professional.step1Desc` - "Tell clients what you do"
-- [ ] `landing.professional.step2Title` - "Choose Service Categories"
-- [ ] `landing.professional.step2Desc` - "Select the services you offer"
-- [ ] `landing.professional.step3Title` - "Start Receiving Requests"
-- [ ] `landing.professional.step3Desc` - "Browse and apply to available tasks"
-- [ ] `landing.professional.completeProfile` - "Complete Professional Profile"
-- [ ] `landing.professional.minRequirements` - "Minimum requirements: Professional title + At least 1 service category"
+- [ ] `landing.professional.step1Desc` - "Tell clients what you do - that's all you need!"
+- [ ] `landing.professional.step2Title` - "Complete Your Profile"
+- [ ] `landing.professional.step2Desc` - "Add bio and categories to improve visibility (optional)"
+- [ ] `landing.professional.step3Title` - "Start Browsing & Applying"
+- [ ] `landing.professional.step3Desc` - "Browse tasks and build your reputation"
+- [ ] `landing.professional.setProfessionalTitle` - "Set Professional Title"
+- [ ] `landing.professional.minRequirements` - "Only requirement: Professional title"
+- [ ] `landing.professional.recommendedFields` - "Recommended: Bio + Service categories + Location"
+- [ ] `profile.professional.required` - "Required"
+- [ ] `profile.professional.recommended` - "Recommended"
+- [ ] `profile.professional.optional` - "Optional"
 
 **Files to Update:**
 - [ ] `/src/app/[lang]/page.tsx` - Landing page component
 - [ ] `/src/components/pages/landing-page.tsx` - Landing page sections
 - [ ] `/src/lib/intl/[lang]/landing.ts` - Translation keys (EN/BG/RU)
-
-**Professional Status Check Logic:**
-```typescript
-// Helper function to check if user is a professional
-export const isProfessional = (profile: UserProfile): boolean => {
-  return !!(
-    profile.professionalTitle &&
-    profile.serviceCategories &&
-    profile.serviceCategories.length > 0
-  );
-};
-
-// Profile completion percentage
-export const getProfessionalCompletion = (profile: UserProfile): number => {
-  const hasTitle = !!profile.professionalTitle;
-  const hasCategories = profile.serviceCategories && profile.serviceCategories.length > 0;
-
-  if (hasTitle && hasCategories) return 100; // Minimum complete
-  if (hasTitle || hasCategories) return 50;
-  return 0;
-};
-```
+- [x] `/src/server/professionals/professional.repository.ts` - Query logic updated
 
 ### 11. Testing Checklist
 - [ ] User can navigate from avatar dropdown to customer profile

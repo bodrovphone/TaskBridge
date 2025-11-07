@@ -5,6 +5,7 @@ import { Star, MapPin, Clock, CheckCircle, Shield, Phone, Users } from "lucide-r
 import { useTranslation } from 'react-i18next';
 import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
 import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
+import { formatYearsExperience } from '@/lib/utils/pluralization';
 
 interface Professional {
  id: string;
@@ -31,7 +32,7 @@ interface ProfessionalHeaderProps {
 }
 
 export default function ProfessionalHeader({ professional }: ProfessionalHeaderProps) {
- const { t } = useTranslation();
+ const { t, i18n } = useTranslation();
 
  // Determine which warning to show (prioritize multiple reports over negative reviews)
  const warningType: WarningType | null = professional.safetyStatus.multipleReports
@@ -97,14 +98,21 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
 
        {/* Rating and Location */}
        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-        <button
-         onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
-         className="flex items-center gap-1 hover:text-blue-600 transition-colors cursor-pointer"
-        >
-         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-         <span className="font-semibold text-gray-900">{professional.rating}</span>
-         <span>({professional.reviewCount} {t('professionalDetail.reviews')})</span>
-        </button>
+        {professional.reviewCount > 0 ? (
+          <button
+           onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
+           className="flex items-center gap-1 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+           <span className="font-semibold text-gray-900">{professional.rating}</span>
+           <span>({professional.reviewCount} {t('professionalDetail.reviews')})</span>
+          </button>
+        ) : (
+          <div className="flex items-center gap-1 text-gray-500">
+           <Star className="w-4 h-4 text-gray-400" />
+           <span className="font-medium">{t('professionals.card.waitingForReviews', 'Waiting for first reviews')}</span>
+          </div>
+        )}
         
         <div className="flex items-center gap-1">
          <MapPin className="w-4 h-4 text-gray-400" />
@@ -122,12 +130,23 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 min-w-fit">
        <div className="grid grid-cols-3 gap-4 text-center">
         <div>
-         <div className="text-xl font-bold text-blue-600">{professional.completedTasks || 0}</div>
-         <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.completedTasks')}</div>
+         {professional.completedTasks > 0 ? (
+           <>
+             <div className="text-xl font-bold text-blue-600">{professional.completedTasks}</div>
+             <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.completedTasks')}</div>
+           </>
+         ) : (
+           <>
+             <div className="text-xl font-bold text-blue-500">0</div>
+             <div className="text-xs text-blue-600 leading-tight font-medium">{t('professionals.card.lookingForFirstTask', 'Ready for first task')}</div>
+           </>
+         )}
         </div>
         <div>
-         <div className="text-xl font-bold text-green-600">{professional.yearsExperience}</div>
-         <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.yearsExperience')}</div>
+         <div className="text-xl font-bold text-green-600">
+          {formatYearsExperience(professional.yearsExperience, i18n.language, t)}
+         </div>
+         <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.experience', 'Experience')}</div>
         </div>
         <div>
          <div className="text-xl font-bold text-purple-600">{professional.responseTime}</div>

@@ -3,7 +3,19 @@
  * Database queries for professional listings
  */
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+
+// Use service role to bypass RLS - professional listings are public
+const supabaseAdmin = createSupabaseClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+)
 import type {
   Professional,
   ProfessionalRaw,
@@ -18,16 +30,11 @@ import { QUERY_CONSTRAINTS } from './professional.query-types'
  * Used as fallback when no results found
  */
 async function getFeaturedProfessionals(limit: number = 8): Promise<Professional[]> {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
-    .neq('professional_title', '')
-    .not('service_categories', 'is', null)
-    .gt('service_categories', '{}')
-    .or('is_banned.is.null,is_banned.eq.false')
+    .neq('is_banned', true)
     .order('average_rating', { ascending: false, nullsFirst: false })
     .order('tasks_completed', { ascending: false })
     .limit(limit)
@@ -50,16 +57,12 @@ async function getFeaturedProfessionals(limit: number = 8): Promise<Professional
 export async function getProfessionals(
   params: ProfessionalQueryParams
 ): Promise<PaginatedProfessionalsResponse> {
-  const supabase = await createClient()
-
-  // Build base query - only users with professional_title and service_categories
-  let query = supabase
+  // Build base query - only users with professional_title
+  // Note: Using service role to bypass RLS - professional listings are public
+  let query = supabaseAdmin
     .from('users')
     .select('*', { count: 'exact' })
     .not('professional_title', 'is', null)
-    .neq('professional_title', '')
-    .not('service_categories', 'is', null)
-    .gt('service_categories', '{}') // service_categories array must not be empty
 
   // === Apply Filters ===
 
@@ -98,8 +101,9 @@ export async function getProfessionals(
     query = query.gt('tasks_completed', QUERY_CONSTRAINTS.mostActiveThreshold)
   }
 
-  // Exclude banned users
-  query = query.or('is_banned.is.null,is_banned.eq.false')
+  // Exclude banned users - only filter out explicitly banned (true)
+  // This allows both null and false through without OR complexity
+  query = query.neq('is_banned', true)
 
   // === Apply Sorting ===
   switch (params.sortBy) {

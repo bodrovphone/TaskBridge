@@ -20,6 +20,7 @@ export const professionals = {
   'professionals.completedJobs': 'Завършени задачи',
   'professionals.card.completedJobs': 'завършени задачи',
   'professionals.card.lookingForFirstTask': 'Готов за първа задача',
+  'professionals.card.waitingForReviews': 'Очаква първи отзиви',
   'professionals.startingFrom': 'Започва от',
   'professionals.noResults':
     'Няма категории, които да съвпадат с вашето търсене',
@@ -138,7 +139,10 @@ export const professionals = {
   'professionalDetail.verified.id': 'Документ',
   'professionalDetail.stats.completedTasks': 'Задачи',
   'professionalDetail.stats.yearsExperience': 'Години',
+  'professionalDetail.stats.yearsExperienceLabel': 'години',
+  'professionalDetail.stats.experience': 'Опит',
   'professionalDetail.stats.responseTime': 'Отговор',
+  'professionalDetail.defaultBio': 'Професионален специалист с опит в сферата.',
   'professionalDetail.actions.inviteToApply': 'Покани да кандидатства',
   'professionalDetail.actions.contact': 'Контакт',
   'professionalDetail.actions.share': 'Сподели',
