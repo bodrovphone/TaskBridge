@@ -315,24 +315,24 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
     e.preventDefault()
     e.stopPropagation()
 
-    // Always validate all fields on submit attempt
-    await form.validateAllFields('submit')
+    // Always validate all fields on submit attempt (using 'change' to trigger onChange validators)
+    await form.validateAllFields('change')
 
-    // Check if form is valid after validation
-    if (!form.state.canSubmit || !form.state.isValid) {
-      // Small delay to let form state update
-      setTimeout(() => {
+    // Small delay to let form state update
+    setTimeout(() => {
+      // Check if form is valid after validation
+      if (!form.state.canSubmit || !form.state.isValid) {
         const errors = collectValidationErrors()
         if (errors.length > 0) {
           setValidationErrors(errors)
           setShowValidationDialog(true)
         }
-      }, 50)
-      return
-    }
+        return
+      }
 
-    // Form is valid, proceed with submission
-    form.handleSubmit()
+      // Form is valid, proceed with submission
+      form.handleSubmit()
+    }, 100)
   }
 
   return (
@@ -407,15 +407,11 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
                   type="submit"
                   size="lg"
                   isLoading={isSubmitting}
-                  isDisabled={isSubmitting || !canSubmit}
+                  isDisabled={isSubmitting}
                   className={`min-w-[300px] h-16 font-bold text-xl transition-all duration-300 ${
                     mode === 'edit'
-                      ? !canSubmit
-                        ? 'bg-orange-500 hover:bg-orange-600 text-white border-2 border-orange-600'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-700 shadow-xl hover:shadow-blue-500/50 hover:scale-105'
-                      : !canSubmit && !isSubmitting
-                        ? 'bg-orange-500 hover:bg-orange-600 text-white border-2 border-orange-600'
-                        : 'bg-green-600 hover:bg-green-700 text-white border-2 border-green-700 shadow-xl hover:shadow-green-500/50 hover:scale-105'
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-700 shadow-xl hover:shadow-blue-500/50 hover:scale-105'
+                      : 'bg-green-600 hover:bg-green-700 text-white border-2 border-green-700 shadow-xl hover:shadow-green-500/50 hover:scale-105'
                   }`}
                   radius="lg"
                 >
@@ -429,13 +425,6 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
                   }
                 </Button>
               </div>
-              {!canSubmit && !isSubmitting && mode === 'create' && (
-                <div className="flex flex-col gap-1 items-center">
-                  <p className="text-sm font-semibold text-orange-600 text-center">
-                    ⚠️ {t('createTask.review.fillRequired', 'Please fill in all required fields to submit')}
-                  </p>
-                </div>
-              )}
             </>
           )}
           </form>

@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, CheckCheck } from 'lucide-react';
+import { Bell, CheckCheck, Loader2 } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
 import {
  Sheet,
@@ -23,13 +24,23 @@ export default function NotificationCenter() {
   activeFilter,
   setActiveFilter,
   markAllAsRead,
+  fetchNotifications,
   getFilteredNotifications,
   getUnreadCount,
+  isLoading,
  } = useNotificationStore();
 
  const filteredNotifications = getFilteredNotifications();
  const unreadCount = getUnreadCount();
  const hasUnread = unreadCount > 0;
+
+ // Only fetch notifications when panel opens (not on mount)
+ // This prevents unnecessary API calls for unauthenticated users
+ useEffect(() => {
+  if (isOpen) {
+    fetchNotifications();
+  }
+ }, [isOpen, fetchNotifications]);
 
  const handleFilterChange = (value: string) => {
   setActiveFilter(value as NotificationFilter);
@@ -96,7 +107,11 @@ export default function NotificationCenter() {
      <TabsContent value={activeFilter} className="flex-1 mt-0 bg-white overflow-hidden">
       <ScrollArea className="h-full bg-white">
        <div className="px-2 py-2 space-y-1 bg-white">
-        {filteredNotifications.length > 0 ? (
+        {isLoading ? (
+         <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+         </div>
+        ) : filteredNotifications.length > 0 ? (
          filteredNotifications.map((notification) => (
           <NotificationCard
            key={notification.id}

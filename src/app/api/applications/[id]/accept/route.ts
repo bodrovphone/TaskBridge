@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createNotification } from '@/lib/services/notification-service';
 
 export async function PATCH(
   request: NextRequest,
@@ -142,15 +143,69 @@ export async function PATCH(
       // Don't fail the request - other applications can be handled manually
     }
 
-    // TODO: Send notifications
-    // - Notify accepted professional (Telegram if connected)
-    // - Notify rejected professionals (Telegram if connected)
+    // Get customer name for notification
+    const { data: customer } = await adminClient
+      .from('users')
+      .select('full_name')
+      .eq('id', task?.customer_id)
+      .single();
+
+    // Send notification to accepted professional (critical - Telegram + in-app)
+    await createNotification({
+      userId: application.professional_id,
+      type: 'application_accepted',
+      templateData: {
+        taskTitle: task?.title,
+        customerName: customer?.full_name || 'the customer',
+        customerMessage: '', // Can be added later when customer provides a message during acceptance
+      },
+      metadata: {
+        taskId: application.task_id,
+        applicationId: application.id,
+        customerId: task?.customer_id,
+        customerName: customer?.full_name,
+      },
+      actionUrl: `/tasks/${application.task_id}`,
+      deliveryChannel: 'both', // Critical: Telegram + In-app
+    });
+
+    // Get rejected applications to notify professionals (in-app only, gentle)
+    const { data: rejectedApps } = await adminClient
+      .from('applications')
+      .select('id, professional_id')
+      .eq('task_id', application.task_id)
+      .eq('status', 'rejected')
+      .neq('id', applicationId);
+
+    // Send gentle rejections (in-app only, no Telegram spam)
+    if (rejectedApps && rejectedApps.length > 0) {
+      for (const rejectedApp of rejectedApps) {
+        await createNotification({
+          userId: rejectedApp.professional_id,
+          type: 'application_rejected',
+          templateData: {
+            taskTitle: task?.title,
+          },
+          metadata: {
+            taskId: application.task_id,
+            applicationId: rejectedApp.id,
+          },
+          actionUrl: '/browse-tasks',
+          deliveryChannel: 'in_app', // In-app only - no Telegram spam
+        });
+      }
+    }
+
     console.log('[Applications] Application accepted:', {
       applicationId,
       taskId: application.task_id,
       taskTitle: task?.title,
       professionalId: application.professional_id,
-      customerId: task?.customer_id
+      customerId: task?.customer_id,
+      notificationsSent: {
+        accepted: 1,
+        rejected: rejectedApps?.length || 0
+      }
     });
 
     return NextResponse.json({

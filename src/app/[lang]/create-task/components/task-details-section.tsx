@@ -33,6 +33,15 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
    <form.Field
     name="title"
     validators={{
+     onChange: ({ value }: any) => {
+      if (!value || value.length < 10) {
+       return 'createTask.errors.titleTooShort'
+      }
+      if (value.length > 200) {
+       return 'createTask.errors.titleTooLong'
+      }
+      return undefined
+     },
      onBlur: ({ value }: any) => {
       if (!value || value.length < 10) {
        return 'createTask.errors.titleTooShort'
@@ -75,8 +84,17 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
    <form.Field
     name="description"
     validators={{
+     onChange: ({ value }: any) => {
+      if (!value || value.length < 15) {
+       return 'createTask.errors.descriptionTooShort'
+      }
+      if (value.length > 2000) {
+       return 'createTask.errors.descriptionTooLong'
+      }
+      return undefined
+     },
      onBlur: ({ value }: any) => {
-      if (!value || value.length < 30) {
+      if (!value || value.length < 15) {
        return 'createTask.errors.descriptionTooShort'
       }
       if (value.length > 2000) {

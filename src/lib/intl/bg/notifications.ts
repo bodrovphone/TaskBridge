@@ -15,6 +15,21 @@ export const notifications = {
   'notifications.viewApplication': 'Виж кандидатурата',
   'notifications.viewTask': 'Виж задачата',
 
+  // Notification Content (titles and messages)
+  'notifications.content.welcome.title': 'Добре дошли в Trudify!',
+  'notifications.content.welcome.message': 'Вашият акаунт беше създаден успешно. Започнете като публикувате задача или разгледате работни възможности!',
+  'notifications.content.applicationReceived.title': 'Нова кандидатура',
+  'notifications.content.applicationReceived.message': '{{professionalName}} кандидатства за вашата задача "{{taskTitle}}"',
+  'notifications.content.applicationAccepted.title': 'Кандидатурата е приета! 🎉',
+  'notifications.content.applicationAccepted.message': 'Вашата кандидатура за "{{taskTitle}}" беше приета от {{customerName}}',
+  'notifications.content.applicationRejected.title': 'Актуализация на кандидатурата',
+  'notifications.content.applicationRejected.message': 'Вашата кандидатура за "{{taskTitle}}" не беше избрана този път. Продължавайте да кандидатствате!',
+
+  // Telegram notification templates
+  'notifications.telegram.welcome': '👋 <b>Добре дошли в Trudify, {{userName}}!</b>\n\n🎉 Поздравления! Вашият акаунт беше създаден успешно.\n\n✅ Ще получавате моментални известия тук за:\n• Нови кандидатури за вашите задачи\n• Съобщения от професионалисти\n• Актуализации и завършвания на задачи\n\nЗапочнете сега:\n📝 Публикувайте задача или\n💼 Разгледайте работни възможности!',
+  'notifications.telegram.applicationReceived': '✅ <b>Нова кандидатура!</b>\n\n<b>{{professionalName}}</b> кандидатства за вашата задача:\n"{{taskTitle}}"\n\n{{link}}',
+  'notifications.telegram.applicationAccepted': '🎉 <b>Кандидатурата е приета!</b>\n\nВашата кандидатура за "{{taskTitle}}" беше приета от {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
+
   // Task Detail
   'taskDetail.backToTasks': 'Обратно към задачите',
   'taskDetail.requirements': 'Изисквания:',

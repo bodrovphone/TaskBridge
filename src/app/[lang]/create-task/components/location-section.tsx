@@ -38,6 +38,12 @@ export function LocationSection({ form }: LocationSectionProps) {
    <form.Field
     name="city"
     validators={{
+     onChange: ({ value }: any) => {
+      if (!value) {
+       return 'createTask.errors.cityRequired'
+      }
+      return undefined
+     },
      onBlur: ({ value }: any) => {
       if (!value) {
        return 'createTask.errors.cityRequired'

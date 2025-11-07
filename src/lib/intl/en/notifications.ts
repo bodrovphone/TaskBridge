@@ -15,6 +15,21 @@ export const notifications = {
   'notifications.viewApplication': 'View Application',
   'notifications.viewTask': 'View Task',
 
+  // Notification Content (titles and messages)
+  'notifications.content.welcome.title': 'Welcome to Trudify!',
+  'notifications.content.welcome.message': 'Your account has been created successfully. Get started by posting a task or browsing work opportunities!',
+  'notifications.content.applicationReceived.title': 'New Application',
+  'notifications.content.applicationReceived.message': '{{professionalName}} applied to your task "{{taskTitle}}"',
+  'notifications.content.applicationAccepted.title': 'Application Accepted! 🎉',
+  'notifications.content.applicationAccepted.message': 'Your application for "{{taskTitle}}" was accepted by {{customerName}}',
+  'notifications.content.applicationRejected.title': 'Application Update',
+  'notifications.content.applicationRejected.message': 'Your application for "{{taskTitle}}" was not selected this time. Keep applying!',
+
+  // Telegram notification templates
+  'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {{userName}}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
+  'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
+  'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
+
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',
   'taskDetail.requirements': 'Requirements:',

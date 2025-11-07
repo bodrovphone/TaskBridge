@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createNotification } from '@/lib/services/notification-service';
 
 /**
  * POST - Submit new application to a task
@@ -126,13 +127,30 @@ export async function POST(request: NextRequest) {
       // Don't fail the request - count can be fixed later
     }
 
-    // TODO: Send notification to task owner (Telegram if connected)
-    console.log('[Applications] New application:', {
-      applicationId: application.id,
-      taskId,
-      taskTitle: task.title,
-      professionalId: user.id,
-      customerId: task.customer_id
+    // Get professional's name for notification
+    const { data: professional } = await supabase
+      .from('users')
+      .select('full_name')
+      .eq('id', user.id)
+      .single();
+
+    // Send notification to task owner (Telegram + in-app)
+    await createNotification({
+      userId: task.customer_id,
+      type: 'application_received',
+      templateData: {
+        professionalName: professional?.full_name || 'Someone',
+        taskTitle: task.title,
+      },
+      metadata: {
+        taskId: task.id,
+        applicationId: application.id,
+        professionalId: user.id,
+        professionalName: professional?.full_name,
+        proposedPrice: proposedPrice,
+      },
+      actionUrl: `/tasks/${task.id}/applications`,
+      deliveryChannel: 'both', // Telegram + in-app (customer gets notified immediately)
     });
 
     return NextResponse.json({

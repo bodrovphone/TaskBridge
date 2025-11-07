@@ -5,7 +5,7 @@
  * Tracks notification delivery and costs in the database
  */
 
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 
 export interface TelegramNotification {
   userId: string;
@@ -36,7 +36,7 @@ export async function sendTelegramNotification(
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // Get user's Telegram ID from database
     const { data: user, error: userError } = await supabase

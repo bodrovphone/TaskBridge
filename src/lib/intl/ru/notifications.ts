@@ -15,6 +15,21 @@ export const notifications = {
   'notifications.viewApplication': 'Посмотреть заявку',
   'notifications.viewTask': 'Посмотреть задачу',
 
+  // Notification Content (titles and messages)
+  'notifications.content.welcome.title': 'Добро пожаловать в Trudify!',
+  'notifications.content.welcome.message': 'Ваш аккаунт успешно создан. Начните с публикации задачи или просмотра рабочих предложений!',
+  'notifications.content.applicationReceived.title': 'Новая заявка',
+  'notifications.content.applicationReceived.message': '{{professionalName}} откликнулся на вашу задачу "{{taskTitle}}"',
+  'notifications.content.applicationAccepted.title': 'Заявка принята! 🎉',
+  'notifications.content.applicationAccepted.message': 'Ваша заявка на "{{taskTitle}}" была принята {{customerName}}',
+  'notifications.content.applicationRejected.title': 'Обновление заявки',
+  'notifications.content.applicationRejected.message': 'Ваша заявка на "{{taskTitle}}" не была выбрана на этот раз. Продолжайте откликаться!',
+
+  // Telegram notification templates
+  'notifications.telegram.welcome': '👋 <b>Добро пожаловать в Trudify, {{userName}}!</b>\n\n🎉 Поздравляем! Ваш аккаунт успешно создан.\n\n✅ Вы будете получать мгновенные уведомления здесь о:\n• Новых заявках на ваши задачи\n• Сообщениях от специалистов\n• Обновлениях и завершениях задач\n\nНачните прямо сейчас:\n📝 Опубликуйте задачу или\n💼 Просмотрите рабочие предложения!',
+  'notifications.telegram.applicationReceived': '✅ <b>Новая заявка!</b>\n\n<b>{{professionalName}}</b> откликнулся на вашу задачу:\n"{{taskTitle}}"\n\n{{link}}',
+  'notifications.telegram.applicationAccepted': '🎉 <b>Заявка принята!</b>\n\nВаша заявка на "{{taskTitle}}" была принята {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
+
   // Task Detail
   'taskDetail.backToTasks': 'Обратно к задачам',
   'taskDetail.requirements': 'Требования:',

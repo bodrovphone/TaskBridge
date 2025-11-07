@@ -20,7 +20,7 @@ export const createTaskSchema = z.object({
     .max(200, 'Title must be less than 200 characters'),
   description: z
     .string()
-    .min(30, 'Description must be at least 30 characters')
+    .min(15, 'Description must be at least 15 characters')
     .max(2000, 'Description must be less than 2000 characters'),
   city: z.string().min(1, 'City is required'),
 
@@ -70,7 +70,7 @@ export const updateTaskSchema = z.object({
     .optional(),
   description: z
     .string()
-    .min(30, 'Description must be at least 30 characters')
+    .min(15, 'Description must be at least 15 characters')
     .max(2000, 'Description must be less than 2000 characters')
     .optional(),
   requirements: z.string().optional(),
