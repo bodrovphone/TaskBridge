@@ -205,9 +205,7 @@ export async function getProfessionals(
 export async function getProfessionalById(
   id: string
 ): Promise<ProfessionalRaw | null> {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('users')
     .select('*')
     .eq('id', id)

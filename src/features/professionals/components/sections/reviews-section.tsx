@@ -145,12 +145,14 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
     </div>
    ) : (
     <div className="text-center py-8">
-     <MessageSquare className="mx-auto text-gray-400 mb-4" size={48} />
-     <p className="text-gray-500 mb-4">
-      {t('professionalDetail.reviews.noReviews')}
+     <div className="flex justify-center mb-6">
+      {renderStars(5)}
+     </div>
+     <p className="text-gray-700 text-lg mb-2">
+      {t('professionalDetail.reviews.emptyState')}
      </p>
-     <p className="text-sm text-gray-400">
-      {t('professionalDetail.reviews.beFirst')}
+     <p className="text-sm text-gray-500">
+      {t('professionalDetail.reviews.emptyStateCTA')}
      </p>
     </div>
    )}

@@ -224,7 +224,12 @@ export default function PortfolioGallery({ portfolio }: PortfolioGalleryProps) {
      <div className="bg-white/70 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
       <Camera className="text-purple-400" size={48} />
      </div>
-     <p className="text-gray-600 text-lg">{t('professionalDetail.portfolio.noWork')}</p>
+     <p className="text-gray-700 text-lg mb-2">
+      {t('professionalDetail.portfolio.emptyState')}
+     </p>
+     <p className="text-sm text-gray-500">
+      {t('professionalDetail.portfolio.emptyStateCTA')}
+     </p>
     </div>
    </div>
   );

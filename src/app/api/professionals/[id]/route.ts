@@ -23,6 +23,15 @@ export async function GET(
   try {
     const { id } = await params;
 
+    // Validate UUID format to prevent errors with .map files, etc.
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      return NextResponse.json(
+        { error: 'Invalid professional ID format' },
+        { status: 404 }
+      );
+    }
+
     console.log('🔍 Fetching professional with ID:', id);
 
     // Fetch professional data from users table (bypasses RLS with service role)

@@ -144,7 +144,11 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
         </div>
         <div>
          <div className="text-xl font-bold text-green-600">
-          {formatYearsExperience(professional.yearsExperience, i18n.language, t)}
+          {formatYearsExperience(
+            professional.yearsExperience,
+            i18n.language,
+            (key: string, fallback?: string) => t(key, fallback || '')
+          )}
          </div>
          <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.experience', 'Experience')}</div>
         </div>

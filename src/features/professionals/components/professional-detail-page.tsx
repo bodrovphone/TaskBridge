@@ -424,7 +424,6 @@ export default function ProfessionalDetailPage({ professionalId }: ProfessionalD
         <ActionButtonsRow
          professional={mockProfessional}
          onInviteToApply={() => console.log('Invite to apply clicked')}
-         onContact={() => console.log('Contact clicked')}
          onShare={() => console.log('Share clicked')}
         />
         <ServicesSection services={mockProfessional.services} />

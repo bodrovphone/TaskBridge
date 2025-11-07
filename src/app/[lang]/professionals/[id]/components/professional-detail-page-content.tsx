@@ -77,7 +77,6 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
               <ActionButtonsRow
                 professional={transformedProfessional}
                 onInviteToApply={() => console.log('Invite to apply clicked')}
-                onContact={() => console.log('Contact clicked')}
                 onShare={() => console.log('Share clicked')}
               />
               <ServicesSection services={transformedProfessional.services} />
@@ -94,22 +93,16 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
             </div>
           </div>
 
-          {/* Reviews & Ratings - Centered Full Width */}
-          {transformedProfessional.reviews && transformedProfessional.reviews.length > 0 && (
-            <div id="reviews-section">
-              <ReviewsSection reviews={transformedProfessional.reviews} />
-            </div>
-          )}
+          {/* Reviews & Ratings - Always show */}
+          <div id="reviews-section">
+            <ReviewsSection reviews={transformedProfessional.reviews} />
+          </div>
 
-          {/* Portfolio Gallery - My Demos */}
-          {transformedProfessional.portfolio && transformedProfessional.portfolio.length > 0 && (
-            <PortfolioGallery portfolio={transformedProfessional.portfolio} />
-          )}
+          {/* Portfolio Gallery - My Demos - Always show */}
+          <PortfolioGallery portfolio={transformedProfessional.portfolio} />
 
-          {/* Completed Tasks */}
-          {transformedProfessional.completedTasksList && transformedProfessional.completedTasksList.length > 0 && (
-            <CompletedTasksSection completedTasks={transformedProfessional.completedTasksList} />
-          )}
+          {/* Completed Tasks - Always show */}
+          <CompletedTasksSection completedTasks={transformedProfessional.completedTasksList} />
         </div>
       </div>
     </div>
