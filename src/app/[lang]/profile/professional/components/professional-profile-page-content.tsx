@@ -123,13 +123,13 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
         )}
 
         {/* Professional Quick Actions */}
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row items-center md:items-start gap-2">
           <Button
             size="sm"
             variant="bordered"
             onPress={() => router.push(`/${lang}/browse-tasks`)}
             startContent={<Search className="w-4 h-4" />}
-            className="flex-1 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 font-medium"
+            className="min-w-[60%] md:min-w-0 md:flex-1 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 font-medium"
           >
             {t('nav.browseTasks')}
           </Button>
@@ -138,7 +138,7 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
             variant="bordered"
             onPress={() => router.push(`/${lang}/tasks/applications`)}
             startContent={<ClipboardList className="w-4 h-4" />}
-            className="flex-1 border-gray-300 hover:border-purple-500 hover:bg-purple-50 text-gray-700 hover:text-purple-700 font-medium"
+            className="min-w-[60%] md:min-w-0 md:flex-1 border-gray-300 hover:border-purple-500 hover:bg-purple-50 text-gray-700 hover:text-purple-700 font-medium"
           >
             {t('nav.myApplications')}
           </Button>
@@ -147,7 +147,7 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
             variant="bordered"
             onPress={() => router.push(`/${lang}/tasks/work`)}
             startContent={<Briefcase className="w-4 h-4" />}
-            className="flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
+            className="min-w-[60%] md:min-w-0 md:flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
           >
             {t('nav.myWork')}
           </Button>

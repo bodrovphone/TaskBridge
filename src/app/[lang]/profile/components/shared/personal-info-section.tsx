@@ -55,8 +55,8 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
       try {
         await onSave({
           name: value.name,
-          phone: value.phone,
-          location: value.location,
+          phone: value.phone || '',
+          location: value.location || '',
           preferredLanguage: value.preferredLanguage,
           preferredContact: value.preferredContact,
         })
@@ -104,8 +104,8 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
         // Update the profile via parent's onSave to sync the state
         await onSave({
           name: personalForm.getFieldValue('name'),
-          phone: personalForm.getFieldValue('phone'),
-          location: personalForm.getFieldValue('location'),
+          phone: personalForm.getFieldValue('phone') || '',
+          location: personalForm.getFieldValue('location') || '',
           preferredLanguage: personalForm.getFieldValue('preferredLanguage'),
           preferredContact: pendingContactChange
         })

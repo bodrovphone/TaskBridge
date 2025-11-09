@@ -15,7 +15,6 @@ import {
  User,
  FileText,
  Briefcase,
- Settings,
  HelpCircle,
  LogOut,
  Search,
@@ -58,9 +57,6 @@ export default function UserAvatarDropdown({
     break
    case 'tasks-work':
     router.push(`/${lang}/tasks/work`)
-    break
-   case 'settings':
-    router.push(`/${lang}/settings`)
     break
    case 'help':
     router.push(`/${lang}/help`)
@@ -189,13 +185,6 @@ export default function UserAvatarDropdown({
 
     {/* General */}
     <DropdownSection showDivider>
-     <DropdownItem
-      key="settings"
-      startContent={<Settings className="text-gray-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('settings')}
-     </DropdownItem>
      <DropdownItem
       key="help"
       startContent={<HelpCircle className="text-gray-500" size={18} />}

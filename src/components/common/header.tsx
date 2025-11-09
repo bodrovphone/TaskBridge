@@ -9,7 +9,7 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
-import { Plus, Handshake, FileText, Send, Briefcase, Search } from "lucide-react"
+import { Plus, Handshake, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut } from "lucide-react"
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
 // @todo FEATURE: Uncomment when reviews feature is built
@@ -30,7 +30,7 @@ import {
 function Header() {
  const pathname = usePathname()
  const { t } = useTranslation()
- const { user, profile } = useAuth()
+ const { user, profile, signOut } = useAuth()
  const isAuthenticated = !!user && !!profile
  const [isMenuOpen, setIsMenuOpen] = useState(false)
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
@@ -148,9 +148,6 @@ function Header() {
 
    {/* Desktop Actions Section */}
    <NavbarContent justify="end" className="hidden lg:flex gap-3">
-    <NavbarItem>
-     <LanguageSwitcher />
-    </NavbarItem>
     {isAuthenticated && (
      <NavbarItem>
       <NotificationBell />
@@ -183,10 +180,7 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile/Tablet Actions Section */}
-   <NavbarContent justify="end" className="lg:hidden gap-2">
-    <NavbarItem>
-     <LanguageSwitcher />
-    </NavbarItem>
+   <NavbarContent justify="end" className="lg:hidden gap-4">
     {isAuthenticated && (
      <NavbarItem>
       <NotificationBell />
@@ -227,6 +221,40 @@ function Header() {
     {/* Portfolio menu items for authenticated users */}
     {isAuthenticated && (
      <>
+      {/* Profile Section */}
+      <NavbarMenuItem>
+       <div className="pt-4 border-t border-gray-200 w-full">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+         {t('nav.profile', 'Profile')}
+        </p>
+       </div>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
+        as={LocaleLink}
+        href="/profile/customer"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onPress={() => setIsMenuOpen(false)}
+       >
+        <User size={18} className="text-gray-500" />
+        {t('nav.profileCustomer')}
+       </NextUILink>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
+        as={LocaleLink}
+        href="/profile/professional"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onPress={() => setIsMenuOpen(false)}
+       >
+        <Briefcase size={18} className="text-gray-500" />
+        {t('nav.profileProfessional')}
+       </NextUILink>
+      </NavbarMenuItem>
+
+      {/* For Customers Section */}
       <NavbarMenuItem>
        <div className="pt-4 border-t border-gray-200 w-full">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
@@ -247,6 +275,7 @@ function Header() {
        </NextUILink>
       </NavbarMenuItem>
 
+      {/* For Professionals Section */}
       <NavbarMenuItem>
        <div className="pt-4 border-t border-gray-200 w-full">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
@@ -278,11 +307,61 @@ function Header() {
         {t('nav.myWork')}
        </NextUILink>
       </NavbarMenuItem>
+
+      {/* General Section */}
+      <NavbarMenuItem>
+       <div className="pt-4 border-t border-gray-200 w-full">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+         {t('nav.general', 'General')}
+        </p>
+       </div>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
+        as={LocaleLink}
+        href="/help"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onPress={() => setIsMenuOpen(false)}
+       >
+        <HelpCircle size={18} className="text-gray-500" />
+        {t('nav.help')}
+       </NextUILink>
+      </NavbarMenuItem>
+
+      {/* Logout */}
+      <NavbarMenuItem>
+       <NextUILink
+        className="w-full text-red-600 hover:text-red-700 font-medium py-2 flex items-center gap-2"
+        size="lg"
+        onPress={() => {
+         setIsMenuOpen(false)
+         signOut()
+        }}
+       >
+        <LogOut size={18} className="text-red-500" />
+        {t('logout')}
+       </NextUILink>
+      </NavbarMenuItem>
      </>
     )}
 
+    {/* Language Switcher */}
     <NavbarMenuItem>
-     <div className="pt-6 pb-2 border-t border-gray-200 w-full">
+     <div className="pt-6 border-t border-gray-200 w-full">
+      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+       {t('nav.language', 'Language')}
+      </p>
+     </div>
+    </NavbarMenuItem>
+    <NavbarMenuItem>
+     <div className="pb-2 w-full flex justify-start">
+      <LanguageSwitcher />
+     </div>
+    </NavbarMenuItem>
+
+    <NavbarMenuItem>
+     <div className="pt-4 pb-2 w-full">
       <Button
        color="primary"
        variant="solid"

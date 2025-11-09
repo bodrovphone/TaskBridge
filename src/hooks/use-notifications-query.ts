@@ -34,7 +34,7 @@ async function fetchNotifications(): Promise<Notification[]> {
   return data.notifications.map((n) => ({
     id: n.id,
     userId: n.user_id,
-    type: n.type,
+    type: n.type as Notification['type'],
     title: n.title,
     message: n.message,
     createdAt: new Date(n.created_at),
@@ -88,6 +88,10 @@ export function useNotificationsQuery() {
       queryClient.setQueryData<Notification[]>(NOTIFICATIONS_QUERY_KEY, []);
 
       return { previousNotifications };
+    },
+    onSuccess: () => {
+      // Invalidate and refetch to ensure fresh data
+      queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });
     },
     onError: (_error, _variables, context) => {
       // Revert on error
