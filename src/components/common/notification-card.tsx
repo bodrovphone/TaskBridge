@@ -13,6 +13,7 @@ import {
  MessageCircle,
  Star,
  Wallet,
+ PartyPopper,
 } from 'lucide-react';
 import type { Notification } from '@/types/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -32,6 +33,7 @@ const notificationIcons = {
  message_received: MessageCircle,
  review_received: Star,
  payment_received: Wallet,
+ welcome_message: PartyPopper,
 };
 
 const notificationColors = {
@@ -43,11 +45,12 @@ const notificationColors = {
  message_received: 'text-purple-600 bg-purple-100',
  review_received: 'text-yellow-600 bg-yellow-100',
  payment_received: 'text-green-600 bg-green-100',
+ welcome_message: 'text-purple-600 bg-purple-100',
 };
 
 export default function NotificationCard({ notification }: NotificationCardProps) {
  const { t, i18n } = useTranslation();
- const { markAsRead, setOpen } = useNotificationStore();
+ const { setOpen } = useNotificationStore();
 
  const Icon = notificationIcons[notification.type];
  const colorClass = notificationColors[notification.type];
@@ -69,29 +72,13 @@ export default function NotificationCard({ notification }: NotificationCardProps
   locale: getLocale(),
  });
 
- const handleClick = () => {
-  if (!notification.isRead) {
-   markAsRead(notification.id);
-  }
- };
-
  const handleActionClick = () => {
-  markAsRead(notification.id);
+  // Close notification panel when action is clicked
   setOpen(false);
  };
 
  return (
-  <div
-   className={cn(
-    'relative flex gap-3 rounded-lg p-4 transition-colors hover:bg-gray-50',
-    !notification.isRead && 'bg-blue-50/50'
-   )}
-   onClick={handleClick}
-  >
-   {/* Unread Indicator */}
-   {!notification.isRead && (
-    <div className="absolute left-2 top-6 h-2 w-2 rounded-full bg-blue-500" />
-   )}
+  <div className="relative flex gap-3 rounded-lg p-4 transition-colors hover:bg-gray-50">
 
    {/* Icon */}
    <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full', colorClass)}>
@@ -112,7 +99,9 @@ export default function NotificationCard({ notification }: NotificationCardProps
      <div className="pt-2">
       <Link href={notification.actionUrl} onClick={handleActionClick}>
        <Button variant="outline" size="sm" className="h-8 text-xs">
-        {notification.type.includes('application')
+        {notification.type === 'welcome_message'
+         ? t('notifications.getStarted')
+         : notification.type.includes('application')
          ? t('notifications.viewApplication')
          : t('notifications.viewTask')}
        </Button>

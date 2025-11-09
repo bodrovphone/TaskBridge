@@ -8,6 +8,16 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get('code')
   const origin = requestUrl.origin
 
+  // Detect locale from referer or default to 'en'
+  let redirectLocale: 'en' | 'bg' | 'ru' = 'en'
+  const referer = request.headers.get('referer')
+  if (referer) {
+    const localeMatch = referer.match(/\/(en|bg|ru)\//)
+    if (localeMatch) {
+      redirectLocale = localeMatch[1] as 'en' | 'bg' | 'ru'
+    }
+  }
+
   if (code) {
     const supabase = await createClient()
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
@@ -28,14 +38,14 @@ export async function GET(request: NextRequest) {
           templateData: {
             userName: data.user.user_metadata?.full_name || 'there',
           },
-          actionUrl: '/browse-tasks', // Link to quick guide (can be changed later)
-          deliveryChannel: 'both', // Welcome via Telegram + in-app
+          actionUrl: '/browse-tasks',
+          deliveryChannel: 'in_app', // In-app only - no Telegram needed for welcome
+          locale: redirectLocale, // Use detected locale for notification
         })
       }
     }
   }
 
-  // Redirect to home page
-  // @todo FUTURE: Add OAuth redirect support when implementing Google/Facebook login
-  return NextResponse.redirect(`${origin}/en`)
+  // Redirect to home page with detected locale
+  return NextResponse.redirect(`${origin}/${redirectLocale}`)
 }

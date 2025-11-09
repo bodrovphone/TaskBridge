@@ -9,6 +9,7 @@ import { UnauthorizedError, NotFoundError } from '@/server/shared/errors/base.er
 import { User } from '@/server/domain/user/user.entity'
 import { CreateUserProfileDto } from '@/server/domain/user/user.types'
 import { CreateUserProfileUseCase } from './create-user-profile.usecase'
+import { createNotification } from '@/lib/services/notification-service'
 import type { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 
 export class AuthService {
@@ -29,6 +30,7 @@ export class AuthService {
       fullName?: string
       phoneNumber?: string
       avatarUrl?: string
+      locale?: 'en' | 'bg' | 'ru'
     }
   ): Promise<Result<User, Error>> {
     try {
@@ -49,7 +51,7 @@ export class AuthService {
         fullName: metadata?.fullName,
         phoneNumber: metadata?.phoneNumber,
         userType: 'customer', // Default to customer
-        preferredLanguage: 'bg', // Default to Bulgarian
+        preferredLanguage: metadata?.locale || 'en', // Use route locale or default to English
       }
 
       const createResult: Result<User, Error> = await this.createUserProfileUseCase.execute(dto)
@@ -65,8 +67,15 @@ export class AuthService {
       if (metadata?.avatarUrl) {
         createdUser.avatarUrl = metadata.avatarUrl
         const updatedUser = await this.userRepository.update(createdUser)
+
+        // Send welcome notification (in-app only for now)
+        await this.sendWelcomeNotification(updatedUser.id, updatedUser.fullName || undefined)
+
         return Result.ok(updatedUser)
       }
+
+      // Send welcome notification (in-app only for now)
+      await this.sendWelcomeNotification(createdUser.id, createdUser.fullName || undefined)
 
       return Result.ok(createdUser)
     } catch (error) {
@@ -146,6 +155,31 @@ export class AuthService {
       return Result.ok(updatedUser)
     } catch (error) {
       return Result.error(error as Error)
+    }
+  }
+
+  /**
+   * Send welcome notification to newly created user
+   * Private helper method
+   */
+  private async sendWelcomeNotification(userId: string, fullName?: string): Promise<void> {
+    try {
+      const firstName = fullName?.split(' ')[0] || 'there'
+
+      await createNotification({
+        userId: userId,
+        type: 'welcome_message',
+        templateData: {
+          userName: firstName,
+        },
+        actionUrl: '/browse-tasks',
+        deliveryChannel: 'in_app', // In-app only (Telegram only if user connects it later)
+      })
+
+      console.log('[Auth] Welcome notification sent to user:', userId)
+    } catch (error) {
+      // Don't fail profile creation if notification fails
+      console.error('[Auth] Failed to send welcome notification:', error)
     }
   }
 }

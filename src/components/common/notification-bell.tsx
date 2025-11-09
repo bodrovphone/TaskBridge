@@ -1,13 +1,18 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNotificationStore } from '@/stores/notification-store';
+import { useNotificationsQuery } from '@/hooks/use-notifications-query';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotificationBell() {
- const { toggleOpen, getUnreadCount } = useNotificationStore();
- const unreadCount = getUnreadCount();
+ const { toggleOpen } = useNotificationStore();
+ const { notifications } = useNotificationsQuery();
+
+ // Total notification count (no read/unread state - all visible until deleted)
+ const notificationCount = notifications.length;
 
  return (
   <Button
@@ -19,22 +24,22 @@ export default function NotificationBell() {
   >
    <Bell className="h-5 w-5" />
 
-   {/* Unread Badge */}
+   {/* Notification Badge (max 8 shown) */}
    <AnimatePresence>
-    {unreadCount > 0 && (
+    {notificationCount > 0 && (
      <motion.span
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       exit={{ scale: 0 }}
       className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white"
      >
-      {unreadCount > 9 ? '9+' : unreadCount}
+      {notificationCount}
      </motion.span>
     )}
    </AnimatePresence>
 
-   {/* Pulse animation for new notifications */}
-   {unreadCount > 0 && (
+   {/* Pulse animation for notifications */}
+   {notificationCount > 0 && (
     <span className="absolute -top-1 -right-1 flex h-5 w-5">
      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
     </span>

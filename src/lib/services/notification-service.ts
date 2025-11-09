@@ -118,7 +118,7 @@ export async function createNotification(
     // Get user preferences, Telegram ID, and locale
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('notification_preferences, telegram_id, full_name, preferred_locale')
+      .select('notification_preferences, telegram_id, full_name, preferred_language')
       .eq('id', params.userId)
       .single()
 

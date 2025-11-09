@@ -2,7 +2,11 @@
 export const notifications = {
   // Notifications
   'notifications.title': 'Уведомления',
-  'notifications.markAllRead': 'Отметить все как прочитанное',
+  'notifications.cleanup': 'Очистить',
+  'notifications.cleanupConfirm.title': 'Удалить все уведомления?',
+  'notifications.cleanupConfirm.message': 'Все уведомления будут удалены навсегда.',
+  'notifications.cleanupConfirm.cancel': 'Отмена',
+  'notifications.cleanupConfirm.confirm': 'Удалить',
   'notifications.tabAll': 'Все',
   'notifications.tabApplications': 'Заявки',
   'notifications.tabTasks': 'Задачи',
@@ -14,6 +18,7 @@ export const notifications = {
   'notifications.emptyUnread.message': 'Все уведомления прочитаны.',
   'notifications.viewApplication': 'Посмотреть заявку',
   'notifications.viewTask': 'Посмотреть задачу',
+  'notifications.getStarted': 'Начать',
 
   // Notification Content (titles and messages)
   'notifications.content.welcome.title': 'Добро пожаловать в Trudify!',

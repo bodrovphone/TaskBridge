@@ -6,7 +6,7 @@
  * Query params:
  * - state: 'sent' | 'dismissed' | 'all' (default: 'all')
  * - type: notification type filter (optional)
- * - limit: number of notifications to return (default: 50, max: 100)
+ * - limit: number of notifications to return (default: 8, max: 100)
  * - offset: pagination offset (default: 0)
  */
 
@@ -31,10 +31,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const state = searchParams.get('state') // 'sent', 'dismissed', or null (all)
     const type = searchParams.get('type') // notification type filter
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
+    const limit = Math.min(parseInt(searchParams.get('limit') || '8'), 100)
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // Build query
+    // Build query - fetch most recent notifications
     let query = supabase
       .from('notifications')
       .select('*', { count: 'exact' })
@@ -62,17 +62,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get unread count separately
-    const { count: unreadCount } = await supabase
-      .from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .eq('state', 'sent')
-
     return NextResponse.json({
       notifications: notifications || [],
       total: count || 0,
-      unreadCount: unreadCount || 0,
       hasMore: (offset + limit) < (count || 0),
       pagination: {
         limit,

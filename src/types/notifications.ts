@@ -6,7 +6,8 @@ export type NotificationType =
   | 'task_cancelled'
   | 'message_received'
   | 'review_received'
-  | 'payment_received';
+  | 'payment_received'
+  | 'welcome_message';
 
 export interface Notification {
   id: string;
@@ -14,7 +15,6 @@ export interface Notification {
   type: NotificationType;
   title: string;
   message: string;
-  isRead: boolean;
   createdAt: Date;
   actionUrl?: string;
   relatedTaskId?: string;

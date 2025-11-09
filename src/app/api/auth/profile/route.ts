@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Parse request body (optional metadata)
-    let body: { fullName?: string; phoneNumber?: string } = {}
+    let body: { fullName?: string; phoneNumber?: string; locale?: string } = {}
     try {
       const text = await request.text()
       if (text) {
@@ -47,11 +47,28 @@ export async function POST(request: NextRequest) {
       // Ignore JSON parse errors - body is optional
     }
 
-    // 3. Create service instances
+    // 3. Detect user's locale from request
+    // Priority: body.locale > referer URL > accept-language header > default 'en'
+    let detectedLocale: 'en' | 'bg' | 'ru' = 'en'
+
+    if (body.locale && ['en', 'bg', 'ru'].includes(body.locale)) {
+      detectedLocale = body.locale as 'en' | 'bg' | 'ru'
+    } else {
+      // Try to extract from Referer header (e.g., https://domain.com/bg/signup)
+      const referer = request.headers.get('referer')
+      if (referer) {
+        const localeMatch = referer.match(/\/(en|bg|ru)\//)
+        if (localeMatch) {
+          detectedLocale = localeMatch[1] as 'en' | 'bg' | 'ru'
+        }
+      }
+    }
+
+    // 4. Create service instances
     const userRepository = new UserRepository()
     const authService = new AuthService(userRepository)
 
-    // 4. Execute use case: create or sync profile
+    // 5. Execute use case: create or sync profile
     const result = await authService.createOrSyncUserProfile(
       authUser.id,
       authUser.email!,
@@ -59,10 +76,11 @@ export async function POST(request: NextRequest) {
         fullName: body.fullName || authUser.user_metadata?.full_name,
         phoneNumber: body.phoneNumber || authUser.user_metadata?.phone,
         avatarUrl: authUser.user_metadata?.avatar_url,
+        locale: detectedLocale,
       }
     )
 
-    // 5. Return user profile or error
+    // 6. Return user profile or error
     try {
       const user = result.unwrap()
       return NextResponse.json(

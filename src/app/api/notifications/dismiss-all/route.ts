@@ -1,13 +1,13 @@
 /**
- * PATCH /api/notifications/dismiss-all
+ * DELETE /api/notifications/dismiss-all
  *
- * Dismiss all sent (unread) notifications for the authenticated user
+ * Delete all notifications for the authenticated user
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-export async function PATCH(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   try {
     const supabase = await createClient()
 
@@ -21,33 +21,27 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    // Dismiss all sent (unread) notifications
-    const { data, error: updateError } = await supabase
+    // Delete all notifications for this user
+    const { error } = await supabase
       .from('notifications')
-      .update({
-        state: 'dismissed',
-        dismissed_at: new Date().toISOString(),
-      })
+      .delete()
       .eq('user_id', user.id)
-      .eq('state', 'sent')
-      .select()
 
-    if (updateError) {
-      console.error('Error dismissing notifications:', updateError)
+    if (error) {
+      console.error('Error deleting all notifications:', error)
       return NextResponse.json(
-        { error: updateError.message },
+        { error: error.message },
         { status: 500 }
       )
     }
 
     return NextResponse.json({
       success: true,
-      dismissedCount: data?.length || 0,
-      message: `Dismissed ${data?.length || 0} notifications`,
+      message: 'All notifications deleted',
     })
 
   } catch (error) {
-    console.error('Dismiss all error:', error)
+    console.error('Delete all notifications API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

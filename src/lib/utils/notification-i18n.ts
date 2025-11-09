@@ -90,8 +90,8 @@ export function getTelegramMessage(
 /**
  * Get user's preferred locale from database user object
  */
-export function getUserLocale(user: { preferred_locale?: string }): Locale {
-  const locale = user.preferred_locale?.toLowerCase();
+export function getUserLocale(user: { preferred_language?: string }): Locale {
+  const locale = user.preferred_language?.toLowerCase();
 
   if (locale === 'bg' || locale === 'ru' || locale === 'en') {
     return locale;
