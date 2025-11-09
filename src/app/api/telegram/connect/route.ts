@@ -45,12 +45,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update user with Telegram ID
+    // Fetch Telegram user profile information from Bot API
+    const telegramUserInfo = await getTelegramUserInfo(telegramIdNumber);
+
+    // Update user with Telegram ID, profile info, and set both notification fields
     const { error: updateError } = await supabase
       .from('users')
       .update({
         telegram_id: telegramIdNumber,
+        telegram_username: telegramUserInfo?.username || null,
+        telegram_first_name: telegramUserInfo?.first_name || null,
+        telegram_last_name: telegramUserInfo?.last_name || null,
+        telegram_photo_url: telegramUserInfo?.photo_url || null,
         preferred_notification_channel: 'telegram',
+        preferred_contact: 'telegram', // Also set preferred contact method
         updated_at: new Date().toISOString()
       })
       .eq('id', userId);
@@ -122,5 +130,100 @@ async function sendConfirmationMessage(telegramId: number, locale: string = 'en'
   } catch (error) {
     console.error('[Telegram] Failed to send confirmation message:', error);
     // Don't fail the whole request if message fails
+  }
+}
+
+interface TelegramUserInfo {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  photo_url?: string;
+}
+
+async function getTelegramUserInfo(telegramId: number): Promise<TelegramUserInfo | null> {
+  const botToken = process.env.TG_BOT_TOKEN;
+  if (!botToken) {
+    console.error('[Telegram] TG_BOT_TOKEN not configured');
+    return null;
+  }
+
+  try {
+    // Use getUserProfilePhotos to get user info
+    const url = `https://api.telegram.org/bot${botToken}/getChat`;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: telegramId
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      console.error('[Telegram] Failed to get user info:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+
+    if (!data.ok || !data.result) {
+      console.error('[Telegram] Invalid response from getChat:', data);
+      return null;
+    }
+
+    const user = data.result;
+
+    // Try to get profile photo URL
+    let photoUrl: string | undefined;
+    try {
+      const photosResponse = await fetch(`https://api.telegram.org/bot${botToken}/getUserProfilePhotos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: telegramId,
+          limit: 1
+        })
+      });
+
+      if (photosResponse.ok) {
+        const photosData = await photosResponse.json();
+        if (photosData.ok && photosData.result?.photos?.[0]?.[0]?.file_id) {
+          const fileId = photosData.result.photos[0][0].file_id;
+
+          // Get file path
+          const fileResponse = await fetch(`https://api.telegram.org/bot${botToken}/getFile`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ file_id: fileId })
+          });
+
+          if (fileResponse.ok) {
+            const fileData = await fileResponse.json();
+            if (fileData.ok && fileData.result?.file_path) {
+              photoUrl = `https://api.telegram.org/file/bot${botToken}/${fileData.result.file_path}`;
+            }
+          }
+        }
+      }
+    } catch (photoError) {
+      console.error('[Telegram] Failed to get profile photo:', photoError);
+      // Continue without photo
+    }
+
+    return {
+      username: user.username,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      photo_url: photoUrl
+    };
+  } catch (error) {
+    console.error('[Telegram] Error fetching user info:', error);
+    return null;
   }
 }

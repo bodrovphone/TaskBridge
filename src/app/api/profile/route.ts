@@ -147,6 +147,34 @@ export async function PUT(request: NextRequest) {
     })
   } catch (error) {
     console.error('PUT /api/profile error:', error)
+
+    // Handle specific database constraint violations
+    if (error instanceof Error) {
+      // Duplicate phone number
+      if (error.message.includes('users_phone_key')) {
+        return NextResponse.json(
+          { error: 'This phone number is already registered to another account' },
+          { status: 409 }
+        )
+      }
+
+      // Duplicate email
+      if (error.message.includes('users_email_key')) {
+        return NextResponse.json(
+          { error: 'This email is already registered to another account' },
+          { status: 409 }
+        )
+      }
+
+      // Duplicate VAT number
+      if (error.message.includes('users_vat_number_key')) {
+        return NextResponse.json(
+          { error: 'This VAT number is already registered to another account' },
+          { status: 409 }
+        )
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

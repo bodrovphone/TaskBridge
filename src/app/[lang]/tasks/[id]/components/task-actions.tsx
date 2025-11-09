@@ -27,7 +27,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const searchParams = useSearchParams();
  const { user, profile } = useAuth();
  const isAuthenticated = !!user && !!profile;
- const lang = params?.lang as string || 'en';
+ const lang = params?.lang as string || 'bg';
 
  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
  const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);

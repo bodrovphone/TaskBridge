@@ -23,7 +23,7 @@ export default function HeroSection() {
  const { t } = useTranslation();
  const pathname = usePathname();
  const router = useRouter();
- const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
+ const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
  const { user, profile } = useAuth();
  const isAuthenticated = !!user && !!profile;
  const [isAuthOpen, setIsAuthOpen] = useState(false);

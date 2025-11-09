@@ -14,7 +14,7 @@ function Footer() {
  const router = useRouter();
 
  // Check if we're on the index/landing page for smart category linking
- const lang = pathname.split('/')[1] || 'en';
+ const lang = pathname.split('/')[1] || 'bg';
  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`;
  const categoriesHref = isIndexPage ? "/#categories" : "/categories";
 

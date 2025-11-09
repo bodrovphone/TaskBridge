@@ -47,7 +47,7 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
 
     // Extract locale from /start parameter (e.g., "/start ru" -> "ru")
     // This locale comes from the app URL the user was on when they clicked "Open Bot"
-    const startParam = text.split(' ')[1] || 'en'; // Default to 'en' if no parameter
+    const startParam = text.split(' ')[1] || 'bg'; // Default to 'bg' if no parameter
 
     // Simple flow: Send telegram_id with greeting in app's language
     // Note: We await this to prevent Vercel from killing the function before message sends

@@ -1,10 +1,12 @@
 import { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
 import { LocaleProviders } from './providers'
 import { Header, Footer } from '@/components/common'
 import ProgressBar from '@/components/common/progress-bar'
-import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
+import { SUPPORTED_LOCALES, type SupportedLocale } from '@/lib/constants/locales'
 import { validateLocale } from '@/lib/utils/locale-detection'
+import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/seo'
 import { Toaster } from '@/components/ui/toaster'
 import { TelegramConnectionToast } from '@/components/telegram-connection-toast'
 import '../nprogress.css'
@@ -19,6 +21,25 @@ interface LocaleLayoutProps {
  */
 export async function generateStaticParams() {
  return SUPPORTED_LOCALES.map((locale) => ({ lang: locale }))
+}
+
+/**
+ * Generate metadata with hrefLang alternates for SEO
+ * This tells search engines about all language versions of the page
+ */
+export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
+ const { lang } = await params
+ const validatedLocale = validateLocale(lang) as SupportedLocale
+
+ // For layout, we use root path. Child pages will override with their specific paths.
+ const pathname = ''
+
+ return {
+  alternates: {
+   canonical: generateCanonicalUrl(validatedLocale, pathname),
+   languages: generateAlternateLanguages(pathname)
+  }
+ }
 }
 
 /**

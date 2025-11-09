@@ -59,7 +59,7 @@ import {
 function Landing({ featuredTasks }: LandingPageProps) {
  const { t, ready } = useTranslation();
  const pathname = usePathname();
- const currentLocale = extractLocaleFromPathname(pathname) ?? 'en';
+ const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
  const isDesktop = useIsDesktop();
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
 

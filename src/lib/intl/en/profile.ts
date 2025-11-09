@@ -66,6 +66,9 @@ export const profile = {
   'profile.statistics.professional.repeatClients': 'Repeat Clients',
   'profile.statistics.professional.monthlyEarnings': 'Monthly Earnings',
 
+  // Quick Actions
+  'profile.quickActions.createTask': 'Create Task',
+
   // Customer Profile
   'profile.customer.personalInfo': 'Personal Information',
   'profile.customer.language': 'Language',
@@ -115,7 +118,9 @@ export const profile = {
   'profile.professional.businessSettings': 'Business Settings',
   'profile.professional.paymentMethod': 'Payment Method',
   'profile.professional.vatNumber': 'VAT Number',
-  'profile.professional.serviceArea': 'Service Area',
+  'profile.professional.serviceLocation': 'Service Location',
+  'profile.professional.setInPersonalInfo': 'Set in Personal Information section',
+  'profile.professional.editInPersonalInfo': 'Edit in Personal Information section',
   'profile.professional.notSet': 'Not set',
   'profile.professional.notVerified': 'Not Verified',
   'profile.professional.titlePlaceholder': 'e.g., Professional Cleaning & Home Services',
@@ -141,6 +146,16 @@ export const profile = {
   'profile.professional.portfolioDescription': 'Showcase your best work with before/after images',
   'profile.professional.addServiceCategories': 'Add Your Service Categories',
   'profile.professional.categoriesHelp': 'Help customers find you! Select the services you offer to start receiving task requests.',
+
+  // Professional Profile Completion
+  'profile.professional.incompleteTitle': 'Complete Your Professional Profile',
+  'profile.professional.minimumRequired': 'Minimum required',
+  'profile.professional.titleField': 'Professional Title',
+  'profile.professional.recommended': 'Recommended',
+  'profile.professional.recommendedFields': 'Categories (Services), Location, and Bio',
+
+  // Telegram Connection
+  'profile.telegram.clickToConnect': 'Click to connect',
 
   // Professional Setup Form
   'profile.professional.form.titlePlaceholder': 'e.g. Full Stack Developer, UX Designer, Marketing Consultant',
@@ -199,6 +214,11 @@ export const profile = {
   'profile.telegramConnectError': 'Failed to connect Telegram. Please try again.',
   'profile.telegramDisconnectConfirm': 'Are you sure you want to disconnect Telegram? You will no longer receive instant notifications.',
   'profile.telegramDisconnectError': 'Failed to disconnect Telegram. Please try again.',
+  'profile.telegram.disconnectConfirmTitle': 'Disconnect Telegram?',
+  'profile.telegram.disconnectConfirmMessage': 'Are you sure you want to stop receiving instant free Telegram notifications?',
+  'profile.telegram.disconnectWarning': 'You will lose access to:',
+  'profile.telegram.keepTelegram': 'Keep Telegram',
+  'profile.telegram.disconnect': 'Disconnect',
   'profile.telegram.steps': 'Follow these steps',
   'profile.telegram.step1': 'Click the button below to open Telegram bot',
   'profile.telegram.step2': 'Click "Start" and copy your Telegram ID',

@@ -52,7 +52,7 @@ function MainCategoryCard({
  const { t } = useTranslation()
  const router = useRouter()
  const params = useParams()
- const lang = params?.lang as string || 'en'
+ const lang = params?.lang as string || 'bg'
 
  const colorConfig = {
   blue: {

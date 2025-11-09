@@ -51,7 +51,7 @@ export class AuthService {
         fullName: metadata?.fullName,
         phoneNumber: metadata?.phoneNumber,
         userType: 'customer', // Default to customer
-        preferredLanguage: metadata?.locale || 'en', // Use route locale or default to English
+        preferredLanguage: metadata?.locale || 'bg', // Use route locale or default to Bulgarian
       }
 
       const createResult: Result<User, Error> = await this.createUserProfileUseCase.execute(dto)

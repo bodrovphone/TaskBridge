@@ -7,20 +7,44 @@ import { useTranslation } from 'react-i18next'
 import { PortfolioGalleryManager } from './portfolio-gallery-manager'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
 import { ServiceCategoriesSection } from './sections/service-categories-section'
-import { VerificationSection } from './sections/verification-section'
 import { AvailabilitySection } from './sections/availability-section'
 import { BusinessSettingsSection } from './sections/business-settings-section'
 import { StatisticsSection } from './sections/statistics-section'
-import { UserProfile } from '@/server/domain/user/user.types'
+import { PersonalInfoSection } from './shared/personal-info-section'
+import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
 
 interface ProfessionalProfileProps {
   profile: UserProfile
   onProfileUpdate: (updates: Partial<UserProfile>) => Promise<void>
+  onSettingsOpen?: () => void
 }
 
-export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalProfileProps) {
+export function ProfessionalProfile({ profile, onProfileUpdate, onSettingsOpen }: ProfessionalProfileProps) {
   const { t } = useTranslation()
   const [error, setError] = useState<string | null>(null)
+
+  // Handler for personal information
+  const handlePersonalInfoSave = async (data: {
+    name: string
+    phone: string
+    location: string
+    preferredLanguage: PreferredLanguage
+    preferredContact: PreferredContact
+  }) => {
+    setError(null)
+    try {
+      await onProfileUpdate({
+        fullName: data.name,
+        phoneNumber: data.phone,
+        city: data.location,
+        preferredLanguage: data.preferredLanguage,
+        preferredContact: data.preferredContact,
+      })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save personal information')
+      throw err
+    }
+  }
 
   // Format years experience for display (matches dropdown options)
   const formatYearsExperience = (years: number | null): string => {
@@ -75,22 +99,15 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
     }
   }
 
-  const handleVerifyPhone = () => {
-    console.log('Phone verification not yet implemented')
-    // TODO: Implement phone verification flow
-  }
-
   const handleAvailabilitySave = async (data: {
     availability: string
     responseTime: string
-    serviceArea: string[]
   }) => {
     setError(null)
     try {
       await onProfileUpdate({
         availabilityStatus: data.availability as 'available' | 'busy' | 'unavailable',
         responseTimeHours: parseFloat(data.responseTime) || null,
-        serviceAreaCities: data.serviceArea
       })
     } catch (err: any) {
       setError(err.message || 'Failed to save availability settings')
@@ -140,6 +157,13 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         </div>
       )}
 
+      {/* 0. Personal Information */}
+      <PersonalInfoSection
+        profile={profile}
+        onSave={handlePersonalInfoSave}
+        onSettingsOpen={onSettingsOpen}
+      />
+
       {/* 1. Professional Identity */}
       <ProfessionalIdentitySection
         title={profile.professionalTitle || ''}
@@ -154,24 +178,18 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         onSave={handleCategoriesSave}
       />
 
-      {/* 3. Verification & Trust */}
-      <VerificationSection
-        phoneNumber={profile.phoneNumber}
-        isPhoneVerified={profile.isPhoneVerified}
-        onVerifyPhone={handleVerifyPhone}
-      />
-
-      {/* 4. Availability & Preferences */}
+      {/* 3. Availability & Preferences */}
       <AvailabilitySection
         availability={profile.availabilityStatus}
         responseTime={formatResponseTime(profile.responseTimeHours)}
-        serviceArea={profile.serviceAreaCities || []}
+        city={profile.city}
+        country={profile.country}
         languages={profile.languages || []}
         onSave={handleAvailabilitySave}
         onLanguageChange={handleLanguageChange}
       />
 
-      {/* 5. Business Settings */}
+      {/* 4. Business Settings */}
       <BusinessSettingsSection
         paymentMethods={profile.paymentMethods || []}
         weekdayHours={profile.weekdayHours || { start: '08:00', end: '18:00' }}
@@ -179,7 +197,7 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         onSave={handleBusinessSettingsSave}
       />
 
-      {/* 6. Portfolio Gallery - Skipped for MVP */}
+      {/* 5. Portfolio Gallery - Skipped for MVP */}
       {/* <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
         <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-4 md:px-6">
           <div className="flex items-center gap-2 md:gap-3">
@@ -201,7 +219,7 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         </CardBody>
       </Card> */}
 
-      {/* 7. Statistics (Read-Only) */}
+      {/* 6. Statistics (Read-Only) */}
       <StatisticsSection
         completedTasks={profile.tasksCompleted}
         averageRating={profile.averageRating || 0}

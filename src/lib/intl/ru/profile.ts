@@ -657,6 +657,9 @@ export const profile = {
   'profile.statistics.professional.repeatClients': 'Постоянные клиенты',
   'profile.statistics.professional.monthlyEarnings': 'Месячный доход',
 
+  // Quick Actions
+  'profile.quickActions.createTask': 'Создать задачу',
+
   // Customer Profile
   'profile.customer.personalInfo': 'Личная информация',
   'profile.customer.language': 'Язык',
@@ -706,7 +709,9 @@ export const profile = {
   'profile.professional.businessSettings': 'Настройки бизнеса',
   'profile.professional.paymentMethod': 'Способ оплаты',
   'profile.professional.vatNumber': 'НДС номер',
-  'profile.professional.serviceArea': 'Область обслуживания',
+  'profile.professional.serviceLocation': 'Местоположение услуги',
+  'profile.professional.setInPersonalInfo': 'Задается в разделе Личная информация',
+  'profile.professional.editInPersonalInfo': 'Редактировать в разделе Личная информация',
   'profile.professional.notSet': 'Не задано',
   'profile.professional.notVerified': 'Не подтверждено',
   'profile.professional.titlePlaceholder': 'например: Профессиональная уборка и домашние услуги',
@@ -732,6 +737,16 @@ export const profile = {
   'profile.professional.portfolioDescription': 'Покажите свою лучшую работу с фотографиями до/после',
   'profile.professional.addServiceCategories': 'Добавьте категории услуг',
   'profile.professional.categoriesHelp': 'Помогите клиентам найти вас! Выберите услуги, которые вы предлагаете, чтобы начать получать заявки.',
+
+  // Professional Profile Completion
+  'profile.professional.incompleteTitle': 'Завершите свой профессиональный профиль',
+  'profile.professional.minimumRequired': 'Минимум требуется',
+  'profile.professional.titleField': 'Профессиональное название',
+  'profile.professional.recommended': 'Рекомендуется',
+  'profile.professional.recommendedFields': 'Категории (Услуги), Местоположение и Биография',
+
+  // Telegram Connection
+  'profile.telegram.clickToConnect': 'Нажмите для подключения',
 
   // Professional Setup Form
   'profile.professional.form.titlePlaceholder': 'например: Full Stack Developer, UX Designer, Маркетинговый консультант',
@@ -790,6 +805,11 @@ export const profile = {
   'profile.telegramConnectError': 'Не удалось подключить Telegram. Пожалуйста, попробуйте снова.',
   'profile.telegramDisconnectConfirm': 'Вы уверены, что хотите отключить Telegram? Вы больше не будете получать мгновенные уведомления.',
   'profile.telegramDisconnectError': 'Не удалось отключить Telegram. Пожалуйста, попробуйте снова.',
+  'profile.telegram.disconnectConfirmTitle': 'Отключить Telegram?',
+  'profile.telegram.disconnectConfirmMessage': 'Вы уверены, что хотите перестать получать мгновенные бесплатные уведомления Telegram?',
+  'profile.telegram.disconnectWarning': 'Вы потеряете доступ к:',
+  'profile.telegram.keepTelegram': 'Оставить Telegram',
+  'profile.telegram.disconnect': 'Отключить',
   'profile.telegram.steps': 'Следуйте этим шагам',
   'profile.telegram.step1': 'Нажмите кнопку ниже, чтобы открыть Telegram бота',
   'profile.telegram.step2': 'Нажмите "Start" и скопируйте ваш Telegram ID',

@@ -60,7 +60,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
  const [isProfileSetup, setIsProfileSetup] = useState(true) // Start with setup profile for demo
  const router = useRouter()
  const pathname = usePathname()
- const currentLocale = extractLocaleFromPathname(pathname) ?? 'en'
+ const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg'
 
  // Mock professional data
  const [professionalData, setProfessionalData] = useState({

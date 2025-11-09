@@ -1,17 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Input, Select, SelectItem, RadioGroup, Radio, Chip } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, RadioGroup, Radio, Chip } from '@nextui-org/react'
 import { Clock, CheckCircle, MapPinned, Languages, Edit, Save, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface AvailabilitySectionProps {
   availability: 'available' | 'busy' | 'unavailable'
   responseTime: string
-  serviceArea: string[]
+  city: string | null
+  country: string
   languages: string[]
-  onSave: (data: { availability: string; responseTime: string; serviceArea: string[] }) => Promise<void>
+  onSave: (data: { availability: string; responseTime: string }) => Promise<void>
   onLanguageChange: (data: string[]) => void
 }
 
@@ -31,7 +33,8 @@ const languageOptions = [
 export function AvailabilitySection({
   availability,
   responseTime,
-  serviceArea,
+  city,
+  country,
   languages,
   onSave,
   onLanguageChange
@@ -41,8 +44,14 @@ export function AvailabilitySection({
   const [isLoading, setIsLoading] = useState(false)
   const [currentLanguages, setCurrentLanguages] = useState(languages)
 
+  // Get translated city label
+  const cityLabel = useMemo(() => {
+    if (!city) return t('profile.professional.notSet', 'Not set')
+    return getCityLabelBySlug(city, t)
+  }, [city, t])
+
   const form = useForm({
-    defaultValues: { availability, responseTime, serviceArea },
+    defaultValues: { availability, responseTime },
     onSubmit: async ({ value }) => {
       setIsLoading(true)
       await onSave(value)
@@ -98,9 +107,14 @@ export function AvailabilitySection({
               <div className="p-2 rounded-lg bg-orange-100">
                 <MapPinned className="w-5 h-5 text-orange-600" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.serviceArea')}</p>
-                <p className="font-semibold text-gray-900">{serviceArea.join(', ')}</p>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.serviceLocation', 'Service Location')}</p>
+                <p className="font-semibold text-gray-900">
+                  {city ? `${cityLabel}, ${country}` : t('profile.professional.notSet', 'Not set')}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {t('profile.professional.setInPersonalInfo', 'Set in Personal Information section')}
+                </p>
               </div>
             </div>
 
@@ -163,14 +177,24 @@ export function AvailabilitySection({
                 )}
               </form.Field>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Service Area</label>
-                <p className="text-xs text-gray-500 mb-2">Cities where you offer services</p>
-                <Input
-                  placeholder="e.g., Sofia, Plovdiv, Varna"
-                  startContent={<MapPinned className="w-4 h-4 text-gray-500" />}
-                  value={serviceArea.join(', ')}
-                />
+              {/* Service Location (Read-only from Personal Information) */}
+              <div className="p-4 rounded-xl bg-blue-50/50 border border-blue-100">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-blue-100 flex-shrink-0">
+                    <MapPinned className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-blue-900 mb-1">
+                      {t('profile.professional.serviceLocation', 'Service Location')}
+                    </p>
+                    <p className="font-semibold text-gray-900">
+                      {city ? `${cityLabel}, ${country}` : t('profile.professional.notSet', 'Not set')}
+                    </p>
+                    <p className="text-xs text-blue-700 mt-1">
+                      {t('profile.professional.editInPersonalInfo', 'Edit in Personal Information section')}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Languages Checkboxes */}

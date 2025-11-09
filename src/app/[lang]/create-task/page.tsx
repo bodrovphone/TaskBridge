@@ -13,7 +13,7 @@ export default function CreateTaskPage() {
  const { user, loading } = useAuth()
  const router = useRouter()
  const params = useParams()
- const lang = (params?.lang as string) || 'en'
+ const lang = (params?.lang as string) || 'bg'
 
  // Redirect to home if not authenticated
  useEffect(() => {

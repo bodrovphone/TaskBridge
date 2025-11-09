@@ -29,7 +29,7 @@ import { useToast } from '@/hooks/use-toast'
 export function useCreateTask() {
   const router = useRouter()
   const params = useParams()
-  const lang = (params?.lang as string) || 'en'
+  const lang = (params?.lang as string) || 'bg'
   const { t } = useTranslation()
   const { user, profile } = useAuth()
   const isAuthenticated = !!user && !!profile

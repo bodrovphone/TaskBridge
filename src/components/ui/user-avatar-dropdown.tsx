@@ -37,12 +37,15 @@ export default function UserAvatarDropdown({
  const { t } = useTranslation()
  const router = useRouter()
  const params = useParams()
- const lang = params?.lang as string || 'en'
+ const lang = params?.lang as string || 'bg'
 
  const handleMenuAction = (key: string) => {
   switch (key) {
-   case 'profile':
-    router.push(`/${lang}/profile`)
+   case 'profile-customer':
+    router.push(`/${lang}/profile/customer`)
+    break
+   case 'profile-professional':
+    router.push(`/${lang}/profile/professional`)
     break
    case 'tasks-posted':
     router.push(`/${lang}/tasks/posted`)
@@ -130,14 +133,21 @@ export default function UserAvatarDropdown({
      </DropdownItem>
     </DropdownSection>
 
-    {/* Profile */}
+    {/* Profiles */}
     <DropdownSection showDivider>
      <DropdownItem
-      key="profile"
+      key="profile-customer"
       startContent={<User className="text-gray-500" size={18} />}
       className="text-gray-900"
      >
-      {t('nav.profile')}
+      {t('nav.profileCustomer')}
+     </DropdownItem>
+     <DropdownItem
+      key="profile-professional"
+      startContent={<Briefcase className="text-gray-500" size={18} />}
+      className="text-gray-900"
+     >
+      {t('nav.profileProfessional')}
      </DropdownItem>
     </DropdownSection>
 

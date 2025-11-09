@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
 
-    // Remove Telegram credentials from user
+    // Remove Telegram credentials from user and reset contact preferences to email
     const { error: updateError } = await supabase
       .from('users')
       .update({
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
         telegram_last_name: null,
         telegram_photo_url: null,
         preferred_notification_channel: 'email', // Fallback to email
+        preferred_contact: 'email', // Also reset preferred contact method
         updated_at: new Date().toISOString()
       })
       .eq('id', userId);

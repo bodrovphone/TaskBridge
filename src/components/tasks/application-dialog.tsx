@@ -128,13 +128,13 @@ export default function ApplicationDialog({
 
  const handleBrowseOther = () => {
   handleClose()
-  const currentLang = i18n.language || 'en'
+  const currentLang = i18n.language || 'bg'
   router.push(`/${currentLang}/browse-tasks`)
  }
 
  const handleViewApplication = () => {
   handleClose()
-  const currentLang = i18n.language || 'en'
+  const currentLang = i18n.language || 'bg'
   router.push(`/${currentLang}/tasks/applications`)
  }
 

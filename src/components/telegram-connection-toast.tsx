@@ -48,7 +48,7 @@ export function TelegramConnectionToast() {
       // Show the toast
       setHasShownToast(true);
 
-      const currentLocale = i18n.language || 'en';
+      const currentLocale = i18n.language || 'bg';
 
       const toastInstance = toast({
         duration: 10000, // Show for 10 seconds

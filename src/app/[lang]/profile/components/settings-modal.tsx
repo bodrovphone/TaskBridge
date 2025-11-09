@@ -16,20 +16,10 @@ import {
 } from '@nextui-org/react'
 import {
  Settings,
- Bell,
  Shield,
  Trash2
 } from 'lucide-react'
 import { TelegramConnection } from './telegram-connection'
-
-interface NotificationSettings {
- emailNotifications: boolean
- taskUpdates: boolean
- marketingEmails: boolean
- smsNotifications: boolean
- pushNotifications: boolean
- weeklyDigest: boolean
-}
 
 interface SettingsModalProps {
  isOpen: boolean
@@ -38,6 +28,7 @@ interface SettingsModalProps {
  telegramConnected?: boolean
  telegramUsername?: string | null
  telegramFirstName?: string | null
+ onTelegramConnectionChange?: () => void // Callback when Telegram connection state changes
 }
 
 export function SettingsModal({
@@ -46,28 +37,10 @@ export function SettingsModal({
  userId, // Required - must be passed from parent
  telegramConnected = false,
  telegramUsername = null,
- telegramFirstName = null
+ telegramFirstName = null,
+ onTelegramConnectionChange
 }: SettingsModalProps) {
  const { t } = useTranslation()
-
- // Comprehensive notification settings state
- const [notifications, setNotifications] = useState<NotificationSettings>({
-  emailNotifications: true,
-  taskUpdates: true,
-  marketingEmails: false,
-  smsNotifications: false,
-  pushNotifications: true,
-  weeklyDigest: false
- })
-
- const handleNotificationChange = (key: keyof NotificationSettings, value: boolean) => {
-  setNotifications(prev => ({
-   ...prev,
-   [key]: value
-  }))
-  // Auto-save notification preference
-  console.log('Notification setting updated:', { [key]: value })
- }
 
  return (
   <Modal
@@ -103,107 +76,8 @@ export function SettingsModal({
        telegramConnected={telegramConnected}
        telegramUsername={telegramUsername}
        telegramFirstName={telegramFirstName}
+       onConnectionChange={onTelegramConnectionChange}
       />
-
-      {/* Notifications */}
-      <Card>
-       <CardBody className="p-4">
-        <div className="flex items-center gap-3 mb-4">
-         <Bell className="w-5 h-5 text-gray-600" />
-         <h3 className="font-semibold">{t('profile.settings.notifications')}</h3>
-        </div>
-
-        <div className="space-y-3">
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.emailNotifications')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.emailNotificationsDesc')}
-           </p>
-          </div>
-          <Switch
-           isSelected={notifications.emailNotifications}
-           onValueChange={(checked) => handleNotificationChange('emailNotifications', checked)}
-          />
-         </div>
-
-         <Divider />
-
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.taskUpdates')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.taskUpdatesDesc')}
-           </p>
-          </div>
-          <Switch
-           isSelected={notifications.taskUpdates}
-           onValueChange={(checked) => handleNotificationChange('taskUpdates', checked)}
-          />
-         </div>
-
-         <Divider />
-
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.customer.smsNotifications')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.customer.smsNotificationsDesc')}
-           </p>
-          </div>
-          <Switch
-           isSelected={notifications.smsNotifications}
-           onValueChange={(checked) => handleNotificationChange('smsNotifications', checked)}
-          />
-         </div>
-
-         <Divider />
-
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.pushNotifications')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.pushNotificationsDesc')}
-           </p>
-          </div>
-          <Switch
-           isSelected={notifications.pushNotifications}
-           onValueChange={(checked) => handleNotificationChange('pushNotifications', checked)}
-          />
-         </div>
-
-         <Divider />
-
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.weeklyDigest')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.weeklyDigestDesc')}
-           </p>
-          </div>
-          <Switch
-           isSelected={notifications.weeklyDigest}
-           onValueChange={(checked) => handleNotificationChange('weeklyDigest', checked)}
-          />
-         </div>
-
-         <Divider />
-
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.marketingEmails')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.marketingEmailsDesc')}
-           </p>
-          </div>
-          <Switch
-           isSelected={notifications.marketingEmails}
-           onValueChange={(checked) => handleNotificationChange('marketingEmails', checked)}
-          />
-         </div>
-        </div>
-       </CardBody>
-      </Card>
 
       {/* Privacy */}
       <Card>

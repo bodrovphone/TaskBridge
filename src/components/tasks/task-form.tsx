@@ -51,7 +51,7 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
   const params = useParams()
   const { toast } = useToast()
   const { user } = useAuth()
-  const locale = (params?.lang as string) || i18n.language || 'en'
+  const locale = (params?.lang as string) || i18n.language || 'bg'
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [category, setCategory] = useState(initialData?.category || '')

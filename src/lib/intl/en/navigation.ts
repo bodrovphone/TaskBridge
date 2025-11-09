@@ -4,6 +4,8 @@ export const navigation = {
   'nav.browseTasks': 'Browse Tasks',
   'nav.createTask': 'Post a Task',
   'nav.profile': 'Profile',
+  'nav.profileCustomer': 'Customer Profile',
+  'nav.profileProfessional': 'Professional Profile',
   'nav.howItWorks': 'How It Works',
   'nav.categories': 'Categories',
   'nav.forProfessionals': 'Professionals',

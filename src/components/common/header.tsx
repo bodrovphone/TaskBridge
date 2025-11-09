@@ -37,7 +37,7 @@ function Header() {
  const [authAction, setAuthAction] = useState<'apply' | 'question' | 'create-task' | 'join-professional' | null>(null)
  const router = useRouter()
  const params = useParams()
- const lang = params?.lang as string || 'en'
+ const lang = params?.lang as string || 'bg'
  const { toast } = useToast()
 
  // @todo FEATURE: Review enforcement (commented out until reviews feature is built)
@@ -314,8 +314,8 @@ function Header() {
    action={authAction}
   />
 
-  {/* Floating Action Buttons - Mobile Only (hide when menu is open) */}
-  {!isMenuOpen && (
+  {/* Floating Action Buttons - Mobile Only (hide when menu is open or on profile pages) */}
+  {!isMenuOpen && !pathname.includes('/profile') && (
   <div className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[45] flex flex-col gap-4">
    {/* Browse Tasks Button - Hide on browse-tasks page */}
    {!pathname.includes('/browse-tasks') && (

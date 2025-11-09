@@ -11,13 +11,15 @@ interface TelegramConnectionProps {
   telegramConnected: boolean;
   telegramUsername?: string | null;
   telegramFirstName?: string | null;
+  onConnectionChange?: () => void; // Callback to notify parent of connection state change
 }
 
 export function TelegramConnection({
   userId,
   telegramConnected,
   telegramUsername,
-  telegramFirstName
+  telegramFirstName,
+  onConnectionChange
 }: TelegramConnectionProps) {
   const { t, i18n } = useTranslation();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -28,7 +30,7 @@ export function TelegramConnection({
 
   const handleOpenBot = () => {
     // Get current app locale and pass it to the bot via start parameter
-    const locale = i18n.language || 'en';
+    const locale = i18n.language || 'bg';
     const botLink = `https://t.me/Trudify_bot?start=${locale}`;
     window.open(botLink, '_blank');
 
@@ -54,7 +56,7 @@ export function TelegramConnection({
 
     try {
       // Get current app locale from i18next
-      const locale = i18n.language || 'en';
+      const locale = i18n.language || 'bg';
 
       const response = await fetch('/api/telegram/connect', {
         method: 'POST',
@@ -76,8 +78,15 @@ export function TelegramConnection({
         return;
       }
 
-      // Success! Reload to show connected status
-      window.location.reload();
+      // Success! Notify parent and reset UI
+      setShowInstructions(false);
+      setTelegramId('');
+      setError(null);
+
+      // Notify parent component to refresh profile data
+      if (onConnectionChange) {
+        onConnectionChange();
+      }
     } catch (err) {
       console.error('Error connecting Telegram:', err);
       setError(err instanceof Error ? err.message : t('profile.telegramConnectError'));
@@ -107,8 +116,10 @@ export function TelegramConnection({
         throw new Error('Failed to disconnect Telegram');
       }
 
-      // Reload to show updated status
-      window.location.reload();
+      // Notify parent component to refresh profile data
+      if (onConnectionChange) {
+        onConnectionChange();
+      }
     } catch (err) {
       console.error('Error disconnecting Telegram:', err);
       setError(t('profile.telegramDisconnectError'));

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 export default function TaskNotFound() {
  const router = useRouter();
  const { t, i18n } = useTranslation();
- const locale = i18n.language || 'en';
+ const locale = i18n.language || 'bg';
 
  return (
   <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4">

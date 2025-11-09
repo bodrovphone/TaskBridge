@@ -24,7 +24,7 @@ function LanguageSwitcher() {
  const pathname = usePathname()
 
  // Extract current locale from URL with fallback
- const currentLocale = extractLocaleFromPathname(pathname) ?? 'en'
+ const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg'
  const currentLanguage = LANGUAGE_CONFIG[currentLocale]
 
  /**
