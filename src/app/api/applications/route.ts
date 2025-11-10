@@ -221,7 +221,9 @@ export async function GET(request: NextRequest) {
           customer:users!tasks_customer_id_fkey (
             id,
             full_name,
-            avatar_url
+            avatar_url,
+            phone,
+            email
           )
         )
       `)
