@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type ComponentProps } from 'react'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
-import { DEFAULT_LOCALE } from '@/lib/constants/locales'
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 
 interface LocaleLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
  href: string
@@ -22,16 +22,19 @@ function LocaleLink({ href, locale, ...props }: LocaleLinkProps) {
  
  // Extract current locale from URL or use provided locale
  const currentLocale = locale || extractLocaleFromPathname(pathname) || DEFAULT_LOCALE
- 
+
+ // Check if href already has ANY supported locale prefix (not just current)
+ const hasLocalePrefix = SUPPORTED_LOCALES.some(loc => href.startsWith(`/${loc}/`))
+
  // Don't prefix external URLs, API routes, or URLs that already have locale
  const shouldPrefixLocale = (
-  !href.startsWith('http') && 
+  !href.startsWith('http') &&
   !href.startsWith('mailto:') &&
   !href.startsWith('tel:') &&
   !href.startsWith('/api/') &&
-  !href.startsWith(`/${currentLocale}/`)
+  !hasLocalePrefix
  )
- 
+
  const localizedHref = shouldPrefixLocale ? `/${currentLocale}${href}` : href
  
  return <Link href={localizedHref} {...props} />

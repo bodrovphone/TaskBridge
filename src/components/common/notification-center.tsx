@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, Trash2, Loader2 } from 'lucide-react';
+import { Bell, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
 import {
@@ -35,37 +35,41 @@ export default function NotificationCenter() {
  const { isOpen, setOpen, activeFilter, setActiveFilter } = useNotificationStore();
 
  // Data from TanStack Query (10-minute stale time, optimized fetching)
- const { notifications, isLoading, deleteAll } = useNotificationsQuery();
+ const { notifications, isLoading, error, deleteAll } = useNotificationsQuery();
+
+ // Handle query errors gracefully
+ const hasError = !!error;
+ const displayNotifications = hasError ? [] : notifications;
 
  // Filter notifications based on active filter
  const filteredNotifications = useMemo(() => {
   if (activeFilter === 'all') {
-   return notifications;
+   return displayNotifications;
   }
 
   if (activeFilter === 'applications') {
-   return notifications.filter((notif) =>
+   return displayNotifications.filter((notif) =>
     ['application_received', 'application_accepted', 'application_rejected'].includes(notif.type)
    );
   }
 
   if (activeFilter === 'tasks') {
-   return notifications.filter((notif) =>
+   return displayNotifications.filter((notif) =>
     ['task_completed', 'task_cancelled', 'task_status_changed', 'deadline_reminder'].includes(notif.type)
    );
   }
 
   if (activeFilter === 'messages') {
-   return notifications.filter((notif) =>
+   return displayNotifications.filter((notif) =>
     ['message_received', 'review_received', 'welcome_message'].includes(notif.type)
    );
   }
 
-  return notifications;
- }, [notifications, activeFilter]);
+  return displayNotifications;
+ }, [displayNotifications, activeFilter]);
 
  // Calculate notification count (all notifications until deleted)
- const notificationCount = notifications.length;
+ const notificationCount = displayNotifications.length;
  const hasNotifications = notificationCount > 0;
 
  const handleFilterChange = (value: string) => {
@@ -133,6 +137,18 @@ export default function NotificationCenter() {
         {isLoading ? (
          <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+         </div>
+        ) : hasError ? (
+         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+           <AlertCircle className="h-8 w-8 text-red-600" />
+          </div>
+          <h3 className="mb-2 text-lg font-semibold text-gray-900">
+           {t('notifications.error.title', 'Failed to Load Notifications')}
+          </h3>
+          <p className="text-sm text-gray-600 max-w-xs">
+           {t('notifications.error.message', 'Please try again later or contact support if the problem persists.')}
+          </p>
          </div>
         ) : filteredNotifications.length > 0 ? (
          filteredNotifications.map((notification) => (

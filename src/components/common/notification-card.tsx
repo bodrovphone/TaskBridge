@@ -67,10 +67,19 @@ export default function NotificationCard({ notification }: NotificationCardProps
   }
  };
 
- const timeAgo = formatDistanceToNow(new Date(notification.createdAt), {
-  addSuffix: true,
-  locale: getLocale(),
- });
+ // Safely format date, fallback to "just now" if invalid
+ let timeAgo = t('notifications.justNow', 'Just now');
+ try {
+  const date = new Date(notification.createdAt);
+  if (!isNaN(date.getTime())) {
+   timeAgo = formatDistanceToNow(date, {
+    addSuffix: true,
+    locale: getLocale(),
+   });
+  }
+ } catch (error) {
+  console.error('Invalid notification date:', notification.createdAt, error);
+ }
 
  const handleActionClick = () => {
   // Close notification panel when action is clicked
