@@ -360,17 +360,12 @@ export default function ApplicationDialog({
              }}
              variant="bordered"
             />
-            <div className="space-y-1">
-             {taskBudget && (taskBudget.min || taskBudget.max) && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1">
-               <Zap className="w-3 h-3" />
-               {t('application.tipClientBudget', { min: taskBudget.min || 0, max: taskBudget.max || 0 })}
-              </p>
-             )}
-             <p className="text-xs text-gray-400 dark:text-gray-500 pl-1">
-              {t('application.tipVolunteering', 'Tip: Enter 0 if you want to volunteer for free')}
+            {taskBudget && (taskBudget.min || taskBudget.max) && (
+             <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1 mt-1">
+              <Zap className="w-3 h-3" />
+              {t('application.tipClientBudget', { min: taskBudget.min || 0, max: taskBudget.max || 0 })}
              </p>
-            </div>
+            )}
            </div>
           )}
          </form.Field>

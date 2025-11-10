@@ -266,9 +266,15 @@ function MainCategoryCard({
    {showFooter && (
     <CardFooter className="px-6 pb-6 pt-0 justify-between border-t border-slate-200/50">
      {totalCount === 0 ? (
-      <div className="text-sm font-bold text-blue-600">
-       {t('landing.categories.beFirst')}
-      </div>
+      <button
+       onClick={() => {
+        const subcategorySlugs = subcategories.map(s => s.value).join(',')
+        router.push(`/${lang}/browse-tasks?category=${categorySlug || subcategories[0]?.value}&subcategories=${subcategorySlugs}`)
+       }}
+       className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+      >
+       ← {t('nav.browseTasks', 'Browse Tasks')}
+      </button>
      ) : (
       <div className="text-sm font-semibold text-slate-700">
        <span className="text-lg font-bold text-slate-900">{totalCount}+</span> {t('landing.categories.specialists')}
@@ -278,7 +284,7 @@ function MainCategoryCard({
       onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
       className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
      >
-      {t('landing.categories.viewAll')} →
+      {t('professionals.viewProfessionals', 'View Professionals')} →
      </button>
     </CardFooter>
    )}

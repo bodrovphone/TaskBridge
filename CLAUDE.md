@@ -294,6 +294,60 @@ All city names stored in `/src/lib/intl/[lang]/common.ts`:
 - ALWAYS use `getCityLabelBySlug()` when displaying city names
 - NEVER display raw slugs to users
 
+### Category & Subcategory System
+
+> **Quick Reference**: For complete documentation, see [README.md - Category & Subcategory System](#category--subcategory-system)
+
+**Architecture**: Hierarchical system with **26 main categories** and **135 subcategories**, using locale-independent slugs with i18next translation layer
+
+**🎯 Key Principles:**
+- **Database Storage**: Store category/subcategory slugs only (e.g., `handyman`, `plumber`)
+- **Display**: Always translate slugs via `getCategoryLabelBySlug()` or `t('categories.sub.plumber')`
+- **Input**: Dropdown/chip selection only (no free text input)
+- **Consistency**: Same slug works across all locales for filtering and routing
+
+**📁 Data Locations:**
+- **Translations**: `/src/lib/intl/[lang]/categories.ts` (EN/BG/RU)
+- **Visuals**: `/src/lib/constants/category-visuals.ts` (icons & colors)
+- **Utilities**: `/src/features/categories/` (helper functions)
+
+**🔧 Quick Usage:**
+
+```typescript
+import { useTranslation } from 'react-i18next'
+import { getCategoryLabelBySlug, getMainCategoriesWithSubcategories } from '@/features/categories'
+
+// Display category label
+const { t } = useTranslation()
+const label = getCategoryLabelBySlug('plumber', t)  // Returns: "Plumber" / "Водопроводчик"
+
+// Get all categories for picker
+const categories = useMemo(() =>
+  getMainCategoriesWithSubcategories(t)
+, [t])
+
+// Store in form (create-task form example)
+form.setFieldValue('category', 'handyman')      // Main category slug
+form.setFieldValue('subcategory', 'plumber')    // Subcategory slug
+```
+
+**📋 Main Categories (26)**:
+`handyman`, `appliance-repair`, `finishing-work`, `construction-work`, `furniture-work`, `cleaning-services`, `logistics`, `household-services`, `pet-services`, `beauty-health`, `auto-repair`, `courier-services`, `digital-marketing`, `ai-services`, `online-advertising`, `advertising-distribution`, `web-development`, `design`, `photo-video`, `tutoring`, `business-services`, `translation-services`, `trainer-services`, `event-planning`, `volunteer-help`, `online-work`
+
+**🏷️ Subcategories (135)**:
+Examples: `plumber`, `electrician`, `locksmith`, `carpenter`, `phone-repair`, `computer-help`, `web-developer`, `copywriting`, `dog-walking`, `house-cleaning`
+
+**✅ Benefits:**
+- Locale-independent database queries
+- Consistent URL filtering: `/browse-tasks?category=plumber`
+- Easy translation updates without touching database
+- Type-safe category validation
+
+**⚠️ IMPORTANT:**
+- NEVER store translation keys in database (`categories.sub.plumber` ❌, `plumber` ✅)
+- ALWAYS use utility functions for display (never show raw slugs to users)
+- NEVER allow free text category input (dropdown/chip selection only)
+
 ### Database & Backend Operations (Supabase)
 
 **Infrastructure Setup**: See `/docs/infrastructure/supabase-vercel-setup.md` for complete guide

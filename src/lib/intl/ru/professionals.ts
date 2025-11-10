@@ -16,6 +16,7 @@ export const professionals = {
   'professionals.allCategories': 'Все категории',
   'professionals.featuredTitle': 'Рекомендуемые специалисты',
   'professionals.viewProfile': 'Посмотреть профиль',
+  'professionals.viewProfessionals': 'Посмотреть специалистов',
   'professionals.rating': 'Рейтинг',
   'professionals.completedJobs': 'Выполненные задания',
   'professionals.card.completedJobs': 'выполненных заданий',

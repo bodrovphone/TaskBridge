@@ -62,9 +62,9 @@ async function LocaleLayout({
  return (
   <LocaleProviders locale={validatedLocale}>
    <ProgressBar />
-   <div className="min-h-screen flex flex-col overflow-x-hidden">
+   <div className="min-h-screen flex flex-col overflow-x-hidden w-full max-w-full">
     <Header />
-    <main className="flex-1 overflow-x-hidden">
+    <main className="flex-1 overflow-x-hidden w-full max-w-full">
      {children}
     </main>
     <Footer />

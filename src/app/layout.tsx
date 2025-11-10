@@ -15,8 +15,8 @@ function RootLayout({
  children: React.ReactNode
 }) {
  return (
-  <html>
-   <body className={inter.className}>
+  <html lang="en" className="overflow-x-hidden">
+   <body className={`${inter.className} overflow-x-hidden w-full`}>
     {children}
    </body>
   </html>

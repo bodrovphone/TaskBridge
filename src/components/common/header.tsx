@@ -60,10 +60,10 @@ function Header() {
  }, [])
 
  const navigation = [
-  { name: t('nav.browseTasks'), href: "/browse-tasks" },
   { name: t('nav.howItWorks'), href: "/#how-it-works" },
   { name: t('nav.categories'), href: categoriesHref },
   { name: t('nav.forProfessionals'), href: "/professionals" },
+  { name: t('nav.browseTasks'), href: "/browse-tasks" },
  ]
 
  const handleCreateTask = useCallback(() => {
@@ -237,20 +237,18 @@ function Header() {
 
     {/* Create Task Button */}
     <NavbarMenuItem>
-     <div className="pt-2 w-full">
-      <Button
-       color="primary"
-       variant="solid"
-       startContent={<Plus size={16} />}
-       className="w-full font-medium"
-       onPress={() => {
-        setIsMenuOpen(false)
-        handleCreateTask()
-       }}
-      >
-       {t('nav.createTask')}
-      </Button>
-     </div>
+     <Button
+      color="primary"
+      variant="solid"
+      startContent={<Plus size={18} />}
+      className="w-full font-medium justify-start pl-4 py-6 rounded-xl"
+      onPress={() => {
+       setIsMenuOpen(false)
+       handleCreateTask()
+      }}
+     >
+      {t('nav.createTask')}
+     </Button>
     </NavbarMenuItem>
 
     {/* Portfolio menu items for authenticated users */}
@@ -357,7 +355,7 @@ function Header() {
       <NavbarMenuItem>
        <div className="pt-4 border-t border-gray-200 w-full">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.general', 'General')}
+         {t('nav.general')}
         </p>
        </div>
       </NavbarMenuItem>

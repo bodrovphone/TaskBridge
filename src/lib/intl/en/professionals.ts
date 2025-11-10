@@ -16,6 +16,7 @@ export const professionals = {
   'professionals.allCategories': 'All Categories',
   'professionals.featuredTitle': 'Featured Professionals',
   'professionals.viewProfile': 'View Profile',
+  'professionals.viewProfessionals': 'View Professionals',
   'professionals.rating': 'Rating',
   'professionals.completedJobs': 'Completed Jobs',
   'professionals.card.completedJobs': 'completed jobs',

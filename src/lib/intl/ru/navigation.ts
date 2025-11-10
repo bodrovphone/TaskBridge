@@ -16,6 +16,7 @@ export const navigation = {
   'nav.myWork': 'Моя работа',
   'nav.help': 'Помощь',
   'nav.language': 'Язык',
+  'nav.general': 'Общее',
 
   // Footer
   'footer.company.description':
