@@ -87,7 +87,10 @@ export class TaskRepository {
 
       const { data: tasks, error } = await supabase
         .from('tasks')
-        .select('*')
+        .select(`
+          *,
+          applications(count)
+        `)
         .eq('customer_id', customerId)
         .order('created_at', { ascending: false })
 
@@ -101,7 +104,14 @@ export class TaskRepository {
         )
       }
 
-      return ok((tasks || []) as Task[])
+      // Map tasks to include applicationsCount
+      const tasksWithCount = (tasks || []).map((task: any) => ({
+        ...task,
+        applicationsCount: task?.applications?.[0]?.count || 0,
+        applications: undefined // Remove the nested structure
+      }))
+
+      return ok(tasksWithCount as Task[])
     } catch (error) {
       console.error('Unexpected error finding tasks:', error)
       return err(new DatabaseError('Unexpected error finding tasks'))
@@ -306,10 +316,13 @@ export class TaskRepository {
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
       const supabase = createAdminClient()
 
-      // Start query builder with count
+      // Start query builder with count and applications
       let query = supabase
         .from('tasks')
-        .select('*', { count: 'exact' })
+        .select(`
+          *,
+          applications(count)
+        `, { count: 'exact' })
 
       // Apply filters
       if (options.filters.customerId) {
@@ -381,8 +394,15 @@ export class TaskRepository {
       const total = count || 0
       const totalPages = Math.ceil(total / options.pagination.limit)
 
+      // Map tasks to include applicationsCount
+      const tasksWithCount = (tasks || []).map((task: any) => ({
+        ...task,
+        applicationsCount: task?.applications?.[0]?.count || 0,
+        applications: undefined // Remove the nested structure
+      }))
+
       return ok({
-        tasks: (tasks || []) as Task[],
+        tasks: tasksWithCount as Task[],
         pagination: {
           page: options.pagination.page,
           limit: options.pagination.limit,

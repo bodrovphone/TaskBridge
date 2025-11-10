@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 
 /**
  * Supported notification channels for auto-login
@@ -30,7 +30,7 @@ export async function createNotificationAutoLoginToken(
   redirectUrl?: string,
   expirationDays: number = 7
 ): Promise<string> {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
   const token = generateSecureToken()
   const expiresAt = new Date()
   expiresAt.setDate(expiresAt.getDate() + expirationDays)
@@ -62,7 +62,7 @@ export async function createNotificationAutoLoginToken(
 export async function validateNotificationAutoLoginToken(
   token: string
 ): Promise<{ userId: string; channel: NotificationChannel; redirectUrl?: string } | null> {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   // Fetch the token
   const { data: tokenData, error } = await supabase

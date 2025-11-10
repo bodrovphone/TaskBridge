@@ -105,7 +105,7 @@ export async function PATCH(
     }
 
     // Send notification to customer (in-app + Telegram if connected)
-    // Note: Email notifications not yet implemented
+    // Customer should go to their posted tasks page to review and confirm
     const notificationResult = await createNotification({
       userId: task.customer_id,
       type: 'task_completed',
@@ -120,7 +120,7 @@ export async function PATCH(
         completionNotes,
         completionPhotos,
       },
-      actionUrl: `/tasks/${task.id}`,
+      actionUrl: '/tasks/posted', // Customer goes to posted tasks page to review
       deliveryChannel: 'both', // Critical: Send both in-app and Telegram
     })
 

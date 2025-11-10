@@ -1,5 +1,6 @@
 import { MyWorkContent } from './components/my-work-content'
 
-export default function MyWorkPage({ params }: { params: { lang: string } }) {
-  return <MyWorkContent lang={params.lang} />
+export default async function MyWorkPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  return <MyWorkContent lang={lang} />
 }
