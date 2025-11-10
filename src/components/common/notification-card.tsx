@@ -110,6 +110,8 @@ export default function NotificationCard({ notification }: NotificationCardProps
        <Button variant="outline" size="sm" className="h-8 text-xs">
         {notification.type === 'welcome_message'
          ? t('notifications.getStarted')
+         : notification.type === 'application_accepted'
+         ? t('notifications.viewMyWork')
          : notification.type.includes('application')
          ? t('notifications.viewApplication')
          : t('notifications.viewTask')}

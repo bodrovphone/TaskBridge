@@ -267,11 +267,24 @@ export async function createNotification(
                   baseUrl
                 )
                 link = `${viewHereText}: ${autoLoginUrl}`
+                console.log(`[Telegram] Auto-login URL generated for ${params.type}:`, autoLoginUrl)
               } catch (error) {
                 console.error('Failed to generate auto-login URL for Telegram, using standard URL:', error)
                 // Fallback to standard URL without auto-login
                 link = `${viewHereText}: ${baseUrl}${finalUrl}`
+                console.log(`[Telegram] Using fallback URL for ${params.type}:`, `${baseUrl}${finalUrl}`)
               }
+            }
+
+            // Ensure link is never empty (additional safety check)
+            if (!link && params.actionUrl) {
+              const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+              let fallbackUrl = params.actionUrl
+              if (!fallbackUrl.startsWith(`/${userLocale}/`)) {
+                fallbackUrl = `/${userLocale}${fallbackUrl}`
+              }
+              link = `${getViewHereText(userLocale)}: ${baseUrl}${fallbackUrl}`
+              console.warn('[Telegram] Link was empty, using emergency fallback:', link)
             }
 
             // Prepare template data with localized link

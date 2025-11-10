@@ -165,7 +165,7 @@ export async function PATCH(
         customerId: task?.customer_id,
         customerName: customer?.full_name,
       },
-      actionUrl: `/tasks/${application.task_id}`,
+      actionUrl: '/tasks/work', // Professional should go to their work page
       deliveryChannel: 'both', // Critical: Telegram + In-app
     });
 

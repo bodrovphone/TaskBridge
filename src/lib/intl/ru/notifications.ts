@@ -17,6 +17,7 @@ export const notifications = {
   'notifications.emptyUnread.title': 'Вы прочитали всё!',
   'notifications.emptyUnread.message': 'Все уведомления прочитаны.',
   'notifications.viewApplication': 'Посмотреть заявку',
+  'notifications.viewMyWork': 'Посмотреть мою работу',
   'notifications.viewTask': 'Посмотреть задачу',
   'notifications.getStarted': 'Начать',
 

@@ -17,6 +17,7 @@ export const notifications = {
   'notifications.emptyUnread.title': "You're all caught up!",
   'notifications.emptyUnread.message': 'All notifications have been read.',
   'notifications.viewApplication': 'View Application',
+  'notifications.viewMyWork': 'View My Work',
   'notifications.viewTask': 'View Task',
   'notifications.getStarted': 'Get Started',
 

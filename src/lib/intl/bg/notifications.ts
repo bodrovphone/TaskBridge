@@ -17,6 +17,7 @@ export const notifications = {
   'notifications.emptyUnread.title': 'Вече сте наваксали!',
   'notifications.emptyUnread.message': 'Всички известия са прочетени.',
   'notifications.viewApplication': 'Виж кандидатурата',
+  'notifications.viewMyWork': 'Виж моята работа',
   'notifications.viewTask': 'Виж задачата',
   'notifications.getStarted': 'Започнете',
 
