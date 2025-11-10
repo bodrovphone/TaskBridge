@@ -372,7 +372,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       {/* Customer Profile - Server Rendered with Client Privacy Toggle */}
       <NextUICard className="bg-white/95 shadow-lg">
        <CardBody className="p-6">
-        <PrivacyToggle customer={task.customer}>
+        <PrivacyToggle customer={task.customer} isOwner={isOwner}>
          <></>
         </PrivacyToggle>
        </CardBody>

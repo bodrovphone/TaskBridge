@@ -23,9 +23,10 @@ interface CustomerInfo {
 interface PrivacyToggleProps {
  customer?: CustomerInfo | null;
  children: ReactNode;
+ isOwner?: boolean;
 }
 
-export default function PrivacyToggle({ customer, children }: PrivacyToggleProps) {
+export default function PrivacyToggle({ customer, children, isOwner = false }: PrivacyToggleProps) {
  const { user, profile } = useAuth();
  const isAuthenticated = !!user && !!profile;
 
@@ -82,7 +83,7 @@ export default function PrivacyToggle({ customer, children }: PrivacyToggleProps
     />
     <div>
      <h4 className="font-semibold text-gray-900">
-      {isAuthenticated
+      {isOwner
        ? displayName
        : displayName.split(' ').map((part, i) => i === 0 ? part : `${part[0]}.`).join(' ')
       }

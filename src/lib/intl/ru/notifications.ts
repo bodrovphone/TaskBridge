@@ -62,7 +62,7 @@ export const notifications = {
   'taskDetail.asap': 'Как можно скорее',
   'taskDetail.negotiable': 'По договоренности',
   'taskDetail.urgency.same_day': 'Срочно - сегодня',
-  'taskDetail.urgency.within_week': 'В течение недели',
+  'taskDetail.urgency.within_week': 'На этой неделе',
   'taskDetail.urgency.flexible': 'Гибкий срок',
   'taskDetail.urgency.default': 'Не указано',
   'taskDetail.status': 'Статус',
