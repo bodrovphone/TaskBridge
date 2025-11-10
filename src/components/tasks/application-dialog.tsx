@@ -116,7 +116,8 @@ export default function ApplicationDialog({
  })
 
  const handleClose = () => {
-  if (!isSubmitting) {
+  // Allow closing if not currently submitting OR if already on success screen
+  if (!isSubmitting || isSuccess) {
    form.reset()
    setIsSuccess(false)
    setApplicationId(null)
@@ -221,7 +222,7 @@ export default function ApplicationDialog({
     header: 'border-b border-gray-200 dark:border-gray-800',
     body: 'overflow-y-auto',
     footer: 'border-t border-gray-200 dark:border-gray-800',
-    closeButton: 'hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-2xl font-bold w-12 h-12 min-w-[48px] min-h-[48px] flex items-center justify-center top-3 right-3 sm:top-4 sm:right-4 rounded-lg transition-colors',
+    closeButton: 'hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-2xl font-bold w-12 h-12 min-w-[48px] min-h-[48px] flex items-center justify-center top-3 right-3 sm:top-4 sm:right-4 rounded-lg transition-colors z-50',
    }}
    motionProps={{
     variants: {
