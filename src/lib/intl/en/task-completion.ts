@@ -70,6 +70,14 @@ export const taskCompletion = {
   'taskCompletion.reject.seriousIssue': 'Experienced fraud or safety concerns?',
   'taskCompletion.reject.reportHint': 'Report serious violations like fraud, scams, or threatening behavior',
 
+  // Toast Notifications
+  'taskCompletion.confirmSuccess': 'Task Completed Successfully!',
+  'taskCompletion.confirmSuccessDescription': 'The professional has been notified. You can leave a review anytime.',
+  'taskCompletion.confirmError': 'Failed to Confirm Completion',
+  'taskCompletion.rejectSuccess': 'Feedback Sent',
+  'taskCompletion.rejectSuccessDescription': 'The professional has been notified and can rework the task.',
+  'taskCompletion.rejectError': 'Failed to Send Feedback',
+
   // Pending Confirmation Banner
   'taskCompletion.pending.waitingCustomer': 'Waiting for Customer Confirmation',
   'taskCompletion.pending.waitingProfessional': 'Waiting for Professional Confirmation',

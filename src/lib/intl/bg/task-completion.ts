@@ -70,6 +70,14 @@ export const taskCompletion = {
   'taskCompletion.reject.seriousIssue': 'Преживяхте измама или проблем с безопасността?',
   'taskCompletion.reject.reportHint': 'Докладвайте сериозни нарушения като измама, заплахи или агресивно поведение',
 
+  // Toast Notifications
+  'taskCompletion.confirmSuccess': 'Задачата е завършена успешно!',
+  'taskCompletion.confirmSuccessDescription': 'Специалистът е уведомен. Можете да оставите отзив по всяко време.',
+  'taskCompletion.confirmError': 'Грешка при потвърждаване',
+  'taskCompletion.rejectSuccess': 'Обратната връзка е изпратена',
+  'taskCompletion.rejectSuccessDescription': 'Специалистът е уведомен и може да преработи задачата.',
+  'taskCompletion.rejectError': 'Грешка при изпращане на обратна връзка',
+
   // Pending Confirmation Banner
   'taskCompletion.pending.waitingCustomer': 'Изчаква потвърждение от клиента',
   'taskCompletion.pending.waitingProfessional': 'Изчаква потвърждение от специалиста',

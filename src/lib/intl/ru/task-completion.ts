@@ -70,6 +70,14 @@ export const taskCompletion = {
   'taskCompletion.reject.seriousIssue': 'Столкнулись с мошенничеством или проблемами безопасности?',
   'taskCompletion.reject.reportHint': 'Сообщите о серьезных нарушениях, таких как мошенничество, угрозы или агрессивное поведение',
 
+  // Toast Notifications
+  'taskCompletion.confirmSuccess': 'Задача успешно завершена!',
+  'taskCompletion.confirmSuccessDescription': 'Специалист уведомлён. Вы можете оставить отзыв в любое время.',
+  'taskCompletion.confirmError': 'Ошибка подтверждения',
+  'taskCompletion.rejectSuccess': 'Отзыв отправлен',
+  'taskCompletion.rejectSuccessDescription': 'Специалист уведомлён и может переделать работу.',
+  'taskCompletion.rejectError': 'Ошибка отправки отзыва',
+
   // Pending Confirmation Banner
   'taskCompletion.pending.waitingCustomer': 'Ожидание подтверждения клиента',
   'taskCompletion.pending.waitingProfessional': 'Ожидание подтверждения специалиста',

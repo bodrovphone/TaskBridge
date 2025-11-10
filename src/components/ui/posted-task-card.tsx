@@ -70,6 +70,7 @@ function PostedTaskCard({
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [showReviewDialog, setShowReviewDialog] = useState(false)
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+  const [isConfirmingCompletion, setIsConfirmingCompletion] = useState(false)
   const [taskHasReview, setTaskHasReview] = useState(hasReview)
 
   // @todo INTEGRATION: Fetch from user's profile/stats
@@ -146,19 +147,80 @@ function PostedTaskCard({
     }
   }
 
-  const handleConfirmComplete = (data?: ConfirmationData) => {
-    console.log('Task confirmed with data:', data)
-    // @todo INTEGRATION: Send confirmation to backend API
-    setShowConfirmDialog(false)
-    // Refresh page or update task status
-    router.refresh()
+  const handleConfirmComplete = async (data?: ConfirmationData) => {
+    setIsConfirmingCompletion(true)
+    try {
+      const response = await fetch(`/api/tasks/${id}/confirm-completion`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'confirm',
+          confirmationData: data
+        })
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to confirm task completion')
+      }
+
+      toast({
+        title: t('taskCompletion.confirmSuccess'),
+        description: t('taskCompletion.confirmSuccessDescription'),
+        variant: 'success'
+      })
+
+      setShowConfirmDialog(false)
+      router.refresh()
+    } catch (error) {
+      console.error('Failed to confirm completion:', error)
+      toast({
+        title: t('taskCompletion.confirmError'),
+        description: error instanceof Error ? error.message : t('common.errorGeneric'),
+        variant: 'destructive'
+      })
+    } finally {
+      setIsConfirmingCompletion(false)
+    }
   }
 
-  const handleRejectComplete = (reason: string, description?: string) => {
-    console.log('Task rejected:', { reason, description })
-    // @todo INTEGRATION: Send rejection to backend API
-    setShowConfirmDialog(false)
-    router.refresh()
+  const handleRejectComplete = async (reason: string, description?: string) => {
+    setIsConfirmingCompletion(true)
+    try {
+      const response = await fetch(`/api/tasks/${id}/confirm-completion`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'reject',
+          rejectionData: { reason, description }
+        })
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to reject task completion')
+      }
+
+      toast({
+        title: t('taskCompletion.rejectSuccess'),
+        description: t('taskCompletion.rejectSuccessDescription'),
+        variant: 'default'
+      })
+
+      setShowConfirmDialog(false)
+      router.refresh()
+    } catch (error) {
+      console.error('Failed to reject completion:', error)
+      toast({
+        title: t('taskCompletion.rejectError'),
+        description: error instanceof Error ? error.message : t('common.errorGeneric'),
+        variant: 'destructive'
+      })
+    } finally {
+      setIsConfirmingCompletion(false)
+    }
   }
 
   const handleCancelTask = (reason: string, description?: string) => {
@@ -508,6 +570,7 @@ function PostedTaskCard({
         }}
         professionalName={acceptedApplication?.professionalName || ''}
         taskTitle={title}
+        isLoading={isConfirmingCompletion}
       />
 
       {/* Report Scam Dialog */}
