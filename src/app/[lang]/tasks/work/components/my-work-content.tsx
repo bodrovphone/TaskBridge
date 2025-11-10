@@ -13,7 +13,7 @@ interface MyWorkContentProps {
   lang: string
 }
 
-type WorkFilter = 'in_progress' | 'pending_completion' | 'completed'
+type WorkFilter = 'in_progress' | 'completed'
 
 export function MyWorkContent({ lang }: MyWorkContentProps) {
   const { t } = useTranslation()
@@ -23,14 +23,12 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const [selectedTaskForCompletion, setSelectedTaskForCompletion] = useState<WorkTask | null>(null)
 
   // Fetch accepted applications from API
-  const { tasks: workTasks, isLoading, error } = useWorkTasks()
+  const { tasks: workTasks, isLoading, error, refetch } = useWorkTasks()
 
   const filteredTasks = workTasks.filter(task => {
     switch (selectedFilter) {
       case 'in_progress':
         return task.task.status === 'in_progress'
-      case 'pending_completion':
-        return task.task.status === 'pending_professional_confirmation'
       case 'completed':
         return task.task.status === 'completed'
       default:
@@ -43,8 +41,6 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
       switch (filter) {
         case 'in_progress':
           return task.task.status === 'in_progress'
-        case 'pending_completion':
-          return task.task.status === 'pending_professional_confirmation'
         case 'completed':
           return task.task.status === 'completed'
         default:
@@ -83,12 +79,12 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
         throw new Error(error.error || 'Failed to mark task complete')
       }
 
-      // Success! Close dialog and refresh page
+      // Success! Close dialog and refetch data
       setIsMarkCompletedDialogOpen(false)
       setSelectedTaskForCompletion(null)
 
-      // Refresh to show updated status
-      router.refresh()
+      // Refetch tasks to show updated status
+      await refetch()
 
     } catch (error: any) {
       console.error('Error marking task complete:', error)
@@ -101,8 +97,6 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
     switch (filter) {
       case 'in_progress':
         return 'inProgress'
-      case 'pending_completion':
-        return 'pendingCompletion'
       case 'completed':
         return 'completed'
       default:
@@ -181,16 +175,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('myWork.filter.inProgress')}</span>
-                    <Chip size="sm" variant="flat" color="primary">{getTaskCountByFilter('in_progress')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
-                key="pending_completion"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('myWork.filter.pendingCompletion')}</span>
-                    <Chip size="sm" variant="flat" color="warning">{getTaskCountByFilter('pending_completion')}</Chip>
+                    <Chip size="sm" className="bg-blue-600 text-white">{getTaskCountByFilter('in_progress')}</Chip>
                   </div>
                 }
               />
@@ -199,7 +184,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                 title={
                   <div className="flex items-center gap-2">
                     <span>{t('myWork.filter.completed')}</span>
-                    <Chip size="sm" variant="flat" color="success">{getTaskCountByFilter('completed')}</Chip>
+                    <Chip size="sm" className="bg-green-600 text-white">{getTaskCountByFilter('completed')}</Chip>
                   </div>
                 }
               />
@@ -347,7 +332,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                       {t('myApplications.viewTask')}
                     </Button>
                     <div className="flex gap-2">
-                      {selectedFilter === 'in_progress' && (
+                      {selectedFilter === 'in_progress' && task.task.status === 'in_progress' && (
                         <Button
                           size="sm"
                           color="success"
@@ -357,22 +342,14 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                           {t('myApplications.markCompleted')}
                         </Button>
                       )}
-                      {selectedFilter === 'pending_completion' && (
-                        <Button
-                          size="sm"
-                          color="success"
-                          onPress={() => console.log('Confirm completion:', task.id)}
-                        >
-                          {t('myWork.confirmCompletion')}
-                        </Button>
-                      )}
                       {selectedFilter === 'completed' && (
                         <Button
                           size="sm"
+                          color="warning"
                           variant="flat"
-                          onPress={() => console.log('View review:', task.id)}
+                          onPress={() => console.log('Leave review:', task.id)}
                         >
-                          {t('myWork.viewReview')}
+                          {t('myWork.leaveReview')}
                         </Button>
                       )}
                     </div>

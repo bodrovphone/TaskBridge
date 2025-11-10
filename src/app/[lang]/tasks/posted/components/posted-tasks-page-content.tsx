@@ -16,7 +16,7 @@ interface PostedTasksPageContentProps {
   lang: string
 }
 
-type TaskStatus = 'all' | 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
+type TaskStatus = 'all' | 'open' | 'in_progress' | 'completed' | 'cancelled'
 
 interface PostedTask {
   id: string
@@ -26,7 +26,7 @@ interface PostedTask {
   subcategory?: string
   budget: number
   budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
-  status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
+  status: 'open' | 'in_progress' | 'completed' | 'cancelled'
   applicationsCount: number
   acceptedApplication?: {
     professionalId: string

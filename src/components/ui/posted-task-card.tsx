@@ -26,7 +26,7 @@ interface PostedTaskCardProps {
   subcategory?: string
   budget: number
   budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
-  status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
+  status: 'open' | 'in_progress' | 'completed' | 'cancelled'
   applicationsCount: number
   acceptedApplication?: {
     professionalId: string
@@ -119,8 +119,6 @@ function PostedTaskCard({
         return 'primary'
       case 'in_progress':
         return 'warning'
-      case 'pending_customer_confirmation':
-        return 'secondary'
       case 'completed':
         return 'success'
       case 'cancelled':
@@ -136,8 +134,6 @@ function PostedTaskCard({
         return t('postedTasks.filter.open')
       case 'in_progress':
         return t('postedTasks.filter.inProgress')
-      case 'pending_customer_confirmation':
-        return t('postedTasks.filter.awaitingConfirmation')
       case 'completed':
         return t('postedTasks.filter.completed')
       case 'cancelled':
@@ -150,33 +146,33 @@ function PostedTaskCard({
   const handleConfirmComplete = async (data?: ConfirmationData) => {
     setIsConfirmingCompletion(true)
     try {
-      const response = await fetch(`/api/tasks/${id}/confirm-completion`, {
-        method: 'POST',
+      const response = await fetch(`/api/tasks/${id}/mark-complete`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'confirm',
-          confirmationData: data
+          completionNotes: data?.notes,
+          completionPhotos: data?.photos
         })
       })
 
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to confirm task completion')
+        throw new Error(result.error || 'Failed to mark task complete')
       }
 
       toast({
-        title: t('taskCompletion.confirmSuccess'),
-        description: t('taskCompletion.confirmSuccessDescription'),
+        title: t('postedTasks.markCompleteSuccess'),
+        description: t('postedTasks.markCompleteSuccessDescription'),
         variant: 'success'
       })
 
       setShowConfirmDialog(false)
       router.refresh()
     } catch (error) {
-      console.error('Failed to confirm completion:', error)
+      console.error('Failed to mark task complete:', error)
       toast({
-        title: t('taskCompletion.confirmError'),
+        title: t('postedTasks.markCompleteError'),
         description: error instanceof Error ? error.message : t('common.errorGeneric'),
         variant: 'destructive'
       })
@@ -382,21 +378,6 @@ function PostedTaskCard({
 
         {/* Status-specific banners - fixed height with min-h to prevent layout shift */}
         <div className="min-h-[52px] mb-4">
-          {status === 'pending_customer_confirmation' && acceptedApplication && (
-            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-3">
-              <div className="flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-yellow-900">
-                    {t('postedTasks.awaitingYourConfirmation')}
-                  </p>
-                  <p className="text-xs text-yellow-700 mt-0.5">
-                    {acceptedApplication.professionalName} {t('postedTasks.markedComplete')}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
           {status === 'in_progress' && acceptedApplication && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <p className="text-sm text-green-800">
@@ -408,35 +389,10 @@ function PostedTaskCard({
         </div>
 
         {/* Action buttons */}
-        <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-auto ${(status === 'open' || status === 'pending_customer_confirmation') ? 'sm:justify-start' : ''}`}>
-          {status === 'pending_customer_confirmation' ? (
+        <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-auto ${status === 'open' ? 'sm:justify-start' : ''}`}>
+          {status === 'in_progress' ? (
             <>
-              {/* Awaiting Confirmation - Confirm button */}
-              <Button
-                size="sm"
-                color="success"
-                startContent={<CheckCircle className="w-4 h-4" />}
-                onPress={() => setShowConfirmDialog(true)}
-                className="w-full sm:w-auto font-semibold py-6"
-              >
-                {t('taskCompletion.confirmCompletion')}
-              </Button>
-              {acceptedApplication && (
-                <Button
-                  size="sm"
-                  variant="light"
-                  color="danger"
-                  startContent={<ShieldAlert className="w-4 h-4" />}
-                  onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:w-auto py-6"
-                >
-                  {t('postedTasks.reportIssue')}
-                </Button>
-              )}
-            </>
-          ) : status === 'in_progress' ? (
-            <>
-              {/* In Progress - View Details + Cancel Task + Report */}
+              {/* In Progress - View Details + Mark Complete + Report */}
               <Button
                 size="sm"
                 variant="flat"
@@ -447,16 +403,18 @@ function PostedTaskCard({
               >
                 {t('postedTasks.viewDetails')}
               </Button>
-              <Button
-                size="sm"
-                variant="flat"
-                color="default"
-                startContent={<XCircle className="w-4 h-4" />}
-                onPress={() => setShowCancelDialog(true)}
-                className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 py-6"
-              >
-                {t('postedTasks.cancelTask')}
-              </Button>
+              {acceptedApplication && (
+                <Button
+                  size="sm"
+                  color="success"
+                  variant="bordered"
+                  startContent={<CheckCircle className="w-4 h-4" />}
+                  onPress={() => setShowConfirmDialog(true)}
+                  className="w-full sm:w-auto font-semibold py-6"
+                >
+                  {t('postedTasks.markComplete')}
+                </Button>
+              )}
               {acceptedApplication && (
                 <Button
                   size="sm"

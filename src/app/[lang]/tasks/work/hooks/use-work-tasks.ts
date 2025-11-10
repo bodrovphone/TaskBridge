@@ -25,7 +25,7 @@ export interface WorkTask {
       city: string
       neighborhood: string
     }
-    status: 'in_progress' | 'pending_professional_confirmation' | 'completed'
+    status: 'in_progress' | 'completed'
   }
 }
 
@@ -80,13 +80,7 @@ export function useWorkTasks() {
               city: app.task.city || '',
               neighborhood: app.task.neighborhood || '',
             },
-            status: app.task.status === 'in_progress'
-              ? 'in_progress'
-              : app.task.status === 'pending_professional_confirmation'
-              ? 'pending_professional_confirmation'
-              : app.task.status === 'completed'
-              ? 'completed'
-              : 'in_progress', // Default fallback
+            status: app.task.status === 'completed' ? 'completed' : 'in_progress'
           },
         }))
 
@@ -103,9 +97,53 @@ export function useWorkTasks() {
   }, [user])
 
   const refetch = async () => {
-    setIsLoading(true)
-    // Re-trigger the effect by forcing a state change
-    setTasks([])
+    if (!user) return
+
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const response = await fetch('/api/applications?status=accepted')
+      if (!response.ok) {
+        throw new Error('Failed to fetch work tasks')
+      }
+
+      const data = await response.json()
+      const workTasks: WorkTask[] = (data.applications || []).map((app: any) => ({
+        id: app.id,
+        taskId: app.task.id,
+        taskTitle: app.task.title,
+        taskDescription: app.task.description,
+        customer: {
+          name: app.task.customer?.full_name || 'Unknown',
+          avatar: app.task.customer?.avatar_url,
+          phone: app.task.customer?.phone,
+          email: app.task.customer?.email,
+        },
+        agreedPrice: app.proposed_price_bgn || 0,
+        timeline: app.estimated_duration_hours
+          ? `${app.estimated_duration_hours} hours`
+          : 'Not specified',
+        startDate: app.responded_at ? new Date(app.responded_at) : undefined,
+        completedAt: undefined,
+        task: {
+          deadline: undefined,
+          category: app.task.category || 'general',
+          location: {
+            city: app.task.city || '',
+            neighborhood: app.task.neighborhood || '',
+          },
+          status: app.task.status === 'completed' ? 'completed' : 'in_progress',
+        },
+      }))
+
+      setTasks(workTasks)
+    } catch (err: any) {
+      console.error('Error refetching work tasks:', err)
+      setError(err.message || 'Failed to reload work tasks')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return {

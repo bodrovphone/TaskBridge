@@ -12,9 +12,9 @@ interface RouteContext {
 /**
  * PATCH /api/tasks/[id]/mark-complete
  *
- * Allows professional to mark an in-progress task as completed.
- * This triggers a status change to 'pending_customer_confirmation' and sends
- * notifications to the customer (in-app + Telegram if connected).
+ * Allows either professional or customer to mark a task as completed.
+ * This triggers a status change to 'completed' and sends notifications
+ * to the other party (in-app + Telegram if connected).
  */
 export async function PATCH(
   request: NextRequest,
@@ -55,10 +55,13 @@ export async function PATCH(
       )
     }
 
-    // Authorization: User must be the assigned professional
-    if (task.selected_professional_id !== user.id) {
+    // Authorization: User must be either the customer or assigned professional
+    const isCustomer = task.customer_id === user.id
+    const isProfessional = task.selected_professional_id === user.id
+
+    if (!isCustomer && !isProfessional) {
       return NextResponse.json(
-        { error: 'Only the assigned professional can mark this task as complete' },
+        { error: 'Only the customer or assigned professional can mark this task as complete' },
         { status: 403 }
       )
     }
@@ -84,13 +87,15 @@ export async function PATCH(
       .eq('id', task.customer_id)
       .single()
 
-    // Update task status
+    // Update task status to completed
+    const now = new Date().toISOString()
     const { data: updatedTask, error: updateError } = await adminClient
       .from('tasks')
       .update({
-        status: 'pending_customer_confirmation',
-        completed_by_professional_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        status: 'completed',
+        completed_at: now,
+        completed_by_professional_at: isProfessional ? now : undefined,
+        updated_at: now
       })
       .eq('id', taskId)
       .select()
@@ -104,36 +109,41 @@ export async function PATCH(
       )
     }
 
-    // Send notification to customer (in-app + Telegram if connected)
-    // Customer should go to their posted tasks page to review and confirm
+    // Send notification to the other party (customer or professional)
+    const recipientId = isProfessional ? task.customer_id : task.selected_professional_id
+    const recipientUser = isProfessional ? customer : professional
+    const completedByName = isProfessional
+      ? professional?.full_name || 'The professional'
+      : customer?.full_name || 'The customer'
+
     const notificationResult = await createNotification({
-      userId: task.customer_id,
+      userId: recipientId!,
       type: 'task_completed',
       templateData: {
         taskTitle: task.title,
-        professionalName: professional?.full_name || 'The professional',
+        professionalName: completedByName,
       },
       metadata: {
         taskId: task.id,
-        professionalId: user.id,
-        completedAt: new Date().toISOString(),
+        completedBy: user.id,
+        completedAt: now,
         completionNotes,
         completionPhotos,
       },
-      actionUrl: '/tasks/posted', // Customer goes to posted tasks page to review
+      actionUrl: isProfessional ? '/tasks/posted' : '/tasks/work', // Customer → posted tasks, Professional → my work
       deliveryChannel: 'both', // Critical: Send both in-app and Telegram
     })
 
     // Log the completion event
-    console.log('[Tasks] Professional marked task complete:', {
+    console.log('[Tasks] Task marked complete:', {
       taskId: task.id,
       taskTitle: task.title,
-      professionalId: user.id,
-      customerId: task.customer_id,
+      completedBy: isProfessional ? 'professional' : 'customer',
+      completedById: user.id,
       notificationSent: notificationResult.success,
       notificationChannels: {
         inApp: true,
-        telegram: !!customer?.telegram_id,
+        telegram: !!recipientUser?.telegram_id,
         email: false // Not yet implemented
       }
     })
@@ -145,11 +155,11 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: 'Task marked as complete. Waiting for customer confirmation.',
+      message: 'Task marked as complete successfully.',
       task: {
         id: updatedTask.id,
         status: updatedTask.status,
-        completed_by_professional_at: updatedTask.completed_by_professional_at
+        completed_at: updatedTask.completed_at
       }
     })
 
