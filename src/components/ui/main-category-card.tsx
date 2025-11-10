@@ -221,8 +221,7 @@ function MainCategoryCard({
          color="primary"
          variant="flat"
          startContent={<Briefcase className="w-4 h-4" />}
-         onPress={(e) => {
-          e.stopPropagation()
+         onPress={() => {
           const subcategorySlugs = subcategories.map(s => s.value).join(',')
           router.push(`/${lang}/professionals?category=${categorySlug}&subcategories=${subcategorySlugs}`)
          }}
@@ -236,8 +235,7 @@ function MainCategoryCard({
          color="secondary"
          variant="flat"
          startContent={<Search className="w-4 h-4" />}
-         onPress={(e) => {
-          e.stopPropagation()
+         onPress={() => {
           const subcategorySlugs = subcategories.map(s => s.value).join(',')
           router.push(`/${lang}/browse-tasks?category=${categorySlug}&subcategories=${subcategorySlugs}`)
          }}
@@ -251,8 +249,7 @@ function MainCategoryCard({
          color="default"
          variant="bordered"
          isIconOnly
-         onPress={(e) => {
-          e.stopPropagation()
+         onPress={() => {
           setIsSuggestionModalOpen(true)
          }}
          className="w-9 h-9"
