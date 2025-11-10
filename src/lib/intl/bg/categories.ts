@@ -101,7 +101,7 @@ export const categories = {
   'categories.main.petServices.title': 'Услуги за животни',
   'categories.main.petServices.description': 'Грижа за кучета, котки и други домашни любимци',
   'categories.main.beautyHealth.title': 'Красота и здраве',
-  'categories.main.beautyHealth.description': 'Масажи, маникюр, козметология',
+  'categories.main.beautyHealth.description': 'Масажи, маникюр, козметология, психология',
   'categories.main.autoRepair.title': 'Ремонт на автомобили',
   'categories.main.autoRepair.description': 'Диагностика, поддръжка и ремонт на автомобили',
   'categories.main.digitalMarketing.title': 'Дигитален маркетинг',
@@ -279,6 +279,7 @@ export const categories = {
   'categories.sub.cosmetology': 'Козметология',
   'categories.sub.lashCare': 'Грижа за мигли',
   'categories.sub.browCare': 'Грижа за вежди',
+  'categories.sub.psychologist': 'Психолог',
 
   // Event Planning
   'categories.sub.eventHost': 'Водещ на събития',

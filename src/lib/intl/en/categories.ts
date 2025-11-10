@@ -101,7 +101,7 @@ export const categories = {
   'categories.main.petServices.title': 'Pet Services',
   'categories.main.petServices.description': 'Care for dogs, cats and other pets',
   'categories.main.beautyHealth.title': 'Beauty & Health',
-  'categories.main.beautyHealth.description': 'Massage, manicure, cosmetology',
+  'categories.main.beautyHealth.description': 'Massage, manicure, cosmetology, psychology',
   'categories.main.autoRepair.title': 'Auto Repair',
   'categories.main.autoRepair.description': 'Diagnostics, maintenance and car repair',
   'categories.main.digitalMarketing.title': 'Digital Marketing',
@@ -279,6 +279,7 @@ export const categories = {
   'categories.sub.cosmetology': 'Cosmetology',
   'categories.sub.lashCare': 'Lash Care',
   'categories.sub.browCare': 'Brow Care',
+  'categories.sub.psychologist': 'Psychologist',
 
   // Event Planning
   'categories.sub.eventHost': 'Event Host',
