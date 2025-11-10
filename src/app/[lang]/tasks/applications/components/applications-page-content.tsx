@@ -484,8 +484,6 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
               </Card>
             ))}
             </div>
-
-            {/* @todo FEATURE: Mock applications for UI reference - removed because mockApplications variable was not defined */}
           </div>
         )}
       </div>
