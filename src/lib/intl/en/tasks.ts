@@ -151,6 +151,8 @@ export const tasks = {
   'createTask.details.titleLabel': 'Task Title',
   'createTask.details.titlePlaceholder': 'What do you need done?',
   'createTask.details.titleHelp': 'Be specific and clear (e.g., "Professional house cleaning for 2-bedroom apartment")',
+  'createTask.details.titleTooltipTitle': 'Write a clear task title',
+  'createTask.details.titleTooltipContent': 'Be specific about what you need. Good examples: "Fix leaking kitchen faucet", "Professional apartment cleaning", "Website homepage redesign"',
   'createTask.details.descriptionLabel': 'Description',
   'createTask.details.descriptionPlaceholder': 'Describe your task in detail...',
   'createTask.details.descriptionHelp': 'Include all important details: what needs to be done, any special requirements, tools/materials needed, etc.',
@@ -180,6 +182,7 @@ export const tasks = {
   'createTask.budget.minLabel': 'Minimum',
   'createTask.budget.maxLabel': 'Maximum',
   'createTask.budget.notSure': "I'm not sure about the budget",
+  'createTask.budget.mustBePositive': 'Budget must be positive',
 
   // Timeline Section
   'createTask.timeline.title': 'When do you need this done?',
@@ -204,7 +207,7 @@ export const tasks = {
   'createTask.photos.maxSize': '5MB maximum',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Uploading photo...',
-  'createTask.photos.fileTooLarge': 'File is too large. Maximum size is 5MB',
+  'createTask.photos.fileTooLarge': 'Image is still too large after optimization (max 5MB). This image will not be uploaded. You can change it now or edit the task later.',
   'createTask.photos.invalidType': 'File is not a supported image format',
   'createTask.photos.uploadError': 'Failed to upload photos. Please try again.',
   'createTask.photos.optimizing': 'Optimizing image for faster upload...',

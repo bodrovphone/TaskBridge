@@ -121,6 +121,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
    isOpen={isModalOpen}
    onClose={closeModal}
    size="full"
+   hideCloseButton={true}
    className="bg-black/95"
    classNames={{
     backdrop: "bg-black/80",
@@ -130,13 +131,13 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
    <ModalContent>
     {() => (
      <>
-      {/* Close button */}
+      {/* Close button - bigger for mobile UX */}
       <button
        onClick={closeModal}
-       className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+       className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors"
        aria-label="Close"
       >
-       <X size={24} />
+       <X size={32} />
       </button>
 
       <ModalBody className="p-0 flex items-center justify-center">

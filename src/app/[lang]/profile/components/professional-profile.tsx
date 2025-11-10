@@ -9,7 +9,6 @@ import { ProfessionalIdentitySection } from './sections/professional-identity-se
 import { ServiceCategoriesSection } from './sections/service-categories-section'
 import { AvailabilitySection } from './sections/availability-section'
 import { BusinessSettingsSection } from './sections/business-settings-section'
-import { StatisticsSection } from './sections/statistics-section'
 import { PersonalInfoSection } from './shared/personal-info-section'
 import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
 
@@ -218,15 +217,6 @@ export function ProfessionalProfile({ profile, onProfileUpdate, onSettingsOpen }
           />
         </CardBody>
       </Card> */}
-
-      {/* 6. Statistics (Read-Only) */}
-      <StatisticsSection
-        completedTasks={profile.tasksCompleted}
-        averageRating={profile.averageRating || 0}
-        totalEarnings={profile.totalEarningsBgn}
-        profileViews={profile.profileViews}
-        memberSince={new Date(profile.createdAt).toISOString().split('T')[0]}
-      />
     </div>
   )
 }

@@ -152,6 +152,8 @@ export const tasks = {
   'createTask.details.titleLabel': 'Название задачи',
   'createTask.details.titlePlaceholder': 'напр. Нужен сантехник для устранения течи на кухне',
   'createTask.details.titleHelp': 'Будьте конкретны и ясны (например, "Профессиональная уборка дома для квартиры с 2 спальнями")',
+  'createTask.details.titleTooltipTitle': 'Напишите четкое название',
+  'createTask.details.titleTooltipContent': 'Будьте конкретны в том, что вам нужно. Хорошие примеры: "Устранение течи на кухне", "Профессиональная уборка квартиры", "Редизайн главной страницы сайта"',
   'createTask.details.descriptionLabel': 'Описание',
   'createTask.details.descriptionPlaceholder': 'Опишите что нужно сделать, когда и какие особые требования у вас есть...',
   'createTask.details.descriptionHelp': 'Включите все важные детали: что нужно сделать, особые требования, необходимые инструменты/материалы и т.д.',
@@ -181,6 +183,7 @@ export const tasks = {
   'createTask.budget.minLabel': 'Минимум',
   'createTask.budget.maxLabel': 'Максимум',
   'createTask.budget.notSure': 'Не уверен в бюджете',
+  'createTask.budget.mustBePositive': 'Бюджет должен быть положительным',
 
   // Timeline Section
   'createTask.timeline.title': 'Когда вам это нужно?',
@@ -205,7 +208,7 @@ export const tasks = {
   'createTask.photos.maxSize': 'Максимум 5MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Загрузка фотографии...',
-  'createTask.photos.fileTooLarge': 'Файл слишком большой. Максимальный размер 5MB',
+  'createTask.photos.fileTooLarge': 'Изображение все еще слишком большое после оптимизации (макс. 5MB). Это изображение не будет загружено. Вы можете изменить его сейчас или отредактировать задачу позже.',
   'createTask.photos.invalidType': 'Файл не является поддерживаемым форматом изображения',
   'createTask.photos.uploadError': 'Не удалось загрузить фотографии. Пожалуйста, попробуйте еще раз.',
   'createTask.photos.optimizing': 'Оптимизация изображения для более быстрой загрузки...',

@@ -152,6 +152,8 @@ export const tasks = {
   'createTask.details.titleLabel': 'Заглавие на задачата',
   'createTask.details.titlePlaceholder': 'От какво се нуждаете?',
   'createTask.details.titleHelp': 'Бъдете конкретни и ясни (например "Професионално почистване на 2-стаен апартамент")',
+  'createTask.details.titleTooltipTitle': 'Напишете ясно заглавие',
+  'createTask.details.titleTooltipContent': 'Бъдете конкретни за това, от което се нуждаете. Добри примери: "Поправка на протичаща кухненска чешма", "Професионално почистване на апартамент", "Редизайн на начална страница на уебсайт"',
   'createTask.details.descriptionLabel': 'Описание',
   'createTask.details.descriptionPlaceholder': 'Опишете задачата си подробно...',
   'createTask.details.descriptionHelp': 'Включете всички важни детайли: какво трябва да бъде направено, специални изисквания, необходими инструменти/материали и т.н.',
@@ -181,6 +183,7 @@ export const tasks = {
   'createTask.budget.minLabel': 'Минимум',
   'createTask.budget.maxLabel': 'Максимум',
   'createTask.budget.notSure': 'Не съм сигурен за бюджета',
+  'createTask.budget.mustBePositive': 'Бюджетът трябва да бъде положителен',
 
   // Timeline Section
   'createTask.timeline.title': 'Кога ви трябва това?',
@@ -205,7 +208,7 @@ export const tasks = {
   'createTask.photos.maxSize': 'Максимум 5MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Качване на снимка...',
-  'createTask.photos.fileTooLarge': 'Файлът е твърде голям. Максималният размер е 5MB',
+  'createTask.photos.fileTooLarge': 'Изображението е все още твърде голямо след оптимизация (макс. 5MB). Тази снимка няма да бъде качена. Можете да я промените сега или да редактирате задачата по-късно.',
   'createTask.photos.invalidType': 'Файлът не е поддържан формат на изображение',
   'createTask.photos.uploadError': 'Неуспешно качване на снимки. Моля, опитайте отново.',
   'createTask.photos.optimizing': 'Оптимизиране на изображението за по-бързо качване...',

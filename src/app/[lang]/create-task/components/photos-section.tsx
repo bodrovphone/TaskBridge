@@ -52,28 +52,11 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
    return
   }
 
-  // Check file size (5MB max)
-  const MAX_SIZE = 5 * 1024 * 1024 // 5MB
-  const isOversized = file.size > MAX_SIZE
-  if (isOversized) {
-   setImageError(t('createTask.photos.fileTooLarge', `Image is too large (max 5MB). This image will not be uploaded. You can change it now or edit the task later.`))
-   // Show preview even for oversized files, but don't compress/upload
-   setOriginalSize(file.size)
-   const reader = new FileReader()
-   reader.onload = (e) => {
-     setPhotoPreview(e.target?.result as string)
-   }
-   reader.readAsDataURL(file)
-   form.setFieldValue('photoFile', null)
-   form.setFieldValue('imageOversized', true)
-   return
-  }
-
   // Store original file
   setPhoto(file)
   setOriginalSize(file.size)
 
-  // Start compression
+  // Start compression - optimize BEFORE validation
   setIsCompressing(true)
   setCompressionProgress(0)
 
@@ -95,7 +78,27 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
     setCompressedSize(result.compressedSize)
     setSavingsPercent(result.savingsPercent)
 
-    // Create preview from compressed blob
+    // NOW validate the compressed file size (5MB max)
+    const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+    const isOversized = result.compressedSize > MAX_SIZE
+
+    if (isOversized) {
+      // Even after compression, file is still too large
+      setImageError(t('createTask.photos.fileTooLarge', `Image is still too large after optimization (max 5MB). This image will not be uploaded. You can change it now or edit the task later.`))
+
+      // Show preview but don't store for upload
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setPhotoPreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(result.blob)
+
+      form.setFieldValue('photoFile', null)
+      form.setFieldValue('imageOversized', true)
+      return
+    }
+
+    // File is valid after compression - create preview and store
     const reader = new FileReader()
     reader.onload = (e) => {
       setPhotoPreview(e.target?.result as string)

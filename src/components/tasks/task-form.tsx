@@ -68,6 +68,7 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
   // Refs for scrolling to sections
   const categoryRef = useRef<HTMLDivElement>(null)
   const detailsRef = useRef<HTMLDivElement>(null)
+  const detailsSectionRef = useRef<{ focusTitleInput: () => void }>(null)
   const locationRef = useRef<HTMLDivElement>(null)
   const budgetRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
@@ -240,6 +241,12 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
     if (newCategory && mode === 'edit') {
       setShowCategoryPicker(false)
     }
+    // In create mode, focus the title input after category selection
+    if (newCategory && mode === 'create') {
+      setTimeout(() => {
+        detailsSectionRef.current?.focusTitleInput()
+      }, 300)
+    }
   }
 
   // Handle category reset (edit mode only)
@@ -366,7 +373,7 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
             <>
               {/* Task Details */}
               <div ref={detailsRef}>
-                <TaskDetailsSection form={form} />
+                <TaskDetailsSection ref={detailsSectionRef} form={form} />
               </div>
 
               {/* Location */}

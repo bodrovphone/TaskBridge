@@ -63,6 +63,7 @@ export default function UserAvatarDropdown({
     break
    case 'logout':
     signOut()
+    router.push(`/${lang}`)
     break
   }
  }

@@ -1,15 +1,47 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Input, Textarea, Card, CardBody } from '@nextui-org/react'
+import { Input, Textarea, Card, CardBody, Tooltip } from '@nextui-org/react'
 import { FileText } from 'lucide-react'
+import { useRef, useState, useImperativeHandle, forwardRef } from 'react'
 
 interface TaskDetailsSectionProps {
  form: any
 }
 
-export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
- const { t } = useTranslation()
+export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, TaskDetailsSectionProps>(
+ function TaskDetailsSection({ form }, ref) {
+  const { t } = useTranslation()
+  const titleInputRef = useRef<HTMLInputElement>(null)
+  const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null)
+  const [showTitleTooltip, setShowTitleTooltip] = useState(false)
+
+  // Expose focusTitleInput method to parent
+  useImperativeHandle(ref, () => ({
+   focusTitleInput: () => {
+    setShowTitleTooltip(true)
+    setTimeout(() => {
+     titleInputRef.current?.focus()
+    }, 100)
+   }
+  }))
+
+  // Handle title input changes
+  const handleTitleChange = (value: string, fieldHandleChange: (val: string) => void) => {
+   // Hide tooltip after first character is typed
+   if (value.length > 0 && showTitleTooltip) {
+    setShowTitleTooltip(false)
+   }
+   fieldHandleChange(value)
+  }
+
+  // Handle Enter key to move to description
+  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
+   if (e.key === 'Enter') {
+    e.preventDefault()
+    descriptionTextareaRef.current?.focus()
+   }
+  }
 
  return (
   <Card className="shadow-md border border-gray-100">
@@ -63,19 +95,41 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
         {(field.state.value || '').length}/200
        </span>
       </div>
-      <Input
-       id="task-title"
-       placeholder={t('createTask.details.titlePlaceholder', 'What do you need done?')}
-       description={t('createTask.details.titleHelp', 'Be specific and clear (e.g., "Professional house cleaning for 2-bedroom apartment")')}
-       value={field.state.value || ''}
-       onValueChange={field.handleChange}
-       onBlur={field.handleBlur}
-       isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
-       errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
-       classNames={{
-        input: 'text-base',
-       }}
-      />
+      <div className="relative">
+       {/* Comic-style speech bubble tooltip */}
+       {showTitleTooltip && (
+        <div className="absolute bottom-full left-4 mb-3 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+         {/* Tooltip content */}
+         <div className="bg-white text-gray-900 shadow-2xl border-2 border-primary/30 rounded-xl px-4 py-3 max-w-md">
+          <div className="text-sm font-bold mb-2 text-gray-900">{t('createTask.details.titleTooltipTitle', 'Write a clear task title')}</div>
+          <div className="text-xs text-gray-700 leading-relaxed">{t('createTask.details.titleTooltipContent', 'Be specific about what you need. Good examples: "Fix leaking kitchen faucet", "Professional apartment cleaning", "Website homepage redesign"')}</div>
+         </div>
+         {/* Comic-style tail/pointer */}
+         <div className="absolute -bottom-[1px] left-8">
+          {/* Border triangle (blue outline) */}
+          <div className="absolute top-0 left-0 w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[14px] border-t-primary/30"></div>
+          {/* Main triangle (white fill) */}
+          <div className="absolute -top-[1px] left-[1px] w-0 h-0 border-l-[13px] border-l-transparent border-r-[13px] border-r-transparent border-t-[13px] border-t-white"></div>
+         </div>
+        </div>
+       )}
+
+       <Input
+        id="task-title"
+        ref={titleInputRef}
+        placeholder={t('createTask.details.titlePlaceholder', 'What do you need done?')}
+        description={t('createTask.details.titleHelp', 'Be specific and clear (e.g., "Professional house cleaning for 2-bedroom apartment")')}
+        value={field.state.value || ''}
+        onValueChange={(val) => handleTitleChange(val, field.handleChange)}
+        onBlur={field.handleBlur}
+        onKeyDown={handleTitleKeyDown}
+        isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+        errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+        classNames={{
+         input: 'text-base',
+        }}
+       />
+      </div>
      </div>
     )}
    </form.Field>
@@ -116,6 +170,7 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
       </div>
       <Textarea
        id="task-description"
+       ref={descriptionTextareaRef}
        placeholder={t('createTask.details.descriptionPlaceholder', 'Describe your task in detail...')}
        description={t('createTask.details.descriptionHelp', 'Include all important details: what needs to be done, any special requirements, tools/materials needed, etc.')}
        value={field.state.value || ''}
@@ -174,4 +229,4 @@ export function TaskDetailsSection({ form }: TaskDetailsSectionProps) {
    </CardBody>
   </Card>
  )
-}
+})

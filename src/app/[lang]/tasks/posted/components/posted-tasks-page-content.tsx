@@ -181,7 +181,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
       <div className="container mx-auto px-4 py-8 max-w-6xl relative z-10">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
                 {t('postedTasks.title')}
@@ -193,7 +193,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               size="lg"
               startContent={<Plus className="w-5 h-5" />}
               onPress={handleCreateTask}
-              className="shadow-lg"
+              className="shadow-lg w-full md:w-auto"
             >
               {t('postedTasks.createTask')}
             </Button>
