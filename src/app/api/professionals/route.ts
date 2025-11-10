@@ -3,6 +3,7 @@
  * GET /api/professionals - Search and list professionals
  *
  * Query Parameters:
+ * - featured: 'true' - Get high-quality featured professionals (20 with diversity)
  * - category: Service category slug (e.g., 'plumbing', 'house-cleaning')
  * - city: City filter
  * - neighborhood: Neighborhood filter (optional)
@@ -38,6 +39,44 @@ export async function GET(request: NextRequest) {
   try {
     // 1. Parse URL search params
     const { searchParams } = new URL(request.url)
+
+    // Check if this is a featured professionals request
+    const isFeaturedRequest = searchParams.get('featured') === 'true'
+
+    // 2. Call service layer
+    const professionalService = new ProfessionalService()
+
+    if (isFeaturedRequest) {
+      // Handle featured professionals request (ignores all filters)
+      const result = await professionalService.getFeaturedProfessionals()
+
+      if (!result.success) {
+        return NextResponse.json(
+          { error: result.error?.message || 'Failed to fetch featured professionals' },
+          { status: 500 }
+        )
+      }
+
+      // Return featured professionals with simplified pagination
+      return NextResponse.json({
+        professionals: result.data,
+        pagination: {
+          page: 1,
+          limit: result.data.length,
+          total: result.data.length,
+          totalPages: 1,
+          hasNext: false,
+          hasPrevious: false
+        }
+      }, {
+        status: 200,
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600', // Cache longer for featured
+        },
+      })
+    }
+
+    // Handle regular professionals request with filters
     const params: Record<string, string | undefined> = {
       category: searchParams.get('category') || undefined,
       city: searchParams.get('city') || undefined,
@@ -50,8 +89,6 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get('limit') || undefined,
     }
 
-    // 2. Call service layer
-    const professionalService = new ProfessionalService()
     const result = await professionalService.getProfessionals(params)
 
     // 3. Handle errors

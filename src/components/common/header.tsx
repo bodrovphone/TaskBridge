@@ -115,15 +115,14 @@ function Header() {
    <Navbar
     maxWidth="full"
     position="sticky"
-    className={`bg-white shadow-sm border-b border-gray-100 z-[${Z_INDEX.NAVBAR}]`}
+    className="bg-white shadow-sm border-b border-gray-100"
+    style={{ zIndex: Z_INDEX.NAVBAR }}
     height="5rem"
     isBordered
     isMenuOpen={isMenuOpen}
     onMenuOpenChange={handleMenuOpenChange}
     classNames={{
-     base: `z-[${Z_INDEX.NAVBAR}]`,
-     wrapper: `z-[${Z_INDEX.NAVBAR}]`,
-     menu: `z-[${Z_INDEX.MOBILE_MENU}] bg-white`,
+     menu: 'bg-white z-[9999]',
      menuItem: 'relative',
     }}
    >
@@ -425,7 +424,10 @@ function Header() {
 
   {/* Floating Action Buttons - Mobile Only (hide when menu is open or on profile pages) */}
   {!isMenuOpen && !pathname.includes('/profile') && (
-  <div className={`lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[${Z_INDEX.FLOATING_BUTTONS}] flex flex-col gap-4`}>
+  <div
+    className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] flex flex-col gap-4"
+    style={{ zIndex: Z_INDEX.FLOATING_BUTTONS }}
+  >
    {/* Browse Tasks Button - Hide on browse-tasks page */}
    {!pathname.includes('/browse-tasks') && (
     <Button

@@ -7,15 +7,20 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
-import { MessageCircle, User } from "lucide-react";
+import { User } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import { ApplicationsSection, QuestionsSection, TaskInProgressState } from "./sections";
+import { ApplicationsSection, TaskInProgressState } from "./sections";
+// @todo FEATURE: Questions feature - commented out for future implementation
+// import { MessageCircle } from "lucide-react";
+// import { QuestionsSection } from "./sections";
 import ApplicationDetail from '@/components/tasks/application-detail';
 import AcceptApplicationDialog from '@/components/tasks/accept-application-dialog';
 import RejectApplicationDialog from '@/components/tasks/reject-application-dialog';
 import { Application } from '@/types/applications';
-import { getTaskQuestions, updateQuestionAnswer, getRelativeTime } from '@/components/tasks/mock-questions';
-import type { Question } from '@/types/questions';
+// @todo FEATURE: Questions feature - commented out for future implementation
+// import { getTaskQuestions, updateQuestionAnswer, getRelativeTime } from '@/components/tasks/mock-questions';
+// import type { Question } from '@/types/questions';
+import { getRelativeTime } from '@/components/tasks/mock-questions';
 import { normalizeCategoryKeys } from '@/lib/utils/categories';
 import { useToast } from '@/hooks/use-toast';
 
@@ -34,9 +39,10 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
  const [isLoadingApplications, setIsLoadingApplications] = useState(true);
  const [applicationsError, setApplicationsError] = useState<string | null>(null);
 
+ // @todo FEATURE: Questions feature - commented out for future implementation
  // State for questions - load from mock service
- const [questions, setQuestions] = useState<Question[]>([]);
- const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+ // const [questions, setQuestions] = useState<Question[]>([]);
+ // const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
 
  // Fetch applications from API
  useEffect(() => {
@@ -100,16 +106,17 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
   fetchApplications();
  }, [taskId]);
 
+ // @todo FEATURE: Questions feature - commented out for future implementation
  // Load questions when component mounts or taskId changes
- useEffect(() => {
-  setIsLoadingQuestions(true);
-  // Simulate loading delay
-  setTimeout(() => {
-   const taskQuestions = getTaskQuestions(taskId);
-   setQuestions(taskQuestions);
-   setIsLoadingQuestions(false);
-  }, 500);
- }, [taskId]);
+ // useEffect(() => {
+ //  setIsLoadingQuestions(true);
+ //  // Simulate loading delay
+ //  setTimeout(() => {
+ //   const taskQuestions = getTaskQuestions(taskId);
+ //   setQuestions(taskQuestions);
+ //   setIsLoadingQuestions(false);
+ //  }, 500);
+ // }, [taskId]);
 
  // Handle URL hash navigation (e.g., #applications)
  useEffect(() => {
@@ -237,16 +244,17 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
   }
  };
 
- const handleReplyToQuestion = (questionId: string, reply: string) => {
-  // Update the answer in mock storage
-  updateQuestionAnswer(taskId, questionId, 'task-author-123', reply);
-
-  // Reload questions to reflect the change
-  const updatedQuestions = getTaskQuestions(taskId);
-  setQuestions(updatedQuestions);
-
-  console.log("Reply posted to question:", questionId);
- };
+ // @todo FEATURE: Questions feature - commented out for future implementation
+ // const handleReplyToQuestion = (questionId: string, reply: string) => {
+ //  // Update the answer in mock storage
+ //  updateQuestionAnswer(taskId, questionId, 'task-author-123', reply);
+ //
+ //  // Reload questions to reflect the change
+ //  const updatedQuestions = getTaskQuestions(taskId);
+ //  setQuestions(updatedQuestions);
+ //
+ //  console.log("Reply posted to question:", questionId);
+ // };
 
  // Check if there's an accepted application
  const acceptedApplication = applications.find(app => app.status === 'accepted');
@@ -263,11 +271,12 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
       selectedKey={selectedTab}
       onSelectionChange={(key) => {
        setSelectedTab(key as string);
+       // @todo FEATURE: Questions feature - commented out for future implementation
        // Reload questions when switching to questions tab
-       if (key === 'questions') {
-        const updatedQuestions = getTaskQuestions(taskId);
-        setQuestions(updatedQuestions);
-       }
+       // if (key === 'questions') {
+       //  const updatedQuestions = getTaskQuestions(taskId);
+       //  setQuestions(updatedQuestions);
+       // }
       }}
       className="w-full overflow-hidden"
      >
@@ -316,7 +325,8 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
        </div>
       </Tab>
 
-      <Tab
+      {/* @todo FEATURE: Questions feature - commented out for future implementation */}
+      {/* <Tab
        key="questions"
        title={
         <div className="flex items-center gap-1.5 sm:gap-2">
@@ -341,7 +351,7 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
         onReplyToQuestion={handleReplyToQuestion}
         isLoading={isLoadingQuestions}
        />
-      </Tab>
+      </Tab> */}
      </Tabs>
     </CardBody>
    </NextUICard>

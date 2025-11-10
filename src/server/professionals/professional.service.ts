@@ -85,6 +85,43 @@ export class ProfessionalService {
   }
 
   /**
+   * Get featured professionals (high-quality, diverse selection)
+   * Ignores all filters and returns top 20 professionals based on quality scoring
+   *
+   * @returns List of featured professionals (privacy-filtered)
+   */
+  async getFeaturedProfessionals(): Promise<ServiceResult<Professional[]>> {
+    try {
+      // Import repository function
+      const { getFeaturedProfessionals: getFeaturedFromRepo } = await import(
+        './professional.repository'
+      )
+
+      // Get featured professionals
+      const featuredProfessionals = await getFeaturedFromRepo(20)
+
+      // Filter sensitive fields
+      const { filterSensitiveFieldsBatch } = await import('./professional.privacy')
+      const filtered = filterSensitiveFieldsBatch(featuredProfessionals as any)
+
+      // Validate no sensitive fields leaked
+      warnIfSensitiveFields(filtered, 'getFeaturedProfessionals response')
+
+      return {
+        success: true,
+        data: filtered,
+      }
+    } catch (error) {
+      console.error('❌ Get featured professionals error:', error)
+
+      return {
+        success: false,
+        error: error instanceof Error ? error : new Error('Unknown error occurred'),
+      }
+    }
+  }
+
+  /**
    * Get a single professional by ID
    * For future use (professional detail page)
    *

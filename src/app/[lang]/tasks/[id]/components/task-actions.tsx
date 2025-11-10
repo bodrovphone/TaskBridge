@@ -2,16 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
-import { MessageCircle, Share2, Edit3, XCircle, Check } from "lucide-react";
+import { Share2, Edit3, XCircle, Check } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
-import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
+// @todo FEATURE: Questions feature - commented out for future implementation
+// import { MessageCircle } from "lucide-react";
+// import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
-import { canEditTask, canApplyToTask, canAskQuestions, canCancelTask, getDisabledReason, type TaskStatus } from "@/lib/utils/task-permissions";
+import { canEditTask, canApplyToTask, canCancelTask, getDisabledReason, type TaskStatus } from "@/lib/utils/task-permissions";
+// @todo FEATURE: Questions feature - commented out for future implementation
+// import { canAskQuestions } from "@/lib/utils/task-permissions";
 import type { ApplicationStatus } from "@/components/tasks/types";
 
 interface TaskActionsProps {
@@ -30,9 +34,12 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const lang = params?.lang as string || 'bg';
 
  const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
- const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);
+ // @todo FEATURE: Questions feature - commented out for future implementation
+ // const [isQuestionDialogOpen, setIsQuestionDialogOpen] = useState(false);
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
- const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
+ const [authAction, setAuthAction] = useState<'apply' | null>(null);
+ // @todo FEATURE: Questions feature - commented out for future implementation
+ // const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
  const [userApplication, setUserApplication] = useState<{ status: ApplicationStatus } | null>(null);
  const [isLoadingApplication, setIsLoadingApplication] = useState(false);
  const [isShareCopied, setIsShareCopied] = useState(false);
@@ -69,9 +76,11 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
    // User just logged in and has a pending action
    if (action === 'apply') {
     setIsApplicationDialogOpen(true);
-   } else if (action === 'question') {
-    setIsQuestionDialogOpen(true);
    }
+   // @todo FEATURE: Questions feature - commented out for future implementation
+   // else if (action === 'question') {
+   //   setIsQuestionDialogOpen(true);
+   // }
 
    // Clean up URL params using Next.js APIs
    const params = new URLSearchParams(searchParams.toString());
@@ -95,19 +104,20 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   setIsApplicationDialogOpen(true);
  };
 
- const handleAskQuestionClick = () => {
-  if (!isAuthenticated) {
-   // Add URL param to trigger action after login using Next.js APIs
-   const params = new URLSearchParams(searchParams.toString());
-   params.set('action', 'question');
-   router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-
-   setAuthAction('question');
-   setIsAuthSlideOverOpen(true);
-   return;
-  }
-  setIsQuestionDialogOpen(true);
- };
+ // @todo FEATURE: Questions feature - commented out for future implementation
+ // const handleAskQuestionClick = () => {
+ //   if (!isAuthenticated) {
+ //     // Add URL param to trigger action after login using Next.js APIs
+ //     const params = new URLSearchParams(searchParams.toString());
+ //     params.set('action', 'question');
+ //     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+ //
+ //     setAuthAction('question');
+ //     setIsAuthSlideOverOpen(true);
+ //     return;
+ //   }
+ //   setIsQuestionDialogOpen(true);
+ // };
 
  const handleEditClick = () => {
   router.push(`/${lang}/tasks/${task.id}/edit`);
@@ -171,7 +181,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const taskStatus = (task.status || 'open') as TaskStatus;
  const canEdit = canEditTask(taskStatus);
  const canApply = canApplyToTask(taskStatus);
- const canAsk = canAskQuestions(taskStatus);
+ // @todo FEATURE: Questions feature - commented out for future implementation
+ // const canAsk = canAskQuestions(taskStatus);
  const canCancel = canCancelTask(taskStatus);
 
  // If owner, show Edit and Cancel buttons instead of Apply/Question
@@ -257,7 +268,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
       </Tooltip>
      )}
 
-     <Tooltip
+     {/* @todo FEATURE: Questions feature - commented out for future implementation */}
+     {/* <Tooltip
       content={!canAsk ? getDisabledReason('ask', taskStatus) : ''}
       isDisabled={canAsk}
      >
@@ -273,7 +285,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
         {t('taskDetail.askQuestion')}
        </NextUIButton>
       </div>
-     </Tooltip>
+     </Tooltip> */}
 
      <NextUIButton
       color="warning"
@@ -312,15 +324,16 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     }}
    />
 
+   {/* @todo FEATURE: Questions feature - commented out for future implementation */}
    {/* Ask Question Dialog */}
-   <AskQuestionDialog
+   {/* <AskQuestionDialog
     isOpen={isQuestionDialogOpen}
     onClose={() => setIsQuestionDialogOpen(false)}
     taskId={task.id}
     taskTitle={task.title}
     taskAuthorId={task.authorId || 'task-author-123'}
     currentUserId={user?.id || ''}
-   />
+   /> */}
 
    {/* Auth Slide Over */}
    <AuthSlideOver

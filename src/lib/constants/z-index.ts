@@ -64,9 +64,6 @@ export const Z_INDEX = {
   // Components that float above page content
   // ============================================
 
-  /** Floating action buttons (FABs) */
-  FLOATING_BUTTONS: 45,
-
   /** Main navigation bar */
   NAVBAR: 50,
 
@@ -83,6 +80,9 @@ export const Z_INDEX = {
 
   /** Dropdown menus from navbar and other components */
   DROPDOWN_MENUS: 60,
+
+  /** Floating action buttons (FABs) - must be above search card, navbar, and dropdowns */
+  FLOATING_BUTTONS: 65,
 
   /** Search suggestions and autocomplete dropdowns */
   SEARCH_SUGGESTIONS: 100,

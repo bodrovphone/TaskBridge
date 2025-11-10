@@ -161,7 +161,8 @@ export default function SearchFiltersSection({
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.5 }}
-      className={`mb-12 -mt-8 relative z-[${Z_INDEX.SEARCH_CARD}]`}
+      className="mb-12 -mt-8 relative"
+      style={{ zIndex: Z_INDEX.SEARCH_CARD }}
     >
       <NextUICard className="bg-white/95 shadow-2xl border-0 max-w-4xl mx-auto overflow-visible">
         <div className="p-8 overflow-visible">
@@ -174,7 +175,11 @@ export default function SearchFiltersSection({
             {/* Enhanced Search Input */}
             <div className="relative mb-8 overflow-visible">
               <div className="relative">
-                <Search className={`absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 z-[${Z_INDEX.STICKY_ELEMENTS}]`} size={24} />
+                <Search
+                  className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  style={{ zIndex: Z_INDEX.STICKY_ELEMENTS }}
+                  size={24}
+                />
                 <Input
                   size="lg"
                   value={searchQuery}
@@ -205,7 +210,8 @@ export default function SearchFiltersSection({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className={`absolute top-full left-0 right-0 mt-2 z-[${Z_INDEX.SEARCH_SUGGESTIONS}]`}
+                      className="absolute top-full left-0 right-0 mt-2"
+                      style={{ zIndex: Z_INDEX.SEARCH_SUGGESTIONS }}
                     >
                       <div className="bg-white border-2 border-gray-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh] mx-1 mb-1">
                         <div className="overflow-y-auto px-2 pb-2">

@@ -1,16 +1,15 @@
 /**
  * Professionals Page (Refactored)
- * Integrates real API data with mock reference data
+ * Integrates real API data with infinite scroll
  * Reduced from 806 lines to ~200 lines by extracting sections
  */
 
 'use client'
 
-import { useState, useEffect } from "react";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
 import { motion } from "framer-motion";
 import { useProfessionalFilters } from '../hooks/use-professional-filters';
-import { fetchProfessionals } from '../lib/professionals-api';
 import { mockProfessionals } from '../lib/mock-professionals';
 import SearchFiltersSection from './sections/search-filters-section';
 import ResultsSection from './sections/results-section';
@@ -23,50 +22,63 @@ export default function ProfessionalsPage() {
   const { t } = useTranslation();
   const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
 
-  // API Data State
-  const [apiData, setApiData] = useState<PaginatedProfessionalsResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  // Check if any filters are active
+  const hasActiveFilters = activeFilterCount > 0;
 
-  // Fetch professionals from API
-  useEffect(() => {
-    const loadProfessionals = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  // Always fetch featured professionals (used as fallback when filters return no results)
+  const { data: featuredData } = useQuery<PaginatedProfessionalsResponse>({
+    queryKey: ['featured-professionals'],
+    queryFn: async () => {
+      const response = await fetch('/api/professionals?featured=true');
+      if (!response.ok) throw new Error('Failed to fetch featured professionals');
+      return response.json();
+    },
+    // Always enabled - featured professionals are shown in two scenarios:
+    // 1. No filters applied (primary featured section)
+    // 2. Filters applied but no results (fallback/suggestion)
+  });
 
-        const queryString = buildApiQuery();
-        const data = await fetchProfessionals(queryString);
+  // Fetch filtered professionals with infinite scroll
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch
+  } = useInfiniteQuery<PaginatedProfessionalsResponse>({
+    queryKey: ['browse-professionals', buildApiQuery()],
+    queryFn: async ({ pageParam = 1 }) => {
+      // Build query with current page
+      const params = new URLSearchParams(buildApiQuery());
+      params.set('page', String(pageParam));
 
-        setApiData(data);
-      } catch (err) {
-        console.error('Failed to fetch professionals:', err);
-        setError(err as Error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      const response = await fetch(`/api/professionals?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch professionals');
+      return response.json();
+    },
+    getNextPageParam: (lastPage) => {
+      // Return next page number if hasNext is true, otherwise undefined
+      return lastPage.pagination.hasNext
+        ? lastPage.pagination.page + 1
+        : undefined;
+    },
+    initialPageParam: 1,
+  });
 
-    loadProfessionals();
-  }, [buildApiQuery]);
+  // Flatten all pages into a single array of professionals
+  const professionals = data?.pages.flatMap(page => page.professionals) || [];
+  const pagination = data?.pages[data.pages.length - 1]?.pagination;
 
-  // Retry on error
+  // Get featured professionals (20 high-quality professionals with diversity)
+  // Used in two scenarios:
+  // 1. No filters: Primary featured section
+  // 2. Filters with no results: Fallback suggestions
+  const featuredProfessionals = featuredData?.professionals || [];
+
   const handleRetry = () => {
-    setError(null);
-    setIsLoading(true);
-    // Trigger re-fetch by changing a state (useEffect will re-run)
-    const queryString = buildApiQuery();
-    fetchProfessionals(queryString)
-      .then(setApiData)
-      .catch(setError)
-      .finally(() => setIsLoading(false));
-  };
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    // This will be handled by useProfessionalFilters
-    // updateFilter('page', page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    refetch();
   };
 
   return (
@@ -195,7 +207,7 @@ export default function ProfessionalsPage() {
 
         {/* Search Filters Section */}
         <SearchFiltersSection
-          professionalsCount={apiData?.pagination.total || 0}
+          professionalsCount={pagination?.total || 0}
           isLoading={isLoading}
         />
 
@@ -214,19 +226,17 @@ export default function ProfessionalsPage() {
 
         {/* Results Section (API + Mock Data) */}
         <ResultsSection
-          professionals={apiData?.professionals || []}
-          featuredProfessionals={apiData?.featuredProfessionals || []}
+          professionals={professionals}
+          featuredProfessionals={featuredProfessionals}
           isLoading={isLoading}
           error={error}
           mockProfessionals={mockProfessionals}
-          currentPage={apiData?.pagination.page || 1}
-          totalPages={apiData?.pagination.totalPages || 1}
-          hasNext={apiData?.pagination.hasNext || false}
-          hasPrevious={apiData?.pagination.hasPrevious || false}
-          onPageChange={handlePageChange}
           onClearFilters={resetFilters}
           onRetry={handleRetry}
-          activeFilterCount={activeFilterCount}
+          hasActiveFilters={hasActiveFilters}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          onLoadMore={fetchNextPage}
         />
       </main>
     </>

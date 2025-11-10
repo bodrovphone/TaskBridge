@@ -26,18 +26,27 @@ import type { ProfessionalQueryParams } from './professional.query-types'
 import { QUERY_CONSTRAINTS } from './professional.query-types'
 
 /**
- * Fetch featured professionals (ignores all user filters)
- * Used as fallback when no results found
+ * Fetch featured professionals with quality scoring and category diversity
+ *
+ * Scoring criteria:
+ * - Has profile photo (avatar_url): +3 points
+ * - Long bio (>150 chars): +2 points
+ * - Has reviews/ratings: +2 points
+ * - VAT verified professional: +3 points
+ * - High rating (>= 4.5): +2 points
+ *
+ * Returns top 20 professionals with category diversity
+ * Used when no filters applied or as fallback when no results found
  */
-async function getFeaturedProfessionals(limit: number = 8): Promise<Professional[]> {
+export async function getFeaturedProfessionals(limit: number = 20): Promise<Professional[]> {
+  // Fetch more than we need for diversity selection
   const { data, error } = await supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
     .neq('is_banned', true)
-    .order('average_rating', { ascending: false, nullsFirst: false })
-    .order('tasks_completed', { ascending: false })
-    .limit(limit)
+    .order('created_at', { ascending: false })
+    .limit(50) // Fetch 50 to ensure category diversity
 
   if (error) {
     console.error('Featured professionals query error:', error)
@@ -45,10 +54,85 @@ async function getFeaturedProfessionals(limit: number = 8): Promise<Professional
   }
 
   const professionalsRaw = (data as ProfessionalRaw[]) || []
-  return professionalsRaw.map((prof) => ({
-    ...prof,
-    featured: calculateFeaturedStatus(prof),
-  })) as any
+
+  if (professionalsRaw.length === 0) {
+    return []
+  }
+
+  // Score each professional
+  const scoredProfessionals = professionalsRaw.map((prof) => {
+    let score = 0
+
+    // Has profile photo: +3 points
+    if (prof.avatar_url) {
+      score += 3
+    }
+
+    // Long bio (>150 chars): +2 points
+    if (prof.bio && prof.bio.length > 150) {
+      score += 2
+    }
+
+    // Has reviews/ratings: +2 points
+    if (prof.total_reviews > 0 && prof.average_rating !== null) {
+      score += 2
+    }
+
+    // VAT verified: +3 points
+    if (prof.is_vat_verified) {
+      score += 3
+    }
+
+    // High rating (>= 4.5): +2 points
+    if (prof.average_rating && prof.average_rating >= 4.5) {
+      score += 2
+    }
+
+    return {
+      professional: {
+        ...prof,
+        featured: calculateFeaturedStatus(prof),
+      } as any,
+      score
+    }
+  })
+
+  // Sort by score descending
+  scoredProfessionals.sort((a, b) => b.score - a.score)
+
+  // Select top professionals with category diversity
+  // Ensure no more than 2 from the same primary category
+  const selectedProfessionals: Professional[] = []
+  const categoryCount = new Map<string, number>()
+
+  // First pass: add high-scoring professionals with category limits
+  for (const { professional, score } of scoredProfessionals) {
+    if (selectedProfessionals.length >= limit) break
+
+    // Get primary category (first in array)
+    const primaryCategory = professional.service_categories?.[0] || 'other'
+    const currentCount = categoryCount.get(primaryCategory) || 0
+
+    // Allow max 2 professionals per category for diversity
+    if (currentCount < 2) {
+      selectedProfessionals.push(professional)
+      categoryCount.set(primaryCategory, currentCount + 1)
+    }
+  }
+
+  // Second pass: fill remaining slots if needed (relaxed rules)
+  if (selectedProfessionals.length < limit) {
+    for (const { professional } of scoredProfessionals) {
+      if (selectedProfessionals.length >= limit) break
+
+      // Skip if already added
+      if (!selectedProfessionals.find(p => p.id === professional.id)) {
+        selectedProfessionals.push(professional)
+      }
+    }
+  }
+
+  return selectedProfessionals
 }
 
 /**
@@ -182,7 +266,7 @@ export async function getProfessionals(
   const hasPrevious = currentPage > 1
 
   // === Fetch Featured Professionals (always, ignoring user filters) ===
-  const featuredProfessionals = await getFeaturedProfessionals(8)
+  const featuredProfessionals = await getFeaturedProfessionals(20)
 
   return {
     professionals: sortedProfessionals as any, // Will be privacy-filtered by service layer
