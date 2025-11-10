@@ -247,29 +247,31 @@ export async function createNotification(
               const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
               const viewHereText = getViewHereText(userLocale)
 
-              // For task_completed notifications, use static link to My Posted Tasks
+              // Construct final URL with locale
               let finalUrl = params.actionUrl
-              if (params.type === 'task_completed') {
-                finalUrl = `/${userLocale}/tasks/posted`
-              } else {
-                // For other notifications, prepend locale if not already present
-                if (!finalUrl.startsWith(`/${userLocale}/`)) {
-                  finalUrl = `/${userLocale}${finalUrl}`
-                }
+
+              // Prepend locale if not already present
+              if (!finalUrl.startsWith(`/${userLocale}/`)) {
+                finalUrl = `/${userLocale}${finalUrl}`
               }
 
               // Determine the notification channel (telegram, viber, email, etc.)
               const channel: NotificationChannel = 'telegram' // Default for this context
 
               // Generate auto-login URL with session token
-              const autoLoginUrl = await generateNotificationAutoLoginUrl(
-                params.userId,
-                channel,
-                finalUrl,
-                baseUrl
-              )
-
-              link = `${viewHereText}: ${autoLoginUrl}`
+              try {
+                const autoLoginUrl = await generateNotificationAutoLoginUrl(
+                  params.userId,
+                  channel,
+                  finalUrl,
+                  baseUrl
+                )
+                link = `${viewHereText}: ${autoLoginUrl}`
+              } catch (error) {
+                console.error('Failed to generate auto-login URL for Telegram, using standard URL:', error)
+                // Fallback to standard URL without auto-login
+                link = `${viewHereText}: ${baseUrl}${finalUrl}`
+              }
             }
 
             // Prepare template data with localized link
