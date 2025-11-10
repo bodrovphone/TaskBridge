@@ -150,8 +150,8 @@ function PostedTaskCard({
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          completionNotes: data?.notes,
-          completionPhotos: data?.photos
+          // ConfirmationData doesn't have notes/photos, only review data
+          // Those fields are optional in the API anyway
         })
       })
 

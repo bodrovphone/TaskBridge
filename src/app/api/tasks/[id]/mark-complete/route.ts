@@ -77,7 +77,7 @@ export async function PATCH(
     // Get professional and customer details for notification
     const { data: professional } = await adminClient
       .from('users')
-      .select('id, full_name')
+      .select('id, full_name, telegram_id')
       .eq('id', user.id)
       .single()
 

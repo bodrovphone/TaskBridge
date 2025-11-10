@@ -242,15 +242,6 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 }
               />
               <Tab
-                key="pending_customer_confirmation"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.awaitingConfirmation')}</span>
-                    <Chip size="sm" variant="solid" color="secondary">{getTaskCountByStatus('pending_customer_confirmation')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
                 key="completed"
                 title={
                   <div className="flex items-center gap-2">
