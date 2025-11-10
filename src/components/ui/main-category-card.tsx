@@ -1,10 +1,12 @@
 'use client'
 
 import { LucideIcon } from "lucide-react"
-import { Card, CardBody, CardFooter, Chip } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react"
 import { useRouter, useParams } from "next/navigation"
 import { useTranslation } from "react-i18next"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
+import { Briefcase, Search, HelpCircle } from "lucide-react"
+import { SuggestCategoryModal } from "@/components/categories/suggest-category-modal"
 
 interface Subcategory {
  label: string
@@ -18,11 +20,14 @@ interface MainCategoryCardProps {
  color: string
  subcategories: Subcategory[]
  totalCount: number
+ categorySlug?: string // Category slug for action button links
+ isAuthenticated?: boolean // Whether user is authenticated (for suggestion modal)
  // Optional props for customization
  onClick?: () => void // Custom click handler for the main card
  onSubcategoryClick?: (value: string) => void // Custom handler for subcategory clicks
  showSubcategories?: boolean // Whether to show subcategories (default: true)
  showFooter?: boolean // Whether to show footer (default: true)
+ showActionButtons?: boolean // Whether to show action buttons (default: true)
  variant?: 'full' | 'simple' // 'full' shows everything, 'simple' is just icon+title+description
 }
 
@@ -43,10 +48,13 @@ function MainCategoryCard({
  color,
  subcategories,
  totalCount,
+ categorySlug,
+ isAuthenticated = false,
  onClick,
  onSubcategoryClick,
  showSubcategories = true,
  showFooter = true,
+ showActionButtons = true,
  variant = 'full'
 }: MainCategoryCardProps) {
  const { t } = useTranslation()
@@ -94,6 +102,7 @@ function MainCategoryCard({
  }
 
  const config = colorConfig[color as keyof typeof colorConfig]
+ const [isSuggestionModalOpen, setIsSuggestionModalOpen] = useState(false)
 
  // Generate random chip colors, avoiding the parent card's color(s)
  const chipColors = useMemo(() => {
@@ -203,6 +212,56 @@ function MainCategoryCard({
         ))}
        </div>
       )}
+
+      {/* Action Buttons */}
+      {showActionButtons && categorySlug && (
+       <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-200/50">
+        <Button
+         size="sm"
+         color="primary"
+         variant="flat"
+         startContent={<Briefcase className="w-4 h-4" />}
+         onPress={(e) => {
+          e.stopPropagation()
+          const subcategorySlugs = subcategories.map(s => s.value).join(',')
+          router.push(`/${lang}/professionals?category=${categorySlug}&subcategories=${subcategorySlugs}`)
+         }}
+         className="flex-1 min-w-[140px]"
+        >
+         {t('categories.searchProfessionals')}
+        </Button>
+
+        <Button
+         size="sm"
+         color="secondary"
+         variant="flat"
+         startContent={<Search className="w-4 h-4" />}
+         onPress={(e) => {
+          e.stopPropagation()
+          const subcategorySlugs = subcategories.map(s => s.value).join(',')
+          router.push(`/${lang}/browse-tasks?category=${categorySlug}&subcategories=${subcategorySlugs}`)
+         }}
+         className="flex-1 min-w-[140px]"
+        >
+         {t('categories.searchTasks')}
+        </Button>
+
+        <Button
+         size="sm"
+         color="default"
+         variant="bordered"
+         isIconOnly
+         onPress={(e) => {
+          e.stopPropagation()
+          setIsSuggestionModalOpen(true)
+         }}
+         className="w-9 h-9"
+         title={t('categories.cantFindCategory')}
+        >
+         <HelpCircle className="w-4 h-4" />
+        </Button>
+       </div>
+      )}
      </>
     )}
    </CardBody>
@@ -232,6 +291,13 @@ function MainCategoryCard({
     <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-white/40"></div>
     <div className="absolute bottom-6 left-4 w-2 h-2 rounded-full bg-white/30"></div>
    </div>
+
+   {/* Suggestion Modal */}
+   <SuggestCategoryModal
+    isOpen={isSuggestionModalOpen}
+    onClose={() => setIsSuggestionModalOpen(false)}
+    isAuthenticated={isAuthenticated}
+   />
   </Card>
  )
 }

@@ -63,6 +63,20 @@ export const categories = {
   'categories.ctaTitle': 'Не намирате това, което търсите?',
   'categories.ctaSubtitle': 'Публикувайте задачата си и нека професионалистите дойдат при вас',
 
+  // Category Card Actions
+  'categories.searchProfessionals': 'Търси професионалисти',
+  'categories.searchTasks': 'Търси задачи',
+  'categories.cantFindCategory': 'Не намирате вашата категория?',
+  'categories.suggestCategoryTitle': 'Предложи нова категория',
+  'categories.suggestCategoryMessage': 'Не намирате точната категория? Изпратете ни предложение и ще я добавим в рамките на 24 часа.',
+  'categories.suggestCategoryPlaceholder': 'Опишете категорията, която ви трябва... (напр., "Дресиране на кучета", "Инсталиране на слънчеви панели")',
+  'categories.submitSuggestion': 'Изпрати предложение',
+  'categories.suggestionSuccess': 'Благодарим! Ще разгледаме вашето предложение в рамките на 24 часа.',
+  'categories.suggestionError': 'Неуспешно изпращане на предложение. Моля, опитайте отново.',
+  'categories.suggestionAuthRequired': 'Моля, влезте в профила си, за да изпратите предложение за категория',
+  'categories.suggestionMinLength': 'Предложението трябва да бъде поне 10 символа',
+  'categories.suggestionMaxLength': 'Предложението трябва да бъде максимум 500 символа',
+
   // Main Categories (centralized categories feature)
   'categories.main.homeServices.title': 'Домашни услуги',
   'categories.main.homeServices.description': 'Водопровод, електричество, майсторски услуги',

@@ -63,6 +63,20 @@ export const categories = {
   'categories.ctaTitle': "Can't find what you're looking for?",
   'categories.ctaSubtitle': 'Post your task and let professionals come to you',
 
+  // Category Card Actions
+  'categories.searchProfessionals': 'Search Professionals',
+  'categories.searchTasks': 'Search Tasks',
+  'categories.cantFindCategory': "Can't find your category?",
+  'categories.suggestCategoryTitle': 'Suggest New Category',
+  'categories.suggestCategoryMessage': "Can't find your exact category? Send us a suggestion and we'll add it within 24 hours.",
+  'categories.suggestCategoryPlaceholder': "Describe the category you need... (e.g., 'Dog training', 'Solar panel installation')",
+  'categories.submitSuggestion': 'Submit Suggestion',
+  'categories.suggestionSuccess': "Thank you! We'll review your suggestion within 24 hours.",
+  'categories.suggestionError': 'Failed to submit suggestion. Please try again.',
+  'categories.suggestionAuthRequired': 'Please log in to submit category suggestions',
+  'categories.suggestionMinLength': 'Suggestion must be at least 10 characters',
+  'categories.suggestionMaxLength': 'Suggestion must be at most 500 characters',
+
   // Main Categories (centralized categories feature)
   'categories.main.homeServices.title': 'Home Services',
   'categories.main.homeServices.description': 'Plumbing, electrical, handyman services',

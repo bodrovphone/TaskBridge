@@ -63,6 +63,20 @@ export const categories = {
   'categories.ctaTitle': 'Не нашли то, что ищете?',
   'categories.ctaSubtitle': 'Опубликуйте вашу задачу и позвольте профессионалам найти вас',
 
+  // Category Card Actions
+  'categories.searchProfessionals': 'Найти специалистов',
+  'categories.searchTasks': 'Найти задачи',
+  'categories.cantFindCategory': 'Не можете найти вашу категорию?',
+  'categories.suggestCategoryTitle': 'Предложить новую категорию',
+  'categories.suggestCategoryMessage': 'Не можете найти точную категорию? Отправьте нам предложение, и мы добавим её в течение 24 часов.',
+  'categories.suggestCategoryPlaceholder': 'Опишите нужную категорию... (напр., "Дрессировка собак", "Установка солнечных панелей")',
+  'categories.submitSuggestion': 'Отправить предложение',
+  'categories.suggestionSuccess': 'Спасибо! Мы рассмотрим ваше предложение в течение 24 часов.',
+  'categories.suggestionError': 'Не удалось отправить предложение. Пожалуйста, попробуйте снова.',
+  'categories.suggestionAuthRequired': 'Пожалуйста, войдите в систему для отправки предложений категорий',
+  'categories.suggestionMinLength': 'Предложение должно содержать не менее 10 символов',
+  'categories.suggestionMaxLength': 'Предложение должно содержать не более 500 символов',
+
   // Main Categories (centralized categories feature)
   'categories.main.homeServices.title': 'Домашние услуги',
   'categories.main.homeServices.description': 'Сантехника, электричество, мастер на все руки',
