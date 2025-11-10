@@ -71,6 +71,10 @@ export const notifications = {
   'taskDetail.statusTypes.done': 'Завършена',
   'taskDetail.statusTypes.archived': 'Архивирана',
   'taskDetail.appliedTooltip': 'Вие сте кандидатствали за тази задача. Клиентът може да приеме или отхвърли вашата кандидатура.',
+  'taskDetail.published.today': 'публикувана днес',
+  'taskDetail.published.thisWeek': 'публикувана тази седмица',
+  'taskDetail.published.thisMonth': 'публикувана този месец',
+  'taskDetail.published.someTimeAgo': 'публикувана отдавна',
 
   'taskDetail.share': 'Сподели',
   'taskDetail.shareText': 'Вижте тази задача в Trudify',

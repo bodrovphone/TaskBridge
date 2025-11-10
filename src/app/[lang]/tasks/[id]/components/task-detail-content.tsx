@@ -13,6 +13,7 @@ import TaskActivity from "./task-activity";
 import { getUserApplication } from "@/components/tasks/mock-submit";
 import TaskCard from "@/components/ui/task-card";
 import { getCategoryName } from '@/lib/utils/category';
+import { getCityLabelBySlug } from '@/features/cities';
 
 interface TaskDetailContentProps {
  task: any;
@@ -100,6 +101,37 @@ function getUrgencyText(task: any, t: any) {
  return t('taskDetail.urgency.flexible');
 }
 
+/**
+ * Get simplified published time relative to now
+ * Returns: "published today", "published this week", "published this month", or "published some time ago"
+ */
+function getPublishedTime(createdAt: string | Date, t: any): string {
+ const created = new Date(createdAt);
+ const now = new Date();
+
+ // Reset time to midnight for day comparison
+ const createdDay = new Date(created.getFullYear(), created.getMonth(), created.getDate());
+ const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+ // Calculate difference in days
+ const diffTime = today.getTime() - createdDay.getTime();
+ const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+ if (diffDays === 0) {
+  return t('taskDetail.published.today', 'published today');
+ }
+
+ if (diffDays <= 7) {
+  return t('taskDetail.published.thisWeek', 'published this week');
+ }
+
+ if (diffDays <= 30) {
+  return t('taskDetail.published.thisMonth', 'published this month');
+ }
+
+ return t('taskDetail.published.someTimeAgo', 'published some time ago');
+}
+
 function getTaskStatus(taskId: string, taskStatus?: string) {
  // Check if user has applied
  const userApplication = getUserApplication(taskId, 'mock-user-id');
@@ -158,8 +190,8 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
  // This ensures each user gets correct visibility regardless of cached pages
  const isOwner = user?.id === task.customer_id;
 
- // Server-side time calculation for initial render
- const timeAgo = `${t('taskDetail.timeAgo')} 2 часа`; // TODO: Implement proper server-side time calculation
+ // Get simplified published time
+ const publishedTime = getPublishedTime(task.created_at || task.createdAt, t);
 
  return (
   <div 
@@ -216,7 +248,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
           >
            {getUrgencyText(task, t)}
           </Chip>
-          <span className="text-sm text-gray-500 ml-auto">{timeAgo}</span>
+          <span className="text-sm text-gray-500 ml-auto">{publishedTime}</span>
          </div>
 
          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -268,7 +300,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
           <div>
            <p className="text-sm text-gray-600">{t('task.location')}</p>
            <p className="font-semibold text-gray-900">
-            {task.city}, {task.neighborhood}
+            {getCityLabelBySlug(task.city, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
            </p>
           </div>
          </div>

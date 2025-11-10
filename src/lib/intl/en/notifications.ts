@@ -70,6 +70,10 @@ export const notifications = {
   'taskDetail.statusTypes.done': 'Done',
   'taskDetail.statusTypes.archived': 'Archived',
   'taskDetail.appliedTooltip': 'You have applied to this task. The client may accept or reject your application.',
+  'taskDetail.published.today': 'published today',
+  'taskDetail.published.thisWeek': 'published this week',
+  'taskDetail.published.thisMonth': 'published this month',
+  'taskDetail.published.someTimeAgo': 'published some time ago',
 
   'taskDetail.share': 'Share',
   'taskDetail.shareText': 'Check out this task on Trudify',

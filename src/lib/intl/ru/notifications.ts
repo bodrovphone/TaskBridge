@@ -71,6 +71,10 @@ export const notifications = {
   'taskDetail.statusTypes.done': 'Выполнена',
   'taskDetail.statusTypes.archived': 'Архивирована',
   'taskDetail.appliedTooltip': 'Вы откликнулись на эту задачу. Клиент может принять или отклонить вашу заявку.',
+  'taskDetail.published.today': 'опубликовано сегодня',
+  'taskDetail.published.thisWeek': 'опубликовано на этой неделе',
+  'taskDetail.published.thisMonth': 'опубликовано в этом месяце',
+  'taskDetail.published.someTimeAgo': 'опубликовано давно',
 
   'taskDetail.share': 'Поделиться',
   'taskDetail.shareText': 'Посмотрите эту задачу на Trudify',

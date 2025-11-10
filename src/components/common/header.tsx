@@ -235,6 +235,24 @@ function Header() {
      </NavbarMenuItem>
     ))}
 
+    {/* Create Task Button */}
+    <NavbarMenuItem>
+     <div className="pt-2 w-full">
+      <Button
+       color="primary"
+       variant="solid"
+       startContent={<Plus size={16} />}
+       className="w-full font-medium"
+       onPress={() => {
+        setIsMenuOpen(false)
+        handleCreateTask()
+       }}
+      >
+       {t('nav.createTask')}
+      </Button>
+     </div>
+    </NavbarMenuItem>
+
     {/* Portfolio menu items for authenticated users */}
     {isAuthenticated && (
      <>
