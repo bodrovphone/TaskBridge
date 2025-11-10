@@ -217,11 +217,19 @@ function Header() {
     {navigation.map((item) => (
      <NavbarMenuItem key={item.name}>
       <NextUILink
-       as={LocaleLink}
-       href={item.href}
+       href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
        className="w-full text-gray-900 hover:text-primary font-medium py-2"
        size="lg"
-       onPress={() => setIsMenuOpen(false)}
+       onPress={() => {
+        setIsMenuOpen(false)
+        if (item.href.startsWith('#') || item.href.startsWith('/#')) {
+         // Handle anchor links
+         window.location.href = `/${lang}${item.href}`
+        } else {
+         // Handle regular routes
+         router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
+        }
+       }}
       >
        {item.name}
       </NextUILink>
@@ -241,11 +249,13 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        as={LocaleLink}
-        href="/profile/customer"
+        href={`/${lang}/profile/customer`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onPress={() => setIsMenuOpen(false)}
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/profile/customer`)
+        }}
        >
         <User size={18} className="text-gray-500" />
         {t('nav.profileCustomer')}
@@ -253,11 +263,13 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        as={LocaleLink}
-        href="/profile/professional"
+        href={`/${lang}/profile/professional`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onPress={() => setIsMenuOpen(false)}
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/profile/professional`)
+        }}
        >
         <Briefcase size={18} className="text-gray-500" />
         {t('nav.profileProfessional')}
@@ -274,11 +286,13 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        as={LocaleLink}
-        href="/tasks/posted"
+        href={`/${lang}/tasks/posted`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onPress={() => setIsMenuOpen(false)}
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/tasks/posted`)
+        }}
        >
         <FileText size={18} className="text-gray-500" />
         {t('nav.myPostedTasks')}
@@ -295,11 +309,13 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        as={LocaleLink}
-        href="/tasks/applications"
+        href={`/${lang}/tasks/applications`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onPress={() => setIsMenuOpen(false)}
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/tasks/applications`)
+        }}
        >
         <Send size={18} className="text-gray-500" />
         {t('nav.myApplications')}
@@ -307,11 +323,13 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        as={LocaleLink}
-        href="/tasks/work"
+        href={`/${lang}/tasks/work`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onPress={() => setIsMenuOpen(false)}
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/tasks/work`)
+        }}
        >
         <Briefcase size={18} className="text-gray-500" />
         {t('nav.myWork')}
@@ -328,11 +346,13 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        as={LocaleLink}
-        href="/help"
+        href={`/${lang}/help`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
-        onPress={() => setIsMenuOpen(false)}
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/help`)
+        }}
        >
         <HelpCircle size={18} className="text-gray-500" />
         {t('nav.help')}

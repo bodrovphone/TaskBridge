@@ -1,6 +1,8 @@
 // Profile page translations - personal info, professional info, statistics, settings
 export const profile = {
   'profile.title': 'Мой профиль',
+  'profile.customerProfileTitle': 'Информация клиентского профиля',
+  'profile.professionalProfileTitle': 'Информация профессионального профиля',
   'profile.personalInfo': 'Личная информация',
   'profile.professionalInfo': 'Профессиональная информация',
   'profile.verification': 'Верификация',

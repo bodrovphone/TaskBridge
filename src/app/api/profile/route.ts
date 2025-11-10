@@ -92,7 +92,10 @@ export async function PUT(request: NextRequest) {
 
     // 4. Apply updates to user entity
     if (updates.fullName !== undefined) user.fullName = updates.fullName
-    if (updates.phoneNumber !== undefined) user.phoneNumber = updates.phoneNumber
+    // Only update phone number if it's a non-empty string to avoid UNIQUE constraint violations with null/empty values
+    if (updates.phoneNumber !== undefined && updates.phoneNumber !== null && updates.phoneNumber.trim() !== '') {
+      user.phoneNumber = updates.phoneNumber
+    }
     if (updates.city !== undefined) user.city = updates.city
     if (updates.neighborhood !== undefined) user.neighborhood = updates.neighborhood
     if (updates.country !== undefined) user.country = updates.country
@@ -104,7 +107,10 @@ export async function PUT(request: NextRequest) {
     // Professional-specific updates
     if (updates.professionalTitle !== undefined) user.professionalTitle = updates.professionalTitle
     if (updates.companyName !== undefined) user.companyName = updates.companyName
-    if (updates.vatNumber !== undefined) user.vatNumber = updates.vatNumber
+    // Only update VAT number if it's a non-empty string to avoid UNIQUE constraint violations with null/empty values
+    if (updates.vatNumber !== undefined && updates.vatNumber !== null && updates.vatNumber.trim() !== '') {
+      user.vatNumber = updates.vatNumber
+    }
     if (updates.yearsExperience !== undefined) user.yearsExperience = updates.yearsExperience
     if (updates.hourlyRateBgn !== undefined) user.hourlyRateBgn = updates.hourlyRateBgn
     if (updates.serviceCategories !== undefined) user.serviceCategories = updates.serviceCategories

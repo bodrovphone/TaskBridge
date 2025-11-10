@@ -86,6 +86,16 @@ export function ProfileHeader({
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-primary-200 to-blue-300 rounded-full blur-3xl opacity-30"></div>
 
           <div className="relative z-10">
+            {/* Profile Type Title */}
+            <div className="mb-6">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                {profileType === 'professional'
+                  ? t('profile.professionalProfileTitle', 'Professional Profile Information')
+                  : t('profile.customerProfileTitle', 'Customer Profile Information')
+                }
+              </h2>
+            </div>
+
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <AvatarUpload
                 currentAvatar={profile.avatarUrl}
@@ -94,7 +104,7 @@ export function ProfileHeader({
                 size="lg"
               />
 
-              <div className="flex-1">
+              <div className="flex-1 w-full sm:w-auto">
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
                     {profile.fullName || profile.email}
@@ -133,20 +143,18 @@ export function ProfileHeader({
                 </p>
 
                 {/* Profile completion with visual indicator */}
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">{t('profile.completion')}</span>
-                      <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                        {completionPercentage}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden shadow-inner">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-full transition-all duration-500 shadow-sm"
-                        style={{ width: `${completionPercentage}%` }}
-                      ></div>
-                    </div>
+                <div className="w-full mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-700">{t('profile.completion')}</span>
+                    <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                      {completionPercentage}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-full transition-all duration-500 shadow-sm"
+                      style={{ width: `${completionPercentage}%` }}
+                    ></div>
                   </div>
                 </div>
 

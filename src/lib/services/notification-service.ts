@@ -16,6 +16,7 @@
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { sendTelegramNotification } from '@/lib/services/telegram-notification'
 import { getNotificationContent, getTelegramMessage, getUserLocale, getViewHereText } from '@/lib/utils/notification-i18n'
+import { generateNotificationAutoLoginUrl, type NotificationChannel } from '@/lib/auth/notification-auto-login'
 
 export type NotificationType =
   | 'application_received'
@@ -175,6 +176,30 @@ export async function createNotification(
       message = message || 'You have a new notification'
     }
 
+    // Generate auto-login URL for in-app notifications (if actionUrl provided)
+    let finalActionUrl = params.actionUrl
+    if (finalActionUrl) {
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+
+        // Prepend locale if not present
+        if (!finalActionUrl.startsWith(`/${userLocale}/`)) {
+          finalActionUrl = `/${userLocale}${finalActionUrl}`
+        }
+
+        // Generate auto-login URL for in-app notifications
+        finalActionUrl = await generateNotificationAutoLoginUrl(
+          params.userId,
+          'telegram', // Channel doesn't matter for in-app, just need a valid value
+          finalActionUrl,
+          baseUrl
+        )
+      } catch (error) {
+        console.error('Failed to generate auto-login URL:', error)
+        // Fall back to original URL if generation fails
+      }
+    }
+
     // Create notification in database
     const { data: notification, error: insertError } = await supabase
       .from('notifications')
@@ -184,7 +209,7 @@ export async function createNotification(
         title: title,  // Use localized title
         message: message,  // Use localized message
         metadata: params.metadata || {},
-        action_url: params.actionUrl,
+        action_url: finalActionUrl, // Use auto-login URL
         delivery_channel: deliveryChannel,
         state: 'sent',
       })
@@ -216,7 +241,7 @@ export async function createNotification(
 
           const localizedType = typeMap[params.type as keyof typeof typeMap]
           if (localizedType) {
-            // Construct proper link with locale and base URL
+            // Construct auto-login link with session token
             let link = ''
             if (params.actionUrl) {
               const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
@@ -233,7 +258,18 @@ export async function createNotification(
                 }
               }
 
-              link = `${viewHereText}: ${baseUrl}${finalUrl}`
+              // Determine the notification channel (telegram, viber, email, etc.)
+              const channel: NotificationChannel = 'telegram' // Default for this context
+
+              // Generate auto-login URL with session token
+              const autoLoginUrl = await generateNotificationAutoLoginUrl(
+                params.userId,
+                channel,
+                finalUrl,
+                baseUrl
+              )
+
+              link = `${viewHereText}: ${autoLoginUrl}`
             }
 
             // Prepare template data with localized link

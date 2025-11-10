@@ -86,22 +86,9 @@ export default function NotificationCenter() {
    <Sheet open={isOpen} onOpenChange={setOpen}>
     <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white h-full">
      <SheetHeader className="border-b pl-6 pr-12 py-4 flex-shrink-0 bg-white">
-      <div className="flex items-center justify-between gap-4">
-       <SheetTitle className="text-xl font-bold">
-        {t('notifications.title')}
-       </SheetTitle>
-       {hasNotifications && (
-        <Button
-         variant="ghost"
-         size="sm"
-         onClick={handleCleanupClick}
-         className="text-sm text-red-600 hover:text-red-700 flex-shrink-0 mr-2"
-        >
-         <Trash2 className="h-4 w-4 mr-1" />
-         {t('notifications.cleanup')}
-        </Button>
-       )}
-      </div>
+      <SheetTitle className="text-xl font-bold">
+       {t('notifications.title')}
+      </SheetTitle>
      </SheetHeader>
 
     {/* Filter Tabs */}
@@ -162,8 +149,22 @@ export default function NotificationCenter() {
      </TabsContent>
     </Tabs>
 
-    {/* Close Button at Bottom - Always visible */}
-    <div className="border-t px-6 py-4 bg-gradient-to-b from-white to-gray-50 flex-shrink-0 safe-area-bottom">
+    {/* Bottom Actions - Always visible */}
+    <div className="border-t px-6 py-4 bg-gradient-to-b from-white to-gray-50 flex-shrink-0 safe-area-bottom space-y-3">
+     {/* Clean up button */}
+     {hasNotifications && (
+      <Button
+       variant="outline"
+       size="lg"
+       onClick={handleCleanupClick}
+       className="w-full font-semibold text-base text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+      >
+       <Trash2 className="h-4 w-4 mr-2" />
+       {t('notifications.cleanup')}
+      </Button>
+     )}
+
+     {/* Close button */}
      <Button
       className="w-full font-semibold text-base bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg"
       size="lg"
