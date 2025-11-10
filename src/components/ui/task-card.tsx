@@ -102,9 +102,12 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const deadline = new Date(task.deadline);
   const now = new Date();
   const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  
+
+  // Past deadline - show as urgent/ASAP
+  if (diffDays < 0) return t('taskDetail.asap', 'ASAP');
+
   if (diffDays === 0) return t('taskCard.deadline.today');
-  if (diffDays === 1) return t('taskCard.deadline.tomorrow'); 
+  if (diffDays === 1) return t('taskCard.deadline.tomorrow');
   if (diffDays <= 7) return `${diffDays} ${t('taskCard.deadline.days')}`;
   return deadline.toLocaleDateString();
  };

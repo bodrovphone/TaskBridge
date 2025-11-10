@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
  *
  * Query parameters:
  * - mode: 'browse' | 'posted' | 'applications'
+ * - featured: 'true' - Get high-quality featured tasks (10 tasks with diversity)
  * - status: Task status filter (comma-separated)
  * - category: Filter by category
  * - city: Filter by city
@@ -122,6 +123,49 @@ export async function GET(request: NextRequest) {
 
     // 2. Parse query parameters
     const { searchParams } = new URL(request.url)
+
+    // Check if this is a featured tasks request
+    const isFeaturedRequest = searchParams.get('featured') === 'true'
+
+    if (isFeaturedRequest) {
+      // 3. Handle featured tasks request
+      const taskService = new TaskService()
+      const result = await taskService.getFeaturedTasks()
+
+      if (!result.success) {
+        const error = result.error as Error
+
+        if (isAppError(error)) {
+          return NextResponse.json(
+            {
+              error: error.message,
+              code: error.code,
+              details: (error as any).details
+            },
+            { status: (error as any).statusCode }
+          )
+        }
+
+        return NextResponse.json(
+          { error: 'message' in error ? error.message : 'Failed to fetch featured tasks' },
+          { status: 500 }
+        )
+      }
+
+      // Return featured tasks with simple pagination structure
+      return NextResponse.json({
+        tasks: result.data,
+        pagination: {
+          page: 1,
+          limit: result.data.length,
+          total: result.data.length,
+          totalPages: 1,
+          hasNext: false,
+          hasPrevious: false
+        }
+      }, { status: 200 })
+    }
+
     const params: import('@/server/tasks/task.query-types').TaskQueryParams = {
       status: searchParams.get('status') || undefined,
       category: searchParams.get('category') || undefined,

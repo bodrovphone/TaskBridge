@@ -114,7 +114,7 @@ function Header() {
    <Navbar
     maxWidth="full"
     position="sticky"
-    className="bg-white shadow-sm border-b border-gray-100 z-50"
+    className="bg-white shadow-sm border-b border-gray-100 z-[9999]"
     height="5rem"
     isBordered
     isMenuOpen={isMenuOpen}
@@ -165,6 +165,9 @@ function Header() {
      </Button>
     </NavbarItem>
     <NavbarItem>
+     <LanguageSwitcher />
+    </NavbarItem>
+    <NavbarItem>
      {isAuthenticated ? (
       <UserAvatarDropdown size="md" />
      ) : (
@@ -203,7 +206,7 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile Menu */}
-   <NavbarMenu className="bg-white">
+   <NavbarMenu className="bg-white z-[9999]">
     {navigation.map((item) => (
      <NavbarMenuItem key={item.name}>
       <NextUILink

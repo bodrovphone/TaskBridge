@@ -23,6 +23,7 @@ interface PostedTaskCardProps {
   title: string
   description: string
   category: string
+  subcategory?: string
   budget: number
   budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
   status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
@@ -48,6 +49,7 @@ function PostedTaskCard({
   title,
   description,
   category,
+  subcategory,
   budget,
   budgetType,
   status,
@@ -247,7 +249,7 @@ function PostedTaskCard({
         {/* Category chip */}
         <div className="mb-3">
           <Chip size="sm" variant="bordered" className={`text-xs ${getCategoryColor(category)}`}>
-            {getCategoryName(t, category)}
+            {getCategoryName(t, category, subcategory)}
           </Chip>
         </div>
 

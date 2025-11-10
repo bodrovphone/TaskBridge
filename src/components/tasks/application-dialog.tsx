@@ -208,6 +208,9 @@ export default function ApplicationDialog({
   <Modal
    isOpen={isOpen}
    onClose={handleClose}
+   onOpenChange={(open) => !open && handleClose()}
+   isDismissable={true}
+   hideCloseButton={false}
    size="2xl"
    scrollBehavior="inside"
    backdrop="blur"

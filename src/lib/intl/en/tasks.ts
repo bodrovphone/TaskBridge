@@ -193,6 +193,7 @@ export const tasks = {
   'createTask.timeline.deadlineLabel': 'Specific Deadline (Optional)',
   'createTask.timeline.deadlineHelp': "Leave empty if you don't have a specific deadline",
   'createTask.timeline.pastDateWarning': 'This deadline is in the past. Please select a future date or clear this field.',
+  'createTask.timeline.selectDate': 'Select date',
 
   // Photos Section
   'createTask.photos.title': 'Add a photo (optional)',

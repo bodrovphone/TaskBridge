@@ -151,7 +151,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
          dateFormat="dd/MM/yyyy"
          locale={dateLocale}
          disabled={urgency === 'same_day'}
-         placeholderText="Select date"
+         placeholderText={t('createTask.timeline.selectDate', 'Select date')}
          calendarStartDay={1}
          portalId="root-portal"
          popperClassName="z-[9999]"

@@ -194,6 +194,7 @@ export const tasks = {
   'createTask.timeline.deadlineLabel': 'Конкретен краен срок (по избор)',
   'createTask.timeline.deadlineHelp': 'Оставете празно, ако нямате конкретен краен срок',
   'createTask.timeline.pastDateWarning': 'Този краен срок е в миналото. Моля, изберете бъдеща дата или изчистете полето.',
+  'createTask.timeline.selectDate': 'Изберете дата',
 
   // Photos Section
   'createTask.photos.title': 'Добавете снимка (по избор)',

@@ -217,7 +217,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                 <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.location')}</p>
                 <p className="font-semibold text-gray-900">
                   {profile.city
-                    ? `${cities.find(c => c.slug === profile.city)?.label || profile.city}, ${profile.country}`
+                    ? cities.find(c => c.slug === profile.city)?.label || profile.city
                     : 'Not set'}
                 </p>
               </div>

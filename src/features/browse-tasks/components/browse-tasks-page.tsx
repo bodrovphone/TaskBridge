@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { mockTasks } from "@/lib/mock-data";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useTaskFilters } from "@/app/[lang]/browse-tasks/hooks/use-task-filters";
 import { FilterBar } from "@/app/[lang]/browse-tasks/components/filter-bar";
 import { FiltersModal } from "@/app/[lang]/browse-tasks/components/filters-modal";
@@ -26,7 +25,7 @@ interface PaginatedTasksResponse {
 }
 
 export default function BrowseTasksPage() {
- const { filters, updateFilter, resetFilters, buildApiQuery } = useTaskFilters();
+ const { filters, updateFilter, resetFilters, buildApiQuery, activeFilterCount } = useTaskFilters();
  const { user } = useAuth();
  const router = useRouter();
  const { i18n } = useTranslation();
@@ -34,21 +33,60 @@ export default function BrowseTasksPage() {
  const [authSlideOverOpen, setAuthSlideOverOpen] = useState(false);
  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
- // Get recommended tasks from mock data (first 6 tasks)
- const recommendedTasks = mockTasks.slice(0, 6);
+ // Check if any filters are active (excluding sort and page)
+ const hasActiveFilters = activeFilterCount > 0;
 
- // Fetch tasks from API
- const { data, isLoading, error, refetch } = useQuery<PaginatedTasksResponse>({
-  queryKey: ['browse-tasks', buildApiQuery()],
+ // Always fetch featured tasks (used as fallback when filters return no results)
+ const { data: featuredData } = useQuery<PaginatedTasksResponse>({
+  queryKey: ['featured-tasks'],
   queryFn: async () => {
-   const response = await fetch(`/api/tasks?${buildApiQuery()}`);
+   const response = await fetch('/api/tasks?featured=true');
+   if (!response.ok) throw new Error('Failed to fetch featured tasks');
+   return response.json();
+  },
+  // Always enabled - featured tasks are shown in two scenarios:
+  // 1. No filters applied (primary featured section)
+  // 2. Filters applied but no results (fallback/suggestion)
+ });
+
+ // Fetch filtered tasks with infinite scroll
+ const {
+  data,
+  isLoading,
+  error,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  refetch
+ } = useInfiniteQuery<PaginatedTasksResponse>({
+  queryKey: ['browse-tasks', buildApiQuery()],
+  queryFn: async ({ pageParam = 1 }) => {
+   // Build query with current page
+   const params = new URLSearchParams(buildApiQuery());
+   params.set('page', String(pageParam));
+
+   const response = await fetch(`/api/tasks?${params.toString()}`);
    if (!response.ok) throw new Error('Failed to fetch tasks');
    return response.json();
   },
+  getNextPageParam: (lastPage) => {
+   // Return next page number if hasNext is true, otherwise undefined
+   return lastPage.pagination.hasNext
+     ? lastPage.pagination.page + 1
+     : undefined;
+  },
+  initialPageParam: 1,
  });
 
- const tasks = data?.tasks || [];
- const pagination = data?.pagination;
+ // Flatten all pages into a single array of tasks
+ const tasks = data?.pages.flatMap(page => page.tasks) || [];
+ const pagination = data?.pages[data.pages.length - 1]?.pagination;
+
+ // Get featured tasks (20 high-quality tasks with diversity)
+ // Used in two scenarios:
+ // 1. No filters: Primary featured section
+ // 2. Filters with no results: Fallback suggestions
+ const featuredTasks = featuredData?.tasks || [];
 
  const handleApplyToTask = (taskId: string) => {
   if (!user) {
@@ -63,10 +101,6 @@ export default function BrowseTasksPage() {
 
  const handleRetry = () => {
   refetch();
- };
-
- const handleSetCurrentPage = (page: number) => {
-  updateFilter('page', page + 1); // Convert 0-based to 1-based
  };
 
  // Handle redirect after successful authentication
@@ -107,13 +141,14 @@ export default function BrowseTasksPage() {
      tasks={tasks}
      isLoading={isLoading}
      error={error}
-     recommendedTasks={recommendedTasks}
-     currentPage={(pagination?.page || 1) - 1} // Convert 1-based to 0-based
-     pageSize={pagination?.limit || 20}
-     onSetCurrentPage={handleSetCurrentPage}
+     recommendedTasks={featuredTasks}
      onClearFilters={resetFilters}
      onApplyToTask={handleApplyToTask}
      onRetry={handleRetry}
+     hasActiveFilters={hasActiveFilters}
+     hasNextPage={hasNextPage}
+     isFetchingNextPage={isFetchingNextPage}
+     onLoadMore={fetchNextPage}
     />
    </main>
 

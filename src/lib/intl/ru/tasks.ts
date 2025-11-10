@@ -194,6 +194,7 @@ export const tasks = {
   'createTask.timeline.deadlineLabel': 'Конкретный срок (по желанию)',
   'createTask.timeline.deadlineHelp': 'Оставьте пустым, если у вас нет конкретного срока',
   'createTask.timeline.pastDateWarning': 'Этот срок в прошлом. Пожалуйста, выберите будущую дату или очистите поле.',
+  'createTask.timeline.selectDate': 'Выберите дату',
 
   // Photos Section
   'createTask.photos.title': 'Добавьте фотографию (по желанию)',

@@ -101,6 +101,13 @@ export class TaskService {
   }
 
   /**
+   * Get featured tasks (high-quality tasks with diversity)
+   */
+  async getFeaturedTasks(): Promise<Result<Task[], DatabaseError>> {
+    return await this.repository.findFeaturedTasks()
+  }
+
+  /**
    * Update task
    *
    * Business flow:

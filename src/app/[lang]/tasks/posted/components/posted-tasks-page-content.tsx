@@ -23,6 +23,7 @@ interface PostedTask {
   title: string
   description: string
   category: string
+  subcategory?: string
   budget: number
   budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
   status: 'open' | 'in_progress' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
@@ -96,6 +97,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             title: task.title,
             description: task.description,
             category: task.category,
+            subcategory: task.subcategory,
             budget: task.budget_max_bgn || task.budget_min_bgn || 0,
             budgetType: task.budget_type,
             status: task.status,
@@ -330,6 +332,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 title={task.title}
                 description={task.description}
                 category={task.category}
+                subcategory={task.subcategory}
                 budget={task.budget}
                 budgetType={task.budgetType}
                 status={task.status}

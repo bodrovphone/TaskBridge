@@ -140,6 +140,94 @@ export class TaskRepository {
   }
 
   /**
+   * Find featured tasks (high-quality tasks with diversity)
+   *
+   * Scoring criteria:
+   * - Has images: +3 points
+   * - Long description (>150 chars): +2 points
+   * - Category diversity: Prefer different categories
+   *
+   * Returns top 20 tasks by quality score
+   */
+  async findFeaturedTasks(): Promise<Result<Task[], DatabaseError>> {
+    try {
+      const supabase = await createClient()
+
+      // Fetch more tasks than we need for diversity selection
+      const { data: tasks, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('status', 'open')
+        .order('created_at', { ascending: false })
+        .limit(50) // Fetch 50 to ensure category diversity
+
+      if (error) {
+        console.error('Database error finding featured tasks:', error)
+        return err(
+          new DatabaseError('Failed to find featured tasks', {
+            code: error.code,
+            message: error.message
+          })
+        )
+      }
+
+      if (!tasks || tasks.length === 0) {
+        return ok([])
+      }
+
+      // Score and select featured tasks
+      const scoredTasks = tasks.map((task: Task) => {
+        let score = 0
+
+        // Has images: +3 points
+        if (task.images && task.images.length > 0) {
+          score += 3
+        }
+
+        // Long description: +2 points
+        if (task.description && task.description.length > 150) {
+          score += 2
+        }
+
+        return { task, score }
+      })
+
+      // Sort by score descending
+      scoredTasks.sort((a, b) => b.score - a.score)
+
+      // Select top 20 with category diversity
+      const selectedTasks: Task[] = []
+      const usedCategories = new Set<string>()
+
+      // First pass: add high-scoring tasks from unique categories
+      for (const { task, score } of scoredTasks) {
+        if (selectedTasks.length >= 20) break
+
+        const categoryKey = task.subcategory || task.category
+        if (!usedCategories.has(categoryKey)) {
+          selectedTasks.push(task)
+          usedCategories.add(categoryKey)
+        }
+      }
+
+      // Second pass: fill remaining slots with highest scores
+      if (selectedTasks.length < 20) {
+        for (const { task } of scoredTasks) {
+          if (selectedTasks.length >= 20) break
+          if (!selectedTasks.find(t => t.id === task.id)) {
+            selectedTasks.push(task)
+          }
+        }
+      }
+
+      return ok(selectedTasks)
+    } catch (error) {
+      console.error('Unexpected error finding featured tasks:', error)
+      return err(new DatabaseError('Unexpected error finding featured tasks'))
+    }
+  }
+
+  /**
    * Update task
    */
   async update(

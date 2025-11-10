@@ -6,6 +6,7 @@ import { Card, CardBody, Chip, Divider } from '@nextui-org/react'
 import { MapPin, Wallet, Clock, FileText } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
 import Image from 'next/image'
+import { getCityLabelBySlug } from '@/features/cities'
 
 interface ReviewSectionProps {
  form: any
@@ -99,7 +100,7 @@ export function ReviewSection({ form }: ReviewSectionProps) {
        </h4>
       </div>
       <p className="text-gray-600 ml-7">
-       {deferredFormData.city || t('createTask.review.noCity', 'No city selected')}
+       {deferredFormData.city ? getCityLabelBySlug(deferredFormData.city, t) : t('createTask.review.noCity', 'No city selected')}
        {deferredFormData.neighborhood && `, ${deferredFormData.neighborhood}`}
       </p>
       {deferredFormData.exactAddress && (
