@@ -31,14 +31,14 @@ export const notifications = {
   'notifications.content.applicationRejected.title': 'Application Update',
   'notifications.content.applicationRejected.message': 'Your application for "{{taskTitle}}" was not selected this time. Keep applying!',
   'notifications.content.taskCompleted.title': 'Task Completed! ✅',
-  'notifications.content.taskCompleted.message': '{{professionalName}} has marked your task "{{taskTitle}}" as complete. Please review and confirm.',
+  'notifications.content.taskCompleted.message': '{{professionalName}} has marked your task "{{taskTitle}}" as complete. Leave a review!',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'View here',
   'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {{userName}}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
   'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
-  'notifications.telegram.taskCompleted': '✅ <b>Task Completed!</b>\n\n<b>{{professionalName}}</b> has marked your task "{{taskTitle}}" as complete.\n\n👉 <b>Action Required:</b>\n• Review the work\n• Confirm completion\n• Leave a rating\n\n🔗 View & Confirm: {{link}}',
+  'notifications.telegram.taskCompleted': '✅ <b>Task Completed!</b>\n\n<b>{{professionalName}}</b> has marked your task "{{taskTitle}}" as complete.\n\n👉 <b>Next Steps:</b>\n• Review the work\n• Leave a rating\n\n🔗 View Task: {{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',
@@ -146,8 +146,10 @@ export const notifications = {
   'postedTasks.viewDetails': 'View Details',
   'postedTasks.editTask': 'Edit Task',
   'postedTasks.acceptedProfessional': 'Accepted Professional',
+  'postedTasks.completedBy': 'Completed by professional',
   'postedTasks.awaitingYourConfirmation': 'Awaiting Your Confirmation',
   'postedTasks.markedComplete': 'marked this task as complete',
+  'postedTasks.markComplete': 'Mark Complete',
   'postedTasks.reportIssue': 'Report Issue',
   'postedTasks.cancelTask': 'Cancel Task',
   'postedTasks.cancelTaskConfirm': 'Are you sure you want to cancel this task? The professional will be notified.',

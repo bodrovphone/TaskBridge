@@ -21,6 +21,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const [selectedFilter, setSelectedFilter] = useState<WorkFilter>('in_progress')
   const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false)
   const [selectedTaskForCompletion, setSelectedTaskForCompletion] = useState<WorkTask | null>(null)
+  const [isMarkingComplete, setIsMarkingComplete] = useState(false)
 
   // Fetch accepted applications from API
   const { tasks: workTasks, isLoading, error, refetch } = useWorkTasks()
@@ -64,6 +65,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const handleMarkCompletedConfirm = async (data: any) => {
     if (!selectedTaskForCompletion) return
 
+    setIsMarkingComplete(true)
     try {
       const response = await fetch(`/api/tasks/${selectedTaskForCompletion.taskId}/mark-complete`, {
         method: 'PATCH',
@@ -89,6 +91,8 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
     } catch (error: any) {
       console.error('Error marking task complete:', error)
       alert(error.message || 'Failed to mark task complete')
+    } finally {
+      setIsMarkingComplete(false)
     }
   }
 
@@ -373,6 +377,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
           taskTitle={selectedTaskForCompletion.taskTitle}
           customerName={selectedTaskForCompletion.customer.name}
           payment={`${selectedTaskForCompletion.agreedPrice} лв`}
+          isLoading={isMarkingComplete}
         />
       )}
     </div>

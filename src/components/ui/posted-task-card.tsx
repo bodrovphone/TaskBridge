@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Card, CardBody, Button, Chip } from '@nextui-org/react'
+import { Card, CardBody, Button, Chip, Avatar } from '@nextui-org/react'
 import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
@@ -384,6 +384,28 @@ function PostedTaskCard({
                 <span className="font-semibold">{t('postedTasks.acceptedProfessional')}:</span>{' '}
                 {acceptedApplication.professionalName}
               </p>
+            </div>
+          )}
+          {status === 'completed' && acceptedApplication && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 flex-1">
+                {acceptedApplication.professionalAvatar && (
+                  <Avatar
+                    src={acceptedApplication.professionalAvatar}
+                    name={acceptedApplication.professionalName}
+                    size="sm"
+                    className="flex-shrink-0"
+                  />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-blue-900 truncate">
+                    {acceptedApplication.professionalName}
+                  </p>
+                  <p className="text-xs text-blue-700">
+                    {t('postedTasks.completedBy', 'Completed by professional')}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>

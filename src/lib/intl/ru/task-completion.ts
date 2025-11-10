@@ -42,6 +42,8 @@ export const taskCompletion = {
   'taskCompletion.confirmDialog.question': 'Вы удовлетворены выполненной работой?',
   'taskCompletion.confirmDialog.yes': 'Да, я удовлетворён',
   'taskCompletion.confirmDialog.no': 'Нет, у меня есть замечания',
+  'taskCompletion.confirmDialog.simpleConfirmTitle': 'Отлично! Задача будет отмечена как завершённая.',
+  'taskCompletion.confirmDialog.simpleConfirmMessage': 'Вы можете оставить подробный отзыв о специалисте на странице завершённых задач.',
   'taskCompletion.confirmDialog.reviewReminder': 'Вы можете добавить отзыв сейчас или позже из завершённых задач.',
   'taskCompletion.confirmDialog.reviewSection': 'Отзыв (необязательно)',
   'taskCompletion.confirmDialog.reviewSectionHelp': 'Поделитесь своим опытом и помогите другим клиентам принимать обоснованные решения.',

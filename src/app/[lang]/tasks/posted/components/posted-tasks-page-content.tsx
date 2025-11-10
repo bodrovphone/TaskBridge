@@ -104,8 +104,8 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             applicationsCount: task.applicationsCount || 0,
             acceptedApplication: task.selected_professional_id ? {
               professionalId: task.selected_professional_id,
-              professionalName: 'Professional', // @todo: Fetch professional details
-              professionalAvatar: undefined
+              professionalName: task.professional?.full_name || 'Professional',
+              professionalAvatar: task.professional?.avatar_url || undefined
             } : needsMockProfessional ? {
               // Add mock professional for demo purposes
               professionalId: `mock-prof-${index}`,

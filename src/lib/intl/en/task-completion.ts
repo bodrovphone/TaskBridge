@@ -42,6 +42,8 @@ export const taskCompletion = {
   'taskCompletion.confirmDialog.question': 'Is the work completed to your satisfaction?',
   'taskCompletion.confirmDialog.yes': 'Yes, I\'m satisfied',
   'taskCompletion.confirmDialog.no': 'No, there are issues',
+  'taskCompletion.confirmDialog.simpleConfirmTitle': 'Great! Task will be marked as completed.',
+  'taskCompletion.confirmDialog.simpleConfirmMessage': 'You can leave a detailed review for the professional from your completed tasks page.',
   'taskCompletion.confirmDialog.reviewReminder': 'You can add a review now or later from your completed tasks.',
   'taskCompletion.confirmDialog.reviewSection': 'Review (Optional)',
   'taskCompletion.confirmDialog.reviewSectionHelp': 'Share your experience and help other customers make informed decisions.',

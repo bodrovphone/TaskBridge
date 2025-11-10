@@ -316,12 +316,13 @@ export class TaskRepository {
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
       const supabase = createAdminClient()
 
-      // Start query builder with count and applications
+      // Start query builder with count, applications, and professional details
       let query = supabase
         .from('tasks')
         .select(`
           *,
-          applications(count)
+          applications(count),
+          professional:users!selected_professional_id(id, full_name, avatar_url)
         `, { count: 'exact' })
 
       // Apply filters

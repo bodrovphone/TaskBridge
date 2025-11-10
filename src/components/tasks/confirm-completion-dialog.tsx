@@ -13,17 +13,13 @@ import {
   Textarea,
   Card,
   CardBody,
-  Divider,
-  Input
+  Divider
 } from '@nextui-org/react'
-import { CheckCircle, XCircle, User, Briefcase, AlertCircle, DollarSign, ShieldAlert } from 'lucide-react'
+import { CheckCircle, XCircle, User, Briefcase, AlertCircle, ShieldAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { StarRating } from '@/components/common/star-rating'
 
 export interface ConfirmationData {
-  actualPricePaid?: number
-  rating?: number
-  reviewText?: string
+  // Empty interface - no additional data needed for simple completion confirmation
 }
 
 interface ConfirmCompletionDialogProps {
@@ -52,11 +48,6 @@ export function ConfirmCompletionDialog({
   const [rejectionReason, setRejectionReason] = useState<string>('')
   const [rejectionDescription, setRejectionDescription] = useState('')
 
-  // Review fields (optional)
-  const [actualPricePaid, setActualPricePaid] = useState('')
-  const [rating, setRating] = useState<number>(0)
-  const [reviewText, setReviewText] = useState('')
-
   const rejectionReasons = [
     { value: 'not_completed', label: t('taskCompletion.reject.notCompleted') },
     { value: 'poor_quality', label: t('taskCompletion.reject.poorQuality') },
@@ -65,12 +56,7 @@ export function ConfirmCompletionDialog({
   ]
 
   const handleConfirm = () => {
-    const confirmationData: ConfirmationData = {
-      actualPricePaid: actualPricePaid ? parseFloat(actualPricePaid) : undefined,
-      rating: rating > 0 ? rating : undefined,
-      reviewText: reviewText.trim() || undefined
-    }
-    onConfirm(confirmationData)
+    onConfirm()
   }
 
   const handleReject = () => {
@@ -83,14 +69,8 @@ export function ConfirmCompletionDialog({
     setIsSatisfied(null)
     setRejectionReason('')
     setRejectionDescription('')
-    setActualPricePaid('')
-    setRating(0)
-    setReviewText('')
     onClose()
   }
-
-  const reviewCharCount = reviewText.length
-  const maxReviewChars = 500
 
   return (
     <Modal
@@ -176,88 +156,23 @@ export function ConfirmCompletionDialog({
             </RadioGroup>
           </div>
 
-          {/* If satisfied - Show review fields */}
+          {/* If satisfied - Show simple confirmation message */}
           {isSatisfied === 'yes' && (
             <div className="space-y-4 animate-in slide-in-from-top duration-300">
               <Divider />
 
-              <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">
-                  {t('taskCompletion.confirmDialog.reviewSection')}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {t('taskCompletion.confirmDialog.reviewSectionHelp')}
-                </p>
-
-                {/* Actual Price Paid */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    {t('taskCompletion.confirmDialog.actualPricePaid')}
-                    <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
-                  </label>
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={actualPricePaid}
-                    onValueChange={setActualPricePaid}
-                    placeholder={t('taskCompletion.confirmDialog.actualPricePlaceholder')}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">BGN</span>
-                      </div>
-                    }
-                    description={t('taskCompletion.confirmDialog.actualPriceHelp')}
-                    classNames={{
-                      input: 'text-right'
-                    }}
-                  />
-                </div>
-
-                {/* Rating */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    {t('taskCompletion.confirmDialog.ratingLabel')}
-                    <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
-                  </label>
-                  <StarRating
-                    value={rating}
-                    onChange={setRating}
-                    interactive={true}
-                    size="lg"
-                  />
-                </div>
-
-                {/* Review Text */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium text-gray-700">
-                      {t('taskCompletion.confirmDialog.reviewLabel')}
-                      <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
-                    </label>
-                    <span className={`text-xs ${reviewCharCount > maxReviewChars ? 'text-danger' : 'text-gray-500'}`}>
-                      {reviewCharCount}/{maxReviewChars}
-                    </span>
-                  </div>
-                  <Textarea
-                    value={reviewText}
-                    onValueChange={setReviewText}
-                    placeholder={t('taskCompletion.confirmDialog.reviewPlaceholder', { name: professionalName })}
-                    minRows={3}
-                    maxRows={5}
-                    maxLength={maxReviewChars}
-                    description={t('taskCompletion.confirmDialog.reviewHelp')}
-                  />
-                </div>
-              </div>
-
               <Card className="bg-success-50 border-success-200 border">
-                <CardBody className="p-3">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-success-700">
-                      {t('taskCompletion.confirmDialog.reviewReminder')}
-                    </p>
+                <CardBody className="p-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-success-900">
+                        {t('taskCompletion.confirmDialog.simpleConfirmTitle')}
+                      </p>
+                      <p className="text-sm text-success-700">
+                        {t('taskCompletion.confirmDialog.simpleConfirmMessage')}
+                      </p>
+                    </div>
                   </div>
                 </CardBody>
               </Card>

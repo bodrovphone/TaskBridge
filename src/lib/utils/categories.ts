@@ -3,21 +3,38 @@
  */
 
 /**
- * Normalizes category keys to include 'categories.' prefix
- * Handles both database format (without prefix) and mock data (with prefix)
+ * Converts kebab-case to camelCase
+ * @example kebabToCamel('baking-desserts') // 'bakingDesserts'
+ */
+function kebabToCamel(str: string): string {
+  return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+/**
+ * Normalizes category keys to include 'categories.' or 'categories.sub.' prefix
+ * Handles both database format (kebab-case) and translation format (camelCase with prefix)
  *
  * @param categoryKey - Category key from database or mock data
- * @returns Normalized category key with 'categories.' prefix
+ * @returns Normalized category key with proper prefix and camelCase format
  *
  * @example
- * normalizeCategoryKey('plumbing') // 'categories.plumbing'
- * normalizeCategoryKey('categories.plumbing') // 'categories.plumbing'
+ * normalizeCategoryKey('plumbing') // 'categories.sub.plumber' (subcategory)
+ * normalizeCategoryKey('baking-desserts') // 'categories.sub.bakingDesserts' (subcategory)
+ * normalizeCategoryKey('categories.plumbing') // 'categories.plumbing' (already normalized)
  */
 export function normalizeCategoryKey(categoryKey: string): string {
   if (!categoryKey) return '';
-  return categoryKey.startsWith('categories.')
-    ? categoryKey
-    : `categories.${categoryKey}`;
+
+  // Already normalized
+  if (categoryKey.startsWith('categories.')) {
+    return categoryKey;
+  }
+
+  // Convert kebab-case to camelCase
+  const camelCase = kebabToCamel(categoryKey);
+
+  // All user service_categories are subcategories, so use 'categories.sub.' prefix
+  return `categories.sub.${camelCase}`;
 }
 
 /**

@@ -9,12 +9,11 @@ import {
   ModalFooter,
   Button,
   Checkbox,
-  Textarea,
   Card,
   CardBody,
   Divider
 } from '@nextui-org/react'
-import { CheckCircle, Upload, X, User, Banknote } from 'lucide-react'
+import { CheckCircle, User, Banknote } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 interface MarkCompletedDialogProps {
@@ -30,8 +29,6 @@ interface MarkCompletedDialogProps {
 interface CompletionData {
   requirementsCompleted: boolean
   customerSatisfied: boolean
-  completionPhotos: File[]
-  notes?: string
 }
 
 export function MarkCompletedDialog({
@@ -46,28 +43,15 @@ export function MarkCompletedDialog({
   const { t } = useTranslation()
   const [requirementsCompleted, setRequirementsCompleted] = useState(false)
   const [customerSatisfied, setCustomerSatisfied] = useState(false)
-  const [photos, setPhotos] = useState<File[]>([])
-  const [notes, setNotes] = useState('')
 
   const canSubmit = requirementsCompleted && customerSatisfied
-
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    setPhotos(prev => [...prev, ...files].slice(0, 5)) // Max 5 photos
-  }
-
-  const removePhoto = (index: number) => {
-    setPhotos(prev => prev.filter((_, i) => i !== index))
-  }
 
   const handleConfirm = () => {
     if (!canSubmit) return
 
     onConfirm({
       requirementsCompleted,
-      customerSatisfied,
-      completionPhotos: photos,
-      notes: notes || undefined
+      customerSatisfied
     })
   }
 
@@ -75,8 +59,6 @@ export function MarkCompletedDialog({
     // Reset form
     setRequirementsCompleted(false)
     setCustomerSatisfied(false)
-    setPhotos([])
-    setNotes('')
     onClose()
   }
 
@@ -161,72 +143,6 @@ export function MarkCompletedDialog({
             </div>
           </div>
 
-          <Divider className="my-4" />
-
-          {/* Optional: Completion Photos */}
-          <div className="space-y-4">
-            <p className="text-sm font-medium text-gray-700">
-              {t('taskCompletion.markDialog.photos')}
-            </p>
-
-            <div>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handlePhotoUpload}
-                className="hidden"
-                id="completion-photos"
-                disabled={photos.length >= 5}
-              />
-
-              <label htmlFor="completion-photos">
-                <Button
-                  as="span"
-                  variant="bordered"
-                  startContent={<Upload className="w-4 h-4" />}
-                  className="cursor-pointer"
-                  isDisabled={photos.length >= 5}
-                >
-                  {t('taskCompletion.markDialog.addPhotos')} ({photos.length}/5)
-                </Button>
-              </label>
-            </div>
-
-            {photos.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {photos.map((photo, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt={`Completion photo ${index + 1}`}
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
-                    <button
-                      onClick={() => removePhoto(index)}
-                      className="absolute -top-2 -right-2 bg-danger text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Optional: Notes */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-700">
-              {t('taskCompletion.markDialog.notes')} ({t('common.optional')})
-            </p>
-            <Textarea
-              placeholder={t('taskCompletion.markDialog.notesPlaceholder')}
-              value={notes}
-              onValueChange={setNotes}
-              minRows={3}
-              maxRows={5}
-            />
-          </div>
         </ModalBody>
 
         <ModalFooter>
