@@ -29,11 +29,15 @@ export const notifications = {
   'notifications.content.applicationAccepted.message': 'Your application for "{{taskTitle}}" was accepted by {{customerName}}',
   'notifications.content.applicationRejected.title': 'Application Update',
   'notifications.content.applicationRejected.message': 'Your application for "{{taskTitle}}" was not selected this time. Keep applying!',
+  'notifications.content.taskCompleted.title': 'Task Completed! ✅',
+  'notifications.content.taskCompleted.message': '{{professionalName}} has marked your task "{{taskTitle}}" as complete. Please review and confirm.',
 
   // Telegram notification templates
+  'notifications.telegram.viewHere': 'View here',
   'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {{userName}}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
   'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
+  'notifications.telegram.taskCompleted': '✅ <b>Task Completed!</b>\n\n<b>{{professionalName}}</b> has marked your task "{{taskTitle}}" as complete.\n\n👉 <b>Action Required:</b>\n• Review the work\n• Confirm completion\n• Leave a rating\n\n🔗 View & Confirm: {{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',

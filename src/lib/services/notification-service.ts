@@ -15,7 +15,7 @@
 
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { sendTelegramNotification } from '@/lib/services/telegram-notification'
-import { getNotificationContent, getTelegramMessage, getUserLocale } from '@/lib/utils/notification-i18n'
+import { getNotificationContent, getTelegramMessage, getUserLocale, getViewHereText } from '@/lib/utils/notification-i18n'
 
 export type NotificationType =
   | 'application_received'
@@ -144,7 +144,7 @@ export async function createNotification(
     let message = params.message
 
     // Use localized content for supported types
-    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected']
+    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed']
     if (localizedTypes.includes(params.type) && (!title || !message)) {
       try {
         const typeMap = {
@@ -152,6 +152,7 @@ export async function createNotification(
           'application_received': 'applicationReceived',
           'application_accepted': 'applicationAccepted',
           'application_rejected': 'applicationRejected',
+          'task_completed': 'taskCompleted',
         } as const
 
         const localizedType = typeMap[params.type as keyof typeof typeMap]
@@ -203,22 +204,43 @@ export async function createNotification(
       try {
         // Get localized Telegram message for supported types
         let telegramMessage: string
-        const telegramTypes = ['welcome_message', 'application_received', 'application_accepted']
+        const telegramTypes = ['welcome_message', 'application_received', 'application_accepted', 'task_completed']
 
         if (telegramTypes.includes(params.type)) {
           const typeMap = {
             'welcome_message': 'welcome',
             'application_received': 'applicationReceived',
             'application_accepted': 'applicationAccepted',
+            'task_completed': 'taskCompleted',
           } as const
 
           const localizedType = typeMap[params.type as keyof typeof typeMap]
           if (localizedType) {
-            // Prepare template data with link
+            // Construct proper link with locale and base URL
+            let link = ''
+            if (params.actionUrl) {
+              const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+              const viewHereText = getViewHereText(userLocale)
+
+              // For task_completed notifications, use static link to My Posted Tasks
+              let finalUrl = params.actionUrl
+              if (params.type === 'task_completed') {
+                finalUrl = `/${userLocale}/tasks/posted`
+              } else {
+                // For other notifications, prepend locale if not already present
+                if (!finalUrl.startsWith(`/${userLocale}/`)) {
+                  finalUrl = `/${userLocale}${finalUrl}`
+                }
+              }
+
+              link = `${viewHereText}: ${baseUrl}${finalUrl}`
+            }
+
+            // Prepare template data with localized link
             const templateData = {
               ...params.templateData,
               userName: user.full_name || 'there',
-              link: params.actionUrl ? `View here: ${process.env.NEXT_PUBLIC_SITE_URL || 'https://trudify.com'}${params.actionUrl}` : '',
+              link,
             }
 
             telegramMessage = getTelegramMessage(userLocale, localizedType, templateData)

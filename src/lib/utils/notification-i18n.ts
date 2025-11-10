@@ -32,7 +32,7 @@ function interpolate(template: string, data: Record<string, any>): string {
  */
 export function getNotificationContent(
   locale: Locale,
-  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'applicationRejected',
+  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'applicationRejected' | 'taskCompleted',
   data?: Record<string, any>
 ): { title: string; message: string } {
   const lang = messages[locale] || messages.en;
@@ -70,7 +70,7 @@ export function getNotificationContent(
  */
 export function getTelegramMessage(
   locale: Locale,
-  type: 'welcome' | 'applicationReceived' | 'applicationAccepted',
+  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'taskCompleted',
   data: Record<string, any>
 ): string {
   const lang = messages[locale] || messages.en;
@@ -99,4 +99,13 @@ export function getUserLocale(user: { preferred_language?: string }): Locale {
 
   // Default to Bulgarian (primary market)
   return 'bg';
+}
+
+/**
+ * Get localized "View here" text for Telegram links
+ */
+export function getViewHereText(locale: Locale): string {
+  const lang = messages[locale] || messages.en;
+  const key = 'notifications.telegram.viewHere' as keyof typeof lang;
+  return (lang[key] as string) || 'View here';
 }

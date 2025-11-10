@@ -12,7 +12,7 @@ interface ProfessionalPageProps {
 // Fetch professional data from API
 async function getProfessional(id: string) {
  try {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/professionals/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'}/api/professionals/${id}`, {
    cache: 'no-store' // Always fetch fresh data
   });
 

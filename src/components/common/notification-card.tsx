@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { LocaleLink } from '@/components/common/locale-link';
 import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, bg as bgLocale, ru as ruLocale } from 'date-fns/locale';
@@ -97,7 +97,7 @@ export default function NotificationCard({ notification }: NotificationCardProps
     {/* Action Buttons */}
     {notification.actionUrl && (
      <div className="pt-2">
-      <Link href={notification.actionUrl} onClick={handleActionClick}>
+      <LocaleLink href={notification.actionUrl} onClick={handleActionClick}>
        <Button variant="outline" size="sm" className="h-8 text-xs">
         {notification.type === 'welcome_message'
          ? t('notifications.getStarted')
@@ -105,7 +105,7 @@ export default function NotificationCard({ notification }: NotificationCardProps
          ? t('notifications.viewApplication')
          : t('notifications.viewTask')}
        </Button>
-      </Link>
+      </LocaleLink>
      </div>
     )}
    </div>

@@ -90,11 +90,35 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
     setIsMarkCompletedDialogOpen(true)
   }
 
-  const handleMarkCompletedConfirm = (data: any) => {
-    console.log('Task marked as completed:', selectedTaskForCompletion?.id, data)
-    // In a real app, this would call an API endpoint
-    setIsMarkCompletedDialogOpen(false)
-    setSelectedTaskForCompletion(null)
+  const handleMarkCompletedConfirm = async (data: any) => {
+    if (!selectedTaskForCompletion) return
+
+    try {
+      const response = await fetch(`/api/tasks/${selectedTaskForCompletion.taskId}/mark-complete`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          completionNotes: data.notes,
+          completionPhotos: data.completionPhotos?.map((file: File) => file.name) // @todo: Upload photos to Supabase Storage first
+        })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to mark task complete')
+      }
+
+      // Success! Close dialog and refresh page
+      setIsMarkCompletedDialogOpen(false)
+      setSelectedTaskForCompletion(null)
+
+      // Refresh to show updated status
+      router.refresh()
+
+    } catch (error: any) {
+      console.error('Error marking task complete:', error)
+      alert(error.message || 'Failed to mark task complete')
+    }
   }
 
   // Convert filter key to translation key format
