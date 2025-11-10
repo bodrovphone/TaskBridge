@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { Plus, Handshake, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut } from "lucide-react"
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
+import { Z_INDEX } from "@/lib/constants/z-index"
 // @todo FEATURE: Uncomment when reviews feature is built
 // import { ReviewDialog, ReviewEnforcementDialog } from "@/features/reviews"
 // import { mockCanCreateTask, mockSubmitReview, type PendingReviewTask } from "@/features/reviews"
@@ -114,11 +115,17 @@ function Header() {
    <Navbar
     maxWidth="full"
     position="sticky"
-    className="bg-white shadow-sm border-b border-gray-100 z-[9999]"
+    className={`bg-white shadow-sm border-b border-gray-100 z-[${Z_INDEX.NAVBAR}]`}
     height="5rem"
     isBordered
     isMenuOpen={isMenuOpen}
     onMenuOpenChange={handleMenuOpenChange}
+    classNames={{
+     base: `z-[${Z_INDEX.NAVBAR}]`,
+     wrapper: `z-[${Z_INDEX.NAVBAR}]`,
+     menu: `z-[${Z_INDEX.MOBILE_MENU}] bg-white`,
+     menuItem: 'relative',
+    }}
    >
    {/* Logo/Brand */}
    <NavbarBrand>
@@ -206,7 +213,7 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile Menu */}
-   <NavbarMenu className="bg-white z-[9999]">
+   <NavbarMenu>
     {navigation.map((item) => (
      <NavbarMenuItem key={item.name}>
       <NextUILink
@@ -398,7 +405,7 @@ function Header() {
 
   {/* Floating Action Buttons - Mobile Only (hide when menu is open or on profile pages) */}
   {!isMenuOpen && !pathname.includes('/profile') && (
-  <div className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[45] flex flex-col gap-4">
+  <div className={`lg:hidden fixed right-0 bottom-8 translate-x-[15%] z-[${Z_INDEX.FLOATING_BUTTONS}] flex flex-col gap-4`}>
    {/* Browse Tasks Button - Hide on browse-tasks page */}
    {!pathname.includes('/browse-tasks') && (
     <Button
