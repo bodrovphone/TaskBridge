@@ -1,1 +1,1 @@
-export * from './mock-professionals'
+export * from './professionals-api'

@@ -49,10 +49,10 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
    )}
 
    {/* Main Header Card */}
-   <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
-    <div className="flex flex-col md:flex-row gap-6">
+   <div className="bg-white/80 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+    <div className="flex flex-col lg:flex-row gap-6">
     {/* Avatar and Online Status */}
-    <div className="relative flex-shrink-0">
+    <div className="relative flex-shrink-0 mx-auto lg:mx-0">
      {professional.isOnline ? (
       <Badge
        content=""
@@ -64,28 +64,28 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
        <Avatar
         src={professional.avatar}
         name={professional.name}
-        className="w-32 h-32 text-large"
+        className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 text-large"
        />
       </Badge>
      ) : (
       <Avatar
        src={professional.avatar}
        name={professional.name}
-       className="w-32 h-32 text-large"
+       className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 text-large"
       />
      )}
     </div>
 
     {/* Professional Info */}
     <div className="flex-1">
-     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-      {/* Name and Title */}
-      <div>
-       <h1 className="text-3xl font-bold text-gray-900 mb-2">
+     <div className="flex flex-col gap-4">
+      {/* Name and Title - Centered on mobile/tablet, left on desktop */}
+      <div className="text-center lg:text-left">
+       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
         {professional.name}
        </h1>
 
-       <p className="text-lg text-gray-600 mb-4">
+       <p className="text-base sm:text-lg text-gray-600 mb-4">
         {professional.title}
        </p>
 
@@ -93,11 +93,11 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
        <SafetyIndicators
         safetyStatus={professional.safetyStatus}
         mode="badges"
-        className="mb-4"
+        className="mb-4 justify-center lg:justify-start"
        />
 
        {/* Rating and Location */}
-       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-gray-600 mb-4">
         {professional.reviewCount > 0 ? (
           <button
            onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
@@ -126,35 +126,35 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
        </div>
       </div>
 
-      {/* Stats */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 min-w-fit">
-       <div className="grid grid-cols-3 gap-4 text-center">
+      {/* Stats - Full width on mobile/tablet, inline on desktop */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6">
+       <div className="grid grid-cols-3 gap-3 sm:gap-6 text-center">
         <div>
          {professional.completedTasks > 0 ? (
            <>
-             <div className="text-xl font-bold text-blue-600">{professional.completedTasks}</div>
-             <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.completedTasks')}</div>
+             <div className="text-xl sm:text-2xl font-bold text-blue-600">{professional.completedTasks}</div>
+             <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.completedTasks')}</div>
            </>
          ) : (
            <>
-             <div className="text-xl font-bold text-blue-500">0</div>
-             <div className="text-xs text-blue-600 leading-tight font-medium">{t('professionals.card.lookingForFirstTask', 'Ready for first task')}</div>
+             <div className="text-xl sm:text-2xl font-bold text-blue-500">0</div>
+             <div className="text-xs sm:text-sm text-blue-600 leading-tight font-medium mt-1">{t('professionals.card.lookingForFirstTask', 'Ready for first task')}</div>
            </>
          )}
         </div>
         <div>
-         <div className="text-xl font-bold text-green-600">
+         <div className="text-xl sm:text-2xl font-bold text-green-600">
           {formatYearsExperience(
             professional.yearsExperience,
             i18n.language,
             (key: string, fallback?: string) => t(key, fallback || '')
           )}
          </div>
-         <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.experience', 'Experience')}</div>
+         <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.experience', 'Experience')}</div>
         </div>
         <div>
-         <div className="text-xl font-bold text-purple-600">{professional.responseTime}</div>
-         <div className="text-xs text-gray-600 leading-tight">{t('professionalDetail.stats.responseTime')}</div>
+         <div className="text-xl sm:text-2xl font-bold text-purple-600">{professional.responseTime}</div>
+         <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.responseTime')}</div>
         </div>
        </div>
       </div>

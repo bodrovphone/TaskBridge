@@ -6,20 +6,24 @@ import { useTranslation } from 'react-i18next';
 import { useDisclosure } from "@nextui-org/react";
 import { LocaleLink } from '@/components/common/locale-link';
 import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
+import { getCityLabelBySlug } from '@/features/cities';
+import { getCategoryLabelBySlug } from '@/features/categories';
+import { getCategoryColor } from '@/lib/utils/category';
 
 interface CompletedTask {
  id: string;
  title: string;
- category: string;
+ categorySlug: string; // Raw slug from API
+ citySlug: string; // Raw slug from API
+ neighborhood?: string;
  completedDate: string;
  clientRating: number;
- budget: string;
- location: string;
+ budget: number; // Raw number from API
+ durationHours: number; // Raw number from API
  clientName?: string;
  clientAvatar?: string;
  testimonial?: string;
  isVerified?: boolean;
- durationCompleted?: string;
  complexity?: 'Simple' | 'Standard' | 'Complex';
 }
 
@@ -148,9 +152,9 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
                {task.title}
               </h4>
               <div className="flex flex-wrap gap-2 mb-3">
-               <Chip size="sm" variant="flat" color="secondary">
-                {task.category}
-               </Chip>
+               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${getCategoryColor(task.categorySlug)} w-fit`}>
+                {getCategoryLabelBySlug(task.categorySlug, t)}
+               </span>
                {task.isVerified && (
                 <Chip
                  size="sm"
@@ -165,11 +169,13 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
              </div>
 
              <div className="text-right">
-              <div className="text-xl font-bold text-green-600">{task.budget}</div>
-              {task.durationCompleted && (
+              <div className="text-xl font-bold text-green-600">
+               {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
+              </div>
+              {task.durationHours > 0 && (
                <div className="text-xs text-gray-500 flex items-center gap-1">
                 <Clock size={10} />
-                {task.durationCompleted}
+                {t('taskCompletion.completedIn', 'Завършено за')} {task.durationHours}{t('common.hours.short', 'ч')}
                </div>
               )}
              </div>
@@ -178,7 +184,9 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
             <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
              <div className="flex items-center gap-1">
               <MapPin size={14} />
-              <span>{task.location}</span>
+              <span>
+               {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
+              </span>
              </div>
              <div className="flex items-center gap-2">
               {renderStars(task.clientRating)}
@@ -251,9 +259,9 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
           </h4>
           <div className="flex items-center flex-wrap gap-2 mb-2">
            <span className="text-xs text-gray-500 whitespace-nowrap">{formatDate(task.completedDate)}</span>
-           <Chip size="sm" variant="flat" color="secondary" className="text-xs">
-            {task.category}
-           </Chip>
+           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${getCategoryColor(task.categorySlug)} w-fit`}>
+            {getCategoryLabelBySlug(task.categorySlug, t)}
+           </span>
            {task.isVerified && (
             <Chip size="sm" variant="flat" color="success" startContent={<CheckCircle size={10} />} className="text-xs">
              {t('professionalDetail.verified')}
@@ -262,14 +270,18 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
           </div>
          </div>
          <div className="text-right flex-shrink-0 ml-2">
-          <div className="text-lg font-bold text-green-600 whitespace-nowrap">{task.budget}</div>
+          <div className="text-lg font-bold text-green-600 whitespace-nowrap">
+           {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
+          </div>
          </div>
         </div>
 
         <div className="flex items-center justify-between mb-2">
          <div className="flex items-center gap-1 flex-1 min-w-0">
           <MapPin size={12} className="flex-shrink-0" />
-          <span className="truncate text-sm text-gray-600">{task.location}</span>
+          <span className="truncate text-sm text-gray-600">
+           {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
+          </span>
          </div>
          <div className="flex items-center gap-1 ml-2">
           {renderStars(task.clientRating)}

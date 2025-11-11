@@ -16,6 +16,18 @@ const supabaseAdmin = createClient<Database>(
 
 type UserProfile = Database['public']['Tables']['users']['Row'];
 
+// Helper function to determine task complexity
+function determineComplexity(budget: number, duration: number): 'Simple' | 'Standard' | 'Complex' {
+  // Complex: High budget OR long duration
+  if (budget > 150 || duration > 6) return 'Complex';
+
+  // Simple: Low budget AND short duration
+  if (budget < 60 && duration < 2) return 'Simple';
+
+  // Everything else is standard
+  return 'Standard';
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -59,11 +71,70 @@ export async function GET(
 
     console.log('✅ Professional found:', professional.full_name);
 
+    // Fetch completed tasks in parallel
+    const { data: completedTasksData, error: tasksError } = await supabaseAdmin
+      .from('tasks')
+      .select(`
+        id,
+        title,
+        category,
+        subcategory,
+        budget_max_bgn,
+        budget_min_bgn,
+        city,
+        neighborhood,
+        completed_at,
+        estimated_duration_hours,
+        customer:customer_id(
+          full_name,
+          avatar_url,
+          is_phone_verified,
+          is_email_verified
+        )
+      `)
+      .eq('selected_professional_id', id)
+      .eq('status', 'completed')
+      .not('completed_at', 'is', null)
+      .order('completed_at', { ascending: false })
+      .limit(20);
+
+    if (tasksError) {
+      console.error('⚠️ Error fetching completed tasks:', tasksError);
+      // Don't fail the whole request, just log the error
+    }
+
+    console.log(`📋 Found ${completedTasksData?.length || 0} completed tasks`);
+
     // @todo: Fetch additional data in parallel
     // - reviews (from reviews table)
     // - portfolio items (from portfolio table)
-    // - completed tasks (from tasks table where selected_professional_id = id)
     // - services (from service_categories array or separate services table)
+
+    // Transform completed tasks for frontend (returns raw slugs for client-side translation)
+    const completedTasksList = completedTasksData?.map((task: any) => {
+      const customer = task.customer;
+      const budget = task.budget_max_bgn || task.budget_min_bgn || 0;
+      const duration = task.estimated_duration_hours || 0;
+
+      return {
+        id: task.id,
+        title: task.title,
+        // Return raw subcategory slug - frontend will translate using getCategoryLabelBySlug()
+        categorySlug: task.subcategory || task.category,
+        // Return raw city slug and neighborhood - frontend will translate using getCityLabelBySlug()
+        citySlug: task.city,
+        neighborhood: task.neighborhood,
+        completedDate: task.completed_at,
+        clientRating: 5, // Default to 5 stars (will be replaced with real reviews later)
+        budget: budget,
+        durationHours: duration,
+        clientName: customer?.full_name || 'Анонимен клиент',
+        clientAvatar: customer?.avatar_url,
+        testimonial: undefined, // Will be added when reviews table is integrated
+        isVerified: customer?.is_phone_verified || customer?.is_email_verified || false,
+        complexity: determineComplexity(budget, duration)
+      };
+    }) || [];
 
     // Transform to match frontend expectations using actual database column names
     const transformedProfessional = {
@@ -85,15 +156,18 @@ export async function GET(
       isOnline: professional.availability_status === 'online',
       rating: professional.average_rating || 0,
       reviewsCount: professional.total_reviews || 0,
-      completedJobs: professional.tasks_completed || 0,
+      // Use actual count of completed tasks instead of potentially stale counter
+      completedJobs: completedTasksList.length,
       createdAt: professional.created_at,
       updatedAt: professional.updated_at,
+
+      // Real data from database
+      completedTasksList: completedTasksList,
 
       // Mock data until we have real tables
       services: [],
       portfolio: [],
       reviews: [],
-      completedTasksList: [],
       responseTime: professional.response_time_hours
         ? `${professional.response_time_hours} часа`
         : "2 часа",

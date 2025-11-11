@@ -21,9 +21,6 @@ interface ResultsSectionProps {
   isLoading: boolean;
   error: any;
 
-  // Mock Data (for reference)
-  mockProfessionals: any[];
-
   // Actions
   onClearFilters: () => void;
   onRetry?: () => void;
@@ -40,7 +37,6 @@ export default function ResultsSection({
   featuredProfessionals,
   isLoading,
   error,
-  mockProfessionals,
   onClearFilters,
   onRetry,
   hasActiveFilters = false,

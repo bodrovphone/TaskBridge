@@ -4,20 +4,24 @@ import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Ch
 import { CheckCircle, MapPin, Star, ExternalLink, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { LocaleLink } from '@/components/common/locale-link';
+import { getCityLabelBySlug } from '@/features/cities';
+import { getCategoryLabelBySlug } from '@/features/categories';
+import { getCategoryColor } from '@/lib/utils/category';
 
 interface CompletedTask {
  id: string;
  title: string;
- category: string;
+ categorySlug: string; // Raw slug from API
+ citySlug: string; // Raw slug from API
+ neighborhood?: string;
  completedDate: string;
  clientRating: number;
- budget: string;
- location: string;
+ budget: number; // Raw number from API
+ durationHours: number; // Raw number from API
  clientName?: string;
  clientAvatar?: string;
  testimonial?: string;
  isVerified?: boolean;
- durationCompleted?: string;
  complexity?: 'Simple' | 'Standard' | 'Complex';
 }
 
@@ -102,9 +106,9 @@ export default function CompletedTasksDialog({
            </h4>
            <div className="flex items-center flex-wrap gap-2 mb-2">
             <span className="text-sm text-gray-500">{formatDate(task.completedDate)}</span>
-            <Chip size="sm" variant="flat" color="secondary">
-             {task.category}
-            </Chip>
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${getCategoryColor(task.categorySlug)} w-fit`}>
+             {getCategoryLabelBySlug(task.categorySlug, t)}
+            </span>
             {task.isVerified && (
              <Chip
               size="sm"
@@ -115,20 +119,22 @@ export default function CompletedTasksDialog({
               {t('professionalDetail.verified')}
              </Chip>
             )}
-            {task.durationCompleted && (
+            {task.durationHours > 0 && (
              <Chip
               size="sm"
               variant="flat"
               color="default"
               startContent={<Clock size={12} />}
              >
-              {task.durationCompleted}
+              {t('taskCompletion.completedIn', 'Завършено за')} {task.durationHours}{t('common.hours.short', 'ч')}
              </Chip>
             )}
            </div>
           </div>
           <div className="text-right flex-shrink-0">
-           <div className="text-xl font-bold text-green-600 mb-2">{task.budget}</div>
+           <div className="text-xl font-bold text-green-600 mb-2">
+            {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
+           </div>
            <div className="flex items-center gap-1 justify-end">
             {renderStars(task.clientRating)}
             <span className="text-sm text-gray-600 ml-1">{task.clientRating}</span>
@@ -138,7 +144,9 @@ export default function CompletedTasksDialog({
 
          <div className="flex items-center text-sm text-gray-600 mb-3">
           <MapPin size={14} className="mr-1" />
-          <span>{task.location}</span>
+          <span>
+           {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
+          </span>
          </div>
 
          {task.testimonial && (

@@ -10,7 +10,6 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
 import { motion } from "framer-motion";
 import { useProfessionalFilters } from '../hooks/use-professional-filters';
-import { mockProfessionals } from '../lib/mock-professionals';
 import SearchFiltersSection from './sections/search-filters-section';
 import ResultsSection from './sections/results-section';
 import { FilterBar } from './filters/filter-bar';
@@ -224,13 +223,12 @@ export default function ProfessionalsPage() {
         {/* Active Filters Display */}
         <ActiveFilters />
 
-        {/* Results Section (API + Mock Data) */}
+        {/* Results Section (API Data) */}
         <ResultsSection
           professionals={professionals}
           featuredProfessionals={featuredProfessionals}
           isLoading={isLoading}
           error={error}
-          mockProfessionals={mockProfessionals}
           onClearFilters={resetFilters}
           onRetry={handleRetry}
           hasActiveFilters={hasActiveFilters}
