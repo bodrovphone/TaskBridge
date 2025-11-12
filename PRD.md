@@ -191,6 +191,11 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 - Task urgency level (same day, within week, flexible)
 - Special requirements or notes
 
+#### Task Reopening (Customers)
+
+- Customers can reopen completed or cancelled tasks from their Posted Tasks page
+- Reopening redirects to Create Task form with all original data pre-filled (except deadline, which defaults to "flexible" to avoid past dates), allowing customers to review and edit before creating a new task clone
+
 #### Task Discovery (Professionals)
 
 - Browse tasks by:

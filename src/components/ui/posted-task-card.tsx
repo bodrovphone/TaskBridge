@@ -229,11 +229,8 @@ function PostedTaskCard({
   }
 
   const handleReopenTask = () => {
-    if (confirm(t('postedTasks.reopenTaskConfirm'))) {
-      console.log('Reopening task:', id)
-      // @todo: Call API to reopen task (status = 'open', clear selectedProfessionalId)
-      router.refresh()
-    }
+    // Redirect to Create Task page with prefill query params
+    router.push(`/${lang}/create-task?reopen=true&originalTaskId=${id}`)
   }
 
   const handleSubmitReview = async (data: { taskId: string; rating: number; reviewText?: string; actualPricePaid?: number }) => {

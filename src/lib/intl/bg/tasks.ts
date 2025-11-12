@@ -267,6 +267,14 @@ export const tasks = {
   'createTask.error': 'Грешка при създаване на задача',
   'createTask.errorMessage': 'Моля, опитайте отново по-късно.',
 
+  // Reopen task flow
+  'createTask.reopeningBanner.title': 'Повторно отваряне на задача',
+  'createTask.reopeningBanner.originalTask': 'Оригинална задача:',
+  'createTask.reopeningBanner.description': 'Прегледайте и редактирайте детайлите по-долу преди публикуване. Това ще създаде нова задача.',
+  'createTask.reopeningBanner.startFresh': 'Започни отначало',
+  'createTask.reopenSuccess': 'Задачата е отворена отново успешно!',
+  'createTask.reopenSuccessMessage': 'Вашата задача е публикувана отново и вече е отворена за нови кандидатури.',
+
   'taskCard.apply': 'Кандидатствай',
   'taskCard.seeDetails': 'Виж детайли',
   'taskCard.anonymous': 'Анонимен',

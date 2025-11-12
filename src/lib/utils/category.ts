@@ -267,7 +267,7 @@ export function getCategoryName(
 ): string {
   // If subcategory exists, use it for display
   if (subcategory) {
-    // Convert kebab-case to camelCase for translation key
+    // Convert kebab-case to camelCase for translation key (e.g., "martial-arts" → "martialArts")
     const camelCase = subcategory.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
     const subcategoryKey = `categories.sub.${camelCase}`
     const translated = t(subcategoryKey, '')

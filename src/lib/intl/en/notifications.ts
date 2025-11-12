@@ -158,7 +158,7 @@ export const notifications = {
   'postedTasks.cancelTask': 'Cancel Task',
   'postedTasks.cancelTaskConfirm': 'Are you sure you want to cancel this task? The professional will be notified.',
   'postedTasks.reopenTask': 'Reopen Task',
-  'postedTasks.reopenTaskConfirm': 'Reopen this task to find a new professional? This will remove the current assignment.',
+  'postedTasks.reopenTaskConfirm': 'Reopen this task? You\'ll be able to review and edit the details before posting again.',
   'postedTasks.empty.title': 'Got an idea? Let\'s make it happen! 💡',
   'postedTasks.empty.description': 'Your task board is empty and ready for action. From home repairs to creative projects, professionals are waiting to help.',
   'postedTasks.empty.subtext': 'Post your first task in under 2 minutes. It\'s free, simple, and you\'ll start receiving applications right away!',

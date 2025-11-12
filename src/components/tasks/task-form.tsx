@@ -2,7 +2,7 @@
 
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { useToast } from '@/hooks/use-toast'
@@ -43,9 +43,10 @@ interface TaskFormProps {
   mode: 'create' | 'edit'
   initialData?: Partial<TaskFormData>
   taskId?: string
+  isReopening?: boolean
 }
 
-export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
+export function TaskForm({ mode, initialData, taskId, isReopening }: TaskFormProps) {
   const { t, i18n } = useTranslation()
   const router = useRouter()
   const params = useParams()
@@ -54,14 +55,7 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
   const locale = (params?.lang as string) || i18n.language || 'bg'
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [category, setCategory] = useState(initialData?.category || '')
   const [showCategoryPicker, setShowCategoryPicker] = useState(false)
-  const [budgetType, setBudgetType] = useState<'fixed' | 'range' | 'unclear'>(
-    initialData?.budgetType || 'unclear'
-  )
-  const [urgency, setUrgency] = useState<'same_day' | 'within_week' | 'flexible'>(
-    initialData?.urgency || 'flexible'
-  )
   const [showValidationDialog, setShowValidationDialog] = useState(false)
   const [validationErrors, setValidationErrors] = useState<Array<{ field: string; message: string }>>([])
 
@@ -73,8 +67,28 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
   const budgetRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
 
+  // Initialize state from initialData when reopening
+  const [category, setCategory] = useState(initialData?.category || '')
+  const [subcategory, setSubcategory] = useState(initialData?.subcategory || '')
+  const [budgetType, setBudgetType] = useState<'fixed' | 'range' | 'unclear'>(
+    initialData?.budgetType || 'unclear'
+  )
+  const [urgency, setUrgency] = useState<'same_day' | 'within_week' | 'flexible'>(
+    initialData?.urgency || 'flexible'
+  )
+
+  // Update state when initialData changes (for reopen flow)
+  useEffect(() => {
+    if (initialData) {
+      setCategory(initialData.category || '')
+      setSubcategory(initialData.subcategory || '')
+      setBudgetType(initialData.budgetType || 'unclear')
+      setUrgency(initialData.urgency || 'flexible')
+    }
+  }, [initialData])
+
   const form = useForm({
-    defaultValues: mode === 'edit' && initialData
+    defaultValues: (mode === 'edit' || isReopening) && initialData
       ? {
           category: initialData.category || '',
           subcategory: initialData.subcategory || '',
@@ -142,7 +156,13 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
           }
 
           // Success toast
-          if (imageSkipped) {
+          if (isReopening) {
+            toast({
+              title: t('createTask.reopenSuccess', 'Task reopened successfully!'),
+              description: t('createTask.reopenSuccessMessage', 'Your task has been reposted and is now open for new applications.'),
+              variant: 'success'
+            })
+          } else if (imageSkipped) {
             toast({
               title: t('createTask.success', 'Task created successfully!'),
               description: t('createTask.successWithoutImage', 'Your task has been posted without an image.'),
@@ -361,8 +381,12 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
           >
           {/* Category - Edit mode shows display by default, create mode always shows picker */}
           <div ref={categoryRef}>
-            {mode === 'edit' && !showCategoryPicker && category ? (
-              <CategoryDisplay category={category} onReset={handleCategoryReset} />
+            {(mode === 'edit' || isReopening) && !showCategoryPicker && category ? (
+              <CategoryDisplay
+                category={category}
+                subcategory={subcategory}
+                onReset={handleCategoryReset}
+              />
             ) : (
               <CategorySelection form={form} onCategoryChange={handleCategoryChange} />
             )}
@@ -392,7 +416,7 @@ export function TaskForm({ mode, initialData, taskId }: TaskFormProps) {
               </div>
 
               {/* Photos */}
-              <PhotosSection form={form} initialImages={mode === 'edit' ? initialData?.images : undefined} />
+              <PhotosSection form={form} initialImages={(mode === 'edit' || isReopening) ? initialData?.images : undefined} />
 
               {/* Review & Submit */}
               <ReviewSection form={form} />

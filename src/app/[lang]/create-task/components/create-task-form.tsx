@@ -2,6 +2,11 @@
 
 import { TaskForm } from '@/components/tasks/task-form'
 
-export function CreateTaskForm() {
-  return <TaskForm mode="create" />
+interface CreateTaskFormProps {
+  initialData?: any
+  isReopening?: boolean
+}
+
+export function CreateTaskForm({ initialData, isReopening }: CreateTaskFormProps) {
+  return <TaskForm mode="create" initialData={initialData} isReopening={isReopening} />
 }

@@ -6,10 +6,11 @@ import { getCategoryName } from '@/lib/utils/category'
 
 interface CategoryDisplayProps {
   category: string
+  subcategory?: string
   onReset: () => void
 }
 
-export function CategoryDisplay({ category, onReset }: CategoryDisplayProps) {
+export function CategoryDisplay({ category, subcategory, onReset }: CategoryDisplayProps) {
   const { t } = useTranslation()
 
   return (
@@ -37,7 +38,7 @@ export function CategoryDisplay({ category, onReset }: CategoryDisplayProps) {
             closeButton: "text-gray-500 hover:text-gray-700"
           }}
         >
-          {getCategoryName(t, category)}
+          {getCategoryName(t, category, subcategory)}
         </Chip>
       </div>
     </div>
