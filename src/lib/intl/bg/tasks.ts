@@ -105,6 +105,8 @@ export const tasks = {
   'browseTasks.results.error.subtext':
     'Обикновено се оправя по-бързо, отколкото можете да кажете "капучино"',
   'browseTasks.results.error.retry': 'Опитай отново',
+  'browseTasks.results.allTasksLoaded': 'Достигнахте края на списъка',
+  'browseTasks.results.loadingMore': 'Зареждане на повече задачи...',
   'browseTasks.pagination.previous': 'Предишна',
   'browseTasks.pagination.next': 'Следваща',
   'browseTasks.search.tags.programming': 'Програмиране',

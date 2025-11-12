@@ -82,6 +82,7 @@ export async function GET(request: NextRequest) {
       city: searchParams.get('city') || undefined,
       neighborhood: searchParams.get('neighborhood') || undefined,
       minRating: searchParams.get('minRating') || undefined,
+      minJobs: searchParams.get('minJobs') || undefined,
       verified: searchParams.get('verified') || undefined,
       mostActive: searchParams.get('mostActive') || undefined,
       sortBy: searchParams.get('sortBy') || undefined,

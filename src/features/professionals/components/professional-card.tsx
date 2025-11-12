@@ -93,17 +93,19 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
         <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
          <Star className="text-yellow-500 fill-current" size={16} />
          <span className="font-bold text-gray-900">{rating}</span>
-         <span className="text-gray-600 text-sm">({reviewsCount})</span>
+         {reviewsCount > 0 && (
+           <span className="text-gray-600 text-sm">({reviewsCount})</span>
+         )}
         </div>
        </div>
-       <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg">
-        <Briefcase size={14} className="text-blue-500" />
+       <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg whitespace-nowrap">
+        <Briefcase size={14} className="text-blue-500 flex-shrink-0" />
         {completedJobs === 0 ? (
           <span className="font-medium text-blue-600">{t('professionals.card.lookingForFirstTask', 'Looking to get first task from you')}</span>
         ) : (
           <>
             <span className="font-semibold text-blue-600">{completedJobs}</span>
-            <span>{t('professionals.card.completedJobs', 'completed jobs')}</span>
+            <span>{t('professionals.card.completedJobsShort', 'jobs')}</span>
           </>
         )}
        </div>

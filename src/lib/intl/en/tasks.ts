@@ -104,6 +104,8 @@ export const tasks = {
   'browseTasks.results.error.subtext':
     'This usually fixes itself faster than you can say "cappuccino"',
   'browseTasks.results.error.retry': 'Try Again',
+  'browseTasks.results.allTasksLoaded': "You've reached the end of the list",
+  'browseTasks.results.loadingMore': 'Loading more tasks...',
   'browseTasks.pagination.previous': 'Previous',
   'browseTasks.pagination.next': 'Next',
   'browseTasks.search.tags.programming': 'Programming',

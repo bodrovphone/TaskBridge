@@ -20,6 +20,7 @@ export const professionals = {
   'professionals.rating': 'Рейтинг',
   'professionals.completedJobs': 'Выполненные задания',
   'professionals.card.completedJobs': 'выполненных заданий',
+  'professionals.card.completedJobsShort': 'заданий',
   'professionals.card.lookingForFirstTask': 'Готов к первому заданию',
   'professionals.card.waitingForReviews': 'Ожидает первых отзывов',
   'professionals.startingFrom': 'Начиная от',
@@ -125,6 +126,8 @@ export const professionals = {
   'professionals.results.featured.title': 'Рекомендуемые специалисты',
   'professionals.results.featured.description':
     'Ознакомьтесь с этими высококлассными специалистами из нашей сети',
+  'professionals.results.allLoaded': 'Вы достигли конца списка',
+  'professionals.results.loadingMore': 'Загрузка ещё специалистов...',
 
   // Pagination
   'professionals.pagination.previous': 'Предыдущая',

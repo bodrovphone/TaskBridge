@@ -20,6 +20,7 @@ export const professionals = {
   'professionals.rating': 'Рейтинг',
   'professionals.completedJobs': 'Завършени задачи',
   'professionals.card.completedJobs': 'завършени задачи',
+  'professionals.card.completedJobsShort': 'задачи',
   'professionals.card.lookingForFirstTask': 'Готов за първа задача',
   'professionals.card.waitingForReviews': 'Очаква първи отзиви',
   'professionals.startingFrom': 'Започва от',
@@ -126,6 +127,8 @@ export const professionals = {
   'professionals.results.featured.title': 'Препоръчани професионалисти',
   'professionals.results.featured.description':
     'Разгледайте тези най-високо оценени професионалисти от нашата мрежа',
+  'professionals.results.allLoaded': 'Достигнахте края на списъка',
+  'professionals.results.loadingMore': 'Зареждане на повече професионалисти...',
 
   // Pagination
   'professionals.pagination.previous': 'Предишна',

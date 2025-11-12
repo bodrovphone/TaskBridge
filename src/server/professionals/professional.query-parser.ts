@@ -50,7 +50,7 @@ export function parseQueryParams(
   }
 
   // === Min Jobs Filter ===
-  if (params.minJobs) {
+  if (params.minJobs !== undefined) {
     const jobs = parseInt(params.minJobs, 10)
     if (!isNaN(jobs) && jobs >= 0) {
       parsed.minJobs = jobs

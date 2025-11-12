@@ -20,6 +20,7 @@ export const professionals = {
   'professionals.rating': 'Rating',
   'professionals.completedJobs': 'Completed Jobs',
   'professionals.card.completedJobs': 'completed jobs',
+  'professionals.card.completedJobsShort': 'jobs',
   'professionals.card.lookingForFirstTask': 'Ready for first task',
   'professionals.card.waitingForReviews': 'Waiting for first reviews',
   'professionals.startingFrom': 'Starting from',
@@ -125,6 +126,8 @@ export const professionals = {
   'professionals.results.featured.title': 'Featured Professionals',
   'professionals.results.featured.description':
     'Check out these top-rated professionals from our network',
+  'professionals.results.allLoaded': "You've reached the end of the list",
+  'professionals.results.loadingMore': 'Loading more professionals...',
 
   // Pagination
   'professionals.pagination.previous': 'Previous',
