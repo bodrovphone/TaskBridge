@@ -32,6 +32,8 @@ export const notifications = {
   'notifications.content.applicationRejected.message': 'Вашата кандидатура за "{{taskTitle}}" не беше избрана този път. Продължавайте да кандидатствате!',
   'notifications.content.taskCompleted.title': 'Задачата е завършена! ✅',
   'notifications.content.taskCompleted.message': '{{professionalName}} маркира вашата задача "{{taskTitle}}" като завършена. Оставете оценка!',
+  'notifications.content.professionalWithdrew.title': 'Професионалистът се оттегли',
+  'notifications.content.professionalWithdrew.message': '{{professionalName}} се оттегли от вашата задача "{{taskTitle}}". Задачата отново е отворена за нови кандидатури.',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'Вижте тук',
@@ -39,6 +41,7 @@ export const notifications = {
   'notifications.telegram.applicationReceived': '✅ <b>Нова кандидатура!</b>\n\n<b>{{professionalName}}</b> кандидатства за вашата задача:\n"{{taskTitle}}"\n\n{{link}}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Кандидатурата е приета!</b>\n\nВашата кандидатура за "{{taskTitle}}" беше приета от {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
   'notifications.telegram.taskCompleted': '✅ <b>Задачата е завършена!</b>\n\n<b>{{professionalName}}</b> маркира вашата задача "{{taskTitle}}" като завършена.\n\n👉 <b>Следващи стъпки:</b>\n• Прегледайте работата\n• Оставете оценка\n\n🔗 Виж задачата: {{link}}',
+  'notifications.telegram.professionalWithdrew': '⚠️ <b>Професионалистът се оттегли</b>\n\n<b>{{professionalName}}</b> се оттегли от вашата задача:\n"{{taskTitle}}"\n\n📋 Задачата отново е <b>отворена</b> за нови кандидатури.\n\n👉 <b>Следващи стъпки:</b>\n• Прегледайте детайлите на задачата\n• Проверете дали бюджетът е конкурентен\n• Отговаряйте бързо на нови кандидатури\n\n🔗 Виж задачата: {{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Обратно към задачите',

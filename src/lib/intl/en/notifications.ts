@@ -32,6 +32,8 @@ export const notifications = {
   'notifications.content.applicationRejected.message': 'Your application for "{{taskTitle}}" was not selected this time. Keep applying!',
   'notifications.content.taskCompleted.title': 'Task Completed! ✅',
   'notifications.content.taskCompleted.message': '{{professionalName}} has marked your task "{{taskTitle}}" as complete. Leave a review!',
+  'notifications.content.professionalWithdrew.title': 'Professional Withdrew',
+  'notifications.content.professionalWithdrew.message': '{{professionalName}} has withdrawn from your task "{{taskTitle}}". Your task is now open for new applications.',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'View here',
@@ -39,6 +41,7 @@ export const notifications = {
   'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
   'notifications.telegram.taskCompleted': '✅ <b>Task Completed!</b>\n\n<b>{{professionalName}}</b> has marked your task "{{taskTitle}}" as complete.\n\n👉 <b>Next Steps:</b>\n• Review the work\n• Leave a rating\n\n🔗 View Task: {{link}}',
+  'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{{professionalName}}</b> has withdrawn from your task:\n"{{taskTitle}}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',

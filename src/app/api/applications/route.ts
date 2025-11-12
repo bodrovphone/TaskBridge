@@ -204,6 +204,7 @@ export async function GET(request: NextRequest) {
         availability_date,
         status,
         responded_at,
+        accepted_at,
         rejection_reason,
         withdrawn_at,
         withdrawal_reason,

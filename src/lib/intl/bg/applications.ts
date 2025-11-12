@@ -218,6 +218,54 @@ export const applications = {
   'myWork.completedOn': 'Завършена на {{date}}',
   'myWork.confirmCompletion': 'Потвърди завършване',
   'myWork.viewReview': 'Виж ревюто',
+  'myWork.withdrawFromTask': 'Оттегли се от задачата',
+  'myWork.leaveReview': 'Остави ревю',
+
+  // Professional Withdrawal from Accepted Task
+  'professionalWithdraw.title': 'Оттегляне от задача',
+  'professionalWithdraw.subtitle': 'Оттегляте се от: {{taskTitle}}',
+  'professionalWithdraw.customer': 'Клиент',
+  'professionalWithdraw.customerNotification': 'Клиентът ще бъде уведомен незабавно и задачата ще бъде отворена отново',
+
+  // Rate limiting
+  'professionalWithdraw.rateLimit.title': 'Можете да се оттеглите още {{remaining}} път(и) този месец',
+  'professionalWithdraw.rateLimit.message': 'Професионалистите могат да се оттеглят от до 2 задачи месечно',
+  'professionalWithdraw.rateLimit.warning': 'Честите оттегляния могат да повлияят на вашия професионален рейтинг и статус на акаунта',
+  'professionalWithdraw.limitExceeded.title': 'Достигнат месечен лимит за оттегляния',
+  'professionalWithdraw.limitExceeded.message': 'Достигнали сте лимита си за оттегляния за този месец. Моля, свържете се с поддръжката, ако имате спешна ситуация.',
+
+  // Timing warnings
+  'professionalWithdraw.earlyWithdrawal.title': 'Ранно оттегляне - без санкция',
+  'professionalWithdraw.earlyWithdrawal.message': 'Тъй като приехте преди по-малко от 2 часа, това няма да се брои към месечния ви лимит',
+  'professionalWithdraw.lateWithdrawal.title': 'Забавено оттегляне',
+  'professionalWithdraw.lateWithdrawal.message': 'Оттеглянето повече от 24 часа след приемане значително засяга клиента и ще повлияе на вашия професионален рейтинг',
+
+  // Reasons
+  'professionalWithdraw.reasonLabel': 'Защо се оттегляте?',
+  'professionalWithdraw.reasons.health_emergency': 'Здравословен проблем или спешност',
+  'professionalWithdraw.reasons.capacity_issue': 'Претоварен съм или подценил времето',
+  'professionalWithdraw.reasons.scope_mismatch': 'Задачата е различна от очакваното',
+  'professionalWithdraw.reasons.customer_unresponsive': 'Клиентът не отговаря на съобщенията',
+  'professionalWithdraw.reasons.location_issue': 'Не мога да достигна локацията или има опасност',
+  'professionalWithdraw.reasons.budget_dispute': 'Клиентът иска да преговаря договорената цена',
+  'professionalWithdraw.reasons.equipment_issue': 'Нямам необходимите инструменти или материали',
+  'professionalWithdraw.reasons.other': 'Друга причина',
+
+  // Form
+  'professionalWithdraw.descriptionLabel': 'Допълнителни детайли',
+  'professionalWithdraw.descriptionPlaceholder': 'Моля, обяснете ситуацията...',
+  'professionalWithdraw.descriptionHint': 'Това ни помага да подобрим платформата',
+  'professionalWithdraw.confirmButton': 'Оттегли се от задачата',
+  'professionalWithdraw.reputationWarning': 'Това оттегляне ще бъде записано и може да повлияе на вашия професионален рейтинг',
+
+  // Success/error
+  'professionalWithdraw.successTitle': 'Успешно оттегляне',
+  'professionalWithdraw.success': 'Оттеглихте се от задачата. Клиентът е уведомен.',
+  'professionalWithdraw.errorTitle': 'Грешка при оттегляне',
+  'professionalWithdraw.error': 'Не може да се оттеглите. Моля, опитайте отново или се свържете с поддръжката.',
+
+  // Task Detail Page - Professional View
+  'taskDetail.professional.withdraw': 'Оттегли се от задачата',
 
   // Accept Application Success Toast
   'acceptApplication.successTitle': '🎉 Заявката е приета!',

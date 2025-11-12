@@ -26,6 +26,7 @@ export const common = {
 
   'common.optional': 'По избор',
   'common.close': 'Затвори',
+  'common.ok': 'ОК',
   'common.days': 'дни',
   'common.cancel': 'Отказ',
   'common.edit': 'Редактирай',

@@ -32,6 +32,8 @@ export const notifications = {
   'notifications.content.applicationRejected.message': 'Ваша заявка на "{{taskTitle}}" не была выбрана на этот раз. Продолжайте откликаться!',
   'notifications.content.taskCompleted.title': 'Задача выполнена! ✅',
   'notifications.content.taskCompleted.message': '{{professionalName}} отметил вашу задачу "{{taskTitle}}" как выполненную. Оставьте отзыв!',
+  'notifications.content.professionalWithdrew.title': 'Профессионал отказался',
+  'notifications.content.professionalWithdrew.message': '{{professionalName}} отказался от вашей задачи "{{taskTitle}}". Задача снова открыта для новых заявок.',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'Посмотреть здесь',
@@ -39,6 +41,7 @@ export const notifications = {
   'notifications.telegram.applicationReceived': '✅ <b>Новая заявка!</b>\n\n<b>{{professionalName}}</b> откликнулся на вашу задачу:\n"{{taskTitle}}"\n\n{{link}}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Заявка принята!</b>\n\nВаша заявка на "{{taskTitle}}" была принята {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
   'notifications.telegram.taskCompleted': '✅ <b>Задача выполнена!</b>\n\n<b>{{professionalName}}</b> отметил вашу задачу "{{taskTitle}}" как выполненную.\n\n👉 <b>Следующие шаги:</b>\n• Проверьте работу\n• Оставьте оценку\n\n🔗 Просмотреть задачу: {{link}}',
+  'notifications.telegram.professionalWithdrew': '⚠️ <b>Профессионал отказался</b>\n\n<b>{{professionalName}}</b> отказался от вашей задачи:\n"{{taskTitle}}"\n\n📋 Ваша задача снова <b>открыта</b> для новых заявок.\n\n👉 <b>Следующие шаги:</b>\n• Проверьте детали задачи\n• Убедитесь, что бюджет конкурентный\n• Быстро отвечайте на новые заявки\n\n🔗 Просмотреть задачу: {{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Обратно к задачам',

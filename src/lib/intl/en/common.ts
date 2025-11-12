@@ -26,6 +26,7 @@ export const common = {
 
   'common.optional': 'Optional',
   'common.close': 'Close',
+  'common.ok': 'OK',
   'common.days': 'days',
   'common.cancel': 'Cancel',
   'common.edit': 'Edit',

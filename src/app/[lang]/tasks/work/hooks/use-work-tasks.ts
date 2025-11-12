@@ -17,6 +17,7 @@ export interface WorkTask {
   agreedPrice: number
   timeline: string
   startDate?: Date
+  acceptedAt?: Date
   completedAt?: Date
   task: {
     deadline?: Date
@@ -72,6 +73,7 @@ export function useWorkTasks() {
             ? `${app.estimated_duration_hours} hours`
             : 'Not specified',
           startDate: app.responded_at ? new Date(app.responded_at) : undefined,
+          acceptedAt: app.accepted_at ? new Date(app.accepted_at) : (app.created_at ? new Date(app.created_at) : new Date()),
           completedAt: undefined, // Will be populated from task completion data
           task: {
             deadline: undefined, // Add if task has deadline field
@@ -125,6 +127,7 @@ export function useWorkTasks() {
           ? `${app.estimated_duration_hours} hours`
           : 'Not specified',
         startDate: app.responded_at ? new Date(app.responded_at) : undefined,
+        acceptedAt: app.accepted_at ? new Date(app.accepted_at) : (app.created_at ? new Date(app.created_at) : new Date()),
         completedAt: undefined,
         task: {
           deadline: undefined,

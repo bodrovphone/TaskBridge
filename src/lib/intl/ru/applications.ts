@@ -218,6 +218,54 @@ export const applications = {
   'myWork.completedOn': 'Завершена {{date}}',
   'myWork.confirmCompletion': 'Подтвердить завершение',
   'myWork.viewReview': 'Посмотреть отзыв',
+  'myWork.withdrawFromTask': 'Отказаться от задачи',
+  'myWork.leaveReview': 'Оставить отзыв',
+
+  // Professional Withdrawal from Accepted Task
+  'professionalWithdraw.title': 'Отказ от задачи',
+  'professionalWithdraw.subtitle': 'Отказ от: {{taskTitle}}',
+  'professionalWithdraw.customer': 'Клиент',
+  'professionalWithdraw.customerNotification': 'Клиент будет немедленно уведомлен, и задача будет открыта снова',
+
+  // Rate limiting
+  'professionalWithdraw.rateLimit.title': 'Вы можете отказаться еще {{remaining}} раз(а) в этом месяце',
+  'professionalWithdraw.rateLimit.message': 'Профессионалы могут отказаться от до 2 задач в месяц',
+  'professionalWithdraw.rateLimit.warning': 'Частые отказы могут повлиять на ваш профессиональный рейтинг и статус аккаунта',
+  'professionalWithdraw.limitExceeded.title': 'Достигнут месячный лимит отказов',
+  'professionalWithdraw.limitExceeded.message': 'Вы достигли лимита отказов за этот месяц. Пожалуйста, свяжитесь с поддержкой, если у вас экстренная ситуация.',
+
+  // Timing warnings
+  'professionalWithdraw.earlyWithdrawal.title': 'Ранний отказ - без штрафа',
+  'professionalWithdraw.earlyWithdrawal.message': 'Поскольку вы приняли менее 2 часов назад, это не будет засчитано в ваш месячный лимит',
+  'professionalWithdraw.lateWithdrawal.title': 'Поздний отказ',
+  'professionalWithdraw.lateWithdrawal.message': 'Отказ более чем через 24 часа после принятия значительно влияет на клиента и повлияет на ваш профессиональный рейтинг',
+
+  // Reasons
+  'professionalWithdraw.reasonLabel': 'Почему вы отказываетесь?',
+  'professionalWithdraw.reasons.health_emergency': 'Проблемы со здоровьем или чрезвычайная ситуация',
+  'professionalWithdraw.reasons.capacity_issue': 'Перегружен или недооценил время',
+  'professionalWithdraw.reasons.scope_mismatch': 'Задача отличается от ожидаемой',
+  'professionalWithdraw.reasons.customer_unresponsive': 'Клиент не отвечает на сообщения',
+  'professionalWithdraw.reasons.location_issue': 'Не могу добраться до места или есть опасность',
+  'professionalWithdraw.reasons.budget_dispute': 'Клиент хочет пересмотреть согласованную цену',
+  'professionalWithdraw.reasons.equipment_issue': 'Нет необходимых инструментов или материалов',
+  'professionalWithdraw.reasons.other': 'Другая причина',
+
+  // Form
+  'professionalWithdraw.descriptionLabel': 'Дополнительные детали',
+  'professionalWithdraw.descriptionPlaceholder': 'Пожалуйста, объясните ситуацию...',
+  'professionalWithdraw.descriptionHint': 'Это помогает нам улучшить платформу',
+  'professionalWithdraw.confirmButton': 'Отказаться от задачи',
+  'professionalWithdraw.reputationWarning': 'Этот отказ будет записан и может повлиять на ваш профессиональный рейтинг',
+
+  // Success/error
+  'professionalWithdraw.successTitle': 'Отказ успешен',
+  'professionalWithdraw.success': 'Вы отказались от задачи. Клиент уведомлен.',
+  'professionalWithdraw.errorTitle': 'Ошибка отказа',
+  'professionalWithdraw.error': 'Не удалось отказаться. Пожалуйста, попробуйте снова или свяжитесь с поддержкой.',
+
+  // Task Detail Page - Professional View
+  'taskDetail.professional.withdraw': 'Отказаться от задачи',
 
   // Accept Application Success Toast
   'acceptApplication.successTitle': '🎉 Заявка принята!',

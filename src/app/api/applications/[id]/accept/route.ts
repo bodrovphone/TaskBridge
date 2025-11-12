@@ -86,6 +86,7 @@ export async function PATCH(
       .update({
         status: 'accepted',
         responded_at: new Date().toISOString(),
+        accepted_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       })
       .eq('id', applicationId);
@@ -115,7 +116,8 @@ export async function PATCH(
         .from('applications')
         .update({
           status: 'pending',
-          responded_at: null
+          responded_at: null,
+          accepted_at: null
         })
         .eq('id', applicationId);
 

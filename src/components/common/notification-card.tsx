@@ -14,6 +14,7 @@ import {
  Star,
  Wallet,
  PartyPopper,
+ LogOut,
 } from 'lucide-react';
 import type { Notification } from '@/types/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -28,6 +29,7 @@ const notificationIcons = {
  application_received: FileText,
  application_accepted: CheckCircle,
  application_rejected: XCircle,
+ professional_withdrew: LogOut,
  task_completed: CheckCheck,
  task_cancelled: Ban,
  message_received: MessageCircle,
@@ -40,6 +42,7 @@ const notificationColors = {
  application_received: 'text-blue-600 bg-blue-100',
  application_accepted: 'text-green-600 bg-green-100',
  application_rejected: 'text-red-600 bg-red-100',
+ professional_withdrew: 'text-orange-600 bg-orange-100',
  task_completed: 'text-green-600 bg-green-100',
  task_cancelled: 'text-orange-600 bg-orange-100',
  message_received: 'text-purple-600 bg-purple-100',

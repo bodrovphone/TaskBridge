@@ -3,9 +3,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Spinner } from '@nextui-org/react'
-import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send, AlertCircle } from 'lucide-react'
+import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
+import { ProfessionalWithdrawDialog } from '@/components/tasks/professional-withdraw-dialog'
 import { getCityLabelBySlug } from '@/features/cities'
 import { useWorkTasks, type WorkTask } from '../hooks/use-work-tasks'
 
@@ -22,6 +23,16 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false)
   const [selectedTaskForCompletion, setSelectedTaskForCompletion] = useState<WorkTask | null>(null)
   const [isMarkingComplete, setIsMarkingComplete] = useState(false)
+  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false)
+  const [selectedTaskForWithdrawal, setSelectedTaskForWithdrawal] = useState<WorkTask | null>(null)
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
+  const [withdrawalSuccessModalOpen, setWithdrawalSuccessModalOpen] = useState(false)
+  const [withdrawalErrorModalOpen, setWithdrawalErrorModalOpen] = useState(false)
+  const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState('')
+
+  // @todo INTEGRATION: Fetch from user's professional profile/stats
+  const withdrawalsThisMonth = 0 // Mock data
+  const maxWithdrawalsPerMonth = 2 // As per PRD
 
   // Fetch accepted applications from API
   const { tasks: workTasks, isLoading, error, refetch } = useWorkTasks()
@@ -93,6 +104,48 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
       alert(error.message || 'Failed to mark task complete')
     } finally {
       setIsMarkingComplete(false)
+    }
+  }
+
+  const handleWithdrawClick = (task: WorkTask) => {
+    setSelectedTaskForWithdrawal(task)
+    setIsWithdrawDialogOpen(true)
+  }
+
+  const handleWithdrawConfirm = async (reason: string, description?: string) => {
+    if (!selectedTaskForWithdrawal) return
+
+    setIsWithdrawing(true)
+    try {
+      const response = await fetch(`/api/tasks/${selectedTaskForWithdrawal.taskId}/withdraw`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reason,
+          description
+        })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to withdraw from task')
+      }
+
+      // Success! Close dialog and refetch data
+      setIsWithdrawDialogOpen(false)
+      setSelectedTaskForWithdrawal(null)
+
+      // Refetch tasks to show updated status
+      await refetch()
+
+      // Show success modal
+      setWithdrawalSuccessModalOpen(true)
+    } catch (error: any) {
+      console.error('Error withdrawing from task:', error)
+      setWithdrawalErrorMessage(error.message || t('professionalWithdraw.error'))
+      setWithdrawalErrorModalOpen(true)
+    } finally {
+      setIsWithdrawing(false)
     }
   }
 
@@ -326,7 +379,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 pt-4 border-t border-gray-200 justify-between items-center">
+                  <div className="flex gap-2 pt-4 border-t border-gray-200 justify-between items-center flex-wrap">
                     <Button
                       size="sm"
                       variant="flat"
@@ -335,16 +388,27 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                     >
                       {t('myApplications.viewTask')}
                     </Button>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                       {selectedFilter === 'in_progress' && task.task.status === 'in_progress' && (
-                        <Button
-                          size="sm"
-                          color="success"
-                          variant="bordered"
-                          onPress={() => handleMarkAsCompleteClick(task)}
-                        >
-                          {t('myApplications.markCompleted')}
-                        </Button>
+                        <>
+                          <Button
+                            size="sm"
+                            color="success"
+                            variant="bordered"
+                            onPress={() => handleMarkAsCompleteClick(task)}
+                          >
+                            {t('myApplications.markCompleted')}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="bordered"
+                            color="warning"
+                            startContent={<LogOut className="w-4 h-4" />}
+                            onPress={() => handleWithdrawClick(task)}
+                          >
+                            {t('myWork.withdrawFromTask')}
+                          </Button>
+                        </>
                       )}
                       {selectedFilter === 'completed' && (
                         <Button
@@ -380,6 +444,79 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
           isLoading={isMarkingComplete}
         />
       )}
+
+      {/* Professional Withdraw Dialog */}
+      {selectedTaskForWithdrawal && (
+        <ProfessionalWithdrawDialog
+          isOpen={isWithdrawDialogOpen}
+          onClose={() => {
+            setIsWithdrawDialogOpen(false)
+            setSelectedTaskForWithdrawal(null)
+          }}
+          onConfirm={handleWithdrawConfirm}
+          taskTitle={selectedTaskForWithdrawal.taskTitle}
+          customerName={selectedTaskForWithdrawal.customer.name}
+          withdrawalsThisMonth={withdrawalsThisMonth}
+          maxWithdrawalsPerMonth={maxWithdrawalsPerMonth}
+          taskBudget={selectedTaskForWithdrawal.agreedPrice}
+          acceptedDate={selectedTaskForWithdrawal.acceptedAt || new Date()}
+        />
+      )}
+
+      {/* Withdrawal Success Modal */}
+      <Modal
+        isOpen={withdrawalSuccessModalOpen}
+        onClose={() => setWithdrawalSuccessModalOpen(false)}
+        size="sm"
+      >
+        <ModalContent>
+          <ModalHeader className="flex gap-2 items-center text-success">
+            <CheckCircle className="w-5 h-5" />
+            {t('professionalWithdraw.successTitle')}
+          </ModalHeader>
+          <ModalBody>
+            <p className="text-gray-600">
+              {t('professionalWithdraw.success')}
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="success"
+              onPress={() => setWithdrawalSuccessModalOpen(false)}
+            >
+              {t('common.ok')}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Withdrawal Error Modal */}
+      <Modal
+        isOpen={withdrawalErrorModalOpen}
+        onClose={() => setWithdrawalErrorModalOpen(false)}
+        size="sm"
+      >
+        <ModalContent>
+          <ModalHeader className="flex gap-2 items-center text-danger">
+            <AlertCircle className="w-5 h-5" />
+            {t('professionalWithdraw.errorTitle')}
+          </ModalHeader>
+          <ModalBody>
+            <p className="text-gray-600">
+              {withdrawalErrorMessage}
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="danger"
+              variant="flat"
+              onPress={() => setWithdrawalErrorModalOpen(false)}
+            >
+              {t('common.close')}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }

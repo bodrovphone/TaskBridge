@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
-import { Share2, Edit3, XCircle, Check } from "lucide-react";
+import { Share2, Edit3, XCircle, Check, LogOut } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
+import { ProfessionalWithdrawDialog } from "@/components/tasks/professional-withdraw-dialog";
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { MessageCircle } from "lucide-react";
 // import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
@@ -43,6 +44,12 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [userApplication, setUserApplication] = useState<{ status: ApplicationStatus } | null>(null);
  const [isLoadingApplication, setIsLoadingApplication] = useState(false);
  const [isShareCopied, setIsShareCopied] = useState(false);
+ const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
+ const [isWithdrawing, setIsWithdrawing] = useState(false);
+
+ // @todo INTEGRATION: Fetch from user's professional profile/stats
+ const withdrawalsThisMonth = 0; // Mock data
+ const maxWithdrawalsPerMonth = 2; // As per PRD
 
  // Fetch user's application for this task
  useEffect(() => {
@@ -177,6 +184,44 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   }
  };
 
+ const handleWithdrawClick = () => {
+  setIsWithdrawDialogOpen(true);
+ };
+
+ const handleWithdrawConfirm = async (reason: string, description?: string) => {
+  setIsWithdrawing(true);
+  try {
+   const response = await fetch(`/api/tasks/${task.id}/withdraw`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+     reason,
+     description
+    })
+   });
+
+   if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to withdraw from task');
+   }
+
+   toast({ title: t('professionalWithdraw.success') });
+   setIsWithdrawDialogOpen(false);
+
+   // Redirect to My Work page
+   router.push(`/${lang}/tasks/work`);
+  } catch (error: any) {
+   console.error('Error withdrawing from task:', error);
+   toast({
+    title: t('professionalWithdraw.error'),
+    description: error.message,
+    variant: 'destructive',
+   });
+  } finally {
+   setIsWithdrawing(false);
+  }
+ };
+
  // Get task status permissions
  const taskStatus = (task.status || 'open') as TaskStatus;
  const canEdit = canEditTask(taskStatus);
@@ -184,6 +229,55 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  // @todo FEATURE: Questions feature - commented out for future implementation
  // const canAsk = canAskQuestions(taskStatus);
  const canCancel = canCancelTask(taskStatus);
+
+ // Check if current user is the assigned professional
+ const isAssignedProfessional = user && task.selectedProfessionalId === user.id;
+
+ // If assigned professional viewing their own task, show Withdraw button
+ if (isAssignedProfessional && taskStatus === 'in_progress') {
+  return (
+   <>
+    <NextUICard className="bg-white/95 shadow-lg">
+     <CardBody className="p-6 space-y-3">
+      <NextUIButton
+       color="warning"
+       variant="bordered"
+       size="lg"
+       className="w-full"
+       startContent={<LogOut size={20} />}
+       onPress={handleWithdrawClick}
+      >
+       {t('taskDetail.professional.withdraw')}
+      </NextUIButton>
+
+      <NextUIButton
+       color="warning"
+       variant="flat"
+       size="lg"
+       className="w-full"
+       startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+       onPress={handleShareClick}
+      >
+       {t('taskDetail.share')}
+      </NextUIButton>
+     </CardBody>
+    </NextUICard>
+
+    {/* Professional Withdraw Dialog */}
+    <ProfessionalWithdrawDialog
+     isOpen={isWithdrawDialogOpen}
+     onClose={() => setIsWithdrawDialogOpen(false)}
+     onConfirm={handleWithdrawConfirm}
+     taskTitle={task.title}
+     customerName={task.customer?.name || task.customerName || 'Customer'}
+     withdrawalsThisMonth={withdrawalsThisMonth}
+     maxWithdrawalsPerMonth={maxWithdrawalsPerMonth}
+     taskBudget={task.budgetMax || task.budget || 0}
+     acceptedDate={task.acceptedAt ? new Date(task.acceptedAt) : new Date()}
+    />
+   </>
+  );
+ }
 
  // If owner, show Edit and Cancel buttons instead of Apply/Question
  if (isOwner) {

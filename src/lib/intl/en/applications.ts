@@ -218,6 +218,54 @@ export const applications = {
   'myWork.completedOn': 'Completed on {{date}}',
   'myWork.confirmCompletion': 'Confirm Completion',
   'myWork.viewReview': 'View Review',
+  'myWork.withdrawFromTask': 'Withdraw from Task',
+  'myWork.leaveReview': 'Leave Review',
+
+  // Professional Withdrawal from Accepted Task
+  'professionalWithdraw.title': 'Withdraw from Task',
+  'professionalWithdraw.subtitle': 'Withdrawing from: {{taskTitle}}',
+  'professionalWithdraw.customer': 'Customer',
+  'professionalWithdraw.customerNotification': 'The customer will be notified immediately and the task will be reopened',
+
+  // Rate limiting
+  'professionalWithdraw.rateLimit.title': 'You can withdraw {{remaining}} more time(s) this month',
+  'professionalWithdraw.rateLimit.message': 'Professionals can withdraw from up to 2 tasks per month',
+  'professionalWithdraw.rateLimit.warning': 'Frequent withdrawals may affect your professional rating and account standing',
+  'professionalWithdraw.limitExceeded.title': 'Monthly withdrawal limit reached',
+  'professionalWithdraw.limitExceeded.message': 'You\'ve reached your withdrawal limit for this month. Please contact support if you have an emergency situation.',
+
+  // Timing warnings
+  'professionalWithdraw.earlyWithdrawal.title': 'Early withdrawal - no penalty',
+  'professionalWithdraw.earlyWithdrawal.message': 'Since you accepted less than 2 hours ago, this won\'t count toward your monthly limit',
+  'professionalWithdraw.lateWithdrawal.title': 'Late withdrawal notice',
+  'professionalWithdraw.lateWithdrawal.message': 'Withdrawing more than 24 hours after acceptance significantly impacts the customer and will affect your professional rating',
+
+  // Reasons
+  'professionalWithdraw.reasonLabel': 'Why are you withdrawing?',
+  'professionalWithdraw.reasons.health_emergency': 'Health issue or emergency',
+  'professionalWithdraw.reasons.capacity_issue': 'Overbooked or underestimated time required',
+  'professionalWithdraw.reasons.scope_mismatch': 'Task different than expected',
+  'professionalWithdraw.reasons.customer_unresponsive': 'Customer not responding to messages',
+  'professionalWithdraw.reasons.location_issue': 'Cannot reach location or safety concern',
+  'professionalWithdraw.reasons.budget_dispute': 'Customer wants to renegotiate agreed price',
+  'professionalWithdraw.reasons.equipment_issue': 'Don\'t have necessary tools or materials',
+  'professionalWithdraw.reasons.other': 'Other reason',
+
+  // Form
+  'professionalWithdraw.descriptionLabel': 'Additional details',
+  'professionalWithdraw.descriptionPlaceholder': 'Please explain your situation...',
+  'professionalWithdraw.descriptionHint': 'This helps us improve the platform',
+  'professionalWithdraw.confirmButton': 'Withdraw from Task',
+  'professionalWithdraw.reputationWarning': 'This withdrawal will be recorded and may affect your professional rating',
+
+  // Success/error
+  'professionalWithdraw.successTitle': 'Withdrawal Successful',
+  'professionalWithdraw.success': 'You\'ve withdrawn from the task. The customer has been notified.',
+  'professionalWithdraw.errorTitle': 'Withdrawal Failed',
+  'professionalWithdraw.error': 'Unable to withdraw. Please try again or contact support.',
+
+  // Task Detail Page - Professional View
+  'taskDetail.professional.withdraw': 'Withdraw from Task',
 
   // Accept Application Success Toast
   'acceptApplication.successTitle': '🎉 Application Accepted!',
