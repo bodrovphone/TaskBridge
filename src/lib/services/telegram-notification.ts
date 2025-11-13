@@ -174,6 +174,14 @@ export const NotificationTemplates = {
     message: `👋 <b>Welcome to Trudify, ${userName}!</b>\n\n🎉 Congratulations! Your account has been created successfully via Telegram.\n\n✅ You'll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!`,
     parseMode: 'HTML' as const,
   }),
+
+  /**
+   * Notification when customer removes professional from task
+   */
+  removedByCustomer: (taskTitle: string) => ({
+    message: `⚠️ <b>Removed from Task</b>\n\nYou have been removed from the task "${taskTitle}" by the customer.\n\nThe task is now open for other professionals to apply.\n\nThis does not negatively affect your rating unless there are quality or safety concerns.\n\nIf you have questions, please contact support.`,
+    parseMode: 'HTML' as const,
+  }),
 };
 
 /**

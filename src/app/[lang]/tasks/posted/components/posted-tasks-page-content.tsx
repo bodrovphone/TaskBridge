@@ -1,16 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Spinner } from '@nextui-org/react'
 import { FileText, Plus, Filter } from 'lucide-react'
 import PostedTaskCard from '@/components/ui/posted-task-card'
 import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'
 import { useCreateTask } from '@/hooks/use-create-task'
+import { usePostedTasks } from '@/hooks/use-posted-tasks'
 // @todo FEATURE: Uncomment when reviews feature is built
 // import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
-import { useAuth } from '@/features/auth/hooks/use-auth'
 
 interface PostedTasksPageContentProps {
   lang: string
@@ -18,41 +18,12 @@ interface PostedTasksPageContentProps {
 
 type TaskStatus = 'all' | 'open' | 'in_progress' | 'completed' | 'cancelled'
 
-interface PostedTask {
-  id: string
-  title: string
-  description: string
-  category: string
-  subcategory?: string
-  budget: number
-  budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled'
-  applicationsCount: number
-  acceptedApplication?: {
-    professionalId: string
-    professionalName: string
-    professionalAvatar?: string
-  }
-  location: {
-    city: string
-    neighborhood: string
-  }
-  createdAt: Date
-  completedAt?: Date
-  hasReview?: boolean
-  deadline?: Date
-  images?: string[]
-  isStale?: boolean
-  daysSinceCreation?: number
-}
-
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const { t } = useTranslation()
-  const { user } = useAuth()
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('all')
-  const [tasks, setTasks] = useState<PostedTask[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+
+  // Use TanStack Query hook for data fetching
+  const { tasks, isLoading, error } = usePostedTasks()
 
   // Create task hook with auth
   const {
@@ -61,94 +32,6 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
     setShowAuthPrompt
     // @todo FEATURE: Add review-related properties when reviews feature is built
   } = useCreateTask()
-
-  // Fetch real tasks from API
-  useEffect(() => {
-    async function fetchTasks() {
-      if (!user) {
-        setIsLoading(false)
-        setTasks([])
-        return
-      }
-
-      try {
-        setIsLoading(true)
-        const response = await fetch('/api/tasks?mode=posted', {
-          credentials: 'include'
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch tasks')
-        }
-
-        const data = await response.json()
-
-        // Map API data to PostedTask format and mix in mock UI elements
-        const mappedTasks: PostedTask[] = data.tasks.map((task: any, index: number) => {
-          // Calculate days since creation for stale task detection
-          const daysSinceCreation = Math.floor((Date.now() - new Date(task.created_at).getTime()) / (1000 * 60 * 60 * 24))
-          const isStale = daysSinceCreation >= 2 && task.status === 'open' && (task.applicationsCount === 0 || task.applicationsCount === null)
-
-          // For completed/in_progress tasks without a selected professional, add mock professional data
-          const needsMockProfessional = (task.status === 'completed' || task.status === 'in_progress' || task.status === 'pending_customer_confirmation') && !task.selected_professional_id
-
-          return {
-            id: task.id,
-            title: task.title,
-            description: task.description,
-            category: task.category,
-            subcategory: task.subcategory,
-            budget: task.budget_max_bgn || task.budget_min_bgn || 0,
-            budgetType: task.budget_type,
-            status: task.status,
-            applicationsCount: task.applicationsCount || 0,
-            acceptedApplication: task.selected_professional_id ? {
-              professionalId: task.selected_professional_id,
-              professionalName: task.professional?.full_name || 'Professional',
-              professionalAvatar: task.professional?.avatar_url || undefined
-            } : needsMockProfessional ? {
-              // Add mock professional for demo purposes
-              professionalId: `mock-prof-${index}`,
-              professionalName: index % 2 === 0 ? 'Ivan Georgiev' : 'Maria Petrova',
-              professionalAvatar: undefined
-            } : undefined,
-            location: {
-              city: task.city,
-              neighborhood: task.neighborhood || ''
-            },
-            createdAt: new Date(task.created_at),
-            completedAt: task.completed_at ? new Date(task.completed_at) : undefined,
-            // Mix in mock UI elements: 50% of completed tasks need review
-            hasReview: task.status === 'completed' ? (index % 2 === 0 ? false : true) : undefined,
-            deadline: task.deadline ? new Date(task.deadline) : undefined,
-            images: task.images || [], // Task images from database
-            isStale,
-            daysSinceCreation
-          }
-        })
-
-        setTasks(mappedTasks)
-        setError(null)
-
-        // Debug: Log task statuses and counts
-        console.log('📊 Posted Tasks Status Summary:', {
-          total: mappedTasks.length,
-          byStatus: mappedTasks.reduce((acc, task) => {
-            acc[task.status] = (acc[task.status] || 0) + 1
-            return acc
-          }, {} as Record<string, number>)
-        })
-      } catch (err) {
-        console.error('Error fetching tasks:', err)
-        setError(err instanceof Error ? err.message : 'Failed to load tasks')
-        setTasks([])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchTasks()
-  }, [user])
 
   const filteredTasks = tasks.filter(task => {
     if (selectedStatus === 'all') return true
@@ -278,7 +161,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
                 {t('error', 'Error loading tasks')}
               </h3>
-              <p className="text-gray-500 mb-6">{error}</p>
+              <p className="text-gray-500 mb-6">{error.message}</p>
               <Button
                 color="primary"
                 size="lg"

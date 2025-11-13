@@ -3,17 +3,20 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { Card, CardBody, Button, Chip, Avatar } from '@nextui-org/react'
-import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit } from 'lucide-react'
+import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit, UserX } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
 import { CancelTaskDialog } from '@/components/tasks/cancel-task-dialog'
+import { CustomerRemoveProfessionalDialog } from '@/components/tasks/customer-remove-professional-dialog'
 import { ReviewDialog } from '@/features/reviews'
 import { mockSubmitReview } from '@/features/reviews'
 import { useToast } from '@/hooks/use-toast'
 import { TaskHintBanner } from '@/components/ui/task-hint-banner'
 import { useTaskHints } from '@/hooks/use-task-hints'
+import { POSTED_TASKS_QUERY_KEY } from '@/hooks/use-posted-tasks'
 import DefaultTaskImage from '@/components/ui/default-task-image'
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -64,18 +67,25 @@ function PostedTaskCard({
 }: PostedTaskCardProps) {
   const { t } = useTranslation()
   const router = useRouter()
+  const queryClient = useQueryClient()
   const { toast } = useToast()
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [showReviewDialog, setShowReviewDialog] = useState(false)
+  const [showRemoveDialog, setShowRemoveDialog] = useState(false)
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
   const [isConfirmingCompletion, setIsConfirmingCompletion] = useState(false)
+  const [isRemovingProfessional, setIsRemovingProfessional] = useState(false)
   const [taskHasReview, setTaskHasReview] = useState(hasReview)
 
   // @todo INTEGRATION: Fetch from user's profile/stats
   const cancellationsThisMonth = 0 // Mock data
   const maxCancellationsPerMonth = 1 // As per PRD
+
+  // @todo INTEGRATION: Fetch from user's profile/stats
+  const removalsThisMonth = 0 // Mock data
+  const maxRemovalsPerMonth = 1 // As per PRD (stricter than professional withdrawal)
 
   // Task hints hook
   const taskHintsData = useTaskHints({
@@ -168,7 +178,9 @@ function PostedTaskCard({
       })
 
       setShowConfirmDialog(false)
-      router.refresh()
+
+      // Invalidate query to refetch tasks
+      queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
     } catch (error) {
       console.error('Failed to mark task complete:', error)
       toast({
@@ -253,6 +265,43 @@ function PostedTaskCard({
       })
     } finally {
       setIsSubmittingReview(false)
+    }
+  }
+
+  const handleRemoveProfessional = async (reason: string, description?: string) => {
+    setIsRemovingProfessional(true)
+    try {
+      const response = await fetch(`/api/tasks/${id}/remove-professional`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason, description })
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to remove professional')
+      }
+
+      toast({
+        title: t('common.success'),
+        description: t('postedTasks.removeProfessionalSuccess'),
+        variant: 'default'
+      })
+
+      setShowRemoveDialog(false)
+
+      // Invalidate query to refetch tasks
+      queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
+    } catch (error) {
+      console.error('Failed to remove professional:', error)
+      toast({
+        title: t('common.error', 'Error'),
+        description: error instanceof Error ? error.message : t('common.errorGeneric', 'Something went wrong'),
+        variant: 'destructive'
+      })
+    } finally {
+      setIsRemovingProfessional(false)
     }
   }
 
@@ -373,8 +422,9 @@ function PostedTaskCard({
           </div>
         </div>
 
-        {/* Status-specific banners - fixed height with min-h to prevent layout shift */}
-        <div className="min-h-[52px] mb-4">
+        {/* Status-specific banners */}
+        {((status === 'in_progress' && acceptedApplication) || (status === 'completed' && acceptedApplication)) && (
+          <div className="mb-4">
           {status === 'in_progress' && acceptedApplication && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <p className="text-sm text-green-800">
@@ -405,61 +455,52 @@ function PostedTaskCard({
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )}
 
         {/* Action buttons */}
-        <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-auto ${status === 'open' ? 'sm:justify-start' : ''}`}>
+        <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:mt-auto ${status === 'open' ? 'sm:justify-start' : ''}`}>
           {status === 'in_progress' ? (
             <>
-              {/* In Progress - View Details + Mark Complete + Report */}
-              <Button
-                size="sm"
-                variant="flat"
-                color="primary"
-                startContent={<Eye className="w-4 h-4" />}
-                onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:flex-1 py-6"
-              >
-                {t('postedTasks.viewDetails')}
-              </Button>
+              {/* In Progress - Mark Complete + Remove + Report */}
               {acceptedApplication && (
-                <Button
-                  size="sm"
-                  color="success"
-                  variant="bordered"
-                  startContent={<CheckCircle className="w-4 h-4" />}
-                  onPress={() => setShowConfirmDialog(true)}
-                  className="w-full sm:w-auto font-semibold py-6"
-                >
-                  {t('postedTasks.markComplete')}
-                </Button>
-              )}
-              {acceptedApplication && (
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="danger"
-                  startContent={<ShieldAlert className="w-4 h-4" />}
-                  onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 py-6"
-                >
-                  {t('postedTasks.reportIssue')}
-                </Button>
+                <>
+                  <Button
+                    size="sm"
+                    color="success"
+                    variant="bordered"
+                    startContent={<CheckCircle className="w-4 h-4" />}
+                    onPress={() => setShowConfirmDialog(true)}
+                    className="w-full sm:flex-1 font-semibold py-6"
+                  >
+                    {t('postedTasks.markComplete')}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="bordered"
+                    color="warning"
+                    startContent={<UserX className="w-4 h-4" />}
+                    onPress={() => setShowRemoveDialog(true)}
+                    className="w-full sm:flex-1 font-semibold py-6"
+                  >
+                    {t('postedTasks.removeProfessional')}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="flat"
+                    color="danger"
+                    startContent={<ShieldAlert className="w-4 h-4" />}
+                    onPress={() => setShowReportDialog(true)}
+                    className="w-full sm:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
+                  >
+                    {t('postedTasks.reportIssue')}
+                  </Button>
+                </>
               )}
             </>
           ) : status === 'completed' || status === 'cancelled' ? (
             <>
-              {/* Completed/Cancelled - View Details + Leave Review / Reopen */}
-              <Button
-                size="sm"
-                variant="flat"
-                color="primary"
-                startContent={<Eye className="w-4 h-4" />}
-                onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:flex-1 py-6"
-              >
-                {t('postedTasks.viewDetails')}
-              </Button>
+              {/* Completed/Cancelled - Leave Review / Reopen / Report */}
               {status === 'completed' && acceptedApplication && !taskHasReview && (
                 <Button
                   size="sm"
@@ -467,7 +508,7 @@ function PostedTaskCard({
                   color="warning"
                   startContent={<Star className="w-4 h-4" />}
                   onPress={() => setShowReviewDialog(true)}
-                  className="w-full sm:w-auto font-semibold py-6"
+                  className="w-full sm:flex-1 font-semibold py-6"
                 >
                   {t('reviews.pending.leaveReviewButton')}
                 </Button>
@@ -478,7 +519,7 @@ function PostedTaskCard({
                 color="secondary"
                 startContent={<RotateCcw className="w-4 h-4" />}
                 onPress={handleReopenTask}
-                className="w-full sm:w-auto py-6"
+                className="w-full sm:flex-1 py-6"
               >
                 {t('postedTasks.reopenTask')}
               </Button>
@@ -489,7 +530,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-4 h-4" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 py-6"
+                  className="w-full sm:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -590,6 +631,22 @@ function PostedTaskCard({
               : 0
           }}
           isLoading={isSubmittingReview}
+        />
+      )}
+
+      {/* Customer Remove Professional Dialog */}
+      {status === 'in_progress' && acceptedApplication && (
+        <CustomerRemoveProfessionalDialog
+          isOpen={showRemoveDialog}
+          onClose={() => setShowRemoveDialog(false)}
+          onConfirm={handleRemoveProfessional}
+          taskTitle={title}
+          professionalName={acceptedApplication.professionalName}
+          professionalAvatar={acceptedApplication.professionalAvatar}
+          removalsThisMonth={removalsThisMonth}
+          maxRemovalsPerMonth={maxRemovalsPerMonth}
+          acceptedDate={createdAt} // @todo INTEGRATION: Use actual accepted_at date from application
+          isLoading={isRemovingProfessional}
         />
       )}
     </Card>

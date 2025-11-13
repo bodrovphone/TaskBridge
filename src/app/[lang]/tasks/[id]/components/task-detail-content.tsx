@@ -136,6 +136,17 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
  // Check if user has applied
  const userApplication = getUserApplication(taskId, 'mock-user-id');
 
+ // If task is in progress
+ if (taskStatus === 'in_progress') {
+  return {
+   key: 'inProgress',
+   icon: CheckCircle,
+   color: 'success',
+   bgColor: 'bg-green-100',
+   iconColor: 'text-green-600'
+  };
+ }
+
  // If task is completed or archived
  if (taskStatus === 'completed') {
   return {
@@ -208,7 +219,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
     {/* Back Navigation */}
     <div className="mb-6">
-     <Link 
+     <Link
       href={`/${lang}/browse-tasks`}
       className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
      >
@@ -216,6 +227,25 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       {t('taskDetail.backToTasks')}
      </Link>
     </div>
+
+    {/* In Progress Banner - Show when task is no longer available */}
+    {task.status === 'in_progress' && !isOwner && (
+     <div className="mb-6 bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-lg shadow-md">
+      <div className="flex items-start">
+       <div className="flex-shrink-0">
+        <AlertCircle className="h-5 w-5 text-orange-600" />
+       </div>
+       <div className="ml-3">
+        <h3 className="text-sm font-semibold text-orange-900">
+         {t('taskDetail.inProgressBanner.title')}
+        </h3>
+        <p className="mt-1 text-sm text-orange-700">
+         {t('taskDetail.inProgressBanner.message')}
+        </p>
+       </div>
+      </div>
+     </div>
+    )}
 
     <div className="grid lg:grid-cols-3 gap-8">
      {/* Main Content */}
