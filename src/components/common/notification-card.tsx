@@ -30,6 +30,7 @@ const notificationIcons = {
  application_accepted: CheckCircle,
  application_rejected: XCircle,
  professional_withdrew: LogOut,
+ removed_by_customer: Ban,
  task_completed: CheckCheck,
  task_cancelled: Ban,
  message_received: MessageCircle,
@@ -43,6 +44,7 @@ const notificationColors = {
  application_accepted: 'text-green-600 bg-green-100',
  application_rejected: 'text-red-600 bg-red-100',
  professional_withdrew: 'text-orange-600 bg-orange-100',
+ removed_by_customer: 'text-red-600 bg-red-100',
  task_completed: 'text-green-600 bg-green-100',
  task_cancelled: 'text-orange-600 bg-orange-100',
  message_received: 'text-purple-600 bg-purple-100',
@@ -55,8 +57,9 @@ export default function NotificationCard({ notification }: NotificationCardProps
  const { t, i18n } = useTranslation();
  const { setOpen } = useNotificationStore();
 
- const Icon = notificationIcons[notification.type];
- const colorClass = notificationColors[notification.type];
+ // Fallback to FileText icon if type not found
+ const Icon = notificationIcons[notification.type] || FileText;
+ const colorClass = notificationColors[notification.type] || 'text-gray-600 bg-gray-100';
 
  // Get locale for date-fns
  const getLocale = () => {

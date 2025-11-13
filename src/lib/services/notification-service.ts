@@ -32,6 +32,7 @@ export type NotificationType =
   | 'weekly_digest'
   | 'deadline_reminder'
   | 'professional_withdrew'
+  | 'removed_by_customer'
 
 export type DeliveryChannel = 'in_app' | 'telegram' | 'both'
 
@@ -65,6 +66,7 @@ const DEFAULT_ROUTING: Record<NotificationType, DeliveryChannel> = {
   welcome_message: 'both',
   deadline_reminder: 'both',
   professional_withdrew: 'both', // Critical: customer needs to know immediately
+  removed_by_customer: 'both', // Critical: professional needs to know immediately
 
   // Important notifications (In-app only by default, user can enable Telegram)
   application_received: 'in_app',

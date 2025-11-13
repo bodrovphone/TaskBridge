@@ -86,7 +86,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. Return success response
+    // 5. Increment grace period counter (for review enforcement)
+    // This tracks how many tasks created since last review submission
+    try {
+      await supabase.rpc('increment_grace_counter', { user_id: authUser.id })
+    } catch (error) {
+      // Log but don't fail the request if counter update fails
+      console.warn('Failed to increment grace period counter:', error)
+    }
+
+    // 6. Return success response
     return NextResponse.json(
       result.data,
       { status: 201 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database.types';
+import { formatDistanceToNow } from 'date-fns';
+import { bg, enUS, ru } from 'date-fns/locale';
 
 // Use service role to bypass RLS
 const supabaseAdmin = createClient<Database>(
@@ -15,6 +17,16 @@ const supabaseAdmin = createClient<Database>(
 );
 
 type UserProfile = Database['public']['Tables']['users']['Row'];
+
+// Helper function to get date-fns locale
+function getDateLocale(lang?: string) {
+  switch(lang) {
+    case 'bg': return bg;
+    case 'ru': return ru;
+    case 'en': return enUS;
+    default: return bg; // Default to Bulgarian
+  }
+}
 
 // Helper function to determine task complexity
 function determineComplexity(budget: number, duration: number): 'Simple' | 'Standard' | 'Complex' {
@@ -71,8 +83,12 @@ export async function GET(
 
     console.log('✅ Professional found:', professional.full_name);
 
-    // Fetch completed tasks in parallel
-    const { data: completedTasksData, error: tasksError } = await supabaseAdmin
+    // Fetch completed tasks and reviews in parallel
+    const [
+      { data: completedTasksData, error: tasksError },
+      { data: reviewsData, error: reviewsError }
+    ] = await Promise.all([
+      supabaseAdmin
       .from('tasks')
       .select(`
         id,
@@ -96,17 +112,70 @@ export async function GET(
       .eq('status', 'completed')
       .not('completed_at', 'is', null)
       .order('completed_at', { ascending: false })
-      .limit(20);
+      .limit(20),
+      supabaseAdmin
+        .from('reviews')
+        .select(`
+          id,
+          rating,
+          comment,
+          created_at,
+          communication_rating,
+          quality_rating,
+          professionalism_rating,
+          timeliness_rating,
+          reviewer:reviewer_id(
+            full_name,
+            avatar_url
+          ),
+          task:task_id(
+            title,
+            category,
+            subcategory
+          )
+        `)
+        .eq('reviewee_id', id)
+        .eq('review_type', 'customer_to_professional')
+        .eq('is_hidden', false)
+        .order('created_at', { ascending: false })
+        .limit(50)
+    ]);
 
     if (tasksError) {
       console.error('⚠️ Error fetching completed tasks:', tasksError);
       // Don't fail the whole request, just log the error
     }
 
+    if (reviewsError) {
+      console.error('⚠️ Error fetching reviews:', reviewsError);
+      // Don't fail the whole request, just log the error
+    }
+
     console.log(`📋 Found ${completedTasksData?.length || 0} completed tasks`);
+    console.log(`⭐ Found ${reviewsData?.length || 0} reviews`);
+
+    // Transform reviews to UI format
+    const transformedReviews = (reviewsData || []).map((review: any) => ({
+      id: review.id,
+      clientName: review.reviewer?.full_name || 'Unknown',
+      clientAvatar: review.reviewer?.avatar_url,
+      rating: review.rating,
+      comment: review.comment || '',
+      date: formatDistanceToNow(new Date(review.created_at), {
+        addSuffix: true,
+        locale: getDateLocale('bg') // TODO: Get from request headers/query param
+      }),
+      verified: true, // All reviews from completed tasks are verified
+      anonymous: false, // MVP: no anonymous reviews yet
+      isVisible: true,
+      visibilityReason: 'visible_high_rating' as const,
+      communicationRating: review.communication_rating,
+      qualityRating: review.quality_rating,
+      professionalismRating: review.professionalism_rating,
+      timelinessRating: review.timeliness_rating
+    }));
 
     // @todo: Fetch additional data in parallel
-    // - reviews (from reviews table)
     // - portfolio items (from portfolio table)
     // - services (from service_categories array or separate services table)
 
@@ -167,7 +236,7 @@ export async function GET(
       // Mock data until we have real tables
       services: [],
       portfolio: [],
-      reviews: [],
+      reviews: transformedReviews,
       responseTime: professional.response_time_hours
         ? `${professional.response_time_hours} часа`
         : "2 часа",

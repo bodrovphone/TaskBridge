@@ -3,6 +3,7 @@ export type NotificationType =
   | 'application_accepted'
   | 'application_rejected'
   | 'professional_withdrew'
+  | 'removed_by_customer'
   | 'task_completed'
   | 'task_cancelled'
   | 'message_received'
