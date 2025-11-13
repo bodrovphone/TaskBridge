@@ -34,6 +34,8 @@ export const notifications = {
   'notifications.content.taskCompleted.message': '{{professionalName}} has marked your task "{{taskTitle}}" as complete. Leave a review!',
   'notifications.content.professionalWithdrew.title': 'Professional Withdrew',
   'notifications.content.professionalWithdrew.message': '{{professionalName}} has withdrawn from your task "{{taskTitle}}". Your task is now open for new applications.',
+  'notifications.content.taskCancelled.title': 'Task Cancelled',
+  'notifications.content.taskCancelled.message': 'The task "{{taskTitle}}" has been cancelled by the client',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'View here',
@@ -42,6 +44,7 @@ export const notifications = {
   'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
   'notifications.telegram.taskCompleted': '✅ <b>Task Completed!</b>\n\n<b>{{professionalName}}</b> has marked your task "{{taskTitle}}" as complete.\n\n👉 <b>Next Steps:</b>\n• Review the work\n• Leave a rating\n\n🔗 View Task: {{link}}',
   'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{{professionalName}}</b> has withdrawn from your task:\n"{{taskTitle}}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {{link}}',
+  'notifications.telegram.taskCancelled': '❌ <b>Task Cancelled</b>\n\nThe task "{{taskTitle}}" has been cancelled by the client.\n\nYour application and all discussions related to this task have been removed.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n\n🔗 Browse Tasks: {{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',
@@ -89,7 +92,18 @@ export const notifications = {
   'taskDetail.editTask': 'Edit Task',
   'taskDetail.cancelTask': 'Cancel Task',
   'taskDetail.confirmCancel': 'Are you sure you want to cancel this task?',
-  'taskDetail.cancelSuccess': 'Task cancellation feature coming soon!',
+  'taskDetail.cancelSuccess': 'Task cancelled successfully',
+  'taskDetail.cancelError': 'Failed to cancel task',
+  'taskDetail.cancelDialog.title': 'Cancel This Task?',
+  'taskDetail.cancelDialog.warning': 'This action cannot be undone and will:',
+  'taskDetail.cancelDialog.consequence1': 'Delete all applications',
+  'taskDetail.cancelDialog.consequence1NoApps': 'Remove the task (no applications yet)',
+  'taskDetail.cancelDialog.consequence2': 'Remove the task from search results',
+  'taskDetail.cancelDialog.consequence3': 'Delete all task data permanently',
+  'taskDetail.cancelDialog.confirm': 'Are you sure you want to cancel this task?',
+  'taskDetail.cancelDialog.btnCancel': 'Cancel',
+  'taskDetail.cancelDialog.btnConfirm': 'Yes, Cancel Task',
+  'taskDetail.cancelDialog.processing': 'Cancelling...',
   'taskDetail.activity': 'Task Activity',
   'taskDetail.applications': 'Applications',
   'taskDetail.questions': 'Questions',

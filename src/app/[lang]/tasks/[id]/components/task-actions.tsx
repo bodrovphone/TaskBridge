@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import { ProfessionalWithdrawDialog } from "@/components/tasks/professional-withdraw-dialog";
+import { CancelTaskConfirmDialog } from "@/components/tasks/cancel-task-confirm-dialog";
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { MessageCircle } from "lucide-react";
 // import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
@@ -46,6 +47,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [isShareCopied, setIsShareCopied] = useState(false);
  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
  const [isWithdrawing, setIsWithdrawing] = useState(false);
+ const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
+ const [isCancelling, setIsCancelling] = useState(false);
 
  // @todo INTEGRATION: Fetch from user's professional profile/stats
  const withdrawalsThisMonth = 0; // Mock data
@@ -131,10 +134,36 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  };
 
  const handleCancelClick = () => {
-  // @todo FEATURE: Implement cancel task functionality
-  // For now, just show an alert
-  if (window.confirm(t('taskDetail.confirmCancel', 'Are you sure you want to cancel this task?'))) {
-   alert(t('taskDetail.cancelSuccess', 'Task cancellation feature coming soon!'));
+  setIsCancelDialogOpen(true);
+ };
+
+ const handleCancelConfirm = async () => {
+  setIsCancelling(true);
+  try {
+   const response = await fetch(`/api/tasks/${task.id}/cancel`, {
+    method: 'DELETE',
+    credentials: 'include'
+   });
+
+   if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to cancel task');
+   }
+
+   toast({ title: t('taskDetail.cancelSuccess') });
+   setIsCancelDialogOpen(false);
+
+   // Redirect to posted tasks page
+   router.push(`/${lang}/tasks/posted`);
+  } catch (error: any) {
+   console.error('Error cancelling task:', error);
+   toast({
+    title: t('taskDetail.cancelError'),
+    description: error.message,
+    variant: 'destructive',
+   });
+  } finally {
+   setIsCancelling(false);
   }
  };
 
@@ -282,58 +311,70 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  // If owner, show Edit and Cancel buttons instead of Apply/Question
  if (isOwner) {
   return (
-   <NextUICard className="bg-white/95 shadow-lg">
-    <CardBody className="p-6 space-y-3">
-     <Tooltip
-      content={!canEdit ? getDisabledReason('edit', taskStatus) : ''}
-      isDisabled={canEdit}
-     >
-      <div>
-       <NextUIButton
-        color="primary"
-        variant="bordered"
-        size="lg"
-        className="w-full"
-        startContent={<Edit3 size={20} />}
-        onPress={handleEditClick}
-        isDisabled={!canEdit}
-       >
-        {t('taskDetail.editTask')}
-       </NextUIButton>
-      </div>
-     </Tooltip>
+   <>
+    <NextUICard className="bg-white/95 shadow-lg">
+     <CardBody className="p-6 space-y-3">
+      <Tooltip
+       content={!canEdit ? getDisabledReason('edit', taskStatus) : ''}
+       isDisabled={canEdit}
+      >
+       <div>
+        <NextUIButton
+         color="primary"
+         variant="bordered"
+         size="lg"
+         className="w-full"
+         startContent={<Edit3 size={20} />}
+         onPress={handleEditClick}
+         isDisabled={!canEdit}
+        >
+         {t('taskDetail.editTask')}
+        </NextUIButton>
+       </div>
+      </Tooltip>
 
-     <Tooltip
-      content={!canCancel ? getDisabledReason('cancel', taskStatus) : ''}
-      isDisabled={canCancel}
-     >
-      <div>
-       <NextUIButton
-        color="danger"
-        variant="bordered"
-        size="lg"
-        className="w-full"
-        startContent={<XCircle size={20} />}
-        onPress={handleCancelClick}
-        isDisabled={!canCancel}
-       >
-        {t('taskDetail.cancelTask')}
-       </NextUIButton>
-      </div>
-     </Tooltip>
+      <Tooltip
+       content={!canCancel ? getDisabledReason('cancel', taskStatus) : ''}
+       isDisabled={canCancel}
+      >
+       <div>
+        <NextUIButton
+         color="danger"
+         variant="bordered"
+         size="lg"
+         className="w-full"
+         startContent={<XCircle size={20} />}
+         onPress={handleCancelClick}
+         isDisabled={!canCancel}
+        >
+         {t('taskDetail.cancelTask')}
+        </NextUIButton>
+       </div>
+      </Tooltip>
 
-     <NextUIButton
-      color="warning"
-      variant="flat"
-      size="lg"
-      className="w-full"
-      startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
-      onPress={handleShareClick}
-     >
-      {t('taskDetail.share')}
-     </NextUIButton>
-    </CardBody>
-   </NextUICard>
+      <NextUIButton
+       color="warning"
+       variant="flat"
+       size="lg"
+       className="w-full"
+       startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+       onPress={handleShareClick}
+      >
+       {t('taskDetail.share')}
+      </NextUIButton>
+     </CardBody>
+    </NextUICard>
+
+    {/* Cancel Task Confirmation Dialog */}
+    <CancelTaskConfirmDialog
+     isOpen={isCancelDialogOpen}
+     onClose={() => setIsCancelDialogOpen(false)}
+     onConfirm={handleCancelConfirm}
+     taskTitle={task.title}
+     applicationsCount={task.applicationsCount || 0}
+     isLoading={isCancelling}
+    />
+   </>
   );
  }
 

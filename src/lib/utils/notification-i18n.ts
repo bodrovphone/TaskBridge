@@ -32,7 +32,7 @@ function interpolate(template: string, data: Record<string, any>): string {
  */
 export function getNotificationContent(
   locale: Locale,
-  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'applicationRejected' | 'taskCompleted' | 'professionalWithdrew',
+  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'applicationRejected' | 'taskCompleted' | 'taskCancelled' | 'professionalWithdrew',
   data?: Record<string, any>
 ): { title: string; message: string } {
   const lang = messages[locale] || messages.en;
@@ -70,7 +70,7 @@ export function getNotificationContent(
  */
 export function getTelegramMessage(
   locale: Locale,
-  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'taskCompleted' | 'professionalWithdrew',
+  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'taskCompleted' | 'taskCancelled' | 'professionalWithdrew',
   data: Record<string, any>
 ): string {
   const lang = messages[locale] || messages.en;

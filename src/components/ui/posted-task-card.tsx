@@ -9,7 +9,7 @@ import { Card, CardBody, Button, Chip, Avatar } from '@nextui-org/react'
 import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit, UserX } from 'lucide-react'
 import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
-import { CancelTaskDialog } from '@/components/tasks/cancel-task-dialog'
+import { CancelTaskConfirmDialog } from '@/components/tasks/cancel-task-confirm-dialog'
 import { CustomerRemoveProfessionalDialog } from '@/components/tasks/customer-remove-professional-dialog'
 import { ReviewDialog } from '@/features/reviews'
 import { mockSubmitReview } from '@/features/reviews'
@@ -77,6 +77,7 @@ function PostedTaskCard({
   const [isSubmittingReview, setIsSubmittingReview] = useState(false)
   const [isConfirmingCompletion, setIsConfirmingCompletion] = useState(false)
   const [isRemovingProfessional, setIsRemovingProfessional] = useState(false)
+  const [isCancellingTask, setIsCancellingTask] = useState(false)
   const [taskHasReview, setTaskHasReview] = useState(hasReview)
 
   // @todo INTEGRATION: Fetch from user's profile/stats
@@ -231,13 +232,38 @@ function PostedTaskCard({
     }
   }
 
-  const handleCancelTask = (reason: string, description?: string) => {
-    console.log('Cancelling task:', id, { reason, description })
-    // @todo INTEGRATION: Call API to cancel task (status = 'cancelled')
-    // @todo INTEGRATION: Increment user's cancellationsThisMonth counter
-    // @todo INTEGRATION: If exceeds limit, trigger account action/review
-    setShowCancelDialog(false)
-    router.refresh()
+  const handleCancelTask = async () => {
+    setIsCancellingTask(true)
+    try {
+      const response = await fetch(`/api/tasks/${id}/cancel`, {
+        method: 'DELETE',
+        credentials: 'include'
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to cancel task')
+      }
+
+      toast({
+        title: t('taskDetail.cancelSuccess', 'Task cancelled successfully'),
+        variant: 'success'
+      })
+
+      setShowCancelDialog(false)
+
+      // Invalidate query to refetch tasks
+      queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
+    } catch (error) {
+      console.error('Failed to cancel task:', error)
+      toast({
+        title: t('taskDetail.cancelError', 'Failed to cancel task'),
+        description: error instanceof Error ? error.message : t('common.errorGeneric'),
+        variant: 'destructive'
+      })
+    } finally {
+      setIsCancellingTask(false)
+    }
   }
 
   const handleReopenTask = () => {
@@ -469,7 +495,7 @@ function PostedTaskCard({
                     size="sm"
                     color="success"
                     variant="bordered"
-                    startContent={<CheckCircle className="w-4 h-4" />}
+                    startContent={<CheckCircle className="w-5 h-5" />}
                     onPress={() => setShowConfirmDialog(true)}
                     className="w-full sm:flex-1 font-semibold py-6"
                   >
@@ -479,7 +505,7 @@ function PostedTaskCard({
                     size="sm"
                     variant="bordered"
                     color="warning"
-                    startContent={<UserX className="w-4 h-4" />}
+                    startContent={<UserX className="w-5 h-5" />}
                     onPress={() => setShowRemoveDialog(true)}
                     className="w-full sm:flex-1 font-semibold py-6"
                   >
@@ -489,7 +515,7 @@ function PostedTaskCard({
                     size="sm"
                     variant="flat"
                     color="danger"
-                    startContent={<ShieldAlert className="w-4 h-4" />}
+                    startContent={<ShieldAlert className="w-5 h-5" />}
                     onPress={() => setShowReportDialog(true)}
                     className="w-full sm:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
                   >
@@ -506,7 +532,7 @@ function PostedTaskCard({
                   size="sm"
                   variant="solid"
                   color="warning"
-                  startContent={<Star className="w-4 h-4" />}
+                  startContent={<Star className="w-5 h-5" />}
                   onPress={() => setShowReviewDialog(true)}
                   className="w-full sm:flex-1 font-semibold py-6"
                 >
@@ -517,7 +543,7 @@ function PostedTaskCard({
                 size="sm"
                 variant="bordered"
                 color="secondary"
-                startContent={<RotateCcw className="w-4 h-4" />}
+                startContent={<RotateCcw className="w-5 h-5" />}
                 onPress={handleReopenTask}
                 className="w-full sm:flex-1 py-6"
               >
@@ -528,7 +554,7 @@ function PostedTaskCard({
                   size="sm"
                   variant="flat"
                   color="danger"
-                  startContent={<ShieldAlert className="w-4 h-4" />}
+                  startContent={<ShieldAlert className="w-5 h-5" />}
                   onPress={() => setShowReportDialog(true)}
                   className="w-full sm:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
                 >
@@ -538,14 +564,14 @@ function PostedTaskCard({
             </>
           ) : (
             <>
-              {/* Open - View Details + Edit Task + View Applications */}
+              {/* Open - View Details + Edit Task + View Applications + Cancel */}
               <Button
                 size="sm"
                 variant="solid"
                 color="primary"
-                startContent={<Eye className="w-4 h-4" />}
+                startContent={<Eye className="w-5 h-5" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white py-6"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white h-12"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
@@ -553,9 +579,9 @@ function PostedTaskCard({
                 size="sm"
                 variant="bordered"
                 color="primary"
-                startContent={<Edit className="w-4 h-4" />}
+                startContent={<Edit className="w-5 h-5" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}/edit`)}
-                className="w-full sm:w-auto py-6"
+                className="w-full sm:w-auto h-12"
               >
                 {t('postedTasks.editTask')}
               </Button>
@@ -564,13 +590,23 @@ function PostedTaskCard({
                   size="sm"
                   variant="solid"
                   color="secondary"
-                  startContent={<FileText className="w-4 h-4" />}
+                  startContent={<FileText className="w-5 h-5" />}
                   onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
-                  className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white py-6"
+                  className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white h-12"
                 >
                   {t('postedTasks.viewApplications')} ({applicationsCount})
                 </Button>
               )}
+              <Button
+                size="sm"
+                variant="bordered"
+                color="danger"
+                startContent={<XCircle className="w-5 h-5" />}
+                onPress={() => setShowCancelDialog(true)}
+                className="w-full sm:flex-1 h-12"
+              >
+                {t('postedTasks.cancelTask', 'Cancel Task')}
+              </Button>
             </>
           )}
         </div>
@@ -603,14 +639,13 @@ function PostedTaskCard({
       )}
 
       {/* Cancel Task Dialog */}
-      <CancelTaskDialog
+      <CancelTaskConfirmDialog
         isOpen={showCancelDialog}
         onClose={() => setShowCancelDialog(false)}
         onConfirm={handleCancelTask}
         taskTitle={title}
-        professionalName={acceptedApplication?.professionalName}
-        cancellationsThisMonth={cancellationsThisMonth}
-        maxCancellationsPerMonth={maxCancellationsPerMonth}
+        applicationsCount={applicationsCount}
+        isLoading={isCancellingTask}
       />
 
       {/* Review Dialog */}

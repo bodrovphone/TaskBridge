@@ -23,6 +23,7 @@ export type NotificationType =
   | 'application_accepted'
   | 'application_rejected'
   | 'task_completed'
+  | 'task_cancelled'
   | 'task_status_changed'
   | 'message_received'
   | 'payment_received'
@@ -68,6 +69,7 @@ const DEFAULT_ROUTING: Record<NotificationType, DeliveryChannel> = {
   // Important notifications (In-app only by default, user can enable Telegram)
   application_received: 'in_app',
   task_status_changed: 'in_app',
+  task_cancelled: 'in_app', // Not critical: professionals will see it when they check the app
   message_received: 'in_app',
   review_received: 'in_app',
 

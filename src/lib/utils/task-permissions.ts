@@ -40,12 +40,12 @@ export function canApplyToTask(status: TaskStatus): boolean {
  * Check if a task can be cancelled by its author
  *
  * Rules:
- * - 'open' tasks can be cancelled freely
- * - 'in_progress' tasks can be cancelled but with penalties (handled separately)
+ * - Only 'open' tasks can be cancelled (not yet started)
+ * - For 'in_progress' tasks, customer must either mark complete or remove professional
  * - Completed, already cancelled, or disputed tasks cannot be cancelled
  */
 export function canCancelTask(status: TaskStatus): boolean {
-  return status === 'open' || status === 'in_progress'
+  return status === 'open'
 }
 
 /**
@@ -109,6 +109,7 @@ export function getDisabledReason(
       return 'Applications are not accepted for this task'
 
     case 'cancel':
+      if (status === 'in_progress') return 'In-progress tasks cannot be cancelled. Mark as complete or remove the professional.'
       if (status === 'completed') return 'Completed tasks cannot be cancelled'
       if (status === 'cancelled') return 'This task is already cancelled'
       return 'This task cannot be cancelled'
