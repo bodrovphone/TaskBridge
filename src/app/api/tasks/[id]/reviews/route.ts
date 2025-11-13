@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { calculatePublishedAt } from '@/lib/utils/review-delay'
 
 /**
  * POST /api/tasks/[id]/reviews
@@ -7,9 +8,10 @@ import { NextResponse } from 'next/server'
  */
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: taskId } = await params
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -24,7 +26,9 @@ export async function POST(
       qualityRating,
       communicationRating,
       timelinessRating,
-      professionalismRating
+      professionalismRating,
+      isAnonymous,
+      delayPublishing
     } = body
 
     // Validation: Rating is required and must be 1-5
@@ -47,7 +51,7 @@ export async function POST(
           status
         )
       `)
-      .eq('id', params.id)
+      .eq('id', taskId)
       .eq('customer_id', user.id)
       .single()
 
@@ -82,7 +86,7 @@ export async function POST(
     const { data: existingReview } = await supabase
       .from('reviews')
       .select('id')
-      .eq('task_id', params.id)
+      .eq('task_id', taskId)
       .eq('reviewer_id', user.id)
       .eq('review_type', 'customer_to_professional')
       .maybeSingle()
@@ -94,11 +98,16 @@ export async function POST(
       )
     }
 
+    // Calculate published_at date
+    // - Production: delayed by 1 week
+    // - Development/Staging: delayed by 1 day (for testing)
+    const publishedAt = calculatePublishedAt(delayPublishing || false)
+
     // Insert review
     const { data: review, error: reviewError } = await supabase
       .from('reviews')
       .insert({
-        task_id: params.id,
+        task_id: taskId,
         reviewer_id: user.id,
         reviewee_id: acceptedApp.professional_id,
         rating,
@@ -107,7 +116,9 @@ export async function POST(
         quality_rating: qualityRating || null,
         communication_rating: communicationRating || null,
         timeliness_rating: timelinessRating || null,
-        professionalism_rating: professionalismRating || null
+        professionalism_rating: professionalismRating || null,
+        is_anonymous: isAnonymous || false,
+        published_at: publishedAt
       })
       .select()
       .single()
@@ -124,7 +135,7 @@ export async function POST(
     await supabase
       .from('tasks')
       .update({ reviewed_by_customer: true })
-      .eq('id', params.id)
+      .eq('id', taskId)
 
     // Reset grace period counter
     await supabase

@@ -17,9 +17,24 @@ export const reviews = {
   'review.dialog.cancelButton': 'Cancel',
   'review.dialog.submitting': 'Submitting...',
 
+  // Review Privacy Options
+  'reviews.dialog.privacyOptions': 'Privacy Options',
+  'reviews.dialog.postAnonymously': 'Post review anonymously',
+  'reviews.dialog.postAnonymouslyDescription': 'Your name will be hidden from the professional',
+  'reviews.dialog.delayPublishing': 'Delay publishing ({{delay}})',
+  'reviews.dialog.delayPublishingDescription': 'Review will be published in {{delay}} to protect your privacy',
+  'reviews.dialog.delayedPublishingInfo': 'This review will be published on {{date}}. The professional will not see it until then.',
+  'reviews.dialog.successTitle': 'Review submitted!',
+  'reviews.dialog.successMessage': 'Thank you for your feedback',
+  'reviews.dialog.errorTitle': 'Failed to submit',
+  'reviews.dialog.errorMessage': 'Please try again',
+
+  // Pending Reviews Page
+  'reviews.pending.pageTitle': 'Pending Reviews',
+  'reviews.pending.pageDescription': 'Leave reviews for completed tasks to help other customers find great professionals',
+
   // Pending Reviews List
-  'reviews.pending.title': '{{count}} Task Needs Your Review',
-  'reviews.pending.title_plural': '{{count}} Tasks Need Your Review',
+  'reviews.pending.title': 'Professionals and community are waiting for your reviews',
   'reviews.pending.completedDaysAgo': 'Completed {{count}} day ago',
   'reviews.pending.completedDaysAgo_plural': 'Completed {{count}} days ago',
   'reviews.pending.completedWeeksAgo': 'Completed {{count}} week ago',

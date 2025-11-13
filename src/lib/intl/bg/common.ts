@@ -23,6 +23,8 @@ export const common = {
   previous: 'Предишна',
   reviews: 'отзива',
   close: 'Затвори',
+  today: 'Днес',
+  yesterday: 'Вчера',
 
   'common.optional': 'По избор',
   'common.close': 'Затвори',

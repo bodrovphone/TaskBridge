@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Modal,
   ModalContent,
@@ -11,12 +11,16 @@ import {
   Textarea,
   Input,
   Avatar,
-  Divider
+  Divider,
+  Checkbox,
+  Card,
+  CardBody
 } from '@nextui-org/react'
-import { Star, User, Calendar, AlertCircle } from 'lucide-react'
+import { Star, User, Calendar, AlertCircle, Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { StarRating } from '@/components/common/star-rating'
 import type { PendingReviewTask, ReviewSubmitData } from '../lib/types'
+import { getReviewPublishingDelay, getReviewDelayLabel } from '@/lib/utils/review-delay'
 
 interface ReviewDialogProps {
   isOpen: boolean
@@ -43,6 +47,8 @@ export function ReviewDialog({
   const [rating, setRating] = useState<number>(0)
   const [reviewText, setReviewText] = useState('')
   const [actualPricePaid, setActualPricePaid] = useState('')
+  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [delayPublishing, setDelayPublishing] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Validation
@@ -52,11 +58,21 @@ export function ReviewDialog({
   const minReviewChars = 50
   const maxReviewChars = 500
 
+  // Calculate delayed publish date based on environment
+  const delayedPublishDate = useMemo(() => {
+    const delay = getReviewPublishingDelay()
+    return new Date(Date.now() + delay).toLocaleDateString()
+  }, [])
+
+  const delayLabel = getReviewDelayLabel()
+
   const handleClose = () => {
     // Reset form
     setRating(0)
     setReviewText('')
     setActualPricePaid('')
+    setIsAnonymous(false)
+    setDelayPublishing(false)
     setShowRatingError(false)
     onClose()
   }
@@ -71,10 +87,11 @@ export function ReviewDialog({
     setIsSubmitting(true)
     try {
       const submitData: ReviewSubmitData = {
-        taskId: task.id,
         rating,
         reviewText: reviewText.trim() || undefined,
-        actualPricePaid: actualPricePaid ? parseFloat(actualPricePaid) : undefined
+        actualPricePaid: actualPricePaid ? parseFloat(actualPricePaid) : undefined,
+        isAnonymous,
+        delayPublishing
       }
 
       await onSubmit(submitData)
@@ -87,28 +104,29 @@ export function ReviewDialog({
     }
   }
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date
     const now = new Date()
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+    const diffDays = Math.floor((now.getTime() - dateObj.getTime()) / (1000 * 60 * 60 * 24))
 
     if (diffDays === 0) return t('common.today')
     if (diffDays === 1) return t('common.yesterday')
     if (diffDays < 7) return t('reviews.pending.completedDaysAgo', { count: diffDays })
-    return date.toLocaleDateString()
+    return dateObj.toLocaleDateString()
   }
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      size="lg"
+      size="full"
       scrollBehavior="inside"
       isDismissable={!isSubmitting}
       hideCloseButton={isSubmitting}
       classNames={{
-        wrapper: 'z-[100]',
-        backdrop: 'z-[99]',
-        base: 'bg-white z-[100]',
+        wrapper: 'z-[100] items-end sm:items-center',
+        backdrop: 'z-[99] bg-black/80',
+        base: 'bg-white z-[100] sm:max-w-2xl m-0 sm:mx-auto h-screen sm:h-auto sm:rounded-lg',
         header: 'border-b border-gray-200',
         body: 'py-6',
         footer: 'border-t border-gray-200'
@@ -205,14 +223,7 @@ export function ReviewDialog({
                     maxRows={8}
                     maxLength={maxReviewChars}
                     description={
-                      <div className="flex justify-between items-center w-full">
-                        <span className="text-xs text-gray-500">
-                          {reviewCharCount > 0 && reviewCharCount < minReviewChars && (
-                            <span className="text-warning">
-                              {t('review.dialog.minCharacters', { min: minReviewChars })}
-                            </span>
-                          )}
-                        </span>
+                      <div className="flex justify-end items-center w-full">
                         <span className={`text-xs ${reviewCharCount > maxReviewChars * 0.9 ? 'text-warning' : 'text-gray-500'}`}>
                           {t('review.dialog.charCount', { count: reviewCharCount, max: maxReviewChars })}
                         </span>
@@ -247,6 +258,70 @@ export function ReviewDialog({
                     }}
                   />
                 </div>
+
+                <Divider />
+
+                {/* Privacy Controls */}
+                <Card className="border border-gray-200 bg-gray-50">
+                  <CardBody className="space-y-4 p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="w-4 h-4 text-gray-600" />
+                      <h4 className="font-medium text-sm text-gray-700">
+                        {t('reviews.dialog.privacyOptions')}
+                      </h4>
+                    </div>
+
+                    {/* Anonymous Review */}
+                    <Checkbox
+                      isSelected={isAnonymous}
+                      onValueChange={setIsAnonymous}
+                      classNames={{
+                        base: 'max-w-full',
+                        label: 'w-full'
+                      }}
+                    >
+                      <div className="flex flex-col gap-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {t('reviews.dialog.postAnonymously')}
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          {t('reviews.dialog.postAnonymouslyDescription')}
+                        </p>
+                      </div>
+                    </Checkbox>
+
+                    {/* Delayed Publishing */}
+                    <Checkbox
+                      isSelected={delayPublishing}
+                      onValueChange={setDelayPublishing}
+                      classNames={{
+                        base: 'max-w-full',
+                        label: 'w-full'
+                      }}
+                    >
+                      <div className="flex flex-col gap-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {t('reviews.dialog.delayPublishing', { delay: delayLabel })}
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          {t('reviews.dialog.delayPublishingDescription', { delay: delayLabel })}
+                        </p>
+                      </div>
+                    </Checkbox>
+
+                    {/* Info callout when delayed */}
+                    {delayPublishing && (
+                      <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                        <p className="text-xs text-blue-900">
+                          {t('reviews.dialog.delayedPublishingInfo', {
+                            date: delayedPublishDate
+                          })}
+                        </p>
+                      </div>
+                    )}
+                  </CardBody>
+                </Card>
               </div>
             </ModalBody>
 

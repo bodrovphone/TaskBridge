@@ -17,9 +17,24 @@ export const reviews = {
   'review.dialog.cancelButton': 'Отказ',
   'review.dialog.submitting': 'Изпращане...',
 
+  // Review Privacy Options
+  'reviews.dialog.privacyOptions': 'Опции за поверителност',
+  'reviews.dialog.postAnonymously': 'Публикувай отзива анонимно',
+  'reviews.dialog.postAnonymouslyDescription': 'Вашето име ще бъде скрито от професионалиста',
+  'reviews.dialog.delayPublishing': 'Забави публикуването ({{delay}})',
+  'reviews.dialog.delayPublishingDescription': 'Отзивът ще бъде публикуван след {{delay}} за защита на вашата поверителност',
+  'reviews.dialog.delayedPublishingInfo': 'Този отзив ще бъде публикуван на {{date}}. Професионалистът няма да го види до тогава.',
+  'reviews.dialog.successTitle': 'Отзивът е изпратен!',
+  'reviews.dialog.successMessage': 'Благодарим ви за обратната връзка',
+  'reviews.dialog.errorTitle': 'Неуспешно изпращане',
+  'reviews.dialog.errorMessage': 'Моля, опитайте отново',
+
+  // Pending Reviews Page
+  'reviews.pending.pageTitle': 'Чакащи отзиви',
+  'reviews.pending.pageDescription': 'Оставете отзиви за завършени задачи, за да помогнете на други клиенти да намерят добри професионалисти',
+
   // Pending Reviews List
-  'reviews.pending.title': '{{count}} задача се нуждае от вашия отзив',
-  'reviews.pending.title_plural': '{{count}} задачи се нуждаят от вашия отзив',
+  'reviews.pending.title': 'Специалистите и общността очакват вашите отзиви',
   'reviews.pending.completedDaysAgo': 'Завършена преди {{count}} ден',
   'reviews.pending.completedDaysAgo_plural': 'Завършена преди {{count}} дни',
   'reviews.pending.completedWeeksAgo': 'Завършена преди {{count}} седмица',

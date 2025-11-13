@@ -130,7 +130,7 @@ export async function PATCH(
         completionNotes,
         completionPhotos,
       },
-      actionUrl: isProfessional ? '/tasks/posted' : '/tasks/work', // Customer → posted tasks, Professional → my work
+      actionUrl: isProfessional ? '/reviews/pending' : '/tasks/work', // Customer → leave review, Professional → my work
       deliveryChannel: 'both', // Critical: Send both in-app and Telegram
     })
 

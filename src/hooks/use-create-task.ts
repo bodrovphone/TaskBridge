@@ -106,7 +106,9 @@ export function useCreateTask() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           rating: data.rating,
-          comment: data.reviewText
+          comment: data.reviewText,
+          isAnonymous: data.isAnonymous,
+          delayPublishing: data.delayPublishing
         })
       })
 
@@ -121,6 +123,7 @@ export function useCreateTask() {
       // Refresh eligibility check and pending reviews
       queryClient.invalidateQueries({ queryKey: ['can-create-task'] })
       queryClient.invalidateQueries({ queryKey: ['pendingReviews'] })
+      queryClient.invalidateQueries({ queryKey: ['pendingReviewsCount'] })
 
       // Show success toast
       toast({

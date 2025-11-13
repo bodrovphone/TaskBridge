@@ -124,6 +124,7 @@ export async function GET(
           quality_rating,
           professionalism_rating,
           timeliness_rating,
+          is_anonymous,
           reviewer:reviewer_id(
             full_name,
             avatar_url
@@ -137,6 +138,7 @@ export async function GET(
         .eq('reviewee_id', id)
         .eq('review_type', 'customer_to_professional')
         .eq('is_hidden', false)
+        .lte('published_at', new Date().toISOString())  // Only published reviews
         .order('created_at', { ascending: false })
         .limit(50)
     ]);
@@ -157,8 +159,8 @@ export async function GET(
     // Transform reviews to UI format
     const transformedReviews = (reviewsData || []).map((review: any) => ({
       id: review.id,
-      clientName: review.reviewer?.full_name || 'Unknown',
-      clientAvatar: review.reviewer?.avatar_url,
+      clientName: review.is_anonymous ? 'Anonymous Customer' : (review.reviewer?.full_name || 'Unknown'),
+      clientAvatar: review.is_anonymous ? null : review.reviewer?.avatar_url,
       rating: review.rating,
       comment: review.comment || '',
       date: formatDistanceToNow(new Date(review.created_at), {
@@ -166,7 +168,7 @@ export async function GET(
         locale: getDateLocale('bg') // TODO: Get from request headers/query param
       }),
       verified: true, // All reviews from completed tasks are verified
-      anonymous: false, // MVP: no anonymous reviews yet
+      anonymous: review.is_anonymous || false,
       isVisible: true,
       visibilityReason: 'visible_high_rating' as const,
       communicationRating: review.communication_rating,

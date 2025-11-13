@@ -355,24 +355,115 @@ To ensure accountability and maintain platform trust, customers face restriction
 
 ### 3.4 Rating & Review System
 
-#### Bidirectional Reviews
+**Status**: ✅ **IMPLEMENTED** - Pending reviews enforcement and review submission flow complete
 
-- Customers rate professionals on:
-  - Quality of work (1-5 stars)
-  - Timeliness (1-5 stars)
-  - Communication (1-5 stars)
-  - Overall satisfaction (1-5 stars)
-  - Written review (optional)
-- Professionals rate customers on:
-  - Clear task description (1-5 stars)
-  - Payment promptness (1-5 stars)
-  - Communication (1-5 stars)
-  - Overall experience (1-5 stars)
-  - Written review (optional)
+**Implementation Date:** January 13, 2025
 
-#### Review Management & Visibility (MVP)
+#### Review Submission Flow
 
-**Smart Negative Review Hiding:**
+**Customer Review Experience:**
+- **Trigger:** Task marked as completed (either by professional or customer confirmation)
+- **Review Dialog:** Full-screen modal on mobile, centered modal on desktop
+- **Required Fields:**
+  - Star rating (1-5 stars) - Required, interactive star selector
+  - Review text - Optional, 0-1000 characters with live counter
+- **Optional Fields:**
+  - Actual price paid (BGN) - Tracks final payment vs original budget
+  - Anonymous posting - Hide customer name from professional
+  - Delayed publishing - Publish review in 1 week (staging) or 3 weeks (production)
+- **Task Information Display:**
+  - Task title with file icon
+  - Professional name and avatar with sparkles badge
+  - Completion date with relative time display ("Completed 3 days ago")
+
+**Professional Review Experience:**
+- Similar dialog structure for rating customers
+- Focus on customer behavior and communication
+- Optional fields for feedback quality
+
+#### Pending Reviews Management
+
+**Status**: ✅ **FULLY IMPLEMENTED** with engaging UI/UX
+
+**Implementation Details:**
+- **Route:** `/[lang]/reviews/pending` - Dedicated page for pending reviews
+- **UI/UX Features:**
+  - 🌟 **Star-decorated header** - Visual 5-star rows flanking title (desktop), single stars on mobile
+  - 🎨 **Colorful card design** - Yellow gradient backgrounds with yellow borders
+  - ✨ **Avatar enhancements** - Yellow ring + sparkles badge on professional avatars
+  - 🏷️ **Colored chips** - Blue chip for professional name, green chip for completion date
+  - 🔔 **Prominent CTA button** - Large yellow/warning button with shadow ("Leave Review")
+  - 📱 **Full mobile optimization** - Full viewport height modal, responsive layouts
+- **Data Display:**
+  - Professional name, avatar, and verification badges
+  - Task title with clear typography
+  - Completion time with relative dates ("Completed 3 days ago", "Yesterday")
+  - Task count header: "Professionals and community are waiting for your reviews"
+- **Empty State:**
+  - Animated pulsing stars and sparkles
+  - Gradient green icon background
+  - Encouraging message about being caught up
+- **Localization:** Full support for EN/BG/RU
+
+**API Integration:**
+- **Endpoint:** `GET /api/reviews/pending`
+- **Query Logic:**
+  - Filters: `status='completed' AND reviewed_by_customer=false`
+  - Includes: Professional data (name, avatar) via foreign key
+  - Returns: Array of pending review tasks with professional info
+- **Data Structure:**
+  ```typescript
+  {
+    id: string
+    title: string
+    professionalId: string
+    professionalName: string
+    professionalAvatar?: string
+    completedAt: Date | string
+    daysAgo: number
+  }
+  ```
+
+#### Review Enforcement System
+
+**Implementation Status:** ✅ **ACTIVE** - Two-tier accountability system
+
+**Enforcement Rules:**
+1. **Hard Block - Pending Confirmations:**
+   - Trigger: Task status is `pending_customer_confirmation`
+   - Rule: Customer CANNOT create new tasks until they respond (confirm/reject)
+   - Grace period: None - immediate enforcement
+   - Rationale: Professional completed work and is waiting
+
+2. **Soft Block - Missing Reviews:**
+   - Trigger: Task status is `completed` but `reviewed_by_customer=false`
+   - Rule: Customer can create **3 new tasks** without review (grace period)
+   - After 3 tasks: Hard block until reviews submitted
+   - Enforcement Dialog: Shows list of pending reviews with quick links
+   - Rationale: Encourage feedback while allowing legitimate use
+
+3. **No Block - In Progress:**
+   - Trigger: Task status is `in_progress`
+   - Rule: No blocking - allows multiple simultaneous tasks
+   - Optional: Soft reminder if >5 active tasks
+
+**Enforcement UI:**
+- **Hard Block Dialog:** Red/critical design, "Action Required" title
+- **Soft Block Dialog:** Yellow/warning design, "Reviews Required" title
+- **Pending Reviews List:** Embedded in dialog with "Leave Review" quick actions
+- **Navigation:** Direct links to `/reviews/pending` page
+
+#### Review Privacy & Safety
+
+**Privacy Options:**
+- **Anonymous Reviews:** Customer name hidden from professional
+- **Delayed Publishing:**
+  - Development/Staging: 1 day delay
+  - Production: 3 weeks delay
+  - Protects customer privacy after service completion
+- **Delayed Publishing Info:** Clear notice showing publish date
+
+**Review Visibility Rules:**
 - Reviews with ≤3 stars are **hidden by default**
 - Negative reviews become visible when pattern detected:
   - Professional has 2+ reviews with ≤3 stars
@@ -381,11 +472,35 @@ To ensure accountability and maintain platform trust, customers face restriction
 - Patterns of poor service become visible to all users
 - High ratings (>3 stars) always visible immediately
 
-**Standard Review Rules:**
-- Reviews published after task completion
-- Both parties must submit reviews to see each other's
-- 30-day review window
-- Review authenticity verification
+#### Review Management & Validation
+
+**Validation Rules:**
+- Rating required (1-5 stars)
+- Review text optional (max 1000 characters)
+- Actual price paid optional (positive number, BGN)
+- Cannot review same task twice
+- 30-day review window after completion
+
+**Database Schema:**
+```sql
+reviews table:
+  - id (uuid)
+  - task_id (foreign key)
+  - reviewer_id (customer or professional)
+  - reviewee_id (professional or customer)
+  - rating (integer 1-5)
+  - review_text (text, optional)
+  - actual_price_paid (decimal, optional)
+  - is_anonymous (boolean)
+  - published_at (timestamp with delay)
+  - created_at (timestamp)
+```
+
+**Integration Points:**
+- Task completion triggers review prompt
+- Notification system sends review reminders
+- Professional profiles display aggregated ratings
+- Task cards show if review is pending
 
 ### 3.5 Safety & Trust System (MVP - No Support Team)
 

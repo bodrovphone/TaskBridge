@@ -30,10 +30,12 @@ export const notifications = {
   'notifications.content.applicationAccepted.message': 'Your application for "{{taskTitle}}" was accepted by {{customerName}}',
   'notifications.content.applicationRejected.title': 'Application Update',
   'notifications.content.applicationRejected.message': 'Your application for "{{taskTitle}}" was not selected this time. Keep applying!',
-  'notifications.content.taskCompleted.title': 'Task Completed! ✅',
-  'notifications.content.taskCompleted.message': '{{professionalName}} has marked your task "{{taskTitle}}" as complete. Leave a review!',
+  'notifications.content.taskCompleted.title': 'Task Completed - Review Needed ⭐',
+  'notifications.content.taskCompleted.message': '"{{taskTitle}}" is complete! Please take a moment to review {{professionalName}}\'s work.',
   'notifications.content.professionalWithdrew.title': 'Professional Withdrew',
   'notifications.content.professionalWithdrew.message': '{{professionalName}} has withdrawn from your task "{{taskTitle}}". Your task is now open for new applications.',
+  'notifications.content.removedByCustomer.title': 'Customer Removed You from Task',
+  'notifications.content.removedByCustomer.message': 'You were removed from task "{{taskTitle}}" by the customer.',
   'notifications.content.taskCancelled.title': 'Task Cancelled',
   'notifications.content.taskCancelled.message': 'The task "{{taskTitle}}" has been cancelled by the client',
 
@@ -42,8 +44,9 @@ export const notifications = {
   'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {{userName}}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
   'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n{{customerMessage}}\n\n{{link}}',
-  'notifications.telegram.taskCompleted': '✅ <b>Task Completed!</b>\n\n<b>{{professionalName}}</b> has marked your task "{{taskTitle}}" as complete.\n\n👉 <b>Next Steps:</b>\n• Review the work\n• Leave a rating\n\n🔗 View Task: {{link}}',
+  'notifications.telegram.taskCompleted': '✅ <b>Task Completed - Review Needed!</b>\n\nYour task "<b>{{taskTitle}}</b>" was completed by {{professionalName}}.\n\n⭐ <b>Please leave a review</b> to help others find great professionals.\n\n{{link}}',
   'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{{professionalName}}</b> has withdrawn from your task:\n"{{taskTitle}}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {{link}}',
+  'notifications.telegram.removedByCustomer': '⚠️ <b>Customer Removed You from Task</b>\n\nYou were removed from task:\n"<b>{{taskTitle}}</b>"\n\n📋 The task has been <b>reopened</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n• Focus on building positive client relationships\n\n🔗 Browse Tasks: {{link}}',
   'notifications.telegram.taskCancelled': '❌ <b>Task Cancelled</b>\n\nThe task "{{taskTitle}}" has been cancelled by the client.\n\nYour application and all discussions related to this task have been removed.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n\n🔗 Browse Tasks: {{link}}',
 
   // Task Detail

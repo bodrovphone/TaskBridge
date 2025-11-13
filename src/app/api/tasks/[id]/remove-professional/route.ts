@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { sendTemplatedNotification } from '@/lib/services/telegram-notification'
+import { createNotification } from '@/lib/services/notification-service'
 
 interface RemoveProfessionalRequest {
   reason: string
@@ -212,38 +212,17 @@ export async function POST(
       }
     }
 
-    // Get professional info for notification
-    const { data: professional } = await supabase
-      .from('users')
-      .select('full_name')
-      .eq('id', application.professional_id)
-      .single()
-
-    // Send notification to professional
+    // Send notification to professional using notification service
     try {
-      await supabase.from('notifications').insert({
-        user_id: application.professional_id,
+      await createNotification({
+        userId: application.professional_id,
         type: 'removed_by_customer',
-        title: 'Customer Removed You from Task',
-        message: `You were removed from task "${task.title}" by the customer.`,
-        action_url: `/tasks/${taskId}`,
-        created_at: new Date().toISOString(),
+        templateData: {
+          taskTitle: task.title,
+        },
+        actionUrl: `/browse-tasks`,
+        deliveryChannel: 'both', // Critical: both in-app and Telegram
       })
-
-      // Send Telegram notification if professional has Telegram connected
-      const { data: professionalUser } = await supabase
-        .from('users')
-        .select('telegram_id')
-        .eq('id', application.professional_id)
-        .single()
-
-      if (professionalUser?.telegram_id) {
-        await sendTemplatedNotification(
-          application.professional_id,
-          'removedByCustomer',
-          task.title
-        )
-      }
     } catch (notificationError) {
       console.error('Error sending notification:', notificationError)
       // Non-fatal, continue

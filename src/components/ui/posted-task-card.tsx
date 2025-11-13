@@ -11,8 +11,7 @@ import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tas
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
 import { CancelTaskConfirmDialog } from '@/components/tasks/cancel-task-confirm-dialog'
 import { CustomerRemoveProfessionalDialog } from '@/components/tasks/customer-remove-professional-dialog'
-import { ReviewDialog } from '@/features/reviews'
-import { mockSubmitReview } from '@/features/reviews'
+import { ReviewDialog, type ReviewSubmitData } from '@/features/reviews'
 import { useToast } from '@/hooks/use-toast'
 import { TaskHintBanner } from '@/components/ui/task-hint-banner'
 import { useTaskHints } from '@/hooks/use-task-hints'
@@ -271,10 +270,25 @@ function PostedTaskCard({
     router.push(`/${lang}/create-task?reopen=true&originalTaskId=${id}`)
   }
 
-  const handleSubmitReview = async (data: { taskId: string; rating: number; reviewText?: string; actualPricePaid?: number }) => {
+  const handleSubmitReview = async (data: ReviewSubmitData) => {
     setIsSubmittingReview(true)
     try {
-      await mockSubmitReview(data)
+      // Call the real API endpoint
+      const response = await fetch(`/api/tasks/${id}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rating: data.rating,
+          comment: data.reviewText,
+          actualPricePaid: data.actualPricePaid,
+          isAnonymous: data.isAnonymous,
+          delayPublishing: data.delayPublishing
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit review')
+      }
 
       toast({
         title: t('reviews.success'),
@@ -283,7 +297,6 @@ function PostedTaskCard({
 
       setTaskHasReview(true)
       setShowReviewDialog(false)
-      // @todo INTEGRATION: Update task hasReview in backend
     } catch (error) {
       toast({
         title: t('reviews.error'),

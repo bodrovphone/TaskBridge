@@ -11,10 +11,11 @@ export interface PendingReviewTask {
 }
 
 export interface ReviewSubmitData {
-  taskId: string
   rating: number // 1-5, required
   reviewText?: string
   actualPricePaid?: number
+  isAnonymous?: boolean      // Hide reviewer name from professional
+  delayPublishing?: boolean  // Publish review in 1 week instead of immediately
 }
 
 export interface Review {

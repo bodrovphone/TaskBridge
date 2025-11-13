@@ -17,9 +17,24 @@ export const reviews = {
   'review.dialog.cancelButton': 'Отмена',
   'review.dialog.submitting': 'Отправка...',
 
+  // Review Privacy Options
+  'reviews.dialog.privacyOptions': 'Параметры конфиденциальности',
+  'reviews.dialog.postAnonymously': 'Опубликовать отзыв анонимно',
+  'reviews.dialog.postAnonymouslyDescription': 'Ваше имя будет скрыто от специалиста',
+  'reviews.dialog.delayPublishing': 'Отложить публикацию ({{delay}})',
+  'reviews.dialog.delayPublishingDescription': 'Отзыв будет опубликован через {{delay}} для защиты вашей конфиденциальности',
+  'reviews.dialog.delayedPublishingInfo': 'Этот отзыв будет опубликован {{date}}. Специалист не увидит его до этого времени.',
+  'reviews.dialog.successTitle': 'Отзыв отправлен!',
+  'reviews.dialog.successMessage': 'Спасибо за ваш отзыв',
+  'reviews.dialog.errorTitle': 'Ошибка отправки',
+  'reviews.dialog.errorMessage': 'Пожалуйста, попробуйте снова',
+
+  // Pending Reviews Page
+  'reviews.pending.pageTitle': 'Ожидающие отзывы',
+  'reviews.pending.pageDescription': 'Оставьте отзывы о завершенных задачах, чтобы помочь другим найти хороших специалистов',
+
   // Pending Reviews List
-  'reviews.pending.title': '{{count}} задача требует вашего отзыва',
-  'reviews.pending.title_plural': '{{count}} задач требуют вашего отзыва',
+  'reviews.pending.title': 'Мастера и сообщество ждут ваших отзывов',
   'reviews.pending.completedDaysAgo': 'Выполнено {{count}} день назад',
   'reviews.pending.completedDaysAgo_plural': 'Выполнено {{count}} дней назад',
   'reviews.pending.completedWeeksAgo': 'Выполнено {{count}} неделю назад',

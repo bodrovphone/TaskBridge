@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 /**
@@ -14,12 +14,15 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Use admin client for queries to bypass RLS
+    const adminSupabase = createAdminClient()
+
     // Get completed tasks where:
     // 1. User is the customer
     // 2. Task is completed
     // 3. Has an accepted application
     // 4. Customer hasn't reviewed yet (reviewed_by_customer = false)
-    const { data: tasks, error } = await supabase
+    const { data: tasks, error } = await adminSupabase
       .from('tasks')
       .select(`
         id,
@@ -27,11 +30,7 @@ export async function GET() {
         completed_at,
         applications!inner(
           professional_id,
-          status,
-          professional:professional_id(
-            full_name,
-            avatar_url
-          )
+          status
         )
       `)
       .eq('customer_id', user.id)
@@ -42,18 +41,41 @@ export async function GET() {
       .limit(20)
 
     if (error) {
-      console.error('Error fetching pending reviews:', error)
+      console.error('[Pending Reviews] Error fetching tasks:', error)
       return NextResponse.json(
         { error: 'Failed to fetch pending reviews' },
         { status: 500 }
       )
     }
 
+    // Get all unique professional IDs
+    const professionalIds = [...new Set(
+      (tasks || [])
+        .flatMap(task => (task.applications as any[]))
+        .map(app => app.professional_id)
+        .filter(Boolean)
+    )]
+
+    // Fetch professional data in bulk
+    const { data: professionals, error: profError } = await adminSupabase
+      .from('users')
+      .select('id, full_name, avatar_url')
+      .in('id', professionalIds)
+
+    if (profError) {
+      console.error('[Pending Reviews] Error fetching professionals:', profError)
+    }
+
+    // Create a lookup map
+    const professionalMap = new Map(
+      (professionals || []).map(prof => [prof.id, prof])
+    )
+
     // Transform to expected format
     const pendingReviews = (tasks || []).map(task => {
       // Get the accepted application (should only be one)
       const acceptedApp = (task.applications as any[])[0]
-      const professional = acceptedApp?.professional
+      const professional = professionalMap.get(acceptedApp?.professional_id)
 
       return {
         id: task.id,
