@@ -73,6 +73,12 @@ export const common = {
   'error.network': 'Грешка в мрежата. Моля, проверете връзката си.',
   'error.unauthorized': 'Трябва да влезете, за да достъпите тази страница.',
 
+  // Empty states
+  'common.noResults': 'Не са намерени задачи',
+  'common.noResultsFilter': 'Опитайте да изберете различен филтър за статус',
+  'common.clearFilters': 'Виж всички задачи',
+  'common.errorGeneric': 'Нещо се обърка. Моля, опитайте отново.',
+
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Потвърден телефон',
   'safety.emailVerified': 'Потвърден имейл',

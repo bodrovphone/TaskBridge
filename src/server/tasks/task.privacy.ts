@@ -15,7 +15,8 @@ export const isTaskOwner = (task: Task, viewerId?: string): boolean => {
 
 /**
  * Apply privacy filter to single task
- * Hides exact address and location notes from non-owners
+ * Hides exact address from non-owners
+ * Note: location_notes stores "requirements" field which should be public
  */
 export const applyPrivacyFilter = (
   task: Task,
@@ -25,11 +26,11 @@ export const applyPrivacyFilter = (
     return task // Owner sees everything
   }
 
-  // Non-owner: hide sensitive location data
+  // Non-owner: hide sensitive location data (exact address only)
+  // location_notes (requirements) should be visible to everyone
   return {
     ...task,
-    address: null,
-    location_notes: null
+    address: null
   }
 }
 

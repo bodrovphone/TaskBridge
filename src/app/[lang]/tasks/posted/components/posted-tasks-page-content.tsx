@@ -151,7 +151,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
           <Card className="shadow-xl border border-white/20 bg-white/95">
             <CardBody className="p-12 text-center">
               <Spinner size="lg" className="mb-4" />
-              <p className="text-gray-600">{t('loading', 'Loading...')}</p>
+              <p className="text-gray-600">{t('postedTasks.loading')}</p>
             </CardBody>
           </Card>
         ) : error ? (

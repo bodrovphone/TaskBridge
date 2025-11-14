@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from '@tanstack/react-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
@@ -8,6 +9,7 @@ import { Button } from '@nextui-org/react'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/features/auth/hooks/use-auth'
 import { uploadTaskImage, deleteTaskImage } from '@/lib/utils/image-upload'
+import { POSTED_TASKS_QUERY_KEY } from '@/hooks/use-posted-tasks'
 import { defaultFormValues } from '@/app/[lang]/create-task/lib/validation'
 import { CategorySelection } from '@/app/[lang]/create-task/components/category-selection'
 import { TaskDetailsSection } from '@/app/[lang]/create-task/components/task-details-section'
@@ -52,6 +54,7 @@ export function TaskForm({ mode, initialData, taskId, isReopening }: TaskFormPro
   const params = useParams()
   const { toast } = useToast()
   const { user } = useAuth()
+  const queryClient = useQueryClient()
   const locale = (params?.lang as string) || i18n.language || 'bg'
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -235,6 +238,9 @@ export function TaskForm({ mode, initialData, taskId, isReopening }: TaskFormPro
             duration: 8000,
           })
         }
+
+        // Invalidate posted tasks query to refetch fresh data
+        await queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
 
         // Redirect to posted tasks
         router.push(`/${locale}/tasks/posted`)

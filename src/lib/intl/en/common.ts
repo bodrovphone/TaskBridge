@@ -73,6 +73,12 @@ export const common = {
   'error.network': 'Network error. Please check your connection.',
   'error.unauthorized': 'You need to log in to access this page.',
 
+  // Empty states
+  'common.noResults': 'No tasks found',
+  'common.noResultsFilter': 'Try selecting a different status filter',
+  'common.clearFilters': 'View All Tasks',
+  'common.errorGeneric': 'Something went wrong. Please try again.',
+
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Phone Verified',
   'safety.emailVerified': 'Email Verified',

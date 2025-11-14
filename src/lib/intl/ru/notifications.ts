@@ -163,6 +163,7 @@ export const notifications = {
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Мои опубликованные задачи',
   'postedTasks.subtitle': 'Управляйте созданными вами задачами',
+  'postedTasks.loading': 'Загрузка ваших задач...',
   'postedTasks.createTask': 'Создать задачу',
   'postedTasks.filter.all': 'Все',
   'postedTasks.filter.open': 'Открытые',

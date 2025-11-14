@@ -162,6 +162,7 @@ export const notifications = {
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'My Posted Tasks',
   'postedTasks.subtitle': 'Manage tasks you\'ve created',
+  'postedTasks.loading': 'Loading your tasks...',
   'postedTasks.createTask': 'Create Task',
   'postedTasks.filter.all': 'All',
   'postedTasks.filter.open': 'Open',

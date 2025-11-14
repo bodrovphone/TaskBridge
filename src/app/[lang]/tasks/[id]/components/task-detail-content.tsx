@@ -289,14 +289,15 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
           {task.description}
          </p>
 
-         {task.requirements && (
+         {/* Requirements - supports both requirements (frontend) and location_notes (database) */}
+         {(task.requirements || task.location_notes) && (
           <div>
            <h3 className="text-lg font-semibold text-gray-900 mb-2">
             {t('taskDetail.requirements')}
            </h3>
            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
             <pre className="whitespace-pre-wrap text-gray-700 font-sans">
-             {task.requirements}
+             {task.requirements || task.location_notes}
             </pre>
            </div>
           </div>

@@ -74,6 +74,12 @@ export const common = {
   'error.unauthorized':
     'Вам нужно войти в систему, чтобы получить доступ к этой странице.',
 
+  // Empty states
+  'common.noResults': 'Задачи не найдены',
+  'common.noResultsFilter': 'Попробуйте выбрать другой фильтр статуса',
+  'common.clearFilters': 'Показать все задачи',
+  'common.errorGeneric': 'Что-то пошло не так. Пожалуйста, попробуйте еще раз.',
+
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Телефон подтвержден',
   'safety.emailVerified': 'Email подтвержден',
