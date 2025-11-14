@@ -106,6 +106,10 @@ export async function GET(
           avatar_url,
           is_phone_verified,
           is_email_verified
+        ),
+        task_review:reviews!reviews_task_id_fkey(
+          rating,
+          comment
         )
       `)
       .eq('selected_professional_id', id)
@@ -187,6 +191,11 @@ export async function GET(
       const budget = task.budget_max_bgn || task.budget_min_bgn || 0;
       const duration = task.estimated_duration_hours || 0;
 
+      // Get review data for this task (customer's review of the professional)
+      const taskReview = Array.isArray(task.task_review)
+        ? task.task_review.find((r: any) => r.rating !== null)
+        : task.task_review;
+
       return {
         id: task.id,
         title: task.title,
@@ -196,12 +205,14 @@ export async function GET(
         citySlug: task.city,
         neighborhood: task.neighborhood,
         completedDate: task.completed_at,
-        clientRating: 5, // Default to 5 stars (will be replaced with real reviews later)
+        // Get actual rating from review, or null if no review yet
+        clientRating: taskReview?.rating || 0,
         budget: budget,
         durationHours: duration,
         clientName: customer?.full_name || 'Анонимен клиент',
         clientAvatar: customer?.avatar_url,
-        testimonial: undefined, // Will be added when reviews table is integrated
+        // Get testimonial from review comment
+        testimonial: taskReview?.comment || undefined,
         isVerified: customer?.is_phone_verified || customer?.is_email_verified || false,
         complexity: determineComplexity(budget, duration)
       };

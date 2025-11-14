@@ -166,23 +166,21 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
      </div>
 
      {/* Enhanced Action */}
-     <div className="hover:scale-[1.02] active:scale-[0.98] transition-transform duration-150">
-      <LocaleLink href={`/professionals/${professional.id}`} className="block">
-       <NextUIButton
-        color="primary"
-        variant="shadow"
-        size="lg"
-        className="w-full font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl"
-        endContent={
-         <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
-          →
-         </span>
-        }
-       >
-        {t('professionals.viewProfile')}
-       </NextUIButton>
-      </LocaleLink>
-     </div>
+     <NextUIButton
+      as={LocaleLink}
+      href={`/professionals/${professional.id}`}
+      color="primary"
+      variant="shadow"
+      size="lg"
+      className="w-full font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transform"
+      endContent={
+       <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+        →
+       </span>
+      }
+     >
+      {t('professionals.viewProfile')}
+     </NextUIButton>
     </CardBody>
    </NextUICard>
   </div>

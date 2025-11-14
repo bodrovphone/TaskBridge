@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@nextui-org/react";
-import { Share2, UserPlus } from "lucide-react";
+import { Share2, UserPlus, Check } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 
 interface Professional {
@@ -17,12 +17,14 @@ interface ActionButtonsRowProps {
  professional: Professional;
  onInviteToApply: () => void;
  onShare: () => void;
+ isShareCopied?: boolean;
 }
 
 export default function ActionButtonsRow({
  professional,
  onInviteToApply,
- onShare
+ onShare,
+ isShareCopied = false
 }: ActionButtonsRowProps) {
  const { t } = useTranslation();
 
@@ -46,7 +48,7 @@ export default function ActionButtonsRow({
      variant="bordered"
      className="border-2 border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400 transition-colors w-full"
      onClick={onShare}
-     startContent={<Share2 size={16} />}
+     startContent={isShareCopied ? <Check size={16} className="text-green-600" /> : <Share2 size={16} />}
     >
      {t('professionalDetail.actions.share')}
     </Button>

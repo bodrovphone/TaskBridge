@@ -1,10 +1,9 @@
 'use client'
 
 import { Card, CardBody, Chip, Button, Avatar } from "@nextui-org/react";
-import { CheckCircle, MapPin, Calendar, Star, ExternalLink, TrendingUp, Award, Clock } from "lucide-react";
+import { CheckCircle, MapPin, Star, TrendingUp, Award, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { useDisclosure } from "@nextui-org/react";
-import { LocaleLink } from '@/components/common/locale-link';
 import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
 import { getCityLabelBySlug } from '@/features/cities';
 import { getCategoryLabelBySlug } from '@/features/categories';
@@ -92,7 +91,12 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
 
  // Statistics summary
  const totalTasks = completedTasks.length;
- const averageRating = completedTasks.reduce((sum, task) => sum + task.clientRating, 0) / totalTasks;
+
+ // Only calculate average from tasks that have been reviewed (rating > 0)
+ const reviewedTasks = completedTasks.filter(task => task.clientRating > 0);
+ const averageRating = reviewedTasks.length > 0
+   ? reviewedTasks.reduce((sum, task) => sum + task.clientRating, 0) / reviewedTasks.length
+   : 0;
  const fiveStarTasks = completedTasks.filter(task => task.clientRating === 5).length;
 
  return (
@@ -110,14 +114,18 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
       <div className="text-2xl font-bold text-green-600">{totalTasks}</div>
       <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.tasksCompleted')}</div>
      </div>
-     <div className="text-center">
-      <div className="text-2xl font-bold text-yellow-600">{averageRating.toFixed(1)}</div>
-      <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.avgRating')}</div>
-     </div>
-     <div className="text-center">
-      <div className="text-2xl font-bold text-purple-600">{Math.round((fiveStarTasks / totalTasks) * 100)}%</div>
-      <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.fiveStarTasks')}</div>
-     </div>
+     {reviewedTasks.length > 0 && (
+      <div className="text-center">
+       <div className="text-2xl font-bold text-yellow-600">{averageRating.toFixed(1)}</div>
+       <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.avgRating')}</div>
+      </div>
+     )}
+     {fiveStarTasks > 0 && (
+      <div className="text-center">
+       <div className="text-2xl font-bold text-purple-600">{Math.round((fiveStarTasks / reviewedTasks.length) * 100)}%</div>
+       <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.stats.fiveStarTasks')}</div>
+      </div>
+     )}
     </div>
    </div>
 
@@ -188,9 +196,22 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
                {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
               </span>
              </div>
-             <div className="flex items-center gap-2">
-              {renderStars(task.clientRating)}
-              <span className="font-semibold text-gray-900">{task.clientRating}</span>
+             <div className="flex flex-col items-end gap-1">
+              {task.clientRating > 0 ? (
+               <div className="flex items-center gap-2">
+                {renderStars(task.clientRating)}
+                <span className="font-semibold text-gray-900">{task.clientRating}</span>
+               </div>
+              ) : (
+               <>
+                <div className="flex items-center gap-1">
+                 {renderStars(0)}
+                </div>
+                <span className="text-xs text-gray-500 italic">
+                 {t('professionalDetail.completedTasks.pendingReview', 'Pending review')}
+                </span>
+               </>
+              )}
              </div>
             </div>
 
@@ -209,18 +230,6 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
               </div>
              </div>
             )}
-
-            <LocaleLink href={`/tasks/${task.id}`}>
-             <Button
-              size="sm"
-              variant="bordered"
-              color="primary"
-              endContent={<ExternalLink size={14} />}
-              className="font-medium"
-             >
-              {t('professionalDetail.completedTasks.viewTask')}
-             </Button>
-            </LocaleLink>
            </div>
           </div>
          </CardBody>
@@ -240,7 +249,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
        className="font-medium"
        onPress={onOpen}
       >
-       View all {completedTasks.length} tasks
+       {t('professionalDetail.completedTasks.viewAll', 'View all {{count}} tasks', { count: completedTasks.length })}
       </Button>
      </div>
     )}
@@ -283,9 +292,22 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
            {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
           </span>
          </div>
-         <div className="flex items-center gap-1 ml-2">
-          {renderStars(task.clientRating)}
-          <span className="text-xs text-gray-600 ml-1">{task.clientRating}</span>
+         <div className="flex flex-col items-end gap-0.5 ml-2">
+          {task.clientRating > 0 ? (
+           <div className="flex items-center gap-1">
+            {renderStars(task.clientRating)}
+            <span className="text-xs text-gray-600 ml-1">{task.clientRating}</span>
+           </div>
+          ) : (
+           <>
+            <div className="flex items-center gap-0.5">
+             {renderStars(0)}
+            </div>
+            <span className="text-[10px] text-gray-500 italic whitespace-nowrap">
+             {t('professionalDetail.completedTasks.pendingReview', 'Pending review')}
+            </span>
+           </>
+          )}
          </div>
         </div>
 
@@ -310,7 +332,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
        className="font-medium"
        onPress={onOpen}
       >
-       View all {completedTasks.length} tasks
+       {t('professionalDetail.completedTasks.viewAll', 'View all {{count}} tasks', { count: completedTasks.length })}
       </Button>
      </div>
     )}

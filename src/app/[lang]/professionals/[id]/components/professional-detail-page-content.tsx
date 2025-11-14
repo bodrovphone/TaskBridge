@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProfessionalHeader from '@/features/professionals/components/sections/professional-header';
 import ActionButtonsRow from '@/features/professionals/components/sections/action-buttons-row';
@@ -9,6 +10,7 @@ import CompletedTasksSection from '@/features/professionals/components/sections/
 import ReviewsSection from '@/features/professionals/components/sections/reviews-section';
 import { SuspensionBanner } from '@/components/safety/suspension-banner';
 import { getCityLabelBySlug } from '@/features/cities';
+import { toast } from '@/hooks/use-toast';
 
 interface ProfessionalDetailPageContentProps {
   professional: any; // @todo: Add proper type from API
@@ -17,6 +19,7 @@ interface ProfessionalDetailPageContentProps {
 
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
   const { t } = useTranslation();
+  const [isShareCopied, setIsShareCopied] = useState(false);
 
   // Transform API data to match component expectations
   const transformedProfessional = {
@@ -26,6 +29,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     title: professional.specialization || t('professionals.card.lookingForFirstTask', 'Professional service provider'),
     avatar: professional.avatarUrl || professional.avatar,
     rating: professional.rating || 0,
+    // Use reviewsCount from API (already filtered to published reviews only)
     reviewCount: professional.reviewsCount || professional.reviewCount || 0,
     completedTasks: professional.completedJobs || professional.completedTasks || 0,
     yearsExperience: professional.yearsExperience || 0,
@@ -58,6 +62,52 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     completedTasksList: professional.completedTasksList || professional.completedTasks || []
   };
 
+  const handleShareClick = async () => {
+    const professionalUrl = `${window.location.origin}/${lang}/professionals/${professional.id}`;
+    const shareData = {
+      title: transformedProfessional.name,
+      text: t('professionalDetail.shareText', 'Check out this professional on Trudify'),
+      url: professionalUrl,
+    };
+
+    // Try to use Web Share API (native on mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast({ title: t('professionalDetail.shareSuccess', 'Shared successfully!') });
+      } catch (error: any) {
+        // User cancelled or error occurred
+        if (error.name !== 'AbortError') {
+          console.error('Error sharing:', error);
+          // Fallback to clipboard
+          await copyToClipboard(professionalUrl);
+        }
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      await copyToClipboard(professionalUrl);
+    }
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsShareCopied(true);
+      toast({ title: t('professionalDetail.linkCopied', 'Link copied to clipboard!') });
+
+      // Reset icon after 2 seconds
+      setTimeout(() => {
+        setIsShareCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+      toast({
+        title: t('professionalDetail.copyError', 'Failed to copy link'),
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -77,7 +127,8 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
               <ActionButtonsRow
                 professional={transformedProfessional}
                 onInviteToApply={() => console.log('Invite to apply clicked')}
-                onShare={() => console.log('Share clicked')}
+                onShare={handleShareClick}
+                isShareCopied={isShareCopied}
               />
               <ServicesSection services={transformedProfessional.services} />
             </div>

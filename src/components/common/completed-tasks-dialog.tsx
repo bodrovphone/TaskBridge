@@ -1,9 +1,8 @@
 'use client'
 
-import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Chip, Button } from "@nextui-org/react";
-import { CheckCircle, MapPin, Star, ExternalLink, Clock } from "lucide-react";
+import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Chip } from "@nextui-org/react";
+import { CheckCircle, MapPin, Star, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
-import { LocaleLink } from '@/components/common/locale-link';
 import { getCityLabelBySlug } from '@/features/cities';
 import { getCategoryLabelBySlug } from '@/features/categories';
 import { getCategoryColor } from '@/lib/utils/category';
@@ -63,7 +62,12 @@ export default function CompletedTasksDialog({
  };
 
  const totalTasks = completedTasks.length;
- const averageRating = completedTasks.reduce((sum, task) => sum + task.clientRating, 0) / totalTasks;
+
+ // Only calculate average from tasks that have been reviewed (rating > 0)
+ const reviewedTasks = completedTasks.filter(task => task.clientRating > 0);
+ const averageRating = reviewedTasks.length > 0
+   ? reviewedTasks.reduce((sum, task) => sum + task.clientRating, 0) / reviewedTasks.length
+   : 0;
 
  return (
   <Modal
@@ -87,12 +91,14 @@ export default function CompletedTasksDialog({
       </h2>
       <div className="text-right">
        <div className="text-2xl font-bold text-green-600">{totalTasks}</div>
-       <div className="text-sm text-gray-600">Total Tasks</div>
+       <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.totalTasks', 'Total Tasks')}</div>
       </div>
      </div>
-     <div className="text-sm text-gray-600">
-      Average rating: {averageRating.toFixed(1)} stars
-     </div>
+     {reviewedTasks.length > 0 && (
+      <div className="text-sm text-gray-600">
+       {t('professionalDetail.completedTasks.averageRatingStars', 'Average rating: {{rating}} stars', { rating: averageRating.toFixed(1) })}
+      </div>
+     )}
     </ModalHeader>
     <ModalBody className="flex-1 overflow-auto">
      <div className="space-y-4 pr-2">
@@ -135,9 +141,22 @@ export default function CompletedTasksDialog({
            <div className="text-xl font-bold text-green-600 mb-2">
             {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
            </div>
-           <div className="flex items-center gap-1 justify-end">
-            {renderStars(task.clientRating)}
-            <span className="text-sm text-gray-600 ml-1">{task.clientRating}</span>
+           <div className="flex flex-col items-end gap-1">
+            {task.clientRating > 0 ? (
+             <div className="flex items-center gap-1 justify-end">
+              {renderStars(task.clientRating)}
+              <span className="text-sm text-gray-600 ml-1">{task.clientRating}</span>
+             </div>
+            ) : (
+             <>
+              <div className="flex items-center gap-1">
+               {renderStars(0)}
+              </div>
+              <span className="text-xs text-gray-500 italic">
+               {t('professionalDetail.completedTasks.pendingReview', 'Pending review')}
+              </span>
+             </>
+            )}
            </div>
           </div>
          </div>
@@ -164,18 +183,6 @@ export default function CompletedTasksDialog({
            </div>
           </div>
          )}
-
-         <LocaleLink href={`/tasks/${task.id}`}>
-          <Button
-           size="sm"
-           variant="bordered"
-           color="primary"
-           endContent={<ExternalLink size={14} />}
-           className="font-medium"
-          >
-           {t('professionalDetail.completedTasks.viewTask')}
-          </Button>
-         </LocaleLink>
         </CardBody>
        </Card>
       ))}
