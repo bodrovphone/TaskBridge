@@ -127,6 +127,22 @@ export async function POST(request: NextRequest) {
       // Don't fail the request - count can be fixed later
     }
 
+    // Clean up professional's old rejected/withdrawn applications (30+ days)
+    // This keeps the database lean without needing a cron job
+    try {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      await supabase
+        .from('applications')
+        .delete()
+        .eq('professional_id', user.id)
+        .in('status', ['rejected', 'withdrawn'])
+        .lt('updated_at', thirtyDaysAgo.toISOString());
+    } catch {
+      // Fail silently - cleanup is best-effort and non-critical
+    }
+
     // Get professional's name for notification
     const { data: professional } = await supabase
       .from('users')
