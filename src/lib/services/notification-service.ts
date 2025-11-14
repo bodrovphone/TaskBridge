@@ -151,7 +151,7 @@ export async function createNotification(
     let message = params.message
 
     // Use localized content for supported types
-    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'removed_by_customer']
+    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'task_cancelled', 'removed_by_customer']
     if (localizedTypes.includes(params.type) && (!title || !message)) {
       try {
         const typeMap = {
@@ -160,6 +160,7 @@ export async function createNotification(
           'application_accepted': 'applicationAccepted',
           'application_rejected': 'applicationRejected',
           'task_completed': 'taskCompleted',
+          'task_cancelled': 'taskCancelled',
           'removed_by_customer': 'removedByCustomer',
         } as const
 
@@ -236,7 +237,7 @@ export async function createNotification(
       try {
         // Get localized Telegram message for supported types
         let telegramMessage: string
-        const telegramTypes = ['welcome_message', 'application_received', 'application_accepted', 'task_completed', 'removed_by_customer']
+        const telegramTypes = ['welcome_message', 'application_received', 'application_accepted', 'task_completed', 'task_cancelled', 'removed_by_customer']
 
         if (telegramTypes.includes(params.type)) {
           const typeMap = {
@@ -244,6 +245,7 @@ export async function createNotification(
             'application_received': 'applicationReceived',
             'application_accepted': 'applicationAccepted',
             'task_completed': 'taskCompleted',
+            'task_cancelled': 'taskCancelled',
             'removed_by_customer': 'removedByCustomer',
           } as const
 
