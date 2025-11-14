@@ -353,21 +353,53 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                         <User className="w-4 h-4 text-blue-600" />
                         <span className="font-medium">{task.customer.name}</span>
                       </div>
-                      {task.customer.phone && (
-                        <div className="flex items-center gap-2 text-sm text-blue-800">
-                          <Phone className="w-4 h-4 text-blue-600" />
-                          <a href={`tel:${task.customer.phone}`} className="hover:underline">
-                            {task.customer.phone}
-                          </a>
-                        </div>
-                      )}
-                      {task.customer.email && (
-                        <div className="flex items-center gap-2 text-sm text-blue-800">
-                          <Mail className="w-4 h-4 text-blue-600" />
-                          <a href={`mailto:${task.customer.email}`} className="hover:underline">
-                            {task.customer.email}
-                          </a>
-                        </div>
+
+                      {/* Display shared contact info (from acceptance) */}
+                      {task.sharedContactInfo ? (
+                        <>
+                          {task.sharedContactInfo.method === 'phone' && task.sharedContactInfo.phone && (
+                            <div className="flex items-center gap-2 text-sm text-blue-800">
+                              <Phone className="w-4 h-4 text-blue-600" />
+                              <a href={`tel:${task.sharedContactInfo.phone}`} className="font-mono hover:underline">
+                                {task.sharedContactInfo.phone}
+                              </a>
+                            </div>
+                          )}
+                          {task.sharedContactInfo.method === 'email' && task.sharedContactInfo.email && (
+                            <div className="flex items-center gap-2 text-sm text-blue-800">
+                              <Mail className="w-4 h-4 text-blue-600" />
+                              <a href={`mailto:${task.sharedContactInfo.email}`} className="hover:underline">
+                                {task.sharedContactInfo.email}
+                              </a>
+                            </div>
+                          )}
+                          {task.sharedContactInfo.method === 'custom' && task.sharedContactInfo.customContact && (
+                            <div className="flex items-start gap-2 text-sm text-blue-800">
+                              <Send className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <span className="break-words">{task.sharedContactInfo.customContact}</span>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        // Fallback to customer's default contact info (for old applications before this feature)
+                        <>
+                          {task.customer.phone && (
+                            <div className="flex items-center gap-2 text-sm text-blue-800">
+                              <Phone className="w-4 h-4 text-blue-600" />
+                              <a href={`tel:${task.customer.phone}`} className="hover:underline">
+                                {task.customer.phone}
+                              </a>
+                            </div>
+                          )}
+                          {task.customer.email && (
+                            <div className="flex items-center gap-2 text-sm text-blue-800">
+                              <Mail className="w-4 h-4 text-blue-600" />
+                              <a href={`mailto:${task.customer.email}`} className="hover:underline">
+                                {task.customer.email}
+                              </a>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>

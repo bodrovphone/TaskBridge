@@ -255,14 +255,36 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 #### Acceptance Flow
 
 - When task owner accepts an application:
-  1. Confirmation dialog shown
+  1. Confirmation dialog shown with **Privacy-Focused Contact Selection**:
+     - Customer explicitly chooses which contact method to share:
+       * **Share phone number** - If user has phone in profile (with privacy policy link)
+       * **Share email** - With warning: "Email is slower for coordination. Consider phone/Telegram for faster communication."
+       * **Custom contact info** - Text input for Telegram (@username), Viber link, WhatsApp, or any contact method
+     - **No defaults** - User must actively select a contact method
+     - **Masked preview** shown before sharing (e.g., `+359 888 *** ***`, `j***n@example.com`)
+     - If user has no phone/email in profile, custom contact input shown directly
   2. All other applications automatically rejected
   3. Task status → "in_progress"
-  4. Contact information revealed to both parties:
-     - Full name, phone number, email
-     - Exact task address (if provided)
-  5. Notifications sent to all applicants
-  6. Both parties can now communicate directly
+  4. Selected contact information revealed to professional:
+     - Displayed in **Telegram notification** with icon (📞/📧/💬)
+     - Shown in **in-app notification center** (green highlighted box)
+     - Visible on **My Work page** task cards (persistent access)
+     - Full name and exact task address (if provided) also shared
+  5. Contact info stored in `applications.shared_contact_info` (JSONB):
+     ```json
+     {
+       "method": "phone|email|custom",
+       "phone": "+359888123456",      // if method=phone
+       "email": "user@example.com",   // if method=email
+       "customContact": "@my_telegram" // if method=custom
+     }
+     ```
+  6. Notifications sent to all applicants (accepted/rejected)
+  7. Both parties can now communicate directly via shared contact method
+
+**Backwards Compatibility:**
+- Old applications without `shared_contact_info` fall back to customer's default profile phone/email
+- Ensures professionals can always contact customer even for legacy acceptances
 
 #### Task Completion Workflow
 

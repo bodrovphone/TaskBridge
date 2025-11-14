@@ -224,6 +224,7 @@ export async function GET(request: NextRequest) {
         rejection_reason,
         withdrawn_at,
         withdrawal_reason,
+        shared_contact_info,
         task:tasks (
           id,
           title,

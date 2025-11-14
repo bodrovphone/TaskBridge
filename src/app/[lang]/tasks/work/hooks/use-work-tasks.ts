@@ -14,6 +14,12 @@ export interface WorkTask {
     phone?: string
     email?: string
   }
+  sharedContactInfo?: {
+    method: 'phone' | 'email' | 'custom'
+    phone?: string
+    email?: string
+    customContact?: string
+  }
   agreedPrice: number
   timeline: string
   startDate?: Date
@@ -57,34 +63,49 @@ export function useWorkTasks() {
         const data = await response.json()
 
         // Transform API response to WorkTask format
-        const workTasks: WorkTask[] = (data.applications || []).map((app: any) => ({
-          id: app.id,
-          taskId: app.task.id,
-          taskTitle: app.task.title,
-          taskDescription: app.task.description,
-          customer: {
-            name: app.task.customer?.full_name || 'Unknown',
-            avatar: app.task.customer?.avatar_url,
-            phone: app.task.customer?.phone,
-            email: app.task.customer?.email,
-          },
-          agreedPrice: app.proposed_price_bgn || 0,
-          timeline: app.estimated_duration_hours
-            ? `${app.estimated_duration_hours} hours`
-            : 'Not specified',
-          startDate: app.responded_at ? new Date(app.responded_at) : undefined,
-          acceptedAt: app.accepted_at ? new Date(app.accepted_at) : (app.created_at ? new Date(app.created_at) : new Date()),
-          completedAt: undefined, // Will be populated from task completion data
-          task: {
-            deadline: undefined, // Add if task has deadline field
-            category: app.task.category || 'general',
-            location: {
-              city: app.task.city || '',
-              neighborhood: app.task.neighborhood || '',
+        const workTasks: WorkTask[] = (data.applications || []).map((app: any) => {
+          // Parse shared contact info if it exists
+          let sharedContactInfo = undefined
+          if (app.shared_contact_info) {
+            try {
+              sharedContactInfo = typeof app.shared_contact_info === 'string'
+                ? JSON.parse(app.shared_contact_info)
+                : app.shared_contact_info
+            } catch (e) {
+              console.error('Failed to parse shared_contact_info:', e)
+            }
+          }
+
+          return {
+            id: app.id,
+            taskId: app.task.id,
+            taskTitle: app.task.title,
+            taskDescription: app.task.description,
+            customer: {
+              name: app.task.customer?.full_name || 'Unknown',
+              avatar: app.task.customer?.avatar_url,
+              phone: app.task.customer?.phone,
+              email: app.task.customer?.email,
             },
-            status: app.task.status === 'completed' ? 'completed' : 'in_progress'
-          },
-        }))
+            sharedContactInfo,
+            agreedPrice: app.proposed_price_bgn || 0,
+            timeline: app.estimated_duration_hours
+              ? `${app.estimated_duration_hours} hours`
+              : 'Not specified',
+            startDate: app.responded_at ? new Date(app.responded_at) : undefined,
+            acceptedAt: app.accepted_at ? new Date(app.accepted_at) : (app.created_at ? new Date(app.created_at) : new Date()),
+            completedAt: undefined, // Will be populated from task completion data
+            task: {
+              deadline: undefined, // Add if task has deadline field
+              category: app.task.category || 'general',
+              location: {
+                city: app.task.city || '',
+                neighborhood: app.task.neighborhood || '',
+              },
+              status: app.task.status === 'completed' ? 'completed' : 'in_progress',
+            },
+          }
+        })
 
         setTasks(workTasks)
       } catch (err: any) {
@@ -111,34 +132,49 @@ export function useWorkTasks() {
       }
 
       const data = await response.json()
-      const workTasks: WorkTask[] = (data.applications || []).map((app: any) => ({
-        id: app.id,
-        taskId: app.task.id,
-        taskTitle: app.task.title,
-        taskDescription: app.task.description,
-        customer: {
-          name: app.task.customer?.full_name || 'Unknown',
-          avatar: app.task.customer?.avatar_url,
-          phone: app.task.customer?.phone,
-          email: app.task.customer?.email,
-        },
-        agreedPrice: app.proposed_price_bgn || 0,
-        timeline: app.estimated_duration_hours
-          ? `${app.estimated_duration_hours} hours`
-          : 'Not specified',
-        startDate: app.responded_at ? new Date(app.responded_at) : undefined,
-        acceptedAt: app.accepted_at ? new Date(app.accepted_at) : (app.created_at ? new Date(app.created_at) : new Date()),
-        completedAt: undefined,
-        task: {
-          deadline: undefined,
-          category: app.task.category || 'general',
-          location: {
-            city: app.task.city || '',
-            neighborhood: app.task.neighborhood || '',
+      const workTasks: WorkTask[] = (data.applications || []).map((app: any) => {
+        // Parse shared contact info if it exists
+        let sharedContactInfo = undefined
+        if (app.shared_contact_info) {
+          try {
+            sharedContactInfo = typeof app.shared_contact_info === 'string'
+              ? JSON.parse(app.shared_contact_info)
+              : app.shared_contact_info
+          } catch (e) {
+            console.error('Failed to parse shared_contact_info:', e)
+          }
+        }
+
+        return {
+          id: app.id,
+          taskId: app.task.id,
+          taskTitle: app.task.title,
+          taskDescription: app.task.description,
+          customer: {
+            name: app.task.customer?.full_name || 'Unknown',
+            avatar: app.task.customer?.avatar_url,
+            phone: app.task.customer?.phone,
+            email: app.task.customer?.email,
           },
-          status: app.task.status === 'completed' ? 'completed' : 'in_progress',
-        },
-      }))
+          sharedContactInfo,
+          agreedPrice: app.proposed_price_bgn || 0,
+          timeline: app.estimated_duration_hours
+            ? `${app.estimated_duration_hours} hours`
+            : 'Not specified',
+          startDate: app.responded_at ? new Date(app.responded_at) : undefined,
+          acceptedAt: app.accepted_at ? new Date(app.accepted_at) : (app.created_at ? new Date(app.created_at) : new Date()),
+          completedAt: undefined,
+          task: {
+            deadline: undefined,
+            category: app.task.category || 'general',
+            location: {
+              city: app.task.city || '',
+              neighborhood: app.task.neighborhood || '',
+            },
+            status: app.task.status === 'completed' ? 'completed' : 'in_progress',
+          },
+        }
+      })
 
       setTasks(workTasks)
     } catch (err: any) {

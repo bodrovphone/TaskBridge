@@ -39,10 +39,38 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
  const [isLoadingApplications, setIsLoadingApplications] = useState(true);
  const [applicationsError, setApplicationsError] = useState<string | null>(null);
 
+ // State for user profile (for contact selection)
+ const [userProfile, setUserProfile] = useState<{
+   phone?: string | null;
+   email?: string | null;
+   telegram_username?: string | null;
+ } | null>(null);
+
  // @todo FEATURE: Questions feature - commented out for future implementation
  // State for questions - load from mock service
  // const [questions, setQuestions] = useState<Question[]>([]);
  // const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+
+ // Fetch user profile for contact selection
+ useEffect(() => {
+  const fetchUserProfile = async () => {
+   try {
+    const response = await fetch('/api/profile');
+    if (response.ok) {
+     const data = await response.json();
+     setUserProfile({
+      phone: data.phone,
+      email: data.email,
+      telegram_username: data.telegram_username
+     });
+    }
+   } catch (error) {
+    console.error('[TaskActivity] Error fetching user profile:', error);
+   }
+  };
+
+  fetchUserProfile();
+ }, []);
 
  // Fetch applications from API
  useEffect(() => {
@@ -159,11 +187,26 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
   }
  };
 
- const handleAcceptConfirm = async (id: string) => {
+ const handleAcceptConfirm = async (id: string, contactInfo: { method: 'phone' | 'email' | 'custom'; customContact?: string }) => {
   try {
+   // Build contact info payload
+   const contactPayload: any = { method: contactInfo.method };
+
+   if (contactInfo.method === 'phone' && userProfile?.phone) {
+    contactPayload.phone = userProfile.phone;
+   } else if (contactInfo.method === 'email' && userProfile?.email) {
+    contactPayload.email = userProfile.email;
+   } else if (contactInfo.method === 'custom') {
+    contactPayload.customContact = contactInfo.customContact;
+   }
+
    // Call API to accept application
    const response = await fetch(`/api/applications/${id}/accept`, {
-    method: 'PATCH'
+    method: 'PATCH',
+    headers: {
+     'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ contactInfo: contactPayload })
    });
 
    if (!response.ok) {
@@ -372,6 +415,7 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
     isOpen={isAcceptDialogOpen}
     onClose={() => setIsAcceptDialogOpen(false)}
     onConfirm={handleAcceptConfirm}
+    userProfile={userProfile}
    />
 
    {/* Reject Dialog */}

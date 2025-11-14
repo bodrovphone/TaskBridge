@@ -7,12 +7,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { createNotification } from '@/lib/services/notification-service';
 
+interface ContactInfo {
+  method: 'phone' | 'email' | 'custom';
+  phone?: string;
+  email?: string;
+  customContact?: string;
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id: applicationId } = await params;
+    const body = await request.json();
+    const { contactInfo } = body as { contactInfo?: ContactInfo };
+
     const supabase = await createClient();
 
     // Check authentication
@@ -80,14 +90,15 @@ export async function PATCH(
     }
 
     // Start transaction: Accept application and update task
-    // 1. Update application status to accepted
+    // 1. Update application status to accepted (store contact info for later reference)
     const { error: acceptError } = await adminClient
       .from('applications')
       .update({
         status: 'accepted',
         responded_at: new Date().toISOString(),
         accepted_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        shared_contact_info: contactInfo ? JSON.stringify(contactInfo) : null
       })
       .eq('id', applicationId);
 
@@ -152,6 +163,18 @@ export async function PATCH(
       .eq('id', task?.customer_id)
       .single();
 
+    // Build contact information string for notification
+    let contactText = '';
+    if (contactInfo) {
+      if (contactInfo.method === 'phone' && contactInfo.phone) {
+        contactText = `📞 ${contactInfo.phone}`;
+      } else if (contactInfo.method === 'email' && contactInfo.email) {
+        contactText = `📧 ${contactInfo.email}`;
+      } else if (contactInfo.method === 'custom' && contactInfo.customContact) {
+        contactText = `💬 ${contactInfo.customContact}`;
+      }
+    }
+
     // Send notification to accepted professional (critical - Telegram + in-app)
     await createNotification({
       userId: application.professional_id,
@@ -159,13 +182,14 @@ export async function PATCH(
       templateData: {
         taskTitle: task?.title,
         customerName: customer?.full_name || 'the customer',
-        customerMessage: '', // Can be added later when customer provides a message during acceptance
+        customerContact: contactText,
       },
       metadata: {
         taskId: application.task_id,
         applicationId: application.id,
         customerId: task?.customer_id,
         customerName: customer?.full_name,
+        contactInfo: contactInfo || null,
       },
       actionUrl: '/tasks/work', // Professional should go to their work page
       deliveryChannel: 'both', // Critical: Telegram + In-app

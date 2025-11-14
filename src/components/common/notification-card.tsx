@@ -15,6 +15,9 @@ import {
  Wallet,
  PartyPopper,
  LogOut,
+ Phone,
+ Mail,
+ Send,
 } from 'lucide-react';
 import type { Notification } from '@/types/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -108,6 +111,37 @@ export default function NotificationCard({ notification }: NotificationCardProps
     </div>
 
     <p className="text-sm text-gray-600 leading-relaxed">{notification.message}</p>
+
+    {/* Contact Information for Application Accepted */}
+    {notification.type === 'application_accepted' && notification.metadata?.contactInfo && (
+     <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+      <h5 className="text-xs font-semibold text-green-900 mb-2">{t('notifications.customerContact')}</h5>
+      <div className="flex items-start gap-2 text-sm text-green-800">
+       {notification.metadata.contactInfo.method === 'phone' && notification.metadata.contactInfo.phone && (
+        <>
+         <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
+         <a href={`tel:${notification.metadata.contactInfo.phone}`} className="font-mono hover:underline">
+          {notification.metadata.contactInfo.phone}
+         </a>
+        </>
+       )}
+       {notification.metadata.contactInfo.method === 'email' && notification.metadata.contactInfo.email && (
+        <>
+         <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
+         <a href={`mailto:${notification.metadata.contactInfo.email}`} className="hover:underline">
+          {notification.metadata.contactInfo.email}
+         </a>
+        </>
+       )}
+       {notification.metadata.contactInfo.method === 'custom' && notification.metadata.contactInfo.customContact && (
+        <>
+         <Send className="w-4 h-4 mt-0.5 flex-shrink-0" />
+         <span className="break-words">{notification.metadata.contactInfo.customContact}</span>
+        </>
+       )}
+      </div>
+     </div>
+    )}
 
     {/* Action Buttons */}
     {notification.actionUrl && (

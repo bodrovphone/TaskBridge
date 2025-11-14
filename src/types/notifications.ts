@@ -27,6 +27,12 @@ export interface Notification {
     taskTitle?: string;
     price?: number;
     rating?: number;
+    contactInfo?: {
+      method: 'phone' | 'email' | 'custom';
+      phone?: string;
+      email?: string;
+      customContact?: string;
+    };
   };
 }
 
