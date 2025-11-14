@@ -77,8 +77,8 @@ export function BusinessSettingsSection({
               {currentPaymentMethods.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {currentPaymentMethods.map(method => (
-                    <Chip key={method} variant="flat" color="success" className="capitalize shadow-sm">
-                      {method.replace('_', ' ')}
+                    <Chip key={method} variant="flat" color="success" className="shadow-sm">
+                      {t(`profile.professional.paymentMethods.${method}`)}
                     </Chip>
                   ))}
                 </div>
@@ -99,7 +99,7 @@ export function BusinessSettingsSection({
                     <Clock className="w-3.5 h-3.5 text-blue-600" />
                   </div>
                   <span className="text-sm font-medium text-gray-900">
-                    Mon-Fri: {weekdayHours.start}-{weekdayHours.end}
+                    {t('profile.professional.businessHours.weekdays')}: {weekdayHours.start}-{weekdayHours.end}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export function BusinessSettingsSection({
                     <Clock className="w-3.5 h-3.5 text-orange-600" />
                   </div>
                   <span className="text-sm font-medium text-gray-900">
-                    Sat-Sun: {weekendHours.start}-{weekendHours.end}
+                    {t('profile.professional.businessHours.weekend')}: {weekendHours.start}-{weekendHours.end}
                   </span>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export function BusinessSettingsSection({
                       onChange={(e) => handlePaymentMethodToggle(method, e.target.checked)}
                       className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
-                    <span className="text-sm capitalize">{method.replace('_', ' ')}</span>
+                    <span className="text-sm">{t(`profile.professional.paymentMethods.${method}`)}</span>
                   </label>
                 ))}
               </div>

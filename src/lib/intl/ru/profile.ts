@@ -722,6 +722,10 @@ export const profile = {
   'profile.professional.selectCategories': 'Выбрать категории',
   'profile.professional.serviceCategories': 'Категории услуг',
   'profile.serviceCategories.saveCategories': 'Сохранить категории',
+  'profile.serviceCategories.searchPlaceholder': 'Поиск категорий...',
+  'profile.serviceCategories.popularCategories': 'Популярные категории',
+  'profile.serviceCategories.selected': 'Выбрано',
+  'profile.serviceCategories.clearAll': 'Очистить все',
   'profile.professional.verificationTrust': 'Верификация и доверие',
   'profile.professional.phoneVerification': 'Верификация телефона',
   'profile.professional.phoneVerificationRequired': 'Обязательно для всех профессионалов',
@@ -776,6 +780,27 @@ export const profile = {
   'profile.professional.form.availabilityOptions.available': 'Доступен',
   'profile.professional.form.availabilityOptions.busy': 'Занят',
   'profile.professional.form.availabilityOptions.unavailable': 'Недоступен',
+
+  // Response Time Options
+  'profile.professional.responseTime.1h': 'В течение 1 часа',
+  'profile.professional.responseTime.2h': 'В течение 2 часов',
+  'profile.professional.responseTime.4h': 'В течение 4 часов',
+  'profile.professional.responseTime.24h': 'В течение 24 часов',
+
+  // Language Options
+  'profile.professional.languages.bg': '🇧🇬 Болгарский',
+  'profile.professional.languages.ru': '🇷🇺 Русский',
+  'profile.professional.languages.en': '🇬🇧 Английский',
+
+  // Payment Method Options
+  'profile.professional.paymentMethods.cash': 'Наличные',
+  'profile.professional.paymentMethods.card': 'Карта',
+  'profile.professional.paymentMethods.bank_transfer': 'Банковский перевод',
+  'profile.professional.paymentMethods.mobile_payment': 'Мобильный платеж',
+
+  // Business Hours Labels
+  'profile.professional.businessHours.weekdays': 'Пн-Пт',
+  'profile.professional.businessHours.weekend': 'Сб-Вс',
 
   // Form Validation
   'profile.professional.form.validation.titleRequired': 'Профессиональная должность обязательна (минимум 3 символа)',

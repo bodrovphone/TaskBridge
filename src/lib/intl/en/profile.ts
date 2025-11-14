@@ -131,6 +131,10 @@ export const profile = {
   'profile.professional.selectCategories': 'Select Categories',
   'profile.professional.serviceCategories': 'Service Categories',
   'profile.serviceCategories.saveCategories': 'Save Categories',
+  'profile.serviceCategories.searchPlaceholder': 'Search categories...',
+  'profile.serviceCategories.popularCategories': 'Popular Categories',
+  'profile.serviceCategories.selected': 'Selected',
+  'profile.serviceCategories.clearAll': 'Clear all',
   'profile.professional.verificationTrust': 'Verification & Trust',
   'profile.professional.phoneVerification': 'Phone Verification',
   'profile.professional.phoneVerificationRequired': 'Required for all professionals',
@@ -185,6 +189,27 @@ export const profile = {
   'profile.professional.form.availabilityOptions.available': 'Available',
   'profile.professional.form.availabilityOptions.busy': 'Busy',
   'profile.professional.form.availabilityOptions.unavailable': 'Unavailable',
+
+  // Response Time Options
+  'profile.professional.responseTime.1h': 'Within 1 hour',
+  'profile.professional.responseTime.2h': 'Within 2 hours',
+  'profile.professional.responseTime.4h': 'Within 4 hours',
+  'profile.professional.responseTime.24h': 'Within 24 hours',
+
+  // Language Options
+  'profile.professional.languages.bg': '🇧🇬 Bulgarian',
+  'profile.professional.languages.ru': '🇷🇺 Russian',
+  'profile.professional.languages.en': '🇬🇧 English',
+
+  // Payment Method Options
+  'profile.professional.paymentMethods.cash': 'Cash',
+  'profile.professional.paymentMethods.card': 'Card',
+  'profile.professional.paymentMethods.bank_transfer': 'Bank Transfer',
+  'profile.professional.paymentMethods.mobile_payment': 'Mobile Payment',
+
+  // Business Hours Labels
+  'profile.professional.businessHours.weekdays': 'Mon-Fri',
+  'profile.professional.businessHours.weekend': 'Sat-Sun',
 
   // Form Validation
   'profile.professional.form.validation.titleRequired': 'Professional title is required (minimum 3 characters)',

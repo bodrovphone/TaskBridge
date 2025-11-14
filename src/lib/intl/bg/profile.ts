@@ -131,6 +131,10 @@ export const profile = {
   'profile.professional.selectCategories': 'Избери категории',
   'profile.professional.serviceCategories': 'Категории услуги',
   'profile.serviceCategories.saveCategories': 'Запази категориите',
+  'profile.serviceCategories.searchPlaceholder': 'Търси категории...',
+  'profile.serviceCategories.popularCategories': 'Популярни категории',
+  'profile.serviceCategories.selected': 'Избрани',
+  'profile.serviceCategories.clearAll': 'Изчисти всички',
   'profile.professional.verificationTrust': 'Верификация и доверие',
   'profile.professional.phoneVerification': 'Верификация на телефон',
   'profile.professional.phoneVerificationRequired': 'Задължително за всички професионалисти',
@@ -185,6 +189,27 @@ export const profile = {
   'profile.professional.form.availabilityOptions.available': 'Наличен',
   'profile.professional.form.availabilityOptions.busy': 'Зает',
   'profile.professional.form.availabilityOptions.unavailable': 'Недостъпен',
+
+  // Response Time Options
+  'profile.professional.responseTime.1h': 'В рамките на 1 час',
+  'profile.professional.responseTime.2h': 'В рамките на 2 часа',
+  'profile.professional.responseTime.4h': 'В рамките на 4 часа',
+  'profile.professional.responseTime.24h': 'В рамките на 24 часа',
+
+  // Language Options
+  'profile.professional.languages.bg': '🇧🇬 Български',
+  'profile.professional.languages.ru': '🇷🇺 Руски',
+  'profile.professional.languages.en': '🇬🇧 Английски',
+
+  // Payment Method Options
+  'profile.professional.paymentMethods.cash': 'Кеш',
+  'profile.professional.paymentMethods.card': 'Карта',
+  'profile.professional.paymentMethods.bank_transfer': 'Банков превод',
+  'profile.professional.paymentMethods.mobile_payment': 'Мобилно плащане',
+
+  // Business Hours Labels
+  'profile.professional.businessHours.weekdays': 'Пон-Пет',
+  'profile.professional.businessHours.weekend': 'Съб-Нед',
 
   // Form Validation
   'profile.professional.form.validation.titleRequired': 'Професионалната титла е задължителна (минимум 3 символа)',

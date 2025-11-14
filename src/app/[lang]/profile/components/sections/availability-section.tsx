@@ -17,18 +17,9 @@ interface AvailabilitySectionProps {
   onLanguageChange: (data: string[]) => void
 }
 
-const responseTimeOptions = [
-  { key: '1h', label: 'Within 1 hour' },
-  { key: '2h', label: 'Within 2 hours' },
-  { key: '4h', label: 'Within 4 hours' },
-  { key: '24h', label: 'Within 24 hours' }
-]
-
-const languageOptions = [
-  { code: 'bg', label: '🇧🇬 Bulgarian' },
-  { code: 'ru', label: '🇷🇺 Russian' },
-  { code: 'en', label: '🇬🇧 English' }
-]
+// Response time and language options - will be translated
+const responseTimeKeys = ['1h', '2h', '4h', '24h']
+const languageCodes = ['bg', 'ru', 'en']
 
 export function AvailabilitySection({
   availability,
@@ -89,7 +80,9 @@ export function AvailabilitySection({
               </div>
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.status')}</p>
-                <p className="font-semibold text-gray-900 capitalize">{availability}</p>
+                <p className="font-semibold text-gray-900 capitalize">
+                  {t(`profile.professional.form.availabilityOptions.${availability}`)}
+                </p>
               </div>
             </div>
 
@@ -99,7 +92,9 @@ export function AvailabilitySection({
               </div>
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.responseTime')}</p>
-                <p className="font-semibold text-gray-900">{responseTime}</p>
+                <p className="font-semibold text-gray-900">
+                  {t(`profile.professional.responseTime.${responseTime}`)}
+                </p>
               </div>
             </div>
 
@@ -110,7 +105,7 @@ export function AvailabilitySection({
               <div className="flex-1">
                 <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.serviceLocation', 'Service Location')}</p>
                 <p className="font-semibold text-gray-900">
-                  {city ? `${cityLabel}, ${country}` : t('profile.professional.notSet', 'Not set')}
+                  {city ? cityLabel : t('profile.professional.notSet', 'Not set')}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {t('profile.professional.setInPersonalInfo', 'Set in Personal Information section')}
@@ -127,8 +122,8 @@ export function AvailabilitySection({
                 {languages.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {languages.map(lang => (
-                      <Chip key={lang} variant="flat" color="secondary" size="sm" className="uppercase">
-                        {lang === 'bg' ? '🇧🇬 Bulgarian' : lang === 'ru' ? '🇷🇺 Russian' : lang === 'en' ? '🇬🇧 English' : lang}
+                      <Chip key={lang} variant="flat" color="secondary" size="md" className="text-sm">
+                        {t(`profile.professional.languages.${lang}`)}
                       </Chip>
                     ))}
                   </div>
@@ -145,15 +140,21 @@ export function AvailabilitySection({
               <form.Field name="availability">
                 {(field) => (
                   <div>
-                    <label className="block text-sm font-medium mb-2">Current Status</label>
+                    <label className="block text-sm font-medium mb-2">{t('profile.professional.status')}</label>
                     <RadioGroup
                       value={field.state.value}
                       onValueChange={(value) => field.handleChange(value as any)}
                       orientation="horizontal"
                     >
-                      <Radio value="available" className="capitalize">Available</Radio>
-                      <Radio value="busy" className="capitalize">Busy</Radio>
-                      <Radio value="unavailable" className="capitalize">Unavailable</Radio>
+                      <Radio value="available">
+                        {t('profile.professional.form.availabilityOptions.available')}
+                      </Radio>
+                      <Radio value="busy">
+                        {t('profile.professional.form.availabilityOptions.busy')}
+                      </Radio>
+                      <Radio value="unavailable">
+                        {t('profile.professional.form.availabilityOptions.unavailable')}
+                      </Radio>
                     </RadioGroup>
                   </div>
                 )}
@@ -162,7 +163,7 @@ export function AvailabilitySection({
               <form.Field name="responseTime">
                 {(field) => (
                   <Select
-                    label="Response Time"
+                    label={t('profile.professional.responseTime')}
                     selectedKeys={[field.state.value]}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
@@ -170,8 +171,10 @@ export function AvailabilitySection({
                     }}
                     startContent={<Clock className="w-4 h-4 text-gray-500" />}
                   >
-                    {responseTimeOptions.map(opt => (
-                      <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+                    {responseTimeKeys.map(key => (
+                      <SelectItem key={key} value={key}>
+                        {t(`profile.professional.responseTime.${key}`)}
+                      </SelectItem>
                     ))}
                   </Select>
                 )}
@@ -188,7 +191,7 @@ export function AvailabilitySection({
                       {t('profile.professional.serviceLocation', 'Service Location')}
                     </p>
                     <p className="font-semibold text-gray-900">
-                      {city ? `${cityLabel}, ${country}` : t('profile.professional.notSet', 'Not set')}
+                      {city ? cityLabel : t('profile.professional.notSet', 'Not set')}
                     </p>
                     <p className="text-xs text-blue-700 mt-1">
                       {t('profile.professional.editInPersonalInfo', 'Edit in Personal Information section')}
@@ -201,18 +204,18 @@ export function AvailabilitySection({
               <div>
                 <label className="block text-sm font-medium mb-2 flex items-center gap-2">
                   <Languages className="w-4 h-4" />
-                  Languages Spoken
+                  {t('profile.professional.languagesSpoken')}
                 </label>
                 <div className="space-y-2">
-                  {languageOptions.map(lang => (
-                    <label key={lang.code} className="flex items-center gap-2 cursor-pointer">
+                  {languageCodes.map(code => (
+                    <label key={code} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={currentLanguages.includes(lang.code)}
-                        onChange={(e) => handleLanguageToggle(lang.code, e.target.checked)}
+                        checked={currentLanguages.includes(code)}
+                        onChange={(e) => handleLanguageToggle(code, e.target.checked)}
                         className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                       />
-                      <span className="text-sm">{lang.label}</span>
+                      <span className="text-sm">{t(`profile.professional.languages.${code}`)}</span>
                     </label>
                   ))}
                 </div>
