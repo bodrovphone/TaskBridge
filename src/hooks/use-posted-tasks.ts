@@ -152,7 +152,7 @@ async function removeProfessional(taskId: string, reason: string, description?: 
  * Custom hook for posted tasks with TanStack Query
  */
 export function usePostedTasks() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const queryClient = useQueryClient()
 
   // Fetch posted tasks query
@@ -185,7 +185,8 @@ export function usePostedTasks() {
 
   return {
     tasks: tasksQuery.data || [],
-    isLoading: tasksQuery.isLoading,
+    // Show loading state while auth is loading OR query is loading
+    isLoading: authLoading || tasksQuery.isLoading,
     error: tasksQuery.error,
     refetch: tasksQuery.refetch,
     markComplete: markCompleteMutation.mutateAsync,

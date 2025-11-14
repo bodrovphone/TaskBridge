@@ -95,32 +95,34 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
 
     const data = await response.json();
 
-    // Map API response to Application type
-    const mappedApplications: Application[] = (data.applications || []).map((app: any) => ({
-     id: app.id,
-     taskId: taskId,
-     professional: {
-      id: app.professional?.id || '',
-      name: app.professional?.full_name || 'Unknown',
-      avatar: app.professional?.avatar_url || null,
-      rating: app.professional?.average_rating || 0,
-      completedTasks: app.professional?.tasks_completed || 0,
-      skills: normalizeCategoryKeys(app.professional?.service_categories),
-      hourlyRate: app.professional?.hourly_rate_bgn || null,
-      bio: app.professional?.bio || null,
-      city: app.professional?.city || null,
-     },
-     proposedPrice: app.proposed_price_bgn,
-     currency: 'BGN',  // Bulgarian Lev
-     timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : t('common.flexible', 'Flexible'),
-     message: app.message,
-     status: app.status,
-     createdAt: new Date(app.created_at),
-     updatedAt: new Date(app.updated_at),
-     rejectionReason: app.rejection_reason || undefined,
-     withdrawnAt: app.withdrawn_at ? new Date(app.withdrawn_at) : undefined,
-     withdrawalReason: app.withdrawal_reason || undefined,
-    }));
+    // Map API response to Application type and filter out removed applications
+    const mappedApplications: Application[] = (data.applications || [])
+     .filter((app: any) => app.status !== 'removed_by_customer') // Don't show removed applications
+     .map((app: any) => ({
+      id: app.id,
+      taskId: taskId,
+      professional: {
+       id: app.professional?.id || '',
+       name: app.professional?.full_name || 'Unknown',
+       avatar: app.professional?.avatar_url || null,
+       rating: app.professional?.average_rating || 0,
+       completedTasks: app.professional?.tasks_completed || 0,
+       skills: normalizeCategoryKeys(app.professional?.service_categories),
+       hourlyRate: app.professional?.hourly_rate_bgn || null,
+       bio: app.professional?.bio || null,
+       city: app.professional?.city || null,
+      },
+      proposedPrice: app.proposed_price_bgn,
+      currency: 'BGN',  // Bulgarian Lev
+      timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : t('common.flexible', 'Flexible'),
+      message: app.message,
+      status: app.status,
+      createdAt: new Date(app.created_at),
+      updatedAt: new Date(app.updated_at),
+      rejectionReason: app.rejection_reason || undefined,
+      withdrawnAt: app.withdrawn_at ? new Date(app.withdrawn_at) : undefined,
+      withdrawalReason: app.withdrawal_reason || undefined,
+     }));
 
     setApplications(mappedApplications);
    } catch (error) {

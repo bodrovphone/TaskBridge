@@ -2,7 +2,7 @@
  * Application types for task applications management
  */
 
-export type ApplicationStatus = 'pending' | 'accepted' | 'rejected'
+export type ApplicationStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn' | 'removed_by_customer'
 
 export interface ProfessionalReview {
   id: string

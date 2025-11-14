@@ -447,8 +447,8 @@ function Header() {
    action={authAction}
   />
 
-  {/* Floating Action Buttons - Mobile Only (hide when menu is open or on profile pages) */}
-  {!isMenuOpen && !pathname.includes('/profile') && (
+  {/* Floating Action Buttons - Mobile Only (hide when menu is open or on profile/form pages) */}
+  {!isMenuOpen && !pathname.includes('/profile') && !pathname.includes('/create-task') && !pathname.includes('/edit-task') && (
   <div
     className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] flex flex-col gap-4"
     style={{ zIndex: Z_INDEX.FLOATING_BUTTONS }}
