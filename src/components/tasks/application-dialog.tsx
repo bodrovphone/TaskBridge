@@ -58,7 +58,7 @@ export default function ApplicationDialog({
 }: ApplicationDialogProps) {
  const { t, i18n } = useTranslation()
  const router = useRouter()
- const { user } = useAuth()
+ const { user, authenticatedFetch } = useAuth()
  const [isSubmitting, setIsSubmitting] = useState(false)
  const [isSuccess, setIsSuccess] = useState(false)
  const [applicationId, setApplicationId] = useState<string | null>(null)
@@ -84,7 +84,7 @@ export default function ApplicationDialog({
       'flexible': 80
     }
 
-    const response = await fetch('/api/applications', {
+    const response = await authenticatedFetch('/api/applications', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

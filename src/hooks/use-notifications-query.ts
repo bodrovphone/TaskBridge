@@ -21,8 +21,10 @@ interface NotificationsResponse {
  * Fetch notifications from API
  * Fetches 8 most recent notifications for performance
  */
-async function fetchNotifications(): Promise<Notification[]> {
-  const response = await fetch('/api/notifications?limit=8');
+async function fetchNotifications(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
+): Promise<Notification[]> {
+  const response = await authenticatedFetch('/api/notifications?limit=8');
 
   if (!response.ok) {
     throw new Error('Failed to fetch notifications');
@@ -48,8 +50,10 @@ async function fetchNotifications(): Promise<Notification[]> {
 /**
  * Delete all notifications
  */
-async function deleteAllNotifications(): Promise<void> {
-  const response = await fetch('/api/notifications/dismiss-all', {
+async function deleteAllNotifications(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
+): Promise<void> {
+  const response = await authenticatedFetch('/api/notifications/dismiss-all', {
     method: 'DELETE',
   });
 
@@ -62,13 +66,15 @@ async function deleteAllNotifications(): Promise<void> {
  * Custom hook for notifications with TanStack Query
  * Fetches notifications with 10-minute stale time to reduce API calls
  */
-export function useNotificationsQuery() {
+export function useNotificationsQuery(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
+) {
   const queryClient = useQueryClient();
 
   // Fetch notifications query with 10-minute stale time
   const notificationsQuery = useQuery({
     queryKey: NOTIFICATIONS_QUERY_KEY,
-    queryFn: fetchNotifications,
+    queryFn: () => fetchNotifications(authenticatedFetch),
     staleTime: 10 * 60 * 1000, // 10 minutes - data considered fresh for this duration
     refetchOnWindowFocus: false, // Don't refetch when user returns to tab
     refetchOnMount: false, // Don't refetch on component mount if data is fresh
@@ -76,7 +82,7 @@ export function useNotificationsQuery() {
 
   // Delete all notifications mutation
   const deleteAllMutation = useMutation({
-    mutationFn: deleteAllNotifications,
+    mutationFn: () => deleteAllNotifications(authenticatedFetch),
     onMutate: async () => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });

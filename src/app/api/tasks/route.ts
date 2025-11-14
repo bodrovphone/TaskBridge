@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import { TaskService } from '@/server/tasks/task.service'
 import { isAppError } from '@/server/shared/errors'
 import type { CreateTaskInput } from '@/server/tasks/task.types'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * POST /api/tasks
@@ -34,14 +35,10 @@ import type { CreateTaskInput } from '@/server/tasks/task.types'
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Verify authentication
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // 1. Verify authentication (supports both Supabase session and notification token)
+    const authUser = await authenticateRequest(request)
 
-    if (authError || !authUser) {
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }

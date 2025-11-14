@@ -4,8 +4,6 @@ import { LOCALE_COOKIE, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { detectUserLocale } from '@/lib/utils/locale-detection'
 import { pathnameHasLocale, addLocaleToPathname } from '@/lib/utils/url-locale'
 import { updateSession } from '@/lib/supabase/middleware'
-import { validateNotificationAutoLoginToken } from '@/lib/auth/notification-auto-login'
-import { createClient } from '@/lib/supabase/server'
 
 /**
  * Patterns for routes that should skip locale processing (but still get session refresh)
@@ -37,58 +35,6 @@ export async function middleware(request: NextRequest) {
 
   // First, update Supabase session (required for auth to work on ALL routes)
   let supabaseResponse = await updateSession(request)
-
-  // 🔐 AUTO-LOGIN: Check for notification session token
-  const notificationSessionToken = request.nextUrl.searchParams.get('notificationSession')
-
-  if (notificationSessionToken) {
-    try {
-      // Validate the token
-      const tokenData = await validateNotificationAutoLoginToken(notificationSessionToken)
-
-      if (tokenData) {
-        // Token is valid - create a session for the user
-        const supabase = await createClient()
-
-        // Get user email to sign them in
-        const { data: user } = await supabase
-          .from('users')
-          .select('email')
-          .eq('id', tokenData.userId)
-          .single()
-
-        if (user?.email) {
-          // Generate magic link for session creation
-          const { data: linkData } = await supabase.auth.admin.generateLink({
-            type: 'magiclink',
-            email: user.email
-          })
-
-          if (linkData?.properties?.action_link) {
-            // Verify the magic link token to create session
-            const magicLinkUrl = new URL(linkData.properties.action_link)
-            const sessionToken = magicLinkUrl.searchParams.get('token')
-
-            if (sessionToken) {
-              await supabase.auth.verifyOtp({
-                token_hash: sessionToken,
-                type: 'magiclink'
-              })
-
-              // Remove notificationSession parameter from URL and redirect
-              const cleanUrl = request.nextUrl.clone()
-              cleanUrl.searchParams.delete('notificationSession')
-
-              return NextResponse.redirect(cleanUrl)
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Notification auto-login failed:', error)
-      // Continue with normal flow on error
-    }
-  }
 
   // ✅ EARLY RETURN #1: Already has locale in URL - minimal cost for returning users!
   if (pathnameHasLocale(pathname)) {

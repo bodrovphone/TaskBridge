@@ -16,6 +16,7 @@ interface UseAuthReturn {
   profile: UserProfile | null
   loading: boolean
   error: string | null
+  notificationToken: string | null
 
   // Auth methods
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: string | null }>
@@ -24,6 +25,9 @@ interface UseAuthReturn {
   signInWithFacebook: () => Promise<{ error: string | null }>
   signOut: () => Promise<{ error: string | null }>
   refreshProfile: () => Promise<void>
+
+  // Authenticated fetch wrapper
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
 }
 
 export function useAuth(): UseAuthReturn {
@@ -31,6 +35,7 @@ export function useAuth(): UseAuthReturn {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [notificationToken, setNotificationToken] = useState<string | null>(null)
 
   const supabase = createClient()
 
@@ -62,9 +67,61 @@ export function useAuth(): UseAuthReturn {
   }, [])
 
   /**
+   * Handle notification session auto-login
+   */
+  const handleNotificationSession = useCallback(async (token: string) => {
+    try {
+      console.log('🔐 Handling notification session token...')
+
+      const response = await fetch('/api/auth/validate-notification-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      })
+
+      if (!response.ok) {
+        console.error('❌ Notification session validation failed')
+        setLoading(false)
+        return
+      }
+
+      const data = await response.json()
+
+      // Store the notification token for API authentication
+      if (data.notificationToken && data.user) {
+        setNotificationToken(data.notificationToken)
+        setProfile(data.user)
+        setLoading(false)
+      } else {
+        console.error('❌ No user data or token in response')
+        setError('Invalid response from server')
+        setLoading(false)
+      }
+    } catch (err) {
+      console.error('❌ Notification session error:', err)
+      setError('Failed to authenticate via notification link')
+      setLoading(false)
+    }
+  }, [])
+
+  /**
    * Initialize auth state
    */
   useEffect(() => {
+    // Check for notification session token in URL
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const notificationToken = params.get('notificationSession')
+
+      if (notificationToken) {
+        console.log('🔗 Detected notification session token in URL')
+        handleNotificationSession(notificationToken)
+        return // Skip normal auth flow when using notification session
+      }
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
@@ -92,7 +149,7 @@ export function useAuth(): UseAuthReturn {
     })
 
     return () => subscription.unsubscribe()
-  }, [fetchProfile, supabase.auth])
+  }, [fetchProfile, handleNotificationSession, supabase.auth])
 
   /**
    * Sign up with email and password
@@ -261,16 +318,38 @@ export function useAuth(): UseAuthReturn {
     }
   }
 
+  /**
+   * Authenticated fetch wrapper - automatically includes notification token if present
+   */
+  const authenticatedFetch = useCallback(
+    async (url: string, options?: RequestInit): Promise<Response> => {
+      const headers = new Headers(options?.headers)
+
+      // Add notification token if available
+      if (notificationToken) {
+        headers.set('Authorization', `NotificationToken ${notificationToken}`)
+      }
+
+      return fetch(url, {
+        ...options,
+        headers,
+      })
+    },
+    [notificationToken]
+  )
+
   return {
     user,
     profile,
     loading,
     error,
+    notificationToken,
     signUp,
     signIn,
     signInWithGoogle,
     signInWithFacebook,
     signOut,
     refreshProfile,
+    authenticatedFetch,
   }
 }

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Bell, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
+import { useAuth } from '@/features/auth/hooks/use-auth';
 import {
  Sheet,
  SheetContent,
@@ -29,11 +30,14 @@ export default function NotificationCenter() {
  const { t } = useTranslation();
  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
+ // Auth state with authenticated fetch wrapper
+ const { authenticatedFetch } = useAuth();
+
  // UI state from Zustand (persisted in localStorage)
  const { isOpen, setOpen } = useNotificationStore();
 
  // Data from TanStack Query (10-minute stale time, optimized fetching)
- const { notifications, isLoading, error, deleteAll } = useNotificationsQuery();
+ const { notifications, isLoading, error, deleteAll } = useNotificationsQuery(authenticatedFetch);
 
  // Handle query errors gracefully
  const hasError = !!error;

@@ -10,9 +10,9 @@ interface ProfessionalPageProps {
 }
 
 // Fetch professional data from API
-async function getProfessional(id: string) {
+async function getProfessional(id: string, lang: string) {
  try {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'}/api/professionals/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'}/api/professionals/${id}?lang=${lang}`, {
    cache: 'no-store' // Always fetch fresh data
   });
 
@@ -30,7 +30,7 @@ async function getProfessional(id: string) {
 
 export async function generateMetadata({ params }: ProfessionalPageProps): Promise<Metadata> {
  const resolvedParams = await params;
- const professional = await getProfessional(resolvedParams.id);
+ const professional = await getProfessional(resolvedParams.id, resolvedParams.lang);
 
  if (!professional) {
   return {
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: ProfessionalPageProps): Promi
 
 export default async function ProfessionalPage({ params }: ProfessionalPageProps) {
  const resolvedParams = await params;
- const professional = await getProfessional(resolvedParams.id);
+ const professional = await getProfessional(resolvedParams.id, resolvedParams.lang);
 
  if (!professional) {
   notFound();

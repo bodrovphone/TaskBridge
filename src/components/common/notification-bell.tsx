@@ -5,11 +5,13 @@ import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
+import { useAuth } from '@/features/auth/hooks/use-auth';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotificationBell() {
+ const { authenticatedFetch } = useAuth();
  const { toggleOpen } = useNotificationStore();
- const { notifications } = useNotificationsQuery();
+ const { notifications } = useNotificationsQuery(authenticatedFetch);
 
  // Total notification count (no read/unread state - all visible until deleted)
  const notificationCount = notifications.length;

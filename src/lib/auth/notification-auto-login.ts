@@ -54,7 +54,8 @@ export async function createNotificationAutoLoginToken(
 }
 
 /**
- * Validate and consume a notification session token
+ * Validate a notification session token (does NOT mark as used)
+ * Token remains valid for 7 days and can be used multiple times
  *
  * @param token - The token to validate
  * @returns Object with userId, channel, and redirectUrl if valid, null otherwise
@@ -67,18 +68,12 @@ export async function validateNotificationAutoLoginToken(
   // Fetch the token
   const { data: tokenData, error } = await supabase
     .from('notification_session_tokens')
-    .select('user_id, notification_channel, redirect_url, expires_at, used_at')
+    .select('user_id, notification_channel, redirect_url, expires_at')
     .eq('token', token)
     .single()
 
   if (error || !tokenData) {
     console.error('Token not found:', error)
-    return null
-  }
-
-  // Check if already used
-  if (tokenData.used_at) {
-    console.error('Token already used')
     return null
   }
 
@@ -88,12 +83,8 @@ export async function validateNotificationAutoLoginToken(
     return null
   }
 
-  // Mark token as used
-  await supabase
-    .from('notification_session_tokens')
-    .update({ used_at: new Date().toISOString() })
-    .eq('token', token)
-
+  // Token is valid - return user data
+  // Note: We do NOT mark it as used - token can be reused within 7-day window
   return {
     userId: tokenData.user_id,
     channel: tokenData.notification_channel as NotificationChannel,
@@ -103,16 +94,16 @@ export async function validateNotificationAutoLoginToken(
 
 /**
  * Generate a full auto-login URL with token
- * Works for ALL notification channels
+ * Works for ALL notification channels, including Telegram WebView
  *
  * Simply appends ?notificationSession=token to the destination URL
- * Middleware will handle authentication transparently
+ * The useAuth hook will detect this parameter and authenticate the user client-side
  *
  * @param userId - User ID to create token for
  * @param channel - Notification channel sending the link
  * @param destinationPath - Full path to destination (e.g., '/en/tasks/123')
  * @param baseUrl - Base URL of the site (e.g., 'https://trudify.com')
- * @returns Complete URL with session token parameter
+ * @returns Complete URL with notificationSession parameter
  */
 export async function generateNotificationAutoLoginUrl(
   userId: string,
@@ -120,10 +111,11 @@ export async function generateNotificationAutoLoginUrl(
   destinationPath: string,
   baseUrl: string = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 ): Promise<string> {
-  // Create token (7 day expiration)
+  // Create token (7 day expiration, reusable)
   const token = await createNotificationAutoLoginToken(userId, channel, destinationPath)
 
   // Build URL with notificationSession parameter
+  // The page will detect this and call the auth API to create a session
   const url = new URL(destinationPath, baseUrl)
   url.searchParams.set('notificationSession', token)
 

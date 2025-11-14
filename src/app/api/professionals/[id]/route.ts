@@ -47,6 +47,10 @@ export async function GET(
   try {
     const { id } = await params;
 
+    // Get locale from query parameter
+    const searchParams = request.nextUrl.searchParams;
+    const lang = searchParams.get('lang') || 'bg';
+
     // Validate UUID format to prevent errors with .map files, etc.
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(id)) {
@@ -56,7 +60,7 @@ export async function GET(
       );
     }
 
-    console.log('🔍 Fetching professional with ID:', id);
+    console.log('🔍 Fetching professional with ID:', id, 'lang:', lang);
 
     // Fetch professional data from users table (bypasses RLS with service role)
     const { data: professional, error } = await supabaseAdmin
@@ -169,7 +173,7 @@ export async function GET(
       comment: review.comment || '',
       date: formatDistanceToNow(new Date(review.created_at), {
         addSuffix: true,
-        locale: getDateLocale('bg') // TODO: Get from request headers/query param
+        locale: getDateLocale(lang)
       }),
       verified: true, // All reviews from completed tasks are verified
       anonymous: review.is_anonymous || false,

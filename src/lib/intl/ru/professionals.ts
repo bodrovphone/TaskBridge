@@ -140,7 +140,7 @@ export const professionals = {
   'professionalDetail.offline': 'Недавно был в сети',
   'professionalDetail.verified.phone': 'Телефон',
   'professionalDetail.verified.id': 'Документ',
-  'professionalDetail.stats.completedTasks': 'Задач',
+  'professionalDetail.stats.completedTasks': 'Задач(и)',
   'professionalDetail.stats.yearsExperience': 'Лет',
   'professionalDetail.stats.yearsExperienceLabel': 'лет',
   'professionalDetail.stats.experience': 'Опыт',
