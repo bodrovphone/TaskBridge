@@ -25,6 +25,8 @@ export const common = {
   close: 'Затвори',
   today: 'Днес',
   yesterday: 'Вчера',
+  application: 'кандидатура',
+  applications: 'кандидатури',
 
   'common.optional': 'По избор',
   'common.close': 'Затвори',

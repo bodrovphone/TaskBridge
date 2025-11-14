@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Modal,
   ModalContent,
@@ -46,7 +46,7 @@ export function ReviewDialog({
   // Form state
   const [rating, setRating] = useState<number>(0)
   const [reviewText, setReviewText] = useState('')
-  const [actualPricePaid, setActualPricePaid] = useState('')
+  const [actualPricePaid, setActualPricePaid] = useState(task.proposedPrice?.toString() || '')
   const [isAnonymous, setIsAnonymous] = useState(false)
   const [delayPublishing, setDelayPublishing] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -55,7 +55,6 @@ export function ReviewDialog({
   const [showRatingError, setShowRatingError] = useState(false)
 
   const reviewCharCount = reviewText.length
-  const minReviewChars = 50
   const maxReviewChars = 500
 
   // Calculate delayed publish date based on environment
@@ -70,7 +69,7 @@ export function ReviewDialog({
     // Reset form
     setRating(0)
     setReviewText('')
-    setActualPricePaid('')
+    setActualPricePaid(task.proposedPrice?.toString() || '')
     setIsAnonymous(false)
     setDelayPublishing(false)
     setShowRatingError(false)
@@ -116,26 +115,23 @@ export function ReviewDialog({
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      size="full"
-      scrollBehavior="inside"
-      isDismissable={!isSubmitting}
-      hideCloseButton={isSubmitting}
-      classNames={{
-        wrapper: 'z-[100] items-end sm:items-center',
-        backdrop: 'z-[99] bg-black/80',
-        base: 'bg-white z-[100] sm:max-w-2xl m-0 sm:mx-auto h-screen sm:h-auto sm:rounded-lg',
-        header: 'border-b border-gray-200',
-        body: 'py-6',
-        footer: 'border-t border-gray-200'
-      }}
-    >
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
+    <div className="relative">
+      <Modal
+        isOpen={isOpen}
+        onClose={handleClose}
+        scrollBehavior="inside"
+        isDismissable={!isSubmitting}
+        hideCloseButton={isSubmitting}
+        classNames={{
+          wrapper: 'z-[100] flex items-center justify-center p-0',
+          backdrop: 'z-[99] bg-black/80',
+          base: 'my-0 mx-auto w-full sm:w-auto sm:max-w-2xl',
+        }}
+      >
+        <ModalContent className="h-[80vh] sm:h-auto max-h-[80vh] sm:max-h-[90vh] rounded-3xl sm:rounded-xl overflow-hidden flex flex-col">
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 border-b border-gray-200 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-bold text-gray-900">
                   {t('review.dialog.title')}
@@ -151,7 +147,7 @@ export function ReviewDialog({
               </p>
             </ModalHeader>
 
-            <ModalBody>
+            <ModalBody className="flex-1 overflow-y-auto overscroll-contain py-6">
               <div className="space-y-6">
                 {/* Task Info Card */}
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
@@ -176,7 +172,7 @@ export function ReviewDialog({
                       </h4>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Calendar className="w-4 h-4" />
-                        <span>{t('review.dialog.completedLabel')}: {formatDate(task.completedAt)}</span>
+                        <span>{formatDate(task.completedAt)}</span>
                       </div>
                     </div>
                   </div>
@@ -241,22 +237,24 @@ export function ReviewDialog({
                     {t('review.dialog.actualPriceLabel')}
                     <span className="text-gray-500 font-normal ml-1">({t('common.optional')})</span>
                   </label>
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={actualPricePaid}
-                    onValueChange={setActualPricePaid}
-                    placeholder={t('review.dialog.actualPricePlaceholder')}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">BGN</span>
-                      </div>
-                    }
-                    classNames={{
-                      input: 'text-right'
-                    }}
-                  />
+                  <div className="w-48">
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={actualPricePaid}
+                      onValueChange={setActualPricePaid}
+                      placeholder={t('review.dialog.actualPricePlaceholder')}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">BGN</span>
+                        </div>
+                      }
+                      classNames={{
+                        input: 'text-right'
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <Divider />
@@ -325,7 +323,7 @@ export function ReviewDialog({
               </div>
             </ModalBody>
 
-            <ModalFooter>
+            <ModalFooter className="border-t border-gray-200 flex-shrink-0">
               <Button
                 variant="solid"
                 onPress={handleClose}
@@ -345,9 +343,10 @@ export function ReviewDialog({
                 {isSubmitting ? t('review.dialog.submitting') : t('review.dialog.submitButton')}
               </Button>
             </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </div>
   )
 }

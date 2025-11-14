@@ -73,15 +73,21 @@
 }
 
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     @apply border-border;
+    box-sizing: border-box;
   }
+
   html, body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
     position: relative;
+    margin: 0;
+    padding: 0;
   }
 
   #__next {

@@ -25,6 +25,8 @@ export const common = {
   close: 'Close',
   today: 'Today',
   yesterday: 'Yesterday',
+  application: 'application',
+  applications: 'applications',
 
   'common.optional': 'Optional',
   'common.close': 'Close',

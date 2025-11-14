@@ -8,6 +8,7 @@ export interface PendingReviewTask {
   professionalAvatar?: string
   completedAt: Date
   daysAgo: number
+  proposedPrice?: number // Price from accepted application
 }
 
 export interface ReviewSubmitData {
