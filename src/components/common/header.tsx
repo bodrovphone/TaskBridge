@@ -51,9 +51,6 @@ function Header() {
  // Check if we're on the index/landing page
  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
 
- // Dynamic categories link based on current page
- const categoriesHref = isIndexPage ? "/#categories" : "/categories"
-
  // Explicit handler for menu state
  const handleMenuOpenChange = useCallback((open: boolean) => {
   setIsMenuOpen(open)
@@ -61,7 +58,7 @@ function Header() {
 
  const navigation = [
   { name: t('nav.howItWorks'), href: "/#how-it-works" },
-  { name: t('nav.categories'), href: categoriesHref },
+  { name: t('nav.categories'), href: "/categories" },
   { name: t('nav.forProfessionals'), href: "/professionals" },
   { name: t('nav.browseTasks'), href: "/browse-tasks" },
  ]
@@ -222,8 +219,20 @@ function Header() {
        onPress={() => {
         setIsMenuOpen(false)
         if (item.href.startsWith('#') || item.href.startsWith('/#')) {
-         // Handle anchor links
-         window.location.href = `/${lang}${item.href}`
+         // Handle anchor links - check if we're on index page
+         const anchorId = item.href.replace(/^\/#?/, '')
+         const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
+
+         if (isOnIndexPage) {
+          // Already on index page - smooth scroll to anchor
+          const element = document.getElementById(anchorId)
+          if (element) {
+           element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+         } else {
+          // Navigate to index page first, then scroll
+          router.push(`/${lang}#${anchorId}`)
+         }
         } else {
          // Handle regular routes
          router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)

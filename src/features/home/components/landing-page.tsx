@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import CategoryCard from "@/components/ui/category-card";
 import { LocaleLink } from "@/components/common/locale-link";
@@ -62,6 +62,21 @@ function Landing({ featuredTasks }: LandingPageProps) {
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
  const isDesktop = useIsDesktop();
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
+
+ // Handle smooth scrolling to hash anchor on page load
+ useEffect(() => {
+  const hash = window.location.hash;
+  if (hash) {
+   // Small delay to ensure page is fully rendered
+   setTimeout(() => {
+    const id = hash.replace('#', '');
+    const element = document.getElementById(id);
+    if (element) {
+     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+   }, 100);
+  }
+ }, []);
 
  const categories = [
   {
