@@ -37,7 +37,7 @@ export interface WorkTask {
 }
 
 export function useWorkTasks() {
-  const { profile } = useAuth()
+  const { profile, authenticatedFetch } = useAuth()
   const [tasks, setTasks] = useState<WorkTask[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -54,9 +54,7 @@ export function useWorkTasks() {
         setError(null)
 
         // Fetch accepted applications
-        const response = await fetch('/api/applications?status=accepted', {
-          credentials: 'include'
-        })
+        const response = await authenticatedFetch('/api/applications?status=accepted')
 
         if (!response.ok) {
           throw new Error('Failed to fetch work tasks')
@@ -119,7 +117,7 @@ export function useWorkTasks() {
     }
 
     fetchWorkTasks()
-  }, [profile])
+  }, [profile, authenticatedFetch])
 
   const refetch = async () => {
     if (!profile) return
@@ -128,9 +126,7 @@ export function useWorkTasks() {
       setIsLoading(true)
       setError(null)
 
-      const response = await fetch('/api/applications?status=accepted', {
-        credentials: 'include'
-      })
+      const response = await authenticatedFetch('/api/applications?status=accepted')
       if (!response.ok) {
         throw new Error('Failed to fetch work tasks')
       }
