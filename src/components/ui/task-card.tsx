@@ -131,11 +131,11 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
    radius="lg"
   >
    <CardBody
-    className="p-0 flex-grow flex flex-col cursor-pointer"
+    className="p-0 flex-1 flex flex-col cursor-pointer overflow-y-auto"
     onClick={handleCardPress}
    >
     {/* Image or Default Gradient */}
-    <div className="w-full h-48 overflow-hidden flex-shrink-0">
+    <div className="w-full h-40 overflow-hidden flex-shrink-0">
      {task.images && task.images.length > 0 && !imageError ? (
       <Image
        src={task.images[0]}
@@ -165,9 +165,9 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
     </div>
 
     {/* Content with better spacing */}
-    <div className="p-6 flex-grow flex flex-col">
+    <div className="p-4 flex-grow flex flex-col min-h-0">
      {/* Category badge and time */}
-     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
+     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor} w-fit`}>
        {categoryName}
       </span>
@@ -180,12 +180,12 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
      </h3>
 
      {/* Description with better contrast */}
-     <p className="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">
+     <p className="text-sm text-gray-600 mb-3 line-clamp-3">
       {task.description}
      </p>
 
      {/* Task details with larger icons */}
-     <div className="space-y-2 mb-4 mt-auto">
+     <div className="space-y-2 mt-auto">
       <div className="flex items-center text-sm text-gray-600">
        <MapPin size={16} className="mr-2 flex-shrink-0" />
        <span className="truncate">{getCityLabelBySlug(task.city, t)}{task.neighborhood && `, ${task.neighborhood}`}</span>
@@ -203,7 +203,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
    </CardBody>
 
    {/* Footer with clear separator */}
-   <CardFooter className="px-6 pb-4 pt-4 border-t border-gray-100 mt-auto">
+   <CardFooter className="px-4 pb-3 pt-3 border-t border-gray-100 flex-shrink-0">
     <div className="flex flex-col min-[590px]:flex-row gap-3 w-full" onClick={(e) => e.stopPropagation()}>
      <Button
       variant="bordered"

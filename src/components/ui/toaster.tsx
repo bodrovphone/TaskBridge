@@ -16,7 +16,7 @@ export function Toaster() {
 
  return (
   <ToastProvider>
-   {toasts.map(function ({ id, title, description, action, hideIcon, ...props }) {
+   {toasts.map(function ({ id, title, description, action, hideIcon, hideCloseButton, ...props }) {
     return (
      <Toast key={id} {...props}>
       <div className="flex items-start gap-3 flex-1">
@@ -29,7 +29,7 @@ export function Toaster() {
        </div>
       </div>
       {action}
-      <ToastClose />
+      {!hideCloseButton && <ToastClose />}
      </Toast>
     )
    })}

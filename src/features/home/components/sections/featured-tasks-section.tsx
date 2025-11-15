@@ -64,7 +64,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
  };
 
  return (
-  <section id="browse-tasks" className="py-24 relative overflow-hidden">
+  <section id="browse-tasks" className="py-12 relative overflow-hidden">
    {/* Cardboard background with slate overlay */}
    <div className="absolute inset-0 bg-slate-50/70 "></div>
    {/* Background Elements */}
@@ -98,7 +98,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
        {featuredTasks.map((task: any, index: number) => (
         <div
          key={task.id}
-         className="flex-shrink-0 w-80 h-[580px] hover:scale-105 transition-transform duration-300"
+         className="flex-shrink-0 w-80 h-[600px] hover:scale-105 transition-transform duration-300"
          style={{
           animationDelay: `${index * 100}ms`,
          }}

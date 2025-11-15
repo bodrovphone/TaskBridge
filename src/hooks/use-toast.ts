@@ -14,6 +14,7 @@ type ToasterToast = ToastProps & {
   description?: React.ReactNode
   action?: ToastActionElement
   hideIcon?: boolean
+  hideCloseButton?: boolean
 }
 
 const actionTypes = {
