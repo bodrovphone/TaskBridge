@@ -454,8 +454,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     taskId={task.id}
     taskTitle={task.title}
     taskBudget={{
-     min: task.budgetMin,
-     max: task.budgetMax,
+     min: task.budgetMin || task.budget_min_bgn || task.budget,
+     max: task.budgetMax || task.budget_max_bgn || task.budget,
     }}
    />
 

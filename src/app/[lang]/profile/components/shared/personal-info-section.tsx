@@ -371,8 +371,10 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     label={t('profile.customer.preferredLanguage', 'Preferred Language')}
                     selectedKeys={[field.state.value]}
                     onSelectionChange={(keys) => {
-                      const selected = Array.from(keys)[0] as 'en' | 'bg' | 'ru'
-                      field.handleChange(selected as any)
+                      const selected = Array.from(keys)[0] as string
+                      if (selected === 'en' || selected === 'bg' || selected === 'ru') {
+                        field.handleChange(selected)
+                      }
                     }}
                     startContent={<Globe className="w-4 h-4 text-gray-500" />}
                   >
@@ -391,6 +393,11 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     <RadioGroup
                       value={field.state.value}
                       onValueChange={(value) => {
+                        // Validate that value is a valid PreferredContact type
+                        if (value !== 'email' && value !== 'phone' && value !== 'sms' && value !== 'telegram') {
+                          return // Invalid value, don't change
+                        }
+
                         // If user tries to select Telegram without having it connected, open settings
                         if (value === 'telegram' && !hasTelegramConnected) {
                           if (onSettingsOpen) {
@@ -401,12 +408,12 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
 
                         // If user is switching AWAY from Telegram when it's connected, show disconnect dialog
                         if (field.state.value === 'telegram' && value !== 'telegram' && hasTelegramConnected) {
-                          setPendingContactChange(value as PreferredContact)
+                          setPendingContactChange(value)
                           setShowTelegramDisconnectDialog(true)
                           return // Don't change the value yet
                         }
 
-                        field.handleChange(value as any)
+                        field.handleChange(value)
                       }}
                       orientation="horizontal"
                       classNames={{

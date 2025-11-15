@@ -7,6 +7,7 @@ import { LocaleLink } from "./locale-link";
 import { LANGUAGE_CONFIG } from "@/lib/constants/locales";
 import { extractLocaleFromPathname, replaceLocaleInPathname } from "@/lib/utils/url-locale";
 import { saveUserLocalePreference } from "@/lib/utils/client-locale";
+import { updateUserLanguagePreference } from "@/lib/utils/update-user-language";
 
 function Footer() {
  const { t, i18n } = useTranslation();
@@ -136,12 +137,20 @@ function Footer() {
         {Object.values(LANGUAGE_CONFIG).map((language) => {
          const isActive = extractLocaleFromPathname(pathname) === language.code;
 
-         const handleLanguageChange = () => {
+         const handleLanguageChange = async () => {
           if (isActive) return;
 
           try {
+           // Save user preference for future visits (cookie + localStorage)
            saveUserLocalePreference(language.code);
+
+           // Update authenticated user's profile language preference (silently fails if not logged in)
+           await updateUserLanguagePreference(language.code);
+
+           // Update i18next for immediate UI feedback
            i18n.changeLanguage(language.code);
+
+           // Navigate to new locale URL
            const newPath = replaceLocaleInPathname(pathname, language.code);
            router.push(newPath);
           } catch (error) {

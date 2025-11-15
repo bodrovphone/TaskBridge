@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { StarRating } from '@/components/common/star-rating'
 import type { PendingReviewTask, ReviewSubmitData } from '../lib/types'
 import { getReviewPublishingDelay, getReviewDelayLabel } from '@/lib/utils/review-delay'
+import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
 
 interface ReviewDialogProps {
   isOpen: boolean
@@ -42,6 +43,7 @@ export function ReviewDialog({
   totalCount
 }: ReviewDialogProps) {
   const { t } = useTranslation()
+  const isKeyboardOpen = useKeyboardHeight()
 
   // Form state
   const [rating, setRating] = useState<number>(0)
@@ -122,16 +124,20 @@ export function ReviewDialog({
         scrollBehavior="inside"
         isDismissable={!isSubmitting}
         hideCloseButton={isSubmitting}
+        size="2xl"
+        placement="center"
         classNames={{
-          wrapper: 'z-[100] flex items-center justify-center p-0',
-          backdrop: 'z-[99] bg-black/80',
-          base: 'my-0 mx-auto w-full sm:w-auto sm:max-w-2xl',
+          backdrop: 'bg-black/80',
+          base: `${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[95vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`,
+          header: 'border-b border-gray-200 flex-shrink-0 sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4',
+          body: 'overflow-y-auto px-4 py-4 sm:px-6 sm:py-6',
+          footer: 'border-t border-gray-200 flex-shrink-0 sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4',
         }}
       >
-        <ModalContent className="h-[80vh] sm:h-auto max-h-[80vh] sm:max-h-[90vh] rounded-3xl sm:rounded-xl overflow-hidden flex flex-col">
+        <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 border-b border-gray-200 flex-shrink-0">
+              <ModalHeader className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-bold text-gray-900">
                   {t('review.dialog.title')}
@@ -147,7 +153,7 @@ export function ReviewDialog({
               </p>
             </ModalHeader>
 
-            <ModalBody className="flex-1 overflow-y-auto overscroll-contain py-6">
+            <ModalBody className="flex-1 overflow-y-auto overscroll-contain">
               <div className="space-y-6">
                 {/* Task Info Card */}
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
@@ -323,12 +329,13 @@ export function ReviewDialog({
               </div>
             </ModalBody>
 
-            <ModalFooter className="border-t border-gray-200 flex-shrink-0">
+            <ModalFooter className="flex-col-reverse sm:flex-row gap-3">
               <Button
                 variant="solid"
                 onPress={handleClose}
                 isDisabled={isSubmitting}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800"
+                size="lg"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 w-full sm:w-auto"
               >
                 {t('review.dialog.cancelButton')}
               </Button>
@@ -338,7 +345,8 @@ export function ReviewDialog({
                 onPress={handleSubmit}
                 isLoading={isSubmitting}
                 isDisabled={rating === 0}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
               >
                 {isSubmitting ? t('review.dialog.submitting') : t('review.dialog.submitButton')}
               </Button>

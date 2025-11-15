@@ -32,6 +32,7 @@ import type { ApplicationFormData } from './types'
 import { TIMELINE_OPTIONS } from './types'
 import { useAuth } from '@/features/auth'
 import { useRouter } from 'next/navigation'
+import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
 
 interface ApplicationDialogProps {
  isOpen: boolean
@@ -59,6 +60,7 @@ export default function ApplicationDialog({
  const { t, i18n } = useTranslation()
  const router = useRouter()
  const { user } = useAuth()
+ const isKeyboardOpen = useKeyboardHeight()
  const [isSubmitting, setIsSubmitting] = useState(false)
  const [isSuccess, setIsSuccess] = useState(false)
  const [applicationId, setApplicationId] = useState<string | null>(null)
@@ -117,15 +119,18 @@ export default function ApplicationDialog({
  })
 
  const handleClose = () => {
-  // Allow closing if not currently submitting OR if already on success screen
-  if (!isSubmitting || isSuccess) {
-   form.reset()
-   setIsSuccess(false)
-   setApplicationId(null)
-   setError(null)
-   setAlreadyApplied(false)
-   onClose()
+  // Prevent closing while submitting (unless on success screen)
+  if (isSubmitting && !isSuccess) {
+   return
   }
+
+  // Reset form state
+  form.reset()
+  setIsSuccess(false)
+  setApplicationId(null)
+  setError(null)
+  setAlreadyApplied(false)
+  onClose()
  }
 
  const handleBrowseOther = () => {
@@ -211,19 +216,19 @@ export default function ApplicationDialog({
    isOpen={isOpen}
    onClose={handleClose}
    onOpenChange={(open) => !open && handleClose()}
-   isDismissable={true}
-   hideCloseButton={false}
+   isDismissable={!isSubmitting}
+   hideCloseButton={isSubmitting && !isSuccess}
    size="2xl"
    scrollBehavior="inside"
    backdrop="blur"
    placement="center"
    classNames={{
     backdrop: 'bg-gradient-to-t from-zinc-900/80 to-zinc-900/20',
-    base: 'border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-800 max-h-[98vh] sm:max-h-[90vh] my-auto',
-    header: 'border-b border-gray-200 dark:border-gray-800',
-    body: 'overflow-y-auto',
-    footer: 'border-t border-gray-200 dark:border-gray-800',
-    closeButton: 'hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-2xl font-bold w-12 h-12 min-w-[48px] min-h-[48px] flex items-center justify-center top-3 right-3 sm:top-4 sm:right-4 rounded-lg transition-colors z-50',
+    base: `border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-800 ${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[95vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`,
+    header: 'border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10 bg-white dark:bg-gray-900',
+    body: 'overflow-y-auto px-4 sm:px-6',
+    footer: 'border-t border-gray-200 dark:border-gray-800 sticky bottom-0 z-10 bg-white dark:bg-gray-900',
+    closeButton: 'hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-2xl font-bold w-12 h-12 min-w-[48px] min-h-[48px] flex items-center justify-center top-4 right-4 rounded-lg transition-colors z-50',
    }}
    motionProps={{
     variants: {
@@ -256,7 +261,7 @@ export default function ApplicationDialog({
        exit={{ opacity: 0, y: -20 }}
        transition={{ duration: 0.3 }}
       >
-       <ModalHeader className="flex flex-col gap-3 pt-6 px-6 pb-4">
+       <ModalHeader className="flex flex-col gap-3 pt-4 px-4 pb-3 sm:pt-6 sm:px-6 sm:pb-4">
         <div className="flex items-start gap-3">
          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 flex items-center justify-center">
           <Sparkles className="w-6 h-6 text-primary-600 dark:text-primary-400" />
@@ -270,20 +275,9 @@ export default function ApplicationDialog({
           </p>
          </div>
         </div>
-        {taskBudget && (taskBudget.min || taskBudget.max) && (
-         <Chip
-          startContent={<Wallet className="w-4 h-4" />}
-          variant="flat"
-          color="success"
-          size="sm"
-          className="w-fit"
-         >
-          {t('application.budget')}: {taskBudget.min || 0} - {taskBudget.max || 0} BGN
-         </Chip>
-        )}
        </ModalHeader>
 
-       <ModalBody className="gap-6 py-6 px-6">
+       <ModalBody className="gap-6 py-4 sm:py-6">
         <form
          id="application-form"
          onSubmit={(e) => {
@@ -291,8 +285,20 @@ export default function ApplicationDialog({
           e.stopPropagation()
           form.handleSubmit()
          }}
-         className="space-y-6"
+         className="space-y-6 relative"
         >
+         {/* Loading overlay while submitting */}
+         {isSubmitting && !isSuccess && (
+          <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 flex items-center justify-center rounded-lg">
+           <div className="flex flex-col items-center gap-3">
+            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+             {t('application.submitting')}
+            </p>
+           </div>
+          </div>
+         )}
+
          {error && (
           <motion.div
            initial={{ opacity: 0, scale: 0.95 }}
@@ -361,11 +367,13 @@ export default function ApplicationDialog({
              }}
              variant="bordered"
             />
-            {taskBudget && (taskBudget.min || taskBudget.max) && (
-             <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pl-1 mt-1">
-              <Zap className="w-3 h-3" />
-              {t('application.tipClientBudget', { min: taskBudget.min || 0, max: taskBudget.max || 0 })}
-             </p>
+            {taskBudget && (taskBudget.min !== undefined || taskBudget.max !== undefined) && (
+             <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3 flex items-start gap-2 mt-2">
+              <Wallet className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-blue-800 dark:text-blue-200 font-medium leading-relaxed">
+               {t('application.tipClientBudget', { min: taskBudget.min ?? 0, max: taskBudget.max ?? 0 })}
+              </p>
+             </div>
             )}
            </div>
           )}
@@ -507,7 +515,7 @@ export default function ApplicationDialog({
         </form>
        </ModalBody>
 
-       <ModalFooter className="flex flex-col-reverse sm:flex-row gap-3 px-6 py-5">
+       <ModalFooter className="flex flex-col-reverse sm:flex-row gap-3 px-4 py-4 sm:px-6 sm:py-5">
         <Button
          color="default"
          variant="flat"
@@ -573,7 +581,7 @@ export default function ApplicationDialog({
         ))}
        </div>
 
-       <ModalHeader className="flex flex-col items-center gap-4 pt-8 px-6 pb-6">
+       <ModalHeader className="flex flex-col items-center gap-4 pt-6 px-4 pb-4 sm:pt-8 sm:px-6 sm:pb-6">
         <motion.div
          initial={{ scale: 0 }}
          animate={{ scale: 1 }}
@@ -594,7 +602,7 @@ export default function ApplicationDialog({
         </div>
        </ModalHeader>
 
-       <ModalBody className="py-6 px-6">
+       <ModalBody className="py-4 sm:py-6">
         <div className="text-center space-y-6">
          <div className="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-2xl p-6 border border-primary-100 dark:border-primary-800">
           <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
@@ -602,7 +610,7 @@ export default function ApplicationDialog({
           </p>
          </div>
 
-         <div className="grid grid-cols-3 gap-3 text-center">
+         <div className="grid grid-cols-1 xs:grid-cols-3 gap-3 text-center">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
            <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
             <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -625,7 +633,7 @@ export default function ApplicationDialog({
         </div>
        </ModalBody>
 
-       <ModalFooter className="flex-col sm:flex-row gap-3 px-6 py-6">
+       <ModalFooter className="flex-col sm:flex-row gap-3 px-4 py-4 sm:px-6 sm:py-6">
         <Button
          color="default"
          variant="bordered"

@@ -13,6 +13,7 @@ import {
 import { LANGUAGE_CONFIG, type SupportedLocale } from '@/lib/constants/locales'
 import { extractLocaleFromPathname, replaceLocaleInPathname } from '@/lib/utils/url-locale'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
+import { updateUserLanguagePreference } from '@/lib/utils/update-user-language'
 
 interface LanguageSwitcherProps {
  /**
@@ -40,7 +41,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
   * Handles language change with proper persistence and navigation
   * @param key - Selected language code
   */
- const handleLanguageChange = (key: unknown) => {
+ const handleLanguageChange = async (key: unknown) => {
   const newLocale = key as SupportedLocale
 
   if (!LANGUAGE_CONFIG[newLocale]) {
@@ -49,8 +50,11 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
   }
 
   try {
-   // Save user preference for future visits
+   // Save user preference for future visits (cookie + localStorage)
    saveUserLocalePreference(newLocale)
+
+   // Update authenticated user's profile language preference (silently fails if not logged in)
+   await updateUserLanguagePreference(newLocale)
 
    // Update i18next for immediate UI feedback
    i18n.changeLanguage(newLocale)

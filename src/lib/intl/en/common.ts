@@ -36,6 +36,8 @@ export const common = {
   'common.edit': 'Edit',
   'common.save': 'Save',
   'common.anonymous': 'Anonymous User',
+  'common.today': 'Today',
+  'common.yesterday': 'Yesterday',
 
   // Countries
   'common.country.bulgaria': 'Bulgaria',
