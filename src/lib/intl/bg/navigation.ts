@@ -17,6 +17,7 @@ export const navigation = {
   'nav.help': 'Помощ',
   'nav.language': 'Език',
   'nav.general': 'Общи',
+  'nav.closeMenu': 'Затвори менюто',
 
   // Footer
   'footer.company.description':

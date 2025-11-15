@@ -9,7 +9,7 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
-import { Plus, Handshake, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut } from "lucide-react"
+import { Plus, Handshake, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Grid3x3, Users } from "lucide-react"
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
@@ -57,10 +57,10 @@ function Header() {
  }, [])
 
  const navigation = [
-  { name: t('nav.howItWorks'), href: "/#how-it-works" },
-  { name: t('nav.categories'), href: "/categories" },
-  { name: t('nav.forProfessionals'), href: "/professionals" },
-  { name: t('nav.browseTasks'), href: "/browse-tasks" },
+  { name: t('nav.howItWorks'), href: "/#how-it-works", icon: Lightbulb },
+  { name: t('nav.categories'), href: "/categories", icon: Grid3x3 },
+  { name: t('nav.forProfessionals'), href: "/professionals", icon: Users },
+  { name: t('nav.browseTasks'), href: "/browse-tasks", icon: Search },
  ]
 
  const handleCreateTask = useCallback(() => {
@@ -121,6 +121,24 @@ function Header() {
     classNames={{
      menu: 'bg-white z-[9999]',
      menuItem: 'relative',
+    }}
+    motionProps={{
+     variants: {
+      enter: {
+       y: 0,
+       transition: {
+        duration: 0.15,
+        ease: [0.4, 0, 0.2, 1]
+       }
+      },
+      exit: {
+       y: -20,
+       transition: {
+        duration: 0.15,
+        ease: [0.4, 0, 0.2, 1]
+       }
+      }
+     }
     }}
    >
    {/* Logo/Brand */}
@@ -209,68 +227,57 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile Menu */}
-   <NavbarMenu>
-    {navigation.map((item) => (
-     <NavbarMenuItem key={item.name}>
-      <NextUILink
-       href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
-       className="w-full text-gray-900 hover:text-primary font-medium py-2"
-       size="lg"
-       onPress={() => {
-        setIsMenuOpen(false)
-        if (item.href.startsWith('#') || item.href.startsWith('/#')) {
-         // Handle anchor links - check if we're on index page
-         const anchorId = item.href.replace(/^\/#?/, '')
-         const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
+   <NavbarMenu className="flex flex-col overflow-y-auto pb-4">
+    <div className="flex-1 overflow-y-auto">
+     {navigation.map((item) => {
+      const Icon = item.icon
+      return (
+       <NavbarMenuItem key={item.name}>
+        <NextUILink
+         href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+         setIsMenuOpen(false)
+         if (item.href.startsWith('#') || item.href.startsWith('/#')) {
+          // Handle anchor links - check if we're on index page
+          const anchorId = item.href.replace(/^\/#?/, '')
+          const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
 
-         if (isOnIndexPage) {
-          // Already on index page - smooth scroll to anchor
-          const element = document.getElementById(anchorId)
-          if (element) {
-           element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          if (isOnIndexPage) {
+           // Already on index page - smooth scroll to anchor
+           const element = document.getElementById(anchorId)
+           if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+           }
+          } else {
+           // Navigate to index page first, then scroll
+           router.push(`/${lang}#${anchorId}`)
           }
          } else {
-          // Navigate to index page first, then scroll
-          router.push(`/${lang}#${anchorId}`)
+          // Handle regular routes
+          router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
          }
-        } else {
-         // Handle regular routes
-         router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
-        }
-       }}
-      >
-       {item.name}
-      </NextUILink>
-     </NavbarMenuItem>
-    ))}
+        }}
+       >
+        <Icon size={18} className="text-gray-500" />
+        {item.name}
+       </NextUILink>
+       </NavbarMenuItem>
+      )
+     })}
 
-    {/* Create Task Button */}
-    <NavbarMenuItem>
-     <Button
-      color="primary"
-      variant="solid"
-      startContent={<Plus size={18} />}
-      className="w-full font-medium justify-start pl-4 py-6 rounded-xl"
-      onPress={() => {
-       setIsMenuOpen(false)
-       handleCreateTask()
-      }}
-     >
-      {t('nav.createTask')}
-     </Button>
-    </NavbarMenuItem>
-
-    {/* Portfolio menu items for authenticated users */}
-    {isAuthenticated && (
-     <>
-      {/* Profile Section */}
-      <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.profile', 'Profile')}
-        </p>
-       </div>
-      </NavbarMenuItem>
+     {/* Portfolio menu items for authenticated users */}
+     {isAuthenticated && (
+      <>
+       {/* Profile Section */}
+       <NavbarMenuItem>
+        <div className="pt-4 border-t border-gray-200 w-full">
+         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          {t('nav.profile', 'Profile')}
+         </p>
+        </div>
+       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
         href={`/${lang}/profile/customer`}
@@ -384,38 +391,37 @@ function Header() {
       </NavbarMenuItem>
 
       {/* Logout */}
-      <NavbarMenuItem>
-       <NextUILink
-        className="w-full text-red-600 hover:text-red-700 font-medium py-2 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         signOut()
-        }}
-       >
-        <LogOut size={18} className="text-red-500" />
-        {t('logout')}
-       </NextUILink>
-      </NavbarMenuItem>
-     </>
-    )}
+       <NavbarMenuItem>
+        <NextUILink
+         className="w-full text-red-600 hover:text-red-700 font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          signOut()
+         }}
+        >
+         <LogOut size={18} className="text-red-500" />
+         {t('logout')}
+        </NextUILink>
+       </NavbarMenuItem>
+      </>
+     )}
+    </div>
 
-    {/* Language Switcher */}
-    <NavbarMenuItem>
-     <div className="pt-6 border-t border-gray-200 w-full">
+    {/* Sticky Bottom Section - Always visible */}
+    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-4 pb-safe">
+     {/* Language Switcher */}
+     <div className="w-full px-4">
       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
        {t('nav.language', 'Language')}
       </p>
+      <div className="pb-3 w-full">
+       <LanguageSwitcher mode="full" />
+      </div>
      </div>
-    </NavbarMenuItem>
-    <NavbarMenuItem>
-     <div className="pb-2 w-full flex justify-start">
-      <LanguageSwitcher />
-     </div>
-    </NavbarMenuItem>
 
-    <NavbarMenuItem>
-     <div className="pt-4 pb-2 w-full">
+     {/* Create Task Button - Sticky */}
+     <div className="px-4 pb-2 w-full">
       <Button
        color="primary"
        variant="solid"
@@ -433,7 +439,19 @@ function Header() {
        {t('nav.createTask')}
       </Button>
      </div>
-    </NavbarMenuItem>
+
+     {/* Close Menu Button */}
+     <div className="px-4 pb-2 w-full">
+      <Button
+       variant="flat"
+       size="lg"
+       className="w-full font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
+       onPress={() => setIsMenuOpen(false)}
+      >
+       {t('nav.closeMenu', 'Close Menu')}
+      </Button>
+     </div>
+    </div>
    </NavbarMenu>
 
    {/* Notification Center */}

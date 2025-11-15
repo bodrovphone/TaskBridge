@@ -17,6 +17,7 @@ export const navigation = {
   'nav.help': 'Help',
   'nav.language': 'Language',
   'nav.general': 'General',
+  'nav.closeMenu': 'Close Menu',
 
   // Footer
   'footer.company.description':

@@ -14,11 +14,20 @@ import { LANGUAGE_CONFIG, type SupportedLocale } from '@/lib/constants/locales'
 import { extractLocaleFromPathname, replaceLocaleInPathname } from '@/lib/utils/url-locale'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
 
+interface LanguageSwitcherProps {
+ /**
+  * Display mode for the switcher
+  * - 'icon': Shows only the flag icon (default, for header)
+  * - 'full': Shows language name with flag on the right (for mobile menu)
+  */
+ mode?: 'icon' | 'full'
+}
+
 /**
  * Language switcher component with proper locale management
  * Handles both URL navigation and persistence of user preferences
  */
-function LanguageSwitcher() {
+function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
  const { i18n } = useTranslation()
  const router = useRouter()
  const pathname = usePathname()
@@ -33,19 +42,19 @@ function LanguageSwitcher() {
   */
  const handleLanguageChange = (key: unknown) => {
   const newLocale = key as SupportedLocale
-  
+
   if (!LANGUAGE_CONFIG[newLocale]) {
    console.warn(`Unsupported locale selected: ${newLocale}`)
    return
   }
-  
+
   try {
    // Save user preference for future visits
    saveUserLocalePreference(newLocale)
-   
+
    // Update i18next for immediate UI feedback
    i18n.changeLanguage(newLocale)
-   
+
    // Navigate to new locale URL
    const newPath = replaceLocaleInPathname(pathname, newLocale)
    router.push(newPath)
@@ -57,14 +66,25 @@ function LanguageSwitcher() {
  return (
   <Dropdown>
    <DropdownTrigger>
-    <Button
-     variant="light"
-     size="sm"
-     className="h-8 px-2 min-w-[32px] flex-shrink-0"
-     isIconOnly
-    >
-     <span className="text-xl">{currentLanguage.flag}</span>
-    </Button>
+    {mode === 'icon' ? (
+     <Button
+      variant="light"
+      size="sm"
+      className="h-8 px-2 min-w-[32px] flex-shrink-0"
+      isIconOnly
+     >
+      <span className="text-xl">{currentLanguage.flag}</span>
+     </Button>
+    ) : (
+     <Button
+      variant="light"
+      size="lg"
+      className="w-full justify-between px-0 font-medium text-gray-900"
+      endContent={<span className="text-xl">{currentLanguage.flag}</span>}
+     >
+      {currentLanguage.name}
+     </Button>
+    )}
    </DropdownTrigger>
    <DropdownMenu 
     aria-label="Language selection"
