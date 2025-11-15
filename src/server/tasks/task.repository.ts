@@ -316,14 +316,15 @@ export class TaskRepository {
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
       const supabase = createAdminClient()
 
-      // Start query builder with count, applications, and professional details
+      // Start query builder with count, applications (pending only), and professional details
       let query = supabase
         .from('tasks')
         .select(`
           *,
-          applications(count),
+          applications!applications_task_id_fkey(count),
           professional:users!selected_professional_id(id, full_name, avatar_url)
         `, { count: 'exact' })
+        .eq('applications.status', 'pending')
 
       // Apply filters
       if (options.filters.customerId) {
@@ -430,14 +431,15 @@ export class TaskRepository {
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
       const supabase = createAdminClient()
 
-      // 1. Get task with applications count
+      // 1. Get task with applications count (pending only)
       const { data: task, error } = await supabase
         .from('tasks')
         .select(`
           *,
-          applications(count)
+          applications!applications_task_id_fkey(count)
         `)
         .eq('id', id)
+        .eq('applications.status', 'pending')
         .single()
 
       if (error) {

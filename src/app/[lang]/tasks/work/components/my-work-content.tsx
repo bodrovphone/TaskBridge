@@ -297,13 +297,13 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
             </CardBody>
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {filteredTasks.map((task) => (
               <Card
                 key={task.id}
-                className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-shadow"
+                className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-shadow h-full flex flex-col"
               >
-                <CardBody className="p-6">
+                <CardBody className="p-6 flex flex-col h-full">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-start gap-4 flex-1">
                       <Avatar
@@ -411,48 +411,50 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 pt-4 border-t border-gray-200 justify-between items-center flex-wrap">
+                  <div className="flex flex-col md:flex-row gap-2 pt-4 border-t border-gray-200 mt-auto">
                     <Button
                       size="sm"
-                      variant="flat"
+                      variant="bordered"
                       color="primary"
                       onPress={() => router.push(`/${lang}/tasks/${task.taskId}`)}
+                      className="w-full md:w-auto"
                     >
                       {t('myApplications.viewTask')}
                     </Button>
-                    <div className="flex gap-2 flex-wrap">
-                      {selectedFilter === 'in_progress' && task.task.status === 'in_progress' && (
-                        <>
-                          <Button
-                            size="sm"
-                            color="success"
-                            variant="bordered"
-                            onPress={() => handleMarkAsCompleteClick(task)}
-                          >
-                            {t('myApplications.markCompleted')}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="bordered"
-                            color="warning"
-                            startContent={<LogOut className="w-4 h-4" />}
-                            onPress={() => handleWithdrawClick(task)}
-                          >
-                            {t('myWork.withdrawFromTask')}
-                          </Button>
-                        </>
-                      )}
-                      {selectedFilter === 'completed' && (
+                    {selectedFilter === 'in_progress' && task.task.status === 'in_progress' && (
+                      <>
                         <Button
                           size="sm"
-                          color="warning"
-                          variant="flat"
-                          onPress={() => console.log('Leave review:', task.id)}
+                          color="success"
+                          variant="bordered"
+                          onPress={() => handleMarkAsCompleteClick(task)}
+                          className="w-full md:flex-1"
                         >
-                          {t('myWork.leaveReview')}
+                          {t('myApplications.markCompleted')}
                         </Button>
-                      )}
-                    </div>
+                        <Button
+                          size="sm"
+                          variant="bordered"
+                          color="warning"
+                          startContent={<LogOut className="w-4 h-4" />}
+                          onPress={() => handleWithdrawClick(task)}
+                          className="w-full md:flex-1"
+                        >
+                          {t('myWork.withdrawFromTask')}
+                        </Button>
+                      </>
+                    )}
+                    {selectedFilter === 'completed' && (
+                      <Button
+                        size="sm"
+                        color="warning"
+                        variant="flat"
+                        onPress={() => console.log('Leave review:', task.id)}
+                        className="w-full md:flex-1"
+                      >
+                        {t('myWork.leaveReview')}
+                      </Button>
+                    )}
                   </div>
                 </CardBody>
               </Card>

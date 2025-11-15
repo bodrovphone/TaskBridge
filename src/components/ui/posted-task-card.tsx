@@ -127,7 +127,7 @@ function PostedTaskCard({
   const getStatusColor = (taskStatus: typeof status) => {
     switch (taskStatus) {
       case 'open':
-        return 'primary'
+        return 'secondary'
       case 'in_progress':
         return 'warning'
       case 'completed':
@@ -385,7 +385,7 @@ function PostedTaskCard({
             color={getStatusColor(status)}
             variant="flat"
             size="sm"
-            className="flex-shrink-0"
+            className={`flex-shrink-0 ${status === 'open' ? 'bg-blue-100 text-blue-700 font-semibold' : ''}`}
           >
             {getStatusLabel(status)}
           </Chip>
@@ -500,7 +500,7 @@ function PostedTaskCard({
         )}
 
         {/* Action buttons */}
-        <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:mt-auto ${status === 'open' ? 'sm:justify-start' : ''}`}>
+        <div className={`flex flex-col md:flex-row md:flex-wrap gap-2 md:mt-auto ${status === 'open' ? 'md:justify-start' : ''}`}>
           {status === 'in_progress' ? (
             <>
               {/* In Progress - Mark Complete + Remove + Report */}
@@ -512,7 +512,7 @@ function PostedTaskCard({
                     variant="bordered"
                     startContent={<CheckCircle className="w-5 h-5" />}
                     onPress={() => setShowConfirmDialog(true)}
-                    className="w-full sm:flex-1 font-semibold py-6"
+                    className="w-full md:flex-1 font-semibold py-6"
                   >
                     {t('postedTasks.markComplete')}
                   </Button>
@@ -522,7 +522,7 @@ function PostedTaskCard({
                     color="warning"
                     startContent={<UserX className="w-5 h-5" />}
                     onPress={() => setShowRemoveDialog(true)}
-                    className="w-full sm:flex-1 font-semibold py-6"
+                    className="w-full md:flex-1 font-semibold py-6"
                   >
                     {t('postedTasks.removeProfessional')}
                   </Button>
@@ -532,7 +532,7 @@ function PostedTaskCard({
                     color="danger"
                     startContent={<ShieldAlert className="w-5 h-5" />}
                     onPress={() => setShowReportDialog(true)}
-                    className="w-full sm:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
+                    className="w-full md:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
                   >
                     {t('postedTasks.reportIssue')}
                   </Button>
@@ -549,7 +549,7 @@ function PostedTaskCard({
                   color="warning"
                   startContent={<Star className="w-5 h-5" />}
                   onPress={() => setShowReviewDialog(true)}
-                  className="w-full sm:flex-1 font-semibold py-6"
+                  className="w-full md:flex-1 font-semibold py-6"
                 >
                   {t('reviews.pending.leaveReviewButton')}
                 </Button>
@@ -560,7 +560,7 @@ function PostedTaskCard({
                 color="secondary"
                 startContent={<RotateCcw className="w-5 h-5" />}
                 onPress={handleReopenTask}
-                className="w-full sm:flex-1 py-6"
+                className="w-full md:flex-1 py-6"
               >
                 {t('postedTasks.reopenTask')}
               </Button>
@@ -571,7 +571,7 @@ function PostedTaskCard({
                   color="danger"
                   startContent={<ShieldAlert className="w-5 h-5" />}
                   onPress={() => setShowReportDialog(true)}
-                  className="w-full sm:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
+                  className="w-full md:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
                 >
                   {t('postedTasks.reportIssue')}
                 </Button>
@@ -586,7 +586,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Eye className="w-5 h-5" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white h-12"
+                className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white h-12"
               >
                 {t('postedTasks.viewDetails')}
               </Button>
@@ -596,7 +596,7 @@ function PostedTaskCard({
                 color="primary"
                 startContent={<Edit className="w-5 h-5" />}
                 onPress={() => router.push(`/${lang}/tasks/${id}/edit`)}
-                className="w-full sm:w-auto h-12"
+                className="w-full md:w-auto h-12"
               >
                 {t('postedTasks.editTask')}
               </Button>
@@ -607,7 +607,7 @@ function PostedTaskCard({
                   color="secondary"
                   startContent={<FileText className="w-5 h-5" />}
                   onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
-                  className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white h-12"
+                  className="w-full md:flex-1 bg-green-600 hover:bg-green-700 text-white h-12"
                 >
                   {t('postedTasks.viewApplications')} ({applicationsCount})
                 </Button>
@@ -618,7 +618,7 @@ function PostedTaskCard({
                 color="danger"
                 startContent={<XCircle className="w-5 h-5" />}
                 onPress={() => setShowCancelDialog(true)}
-                className="w-full sm:flex-1 h-12"
+                className="w-full md:flex-1 h-12"
               >
                 {t('postedTasks.cancelTask', 'Cancel Task')}
               </Button>
