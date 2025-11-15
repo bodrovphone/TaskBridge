@@ -55,18 +55,7 @@ export function TelegramConnectionToast() {
         className: 'border-l-4 border-blue-500 bg-gradient-to-r from-blue-50 to-white p-4',
         hideIcon: true, // Hide default info icon
         hideCloseButton: true, // Hide the X close button
-        title: (
-          <div className="flex items-center gap-3">
-            <Image
-              src="/icons/telegram-logo.svg"
-              width={32}
-              height={32}
-              alt="Telegram"
-              className="flex-shrink-0"
-            />
-            <span>{t('profile.telegram.toast.title') as string}</span>
-          </div>
-        ),
+        title: t('profile.telegram.toast.title'),
         description: (
           <div className="space-y-3 mt-2">
             <p className="text-sm text-gray-700">
