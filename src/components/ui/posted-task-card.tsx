@@ -78,6 +78,7 @@ function PostedTaskCard({
   const [isRemovingProfessional, setIsRemovingProfessional] = useState(false)
   const [isCancellingTask, setIsCancellingTask] = useState(false)
   const [taskHasReview, setTaskHasReview] = useState(hasReview)
+  const [imageError, setImageError] = useState(false)
 
   // @todo INTEGRATION: Fetch from user's profile/stats
   const cancellationsThisMonth = 0 // Mock data
@@ -353,16 +354,17 @@ function PostedTaskCard({
         className="w-full h-48 overflow-hidden flex-shrink-0 cursor-pointer"
         onClick={() => router.push(`/${lang}/tasks/${id}`)}
       >
-        {images && images.length > 0 ? (
+        {images && images.length > 0 && !imageError ? (
           <Image
             src={images[0]}
             alt={title}
             width={400}
             height={192}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            onError={() => setImageError(true)}
           />
         ) : (
-          // Show category-based default when no photos
+          // Show category-based default when no photos or image failed to load
           <DefaultTaskImage
             category={category}
             className="w-full h-full"

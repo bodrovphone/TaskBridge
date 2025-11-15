@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react';
 import { MapPin, Clock, Wallet } from "lucide-react";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
@@ -54,6 +55,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  const { t, i18n } = useTranslation();
  const router = useRouter();
  const pathname = usePathname();
+ const [imageError, setImageError] = useState(false);
 
  const getDateLocale = () => {
   switch (i18n.language) {
@@ -134,15 +136,16 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
    >
     {/* Image or Default Gradient */}
     <div className="w-full h-48 overflow-hidden flex-shrink-0">
-     {task.images && task.images.length > 0 ? (
+     {task.images && task.images.length > 0 && !imageError ? (
       <Image
        src={task.images[0]}
        alt={task.title}
        width={400}
        height={192}
        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+       onError={() => setImageError(true)}
       />
-     ) : (task as any).imageUrl ? (
+     ) : (task as any).imageUrl && !imageError ? (
       // Backward compatibility with mock data
       <Image
        src={(task as any).imageUrl || getCategoryImage(task.category, task.id)}
@@ -150,9 +153,10 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
        width={400}
        height={192}
        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+       onError={() => setImageError(true)}
       />
      ) : (
-      // Show gradient default when no photos
+      // Show gradient default when no photos or image failed to load
       <DefaultTaskImage
        category={task.subcategory || task.category}
        className="w-full h-full"
