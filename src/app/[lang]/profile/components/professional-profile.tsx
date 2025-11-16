@@ -1,10 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import { Award } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { PortfolioGalleryManager } from './portfolio-gallery-manager'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
 import { ServiceCategoriesSection } from './sections/service-categories-section'
 import { AvailabilitySection } from './sections/availability-section'

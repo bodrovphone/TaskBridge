@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import type { ApplicationFormData } from './types'
 import { TIMELINE_OPTIONS } from './types'
-import { useAuth } from '@/features/auth'
+import { useAuth } from '@/features/auth/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
 

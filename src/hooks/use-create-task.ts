@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '@/features/auth'
+import { useAuth } from '@/features/auth/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import type { BlockType, PendingReviewTask, ReviewSubmitData } from '@/features/reviews/lib/types'

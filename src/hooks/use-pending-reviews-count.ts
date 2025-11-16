@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '@/features/auth'
+import { useAuth } from '@/features/auth/hooks/use-auth'
 
 export function usePendingReviewsCount() {
   const { user } = useAuth()
