@@ -205,24 +205,29 @@ function Header() {
 
    {/* Mobile/Tablet Actions Section */}
    <NavbarContent justify="end" className="lg:hidden gap-4">
-    {isAuthenticated && (
-     <NavbarItem>
-      <NotificationBell />
-     </NavbarItem>
+    {/* Hide notification bell and avatar when mobile menu is open to prevent conflicts */}
+    {!isMenuOpen && (
+     <>
+      {isAuthenticated && (
+       <NavbarItem>
+        <NotificationBell />
+       </NavbarItem>
+      )}
+      <NavbarItem>
+       {isAuthenticated ? (
+        <UserAvatarDropdown size="sm" />
+       ) : (
+        <UserAvatarDropdown
+         size="sm"
+         onLoginClick={() => {
+          setAuthAction(null)
+          setIsAuthSlideOverOpen(true)
+         }}
+        />
+       )}
+      </NavbarItem>
+     </>
     )}
-    <NavbarItem>
-     {isAuthenticated ? (
-      <UserAvatarDropdown size="sm" />
-     ) : (
-      <UserAvatarDropdown
-       size="sm"
-       onLoginClick={() => {
-        setAuthAction(null)
-        setIsAuthSlideOverOpen(true)
-       }}
-      />
-     )}
-    </NavbarItem>
     <NavbarMenuToggle />
    </NavbarContent>
 

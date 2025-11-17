@@ -151,10 +151,10 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
 
    {/* Slide-over Panel */}
    <div
-    className="fixed top-0 bottom-0 right-0 w-full max-w-md h-screen transform transition-transform duration-300 ease-in-out"
-    style={{ zIndex: 999999, height: '100dvh' }}
+    className="fixed inset-0 w-full max-w-md h-full transform transition-transform duration-300 ease-in-out overflow-hidden bg-white ml-auto"
+    style={{ zIndex: 999999, height: '100dvh', minHeight: '100vh' }}
    >
-    <div className="flex h-full flex-col bg-white shadow-xl">
+    <div className="flex h-full flex-col bg-white shadow-xl overflow-hidden">
      {/* Header */}
      <div className="bg-blue-600 px-6 py-4">
       <div className="flex items-center justify-between">
