@@ -112,7 +112,7 @@ export async function PATCH(
     // Send notification ONLY when professional marks complete
     // Customer gets notification to leave a review
     // When customer marks complete, no notification needed (professional already knows they finished)
-    let notificationResult = { success: false, error: 'No notification sent' }
+    let notificationResult: { success: boolean; error?: string; notificationId?: string } = { success: false }
 
     if (isProfessional) {
       // Professional marked complete → Send review request to customer
