@@ -71,6 +71,14 @@ export async function POST(
       )
     }
 
+    // Prevent self-invitation
+    if (professionalId === user.id) {
+      return NextResponse.json(
+        { error: 'You cannot invite yourself to your own task' },
+        { status: 400 }
+      )
+    }
+
     // Get professional details (use admin client)
     const { data: professional, error: professionalError } = await adminClient
       .from('users')

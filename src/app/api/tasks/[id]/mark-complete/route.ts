@@ -109,30 +109,33 @@ export async function PATCH(
       )
     }
 
-    // Send notification to the other party (customer or professional)
-    const recipientId = isProfessional ? task.customer_id : task.selected_professional_id
-    const recipientUser = isProfessional ? customer : professional
-    const completedByName = isProfessional
-      ? professional?.full_name || 'The professional'
-      : customer?.full_name || 'The customer'
+    // Send notification ONLY when professional marks complete
+    // Customer gets notification to leave a review
+    // When customer marks complete, no notification needed (professional already knows they finished)
+    let notificationResult = { success: false, error: 'No notification sent' }
 
-    const notificationResult = await createNotification({
-      userId: recipientId!,
-      type: 'task_completed',
-      templateData: {
-        taskTitle: task.title,
-        professionalName: completedByName,
-      },
-      metadata: {
-        taskId: task.id,
-        completedBy: user.id,
-        completedAt: now,
-        completionNotes,
-        completionPhotos,
-      },
-      actionUrl: isProfessional ? '/reviews/pending' : '/tasks/work', // Customer → leave review, Professional → my work
-      deliveryChannel: 'both', // Critical: Send both in-app and Telegram
-    })
+    if (isProfessional) {
+      // Professional marked complete → Send review request to customer
+      notificationResult = await createNotification({
+        userId: task.customer_id,
+        type: 'task_completed',
+        templateData: {
+          taskTitle: task.title,
+          professionalName: professional?.full_name || 'The professional',
+        },
+        metadata: {
+          taskId: task.id,
+          completedBy: user.id,
+          completedAt: now,
+          completionNotes,
+          completionPhotos,
+        },
+        actionUrl: '/reviews/pending', // Customer goes to reviews page
+        deliveryChannel: 'both', // Critical: Send both in-app and Telegram
+      })
+    }
+    // Note: When customer marks complete, we don't send task_completed notification
+    // because professionals don't leave reviews in MVP
 
     // Log the completion event
     console.log('[Tasks] Task marked complete:', {
@@ -141,16 +144,17 @@ export async function PATCH(
       completedBy: isProfessional ? 'professional' : 'customer',
       completedById: user.id,
       notificationSent: notificationResult.success,
-      notificationChannels: {
+      notificationTo: isProfessional ? 'customer (review request)' : 'none (no notification sent)',
+      notificationChannels: isProfessional ? {
         inApp: true,
-        telegram: !!recipientUser?.telegram_id,
+        telegram: !!customer?.telegram_id,
         email: false // Not yet implemented
-      }
+      } : null
     })
 
     // Log notification delivery details
-    if (!notificationResult.success) {
-      console.warn('[Tasks] Notification delivery failed:', notificationResult.error)
+    if (isProfessional && !notificationResult.success) {
+      console.warn('[Tasks] Review notification delivery failed:', notificationResult.error)
     }
 
     return NextResponse.json({

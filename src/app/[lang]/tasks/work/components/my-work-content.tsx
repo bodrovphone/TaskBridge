@@ -444,17 +444,6 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                         </Button>
                       </>
                     )}
-                    {selectedFilter === 'completed' && (
-                      <Button
-                        size="sm"
-                        color="warning"
-                        variant="flat"
-                        onPress={() => console.log('Leave review:', task.id)}
-                        className="w-full md:flex-1"
-                      >
-                        {t('myWork.leaveReview')}
-                      </Button>
-                    )}
                   </div>
                 </CardBody>
               </Card>
