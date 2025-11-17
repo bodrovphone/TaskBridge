@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Bell, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
-import { useAuth } from '@/features/auth/hooks/use-auth';
+import { useAuth } from '@/features/auth';
 import {
  Sheet,
  SheetContent,

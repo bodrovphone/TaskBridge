@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
 import ProfessionalHeader from '@/features/professionals/components/sections/professional-header';
 import ActionButtonsRow from '@/features/professionals/components/sections/action-buttons-row';
 import ServicesSection from '@/features/professionals/components/sections/services-section';
@@ -11,6 +12,9 @@ import ReviewsSection from '@/features/professionals/components/sections/reviews
 import { SuspensionBanner } from '@/components/safety/suspension-banner';
 import { getCityLabelBySlug } from '@/features/cities';
 import { toast } from '@/hooks/use-toast';
+import { TaskSelectionModal } from '@/components/modals/task-selection-modal';
+import AuthSlideOver from '@/components/ui/auth-slide-over';
+import { useAuth } from '@/features/auth';
 
 interface ProfessionalDetailPageContentProps {
   professional: any; // @todo: Add proper type from API
@@ -19,7 +23,26 @@ interface ProfessionalDetailPageContentProps {
 
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
   const { t } = useTranslation();
+  const router = useRouter();
+  const { user } = useAuth();
   const [isShareCopied, setIsShareCopied] = useState(false);
+  const [showAuthSlideOver, setShowAuthSlideOver] = useState(false);
+  const [showTaskSelectionModal, setShowTaskSelectionModal] = useState(false);
+  const [userTasks, setUserTasks] = useState<any[]>([]);
+  const [isLoadingTasks, setIsLoadingTasks] = useState(false);
+  const [isSendingInvitation, setIsSendingInvitation] = useState(false);
+  const [hasInvitedThisSession, setHasInvitedThisSession] = useState(false);
+
+  // Check sessionStorage on mount to see if user already invited this professional
+  useEffect(() => {
+    const invitedProfessionals = sessionStorage.getItem('invitedProfessionals');
+    if (invitedProfessionals) {
+      const invitedIds = JSON.parse(invitedProfessionals);
+      if (invitedIds.includes(professional.id)) {
+        setHasInvitedThisSession(true);
+      }
+    }
+  }, [professional.id]);
 
   // Transform API data to match component expectations
   const transformedProfessional = {
@@ -108,6 +131,129 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     }
   };
 
+  // Fetch user's open tasks via API
+  const fetchUserTasks = async () => {
+    if (!user) return [];
+
+    setIsLoadingTasks(true);
+    try {
+      const response = await fetch('/api/tasks?mode=posted&status=open', {
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tasks');
+      }
+
+      const data = await response.json();
+      return data.tasks || [];
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      return [];
+    } finally {
+      setIsLoadingTasks(false);
+    }
+  };
+
+  // Handle invite button click - Implements all three branches
+  const handleInviteClick = () => {
+    // Check if already invited this session
+    if (hasInvitedThisSession) {
+      toast({
+        title: t('inviteModal.alreadyInvitedProfessional', 'Already invited'),
+        description: t('inviteModal.alreadyInvitedProfessionalDescription', {
+          defaultValue: 'You have already invited {{name}} to your task. They may apply within 24 hours if available.',
+          name: transformedProfessional.name,
+        }),
+      });
+      return;
+    }
+
+    // Branch C: Unauthenticated - Show login
+    if (!user) {
+      setShowAuthSlideOver(true);
+      return;
+    }
+
+    // Show modal immediately and fetch tasks in background
+    setShowTaskSelectionModal(true);
+
+    // Fetch tasks in background
+    fetchUserTasks().then((tasks) => {
+      setUserTasks(tasks);
+    });
+  };
+
+  // Handle task selection and send invitation
+  const handleTaskSelection = async (taskId: string) => {
+    setIsSendingInvitation(true);
+    try {
+      const response = await fetch(`/api/professionals/${professional.id}/invite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle duplicate invitation error specifically
+        if (data.error?.includes('already invited')) {
+          toast({
+            title: t('inviteModal.alreadyInvited', 'Already invited'),
+            description: t('inviteModal.alreadyInvitedDescription', {
+              defaultValue: 'You have already invited {{name}} to this task.',
+              name: transformedProfessional.name,
+            }),
+            variant: 'destructive',
+          });
+          setShowTaskSelectionModal(false);
+          return;
+        }
+        throw new Error(data.error || 'Failed to send invitation');
+      }
+
+      toast({
+        title: t('inviteModal.success', 'Invitation sent!'),
+        description: t('inviteModal.successDescription', {
+          defaultValue: '{{name}} will be notified about your task.',
+          name: transformedProfessional.name,
+        }),
+      });
+
+      // Track in sessionStorage to prevent spam
+      const invitedProfessionals = sessionStorage.getItem('invitedProfessionals');
+      const invitedIds = invitedProfessionals ? JSON.parse(invitedProfessionals) : [];
+      if (!invitedIds.includes(professional.id)) {
+        invitedIds.push(professional.id);
+        sessionStorage.setItem('invitedProfessionals', JSON.stringify(invitedIds));
+      }
+      setHasInvitedThisSession(true);
+
+      setShowTaskSelectionModal(false);
+    } catch (error: any) {
+      console.error('Error sending invitation:', error);
+      toast({
+        title: t('inviteModal.error', 'Failed to send invitation'),
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSendingInvitation(false);
+    }
+  };
+
+  // Handle successful authentication - Resume invite flow
+  useEffect(() => {
+    if (user && showAuthSlideOver) {
+      setShowAuthSlideOver(false);
+      // Re-trigger invite flow now that user is authenticated
+      handleInviteClick();
+    }
+  }, [user, showAuthSlideOver]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -126,7 +272,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
             <div className="flex flex-col gap-8">
               <ActionButtonsRow
                 professional={transformedProfessional}
-                onInviteToApply={() => console.log('Invite to apply clicked')}
+                onInviteToApply={handleInviteClick}
                 onShare={handleShareClick}
                 isShareCopied={isShareCopied}
               />
@@ -156,6 +302,28 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
           <CompletedTasksSection completedTasks={transformedProfessional.completedTasksList} />
         </div>
       </div>
+
+      {/* Auth Slide-Over for unauthenticated users */}
+      <AuthSlideOver
+        isOpen={showAuthSlideOver}
+        onClose={() => setShowAuthSlideOver(false)}
+        action={null}
+      />
+
+      {/* Task Selection Modal for users with existing tasks */}
+      <TaskSelectionModal
+        isOpen={showTaskSelectionModal}
+        onClose={() => setShowTaskSelectionModal(false)}
+        tasks={userTasks}
+        professionalName={transformedProfessional.name}
+        onSelectTask={handleTaskSelection}
+        onCreateNewTask={() => {
+          setShowTaskSelectionModal(false);
+          router.push(`/${lang}/create-task?inviteProfessionalId=${professional.id}&inviteProfessionalName=${encodeURIComponent(transformedProfessional.name)}`);
+        }}
+        isLoading={isSendingInvitation}
+        isLoadingTasks={isLoadingTasks}
+      />
     </div>
   );
 }

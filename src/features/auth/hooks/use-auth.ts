@@ -37,7 +37,8 @@ export function useAuth(): UseAuthReturn {
   const [error, setError] = useState<string | null>(null)
   const [notificationToken, setNotificationToken] = useState<string | null>(null)
 
-  const supabase = createClient()
+  // Create supabase client only once
+  const [supabase] = useState(() => createClient())
 
   /**
    * Fetch user profile from our API
@@ -149,7 +150,8 @@ export function useAuth(): UseAuthReturn {
     })
 
     return () => subscription.unsubscribe()
-  }, [fetchProfile, handleNotificationSession, supabase.auth])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Run only once on mount - supabase client is stable
 
   /**
    * Sign up with email and password

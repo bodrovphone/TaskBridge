@@ -5,7 +5,7 @@ import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
-import { useAuth } from '@/features/auth/hooks/use-auth';
+import { useAuth } from '@/features/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotificationBell() {

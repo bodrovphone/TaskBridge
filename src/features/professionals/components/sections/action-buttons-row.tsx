@@ -31,7 +31,7 @@ export default function ActionButtonsRow({
  return (
   <div className="bg-white/80 rounded-2xl p-6 shadow-lg border border-gray-100">
    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {/* Invite to Apply - Primary Action */}
+    {/* Suggest My Task - Primary Action */}
     <Button
      size="md"
      color="primary"
@@ -39,7 +39,7 @@ export default function ActionButtonsRow({
      startContent={<UserPlus size={18} />}
      onClick={onInviteToApply}
     >
-     {t('professionalDetail.actions.inviteToApply')}
+     {t('professionalDetail.actions.suggestMyTask', 'Suggest My Task')}
     </Button>
 
     {/* Share */}

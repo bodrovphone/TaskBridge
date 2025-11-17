@@ -5,7 +5,8 @@ import { Chip } from '@nextui-org/react'
 import { CheckCircle, Clock, Shield, Users } from 'lucide-react'
 import { CreateTaskForm } from './components/create-task-form'
 import { ReopenBanner } from './components/reopen-banner'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { InvitationBanner } from './components/invitation-banner'
+import { useAuth } from '@/features/auth'
 import { useEffect, useState } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 
@@ -22,9 +23,17 @@ export default function CreateTaskPage() {
  const [originalTask, setOriginalTask] = useState<any>(null)
  const [taskLoading, setTaskLoading] = useState(false)
 
+ // Invitation state
+ const [isInviting, setIsInviting] = useState(false)
+ const [invitedProfessional, setInvitedProfessional] = useState<any>(null)
+
  // Check for reopen query params
  const reopenParam = searchParams.get('reopen')
  const originalTaskId = searchParams.get('originalTaskId')
+
+ // Check for invitation query params
+ const inviteProfessionalId = searchParams.get('inviteProfessionalId')
+ const inviteProfessionalName = searchParams.get('inviteProfessionalName')
 
  // Ensure i18n language matches URL locale
  useEffect(() => {
@@ -32,6 +41,17 @@ export default function CreateTaskPage() {
     i18n.changeLanguage(lang)
   }
  }, [i18n, lang])
+
+ // Set up invitation state if inviting a professional
+ useEffect(() => {
+  if (inviteProfessionalId && user) {
+    setIsInviting(true)
+    setInvitedProfessional({
+      id: inviteProfessionalId,
+      name: inviteProfessionalName || '',
+    })
+  }
+ }, [inviteProfessionalId, inviteProfessionalName, user])
 
  // Fetch original task if reopening
  useEffect(() => {
@@ -90,6 +110,13 @@ export default function CreateTaskPage() {
  const handleStartFresh = () => {
   setIsReopening(false)
   setOriginalTask(null)
+  router.push(`/${lang}/create-task`)
+ }
+
+ // Handle cancel invitation
+ const handleCancelInvitation = () => {
+  setIsInviting(false)
+  setInvitedProfessional(null)
   router.push(`/${lang}/create-task`)
  }
 
@@ -170,6 +197,14 @@ export default function CreateTaskPage() {
       />
     )}
 
+    {/* Invitation Banner */}
+    {isInviting && invitedProfessional && (
+      <InvitationBanner
+        professionalName={invitedProfessional.name}
+        onCancel={handleCancelInvitation}
+      />
+    )}
+
     {/* Form - No outer card, each section has its own card */}
     <div className="space-y-6 mb-12">
      {taskLoading ? (
@@ -181,7 +216,8 @@ export default function CreateTaskPage() {
       <CreateTaskForm
         initialData={isReopening ? originalTask : undefined}
         isReopening={isReopening}
-        key={isReopening && originalTask ? 'reopen' : 'create'}
+        inviteProfessionalId={isInviting ? invitedProfessional?.id : undefined}
+        key={isReopening && originalTask ? 'reopen' : isInviting ? 'invite' : 'create'}
       />
      )}
     </div>

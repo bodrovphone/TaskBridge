@@ -9,7 +9,7 @@ import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
 import { useTranslation } from 'react-i18next';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
-import { useAuth } from '@/features/auth/hooks/use-auth';
+import { useAuth } from '@/features/auth';
 import {
  Shield,
  Star,

@@ -49,6 +49,7 @@ export const notifications = {
   'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{{professionalName}}</b> has withdrawn from your task:\n"{{taskTitle}}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {{link}}',
   'notifications.telegram.removedByCustomer': '⚠️ <b>Customer Removed You from Task</b>\n\nYou were removed from task:\n"<b>{{taskTitle}}</b>"\n\n📋 The task has been <b>reopened</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n• Focus on building positive client relationships\n\n🔗 Browse Tasks: {{link}}',
   'notifications.telegram.taskCancelled': '❌ <b>Task Cancelled</b>\n\nThe task "{{taskTitle}}" has been cancelled by the client.\n\nYour application and all discussions related to this task have been removed.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n\n🔗 Browse Tasks: {{link}}',
+  'notifications.telegram.taskInvitation': '🎯 <b>New Task Invitation!</b>\n\n<b>{{customerName}}</b> has invited you to apply for their task:\n\n📋 <b>{{taskTitle}}</b>\n🏷️ Category: {{taskCategory}}\n\n👉 View and apply here:\n{{link}}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',

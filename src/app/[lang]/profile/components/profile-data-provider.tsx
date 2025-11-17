@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { useAuth } from '@/features/auth'
 import { UserProfile } from '@/server/domain/user/user.types'
 
 interface ProfileDataProviderProps {

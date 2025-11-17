@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { useAuth } from '@/features/auth'
 
 export const POSTED_TASKS_QUERY_KEY = ['posted-tasks']
 

@@ -10,7 +10,7 @@ import {
  DropdownSection
 } from '@nextui-org/react'
 import UserAvatar from './user-avatar'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { useAuth } from '@/features/auth'
 import {
  User,
  FileText,

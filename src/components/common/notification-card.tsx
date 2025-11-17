@@ -18,6 +18,7 @@ import {
  Phone,
  Mail,
  Send,
+ UserPlus,
 } from 'lucide-react';
 import type { Notification } from '@/types/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -36,6 +37,7 @@ const notificationIcons = {
  removed_by_customer: Ban,
  task_completed: CheckCheck,
  task_cancelled: Ban,
+ task_invitation: UserPlus,
  message_received: MessageCircle,
  review_received: Star,
  payment_received: Wallet,
@@ -50,6 +52,7 @@ const notificationColors = {
  removed_by_customer: 'text-red-600 bg-red-100',
  task_completed: 'text-green-600 bg-green-100',
  task_cancelled: 'text-orange-600 bg-orange-100',
+ task_invitation: 'text-indigo-600 bg-indigo-100',
  message_received: 'text-purple-600 bg-purple-100',
  review_received: 'text-yellow-600 bg-yellow-100',
  payment_received: 'text-green-600 bg-green-100',

@@ -17,6 +17,7 @@ interface AuthContextType {
   profile: UserProfile | null
   loading: boolean
   error: string | null
+  notificationToken: string | null
 
   // Auth methods
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: string | null }>
@@ -25,6 +26,9 @@ interface AuthContextType {
   signInWithFacebook: () => Promise<{ error: string | null }>
   signOut: () => Promise<{ error: string | null }>
   refreshProfile: () => Promise<void>
+
+  // Authenticated fetch wrapper
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)

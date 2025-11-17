@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { useToast } from '@/hooks/use-toast'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { useAuth } from '@/features/auth'
 import { uploadTaskImage, deleteTaskImage } from '@/lib/utils/image-upload'
 import { POSTED_TASKS_QUERY_KEY } from '@/hooks/use-posted-tasks'
 import { defaultFormValues } from '@/app/[lang]/create-task/lib/validation'
@@ -46,9 +46,16 @@ interface TaskFormProps {
   initialData?: Partial<TaskFormData>
   taskId?: string
   isReopening?: boolean
+  inviteProfessionalId?: string
 }
 
-export function TaskForm({ mode, initialData, taskId, isReopening }: TaskFormProps) {
+export function TaskForm({
+  mode,
+  initialData,
+  taskId,
+  isReopening,
+  inviteProfessionalId
+}: TaskFormProps) {
   const { t, i18n } = useTranslation()
   const router = useRouter()
   const params = useParams()
@@ -158,25 +165,60 @@ export function TaskForm({ mode, initialData, taskId, isReopening }: TaskFormPro
             throw new Error(result.error || 'Failed to create task')
           }
 
-          // Success toast
-          if (isReopening) {
-            toast({
-              title: t('createTask.reopenSuccess', 'Task reopened successfully!'),
-              description: t('createTask.reopenSuccessMessage', 'Your task has been reposted and is now open for new applications.'),
-              variant: 'success'
-            })
-          } else if (imageSkipped) {
-            toast({
-              title: t('createTask.success', 'Task created successfully!'),
-              description: t('createTask.successWithoutImage', 'Your task has been posted without an image.'),
-              variant: 'success'
-            })
+          const createdTaskId = result.task?.id || result.id
+
+          // If inviting a professional, send invitation
+          if (inviteProfessionalId && createdTaskId) {
+            try {
+              const inviteResponse = await fetch(`/api/professionals/${inviteProfessionalId}/invite`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ taskId: createdTaskId }),
+              })
+
+              if (inviteResponse.ok) {
+                toast({
+                  title: t('createTask.inviteSuccess', 'Task created and invitation sent!'),
+                  description: t('createTask.inviteSuccessMessage', 'The professional has been notified about your task.'),
+                  variant: 'success'
+                })
+              } else {
+                // Task created but invitation failed
+                toast({
+                  title: t('createTask.success', 'Task created successfully!'),
+                  description: t('createTask.inviteFailedMessage', 'Task created but failed to send invitation to professional.'),
+                  variant: 'default'
+                })
+              }
+            } catch (error) {
+              console.error('Failed to send invitation:', error)
+              toast({
+                title: t('createTask.success', 'Task created successfully!'),
+                description: t('createTask.inviteErrorMessage', 'Task created but there was an error sending the invitation.'),
+                variant: 'default'
+              })
+            }
           } else {
-            toast({
-              title: t('createTask.success', 'Task created successfully!'),
-              description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
-              variant: 'success'
-            })
+            // Success toast (no invitation)
+            if (isReopening) {
+              toast({
+                title: t('createTask.reopenSuccess', 'Task reopened successfully!'),
+                description: t('createTask.reopenSuccessMessage', 'Your task has been reposted and is now open for new applications.'),
+                variant: 'success'
+              })
+            } else if (imageSkipped) {
+              toast({
+                title: t('createTask.success', 'Task created successfully!'),
+                description: t('createTask.successWithoutImage', 'Your task has been posted without an image.'),
+                variant: 'success'
+              })
+            } else {
+              toast({
+                title: t('createTask.success', 'Task created successfully!'),
+                description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
+                variant: 'success'
+              })
+            }
           }
 
         } else {

@@ -6,6 +6,25 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/server';
+import i18next from 'i18next';
+import { en } from '@/lib/intl/en';
+import { bg } from '@/lib/intl/bg';
+import { ru } from '@/lib/intl/ru';
+
+// Initialize i18next for server-side translations
+const i18nInstance = i18next.createInstance();
+i18nInstance.init({
+  lng: 'en',
+  fallbackLng: 'en',
+  resources: {
+    en: { translation: en },
+    bg: { translation: bg },
+    ru: { translation: ru },
+  },
+  interpolation: {
+    escapeValue: false, // HTML is allowed in Telegram
+  },
+});
 
 export interface TelegramNotification {
   userId: string;
@@ -182,6 +201,30 @@ export const NotificationTemplates = {
     message: `⚠️ <b>Removed from Task</b>\n\nYou have been removed from the task "${taskTitle}" by the customer.\n\nThe task is now open for other professionals to apply.\n\nThis does not negatively affect your rating unless there are quality or safety concerns.\n\nIf you have questions, please contact support.`,
     parseMode: 'HTML' as const,
   }),
+
+  /**
+   * Notification when customer invites professional to a task
+   * @param locale - User's preferred language (en, bg, ru)
+   * @param taskTitle - Title of the task
+   * @param customerName - Name of the customer
+   * @param taskCategory - Translated category name
+   * @param magicLink - Magic link URL for authentication
+   */
+  taskInvitation: (locale: string, taskTitle: string, customerName: string, taskCategory: string, magicLink: string) => {
+    // Use i18next to get localized template
+    const template = i18nInstance.t('notifications.telegram.taskInvitation', {
+      lng: locale,
+      customerName,
+      taskTitle,
+      taskCategory,
+      link: magicLink,
+    });
+
+    return {
+      message: template,
+      parseMode: 'HTML' as const,
+    };
+  },
 };
 
 /**

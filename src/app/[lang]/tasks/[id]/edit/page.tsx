@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { Edit, CheckCircle, Clock, Shield, Users } from 'lucide-react'
 import { EditTaskForm } from './components/edit-task-form'
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { useAuth } from '@/features/auth'
 import type { Task } from '@/server/tasks/task.types'
 
 interface TaskFormData {
