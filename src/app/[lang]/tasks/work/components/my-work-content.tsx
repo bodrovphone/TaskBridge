@@ -35,7 +35,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const maxWithdrawalsPerMonth = 2 // As per PRD
 
   // Fetch accepted applications from API
-  const { tasks: workTasks, isLoading, error, refetch } = useWorkTasks()
+  const { tasks: workTasks, isLoading, error, refetch, markComplete, withdraw, isMarkingComplete: isMutatingComplete, isWithdrawing: isMutatingWithdraw } = useWorkTasks()
 
   const filteredTasks = workTasks.filter(task => {
     switch (selectedFilter) {
@@ -78,27 +78,17 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
 
     setIsMarkingComplete(true)
     try {
-      const response = await fetch(`/api/tasks/${selectedTaskForCompletion.taskId}/mark-complete`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      await markComplete({
+        taskId: selectedTaskForCompletion.taskId,
+        data: {
           completionNotes: data.notes,
           completionPhotos: data.completionPhotos?.map((file: File) => file.name) // @todo: Upload photos to Supabase Storage first
-        })
+        }
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to mark task complete')
-      }
-
-      // Success! Close dialog and refetch data
+      // Success! Close dialog (refetch handled automatically by TanStack Query)
       setIsMarkCompletedDialogOpen(false)
       setSelectedTaskForCompletion(null)
-
-      // Refetch tasks to show updated status
-      await refetch()
-
     } catch (error: any) {
       console.error('Error marking task complete:', error)
       alert(error.message || 'Failed to mark task complete')
@@ -117,26 +107,15 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
 
     setIsWithdrawing(true)
     try {
-      const response = await fetch(`/api/tasks/${selectedTaskForWithdrawal.taskId}/withdraw`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          reason,
-          description
-        })
+      await withdraw({
+        taskId: selectedTaskForWithdrawal.taskId,
+        reason,
+        description
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to withdraw from task')
-      }
-
-      // Success! Close dialog and refetch data
+      // Success! Close dialog (refetch handled automatically by TanStack Query)
       setIsWithdrawDialogOpen(false)
       setSelectedTaskForWithdrawal(null)
-
-      // Refetch tasks to show updated status
-      await refetch()
 
       // Show success modal
       setWithdrawalSuccessModalOpen(true)

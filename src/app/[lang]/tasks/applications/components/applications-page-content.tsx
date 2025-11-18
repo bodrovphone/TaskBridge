@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem, Textarea } from '@nextui-org/react'
-import { Send, Calendar, Banknote, MapPin, User, X, Loader2, AlertCircle } from 'lucide-react'
-import { useAuth } from '@/features/auth'
+import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem } from '@nextui-org/react'
+import { Send, Calendar, Banknote, MapPin, User, X, AlertCircle } from 'lucide-react'
+import { useApplications, type MyApplication } from '@/hooks/use-applications'
 import ApplicationDetailView from '@/features/applications/components/application-detail-view'
 import type { MyApplication as MyApplicationType } from '@/features/applications/lib/types'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -16,35 +16,13 @@ interface ApplicationsPageContentProps {
 
 type ApplicationStatus = 'all' | 'pending' | 'accepted' | 'rejected' | 'withdrawn'
 
-interface MyApplication {
-  id: string
-  taskId: string
-  taskTitle: string
-  taskDescription: string
-  customerName: string
-  customerAvatar?: string
-  proposedPrice: number
-  timeline: string
-  message: string
-  status: 'pending' | 'accepted' | 'rejected' | 'withdrawn'
-  submittedAt: Date
-  task: {
-    budget: number
-    category: string
-    location: {
-      city: string
-      neighborhood: string
-    }
-  }
-}
-
 export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) {
   const { t } = useTranslation()
   const router = useRouter()
-  const { user } = useAuth()
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('pending')
-  const [applications, setApplications] = useState<MyApplication[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+
+  // Use TanStack Query hook for applications
+  const { applications, isLoading, error, withdraw, isWithdrawing } = useApplications(selectedStatus, t)
   const [withdrawDialog, setWithdrawDialog] = useState<{
     isOpen: boolean
     applicationId: string | null
@@ -55,70 +33,10 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
     taskTitle: null
   })
   const [withdrawReason, setWithdrawReason] = useState('')
-  const [isWithdrawing, setIsWithdrawing] = useState(false)
 
   // Detail modal state
   const [selectedDetailApplication, setSelectedDetailApplication] = useState<MyApplicationType | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
-
-  // Helper function to convert hours to user-friendly timeline text
-  const formatTimeline = (hours: number | null | undefined): string => {
-    if (!hours) return t('application.timelineFlexible')
-
-    if (hours <= 24) return t('application.timelineToday')
-    if (hours <= 72) return t('application.timeline3days')
-    if (hours <= 168) return t('application.timelineWeek')
-
-    // For custom durations, show hours with unit
-    return `${hours}${t('application.hoursShort')}`
-  }
-
-  // Fetch applications from API
-  useEffect(() => {
-    if (!user) return
-
-    const fetchApplications = async () => {
-      setIsLoading(true)
-      try {
-        const statusParam = selectedStatus === 'all' ? '' : `?status=${selectedStatus}`
-        const response = await fetch(`/api/applications${statusParam}`)
-
-        if (response.ok) {
-          const data = await response.json()
-
-          // Map API data to component format
-          const mapped = data.applications.map((app: any) => ({
-            id: app.id,
-            taskId: app.task.id,
-            taskTitle: app.task.title,
-            taskDescription: app.task.description,
-            customerName: app.task.customer?.full_name || 'Unknown',
-            customerAvatar: app.task.customer?.avatar_url,
-            proposedPrice: app.proposed_price_bgn,
-            timeline: formatTimeline(app.estimated_duration_hours),
-            message: app.message,
-            status: app.status,
-            submittedAt: new Date(app.created_at),
-            task: {
-              budget: app.task.budget_max_bgn || 0,
-              category: app.task.category,
-              location: {
-                city: app.task.city || '',
-                neighborhood: app.task.neighborhood || ''
-              }
-            }
-          }))
-          setApplications(mapped)
-        }
-      } catch (error) {
-        console.error('[Applications] Error fetching:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchApplications()
-  }, [user, selectedStatus])
 
   const filteredApplications = applications
 
@@ -214,37 +132,18 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   const confirmWithdraw = async () => {
     if (!withdrawDialog.applicationId) return
 
-    setIsWithdrawing(true)
     try {
-      const response = await fetch(`/api/applications/${withdrawDialog.applicationId}/withdraw`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          reason: withdrawReason || undefined
-        })
+      await withdraw({
+        applicationId: withdrawDialog.applicationId,
+        reason: withdrawReason || undefined
       })
 
-      if (response.ok) {
-        // Update applications list
-        setApplications(prev => prev.map(app =>
-          app.id === withdrawDialog.applicationId
-            ? { ...app, status: 'withdrawn' as const }
-            : app
-        ))
-        // Close dialog
-        setWithdrawDialog({ isOpen: false, applicationId: null, taskTitle: null })
-        setWithdrawReason('')
-      } else {
-        const error = await response.json()
-        alert(error.error || t('myApplications.withdrawError', 'Failed to withdraw application'))
-      }
-    } catch (error) {
+      // Success! Close dialog (refetch handled automatically by TanStack Query)
+      setWithdrawDialog({ isOpen: false, applicationId: null, taskTitle: null })
+      setWithdrawReason('')
+    } catch (error: any) {
       console.error('[Applications] Error withdrawing:', error)
-      alert(t('myApplications.withdrawError', 'Failed to withdraw application'))
-    } finally {
-      setIsWithdrawing(false)
+      alert(error.message || t('myApplications.withdrawError', 'Failed to withdraw application'))
     }
   }
 
