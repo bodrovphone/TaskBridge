@@ -34,4 +34,15 @@ export const auth = {
   'auth.benefit4': '• Получавайте известия за нови задачи',
   'auth.continueWith': 'Продължи с',
   'auth.telegramHint': 'Отваря Telegram приложението или десктоп клиента',
+
+  // Email verification
+  'auth.email.subject': 'Trudify - Потвърдете имейл адреса си',
+  'auth.email.heading': 'Добре дошли в Trudify!',
+  'auth.email.greeting': 'Здравейте',
+  'auth.email.message':
+    'Благодарим ви, че се регистрирахте! Моля, потвърдете имейл адреса си, за да активирате известията по имейл.',
+  'auth.email.buttonText': 'Потвърди имейл адрес',
+  'auth.email.linkInstruction': 'Или копирайте и поставете този линк в браузъра си:',
+  'auth.email.footerText': 'Ако не сте създали акаунт, можете спокойно да игнорирате този имейл.',
+  'auth.email.footerRights': 'Всички права запазени.',
 };

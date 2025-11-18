@@ -154,7 +154,7 @@ export function useAuth(): UseAuthReturn {
   }, []) // Run only once on mount - supabase client is stable
 
   /**
-   * Sign up with email and password
+   * Sign up with email and password (via API route)
    */
   const signUp = async (
     email: string,
@@ -164,50 +164,42 @@ export function useAuth(): UseAuthReturn {
     try {
       setError(null)
 
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          email,
+          password,
+          fullName,
+        }),
       })
 
-      if (error) {
-        setError(error.message)
-        return { error: error.message }
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error)
+        return { error: data.error }
       }
 
-      // Explicitly create profile in users table
-      // This ensures the profile exists even if email confirmation is required
-      if (data.session) {
-        try {
-          await fetch('/api/auth/profile', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              fullName: fullName,
-            }),
-          })
-        } catch (err) {
-          console.error('Failed to create profile after signup:', err)
-          // Profile will be created by onAuthStateChange listener as fallback
-        }
+      // Fetch the session after successful signup
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (session?.user) {
+        await fetchProfile(session.user.id)
       }
 
       return { error: null }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to sign up'
+      const message = err instanceof Error ? err.message : 'Failed to sign up. Please try again.'
       setError(message)
       return { error: message }
     }
   }
 
   /**
-   * Sign in with email and password
+   * Sign in with email and password (via API route)
    */
   const signIn = async (
     email: string,
@@ -216,19 +208,27 @@ export function useAuth(): UseAuthReturn {
     try {
       setError(null)
 
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       })
 
-      if (error) {
-        setError(error.message)
-        return { error: error.message }
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error)
+        return { error: data.error }
       }
 
       return { error: null }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to sign in'
+      const message = err instanceof Error ? err.message : 'Failed to sign in. Please try again.'
       setError(message)
       return { error: message }
     }
@@ -289,23 +289,27 @@ export function useAuth(): UseAuthReturn {
   }
 
   /**
-   * Sign out
+   * Sign out (via API route)
    */
   const signOut = async (): Promise<{ error: string | null }> => {
     try {
       setError(null)
 
-      const { error } = await supabase.auth.signOut()
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      })
 
-      if (error) {
-        setError(error.message)
-        return { error: error.message }
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error)
+        return { error: data.error }
       }
 
       setProfile(null)
       return { error: null }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to sign out'
+      const message = err instanceof Error ? err.message : 'Failed to sign out. Please try again.'
       setError(message)
       return { error: message }
     }

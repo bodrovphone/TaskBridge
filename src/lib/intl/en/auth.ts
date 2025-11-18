@@ -34,4 +34,15 @@ export const auth = {
   'auth.benefit4': '• Get notifications for new tasks',
   'auth.continueWith': 'Continue with',
   'auth.telegramHint': 'Opens Telegram app or desktop client',
+
+  // Email verification
+  'auth.email.subject': 'Trudify - Confirm Your Email Address',
+  'auth.email.heading': 'Welcome to Trudify!',
+  'auth.email.greeting': 'Hi',
+  'auth.email.message':
+    'Thank you for signing up! Please verify your email address to enable email notifications.',
+  'auth.email.buttonText': 'Verify Email Address',
+  'auth.email.linkInstruction': 'Or copy and paste this link into your browser:',
+  'auth.email.footerText': "If you didn't create an account, you can safely ignore this email.",
+  'auth.email.footerRights': 'All rights reserved.',
 };
