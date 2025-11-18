@@ -32,13 +32,6 @@ export async function POST(request: Request) {
         )
       }
 
-      if (error.message.includes('Email not confirmed')) {
-        return NextResponse.json(
-          { error: 'Please verify your email address before signing in' },
-          { status: 403 }
-        )
-      }
-
       return NextResponse.json(
         { error: 'Failed to sign in. Please try again.' },
         { status: 401 }
@@ -55,7 +48,6 @@ export async function POST(request: Request) {
       user: {
         id: data.user.id,
         email: data.user.email,
-        emailConfirmed: !!data.user.email_confirmed_at,
       },
     })
   } catch (error) {
