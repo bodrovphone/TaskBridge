@@ -36,8 +36,10 @@ Update users.is_email_verified = true
 # SendGrid API Key (from https://app.sendgrid.com/settings/api_keys)
 SENDGRID_API_KEY=SG.your_api_key_here
 
-# Your app URL
-NEXT_PUBLIC_SITE_URL=http://localhost:3000  # or https://trudify.com for production
+# Your app URL (uses existing NEXT_PUBLIC_BASE_URL)
+# Local: http://localhost:3000
+# Staging: https://task-bridge-chi.vercel.app
+# Production: https://trudify.com
 ```
 
 ## SendGrid Configuration
@@ -239,8 +241,10 @@ bodrovphone+test12@gmail.com
 **Expected Logs:**
 ```
 [Auth] User signed up successfully
+[Auth] Detected user locale: bg
+[Auth] Saved preferred language: bg
 [Auth] Generated verification URL: http://localhost:3000/api/auth/verify-email?token=...
-[Auth] Verification email sent successfully via SendGrid to: bodrovphone+test12@gmail.com
+[Auth] Verification email sent successfully via SendGrid to: bodrovphone+test12@gmail.com in bg
 ```
 
 ### 2. Check Email Delivery

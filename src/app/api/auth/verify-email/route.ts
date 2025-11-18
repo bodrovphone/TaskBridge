@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
     if (!token) {
       return NextResponse.redirect(
-        new URL('/en?error=missing_token', process.env.NEXT_PUBLIC_SITE_URL!)
+        new URL('/en?error=missing_token', process.env.NEXT_PUBLIC_BASE_URL!)
       )
     }
 
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     if (!payload) {
       console.error('[Auth] Invalid or expired verification token')
       return NextResponse.redirect(
-        new URL('/en?error=invalid_token', process.env.NEXT_PUBLIC_SITE_URL!)
+        new URL('/en?error=invalid_token', process.env.NEXT_PUBLIC_BASE_URL!)
       )
     }
 
@@ -36,7 +36,7 @@ export async function GET(request: Request) {
     if (updateError) {
       console.error('[Auth] Failed to update email verification status:', updateError)
       return NextResponse.redirect(
-        new URL('/en?error=verification_failed', process.env.NEXT_PUBLIC_SITE_URL!)
+        new URL('/en?error=verification_failed', process.env.NEXT_PUBLIC_BASE_URL!)
       )
     }
 
@@ -47,12 +47,12 @@ export async function GET(request: Request) {
 
     // Redirect to app with success message
     return NextResponse.redirect(
-      new URL('/en?verified=true', process.env.NEXT_PUBLIC_SITE_URL!)
+      new URL('/en?verified=true', process.env.NEXT_PUBLIC_BASE_URL!)
     )
   } catch (error) {
     console.error('[Auth] Email verification exception:', error)
     return NextResponse.redirect(
-      new URL('/en?error=server_error', process.env.NEXT_PUBLIC_SITE_URL!)
+      new URL('/en?error=server_error', process.env.NEXT_PUBLIC_BASE_URL!)
     )
   }
 }

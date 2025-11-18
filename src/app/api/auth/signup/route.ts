@@ -109,7 +109,7 @@ export async function POST(request: Request) {
 
       // Generate custom verification token (valid for 24 hours)
       const verificationToken = await generateEmailVerificationToken(email, data.user.id)
-      const verificationUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/verify-email?token=${verificationToken}`
+      const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
 
       console.log('[Auth] Generated verification URL:', verificationUrl)
 

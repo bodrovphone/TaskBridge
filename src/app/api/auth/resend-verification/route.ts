@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       const emailContent = getEmailVerificationContent(locale)
 
       const verificationToken = await generateEmailVerificationToken(user.email!, user.id)
-      const verificationUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/verify-email?token=${verificationToken}`
+      const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
 
       // Prepare SendGrid payload
       const sendGridPayload: any = {

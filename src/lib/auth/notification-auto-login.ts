@@ -109,7 +109,7 @@ export async function generateNotificationAutoLoginUrl(
   userId: string,
   channel: NotificationChannel,
   destinationPath: string,
-  baseUrl: string = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  baseUrl: string = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 ): Promise<string> {
   // Create token (7 day expiration, reusable)
   const token = await createNotificationAutoLoginToken(userId, channel, destinationPath)
