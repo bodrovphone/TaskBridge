@@ -45,4 +45,32 @@ export const auth = {
   'auth.email.linkInstruction': 'Или копирайте и поставете този линк в браузъра си:',
   'auth.email.footerText': 'Ако не сте създали акаунт, можете спокойно да игнорирате този имейл.',
   'auth.email.footerRights': 'Всички права запазени.',
+
+  // Forgot password
+  'auth.forgotPassword.title': 'Забравена парола',
+  'auth.forgotPassword.description': 'Въведете имейла си и ще ви изпратим линк за възстановяване на паролата.',
+  'auth.forgotPassword.emailLabel': 'Имейл адрес',
+  'auth.forgotPassword.sendResetLink': 'Изпрати линк за възстановяване',
+  'auth.forgotPassword.backToLogin': 'Обратно към влизане',
+  'auth.forgotPassword.checkEmail': 'Проверете имейла си',
+  'auth.forgotPassword.emailSent': 'Изпратихме линк за възстановяване на паролата до',
+  'auth.forgotPassword.emailSentInstructions': 'Моля, проверете входящата си поща и кликнете върху линка, за да възстановите паролата си.',
+  'auth.forgotPassword.didNotReceive': 'Не получихте имейла?',
+  'auth.forgotPassword.resendLink': 'Изпрати отново',
+  'auth.forgotPassword.error': 'Неуспешно изпращане на имейл за възстановяване. Моля, опитайте отново.',
+
+  // Reset password
+  'auth.resetPassword.title': 'Възстановяване на парола',
+  'auth.resetPassword.description': 'Въведете новата си парола по-долу.',
+  'auth.resetPassword.newPassword': 'Нова парола',
+  'auth.resetPassword.confirmPassword': 'Потвърди новата парола',
+  'auth.resetPassword.resetButton': 'Възстанови паролата',
+  'auth.resetPassword.success': 'Паролата е успешно възстановена!',
+  'auth.resetPassword.successDescription': 'Вече можете да влезете с новата си парола.',
+  'auth.resetPassword.goToLogin': 'Към влизане',
+  'auth.resetPassword.invalidToken': 'Невалиден или изтекъл линк за възстановяване',
+  'auth.resetPassword.invalidTokenDescription': 'Този линк за възстановяване на паролата е невалиден или е изтекъл. Моля, заявете нов.',
+  'auth.resetPassword.passwordMismatch': 'Паролите не съвпадат',
+  'auth.resetPassword.passwordTooShort': 'Паролата трябва да е поне 6 символа',
+  'auth.resetPassword.error': 'Неуспешно възстановяване на паролата. Моля, опитайте отново.',
 };

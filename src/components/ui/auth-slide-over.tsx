@@ -295,7 +295,11 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
            <input type="checkbox" className="mr-2 rounded" />
            {t('auth.rememberMe')}
           </label>
-          <Link href="/forgot-password" className="text-blue-600 hover:text-blue-800">
+          <Link
+           href={`/${i18n.language}/forgot-password`}
+           className="text-blue-600 hover:text-blue-800"
+           onClick={onClose}
+          >
            {t('auth.forgotPassword')}
           </Link>
          </div>

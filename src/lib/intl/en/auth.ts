@@ -45,4 +45,32 @@ export const auth = {
   'auth.email.linkInstruction': 'Or copy and paste this link into your browser:',
   'auth.email.footerText': "If you didn't create an account, you can safely ignore this email.",
   'auth.email.footerRights': 'All rights reserved.',
+
+  // Forgot password
+  'auth.forgotPassword.title': 'Forgot Password',
+  'auth.forgotPassword.description': 'Enter your email and we\'ll send you a link to reset your password.',
+  'auth.forgotPassword.emailLabel': 'Email address',
+  'auth.forgotPassword.sendResetLink': 'Send Reset Link',
+  'auth.forgotPassword.backToLogin': 'Back to login',
+  'auth.forgotPassword.checkEmail': 'Check your email',
+  'auth.forgotPassword.emailSent': 'We\'ve sent a password reset link to',
+  'auth.forgotPassword.emailSentInstructions': 'Please check your inbox and click the link to reset your password.',
+  'auth.forgotPassword.didNotReceive': 'Didn\'t receive the email?',
+  'auth.forgotPassword.resendLink': 'Resend link',
+  'auth.forgotPassword.error': 'Failed to send reset email. Please try again.',
+
+  // Reset password
+  'auth.resetPassword.title': 'Reset Password',
+  'auth.resetPassword.description': 'Enter your new password below.',
+  'auth.resetPassword.newPassword': 'New password',
+  'auth.resetPassword.confirmPassword': 'Confirm new password',
+  'auth.resetPassword.resetButton': 'Reset Password',
+  'auth.resetPassword.success': 'Password reset successful!',
+  'auth.resetPassword.successDescription': 'You can now log in with your new password.',
+  'auth.resetPassword.goToLogin': 'Go to login',
+  'auth.resetPassword.invalidToken': 'Invalid or expired reset link',
+  'auth.resetPassword.invalidTokenDescription': 'This password reset link is invalid or has expired. Please request a new one.',
+  'auth.resetPassword.passwordMismatch': 'Passwords do not match',
+  'auth.resetPassword.passwordTooShort': 'Password must be at least 6 characters',
+  'auth.resetPassword.error': 'Failed to reset password. Please try again.',
 };

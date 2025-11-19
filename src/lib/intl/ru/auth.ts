@@ -45,4 +45,32 @@ export const auth = {
   'auth.email.linkInstruction': 'Или скопируйте и вставьте эту ссылку в ваш браузер:',
   'auth.email.footerText': 'Если вы не создавали аккаунт, можете спокойно игнорировать это письмо.',
   'auth.email.footerRights': 'Все права защищены.',
+
+  // Forgot password
+  'auth.forgotPassword.title': 'Забыли пароль',
+  'auth.forgotPassword.description': 'Введите ваш email, и мы отправим вам ссылку для сброса пароля.',
+  'auth.forgotPassword.emailLabel': 'Email адрес',
+  'auth.forgotPassword.sendResetLink': 'Отправить ссылку для сброса',
+  'auth.forgotPassword.backToLogin': 'Вернуться ко входу',
+  'auth.forgotPassword.checkEmail': 'Проверьте вашу почту',
+  'auth.forgotPassword.emailSent': 'Мы отправили ссылку для сброса пароля на',
+  'auth.forgotPassword.emailSentInstructions': 'Пожалуйста, проверьте ваш почтовый ящик и нажмите на ссылку, чтобы сбросить пароль.',
+  'auth.forgotPassword.didNotReceive': 'Не получили письмо?',
+  'auth.forgotPassword.resendLink': 'Отправить повторно',
+  'auth.forgotPassword.error': 'Не удалось отправить письмо для сброса пароля. Пожалуйста, попробуйте снова.',
+
+  // Reset password
+  'auth.resetPassword.title': 'Сброс пароля',
+  'auth.resetPassword.description': 'Введите ваш новый пароль ниже.',
+  'auth.resetPassword.newPassword': 'Новый пароль',
+  'auth.resetPassword.confirmPassword': 'Подтвердите новый пароль',
+  'auth.resetPassword.resetButton': 'Сбросить пароль',
+  'auth.resetPassword.success': 'Пароль успешно сброшен!',
+  'auth.resetPassword.successDescription': 'Теперь вы можете войти с вашим новым паролем.',
+  'auth.resetPassword.goToLogin': 'Перейти ко входу',
+  'auth.resetPassword.invalidToken': 'Недействительная или истекшая ссылка для сброса',
+  'auth.resetPassword.invalidTokenDescription': 'Эта ссылка для сброса пароля недействительна или истекла. Пожалуйста, запросите новую.',
+  'auth.resetPassword.passwordMismatch': 'Пароли не совпадают',
+  'auth.resetPassword.passwordTooShort': 'Пароль должен содержать не менее 6 символов',
+  'auth.resetPassword.error': 'Не удалось сбросить пароль. Пожалуйста, попробуйте снова.',
 };

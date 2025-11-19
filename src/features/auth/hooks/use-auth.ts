@@ -226,6 +226,14 @@ export function useAuth(): UseAuthReturn {
         return { error: data.error }
       }
 
+      // Refresh the session on client side to sync auth state
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (session?.user) {
+        setUser(session.user)
+        await fetchProfile(session.user.id)
+      }
+
       return { error: null }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to sign in. Please try again.'

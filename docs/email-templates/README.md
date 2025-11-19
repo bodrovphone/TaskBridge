@@ -8,14 +8,17 @@ Production-ready, mobile-responsive email templates with Trudify branding and fu
 1. **01-email-verification.html** - Email verification for new signups ✅ **ACTIVE**
 2. **04-base-notification.html** - Flexible template for all notification types (applications, messages, tasks, etc.) ✅ **READY FOR USE**
 
+### Supabase Auth Templates (Not SendGrid)
+3. **supabase-password-reset-bulgarian.html** - Password reset via Supabase Auth ✅ **READY - See SUPABASE-SETUP.md**
+
 ### Future Use (Keep for Reference)
-3. **03-password-reset.html** - Password recovery (future task - might use Supabase or custom implementation)
-4. **base-template.html** - Generic base template (reference only)
+4. **03-password-reset.html** - SendGrid version (for reference, use Supabase version instead)
+5. **base-template.html** - Generic base template (reference only)
 
 ### Notes
 - ❌ Removed `02-magic-link.html` - You handle magic links your own way
 - ✅ `01-email-verification.html` - Already integrated with SendGrid
-- ⏳ `03-password-reset.html` - Keep for future password reset feature
+- ✅ `supabase-password-reset-bulgarian.html` - For Supabase Auth password resets (see SUPABASE-SETUP.md)
 - 🎯 `04-base-notification.html` - Use for task/application/message notifications
 
 ---
