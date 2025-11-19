@@ -16,6 +16,7 @@ import i18next from 'i18next';
 import { en } from '@/lib/intl/en';
 import { bg } from '@/lib/intl/bg';
 import { ru } from '@/lib/intl/ru';
+import { generateNotificationAutoLoginUrl } from '@/lib/auth/notification-auto-login';
 
 // Initialize i18next for server-side translations
 const i18nInstance = i18next.createInstance();
@@ -107,7 +108,8 @@ export async function sendEmailNotification(
     const locale = notification.locale || user.preferred_language || 'bg';
 
     // Translate all template variables
-    const translatedData = translateEmailVariables(
+    const translatedData = await translateEmailVariables(
+      notification.userId,
       notification.notificationType,
       notification.templateData,
       locale,
@@ -192,12 +194,13 @@ export async function sendEmailNotification(
 /**
  * Translates email template variables based on notification type and locale
  */
-function translateEmailVariables(
+async function translateEmailVariables(
+  userId: string,
   notificationType: NotificationType,
   data: Record<string, any>,
   locale: string,
   userName: string
-): Record<string, any> {
+): Promise<Record<string, any>> {
   const t = (key: string, vars?: Record<string, any>) => {
     return i18nInstance.t(key, { lng: locale, ...vars });
   };
@@ -287,7 +290,15 @@ function translateEmailVariables(
         footer_text: t('notifications.email.messageReceived.footerText'),
       };
 
-    case 'taskCompleted':
+    case 'taskCompleted': {
+      // Generate auto-login URL for review page
+      const reviewUrl = await generateNotificationAutoLoginUrl(
+        userId,
+        'email',
+        `/${locale}/reviews/pending`,
+        baseUrl
+      );
+
       return {
         ...common,
         subject: t('notifications.email.taskCompleted.subject', {
@@ -297,11 +308,12 @@ function translateEmailVariables(
         message: t('notifications.email.taskCompleted.message', {
           task_title: data.taskTitle,
         }),
-        primary_link: `${baseUrl}/${locale}/tasks/${data.taskId}/review`,
+        primary_link: reviewUrl,
         primary_button_text: t('notifications.email.taskCompleted.buttonText'),
         secondary_message: t('notifications.email.taskCompleted.secondaryMessage'),
         footer_text: t('notifications.email.taskCompleted.footerText'),
       };
+    }
 
     case 'paymentReceived':
       return {

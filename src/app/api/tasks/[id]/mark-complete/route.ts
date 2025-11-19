@@ -121,6 +121,7 @@ export async function PATCH(
         type: 'task_completed',
         templateData: {
           taskTitle: task.title,
+          taskId: task.id, // Required for email template link generation
           professionalName: professional?.full_name || 'The professional',
         },
         metadata: {
