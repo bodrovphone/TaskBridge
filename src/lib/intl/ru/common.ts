@@ -133,4 +133,12 @@ export const common = {
   'suspension.message': 'Этот аккаунт временно заблокирован из-за множественных жалоб по безопасности.',
   'suspension.appeal': 'Если вы считаете, что это ошибка, вы можете подать апелляцию по электронной почте.',
   'suspension.contactEmail': 'Контакт: support@taskbridge.com',
+
+  // Notification Warning Banner
+  'notificationWarning.title': 'Важно: Настройте уведомления',
+  'notificationWarning.message': 'Вы не будете получать обновления о заявках, сообщениях или изменениях в задаче без канала уведомлений.',
+  'notificationWarning.recommendation': 'Мы рекомендуем подключить Telegram для мгновенных уведомлений или подтвердить вашу электронную почту в качестве альтернативы.',
+  'notificationWarning.connectTelegram': 'Подключить Telegram',
+  'notificationWarning.verifyEmail': 'Подтвердить email',
+  'notificationWarning.dismiss': 'Понятно',
 };

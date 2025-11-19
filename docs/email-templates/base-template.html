@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{subject}}</title>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td {font-family: Arial, Helvetica, sans-serif !important;}
+  </style>
+  <![endif]-->
+  <style>
+    /* Reset styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+    img {
+      border: 0;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+    /* Container */
+    .email-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    /* Header */
+    .header {
+      background-color: #0066CC;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .logo-container {
+      display: inline-block;
+    }
+    .logo-text {
+      color: #ffffff;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    /* Content */
+    .content {
+      padding: 40px 30px;
+      color: #333333;
+      line-height: 1.6;
+    }
+    .content h2 {
+      color: #1a1a1a;
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 20px 0;
+      line-height: 1.3;
+    }
+    .content p {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      color: #4a4a4a;
+    }
+    /* Button */
+    .button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .button {
+      display: inline-block;
+      background-color: #0066CC;
+      color: #ffffff !important;
+      padding: 14px 40px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #0052a3;
+    }
+    /* Link fallback */
+    .link-fallback {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e5e5;
+    }
+    .link-fallback p {
+      font-size: 14px;
+      color: #666666;
+      margin-bottom: 10px;
+    }
+    .link-fallback a {
+      color: #0066CC;
+      word-wrap: break-word;
+      word-break: break-all;
+      font-size: 13px;
+    }
+    /* Footer */
+    .footer {
+      padding: 25px 30px;
+      background-color: #f9f9f9;
+      text-align: center;
+      color: #666666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .footer p {
+      margin: 8px 0;
+      font-size: 14px;
+      color: #666666;
+    }
+    .footer a {
+      color: #0066CC;
+      text-decoration: none;
+    }
+    /* Mobile Responsive - Enhanced */
+    @media only screen and (max-width: 600px) {
+      body {
+        width: 100% !important;
+        min-width: 100% !important;
+      }
+      .email-container {
+        margin: 10px 5px !important;
+        border-radius: 6px !important;
+        width: 100% !important;
+      }
+      .header {
+        padding: 20px 15px !important;
+      }
+      .content {
+        padding: 25px 20px !important;
+      }
+      .content h2 {
+        font-size: 20px !important;
+        margin-bottom: 15px !important;
+      }
+      .content p {
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+      }
+      .button-container {
+        margin: 20px 0 !important;
+      }
+      .button {
+        display: block !important;
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+      }
+      .link-fallback {
+        margin-top: 20px !important;
+        padding-top: 15px !important;
+      }
+      .footer {
+        padding: 20px 15px !important;
+      }
+      .footer p {
+        font-size: 13px !important;
+      }
+    }
+    @media only screen and (max-width: 400px) {
+      .email-container {
+        margin: 5px 2px !important;
+      }
+      .header {
+        padding: 15px 10px !important;
+      }
+      .content {
+        padding: 20px 15px !important;
+      }
+      .content h2 {
+        font-size: 18px !important;
+      }
+      .content p {
+        font-size: 14px !important;
+      }
+      .button {
+        padding: 12px 16px !important;
+        font-size: 15px !important;
+      }
+      .footer {
+        padding: 15px 10px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding: 20px 0;">
+
+        <!-- Main Container -->
+        <table class="email-container" role="presentation" width="600" cellspacing="0" cellpadding="0" border="0">
+
+          <!-- Header with Logo -->
+          <tr>
+            <td class="header">
+              <div class="logo-container">
+                <!--[if !mso]><!-->
+                <svg width="140" height="40" viewBox="0 0 140 40" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                  <!-- Handshake icon from lucide-react -->
+                  <g transform="translate(5, 8) scale(1.4)" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <path d="m11 17 2 2a1 1 0 1 0 3-3"/>
+                    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/>
+                    <path d="m21 3 1 11h-2"/>
+                    <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/>
+                    <path d="M3 4h8"/>
+                  </g>
+                  <!-- Trudify text -->
+                  <text x="48" y="27"
+                        font-family="Arial, Helvetica, sans-serif"
+                        font-size="20"
+                        font-weight="700"
+                        fill="#ffffff"
+                        letter-spacing="-0.3">Trudify</text>
+                </svg>
+                <!--<![endif]-->
+                <!--[if mso]>
+                <div class="logo-text">Trudify</div>
+                <![endif]-->
+              </div>
+            </td>
+          </tr>
+
+          <!-- Content Area -->
+          <tr>
+            <td class="content">
+              <h2>{{heading}}</h2>
+              <p>{{greeting}} {{user_name}},</p>
+              <p>{{message}}</p>
+
+              <!-- CTA Button -->
+              <div class="button-container">
+                <a href="{{action_link}}" class="button">{{button_text}}</a>
+              </div>
+
+              <!-- Link Fallback -->
+              <div class="link-fallback">
+                <p>{{link_instruction}}</p>
+                <a href="{{action_link}}">{{action_link}}</a>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td class="footer">
+              <p>{{footer_text}}</p>
+              <p>© {{current_year}} Trudify. {{footer_rights}}</p>
+              <p>
+                <a href="mailto:support@trudify.com">support@trudify.com</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

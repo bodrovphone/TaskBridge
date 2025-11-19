@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{subject}}</title>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td {font-family: Arial, Helvetica, sans-serif !important;}
+  </style>
+  <![endif]-->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+    img {
+      border: 0;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #0066CC;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .logo-container {
+      display: inline-block;
+    }
+    .logo-text {
+      color: #ffffff;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    .content {
+      padding: 40px 30px;
+      color: #333333;
+      line-height: 1.6;
+    }
+    .content h2 {
+      color: #1a1a1a;
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 20px 0;
+      line-height: 1.3;
+    }
+    .content p {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      color: #4a4a4a;
+    }
+    .button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .button {
+      display: inline-block;
+      background-color: #0066CC;
+      color: #ffffff !important;
+      padding: 14px 40px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .button-secondary {
+      display: inline-block;
+      background-color: #00A86B;
+      color: #ffffff !important;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 15px;
+      margin-left: 10px;
+    }
+    .info-box {
+      background-color: #f0f8ff;
+      border-left: 4px solid #0066CC;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .info-box p {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      color: #004080;
+    }
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+    .info-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .footer {
+      padding: 25px 30px;
+      background-color: #f9f9f9;
+      text-align: center;
+      color: #666666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .footer p {
+      margin: 8px 0;
+      font-size: 14px;
+      color: #666666;
+    }
+    .footer a {
+      color: #0066CC;
+      text-decoration: none;
+    }
+    /* Mobile Responsive - Enhanced */
+    @media only screen and (max-width: 600px) {
+      body {
+        width: 100% !important;
+        min-width: 100% !important;
+      }
+      .email-container {
+        margin: 10px 5px !important;
+        border-radius: 6px !important;
+        width: 100% !important;
+      }
+      .header {
+        padding: 20px 15px !important;
+      }
+      .content {
+        padding: 25px 20px !important;
+      }
+      .content h2 {
+        font-size: 20px !important;
+        margin-bottom: 15px !important;
+      }
+      .content p {
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+      }
+      .button-container {
+        margin: 20px 0 !important;
+      }
+      .button {
+        display: block !important;
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        margin: 10px 0 !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+      }
+      .button-secondary {
+        display: block !important;
+        width: 100% !important;
+        margin: 10px 0 0 0 !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+      }
+      .info-box {
+        padding: 12px !important;
+        margin: 15px 0 !important;
+      }
+      .info-box p {
+        font-size: 13px !important;
+      }
+      .footer {
+        padding: 20px 15px !important;
+        font-size: 13px !important;
+      }
+      .footer p {
+        font-size: 13px !important;
+      }
+    }
+    /* Extra small devices */
+    @media only screen and (max-width: 400px) {
+      .email-container {
+        margin: 5px 0 !important;
+        border-radius: 0 !important;
+      }
+      .content {
+        padding: 20px 15px !important;
+      }
+      .content h2 {
+        font-size: 18px !important;
+      }
+      .button {
+        font-size: 15px !important;
+        padding: 12px 15px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding: 20px 0;">
+        <table class="email-container" role="presentation" width="600" cellspacing="0" cellpadding="0" border="0">
+
+          <!-- Header -->
+          <tr>
+            <td class="header">
+              <div class="logo-container">
+                <!--[if !mso]><!-->
+                <svg width="140" height="40" viewBox="0 0 140 40" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle;">
+                  <!-- Handshake icon from lucide-react -->
+                  <g transform="translate(5, 8) scale(1.4)" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <path d="m11 17 2 2a1 1 0 1 0 3-3"/>
+                    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/>
+                    <path d="m21 3 1 11h-2"/>
+                    <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/>
+                    <path d="M3 4h8"/>
+                  </g>
+                  <!-- Trudify text -->
+                  <text x="48" y="27"
+                        font-family="Arial, Helvetica, sans-serif"
+                        font-size="20"
+                        font-weight="700"
+                        fill="#ffffff"
+                        letter-spacing="-0.3">Trudify</text>
+                </svg>
+                <!--<![endif]-->
+                <!--[if mso]>
+                <div class="logo-text">Trudify</div>
+                <![endif]-->
+              </div>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td class="content">
+              <h2>{{heading}}</h2>
+              <p>{{greeting}} {{user_name}},</p>
+              <p>{{message}}</p>
+
+              <!-- Optional Info Box (conditional) -->
+              {{#if info_items}}
+              <div class="info-box">
+                <strong>{{info_title}}</strong>
+                {{#each info_items}}
+                  <p>{{this}}</p>
+                {{/each}}
+              </div>
+              {{/if}}
+
+              <!-- CTA Buttons -->
+              <div class="button-container">
+                <a href="{{primary_link}}" class="button">{{primary_button_text}}</a>
+                {{#if secondary_link}}
+                  <a href="{{secondary_link}}" class="button-secondary">{{secondary_button_text}}</a>
+                {{/if}}
+              </div>
+
+              <!-- Optional Secondary Message -->
+              {{#if secondary_message}}
+              <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
+                {{secondary_message}}
+              </p>
+              {{/if}}
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td class="footer">
+              <p>{{footer_text}}</p>
+              <p>© {{current_year}} Trudify. {{footer_rights}}</p>
+              <p><a href="mailto:support@trudify.com">support@trudify.com</a></p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+
+<!--
+BASE NOTIFICATION TEMPLATE
+Use this template for all notification types (applications, messages, tasks, etc.)
+
+REQUIRED VARIABLES:
+- {{heading}} - Notification title/heading (translated)
+- {{greeting}} - "Hi" / "Здравейте" / "Здравствуйте"
+- {{user_name}} - User's name
+- {{message}} - Main notification message (translated)
+- {{primary_link}} - Main CTA link URL
+- {{primary_button_text}} - Main CTA button text (translated)
+- {{footer_text}} - Footer disclaimer (translated)
+- {{footer_rights}} - "All rights reserved." (translated)
+- {{current_year}} - Current year
+
+OPTIONAL VARIABLES:
+- {{secondary_link}} - Secondary action link (optional)
+- {{secondary_button_text}} - Secondary button text (optional)
+- {{secondary_message}} - Additional message below buttons (optional)
+- {{info_title}} - Title for info box (optional)
+- {{info_items}} - Array of info items to display (optional)
+
+EXAMPLE USE CASES:
+1. Application Received:
+   - heading: "New Application Received!"
+   - message: "John Doe applied to your task 'Fix My Laptop'"
+   - primary_button_text: "View Application"
+   - info_items: ["Offered Price: 50 BGN", "Expected Date: Tomorrow"]
+
+2. Message Received:
+   - heading: "You Have a New Message"
+   - message: "Jane Smith sent you a message about 'House Cleaning'"
+   - primary_button_text: "View Message"
+   - secondary_button_text: "Reply Now"
+
+3. Task Completed:
+   - heading: "Task Completed Successfully!"
+   - message: "Your task 'Plumbing Repair' has been marked complete"
+   - primary_button_text: "Leave a Review"
+   - secondary_message: "Please rate your experience"
+-->

@@ -33,6 +33,7 @@ import { TIMELINE_OPTIONS } from './types'
 import { useAuth } from '@/features/auth'
 import { useRouter } from 'next/navigation'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
+import { NotificationWarningBanner } from '@/components/ui/notification-warning-banner'
 
 interface ApplicationDialogProps {
  isOpen: boolean
@@ -66,6 +67,8 @@ export default function ApplicationDialog({
  const [applicationId, setApplicationId] = useState<string | null>(null)
  const [error, setError] = useState<string | null>(null)
  const [alreadyApplied, setAlreadyApplied] = useState(false)
+ const [showNotificationWarning, setShowNotificationWarning] = useState(false)
+ const [bannerDismissed, setBannerDismissed] = useState(false)
 
  const form = useForm({
   defaultValues: {
@@ -118,6 +121,21 @@ export default function ApplicationDialog({
   },
  })
 
+ // Check notification status when user is available and modal is open
+ useEffect(() => {
+  if (user?.id && isOpen) {
+   fetch(`/api/users/${user.id}/notification-channel`)
+    .then(res => res.json())
+    .then(data => {
+     setShowNotificationWarning(data.showWarning || false)
+    })
+    .catch(error => {
+     console.error('Failed to check notification channel:', error)
+     setShowNotificationWarning(false)
+    })
+  }
+ }, [user?.id, isOpen])
+
  const handleClose = () => {
   // Prevent closing while submitting (unless on success screen)
   if (isSubmitting && !isSuccess) {
@@ -130,6 +148,7 @@ export default function ApplicationDialog({
   setApplicationId(null)
   setError(null)
   setAlreadyApplied(false)
+  setBannerDismissed(false)
   onClose()
  }
 
@@ -143,6 +162,25 @@ export default function ApplicationDialog({
   handleClose()
   const currentLang = i18n.language || 'bg'
   router.push(`/${currentLang}/tasks/applications`)
+ }
+
+ // Handle notification warning banner actions
+ const handleConnectTelegram = () => {
+  // Navigate to profile page where Telegram connection is available
+  const currentLang = i18n.language || 'bg'
+  router.push(`/${currentLang}/profile#telegram`)
+  handleClose()
+ }
+
+ const handleVerifyEmail = () => {
+  // Navigate to profile page where email verification is available
+  const currentLang = i18n.language || 'bg'
+  router.push(`/${currentLang}/profile#email`)
+  handleClose()
+ }
+
+ const handleDismissBanner = () => {
+  setBannerDismissed(true)
  }
 
  // Validation helpers
@@ -322,6 +360,20 @@ export default function ApplicationDialog({
            <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium">
             {t('application.alreadyApplied')}
            </p>
+          </motion.div>
+         )}
+
+         {/* Notification Warning Banner */}
+         {showNotificationWarning && !bannerDismissed && (
+          <motion.div
+           initial={{ opacity: 0, scale: 0.95 }}
+           animate={{ opacity: 1, scale: 1 }}
+          >
+           <NotificationWarningBanner
+            onConnectTelegram={handleConnectTelegram}
+            onVerifyEmail={handleVerifyEmail}
+            onDismiss={handleDismissBanner}
+           />
           </motion.div>
          )}
 

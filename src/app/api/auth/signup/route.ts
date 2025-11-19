@@ -130,9 +130,9 @@ export async function POST(request: Request) {
       }
 
       // Use dynamic template if template_id is set, otherwise use inline HTML
-      if (process.env.SENDGRID_TEMPLATE_ID) {
-        sendGridPayload.template_id = process.env.SENDGRID_TEMPLATE_ID
-        console.log('[Auth] Using SendGrid dynamic template:', process.env.SENDGRID_TEMPLATE_ID)
+      if (process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION) {
+        sendGridPayload.template_id = process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION
+        console.log('[Auth] Using SendGrid dynamic template:', process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION)
       } else {
         // Fallback to inline HTML if no template configured
         sendGridPayload.subject = `${emailContent.button_text} - Trudify`
@@ -165,7 +165,7 @@ export async function POST(request: Request) {
             </div>
           `,
         }]
-        console.log('[Auth] Using inline HTML template (no SENDGRID_TEMPLATE_ID set)')
+        console.log('[Auth] Using inline HTML template (no SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION set)')
       }
 
       // Send email via SendGrid API

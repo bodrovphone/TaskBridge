@@ -274,4 +274,87 @@ export const notifications = {
   'taskHints.suggestions.improveDescription': 'Add more details to your description to make it clearer',
   'taskHints.suggestions.adjustDeadline': 'Consider making the deadline more flexible',
   'taskHints.suggestions.updateTask': 'Review and update your task details to make it more appealing',
+
+  // Email Notification Templates
+  // 1. Application Received
+  'notifications.email.applicationReceived.subject': '{{customer_name}}, you have a new application!',
+  'notifications.email.applicationReceived.heading': 'New Application Received!',
+  'notifications.email.applicationReceived.message': '{{professional_name}} has applied to your task "{{task_title}}". Check their profile, reviews, and offer details.',
+  'notifications.email.applicationReceived.buttonText': 'View Application',
+  'notifications.email.applicationReceived.secondaryButtonText': 'View Profile',
+  'notifications.email.applicationReceived.infoTitle': 'Application Details:',
+  'notifications.email.applicationReceived.footerText': "You're receiving this because you posted a task on Trudify.",
+
+  // 2. Application Accepted
+  'notifications.email.applicationAccepted.subject': 'Your application was accepted!',
+  'notifications.email.applicationAccepted.heading': 'Congratulations! Application Accepted',
+  'notifications.email.applicationAccepted.message': 'Your application for "{{task_title}}" has been accepted by {{customer_name}}!',
+  'notifications.email.applicationAccepted.buttonText': 'View Task Details',
+  'notifications.email.applicationAccepted.infoTitle': 'Customer Contact Information:',
+  'notifications.email.applicationAccepted.secondaryMessage': 'Get started on the task and maintain good communication with the customer.',
+  'notifications.email.applicationAccepted.footerText': "You're receiving this because you applied to a task on Trudify.",
+
+  // 3. Application Rejected
+  'notifications.email.applicationRejected.subject': 'Application Update for "{{task_title}}"',
+  'notifications.email.applicationRejected.heading': 'Application Not Accepted',
+  'notifications.email.applicationRejected.message': 'Your application for "{{task_title}}" was not accepted this time. Don\'t worry! Keep applying to other opportunities.',
+  'notifications.email.applicationRejected.buttonText': 'Browse Other Tasks',
+  'notifications.email.applicationRejected.secondaryMessage': 'Remember: Each application is a learning experience. Review feedback and keep improving!',
+  'notifications.email.applicationRejected.footerText': "You're receiving this because you applied to a task on Trudify.",
+
+  // 4. Message Received
+  'notifications.email.messageReceived.subject': 'New message from {{sender_name}}',
+  'notifications.email.messageReceived.heading': 'You Have a New Message',
+  'notifications.email.messageReceived.message': '{{sender_name}} sent you a message about "{{task_title}}"',
+  'notifications.email.messageReceived.buttonText': 'View Message',
+  'notifications.email.messageReceived.infoTitle': 'Message Preview:',
+  'notifications.email.messageReceived.secondaryMessage': 'Respond quickly to maintain good communication and build trust.',
+  'notifications.email.messageReceived.footerText': "You're receiving this because you're involved in a task on Trudify.",
+
+  // 5. Task Completed
+  'notifications.email.taskCompleted.subject': 'Task completed: "{{task_title}}"',
+  'notifications.email.taskCompleted.heading': 'Task Completed Successfully!',
+  'notifications.email.taskCompleted.message': 'The task "{{task_title}}" has been marked as complete. Please rate your experience and help build trust in the community.',
+  'notifications.email.taskCompleted.buttonText': 'Leave a Review',
+  'notifications.email.taskCompleted.secondaryMessage': 'Your review helps other users find great professionals (or customers) and improves the Trudify community.',
+  'notifications.email.taskCompleted.footerText': "You're receiving this because you were involved in a task on Trudify.",
+
+  // 6. Payment Received
+  'notifications.email.paymentReceived.subject': 'Payment received for "{{task_title}}"',
+  'notifications.email.paymentReceived.heading': 'Payment Received!',
+  'notifications.email.paymentReceived.message': 'You received {{amount}} BGN for completing "{{task_title}}". Keep up the great work!',
+  'notifications.email.paymentReceived.buttonText': 'View Balance',
+  'notifications.email.paymentReceived.infoTitle': 'Payment Details:',
+  'notifications.email.paymentReceived.secondaryMessage': 'Earnings are available in your profile. Continue providing excellent service to earn more!',
+  'notifications.email.paymentReceived.footerText': "You're receiving this because you completed a task on Trudify.",
+
+  // 7. Welcome Email
+  'notifications.email.welcome.subject': 'Welcome to Trudify, {{user_name}}!',
+  'notifications.email.welcome.heading': 'Welcome to Trudify!',
+  'notifications.email.welcome.message': 'Congratulations! Your account has been created successfully.',
+  'notifications.email.welcome.buttonText': 'Get Started',
+  'notifications.email.welcome.infoTitle': 'What You Can Do on Trudify:',
+  'notifications.email.welcome.secondaryMessage': 'Need help? Check out our guides or contact support.',
+  'notifications.email.welcome.footerText': "You're receiving this because you created an account on Trudify.",
+
+  // 8. Removed from Task
+  'notifications.email.removedFromTask.subject': 'Task update: "{{task_title}}"',
+  'notifications.email.removedFromTask.heading': "You've Been Removed from a Task",
+  'notifications.email.removedFromTask.message': 'You have been removed from the task "{{task_title}}" by the customer. The task is now open for other professionals to apply.',
+  'notifications.email.removedFromTask.buttonText': 'Browse Other Tasks',
+  'notifications.email.removedFromTask.secondaryMessage': 'This does not affect your rating unless there are quality or safety concerns. If you have questions, please contact support.',
+  'notifications.email.removedFromTask.footerText': "You're receiving this because you were working on a task on Trudify.",
+
+  // 9. Task Invitation
+  'notifications.email.taskInvitation.subject': '{{customer_name}} invited you to a task!',
+  'notifications.email.taskInvitation.heading': "You've Been Invited to a Task!",
+  'notifications.email.taskInvitation.message': '{{customer_name}} has invited you to apply for their task in {{task_category}}.',
+  'notifications.email.taskInvitation.buttonText': 'View Task & Apply',
+  'notifications.email.taskInvitation.infoTitle': 'Task Details:',
+  'notifications.email.taskInvitation.secondaryMessage': 'You were selected based on your skills and reviews. Apply now before the task is filled!',
+  'notifications.email.taskInvitation.footerText': "You're receiving this because you were invited to apply for a task on Trudify.",
+
+  // Common Email Elements
+  'notifications.email.common.greeting': 'Hi',
+  'notifications.email.common.footerRights': 'All rights reserved.',
 };

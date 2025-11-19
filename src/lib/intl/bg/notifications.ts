@@ -275,4 +275,87 @@ export const notifications = {
   'taskHints.suggestions.improveDescription': 'Добавете повече детайли към описанието, за да го направите по-ясно',
   'taskHints.suggestions.adjustDeadline': 'Помислете за по-гъвкав краен срок',
   'taskHints.suggestions.updateTask': 'Прегледайте и актуализирайте детайлите на задачата, за да я направите по-привлекателна',
+
+  // Имейл нотификации
+  // 1. Получена кандидатура
+  'notifications.email.applicationReceived.subject': '{{customer_name}}, имате нова кандидатура!',
+  'notifications.email.applicationReceived.heading': 'Получена нова кандидатура!',
+  'notifications.email.applicationReceived.message': '{{professional_name}} кандидатства за вашата задача "{{task_title}}". Прегледайте профила, отзивите и предложението.',
+  'notifications.email.applicationReceived.buttonText': 'Преглед на кандидатурата',
+  'notifications.email.applicationReceived.secondaryButtonText': 'Преглед на профила',
+  'notifications.email.applicationReceived.infoTitle': 'Детайли за кандидатурата:',
+  'notifications.email.applicationReceived.footerText': 'Получавате този имейл, защото публикувахте задача в Trudify.',
+
+  // 2. Приета кандидатура
+  'notifications.email.applicationAccepted.subject': 'Вашата кандидатура беше приета!',
+  'notifications.email.applicationAccepted.heading': 'Поздравления! Кандидатурата е приета',
+  'notifications.email.applicationAccepted.message': 'Вашата кандидатура за "{{task_title}}" беше приета от {{customer_name}}!',
+  'notifications.email.applicationAccepted.buttonText': 'Преглед на задачата',
+  'notifications.email.applicationAccepted.infoTitle': 'Информация за клиента:',
+  'notifications.email.applicationAccepted.secondaryMessage': 'Започнете работа по задачата и поддържайте добра комуникация с клиента.',
+  'notifications.email.applicationAccepted.footerText': 'Получавате този имейл, защото кандидатствахте за задача в Trudify.',
+
+  // 3. Отхвърлена кандидатура
+  'notifications.email.applicationRejected.subject': 'Актуализация на кандидатурата за "{{task_title}}"',
+  'notifications.email.applicationRejected.heading': 'Кандидатурата не беше приета',
+  'notifications.email.applicationRejected.message': 'Вашата кандидатура за "{{task_title}}" не беше приета този път. Не се притеснявайте! Продължете да кандидатствате за други възможности.',
+  'notifications.email.applicationRejected.buttonText': 'Разгледай други задачи',
+  'notifications.email.applicationRejected.secondaryMessage': 'Не забравяйте: Всяка кандидатура е учебен опит. Прегледайте обратната връзка и продължете да се подобрявате!',
+  'notifications.email.applicationRejected.footerText': 'Получавате този имейл, защото кандидатствахте за задача в Trudify.',
+
+  // 4. Получено съобщение
+  'notifications.email.messageReceived.subject': 'Ново съобщение от {{sender_name}}',
+  'notifications.email.messageReceived.heading': 'Имате ново съобщение',
+  'notifications.email.messageReceived.message': '{{sender_name}} ви изпрати съобщение относно "{{task_title}}"',
+  'notifications.email.messageReceived.buttonText': 'Преглед на съобщението',
+  'notifications.email.messageReceived.infoTitle': 'Преглед на съобщението:',
+  'notifications.email.messageReceived.secondaryMessage': 'Отговорете бързо, за да поддържате добра комуникация и доверие.',
+  'notifications.email.messageReceived.footerText': 'Получавате този имейл, защото участвате в задача в Trudify.',
+
+  // 5. Завършена задача
+  'notifications.email.taskCompleted.subject': 'Завършена задача: "{{task_title}}"',
+  'notifications.email.taskCompleted.heading': 'Задачата е завършена успешно!',
+  'notifications.email.taskCompleted.message': 'Задачата "{{task_title}}" беше маркирана като завършена. Моля, оценете опита си и помогнете за изграждането на доверие в общността.',
+  'notifications.email.taskCompleted.buttonText': 'Оставете отзив',
+  'notifications.email.taskCompleted.secondaryMessage': 'Вашият отзив помага на другите потребители да намерят страхотни специалисти (или клиенти) и подобрява общността на Trudify.',
+  'notifications.email.taskCompleted.footerText': 'Получавате този имейл, защото участвахте в задача в Trudify.',
+
+  // 6. Получено плащане
+  'notifications.email.paymentReceived.subject': 'Получено плащане за "{{task_title}}"',
+  'notifications.email.paymentReceived.heading': 'Плащането е получено!',
+  'notifications.email.paymentReceived.message': 'Получихте {{amount}} лв. за завършването на "{{task_title}}". Продължавайте страхотната работа!',
+  'notifications.email.paymentReceived.buttonText': 'Преглед на баланса',
+  'notifications.email.paymentReceived.infoTitle': 'Детайли за плащането:',
+  'notifications.email.paymentReceived.secondaryMessage': 'Приходите са налични във вашия профил. Продължете да предоставяте отлични услуги, за да печелите повече!',
+  'notifications.email.paymentReceived.footerText': 'Получавате този имейл, защото завършихте задача в Trudify.',
+
+  // 7. Приветствен имейл
+  'notifications.email.welcome.subject': 'Добре дошли в Trudify, {{user_name}}!',
+  'notifications.email.welcome.heading': 'Добре дошли в Trudify!',
+  'notifications.email.welcome.message': 'Поздравления! Вашият акаунт беше създаден успешно.',
+  'notifications.email.welcome.buttonText': 'Започнете',
+  'notifications.email.welcome.infoTitle': 'Какво можете да правите в Trudify:',
+  'notifications.email.welcome.secondaryMessage': 'Нуждаете се от помощ? Разгледайте нашите ръководства или се свържете с поддръжката.',
+  'notifications.email.welcome.footerText': 'Получавате този имейл, защото създадохте акаунт в Trudify.',
+
+  // 8. Премахнат от задача
+  'notifications.email.removedFromTask.subject': 'Актуализация на задачата: "{{task_title}}"',
+  'notifications.email.removedFromTask.heading': 'Бяхте премахнат от задача',
+  'notifications.email.removedFromTask.message': 'Бяхте премахнат от задачата "{{task_title}}" от клиента. Задачата сега е отворена за други специалисти да кандидатстват.',
+  'notifications.email.removedFromTask.buttonText': 'Разгледай други задачи',
+  'notifications.email.removedFromTask.secondaryMessage': 'Това не засяга вашия рейтинг, освен ако няма проблеми с качеството или безопасността. Ако имате въпроси, моля свържете се с поддръжката.',
+  'notifications.email.removedFromTask.footerText': 'Получавате този имейл, защото работихте по задача в Trudify.',
+
+  // 9. Покана за задача
+  'notifications.email.taskInvitation.subject': '{{customer_name}} ви покани за задача!',
+  'notifications.email.taskInvitation.heading': 'Поканени сте за задача!',
+  'notifications.email.taskInvitation.message': '{{customer_name}} ви покани да кандидатствате за тяхната задача в {{task_category}}.',
+  'notifications.email.taskInvitation.buttonText': 'Преглед на задачата',
+  'notifications.email.taskInvitation.infoTitle': 'Детайли за задачата:',
+  'notifications.email.taskInvitation.secondaryMessage': 'Избрани сте въз основа на вашите умения и отзиви. Кандидатствайте сега, преди задачата да бъде попълнена!',
+  'notifications.email.taskInvitation.footerText': 'Получавате този имейл, защото бяхте поканени да кандидатствате за задача в Trudify.',
+
+  // Общи елементи за имейли
+  'notifications.email.common.greeting': 'Здравейте',
+  'notifications.email.common.footerRights': 'Всички права запазени.',
 };

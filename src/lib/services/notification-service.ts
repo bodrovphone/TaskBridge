@@ -2,19 +2,22 @@
  * Notification Service
  *
  * Smart notification routing system that creates notifications with automatic
- * delivery channel determination (in-app, Telegram, or both) based on notification
+ * delivery channel determination (in-app, Telegram, Email) based on notification
  * type and user preferences.
  *
  * Features:
  * - Event-driven notifications (application received, accepted, etc.)
- * - Smart routing (critical = Telegram + in-app, others = in-app only)
+ * - Smart routing (critical = external + in-app, others = in-app only)
+ * - Priority logic: Telegram → Email → None (for external notifications)
  * - User preference overrides
- * - Telegram delivery tracking
- * - Fallback to in-app if Telegram fails
+ * - Telegram & Email delivery tracking
+ * - Fallback to in-app if external delivery fails
  */
 
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { sendTelegramNotification } from '@/lib/services/telegram-notification'
+import { sendEmailNotification } from '@/lib/services/email-notification'
+import { getUserNotificationChannel } from '@/lib/services/email-notification'
 import { getNotificationContent, getTelegramMessage, getUserLocale, getViewHereText } from '@/lib/utils/notification-i18n'
 import { generateNotificationAutoLoginUrl, type NotificationChannel } from '@/lib/auth/notification-auto-login'
 
@@ -232,119 +235,182 @@ export async function createNotification(
       }
     }
 
-    // Send via Telegram if needed
-    if ((deliveryChannel === 'telegram' || deliveryChannel === 'both') && user.telegram_id) {
-      try {
-        // Get localized Telegram message for supported types
-        let telegramMessage: string
-        const telegramTypes = ['welcome_message', 'application_received', 'application_accepted', 'task_completed', 'task_cancelled', 'removed_by_customer']
+    // Send external notifications with priority: Telegram → Email → None
+    // Only send if deliveryChannel indicates external notification is needed
+    if (deliveryChannel === 'telegram' || deliveryChannel === 'both') {
+      // Check user's available notification channel
+      const { channel: availableChannel } = await getUserNotificationChannel(params.userId)
 
-        if (telegramTypes.includes(params.type)) {
-          const typeMap = {
-            'welcome_message': 'welcome',
-            'application_received': 'applicationReceived',
-            'application_accepted': 'applicationAccepted',
-            'task_completed': 'taskCompleted',
-            'task_cancelled': 'taskCancelled',
-            'removed_by_customer': 'removedByCustomer',
-          } as const
+      // Priority 1: Telegram (if user has telegram_id)
+      if (availableChannel === 'telegram' && user.telegram_id) {
+        try {
+          // Get localized Telegram message for supported types
+          let telegramMessage: string
+          const telegramTypes = ['welcome_message', 'application_received', 'application_accepted', 'task_completed', 'task_cancelled', 'removed_by_customer']
 
-          const localizedType = typeMap[params.type as keyof typeof typeMap]
-          if (localizedType) {
-            // Construct auto-login link with session token
-            let link = ''
-            if (params.actionUrl) {
-              const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
-              const viewHereText = getViewHereText(userLocale)
+          if (telegramTypes.includes(params.type)) {
+            const typeMap = {
+              'welcome_message': 'welcome',
+              'application_received': 'applicationReceived',
+              'application_accepted': 'applicationAccepted',
+              'task_completed': 'taskCompleted',
+              'task_cancelled': 'taskCancelled',
+              'removed_by_customer': 'removedByCustomer',
+            } as const
 
-              // Construct final URL with locale
-              let finalUrl = params.actionUrl
+            const localizedType = typeMap[params.type as keyof typeof typeMap]
+            if (localizedType) {
+              // Construct auto-login link with session token
+              let link = ''
+              if (params.actionUrl) {
+                const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+                const viewHereText = getViewHereText(userLocale)
 
-              // Prepend locale if not already present
-              if (!finalUrl.startsWith(`/${userLocale}/`)) {
-                finalUrl = `/${userLocale}${finalUrl}`
+                // Construct final URL with locale
+                let finalUrl = params.actionUrl
+
+                // Prepend locale if not already present
+                if (!finalUrl.startsWith(`/${userLocale}/`)) {
+                  finalUrl = `/${userLocale}${finalUrl}`
+                }
+
+                // Determine the notification channel (telegram, viber, email, etc.)
+                const channel: NotificationChannel = 'telegram' // Default for this context
+
+                // Generate auto-login URL with session token
+                try {
+                  const autoLoginUrl = await generateNotificationAutoLoginUrl(
+                    params.userId,
+                    channel,
+                    finalUrl,
+                    baseUrl
+                  )
+                  link = `${viewHereText}: ${autoLoginUrl}`
+                  console.log(`[Telegram] Auto-login URL generated for ${params.type}:`, autoLoginUrl)
+                } catch (error) {
+                  console.error('Failed to generate auto-login URL for Telegram, using standard URL:', error)
+                  // Fallback to standard URL without auto-login
+                  link = `${viewHereText}: ${baseUrl}${finalUrl}`
+                  console.log(`[Telegram] Using fallback URL for ${params.type}:`, `${baseUrl}${finalUrl}`)
+                }
               }
 
-              // Determine the notification channel (telegram, viber, email, etc.)
-              const channel: NotificationChannel = 'telegram' // Default for this context
-
-              // Generate auto-login URL with session token
-              try {
-                const autoLoginUrl = await generateNotificationAutoLoginUrl(
-                  params.userId,
-                  channel,
-                  finalUrl,
-                  baseUrl
-                )
-                link = `${viewHereText}: ${autoLoginUrl}`
-                console.log(`[Telegram] Auto-login URL generated for ${params.type}:`, autoLoginUrl)
-              } catch (error) {
-                console.error('Failed to generate auto-login URL for Telegram, using standard URL:', error)
-                // Fallback to standard URL without auto-login
-                link = `${viewHereText}: ${baseUrl}${finalUrl}`
-                console.log(`[Telegram] Using fallback URL for ${params.type}:`, `${baseUrl}${finalUrl}`)
+              // Ensure link is never empty (additional safety check)
+              if (!link && params.actionUrl) {
+                const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+                let fallbackUrl = params.actionUrl
+                if (!fallbackUrl.startsWith(`/${userLocale}/`)) {
+                  fallbackUrl = `/${userLocale}${fallbackUrl}`
+                }
+                link = `${getViewHereText(userLocale)}: ${baseUrl}${fallbackUrl}`
+                console.warn('[Telegram] Link was empty, using emergency fallback:', link)
               }
-            }
 
-            // Ensure link is never empty (additional safety check)
-            if (!link && params.actionUrl) {
-              const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
-              let fallbackUrl = params.actionUrl
-              if (!fallbackUrl.startsWith(`/${userLocale}/`)) {
-                fallbackUrl = `/${userLocale}${fallbackUrl}`
+              // Prepare template data with localized link
+              const templateData = {
+                ...params.templateData,
+                userName: user.full_name || 'there',
+                link,
               }
-              link = `${getViewHereText(userLocale)}: ${baseUrl}${fallbackUrl}`
-              console.warn('[Telegram] Link was empty, using emergency fallback:', link)
-            }
 
-            // Prepare template data with localized link
-            const templateData = {
-              ...params.templateData,
-              userName: user.full_name || 'there',
-              link,
+              telegramMessage = getTelegramMessage(userLocale, localizedType, templateData)
+            } else {
+              // Fallback for unsupported types
+              telegramMessage = `<b>${title}</b>\n\n${message}`
             }
-
-            telegramMessage = getTelegramMessage(userLocale, localizedType, templateData)
           } else {
-            // Fallback for unsupported types
+            // Fallback for non-localized types
             telegramMessage = `<b>${title}</b>\n\n${message}`
           }
-        } else {
-          // Fallback for non-localized types
-          telegramMessage = `<b>${title}</b>\n\n${message}`
-        }
 
-        const telegramResult = await sendTelegramNotification({
-          userId: params.userId,
-          message: telegramMessage,
-          notificationType: params.type,
-          parseMode: 'HTML',
-        })
-
-        // Update notification with Telegram delivery status
-        await supabase
-          .from('notifications')
-          .update({
-            telegram_sent_at: new Date().toISOString(),
-            telegram_delivery_status: telegramResult.success ? 'sent' : 'failed',
+          const telegramResult = await sendTelegramNotification({
+            userId: params.userId,
+            message: telegramMessage,
+            notificationType: params.type,
+            parseMode: 'HTML',
           })
-          .eq('id', notification.id)
 
-        if (!telegramResult.success) {
-          console.warn(`Telegram delivery failed for notification ${notification.id}:`, telegramResult.error)
+          // Update notification with Telegram delivery status
+          await supabase
+            .from('notifications')
+            .update({
+              telegram_sent_at: new Date().toISOString(),
+              telegram_delivery_status: telegramResult.success ? 'sent' : 'failed',
+            })
+            .eq('id', notification.id)
+
+          if (!telegramResult.success) {
+            console.warn(`Telegram delivery failed for notification ${notification.id}:`, telegramResult.error)
+          }
+        } catch (telegramError) {
+          console.error('Telegram delivery error:', telegramError)
+
+          // Update notification with failed status
+          await supabase
+            .from('notifications')
+            .update({
+              telegram_delivery_status: 'failed',
+            })
+            .eq('id', notification.id)
+
+          // Don't throw - notification is still saved in-app
         }
-      } catch (telegramError) {
-        console.error('Telegram delivery error:', telegramError)
+      }
+      // Priority 2: Email (if user has verified email and NO Telegram)
+      else if (availableChannel === 'email') {
+        try {
+          // Map notification types to email notification types
+          const emailTypeMap = {
+            'application_received': 'applicationReceived',
+            'application_accepted': 'applicationAccepted',
+            'application_rejected': 'applicationRejected',
+            'message_received': 'messageReceived',
+            'task_completed': 'taskCompleted',
+            'payment_received': 'paymentReceived',
+            'welcome_message': 'welcome',
+            'removed_by_customer': 'removedFromTask',
+            // Note: 'task_cancelled' doesn't have email template yet
+          } as const
 
-        // Update notification with failed status
-        await supabase
-          .from('notifications')
-          .update({
-            telegram_delivery_status: 'failed',
-          })
-          .eq('id', notification.id)
+          type EmailNotificationType = typeof emailTypeMap[keyof typeof emailTypeMap]
+          const emailType = emailTypeMap[params.type as keyof typeof emailTypeMap] as EmailNotificationType
 
-        // Don't throw - notification is still saved in-app
+          if (emailType) {
+            const emailResult = await sendEmailNotification({
+              userId: params.userId,
+              notificationType: emailType,
+              templateData: params.templateData || {},
+              locale: userLocale,
+            })
+
+            // Update notification with Email delivery status
+            await supabase
+              .from('notifications')
+              .update({
+                // Store email delivery info in metadata since we don't have email-specific columns
+                metadata: {
+                  ...params.metadata,
+                  email_sent_at: new Date().toISOString(),
+                  email_delivery_status: emailResult.success ? 'sent' : 'failed',
+                  email_message_id: emailResult.messageId,
+                },
+              })
+              .eq('id', notification.id)
+
+            if (!emailResult.success) {
+              console.warn(`Email delivery failed for notification ${notification.id}:`, emailResult.error)
+            }
+          } else {
+            console.log(`[Email] No email template for notification type: ${params.type}`)
+          }
+        } catch (emailError) {
+          console.error('Email delivery error:', emailError)
+          // Don't throw - notification is still saved in-app
+        }
+      }
+      // Priority 3: None (user has no notification channels)
+      else {
+        console.log(`[Notification] User ${params.userId} has no external notification channels (neither Telegram nor verified email)`)
       }
     }
 

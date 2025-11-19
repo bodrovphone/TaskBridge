@@ -20,6 +20,7 @@ import { PhotosSection } from '@/app/[lang]/create-task/components/photos-sectio
 import { ReviewSection } from '@/app/[lang]/create-task/components/review-section'
 import { CategoryDisplay } from '@/app/[lang]/tasks/[id]/edit/components/category-display'
 import { ValidationErrorDialog } from '@/components/tasks/validation-error-dialog'
+import { NotificationWarningBanner } from '@/components/ui/notification-warning-banner'
 
 interface TaskFormData {
   id?: string
@@ -68,6 +69,8 @@ export function TaskForm({
   const [showCategoryPicker, setShowCategoryPicker] = useState(false)
   const [showValidationDialog, setShowValidationDialog] = useState(false)
   const [validationErrors, setValidationErrors] = useState<Array<{ field: string; message: string }>>([])
+  const [showNotificationWarning, setShowNotificationWarning] = useState(false)
+  const [bannerDismissed, setBannerDismissed] = useState(false)
 
   // Refs for scrolling to sections
   const categoryRef = useRef<HTMLDivElement>(null)
@@ -96,6 +99,21 @@ export function TaskForm({
       setUrgency(initialData.urgency || 'flexible')
     }
   }, [initialData])
+
+  // Check notification status when user is available
+  useEffect(() => {
+    if (user?.id && mode === 'create') {
+      fetch(`/api/users/${user.id}/notification-channel`)
+        .then(res => res.json())
+        .then(data => {
+          setShowNotificationWarning(data.showWarning || false)
+        })
+        .catch(error => {
+          console.error('Failed to check notification channel:', error)
+          setShowNotificationWarning(false)
+        })
+    }
+  }, [user?.id, mode])
 
   const form = useForm({
     defaultValues: (mode === 'edit' || isReopening) && initialData
@@ -322,6 +340,21 @@ export function TaskForm({
     setShowCategoryPicker(true)
   }
 
+  // Handle notification warning banner actions
+  const handleConnectTelegram = () => {
+    // Navigate to profile page where Telegram connection is available
+    router.push(`/${locale}/profile#telegram`)
+  }
+
+  const handleVerifyEmail = () => {
+    // Navigate to profile page where email verification is available
+    router.push(`/${locale}/profile#email`)
+  }
+
+  const handleDismissBanner = () => {
+    setBannerDismissed(true)
+  }
+
   // Handle validation errors - scroll to first error
   const handleScrollToFirstError = () => {
     if (validationErrors.length === 0) return
@@ -443,6 +476,17 @@ export function TaskForm({
           {/* Show remaining sections only after category is selected */}
           {category && (
             <>
+              {/* Notification Warning Banner - shown only in create mode */}
+              {mode === 'create' && showNotificationWarning && !bannerDismissed && (
+                <div className="mb-8">
+                  <NotificationWarningBanner
+                    onConnectTelegram={handleConnectTelegram}
+                    onVerifyEmail={handleVerifyEmail}
+                    onDismiss={handleDismissBanner}
+                  />
+                </div>
+              )}
+
               {/* Task Details */}
               <div ref={detailsRef}>
                 <TaskDetailsSection ref={detailsSectionRef} form={form} />

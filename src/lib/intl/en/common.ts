@@ -132,4 +132,12 @@ export const common = {
   'suspension.message': 'This account has been temporarily suspended due to multiple safety reports.',
   'suspension.appeal': 'If you believe this is a mistake, you can appeal via email.',
   'suspension.contactEmail': 'Contact: support@taskbridge.com',
+
+  // Notification Warning Banner
+  'notificationWarning.title': 'Important: Set Up Notifications',
+  'notificationWarning.message': 'You won\'t receive updates about applications, messages, or task changes without a notification channel.',
+  'notificationWarning.recommendation': 'We recommend connecting Telegram for instant notifications, or verify your email as an alternative.',
+  'notificationWarning.connectTelegram': 'Connect Telegram',
+  'notificationWarning.verifyEmail': 'Verify Email',
+  'notificationWarning.dismiss': 'I Understand',
 };
