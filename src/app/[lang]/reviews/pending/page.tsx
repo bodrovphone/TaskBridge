@@ -9,21 +9,23 @@ import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import type { ReviewSubmitData } from '@/features/reviews/lib/types'
+import { useAuth } from '@/features/auth'
 
 export default function PendingReviewsPage() {
   const { t } = useTranslation()
   const { toast } = useToast()
   const queryClient = useQueryClient()
   const router = useRouter()
+  const { authenticatedFetch } = useAuth()
 
   const [showReviewDialog, setShowReviewDialog] = useState(false)
   const [currentTaskId, setCurrentTaskId] = useState<string | null>(null)
 
-  // Fetch pending reviews
+  // Fetch pending reviews using authenticated fetch
   const { data, isLoading } = useQuery({
     queryKey: ['pendingReviews'],
     queryFn: async () => {
-      const res = await fetch('/api/reviews/pending')
+      const res = await authenticatedFetch('/api/reviews/pending')
       if (!res.ok) throw new Error('Failed to fetch pending reviews')
       return res.json()
     }

@@ -1,14 +1,16 @@
-import { createClient, createAdminClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * GET /api/reviews/pending
  * Fetch all completed tasks where customer hasn't left a review yet
+ * Supports both Supabase session and notification token authentication
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    // Authenticate using either Supabase session or notification token
+    const user = await authenticateRequest(request)
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
