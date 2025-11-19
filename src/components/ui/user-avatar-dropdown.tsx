@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import {
@@ -18,7 +19,10 @@ import {
  HelpCircle,
  LogOut,
  Search,
- Send
+ Send,
+ Mail,
+ CheckCircle,
+ AlertCircle
 } from 'lucide-react'
 
 interface UserAvatarDropdownProps {
@@ -37,9 +41,47 @@ export default function UserAvatarDropdown({
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'
+ const [isResending, setIsResending] = useState(false)
+ const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+ const handleResendVerification = async () => {
+  setIsResending(true)
+  setVerificationMessage(null)
+
+  try {
+   const response = await fetch('/api/auth/resend-verification', {
+    method: 'POST',
+    headers: {
+     'Content-Type': 'application/json',
+    },
+   })
+
+   const data = await response.json()
+
+   if (!response.ok) {
+    if (response.status === 400 && data.error?.includes('already verified')) {
+     setVerificationMessage({ type: 'success', text: t('auth.emailVerification.alreadyVerified') })
+    } else if (response.status === 429) {
+     setVerificationMessage({ type: 'error', text: t('auth.emailVerification.rateLimited') })
+    } else {
+     setVerificationMessage({ type: 'error', text: data.error || t('auth.emailVerification.error') })
+    }
+   } else {
+    setVerificationMessage({ type: 'success', text: t('auth.emailVerification.success') })
+   }
+  } catch (error) {
+   console.error('Error resending verification email:', error)
+   setVerificationMessage({ type: 'error', text: t('auth.emailVerification.error') })
+  } finally {
+   setIsResending(false)
+  }
+ }
 
  const handleMenuAction = (key: string) => {
   switch (key) {
+   case 'verify-email':
+    handleResendVerification()
+    break
    case 'profile-customer':
     router.push(`/${lang}/profile/customer`)
     break
@@ -129,6 +171,30 @@ export default function UserAvatarDropdown({
       </div>
      </DropdownItem>
     </DropdownSection>
+
+    {/* Email Verification - Show only if not verified */}
+    {!profile.isEmailVerified ? (
+     <DropdownSection showDivider>
+      <DropdownItem
+       key="verify-email"
+       startContent={
+        isResending ? (
+         <div className="w-[18px] h-[18px] border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        ) : (
+         <Mail className="text-blue-500" size={18} />
+        )
+       }
+       className="text-blue-600 data-[hover=true]:text-blue-700"
+       description={verificationMessage ? (
+        <span className={verificationMessage.type === 'error' ? 'text-red-600' : 'text-green-600'}>
+         {verificationMessage.text}
+        </span>
+       ) : undefined}
+      >
+       {isResending ? t('auth.emailVerification.resending') : t('auth.emailVerification.resendButton')}
+      </DropdownItem>
+     </DropdownSection>
+    ) : null}
 
     {/* Profiles */}
     <DropdownSection showDivider>

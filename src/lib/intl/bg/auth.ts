@@ -73,4 +73,16 @@ export const auth = {
   'auth.resetPassword.passwordMismatch': 'Паролите не съвпадат',
   'auth.resetPassword.passwordTooShort': 'Паролата трябва да е поне 6 символа',
   'auth.resetPassword.error': 'Неуспешно възстановяване на паролата. Моля, опитайте отново.',
+
+  // Email verification
+  'auth.emailVerification.title': 'Потвърдете имейла си',
+  'auth.emailVerification.notVerified': 'Имейлът ви не е потвърден',
+  'auth.emailVerification.description': 'Моля, потвърдете имейла си, за да получавате известия и достъп до всички функции.',
+  'auth.emailVerification.resendButton': 'Изпрати имейл за потвърждение',
+  'auth.emailVerification.resending': 'Изпращане...',
+  'auth.emailVerification.success': 'Имейлът за потвърждение е изпратен! Проверете входящата си поща.',
+  'auth.emailVerification.alreadyVerified': 'Имейлът ви вече е потвърден!',
+  'auth.emailVerification.error': 'Неуспешно изпращане на имейл за потвърждение. Моля, опитайте отново.',
+  'auth.emailVerification.rateLimited': 'Твърде много заявки. Моля, опитайте отново по-късно.',
+  'auth.emailVerification.checkSpam': 'Не забравяйте да проверите папката си за спам.',
 };

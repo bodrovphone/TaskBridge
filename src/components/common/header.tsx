@@ -416,13 +416,8 @@ function Header() {
     {/* Sticky Bottom Section - Always visible */}
     <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-4 pb-safe">
      {/* Language Switcher */}
-     <div className="w-full px-4">
-      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-       {t('nav.language', 'Language')}
-      </p>
-      <div className="pb-3 w-full">
-       <LanguageSwitcher mode="full" />
-      </div>
+     <div className="w-full px-4 pb-3">
+      <LanguageSwitcher mode="full" />
      </div>
 
      {/* Create Task Button - Sticky */}

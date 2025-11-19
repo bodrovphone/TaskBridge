@@ -73,4 +73,16 @@ export const auth = {
   'auth.resetPassword.passwordMismatch': 'Passwords do not match',
   'auth.resetPassword.passwordTooShort': 'Password must be at least 6 characters',
   'auth.resetPassword.error': 'Failed to reset password. Please try again.',
+
+  // Email verification
+  'auth.emailVerification.title': 'Verify Your Email',
+  'auth.emailVerification.notVerified': 'Your email is not verified',
+  'auth.emailVerification.description': 'Please verify your email to receive notifications and access all features.',
+  'auth.emailVerification.resendButton': 'Send Verification Email',
+  'auth.emailVerification.resending': 'Sending...',
+  'auth.emailVerification.success': 'Verification email sent! Check your inbox.',
+  'auth.emailVerification.alreadyVerified': 'Your email is already verified!',
+  'auth.emailVerification.error': 'Failed to send verification email. Please try again.',
+  'auth.emailVerification.rateLimited': 'Too many requests. Please try again later.',
+  'auth.emailVerification.checkSpam': 'Don\'t forget to check your spam folder.',
 };
