@@ -11,9 +11,7 @@ import type { BlockType, PendingReviewTask, ReviewSubmitData } from '@/features/
 interface CanCreateResponse {
   canCreate: boolean
   blockType: BlockType
-  pendingConfirmations: PendingReviewTask[]
   pendingReviews: PendingReviewTask[]
-  gracePeriodUsed: number
   unreviewedCount: number
 }
 
@@ -171,17 +169,11 @@ export function useCreateTask() {
     // Check eligibility (review enforcement)
     if (!eligibility) return
 
-    if (!eligibility.canCreate) {
-      // User is blocked - determine which dialog to show
-      if (eligibility.blockType === 'pending_confirmation') {
-        setBlockType('pending_confirmation')
-        setBlockingTasks(eligibility.pendingConfirmations)
-        setShowEnforcementDialog(true)
-      } else if (eligibility.blockType === 'missing_reviews') {
-        setBlockType('missing_reviews')
-        setBlockingTasks(eligibility.pendingReviews)
-        setShowEnforcementDialog(true)
-      }
+    // Show enforcement dialog for both soft and hard blocks
+    if (eligibility.blockType === 'soft_block' || eligibility.blockType === 'hard_block') {
+      setBlockType(eligibility.blockType)
+      setBlockingTasks(eligibility.pendingReviews)
+      setShowEnforcementDialog(true)
       return
     }
 
@@ -229,7 +221,6 @@ export function useCreateTask() {
     isCheckingEligibility: isLoading,
     blockType,
     blockingTasks,
-    gracePeriodUsed: eligibility?.gracePeriodUsed ?? 0,
     unreviewedCount: eligibility?.unreviewedCount ?? 0,
 
     // Dialogs

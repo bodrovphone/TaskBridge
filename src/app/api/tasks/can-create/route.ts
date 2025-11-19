@@ -6,8 +6,8 @@ import { NextResponse } from 'next/server'
  * Check if user can create a new task (enforcement logic)
  *
  * Enforcement Hierarchy:
- * 1. HARD BLOCK (Priority 1): Any tasks in pending_customer_confirmation status
- * 2. SOFT BLOCK (Priority 2): 3-task grace period for missing reviews
+ * 1. SOFT BLOCK (1-2 pending reviews): Warning, dismissable
+ * 2. HARD BLOCK (3+ pending reviews): Cannot create task until reviews submitted
  */
 export async function GET() {
   try {
@@ -17,56 +17,6 @@ export async function GET() {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    // PRIORITY 1: Check for pending confirmations (HARD BLOCK)
-    const { data: pendingConfirmations } = await supabase
-      .from('tasks')
-      .select(`
-        id,
-        title,
-        completed_by_professional_at,
-        applications!inner(
-          professional_id,
-          status,
-          professional:professional_id(
-            full_name,
-            avatar_url
-          )
-        )
-      `)
-      .eq('customer_id', user.id)
-      .eq('status', 'pending_customer_confirmation')
-      .eq('applications.status', 'accepted')
-
-    if (pendingConfirmations && pendingConfirmations.length > 0) {
-      return NextResponse.json({
-        canCreate: false,
-        blockType: 'pending_confirmation',
-        pendingConfirmations: pendingConfirmations.map(task => {
-          const acceptedApp = (task.applications as any[])[0]
-          return {
-            taskId: task.id,
-            taskTitle: task.title,
-            professionalName: acceptedApp?.professional?.full_name || 'Unknown',
-            professionalId: acceptedApp?.professional_id,
-            completedAt: task.completed_by_professional_at
-          }
-        }),
-        pendingReviews: [],
-        gracePeriodUsed: 0,
-        unreviewedCount: 0
-      })
-    }
-
-    // PRIORITY 2: Check for missing reviews (SOFT BLOCK with grace period)
-    // Get user's grace period counter
-    const { data: userData } = await supabase
-      .from('users')
-      .select('tasks_created_since_last_review')
-      .eq('id', user.id)
-      .single()
-
-    const gracePeriodUsed = userData?.tasks_created_since_last_review || 0
 
     // Get unreviewed completed tasks
     const { data: unreviewedTasks } = await supabase
@@ -90,37 +40,47 @@ export async function GET() {
       .eq('applications.status', 'accepted')
       .order('completed_at', { ascending: false })
 
-    const unreviewedCount = unreviewedTasks?.length || 0
+    const pendingReviewsCount = unreviewedTasks?.length || 0
 
-    // Enforce after 3 tasks created without review
-    if (unreviewedCount > 0 && gracePeriodUsed >= 3) {
+    const pendingReviewsData = (unreviewedTasks || []).map(task => {
+      const acceptedApp = (task.applications as any[])[0]
+      return {
+        id: task.id,
+        title: task.title,
+        professionalName: acceptedApp?.professional?.full_name || 'Unknown',
+        professionalAvatar: acceptedApp?.professional?.avatar_url,
+        professionalId: acceptedApp?.professional_id,
+        completedAt: task.completed_at,
+        daysAgo: Math.floor((Date.now() - new Date(task.completed_at).getTime()) / (1000 * 60 * 60 * 24))
+      }
+    })
+
+    // HARD BLOCK: 3+ pending reviews
+    if (pendingReviewsCount >= 3) {
       return NextResponse.json({
         canCreate: false,
-        blockType: 'missing_reviews',
-        pendingConfirmations: [],
-        pendingReviews: (unreviewedTasks || []).map(task => {
-          const acceptedApp = (task.applications as any[])[0]
-          return {
-            taskId: task.id,
-            taskTitle: task.title,
-            professionalName: acceptedApp?.professional?.full_name || 'Unknown',
-            professionalId: acceptedApp?.professional_id,
-            completedAt: task.completed_at
-          }
-        }),
-        gracePeriodUsed,
-        unreviewedCount
+        blockType: 'hard_block',
+        pendingReviews: pendingReviewsData,
+        unreviewedCount: pendingReviewsCount
       })
     }
 
-    // Allow task creation
+    // SOFT BLOCK: 1-2 pending reviews (warning)
+    if (pendingReviewsCount >= 1) {
+      return NextResponse.json({
+        canCreate: true, // Still allowed but warned
+        blockType: 'soft_block',
+        pendingReviews: pendingReviewsData,
+        unreviewedCount: pendingReviewsCount
+      })
+    }
+
+    // Allow task creation - no pending reviews
     return NextResponse.json({
       canCreate: true,
       blockType: null,
-      pendingConfirmations: [],
       pendingReviews: [],
-      gracePeriodUsed,
-      unreviewedCount
+      unreviewedCount: 0
     })
   } catch (error) {
     console.error('Error checking task creation eligibility:', error)

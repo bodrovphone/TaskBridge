@@ -29,6 +29,10 @@ export const reviews = {
   'reviews.dialog.errorTitle': 'Failed to submit',
   'reviews.dialog.errorMessage': 'Please try again',
 
+  // Delay durations
+  'reviews.delay.oneDay': '1 day',
+  'reviews.delay.oneWeek': '1 week',
+
   // Pending Reviews Page
   'reviews.pending.pageTitle': 'Pending Reviews',
   'reviews.pending.pageDescription': 'Leave reviews for completed tasks to help other customers find great professionals',

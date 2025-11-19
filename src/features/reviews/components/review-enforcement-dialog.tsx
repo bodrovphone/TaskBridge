@@ -22,7 +22,6 @@ interface ReviewEnforcementDialogProps {
   blockType: BlockType
   pendingTasks: PendingReviewTask[]
   onReviewTask: (taskId: string) => void
-  onConfirmTask?: (taskId: string) => void // For hard block (pending confirmation)
   onProceedToTaskCreation?: () => void // Called after all reviews done
 }
 
@@ -32,13 +31,12 @@ export function ReviewEnforcementDialog({
   blockType,
   pendingTasks,
   onReviewTask,
-  onConfirmTask,
   onProceedToTaskCreation
 }: ReviewEnforcementDialogProps) {
   const { t } = useTranslation()
 
-  const isHardBlock = blockType === 'pending_confirmation'
-  const isSoftBlock = blockType === 'missing_reviews'
+  const isHardBlock = blockType === 'hard_block'
+  const isSoftBlock = blockType === 'soft_block'
 
   const handleStartReviews = () => {
     if (pendingTasks.length > 0) {

@@ -30,12 +30,11 @@ export interface Review {
   createdAt: Date
 }
 
-export type BlockType = 'pending_confirmation' | 'missing_reviews' | null
+export type BlockType = 'soft_block' | 'hard_block' | null
 
 export interface CanCreateTaskResponse {
   canCreate: boolean
   blockType: BlockType
   pendingTasks: PendingReviewTask[]
-  gracePeriodUsed?: number // 0-3
   unreviewedCount?: number
 }

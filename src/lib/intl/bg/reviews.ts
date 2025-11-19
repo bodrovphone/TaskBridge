@@ -29,6 +29,10 @@ export const reviews = {
   'reviews.dialog.errorTitle': 'Неуспешно изпращане',
   'reviews.dialog.errorMessage': 'Моля, опитайте отново',
 
+  // Delay durations
+  'reviews.delay.oneDay': '1 ден',
+  'reviews.delay.oneWeek': '1 седмица',
+
   // Pending Reviews Page
   'reviews.pending.pageTitle': 'Чакащи отзиви',
   'reviews.pending.pageDescription': 'Оставете отзиви за завършени задачи, за да помогнете на други клиенти да намерят добри професионалисти',

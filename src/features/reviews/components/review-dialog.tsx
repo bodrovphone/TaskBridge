@@ -67,7 +67,7 @@ export function ReviewDialog({
     return new Date(Date.now() + delay).toLocaleDateString()
   }, [])
 
-  const delayLabel = getReviewDelayLabel()
+  const delayLabel = t(getReviewDelayLabel())
 
   const handleClose = () => {
     // Reset form
@@ -291,7 +291,7 @@ export function ReviewDialog({
                           </div>
                         }
                         classNames={{
-                          input: 'text-right'
+                          input: 'text-right text-base' // 16px font size prevents iOS zoom
                         }}
                       />
                     </div>

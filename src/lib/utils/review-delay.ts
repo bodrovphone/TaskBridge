@@ -29,9 +29,9 @@ export function getReviewPublishingDelay(): number {
 }
 
 /**
- * Get human-readable delay duration
+ * Get translation key for delay duration
  *
- * @returns Human-readable string like "1 week" or "1 day"
+ * @returns Translation key like "reviews.delay.oneWeek" or "reviews.delay.oneDay"
  */
 export function getReviewDelayLabel(): string {
   const isDevelopment = process.env.NODE_ENV === 'development'
@@ -39,10 +39,10 @@ export function getReviewDelayLabel(): string {
   const isStaging = baseUrl.includes('task-bridge-chi.vercel.app')
 
   if (isDevelopment || isStaging) {
-    return '1 day'
+    return 'reviews.delay.oneDay'
   }
 
-  return '1 week'
+  return 'reviews.delay.oneWeek'
 }
 
 /**

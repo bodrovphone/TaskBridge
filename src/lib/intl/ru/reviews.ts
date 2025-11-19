@@ -29,6 +29,10 @@ export const reviews = {
   'reviews.dialog.errorTitle': 'Ошибка отправки',
   'reviews.dialog.errorMessage': 'Пожалуйста, попробуйте снова',
 
+  // Delay durations
+  'reviews.delay.oneDay': '1 день',
+  'reviews.delay.oneWeek': '1 неделя',
+
   // Pending Reviews Page
   'reviews.pending.pageTitle': 'Ожидающие отзывы',
   'reviews.pending.pageDescription': 'Оставьте отзывы о завершенных задачах, чтобы помочь другим найти хороших специалистов',
