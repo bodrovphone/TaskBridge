@@ -27,6 +27,12 @@ export const profile = {
   'profile.verification.phone': 'Phone Verified',
   'profile.verification.email': 'Email Verified',
 
+  // Email Verification
+  'profile.verifyEmailPrompt': 'Verify your email address',
+  'profile.verifyEmailMessage': 'Get important updates about your tasks and applications. A verification email was sent when you signed up.',
+  'profile.sendVerificationEmail': 'Send Verification Email',
+  'profile.sending': 'Sending...',
+
   // Profile Page
   'profile.completion': 'Profile completion',
   'profile.settings': 'Settings',

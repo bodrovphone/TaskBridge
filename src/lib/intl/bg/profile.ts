@@ -27,6 +27,12 @@ export const profile = {
   'profile.verification.phone': 'Верифициран телефон',
   'profile.verification.email': 'Верифициран имейл',
 
+  // Email Verification
+  'profile.verifyEmailPrompt': 'Потвърдете имейл адреса си',
+  'profile.verifyEmailMessage': 'Получавайте важни актуализации за задачите и кандидатурите си. Имейл за потвърждение беше изпратен при регистрацията ви.',
+  'profile.sendVerificationEmail': 'Изпрати имейл за потвърждение',
+  'profile.sending': 'Изпращане...',
+
   // Profile Page
   'profile.completion': 'Довършване на профил',
   'profile.settings': 'Настройки',

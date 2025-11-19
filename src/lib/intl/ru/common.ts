@@ -134,10 +134,12 @@ export const common = {
   'suspension.appeal': 'Если вы считаете, что это ошибка, вы можете подать апелляцию по электронной почте.',
   'suspension.contactEmail': 'Контакт: support@taskbridge.com',
 
-  // Notification Warning Banner
+  // Notification Warning (Compact Chip)
   'notificationWarning.title': 'Важно: Настройте уведомления',
   'notificationWarning.message': 'Вы не будете получать обновления о заявках, сообщениях или изменениях в задаче без канала уведомлений.',
   'notificationWarning.recommendation': 'Мы рекомендуем подключить Telegram для мгновенных уведомлений или подтвердить вашу электронную почту в качестве альтернативы.',
+  'notificationWarning.compact': 'Настройте уведомления для получения обновлений о ваших задачах',
+  'notificationWarning.setup': 'Настроить',
   'notificationWarning.connectTelegram': 'Подключить Telegram',
   'notificationWarning.verifyEmail': 'Подтвердить email',
   'notificationWarning.dismiss': 'Понятно',

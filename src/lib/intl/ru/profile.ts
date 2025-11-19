@@ -27,6 +27,12 @@ export const profile = {
   'profile.verification.phone': 'Телефон верифицирован',
   'profile.verification.email': 'Email верифицирован',
 
+  // Email Verification
+  'profile.verifyEmailPrompt': 'Подтвердите ваш email адрес',
+  'profile.verifyEmailMessage': 'Получайте важные обновления о задачах и заявках. Письмо для подтверждения было отправлено при регистрации.',
+  'profile.sendVerificationEmail': 'Отправить письмо для подтверждения',
+  'profile.sending': 'Отправка...',
+
   'language.en': 'English',
   'language.bg': 'Български',
   'language.ru': 'Русский',

@@ -29,6 +29,8 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [showTelegramDisconnectDialog, setShowTelegramDisconnectDialog] = useState(false)
   const [pendingContactChange, setPendingContactChange] = useState<PreferredContact | null>(null)
+  const [isResendingVerification, setIsResendingVerification] = useState(false)
+  const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const pathname = usePathname()
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg'
 
@@ -134,6 +136,40 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
     personalForm.setFieldValue('preferredContact', 'telegram')
   }
 
+  // Handle email verification resend
+  const handleResendVerification = async () => {
+    setIsResendingVerification(true)
+    setVerificationMessage(null)
+
+    try {
+      const response = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        if (response.status === 400 && data.error?.includes('already verified')) {
+          setVerificationMessage({ type: 'success', text: t('auth.emailVerification.alreadyVerified', 'Your email is already verified!') })
+        } else if (response.status === 429) {
+          setVerificationMessage({ type: 'error', text: t('auth.emailVerification.rateLimited', 'Too many requests. Please try again later.') })
+        } else {
+          setVerificationMessage({ type: 'error', text: data.error || t('auth.emailVerification.error', 'Failed to send verification email.') })
+        }
+      } else {
+        setVerificationMessage({ type: 'success', text: t('auth.emailVerification.success', 'Verification email sent! Please check your inbox.') })
+      }
+    } catch (error) {
+      console.error('Error resending verification email:', error)
+      setVerificationMessage({ type: 'error', text: t('auth.emailVerification.error', 'Failed to send verification email.') })
+    } finally {
+      setIsResendingVerification(false)
+    }
+  }
+
   return (
     <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
       <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-3 md:px-6 py-3 md:py-4">
@@ -145,6 +181,51 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
         </div>
       </CardHeader>
       <CardBody className="space-y-4 px-3 md:px-6 py-4 md:py-6">
+        {/* Email Verification Banner - Shown when email is not verified */}
+        {!profile.isEmailVerified && (
+          <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-400 rounded-lg shadow-sm">
+            <div className="flex items-start gap-3">
+              <Mail className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h4 className="text-sm font-bold text-amber-900 mb-1">
+                  {t('profile.verifyEmailPrompt', 'Verify your email address')}
+                </h4>
+                <p className="text-sm text-amber-800 mb-3">
+                  {t('profile.verifyEmailMessage', 'Get important updates about your tasks and applications. A verification email was sent when you signed up.')}
+                </p>
+                <Button
+                  size="sm"
+                  color="warning"
+                  variant="flat"
+                  onPress={handleResendVerification}
+                  isLoading={isResendingVerification}
+                  className="font-semibold"
+                  startContent={!isResendingVerification && <Send className="w-4 h-4" />}
+                >
+                  {isResendingVerification
+                    ? t('profile.sending', 'Sending...')
+                    : t('profile.sendVerificationEmail', 'Send Verification Email')}
+                </Button>
+
+                {/* Verification Status Message */}
+                {verificationMessage && (
+                  <div className={`mt-3 p-2 rounded-lg ${
+                    verificationMessage.type === 'success'
+                      ? 'bg-green-100 border border-green-300'
+                      : 'bg-red-100 border border-red-300'
+                  }`}>
+                    <p className={`text-sm font-medium ${
+                      verificationMessage.type === 'success' ? 'text-green-800' : 'text-red-800'
+                    }`}>
+                      {verificationMessage.text}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Error Message Display */}
         {errorMessage && (
           <div className="p-4 bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 rounded-lg shadow-sm">

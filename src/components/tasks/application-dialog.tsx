@@ -33,7 +33,7 @@ import { TIMELINE_OPTIONS } from './types'
 import { useAuth } from '@/features/auth'
 import { useRouter } from 'next/navigation'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
-import { NotificationWarningBanner } from '@/components/ui/notification-warning-banner'
+import { NotificationSetupChip } from '@/components/ui/notification-setup-chip'
 
 interface ApplicationDialogProps {
  isOpen: boolean
@@ -164,18 +164,11 @@ export default function ApplicationDialog({
   router.push(`/${currentLang}/tasks/applications`)
  }
 
- // Handle notification warning banner actions
- const handleConnectTelegram = () => {
-  // Navigate to profile page where Telegram connection is available
+ // Handle notification setup action
+ const handleSetupNotifications = () => {
+  // Navigate to profile page where notification setup is available
   const currentLang = i18n.language || 'bg'
-  router.push(`/${currentLang}/profile#telegram`)
-  handleClose()
- }
-
- const handleVerifyEmail = () => {
-  // Navigate to profile page where email verification is available
-  const currentLang = i18n.language || 'bg'
-  router.push(`/${currentLang}/profile#email`)
+  router.push(`/${currentLang}/profile`)
   handleClose()
  }
 
@@ -363,15 +356,15 @@ export default function ApplicationDialog({
           </motion.div>
          )}
 
-         {/* Notification Warning Banner */}
+         {/* Notification Setup Chip - Compact, non-intrusive */}
          {showNotificationWarning && !bannerDismissed && (
           <motion.div
-           initial={{ opacity: 0, scale: 0.95 }}
-           animate={{ opacity: 1, scale: 1 }}
+           initial={{ opacity: 0, y: -10 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.2 }}
           >
-           <NotificationWarningBanner
-            onConnectTelegram={handleConnectTelegram}
-            onVerifyEmail={handleVerifyEmail}
+           <NotificationSetupChip
+            onSetup={handleSetupNotifications}
             onDismiss={handleDismissBanner}
            />
           </motion.div>
