@@ -524,6 +524,9 @@ export default function ApplicationDialog({
              minRows={3}
              maxRows={8}
              variant="bordered"
+             classNames={{
+              input: 'text-base' // 16px font size prevents iOS zoom
+             }}
              description={
               <div className="flex items-center justify-between mt-2">
                <span

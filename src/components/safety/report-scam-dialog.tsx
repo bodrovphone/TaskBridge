@@ -164,6 +164,9 @@ export function ReportScamDialog({
                   isRequired
                   isInvalid={!!error}
                   errorMessage={error}
+                  classNames={{
+                    input: 'text-base' // 16px font size prevents iOS zoom
+                  }}
                 />
 
                 {/* Evidence Upload (Future Feature) */}

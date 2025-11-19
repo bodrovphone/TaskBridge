@@ -218,7 +218,7 @@ export function CancelTaskDialog({
                   maxRows={5}
                   classNames={{
                     label: 'text-sm font-medium text-gray-900',
-                    input: 'text-sm',
+                    input: 'text-base', // 16px font size prevents iOS zoom
                   }}
                 />
                 <p className="text-xs text-gray-600 mt-1">

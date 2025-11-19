@@ -266,7 +266,7 @@ export function ReviewDialog({
                         </div>
                       }
                       classNames={{
-                        input: 'resize-none'
+                        input: 'resize-none text-base' // 16px font size prevents iOS zoom
                       }}
                     />
                   </div>

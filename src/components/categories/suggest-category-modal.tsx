@@ -134,7 +134,7 @@ export function SuggestCategoryModal({
             maxRows={8}
             isDisabled={isSubmitting}
             classNames={{
-              input: 'resize-y',
+              input: 'resize-y text-base', // 16px font size prevents iOS zoom
             }}
           />
 

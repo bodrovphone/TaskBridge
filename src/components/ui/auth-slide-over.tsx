@@ -227,7 +227,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
            type="text"
            value={fullName}
            onChange={(e) => setFullName(e.target.value)}
-           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
            placeholder="John Doe"
           />
          </div>
@@ -246,7 +246,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
             handleLogin();
            }
           }}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
           placeholder="your@email.com"
          />
         </div>
@@ -264,7 +264,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
             handleLogin();
            }
           }}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
           placeholder="••••••••"
          />
         </div>
@@ -283,7 +283,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
              handleSignUp();
             }
            }}
-           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
            placeholder="••••••••"
           />
          </div>

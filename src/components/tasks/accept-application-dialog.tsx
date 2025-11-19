@@ -191,7 +191,7 @@ export default function AcceptApplicationDialog({
                   startContent={<MessageSquare className="w-4 h-4 text-gray-400" />}
                   classNames={{
                     label: 'font-medium',
-                    input: 'text-sm',
+                    input: 'text-base', // 16px font size prevents iOS zoom
                     description: 'text-xs'
                   }}
                 />
@@ -261,7 +261,7 @@ export default function AcceptApplicationDialog({
                           isRequired
                           classNames={{
                             label: 'text-sm font-medium',
-                            input: 'text-sm',
+                            input: 'text-base', // 16px font size prevents iOS zoom
                             description: 'text-xs'
                           }}
                         />
@@ -285,7 +285,7 @@ export default function AcceptApplicationDialog({
                       isRequired
                       classNames={{
                         label: 'text-sm font-medium',
-                        input: 'text-sm',
+                        input: 'text-base', // 16px font size prevents iOS zoom
                         description: 'text-xs'
                       }}
                     />
