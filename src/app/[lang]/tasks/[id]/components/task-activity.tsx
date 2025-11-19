@@ -23,6 +23,7 @@ import { Application } from '@/types/applications';
 import { getRelativeTime } from '@/components/tasks/mock-questions';
 import { normalizeCategoryKeys } from '@/lib/utils/categories';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/features/auth';
 
 interface TaskActivityProps {
   taskId: string;
@@ -31,6 +32,7 @@ interface TaskActivityProps {
 export default function TaskActivity({ taskId }: TaskActivityProps) {
  const { t, i18n } = useTranslation();
  const { toast } = useToast();
+ const { authenticatedFetch } = useAuth();
  const [selectedTab, setSelectedTab] = useState("applications");
  const applicationsRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +81,7 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
    setApplicationsError(null);
 
    try {
-    const response = await fetch(`/api/tasks/${taskId}/applications`);
+    const response = await authenticatedFetch(`/api/tasks/${taskId}/applications`);
 
     if (!response.ok) {
      if (response.status === 403) {
@@ -134,7 +136,7 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
   };
 
   fetchApplications();
- }, [taskId]);
+ }, [taskId, authenticatedFetch]);
 
  // @todo FEATURE: Questions feature - commented out for future implementation
  // Load questions when component mounts or taskId changes

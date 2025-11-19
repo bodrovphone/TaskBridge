@@ -1,10 +1,12 @@
 /**
  * Task Applications API
  * GET /api/tasks/[id]/applications - Get applications for a task (task owner only)
+ * Supports both Supabase session and notification token authentication
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
+import { authenticateRequest } from '@/lib/auth/api-auth';
 
 export async function GET(
   request: NextRequest,
@@ -12,19 +14,21 @@ export async function GET(
 ) {
   try {
     const { id: taskId } = await params;
-    const supabase = await createClient();
 
-    // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    // Authenticate using either Supabase session or notification token
+    const user = await authenticateRequest(request);
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
+    // Use admin client for queries
+    const adminSupabase = createAdminClient();
+
     // Get task and verify ownership
-    const { data: task, error: taskError } = await supabase
+    const { data: task, error: taskError } = await adminSupabase
       .from('tasks')
       .select('id, customer_id, title, status')
       .eq('id', taskId)
@@ -49,11 +53,8 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
-    // Use admin client to bypass RLS for fetching applications with professional details
-    const adminClient = createAdminClient();
-
     // Build query
-    let query = adminClient
+    let query = adminSupabase
       .from('applications')
       .select(`
         id,
