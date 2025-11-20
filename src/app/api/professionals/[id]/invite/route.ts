@@ -128,27 +128,16 @@ export async function POST(
     const userLocale = professionalData?.preferred_language || 'bg'
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
 
-    // Generate action URL with locale
+    // Generate action URL with locale for in-app notification
     let actionUrl = `/tasks/${task.id}`
     if (!actionUrl.startsWith(`/${userLocale}/`)) {
       actionUrl = `/${userLocale}${actionUrl}`
     }
 
-    // Generate auto-login URL for in-app notification
-    let finalActionUrl = actionUrl
-    try {
-      finalActionUrl = await generateNotificationAutoLoginUrl(
-        professionalId,
-        'telegram',
-        actionUrl,
-        baseUrl
-      )
-    } catch (error) {
-      console.error('Failed to generate auto-login URL:', error)
-      // Fall back to original URL if generation fails
-    }
+    // For in-app notifications, use standard links (users are already authenticated)
+    const finalActionUrl = `${baseUrl}${actionUrl}`
 
-    // Create notification with magic link (use admin client)
+    // Create in-app notification with standard link (use admin client)
     const { error: notificationError } = await adminClient
       .from('notifications')
       .insert({

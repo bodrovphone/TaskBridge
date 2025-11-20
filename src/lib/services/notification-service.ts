@@ -187,28 +187,20 @@ export async function createNotification(
       message = message || 'You have a new notification'
     }
 
-    // Generate auto-login URL for in-app notifications (if actionUrl provided)
+    // Prepare action URL for in-app notifications (standard links, no magic links)
+    // In-app notifications are only shown to authenticated users, so no auto-login needed
     let finalActionUrl = params.actionUrl
     if (finalActionUrl) {
-      try {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
 
-        // Prepend locale if not present
-        if (!finalActionUrl.startsWith(`/${userLocale}/`)) {
-          finalActionUrl = `/${userLocale}${finalActionUrl}`
-        }
-
-        // Generate auto-login URL for in-app notifications
-        finalActionUrl = await generateNotificationAutoLoginUrl(
-          params.userId,
-          'telegram', // Channel doesn't matter for in-app, just need a valid value
-          finalActionUrl,
-          baseUrl
-        )
-      } catch (error) {
-        console.error('Failed to generate auto-login URL:', error)
-        // Fall back to original URL if generation fails
+      // Prepend locale if not present
+      if (!finalActionUrl.startsWith(`/${userLocale}/`)) {
+        finalActionUrl = `/${userLocale}${finalActionUrl}`
       }
+
+      // For in-app notifications, use standard links (users are already authenticated)
+      // No magic link generation needed
+      finalActionUrl = `${baseUrl}${finalActionUrl}`
     }
 
     // Create notification in database
