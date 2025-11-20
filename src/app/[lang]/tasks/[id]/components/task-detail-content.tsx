@@ -192,14 +192,15 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
  const { t } = useTranslation();
  const searchParams = useSearchParams();
- const { user } = useAuth();
+ const { user, profile } = useAuth();
 
  // Get application ID from query params (for auto-opening application detail dialog)
  const applicationId = searchParams.get('application');
 
  // Client-side ownership check (important for ISR caching)
  // This ensures each user gets correct visibility regardless of cached pages
- const isOwner = user?.id === task.customer_id;
+ // Use profile.id for notification sessions (magic links), user.id for regular auth
+ const isOwner = (profile?.id || user?.id) === task.customer_id;
 
  // Get simplified published time
  const publishedTime = getPublishedTime(task.created_at || task.createdAt, t);

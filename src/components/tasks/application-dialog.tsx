@@ -102,7 +102,7 @@ export default function ApplicationDialog({
         taskId,
         proposedPrice: value.proposedPrice,
         estimatedDurationHours: timelineHoursMap[value.timeline] || null,
-        message: value.message || 'Looking forward to working on this task!',
+        message: value.message || null,
       })
     })
 

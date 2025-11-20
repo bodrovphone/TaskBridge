@@ -150,10 +150,10 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
  //  }, 500);
  // }, [taskId]);
 
- // Handle URL hash navigation (e.g., #applications)
+ // Handle URL hash navigation (e.g., #applications or #application)
  useEffect(() => {
   const hash = window.location.hash.replace('#', '');
-  if (hash === 'applications') {
+  if (hash === 'applications' || hash === 'application') {
    setSelectedTab('applications');
    // Scroll to the applications section using ref
    applicationsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
