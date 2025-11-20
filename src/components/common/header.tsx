@@ -232,8 +232,8 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile Menu */}
-   <NavbarMenu className="flex flex-col overflow-y-auto pb-4">
-    <div className="flex-1 overflow-y-auto">
+   <NavbarMenu className="flex flex-col overflow-y-auto pb-32">
+    <div className="flex-1 overflow-y-auto pb-4">
      {navigation.map((item) => {
       const Icon = item.icon
       return (
@@ -414,14 +414,14 @@ function Header() {
     </div>
 
     {/* Sticky Bottom Section - Always visible */}
-    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-4 pb-safe">
+    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-4 pb-4 safe-area-pb">
      {/* Language Switcher */}
      <div className="w-full px-4 pb-3">
       <LanguageSwitcher mode="full" />
      </div>
 
      {/* Create Task Button - Sticky */}
-     <div className="px-4 pb-2 w-full">
+     <div className="px-4 pb-3 w-full">
       <Button
        color="primary"
        variant="solid"
@@ -441,7 +441,7 @@ function Header() {
      </div>
 
      {/* Close Menu Button */}
-     <div className="px-4 pb-2 w-full">
+     <div className="px-4 pb-4 w-full">
       <Button
        variant="flat"
        size="lg"

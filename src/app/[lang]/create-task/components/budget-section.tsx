@@ -145,7 +145,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      )}
     </form.Field>
    ) : budgetType === 'range' ? (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="flex flex-col gap-4">
      <form.Field
       name="budgetMin"
       validators={{
