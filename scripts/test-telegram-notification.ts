@@ -6,7 +6,11 @@
  * This script sends a test notification to a user who has authenticated with Telegram
  */
 
-import 'dotenv/config';
+import { config } from 'dotenv';
+import { resolve } from 'path';
+
+// Load environment variables from .env.local
+config({ path: resolve(process.cwd(), '.env.local') });
 
 const USER_ID = process.argv[2];
 
@@ -19,7 +23,14 @@ if (!USER_ID) {
 async function testNotification() {
   console.log('🚀 Testing Telegram Notification...\n');
   console.log(`📋 User ID: ${USER_ID}`);
-  console.log(`🤖 Bot Token: ${process.env.TG_BOT_TOKEN?.substring(0, 20)}...`);
+  console.log(`🤖 Bot Token: ${process.env.TG_BOT_TOKEN?.substring(0, 20) || 'undefined'}...`);
+
+  if (!process.env.TG_BOT_TOKEN) {
+    console.error('❌ TG_BOT_TOKEN not found in .env.local');
+    console.error('💡 Make sure .env.local exists and contains TG_BOT_TOKEN');
+    process.exit(1);
+  }
+
   console.log('');
 
   try {
@@ -49,8 +60,17 @@ async function testNotification() {
     console.log('');
     console.log('💡 Check your Telegram app for the notification!');
 
-  } catch (error) {
-    console.error('❌ Error:', error);
+  } catch (error: any) {
+    console.error('❌ Error:', error.message);
+
+    if (error.code === 'ECONNREFUSED') {
+      console.error('');
+      console.error('💡 Connection refused - Make sure your dev server is running:');
+      console.error('   npm run dev');
+      console.error('');
+      console.error('   Then run this script again in another terminal.');
+    }
+
     process.exit(1);
   }
 }

@@ -98,7 +98,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
        {featuredTasks.map((task: any, index: number) => (
         <div
          key={task.id}
-         className="flex-shrink-0 w-80 h-[600px] hover:scale-105 transition-transform duration-300"
+         className="flex-shrink-0 w-80 h-[480px] hover:scale-105 transition-transform duration-300"
          style={{
           animationDelay: `${index * 100}ms`,
          }}
