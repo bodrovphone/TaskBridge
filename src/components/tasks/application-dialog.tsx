@@ -27,12 +27,14 @@ import {
  Zap,
  ArrowRight,
  AlertCircle,
+ X,
 } from 'lucide-react'
 import type { ApplicationFormData } from './types'
 import { TIMELINE_OPTIONS } from './types'
 import { useAuth } from '@/features/auth'
 import { useRouter } from 'next/navigation'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
+import { useIsMobile } from '@/hooks/use-is-mobile'
 import { NotificationSetupChip } from '@/components/ui/notification-setup-chip'
 
 interface ApplicationDialogProps {
@@ -62,6 +64,7 @@ export default function ApplicationDialog({
  const router = useRouter()
  const { user } = useAuth()
  const isKeyboardOpen = useKeyboardHeight()
+ const isMobile = useIsMobile() // < 640px (sm breakpoint)
  const [isSubmitting, setIsSubmitting] = useState(false)
  const [isSuccess, setIsSuccess] = useState(false)
  const [applicationId, setApplicationId] = useState<string | null>(null)
@@ -248,21 +251,40 @@ export default function ApplicationDialog({
    onClose={handleClose}
    onOpenChange={(open) => !open && handleClose()}
    isDismissable={!isSubmitting}
-   hideCloseButton={isSubmitting && !isSuccess}
-   size="2xl"
+   hideCloseButton={true}
+   size={isMobile ? "full" : "2xl"}
+   placement={isMobile ? "center" : "center"}
    scrollBehavior="inside"
    backdrop="blur"
-   placement="center"
    classNames={{
-    backdrop: 'bg-gradient-to-t from-zinc-900/80 to-zinc-900/20',
-    base: `border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-800 ${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[95vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`,
-    header: 'border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10 bg-white dark:bg-gray-900',
-    body: 'overflow-y-auto px-4 sm:px-6',
-    footer: 'border-t border-gray-200 dark:border-gray-800 sticky bottom-0 z-10 bg-white dark:bg-gray-900',
-    closeButton: 'hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 text-2xl font-bold w-12 h-12 min-w-[48px] min-h-[48px] flex items-center justify-center top-4 right-4 rounded-lg transition-colors z-50',
+    backdrop: 'bg-black/80',
+    wrapper: isMobile ? 'items-stretch' : '',
+    base: isMobile
+      ? 'h-full max-h-full w-full m-0 rounded-none border-0'
+      : `border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-800 ${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[95vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`,
+    header: 'border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-2 sm:px-6 sm:py-4',
+    body: 'overflow-y-auto overscroll-contain px-4 py-3 sm:px-6 sm:py-4',
+    footer: 'border-t border-gray-200 dark:border-gray-800 sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4',
    }}
    motionProps={{
-    variants: {
+    variants: isMobile ? {
+     enter: {
+      x: 0,
+      opacity: 1,
+      transition: {
+       duration: 0.3,
+       ease: 'easeOut',
+      },
+     },
+     exit: {
+      x: '100%',
+      opacity: 0,
+      transition: {
+       duration: 0.2,
+       ease: 'easeIn',
+      },
+     },
+    } : {
      enter: {
       y: 0,
       opacity: 1,
@@ -292,19 +314,32 @@ export default function ApplicationDialog({
        exit={{ opacity: 0, y: -20 }}
        transition={{ duration: 0.3 }}
       >
-       <ModalHeader className="flex flex-col gap-3 pt-4 px-4 pb-3 sm:pt-6 sm:px-6 sm:pb-4">
-        <div className="flex items-start gap-3">
-         <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 flex items-center justify-center">
-          <Sparkles className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-         </div>
+       <ModalHeader className="flex flex-col gap-2 sm:gap-3">
+        <div className="flex items-start gap-2 sm:gap-3">
+         {!isMobile && (
+           <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 flex items-center justify-center">
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 dark:text-primary-400" />
+           </div>
+         )}
          <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-base sm:text-2xl font-bold text-gray-900 dark:text-white">
            {t('application.title')}
           </h2>
-          <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-           {taskTitle}
-          </p>
+          {!(isMobile && isKeyboardOpen) && (
+            <p className="text-xs sm:text-sm font-normal text-gray-600 dark:text-gray-400 mt-0.5 sm:mt-1 line-clamp-2">
+             {taskTitle}
+            </p>
+          )}
          </div>
+         {/* Custom close button */}
+         <button
+          onClick={handleClose}
+          disabled={isSubmitting && !isSuccess}
+          className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+          aria-label="Close"
+         >
+          <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
+         </button>
         </div>
        </ModalHeader>
 
@@ -356,8 +391,8 @@ export default function ApplicationDialog({
           </motion.div>
          )}
 
-         {/* Notification Setup Chip - Compact, non-intrusive */}
-         {showNotificationWarning && !bannerDismissed && (
+         {/* Notification Setup Chip - hide on mobile when keyboard is open */}
+         {showNotificationWarning && !bannerDismissed && !(isMobile && isKeyboardOpen) && (
           <motion.div
            initial={{ opacity: 0, y: -10 }}
            animate={{ opacity: 1, y: 0 }}
@@ -412,10 +447,10 @@ export default function ApplicationDialog({
              }}
              variant="bordered"
             />
-            {taskBudget && (taskBudget.min !== undefined || taskBudget.max !== undefined) && (
+            {taskBudget && (taskBudget.min !== undefined || taskBudget.max !== undefined) && !(isMobile && isKeyboardOpen) && (
              <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3 flex items-start gap-2 mt-2">
               <Wallet className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-blue-800 dark:text-blue-200 font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-200 font-medium leading-relaxed">
                {t('application.tipClientBudget', { min: taskBudget.min ?? 0, max: taskBudget.max ?? 0 })}
               </p>
              </div>
@@ -514,13 +549,13 @@ export default function ApplicationDialog({
              onBlur={field.handleBlur}
              isInvalid={field.state.meta.errors.length > 0}
              errorMessage={field.state.meta.errors.length > 0 ? String(field.state.meta.errors[0]) : undefined}
-             minRows={3}
-             maxRows={8}
+             minRows={isKeyboardOpen ? 2 : 3}
+             maxRows={isKeyboardOpen ? 3 : 8}
              variant="bordered"
              classNames={{
               input: 'text-base' // 16px font size prevents iOS zoom
              }}
-             description={
+             description={!(isMobile && isKeyboardOpen) ? (
               <div className="flex items-center justify-between mt-2">
                <span
                 className={`text-xs font-medium transition-colors ${
@@ -549,28 +584,30 @@ export default function ApplicationDialog({
                 </div>
                )}
               </div>
-             }
+             ) : undefined}
             />
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-start gap-2">
-             <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-             <p className="text-xs text-blue-700 dark:text-blue-300">
-              {t('application.messageInfo')}
-             </p>
-            </div>
+            {!(isMobile && isKeyboardOpen) && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-start gap-2">
+               <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+               <p className="text-xs text-blue-700 dark:text-blue-300">
+                {t('application.messageInfo')}
+               </p>
+              </div>
+            )}
            </div>
           )}
          </form.Field>
         </form>
        </ModalBody>
 
-       <ModalFooter className="flex flex-col-reverse sm:flex-row gap-3 px-4 py-4 sm:px-6 sm:py-5">
+       <ModalFooter className="flex-row gap-2">
         <Button
          color="default"
          variant="flat"
          onPress={handleClose}
          isDisabled={isSubmitting}
-         size="lg"
-         className="font-semibold w-full sm:w-auto py-6"
+         size={isMobile ? "md" : "lg"}
+         className="font-semibold flex-1 sm:flex-initial sm:w-auto"
         >
          {t('application.cancel')}
         </Button>
@@ -580,9 +617,9 @@ export default function ApplicationDialog({
          form="application-form"
          isLoading={isSubmitting}
          isDisabled={alreadyApplied || !isFormValid}
-         size="lg"
+         size={isMobile ? "md" : "lg"}
          variant="bordered"
-         className="font-semibold transition-colors duration-300 w-full sm:w-auto py-6"
+         className="font-semibold transition-colors duration-300 flex-1 sm:flex-initial sm:w-auto"
          endContent={
           !isSubmitting && <ArrowRight className="w-4 h-4" />
          }
@@ -681,13 +718,13 @@ export default function ApplicationDialog({
         </div>
        </ModalBody>
 
-       <ModalFooter className="flex-col sm:flex-row gap-3 px-4 py-4 sm:px-6 sm:py-6">
+       <ModalFooter className="flex-row gap-2">
         <Button
          color="default"
          variant="bordered"
          onPress={handleViewApplication}
-         className="w-full sm:w-auto font-semibold"
-         size="lg"
+         className="flex-1 sm:flex-initial sm:w-auto font-semibold"
+         size={isMobile ? "md" : "lg"}
         >
          {t('application.viewApplication')}
         </Button>
@@ -695,8 +732,8 @@ export default function ApplicationDialog({
          color="primary"
          variant="solid"
          onPress={handleBrowseOther}
-         className="w-full sm:w-auto font-semibold"
-         size="lg"
+         className="flex-1 sm:flex-initial sm:w-auto font-semibold"
+         size={isMobile ? "md" : "lg"}
          endContent={<ArrowRight className="w-4 h-4" />}
         >
          {t('application.browseOther')}
