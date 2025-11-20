@@ -140,9 +140,10 @@ async function fetchWorkTasks(
  */
 async function markTaskComplete(
   taskId: string,
-  data: { completionNotes?: string; completionPhotos?: string[] }
+  data: { completionNotes?: string; completionPhotos?: string[] },
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
 ): Promise<void> {
-  const response = await fetch(`/api/tasks/${taskId}/mark-complete`, {
+  const response = await authenticatedFetch(`/api/tasks/${taskId}/mark-complete`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -161,9 +162,10 @@ async function markTaskComplete(
 async function withdrawFromTask(
   taskId: string,
   reason: string,
-  description?: string
+  description: string | undefined,
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
 ): Promise<void> {
-  const response = await fetch(`/api/tasks/${taskId}/withdraw`, {
+  const response = await authenticatedFetch(`/api/tasks/${taskId}/withdraw`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -203,7 +205,7 @@ export function useWorkTasks() {
     }: {
       taskId: string;
       data: { completionNotes?: string; completionPhotos?: string[] };
-    }) => markTaskComplete(taskId, data),
+    }) => markTaskComplete(taskId, data, authenticatedFetch),
     onSuccess: () => {
       // Invalidate and refetch work tasks
       queryClient.invalidateQueries({ queryKey: WORK_TASKS_QUERY_KEY });
@@ -220,7 +222,7 @@ export function useWorkTasks() {
       taskId: string;
       reason: string;
       description?: string;
-    }) => withdrawFromTask(taskId, reason, description),
+    }) => withdrawFromTask(taskId, reason, description, authenticatedFetch),
     onSuccess: () => {
       // Invalidate and refetch work tasks
       queryClient.invalidateQueries({ queryKey: WORK_TASKS_QUERY_KEY });

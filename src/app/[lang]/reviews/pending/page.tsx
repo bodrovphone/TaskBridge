@@ -36,7 +36,7 @@ export default function PendingReviewsPage() {
   // Submit review mutation
   const submitReviewMutation = useMutation({
     mutationFn: async ({ taskId, data }: { taskId: string; data: ReviewSubmitData }) => {
-      const res = await fetch(`/api/tasks/${taskId}/reviews`, {
+      const res = await authenticatedFetch(`/api/tasks/${taskId}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

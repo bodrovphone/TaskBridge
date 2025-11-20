@@ -19,6 +19,7 @@ import { POSTED_TASKS_QUERY_KEY } from '@/hooks/use-posted-tasks'
 import DefaultTaskImage from '@/components/ui/default-task-image'
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category'
 import { getCityLabelBySlug } from '@/features/cities'
+import { useAuth } from '@/features/auth'
 
 interface PostedTaskCardProps {
   id: string
@@ -68,6 +69,7 @@ function PostedTaskCard({
   const router = useRouter()
   const queryClient = useQueryClient()
   const { toast } = useToast()
+  const { authenticatedFetch } = useAuth()
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
@@ -157,7 +159,7 @@ function PostedTaskCard({
   const handleConfirmComplete = async (data?: ConfirmationData) => {
     setIsConfirmingCompletion(true)
     try {
-      const response = await fetch(`/api/tasks/${id}/mark-complete`, {
+      const response = await authenticatedFetch(`/api/tasks/${id}/mark-complete`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -197,7 +199,7 @@ function PostedTaskCard({
   const handleRejectComplete = async (reason: string, description?: string) => {
     setIsConfirmingCompletion(true)
     try {
-      const response = await fetch(`/api/tasks/${id}/confirm-completion`, {
+      const response = await authenticatedFetch(`/api/tasks/${id}/confirm-completion`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -235,7 +237,7 @@ function PostedTaskCard({
   const handleCancelTask = async () => {
     setIsCancellingTask(true)
     try {
-      const response = await fetch(`/api/tasks/${id}/cancel`, {
+      const response = await authenticatedFetch(`/api/tasks/${id}/cancel`, {
         method: 'DELETE',
         credentials: 'include'
       })
@@ -275,7 +277,7 @@ function PostedTaskCard({
     setIsSubmittingReview(true)
     try {
       // Call the real API endpoint
-      const response = await fetch(`/api/tasks/${id}/reviews`, {
+      const response = await authenticatedFetch(`/api/tasks/${id}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -311,7 +313,7 @@ function PostedTaskCard({
   const handleRemoveProfessional = async (reason: string, description?: string) => {
     setIsRemovingProfessional(true)
     try {
-      const response = await fetch(`/api/tasks/${id}/remove-professional`, {
+      const response = await authenticatedFetch(`/api/tasks/${id}/remove-professional`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason, description })
