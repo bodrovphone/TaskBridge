@@ -21,8 +21,8 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   const router = useRouter()
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('pending')
 
-  // Use TanStack Query hook for applications
-  const { applications, isLoading, error, withdraw, isWithdrawing } = useApplications(selectedStatus, t)
+  // Use TanStack Query hook for applications - fetch ALL applications
+  const { applications, isLoading, error, withdraw, isWithdrawing } = useApplications('all', t)
   const [withdrawDialog, setWithdrawDialog] = useState<{
     isOpen: boolean
     applicationId: string | null
@@ -38,7 +38,10 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   const [selectedDetailApplication, setSelectedDetailApplication] = useState<MyApplicationType | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
-  const filteredApplications = applications
+  // Filter applications on frontend based on selected tab
+  const filteredApplications = selectedStatus === 'all'
+    ? applications
+    : applications.filter(app => app.status === selectedStatus)
 
   const getStatusColor = (status: MyApplication['status']) => {
     switch (status) {
@@ -348,13 +351,14 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   </div>
 
                   {/* Actions */}
-                  <div className="flex justify-between items-center gap-2 pt-4 border-t border-gray-200">
-                    <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 pt-4 border-t border-gray-200">
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                       <Button
                         size="sm"
                         variant="bordered"
                         color="primary"
                         onPress={() => handleViewDetails(application)}
+                        className="w-full sm:w-auto"
                       >
                         {t('myApplications.viewDetails', 'View Details')}
                       </Button>
@@ -363,6 +367,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                         variant="bordered"
                         color="success"
                         onPress={() => router.push(`/${lang}/tasks/${application.taskId}`)}
+                        className="w-full sm:w-auto"
                       >
                         {t('myApplications.viewTask')}
                       </Button>
@@ -374,6 +379,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                         color="danger"
                         startContent={<X className="w-4 h-4" />}
                         onPress={() => handleWithdrawApplication(application.id, application.taskTitle)}
+                        className="w-full sm:w-auto"
                       >
                         {t('myApplications.withdraw')}
                       </Button>

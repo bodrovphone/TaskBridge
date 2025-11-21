@@ -27,6 +27,10 @@ export default function ApplicationCard({
         return 'success'
       case 'rejected':
         return 'default'
+      case 'withdrawn':
+        return 'default'
+      case 'removed_by_customer':
+        return 'danger'
       case 'pending':
       default:
         return 'warning'
@@ -39,6 +43,10 @@ export default function ApplicationCard({
         return t('applications.filterAccepted', 'Accepted')
       case 'rejected':
         return t('applications.filterRejected', 'Rejected')
+      case 'withdrawn':
+        return t('applications.filterWithdrawn', 'Withdrawn')
+      case 'removed_by_customer':
+        return t('applications.removedByCustomer', 'Removed by Customer')
       case 'pending':
       default:
         return t('applications.filterPending', 'Pending')

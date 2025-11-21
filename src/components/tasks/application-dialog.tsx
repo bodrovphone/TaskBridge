@@ -718,12 +718,12 @@ export default function ApplicationDialog({
         </div>
        </ModalBody>
 
-       <ModalFooter className="flex-row gap-2">
+       <ModalFooter className="flex-col sm:flex-row gap-2">
         <Button
          color="default"
          variant="bordered"
          onPress={handleViewApplication}
-         className="flex-1 sm:flex-initial sm:w-auto font-semibold"
+         className="w-full sm:w-auto sm:flex-1 font-semibold"
          size={isMobile ? "md" : "lg"}
         >
          {t('application.viewApplication')}
@@ -732,7 +732,7 @@ export default function ApplicationDialog({
          color="primary"
          variant="solid"
          onPress={handleBrowseOther}
-         className="flex-1 sm:flex-initial sm:w-auto font-semibold"
+         className="w-full sm:w-auto sm:flex-1 font-semibold"
          size={isMobile ? "md" : "lg"}
          endContent={<ArrowRight className="w-4 h-4" />}
         >

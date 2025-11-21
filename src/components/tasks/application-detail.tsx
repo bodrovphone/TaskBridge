@@ -233,7 +233,12 @@ export default function ApplicationDetail({
               {/* Status Badge */}
               <div className="mt-6">
                 <Chip
-                  color={status === 'accepted' ? 'success' : status === 'rejected' ? 'default' : 'warning'}
+                  color={
+                    status === 'accepted' ? 'success' :
+                    status === 'rejected' || status === 'withdrawn' ? 'default' :
+                    status === 'removed_by_customer' ? 'danger' :
+                    'warning'
+                  }
                   variant="flat"
                   size="lg"
                 >
