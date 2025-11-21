@@ -146,6 +146,7 @@ export const professionals = {
   'professionalDetail.stats.experience': 'Опыт',
   'professionalDetail.stats.responseTime': 'Ответ',
   'professionalDetail.defaultBio': 'Профессиональный специалист с опытом работы в сфере.',
+  'professionalDetail.actions.suggestMyTask': 'Предложить мою задачу',
   'professionalDetail.actions.inviteToApply': 'Предложить задачу',
   'professionalDetail.actions.contact': 'Связаться',
   'professionalDetail.actions.share': 'Поделиться',

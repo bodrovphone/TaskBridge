@@ -30,8 +30,9 @@ import {
 function Header() {
  const pathname = usePathname()
  const { t } = useTranslation()
- const { user, profile, signOut } = useAuth()
- const isAuthenticated = !!user && !!profile
+ const { user, profile, signOut, notificationToken } = useAuth()
+ // User is authenticated if they have a profile (either via Supabase auth OR notification token)
+ const isAuthenticated = !!profile && (!!user || !!notificationToken)
  const [isMenuOpen, setIsMenuOpen] = useState(false)
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
  const [authAction, setAuthAction] = useState<'apply' | 'question' | 'create-task' | 'join-professional' | null>(null)
