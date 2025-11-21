@@ -5,21 +5,23 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request)
 
-    // Get authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    // Use admin client to bypass RLS when using notification token auth
+    const supabase = createAdminClient()
 
     // Delete all notifications for this user
     const { error } = await supabase

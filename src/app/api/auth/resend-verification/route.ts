@@ -1,7 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { generateEmailVerificationToken } from '@/lib/auth/email-verification'
 import { getEmailVerificationContent, type SupportedLocale } from '@/lib/email/verification-templates'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 // Simple in-memory rate limiting (for MVP - use Redis in production)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
@@ -30,18 +31,17 @@ function checkRateLimit(email: string): { allowed: boolean; retryAfter?: number 
   return { allowed: true }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request)
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized. Please sign in first.' }, { status: 401 })
     }
+
+    // Use admin client to bypass RLS when using notification token auth
+    const supabase = createAdminClient()
 
     // Check if email is already verified in our users table and get user's preferred language
     const { data: userData, error: userError } = await supabase

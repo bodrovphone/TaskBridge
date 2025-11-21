@@ -4,8 +4,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import { createNotification } from '@/lib/services/notification-service';
+import { authenticateRequest } from '@/lib/auth/api-auth';
 
 interface ContactInfo {
   method: 'phone' | 'email' | 'custom';
@@ -23,18 +24,16 @@ export async function PATCH(
     const body = await request.json();
     const { contactInfo } = body as { contactInfo?: ContactInfo };
 
-    const supabase = await createClient();
-
-    // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request);
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    // Use admin client for database operations
+    // Use admin client to bypass RLS when using notification token auth
     const adminClient = createAdminClient();
 
     // Get application with task details

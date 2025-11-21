@@ -4,7 +4,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
+import { authenticateRequest } from '@/lib/auth/api-auth';
 
 export async function PATCH(
   request: NextRequest,
@@ -12,11 +13,10 @@ export async function PATCH(
 ) {
   try {
     const { id: applicationId } = await params;
-    const supabase = await createClient();
 
-    // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request);
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

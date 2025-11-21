@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import { TaskService } from '@/server/tasks/task.service'
 import { isAppError } from '@/server/shared/errors'
 import type { UpdateTaskInput } from '@/server/tasks/task.types'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * GET /api/tasks/[id]
@@ -78,14 +79,10 @@ export async function PATCH(
     // 0. Await params (Next.js 15 requirement)
     const { id } = await params
 
-    // 1. Verify authentication
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // 1. Authenticate request - supports both Supabase session and notification tokens
+    const authUser = await authenticateRequest(request)
 
-    if (authError || !authUser) {
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }

@@ -4,9 +4,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 import { UpdateUserProfileDto } from '@/server/domain/user/user.types'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * GET /api/profile
@@ -14,14 +14,10 @@ import { UpdateUserProfileDto } from '@/server/domain/user/user.types'
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Verify authentication
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const authUser = await authenticateRequest(request)
 
-    if (authError || !authUser) {
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -57,14 +53,10 @@ export async function GET(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    // 1. Verify authentication
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const authUser = await authenticateRequest(request)
 
-    if (authError || !authUser) {
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

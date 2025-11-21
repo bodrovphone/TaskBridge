@@ -1,5 +1,6 @@
-import { createClient, createAdminClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * GET /api/tasks/can-create
@@ -9,17 +10,17 @@ import { NextResponse } from 'next/server'
  * 1. SOFT BLOCK (1-2 pending reviews): Warning, dismissable
  * 2. HARD BLOCK (3+ pending reviews): Cannot create task until reviews submitted
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request)
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Use admin client for reading other users' data (bypass RLS)
-    const supabaseAdmin = createAdminClient()
+    // Use admin client to bypass RLS when using notification token auth
+    const supabase = createAdminClient()
 
     // Get count of unreviewed completed tasks
     const { count: pendingReviewsCount, error: tasksError } = await supabase

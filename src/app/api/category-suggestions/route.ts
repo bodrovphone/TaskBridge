@@ -4,7 +4,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
+import { authenticateRequest } from '@/lib/auth/api-auth';
 
 /**
  * POST - Submit new category suggestion
@@ -16,11 +17,9 @@ import { createClient } from '@/lib/supabase/server';
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
-    // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request);
+    if (!user) {
       return NextResponse.json(
         {
           error: 'Authentication required to submit suggestions',
@@ -29,6 +28,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
+
+    // Use admin client to bypass RLS when using notification token auth
+    const supabase = createAdminClient();
 
     const body = await request.json();
     const { suggestion } = body;

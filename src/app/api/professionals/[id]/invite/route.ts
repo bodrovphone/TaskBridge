@@ -1,8 +1,9 @@
-import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { sendTemplatedNotification } from '@/lib/services/telegram-notification'
 import { generateNotificationAutoLoginUrl } from '@/lib/auth/notification-auto-login'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getCategoryLabelBySlug } from '@/features/categories'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 import i18next from 'i18next'
 import { en } from '@/lib/intl/en'
 import { bg } from '@/lib/intl/bg'
@@ -21,28 +22,22 @@ i18nInstance.init({
 })
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Use regular client for auth
-    const supabase = await createClient()
-
-    // Use admin client for data access (bypass RLS)
-    const adminClient = createAdminClient()
-
     const { id: professionalId } = await params
     const { taskId } = await request.json()
 
-    // Get current user (customer)
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request)
 
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    // Use admin client to bypass RLS when using notification token auth
+    const adminClient = createAdminClient()
 
     // Get task details (use admin client)
     const { data: task, error: taskError } = await adminClient

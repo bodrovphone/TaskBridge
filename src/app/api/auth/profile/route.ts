@@ -5,9 +5,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { AuthService } from '@/server/application/auth/auth.service'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * POST /api/auth/profile
@@ -25,14 +25,10 @@ import { UserRepository } from '@/server/infrastructure/supabase/user.repository
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Verify authentication
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const authUser = await authenticateRequest(request)
 
-    if (authError || !authUser) {
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -117,14 +113,10 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Verify authentication
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const authUser = await authenticateRequest(request)
 
-    if (authError || !authUser) {
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

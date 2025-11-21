@@ -1,23 +1,28 @@
-import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { calculatePublishedAt } from '@/lib/utils/review-delay'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 /**
  * POST /api/tasks/[id]/reviews
  * Submit a customer review for a completed task
  */
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id: taskId } = await params
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request)
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    // Use admin client to bypass RLS when using notification token auth
+    const supabase = createAdminClient()
 
     const body = await request.json()
     const {

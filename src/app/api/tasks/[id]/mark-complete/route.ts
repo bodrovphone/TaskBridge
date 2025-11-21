@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/services/notification-service'
+import { authenticateRequest } from '@/lib/auth/api-auth'
 
 interface RouteContext {
   params: Promise<{
@@ -27,19 +27,18 @@ export async function PATCH(
     const body = await request.json()
     const { completionNotes, completionPhotos } = body
 
-    // Get authenticated user
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    // Authenticate request - supports both Supabase session and notification tokens
+    const user = await authenticateRequest(request)
 
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
 
-    // Use admin client for database operations
-    const adminClient = await createAdminClient()
+    // Use admin client to bypass RLS when using notification token auth
+    const adminClient = createAdminClient()
 
     // Fetch task details
     const { data: task, error: taskError } = await adminClient
