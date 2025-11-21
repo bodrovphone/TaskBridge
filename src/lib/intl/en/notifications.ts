@@ -188,7 +188,7 @@ export const notifications = {
   'postedTasks.empty.title': 'Got an idea? Let\'s make it happen! 💡',
   'postedTasks.empty.description': 'Your task board is empty and ready for action. From home repairs to creative projects, professionals are waiting to help.',
   'postedTasks.empty.subtext': 'Post your first task in under 2 minutes. It\'s free, simple, and you\'ll start receiving applications right away!',
-  'postedTasks.empty.createButton': 'Create Your First Task',
+  'postedTasks.empty.createButton': 'Create Task',
   'postedTasks.empty.hint': '✨ Tip: The more details you provide, the better applications you\'ll receive',
   'postedTasks.firstApplication.title': 'Great news! You have your first application',
   'postedTasks.firstApplication.message': 'Check the application details and respond to the professional',
