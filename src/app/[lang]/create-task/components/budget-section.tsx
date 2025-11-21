@@ -54,50 +54,52 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
    {/* Budget Type Selection */}
    <form.Field name="budgetType">
     {(field: any) => (
-     <RadioGroup
-      value={field.state.value || 'unclear'}
-      onValueChange={(value: any) => {
-       field.handleChange(value as 'fixed' | 'range' | 'unclear')
-       handleBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
-      }}
-      classNames={{
-       wrapper: 'flex flex-col gap-3'
-      }}
-     >
-      <Radio
-       value="fixed"
+     <div className="grid grid-cols-1 gap-3">
+      <RadioGroup
+       value={field.state.value || 'unclear'}
+       onValueChange={(value: any) => {
+        field.handleChange(value as 'fixed' | 'range' | 'unclear')
+        handleBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
+       }}
        classNames={{
-        base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-        label: 'text-gray-900 font-medium',
-        wrapper: 'group-data-[selected=true]:border-orange-600',
-        control: 'bg-orange-600'
+        wrapper: 'flex flex-col gap-3'
        }}
       >
-       {t('createTask.budget.typeFixed', 'Fixed Price')}
-      </Radio>
-      <Radio
-       value="range"
-       classNames={{
-        base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-        label: 'text-gray-900 font-medium',
-        wrapper: 'group-data-[selected=true]:border-orange-600',
-        control: 'bg-orange-600'
-       }}
-      >
-       {t('createTask.budget.typeRange', 'Price Range')}
-      </Radio>
-      <Radio
-       value="unclear"
-       classNames={{
-        base: 'inline-flex m-0 bg-white hover:bg-gray-50 items-center justify-between flex-row-reverse w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-        label: 'text-gray-900 font-medium',
-        wrapper: 'group-data-[selected=true]:border-orange-600',
-        control: 'bg-orange-600'
-       }}
-      >
-       {t('createTask.budget.typeUnclear', "I'm not sure about the budget")}
-      </Radio>
-     </RadioGroup>
+       <Radio
+        value="fixed"
+        classNames={{
+         base: 'flex m-0 bg-white hover:bg-gray-50 items-center flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
+         label: 'text-gray-900 font-medium w-full',
+         wrapper: 'group-data-[selected=true]:border-orange-600',
+         control: 'bg-orange-600 flex-shrink-0'
+        }}
+       >
+        {t('createTask.budget.typeFixed', 'Fixed Price')}
+       </Radio>
+       <Radio
+        value="range"
+        classNames={{
+         base: 'flex m-0 bg-white hover:bg-gray-50 items-center flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
+         label: 'text-gray-900 font-medium w-full',
+         wrapper: 'group-data-[selected=true]:border-orange-600',
+         control: 'bg-orange-600 flex-shrink-0'
+        }}
+       >
+        {t('createTask.budget.typeRange', 'Price Range')}
+       </Radio>
+       <Radio
+        value="unclear"
+        classNames={{
+         base: 'flex m-0 bg-white hover:bg-gray-50 items-center flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
+         label: 'text-gray-900 font-medium w-full',
+         wrapper: 'group-data-[selected=true]:border-orange-600',
+         control: 'bg-orange-600 flex-shrink-0'
+        }}
+       >
+        {t('createTask.budget.typeUnclear', "I'm not sure about the budget")}
+       </Radio>
+      </RadioGroup>
+     </div>
     )}
    </form.Field>
 
