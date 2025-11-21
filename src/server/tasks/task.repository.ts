@@ -89,7 +89,7 @@ export class TaskRepository {
         .from('tasks')
         .select(`
           *,
-          applications(count)
+          applications!applications_task_id_fkey(count)
         `)
         .eq('customer_id', customerId)
         .order('created_at', { ascending: false })
@@ -316,7 +316,7 @@ export class TaskRepository {
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
       const supabase = createAdminClient()
 
-      // Start query builder with count, applications (pending only), and professional details
+      // Start query builder with count, all applications (not just pending), and professional details
       let query = supabase
         .from('tasks')
         .select(`
@@ -324,7 +324,6 @@ export class TaskRepository {
           applications!applications_task_id_fkey(count),
           professional:users!selected_professional_id(id, full_name, avatar_url)
         `, { count: 'exact' })
-        .eq('applications.status', 'pending')
 
       // Apply filters
       if (options.filters.customerId) {
