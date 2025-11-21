@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -9,9 +8,11 @@ import { useAuth } from '@/features/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotificationBell() {
- const { authenticatedFetch } = useAuth();
+ const { authenticatedFetch, user } = useAuth();
  const { toggleOpen } = useNotificationStore();
- const { notifications } = useNotificationsQuery(authenticatedFetch);
+
+ // Only fetch notifications if user is authenticated
+ const { notifications } = useNotificationsQuery(authenticatedFetch, !!user);
 
  // Total notification count (no read/unread state - all visible until deleted)
  const notificationCount = notifications.length;

@@ -31,13 +31,14 @@ export default function NotificationCenter() {
  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
  // Auth state with authenticated fetch wrapper
- const { authenticatedFetch } = useAuth();
+ const { authenticatedFetch, user } = useAuth();
 
  // UI state from Zustand (persisted in localStorage)
  const { isOpen, setOpen } = useNotificationStore();
 
  // Data from TanStack Query (10-minute stale time, optimized fetching)
- const { notifications, isLoading, error, deleteAll } = useNotificationsQuery(authenticatedFetch);
+ // Only fetch notifications if user is authenticated
+ const { notifications, isLoading, error, deleteAll } = useNotificationsQuery(authenticatedFetch, !!user);
 
  // Handle query errors gracefully
  const hasError = !!error;

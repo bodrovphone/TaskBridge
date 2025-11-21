@@ -65,9 +65,12 @@ async function deleteAllNotifications(
 /**
  * Custom hook for notifications with TanStack Query
  * Fetches notifications with 10-minute stale time to reduce API calls
+ * @param authenticatedFetch - Function to make authenticated API requests
+ * @param enabled - Whether to enable the query (should be true only when user is authenticated)
  */
 export function useNotificationsQuery(
-  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>,
+  enabled: boolean = true
 ) {
   const queryClient = useQueryClient();
 
@@ -75,6 +78,7 @@ export function useNotificationsQuery(
   const notificationsQuery = useQuery({
     queryKey: NOTIFICATIONS_QUERY_KEY,
     queryFn: () => fetchNotifications(authenticatedFetch),
+    enabled, // Only run query when enabled (i.e., user is authenticated)
     staleTime: 10 * 60 * 1000, // 10 minutes - data considered fresh for this duration
     refetchOnWindowFocus: false, // Don't refetch when user returns to tab
     refetchOnMount: false, // Don't refetch on component mount if data is fresh
