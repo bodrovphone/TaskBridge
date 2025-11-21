@@ -122,14 +122,16 @@ function Header() {
     motionProps={{
      variants: {
       enter: {
+       opacity: 1,
        y: 0,
        transition: {
-        duration: 0.15,
+        duration: 0.2,
         ease: [0.4, 0, 0.2, 1]
        }
       },
       exit: {
-       y: -20,
+       opacity: 0,
+       y: 0,
        transition: {
         duration: 0.15,
         ease: [0.4, 0, 0.2, 1]
@@ -229,52 +231,14 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile Menu */}
-   <NavbarMenu className="flex flex-col overflow-y-auto pb-32">
-    <div className="flex-1 overflow-y-auto pb-4">
-     {navigation.map((item) => {
-      const Icon = item.icon
-      return (
-       <NavbarMenuItem key={item.name}>
-        <NextUILink
-         href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
-         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-         size="lg"
-         onPress={() => {
-         setIsMenuOpen(false)
-         if (item.href.startsWith('#') || item.href.startsWith('/#')) {
-          // Handle anchor links - check if we're on index page
-          const anchorId = item.href.replace(/^\/#?/, '')
-          const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
-
-          if (isOnIndexPage) {
-           // Already on index page - smooth scroll to anchor
-           const element = document.getElementById(anchorId)
-           if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-           }
-          } else {
-           // Navigate to index page first, then scroll
-           router.push(`/${lang}#${anchorId}`)
-          }
-         } else {
-          // Handle regular routes
-          router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
-         }
-        }}
-       >
-        <Icon size={18} className="text-gray-500" />
-        {item.name}
-       </NextUILink>
-       </NavbarMenuItem>
-      )
-     })}
-
+   <NavbarMenu className="flex flex-col overflow-y-auto">
+    <div className="flex-1 overflow-y-auto pb-2">
      {/* Portfolio menu items for authenticated users */}
-     {isAuthenticated && (
+     {isAuthenticated ? (
       <>
        {/* Profile Section */}
        <NavbarMenuItem>
-        <div className="pt-4 border-t border-gray-200 w-full">
+        <div className="w-full">
          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
           {t('nav.profile', 'Profile')}
          </p>
@@ -369,6 +333,52 @@ function Header() {
        </NextUILink>
       </NavbarMenuItem>
 
+      {/* Main Navigation Section */}
+      <NavbarMenuItem>
+       <div className="pt-4 border-t border-gray-200 w-full">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+         {t('nav.discover', 'Discover')}
+        </p>
+       </div>
+      </NavbarMenuItem>
+      {navigation.map((item) => {
+       const Icon = item.icon
+       return (
+        <NavbarMenuItem key={item.name}>
+         <NextUILink
+          href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
+          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+          size="lg"
+          onPress={() => {
+          setIsMenuOpen(false)
+          if (item.href.startsWith('#') || item.href.startsWith('/#')) {
+           // Handle anchor links - check if we're on index page
+           const anchorId = item.href.replace(/^\/#?/, '')
+           const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
+
+           if (isOnIndexPage) {
+            // Already on index page - smooth scroll to anchor
+            const element = document.getElementById(anchorId)
+            if (element) {
+             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+           } else {
+            // Navigate to index page first, then scroll
+            router.push(`/${lang}#${anchorId}`)
+           }
+          } else {
+           // Handle regular routes
+           router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
+          }
+         }}
+        >
+         <Icon size={18} className="text-gray-500" />
+         {item.name}
+        </NextUILink>
+        </NavbarMenuItem>
+       )
+      })}
+
       {/* General Section */}
       <NavbarMenuItem>
        <div className="pt-4 border-t border-gray-200 w-full">
@@ -407,18 +417,57 @@ function Header() {
         </NextUILink>
        </NavbarMenuItem>
       </>
+     ) : (
+      // Non-authenticated users see navigation at the top
+      navigation.map((item) => {
+       const Icon = item.icon
+       return (
+        <NavbarMenuItem key={item.name}>
+         <NextUILink
+          href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
+          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+          size="lg"
+          onPress={() => {
+          setIsMenuOpen(false)
+          if (item.href.startsWith('#') || item.href.startsWith('/#')) {
+           // Handle anchor links - check if we're on index page
+           const anchorId = item.href.replace(/^\/#?/, '')
+           const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
+
+           if (isOnIndexPage) {
+            // Already on index page - smooth scroll to anchor
+            const element = document.getElementById(anchorId)
+            if (element) {
+             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+           } else {
+            // Navigate to index page first, then scroll
+            router.push(`/${lang}#${anchorId}`)
+           }
+          } else {
+           // Handle regular routes
+           router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
+          }
+         }}
+        >
+         <Icon size={18} className="text-gray-500" />
+         {item.name}
+        </NextUILink>
+        </NavbarMenuItem>
+       )
+      })
      )}
     </div>
 
     {/* Sticky Bottom Section - Always visible */}
-    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-4 pb-4 safe-area-pb">
+    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-3 safe-area-pb">
      {/* Language Switcher */}
-     <div className="w-full px-4 pb-3">
+     <div className="w-full px-4 pb-2">
       <LanguageSwitcher mode="full" />
      </div>
 
      {/* Create Task Button - Sticky */}
-     <div className="px-4 pb-3 w-full">
+     <div className="px-4 pb-2 w-full">
       <Button
        color="primary"
        variant="solid"
@@ -438,7 +487,7 @@ function Header() {
      </div>
 
      {/* Close Menu Button */}
-     <div className="px-4 pb-4 w-full">
+     <div className="px-4 pb-16 w-full">
       <Button
        variant="flat"
        size="lg"
