@@ -19,7 +19,7 @@ type TaskStatus = 'all' | 'open' | 'in_progress' | 'completed' | 'cancelled'
 
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const { t } = useTranslation()
-  const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('all')
+  const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('open')
 
   // Use TanStack Query hook for data fetching
   const { tasks, isLoading, error } = usePostedTasks()
@@ -101,15 +101,6 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               }}
             >
               <Tab
-                key="all"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.all')}</span>
-                    <Chip size="sm" variant="flat" color="default">{getTaskCountByStatus('all')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
                 key="open"
                 title={
                   <div className="flex items-center gap-2">
@@ -124,6 +115,15 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                   <div className="flex items-center gap-2">
                     <span>{t('postedTasks.filter.inProgress')}</span>
                     <Chip size="sm" variant="solid" color="warning">{getTaskCountByStatus('in_progress')}</Chip>
+                  </div>
+                }
+              />
+              <Tab
+                key="all"
+                title={
+                  <div className="flex items-center gap-2">
+                    <span>{t('postedTasks.filter.all')}</span>
+                    <Chip size="sm" variant="flat" color="default">{getTaskCountByStatus('all')}</Chip>
                   </div>
                 }
               />

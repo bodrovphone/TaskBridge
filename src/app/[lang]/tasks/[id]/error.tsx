@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from "@nextui-org/react";
 import { AlertCircle, RotateCw, Home } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useTranslation } from 'react-i18next';
 
 export default function TaskError({
@@ -14,6 +14,8 @@ export default function TaskError({
  reset: () => void
 }) {
  const router = useRouter();
+ const params = useParams();
+ const lang = (params?.lang as string) || 'bg';
  const { t } = useTranslation();
 
  useEffect(() => {
@@ -66,9 +68,9 @@ export default function TaskError({
      <Button
       color="primary"
       startContent={<Home size={18} />}
-      onClick={() => router.push('/browse-tasks')}
+      onClick={() => router.push(`/${lang}`)}
      >
-      {t('taskDetail.error.goHome', 'Go to Browse')}
+      {t('taskDetail.error.goHome', 'Go to Home')}
      </Button>
     </div>
    </div>

@@ -160,7 +160,7 @@ export const notifications = {
   'taskDetail.error.title': 'Что-то пошло не так!',
   'taskDetail.error.description': 'Не удалось загрузить эту задачу. Возможно, это временная проблема.',
   'taskDetail.error.retry': 'Попробовать снова',
-  'taskDetail.error.goHome': 'Перейти к просмотру',
+  'taskDetail.error.goHome': 'На главную',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Мои опубликованные задачи',

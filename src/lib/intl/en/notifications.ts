@@ -159,7 +159,7 @@ export const notifications = {
   'taskDetail.error.title': 'Something went wrong!',
   'taskDetail.error.description': "We couldn't load this task. This might be a temporary issue.",
   'taskDetail.error.retry': 'Try Again',
-  'taskDetail.error.goHome': 'Go to Browse',
+  'taskDetail.error.goHome': 'Go to Home',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'My Posted Tasks',
