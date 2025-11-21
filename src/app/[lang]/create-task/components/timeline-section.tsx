@@ -155,7 +155,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
          calendarStartDay={1}
          portalId="root-portal"
          popperClassName="z-[9999]"
-         className="w-full h-10 px-3 py-2 text-sm rounded-xl border-2 border-default-200 hover:border-default-400 focus:border-primary focus:outline-none disabled:bg-default-100 disabled:cursor-not-allowed transition-colors bg-default-50"
+         className="w-full h-10 px-3 py-2 text-base rounded-xl border-2 border-default-200 hover:border-default-400 focus:border-primary focus:outline-none disabled:bg-default-100 disabled:cursor-not-allowed transition-colors bg-default-50"
          calendarClassName="!border-2 !border-default-200 !rounded-xl !shadow-xl"
          wrapperClassName="w-full"
         />
