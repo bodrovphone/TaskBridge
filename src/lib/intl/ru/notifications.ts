@@ -3,6 +3,7 @@ export const notifications = {
   // Notifications
   'notifications.title': 'Уведомления',
   'notifications.cleanup': 'Очистить',
+  'notifications.markAsRead': 'Прочитано',
   'notifications.cleanupConfirm.title': 'Удалить все уведомления?',
   'notifications.cleanupConfirm.message': 'Все уведомления будут удалены навсегда.',
   'notifications.cleanupConfirm.cancel': 'Отмена',

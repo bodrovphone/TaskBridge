@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bell, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -25,10 +25,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import NotificationCard from './notification-card';
+import { filterUnreadNotifications, clearReadNotifications } from '@/lib/utils/notification-read-state';
 
 export default function NotificationCenter() {
  const { t } = useTranslation();
  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+ const [refreshTrigger, setRefreshTrigger] = useState(0);
 
  // Auth state with authenticated fetch wrapper
  const { authenticatedFetch, user } = useAuth();
@@ -42,9 +44,15 @@ export default function NotificationCenter() {
 
  // Handle query errors gracefully
  const hasError = !!error;
- const displayNotifications = hasError ? [] : notifications;
 
- // Calculate notification count (all notifications until deleted)
+ // Filter out read notifications using localStorage
+ const displayNotifications = useMemo(() => {
+  if (hasError) return [];
+  // Force re-filter when refreshTrigger changes
+  return filterUnreadNotifications(notifications);
+ }, [hasError, notifications, refreshTrigger]);
+
+ // Calculate notification count (only unread notifications)
  const notificationCount = displayNotifications.length;
  const hasNotifications = notificationCount > 0;
 
@@ -54,13 +62,19 @@ export default function NotificationCenter() {
 
  const handleConfirmCleanup = () => {
   deleteAll();
+  clearReadNotifications(); // Also clear localStorage when cleaning up
   setShowConfirmDialog(false);
+ };
+
+ const handleMarkAsRead = () => {
+  // Trigger re-render when a notification is marked as read
+  setRefreshTrigger(prev => prev + 1);
  };
 
  return (
   <>
    <Sheet open={isOpen} onOpenChange={setOpen}>
-    <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white h-full">
+    <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white h-full !overflow-x-hidden">
      <SheetHeader className="border-b pl-6 pr-12 py-4 flex-shrink-0 bg-white">
       <SheetTitle className="text-xl font-bold">
        {t('notifications.title')}
@@ -68,9 +82,9 @@ export default function NotificationCenter() {
      </SheetHeader>
 
      {/* Notification List */}
-     <div className="flex-1 min-h-0 bg-white">
+     <div className="flex-1 min-h-0 bg-white overflow-hidden">
       <ScrollArea className="h-full bg-white">
-       <div className="px-2 py-2 pb-4 space-y-1 bg-white">
+       <div className="px-2 py-2 pb-4 space-y-1 bg-white max-w-full overflow-hidden">
         {isLoading ? (
          <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
@@ -92,6 +106,7 @@ export default function NotificationCenter() {
           <NotificationCard
            key={notification.id}
            notification={notification}
+           onMarkAsRead={handleMarkAsRead}
           />
          ))
         ) : (

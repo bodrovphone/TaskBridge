@@ -1,21 +1,29 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
 import { useAuth } from '@/features/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+import { filterUnreadNotifications } from '@/lib/utils/notification-read-state';
 
 export default function NotificationBell() {
  const { authenticatedFetch, user } = useAuth();
- const { toggleOpen } = useNotificationStore();
+ const { toggleOpen, isOpen } = useNotificationStore();
 
  // Only fetch notifications if user is authenticated
  const { notifications } = useNotificationsQuery(authenticatedFetch, !!user);
 
- // Total notification count (no read/unread state - all visible until deleted)
- const notificationCount = notifications.length;
+ // Filter out read notifications from localStorage
+ // Re-compute when the panel opens/closes to catch newly marked-as-read items
+ const unreadNotifications = useMemo(() => {
+  return filterUnreadNotifications(notifications);
+ }, [notifications, isOpen]);
+
+ // Total unread notification count
+ const notificationCount = unreadNotifications.length;
 
  return (
   <Button
