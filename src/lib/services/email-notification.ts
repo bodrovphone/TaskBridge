@@ -29,7 +29,7 @@ i18nInstance.init({
     ru: { translation: ru },
   },
   interpolation: {
-    escapeValue: true, // Escape HTML for email safety
+    escapeValue: false, // Don't escape - SendGrid templates handle HTML encoding
   },
 });
 
