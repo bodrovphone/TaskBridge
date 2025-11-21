@@ -2,27 +2,27 @@
 
 import { Application } from '@/types/applications'
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Checkbox,
-  Divider,
-  Textarea,
-  RadioGroup,
-  Radio,
-  Input,
-  Link
-} from '@nextui-org/react'
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Textarea } from '@/components/ui/textarea'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { CheckCircle, Wallet, Calendar, AlertTriangle, MessageSquare, Phone, Mail, Send, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { getTimelineLabel } from '@/lib/utils/timeline'
 import { maskPhoneNumber, maskEmail } from '@/lib/utils/privacy'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
 import { useIsMobile } from '@/hooks/use-is-mobile'
+import { cn } from '@/lib/utils'
 
 interface UserProfile {
   phone?: string | null
@@ -63,6 +63,17 @@ export default function AcceptApplicationDialog({
     contactSharing: false,
     otherApplications: false
   })
+
+  const bodyRef = useRef<HTMLDivElement>(null)
+
+  // Handle input focus on mobile - scroll into view
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (isMobile && bodyRef.current) {
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 300) // Wait for keyboard animation
+    }
+  }
 
   // Auto-select custom if user has no phone
   useEffect(() => {
@@ -126,92 +137,51 @@ export default function AcceptApplicationDialog({
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      isDismissable={!isSubmitting}
-      hideCloseButton={true}
-      size={isMobile ? "full" : "2xl"}
-      placement={isMobile ? "center" : "center"}
-      scrollBehavior="inside"
-      classNames={{
-        backdrop: 'bg-black/80',
-        wrapper: isMobile ? 'items-stretch' : 'items-end sm:items-center',
-        base: isMobile
-          ? 'h-full max-h-full w-full m-0 rounded-none'
-          : `${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[90vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`,
-        header: 'border-b border-gray-200 flex-shrink-0 sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-2 sm:px-6 sm:py-4',
-        body: 'overflow-y-auto px-4 py-3 sm:px-6 sm:py-6',
-        footer: 'border-t border-gray-200 flex-shrink-0 sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4'
-      }}
-      motionProps={{
-        variants: isMobile ? {
-          enter: {
-            x: 0,
-            opacity: 1,
-            transition: {
-              duration: 0.3,
-              ease: 'easeOut'
-            }
-          },
-          exit: {
-            x: '100%',
-            opacity: 0,
-            transition: {
-              duration: 0.2,
-              ease: 'easeIn'
-            }
-          }
-        } : {
-          enter: {
-            y: 0,
-            opacity: 1,
-            transition: {
-              duration: 0.3,
-              ease: 'easeOut'
-            }
-          },
-          exit: {
-            y: 20,
-            opacity: 0,
-            transition: {
-              duration: 0.2,
-              ease: 'easeIn'
-            }
-          }
-        }
-      }}
-    >
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {!isMobile && <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />}
-                  <h2 className="text-base sm:text-2xl font-bold">{t('acceptApplication.title')}</h2>
-                </div>
-                {/* Custom close button */}
-                <button
-                  onClick={handleClose}
-                  disabled={isSubmitting}
-                  className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Close"
-                >
-                  <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                </button>
-              </div>
-            </ModalHeader>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent
+        className={cn(
+          "max-w-2xl p-0 gap-0 bg-white dark:bg-gray-900 flex flex-col",
+          isMobile ? "h-full max-h-full w-full rounded-none" : "rounded-xl",
+          !isMobile && isKeyboardOpen && "max-h-[60vh]",
+          !isMobile && !isKeyboardOpen && "max-h-[90vh]"
+        )}
+        onInteractOutside={(e) => {
+          if (isSubmitting) e.preventDefault()
+        }}
+      >
+        {/* Header - compact on mobile when keyboard is open */}
+        <DialogHeader className={cn(
+          "border-b border-gray-200 flex-shrink-0 sticky top-0 z-10 bg-white dark:bg-gray-900",
+          isMobile && isKeyboardOpen ? "px-4 py-2" : "px-4 py-2 sm:px-6 sm:py-4",
+          !isMobile && "rounded-t-xl"
+        )}>
+          <div className="flex items-center justify-between pr-8">
+            <div className="flex items-center gap-2">
+              {!isMobile && <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />}
+              <DialogTitle className={cn(
+                "font-bold",
+                isMobile && isKeyboardOpen ? "text-sm" : "text-base sm:text-2xl"
+              )}>
+                {t('acceptApplication.title')}
+              </DialogTitle>
+            </div>
+          </div>
+          {!(isMobile && isKeyboardOpen) && (
+            <DialogDescription className="text-sm sm:text-base text-gray-700 mt-2">
+              {t('acceptApplication.description', { name: professional.name })}
+            </DialogDescription>
+          )}
+        </DialogHeader>
 
-            <ModalBody className="flex-1 overflow-y-auto overscroll-contain">
-              {/* Hide description on mobile when keyboard is open */}
-              {!(isMobile && isKeyboardOpen) && (
-                <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">
-                  {t('acceptApplication.description', { name: professional.name })}
-                </p>
-              )}
-
-              {/* Price & Timeline Summary - hide on mobile when keyboard is open */}
+        {/* Body */}
+        <div
+          ref={bodyRef}
+          className={cn(
+            "flex-1 overflow-y-auto overscroll-contain",
+            isMobile && isKeyboardOpen ? "px-4 py-2" : "px-4 py-3 sm:px-6 sm:py-6"
+          )}
+        >
+          {/* Price & Timeline Summary - hide on mobile when keyboard is open */}
               {!(isMobile && isKeyboardOpen) && (
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -233,228 +203,265 @@ export default function AcceptApplicationDialog({
               </div>
               )}
 
-              {!(isMobile && isKeyboardOpen) && <Divider className="my-3 sm:my-4" />}
+          {!(isMobile && isKeyboardOpen) && <hr className="my-3 sm:my-4 border-gray-200" />}
 
-              {/* Message to Professional */}
-              <div className="mb-4 sm:mb-6">
-                <Textarea
-                  label={t('acceptApplication.messageLabel')}
-                  placeholder={t('acceptApplication.messagePlaceholder')}
-                  value={message}
-                  onValueChange={setMessage}
-                  minRows={isKeyboardOpen ? 2 : 3}
-                  maxRows={isKeyboardOpen ? 3 : 6}
-                  description={!(isMobile && isKeyboardOpen) ? t('acceptApplication.messageHelp', { name: professional.name }) : undefined}
-                  startContent={!(isMobile && isKeyboardOpen) ? <MessageSquare className="w-4 h-4 text-gray-400" /> : undefined}
-                  isDisabled={isSubmitting}
-                  classNames={{
-                    label: 'font-medium text-sm',
-                    input: 'text-base', // 16px font size prevents iOS zoom
-                    description: 'text-xs'
-                  }}
-                />
+          {/* Message to Professional */}
+          <div className="mb-4 sm:mb-6">
+            <div className="space-y-2">
+              <Label htmlFor="message" className="font-medium text-sm flex items-center gap-2">
+                {!(isMobile && isKeyboardOpen) && <MessageSquare className="w-4 h-4 text-gray-400" />}
+                {t('acceptApplication.messageLabel')}
+              </Label>
+              <Textarea
+                id="message"
+                placeholder={t('acceptApplication.messagePlaceholder')}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onFocus={handleInputFocus}
+                rows={isKeyboardOpen ? 2 : 3}
+                disabled={isSubmitting}
+                className="text-base resize-none"
+                style={{ fontSize: '16px' }} // Prevents iOS zoom
+              />
+              {!(isMobile && isKeyboardOpen) && (
+                <p className="text-xs text-gray-500">
+                  {t('acceptApplication.messageHelp', { name: professional.name })}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {!(isMobile && isKeyboardOpen) && <hr className="my-3 sm:my-4 border-gray-200" />}
+
+          {/* Contact Information Selection */}
+          <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+            <h4 className="font-semibold text-base sm:text-lg">{t('acceptApplication.contactInfo')}</h4>
+            {/* Hide info banner on mobile when keyboard is open */}
+            {!(isMobile && isKeyboardOpen) && (
+              <div className="p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs sm:text-sm text-blue-800">
+                  ℹ️ {t('acceptApplication.noInAppChat')}
+                </p>
               </div>
+            )}
 
-              {!(isMobile && isKeyboardOpen) && <Divider className="my-3 sm:my-4" />}
-
-              {/* Contact Information Selection */}
-              <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-                <h4 className="font-semibold text-base sm:text-lg">{t('acceptApplication.contactInfo')}</h4>
-                {/* Hide info banner on mobile when keyboard is open */}
-                {!(isMobile && isKeyboardOpen) && (
-                  <div className="p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-xs sm:text-sm text-blue-800">
-                      ℹ️ {t('acceptApplication.noInAppChat')}
-                    </p>
-                  </div>
-                )}
-
-                {/* If user has phone/email, show radio options */}
-                {(userProfile?.phone || userProfile?.email) ? (
-                  <>
-                    <RadioGroup
-                      value={contactMethod}
-                      onValueChange={(value) => setContactMethod(value as 'phone' | 'email' | 'custom')}
-                      isDisabled={isSubmitting}
-                      classNames={{
-                        wrapper: 'gap-3'
-                      }}
-                    >
-                      {userProfile?.phone && (
-                        <Radio value="phone" classNames={{ label: 'text-sm' }}>
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4" />
-                            <span>{t('acceptApplication.sharePhone')}: <strong>{maskPhoneNumber(userProfile.phone)}</strong></span>
-                          </div>
-                          <p className="text-xs text-gray-500 ml-6 mt-1">
-                            {t('acceptApplication.phoneWarning')} <Link href="/privacy-policy" size="sm" className="text-xs" target="_blank">{t('acceptApplication.privacyPolicy')}</Link>
-                          </p>
-                        </Radio>
-                      )}
-
-                      {userProfile?.email && (
-                        <Radio value="email" classNames={{ label: 'text-sm' }}>
-                          <div className="flex items-center gap-2">
-                            <Mail className="w-4 h-4" />
-                            <span>{t('acceptApplication.shareEmail')}: <strong>{maskEmail(userProfile.email)}</strong></span>
-                          </div>
-                          <p className="text-xs text-amber-600 ml-6 mt-1">
-                            ⚠️ {t('acceptApplication.emailWarning')}
-                          </p>
-                        </Radio>
-                      )}
-
-                      <Radio value="custom" classNames={{ label: 'text-sm' }}>
+            {/* If user has phone/email, show radio options */}
+            {(userProfile?.phone || userProfile?.email) ? (
+              <>
+                <RadioGroup
+                  value={contactMethod}
+                  onValueChange={(value) => setContactMethod(value as 'phone' | 'email' | 'custom')}
+                  disabled={isSubmitting}
+                  className="gap-3"
+                >
+                  {userProfile?.phone && (
+                    <div className="flex items-start space-x-2">
+                      <RadioGroupItem value="phone" id="radio-phone" />
+                      <Label htmlFor="radio-phone" className="text-sm cursor-pointer flex-1">
                         <div className="flex items-center gap-2">
-                          <Send className="w-4 h-4" />
-                          <span>{t('acceptApplication.customContact')}</span>
+                          <Phone className="w-4 h-4" />
+                          <span>{t('acceptApplication.sharePhone')}: <strong>{maskPhoneNumber(userProfile.phone)}</strong></span>
                         </div>
-                      </Radio>
-                    </RadioGroup>
+                        <p className="text-xs text-gray-500 ml-6 mt-1">
+                          {t('acceptApplication.phoneWarning')} <a href="/privacy-policy" className="text-xs text-blue-600 underline" target="_blank" rel="noopener noreferrer">{t('acceptApplication.privacyPolicy')}</a>
+                        </p>
+                      </Label>
+                    </div>
+                  )}
 
-                    {contactMethod === 'custom' && (
-                      <div className="mt-3">
-                        <Input
-                          label={t('acceptApplication.customContactLabel')}
-                          placeholder={t('acceptApplication.customContactPlaceholder')}
-                          value={customContact}
-                          onValueChange={setCustomContact}
-                          description={!(isMobile && isKeyboardOpen) ? t('acceptApplication.customContactHelp') : undefined}
-                          isRequired
-                          isDisabled={isSubmitting}
-                          classNames={{
-                            label: 'text-sm font-medium',
-                            input: 'text-base', // 16px font size prevents iOS zoom
-                            description: 'text-xs'
-                          }}
-                        />
-                        {!customContact.trim() && !(isMobile && isKeyboardOpen) && (
-                          <p className="text-xs text-red-600 mt-2">
-                            {t('acceptApplication.customContactRequired')}
-                          </p>
-                        )}
+                  {userProfile?.email && (
+                    <div className="flex items-start space-x-2">
+                      <RadioGroupItem value="email" id="radio-email" />
+                      <Label htmlFor="radio-email" className="text-sm cursor-pointer flex-1">
+                        <div className="flex items-center gap-2">
+                          <Mail className="w-4 h-4" />
+                          <span>{t('acceptApplication.shareEmail')}: <strong>{maskEmail(userProfile.email)}</strong></span>
+                        </div>
+                        <p className="text-xs text-amber-600 ml-6 mt-1">
+                          ⚠️ {t('acceptApplication.emailWarning')}
+                        </p>
+                      </Label>
+                    </div>
+                  )}
+
+                  <div className="flex items-start space-x-2">
+                    <RadioGroupItem value="custom" id="radio-custom" />
+                    <Label htmlFor="radio-custom" className="text-sm cursor-pointer flex-1">
+                      <div className="flex items-center gap-2">
+                        <Send className="w-4 h-4" />
+                        <span>{t('acceptApplication.customContact')}</span>
                       </div>
-                    )}
-                  </>
-                ) : (
-                  // No phone/email - just show input field directly
-                  <div>
+                    </Label>
+                  </div>
+                </RadioGroup>
+
+                {contactMethod === 'custom' && (
+                  <div className="mt-3 space-y-2">
+                    <Label htmlFor="custom-contact" className="text-sm font-medium">
+                      {t('acceptApplication.customContactLabel')} <span className="text-red-500">*</span>
+                    </Label>
                     <Input
-                      label={t('acceptApplication.customContactLabel')}
+                      id="custom-contact"
                       placeholder={t('acceptApplication.customContactPlaceholder')}
                       value={customContact}
-                      onValueChange={setCustomContact}
-                      description={!(isMobile && isKeyboardOpen) ? t('acceptApplication.customContactHelp') : undefined}
-                      isRequired
-                      isDisabled={isSubmitting}
-                      classNames={{
-                        label: 'text-sm font-medium',
-                        input: 'text-base', // 16px font size prevents iOS zoom
-                        description: 'text-xs'
-                      }}
+                      onChange={(e) => setCustomContact(e.target.value)}
+                      onFocus={handleInputFocus}
+                      disabled={isSubmitting}
+                      className="text-base"
+                      style={{ fontSize: '16px' }} // Prevents iOS zoom
                     />
+                    {!(isMobile && isKeyboardOpen) && (
+                      <p className="text-xs text-gray-500">
+                        {t('acceptApplication.customContactHelp')}
+                      </p>
+                    )}
                     {!customContact.trim() && !(isMobile && isKeyboardOpen) && (
-                      <p className="text-xs text-red-600 mt-2">
+                      <p className="text-xs text-red-600">
                         {t('acceptApplication.customContactRequired')}
                       </p>
                     )}
                   </div>
                 )}
+              </>
+            ) : (
+              // No phone/email - just show input field directly
+              <div className="space-y-2">
+                <Label htmlFor="custom-contact" className="text-sm font-medium">
+                  {t('acceptApplication.customContactLabel')} <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="custom-contact"
+                  placeholder={t('acceptApplication.customContactPlaceholder')}
+                  value={customContact}
+                  onChange={(e) => setCustomContact(e.target.value)}
+                  onFocus={handleInputFocus}
+                  disabled={isSubmitting}
+                  className="text-base"
+                  style={{ fontSize: '16px' }} // Prevents iOS zoom
+                />
+                {!(isMobile && isKeyboardOpen) && (
+                  <p className="text-xs text-gray-500">
+                    {t('acceptApplication.customContactHelp')}
+                  </p>
+                )}
+                {!customContact.trim() && !(isMobile && isKeyboardOpen) && (
+                  <p className="text-xs text-red-600">
+                    {t('acceptApplication.customContactRequired')}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {!(isMobile && isKeyboardOpen) && <hr className="my-3 sm:my-4 border-gray-200" />}
+
+          {/* Agreement Checklist - hide on mobile when keyboard is open */}
+          {!(isMobile && isKeyboardOpen) && (
+            <div className="space-y-3 sm:space-y-4">
+              <h4 className="font-semibold text-base sm:text-lg">{t('acceptApplication.pleaseConfirm')}</h4>
+
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="agree-price"
+                  checked={agreements.priceTimeline}
+                  onCheckedChange={(checked) =>
+                    setAgreements((prev) => ({ ...prev, priceTimeline: checked as boolean }))
+                  }
+                  disabled={isSubmitting}
+                />
+                <Label htmlFor="agree-price" className="text-xs sm:text-sm cursor-pointer">
+                  {t('acceptApplication.agreement.priceTimeline', {
+                    price: proposedPrice,
+                    currency,
+                    timeline: readableTimeline
+                  })}
+                </Label>
               </div>
 
-              {!(isMobile && isKeyboardOpen) && <Divider className="my-3 sm:my-4" />}
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="agree-contact"
+                  checked={agreements.contactSharing}
+                  onCheckedChange={(checked) =>
+                    setAgreements((prev) => ({ ...prev, contactSharing: checked as boolean }))
+                  }
+                  disabled={isSubmitting}
+                />
+                <Label htmlFor="agree-contact" className="text-xs sm:text-sm cursor-pointer">
+                  {t('acceptApplication.agreement.contactSharing', { name: professional.name })}
+                </Label>
+              </div>
 
-              {/* Agreement Checklist - hide on mobile when keyboard is open */}
-              {!(isMobile && isKeyboardOpen) && (
-                <div className="space-y-3 sm:space-y-4">
-                  <h4 className="font-semibold text-base sm:text-lg">{t('acceptApplication.pleaseConfirm')}</h4>
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="agree-applications"
+                  checked={agreements.otherApplications}
+                  onCheckedChange={(checked) =>
+                    setAgreements((prev) => ({ ...prev, otherApplications: checked as boolean }))
+                  }
+                  disabled={isSubmitting}
+                />
+                <Label htmlFor="agree-applications" className="text-xs sm:text-sm cursor-pointer">
+                  {t('acceptApplication.agreement.otherApplications')}
+                </Label>
+              </div>
+            </div>
+          )}
 
-                  <Checkbox
-                    isSelected={agreements.priceTimeline}
-                    onValueChange={(checked) =>
-                      setAgreements((prev) => ({ ...prev, priceTimeline: checked }))
-                    }
-                    isDisabled={isSubmitting}
-                    classNames={{
-                      label: 'text-xs sm:text-sm'
-                    }}
-                  >
-                    {t('acceptApplication.agreement.priceTimeline', {
-                      price: proposedPrice,
-                      currency,
-                      timeline: readableTimeline
-                    })}
-                  </Checkbox>
-
-                  <Checkbox
-                    isSelected={agreements.contactSharing}
-                    onValueChange={(checked) =>
-                      setAgreements((prev) => ({ ...prev, contactSharing: checked }))
-                    }
-                    isDisabled={isSubmitting}
-                    classNames={{
-                      label: 'text-xs sm:text-sm'
-                    }}
-                  >
-                    {t('acceptApplication.agreement.contactSharing', { name: professional.name })}
-                  </Checkbox>
-
-                  <Checkbox
-                    isSelected={agreements.otherApplications}
-                    onValueChange={(checked) =>
-                      setAgreements((prev) => ({ ...prev, otherApplications: checked }))
-                    }
-                    isDisabled={isSubmitting}
-                    classNames={{
-                      label: 'text-xs sm:text-sm'
-                    }}
-                  >
-                    {t('acceptApplication.agreement.otherApplications')}
-                  </Checkbox>
+          {/* Warning - hide on mobile when keyboard is open */}
+          {!(isMobile && isKeyboardOpen) && (
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-xs sm:text-sm text-amber-800">
+                    <span className="font-semibold">{t('important')}:</span> {t('acceptApplication.warning', { name: professional.name })}
+                  </p>
                 </div>
-              )}
+              </div>
+            </div>
+          )}
+        </div>
 
-              {/* Warning - hide on mobile when keyboard is open */}
-              {!(isMobile && isKeyboardOpen) && (
-                <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-xs sm:text-sm text-amber-800">
-                        <span className="font-semibold">{t('important')}:</span> {t('acceptApplication.warning', { name: professional.name })}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </ModalBody>
-
-            <ModalFooter className="flex-row gap-2">
+        {/* Footer - hide on mobile when keyboard is open */}
+        {!(isMobile && isKeyboardOpen) && (
+          <DialogFooter className={cn(
+            "border-t border-gray-200 flex-shrink-0 sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4",
+            !isMobile && "rounded-b-xl"
+          )}>
+            <div className="flex flex-row gap-2 w-full sm:w-auto">
               <Button
-                variant="solid"
-                onPress={handleClose}
-                isDisabled={isSubmitting}
-                size={isMobile ? "md" : "lg"}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 flex-1 sm:flex-initial sm:w-auto"
+                variant="secondary"
+                onClick={handleClose}
+                disabled={isSubmitting}
+                size={isMobile ? "default" : "lg"}
+                className="flex-1 sm:flex-initial sm:w-auto"
               >
                 {t('acceptApplication.cancel')}
               </Button>
               <Button
-                variant="solid"
-                color="success"
-                onPress={handleConfirm}
-                isDisabled={!canConfirm}
-                isLoading={isSubmitting}
-                size={isMobile ? "md" : "lg"}
-                startContent={!isSubmitting && <CheckCircle className="w-4 h-4" />}
-                className="flex-1 sm:flex-initial sm:w-auto"
+                variant="default"
+                onClick={handleConfirm}
+                disabled={!canConfirm}
+                size={isMobile ? "default" : "lg"}
+                className="flex-1 sm:flex-initial sm:w-auto bg-green-600 hover:bg-green-700 text-white"
               >
-                {isSubmitting ? t('acceptApplication.accepting', 'Accepting...') : t('acceptApplication.confirm')}
+                {isSubmitting ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    {t('acceptApplication.accepting', 'Accepting...')}
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    {t('acceptApplication.confirm')}
+                  </>
+                )}
               </Button>
-            </ModalFooter>
-          </>
+            </div>
+          </DialogFooter>
         )}
-      </ModalContent>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   )
 }
