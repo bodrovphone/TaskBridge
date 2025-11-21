@@ -29,6 +29,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
  const [isLoading, setIsLoading] = useState(false);
  const [error, setError] = useState<string | null>(null);
  const [mounted, setMounted] = useState(false);
+ const [showVerificationPrompt, setShowVerificationPrompt] = useState(false);
+ const [isResendingVerification, setIsResendingVerification] = useState(false);
 
  useEffect(() => {
   setMounted(true);
@@ -90,7 +92,9 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
    setError(result.error);
    setIsLoading(false);
   } else {
-   handleAuthSuccess();
+   // Show verification prompt after successful signup
+   setShowVerificationPrompt(true);
+   setIsLoading(false);
   }
  };
 
@@ -136,6 +140,34 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
    console.error('Telegram auth error:', err);
    setError('Failed to authenticate with Telegram');
    setIsLoading(false);
+  }
+ };
+
+ const handleResendVerification = async () => {
+  setIsResendingVerification(true);
+  setError(null);
+
+  try {
+   const response = await fetch('/api/auth/resend-verification', {
+    method: 'POST',
+   });
+
+   const data = await response.json();
+
+   if (!response.ok) {
+    setError(data.error || t('auth.emailVerification.error', 'Failed to send verification email'));
+   } else {
+    // Show success message and close slide-over after delay
+    setError(null);
+    setTimeout(() => {
+     handleAuthSuccess();
+    }, 2000);
+   }
+  } catch (err) {
+   console.error('Failed to resend verification email:', err);
+   setError(t('auth.emailVerification.error', 'Failed to send verification email'));
+  } finally {
+   setIsResendingVerification(false);
   }
  };
 
@@ -216,9 +248,44 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </div>
        )}
 
+       {/* Verification Prompt - Shown after successful signup */}
+       {showVerificationPrompt && (
+        <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg">
+         <h4 className="font-bold text-gray-900 mb-2">
+          📧 {t('auth.emailVerification.checkInbox', 'Check your inbox!')}
+         </h4>
+         <p className="text-sm text-gray-700 mb-3">
+          {t('auth.emailVerification.sentMessage', 'We sent a verification email to')} <strong>{email}</strong>
+         </p>
+         <p className="text-sm text-gray-600 mb-3">
+          {t('auth.emailVerification.instructions', 'Click the link in the email to verify your account.')}
+         </p>
+         <div className="flex flex-col sm:flex-row gap-2">
+          <NextUIButton
+           size="sm"
+           variant="flat"
+           color="primary"
+           onPress={handleResendVerification}
+           isLoading={isResendingVerification}
+           className="font-semibold"
+          >
+           {t('auth.emailVerification.resend', 'Resend Verification Email')}
+          </NextUIButton>
+          <NextUIButton
+           size="sm"
+           variant="bordered"
+           onPress={handleAuthSuccess}
+          >
+           {t('auth.emailVerification.continue', 'Continue to App')}
+          </NextUIButton>
+         </div>
+        </div>
+       )}
+
        {/* Auth Form */}
-       <div className="space-y-4">
-        {mode === 'signup' && (
+       {!showVerificationPrompt && (
+        <div className="space-y-4">
+         {mode === 'signup' && (
          <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
            Full Name
@@ -304,10 +371,9 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           </Link>
          </div>
         )}
-       </div>
 
-       {/* Submit Button */}
-       <NextUIButton
+        {/* Submit Button */}
+        <NextUIButton
         color="primary"
         size="lg"
         className="w-full font-semibold shadow-md border-2 border-blue-700"
@@ -316,10 +382,10 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         isDisabled={mode === 'login' ? (!email || !password) : (!email || !password || !fullName || !confirmPassword)}
        >
         {mode === 'login' ? t('auth.continue') : t('auth.createAccount')}
-       </NextUIButton>
+        </NextUIButton>
 
-       {/* Social Login */}
-       <div className="space-y-3">
+        {/* Social Login */}
+        <div className="space-y-3">
         <NextUIButton
          variant="bordered"
          size="lg"
@@ -351,10 +417,10 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          }
         >
          {t('auth.continueWith')} Facebook
-        </NextUIButton>
+         </NextUIButton>
 
-        {/* Telegram Login Button - COMMENTED OUT - Will be re-enabled later */}
-        {/* <div className="w-full flex flex-col items-center gap-2">
+         {/* Telegram Login Button - COMMENTED OUT - Will be re-enabled later */}
+         {/* <div className="w-full flex flex-col items-center gap-2">
          {typeof window !== 'undefined' && (
           <>
            <LoginButton
@@ -371,10 +437,10 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           </>
          )}
         </div> */}
-       </div>
+        </div>
 
-       {/* Toggle Mode */}
-       <div className="text-center">
+        {/* Toggle Mode */}
+        <div className="text-center">
         <p className="text-sm text-gray-600">
          {mode === 'login' ? t('auth.noAccount') : 'Already have an account?'}
          {' '}
@@ -386,7 +452,9 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           {mode === 'login' ? t('auth.createAccount') : t('auth.login')}
          </button>
         </p>
+        </div>
        </div>
+       )}
 
       </div>
      </div>

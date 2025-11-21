@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 /**
@@ -18,60 +18,40 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get unreviewed completed tasks
-    const { data: unreviewedTasks } = await supabase
+    // Use admin client for reading other users' data (bypass RLS)
+    const supabaseAdmin = createAdminClient()
+
+    // Get count of unreviewed completed tasks
+    const { count: pendingReviewsCount, error: tasksError } = await supabase
       .from('tasks')
-      .select(`
-        id,
-        title,
-        completed_at,
-        applications!inner(
-          professional_id,
-          status,
-          professional:professional_id(
-            full_name,
-            avatar_url
-          )
-        )
-      `)
+      .select('id', { count: 'exact', head: true })
       .eq('customer_id', user.id)
       .eq('status', 'completed')
       .eq('reviewed_by_customer', false)
-      .eq('applications.status', 'accepted')
-      .order('completed_at', { ascending: false })
 
-    const pendingReviewsCount = unreviewedTasks?.length || 0
+    if (tasksError) {
+      console.error('[can-create] Error fetching tasks count:', tasksError)
+    }
 
-    const pendingReviewsData = (unreviewedTasks || []).map(task => {
-      const acceptedApp = (task.applications as any[])[0]
-      return {
-        id: task.id,
-        title: task.title,
-        professionalName: acceptedApp?.professional?.full_name || 'Unknown',
-        professionalAvatar: acceptedApp?.professional?.avatar_url,
-        professionalId: acceptedApp?.professional_id,
-        completedAt: task.completed_at,
-        daysAgo: Math.floor((Date.now() - new Date(task.completed_at).getTime()) / (1000 * 60 * 60 * 24))
-      }
-    })
+    const count = pendingReviewsCount || 0
 
     // HARD BLOCK: 3+ pending reviews
-    if (pendingReviewsCount >= 3) {
+    if (count >= 3) {
       return NextResponse.json({
         canCreate: false,
         blockType: 'hard_block',
-        pendingReviews: pendingReviewsData,
-        unreviewedCount: pendingReviewsCount
+        pendingReviews: Array(count).fill({}), // Empty array with count
+        unreviewedCount: count
       })
     }
 
     // SOFT BLOCK: 1-2 pending reviews (warning)
-    if (pendingReviewsCount >= 1) {
+    if (count >= 1) {
       return NextResponse.json({
         canCreate: true, // Still allowed but warned
         blockType: 'soft_block',
-        pendingReviews: pendingReviewsData,
-        unreviewedCount: pendingReviewsCount
+        pendingReviews: Array(count).fill({}), // Empty array with count
+        unreviewedCount: count
       })
     }
 

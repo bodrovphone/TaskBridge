@@ -61,6 +61,9 @@ export const reviews = {
   'reviews.enforcement.softBlock.pleaseReview': 'Моля, оставете отзиви за завършените задачи преди да създадете нови:',
   'reviews.enforcement.softBlock.leaveReviewsButton': 'Остави отзиви',
   'reviews.enforcement.softBlock.cancelButton': 'Отказ',
+  'reviews.enforcement.pendingCount': '{{count}} чакащ отзив',
+  'reviews.enforcement.pendingCount_plural': '{{count}} чакащи отзива',
+  'reviews.enforcement.helpProfessionals': 'Помогнете на специалистите като споделите вашето мнение',
 
   // Progress
   'reviews.progress.reviewing': 'Отзив {{current}} от {{total}}',

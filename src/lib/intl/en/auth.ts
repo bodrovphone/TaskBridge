@@ -85,4 +85,11 @@ export const auth = {
   'auth.emailVerification.error': 'Failed to send verification email. Please try again.',
   'auth.emailVerification.rateLimited': 'Too many requests. Please try again later.',
   'auth.emailVerification.checkSpam': 'Don\'t forget to check your spam folder.',
+
+  // Email verification after signup (auth slide-over)
+  'auth.emailVerification.checkInbox': 'Check your inbox!',
+  'auth.emailVerification.sentMessage': 'We sent a verification email to',
+  'auth.emailVerification.instructions': 'Click the link in the email to verify your account.',
+  'auth.emailVerification.resend': 'Resend Verification Email',
+  'auth.emailVerification.continue': 'Continue to App',
 };

@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { useAuth } from '@/features/auth';
+import { useCreateTask } from '@/hooks/use-create-task';
+import { ReviewEnforcementDialog } from '@/features/reviews';
 import {
  Shield,
  Star,
@@ -28,15 +30,14 @@ export default function HeroSection() {
  const isAuthenticated = !!user && !!profile;
  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
- const handleCreateTask = () => {
-  if (isAuthenticated) {
-   // Already authenticated, go directly to create task
-   router.push(`/${currentLocale}/create-task`);
-  } else {
-   // Not authenticated, show auth slider
-   setIsAuthOpen(true);
-  }
- };
+ const {
+  handleCreateTask,
+  showEnforcementDialog,
+  setShowEnforcementDialog,
+  blockType,
+  blockingTasks,
+  handleReviewTask
+ } = useCreateTask();
 
  return (
   <section className="relative overflow-hidden py-20 lg:py-32 z-10">
@@ -272,6 +273,15 @@ export default function HeroSection() {
     isOpen={isAuthOpen}
     onClose={() => setIsAuthOpen(false)}
     action="create-task"
+   />
+
+   {/* Review Enforcement Dialog */}
+   <ReviewEnforcementDialog
+    isOpen={showEnforcementDialog}
+    onClose={() => setShowEnforcementDialog(false)}
+    blockType={blockType}
+    pendingTasks={blockingTasks}
+    onReviewTask={handleReviewTask}
    />
   </section>
  );

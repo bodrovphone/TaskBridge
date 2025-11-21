@@ -149,11 +149,11 @@ export function ReviewDialog({
           } : undefined
         }}
         classNames={{
-          backdrop: 'bg-black/80',
-          wrapper: isMobile ? 'items-stretch' : '',
-          base: isMobile
+          backdrop: 'bg-black/80 z-[101]',
+          wrapper: `${isMobile ? 'items-stretch' : ''} z-[102]`,
+          base: `${isMobile
             ? 'h-full max-h-full w-full m-0 rounded-none'
-            : `${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[95vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`,
+            : `${isKeyboardOpen ? 'max-h-[60vh]' : 'max-h-[95vh]'} sm:max-h-[90vh] my-auto transition-all duration-200`} z-[102]`,
           header: 'border-b border-gray-200 flex-shrink-0 sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4',
           body: 'overflow-y-auto px-4 py-4 sm:px-6 sm:py-6',
           footer: 'border-t border-gray-200 flex-shrink-0 sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4',

@@ -15,6 +15,8 @@ import { toast } from '@/hooks/use-toast';
 import { TaskSelectionModal } from '@/components/modals/task-selection-modal';
 import AuthSlideOver from '@/components/ui/auth-slide-over';
 import { useAuth } from '@/features/auth';
+import { useCreateTask } from '@/hooks/use-create-task';
+import { ReviewEnforcementDialog } from '@/features/reviews';
 
 interface ProfessionalDetailPageContentProps {
   professional: any; // @todo: Add proper type from API
@@ -32,6 +34,15 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
   const [isLoadingTasks, setIsLoadingTasks] = useState(false);
   const [isSendingInvitation, setIsSendingInvitation] = useState(false);
   const [hasInvitedThisSession, setHasInvitedThisSession] = useState(false);
+
+  const {
+    handleCreateTask,
+    showEnforcementDialog,
+    setShowEnforcementDialog,
+    blockType,
+    blockingTasks,
+    handleReviewTask
+  } = useCreateTask();
 
   // Check sessionStorage on mount to see if user already invited this professional
   useEffect(() => {
@@ -319,10 +330,19 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
         onSelectTask={handleTaskSelection}
         onCreateNewTask={() => {
           setShowTaskSelectionModal(false);
-          router.push(`/${lang}/create-task?inviteProfessionalId=${professional.id}&inviteProfessionalName=${encodeURIComponent(transformedProfessional.name)}`);
+          handleCreateTask();
         }}
         isLoading={isSendingInvitation}
         isLoadingTasks={isLoadingTasks}
+      />
+
+      {/* Review Enforcement Dialog */}
+      <ReviewEnforcementDialog
+        isOpen={showEnforcementDialog}
+        onClose={() => setShowEnforcementDialog(false)}
+        blockType={blockType}
+        pendingTasks={blockingTasks}
+        onReviewTask={handleReviewTask}
       />
     </div>
   );

@@ -167,7 +167,9 @@ export function useCreateTask() {
     }
 
     // Check eligibility (review enforcement)
-    if (!eligibility) return
+    if (!eligibility) {
+      return
+    }
 
     // Show enforcement dialog for both soft and hard blocks
     if (eligibility.blockType === 'soft_block' || eligibility.blockType === 'hard_block') {

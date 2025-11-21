@@ -9,10 +9,10 @@ import { getUserNotificationChannel } from '@/lib/services/email-notification'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = params.id
+    const { id: userId } = await params
 
     const result = await getUserNotificationChannel(userId)
 

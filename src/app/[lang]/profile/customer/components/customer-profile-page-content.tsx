@@ -10,8 +10,10 @@ import { CustomerProfile } from '../../components/customer-profile'
 import { SettingsModal } from '../../components/settings-modal'
 import { StatisticsModal } from '../../components/statistics-modal'
 import { ProfileDataProvider } from '../../components/profile-data-provider'
-import { TelegramPromptBanner } from '../../components/telegram-prompt-banner'
+import { NotificationBannerManager } from '../../components/notification-banner-manager'
 import { ProfileHeader } from '../../components/shared/profile-header'
+import { useCreateTask } from '@/hooks/use-create-task'
+import { ReviewEnforcementDialog } from '@/features/reviews'
 
 interface CustomerProfilePageContentProps {
   lang: string
@@ -24,13 +26,15 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
   const searchParams = useSearchParams()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isStatisticsOpen, setIsStatisticsOpen] = useState(false)
-  const [isTelegramBannerDismissed, setIsTelegramBannerDismissed] = useState(() => {
-    // Check if user previously dismissed the banner
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('telegram-banner-dismissed') === 'true'
-    }
-    return false
-  })
+
+  const {
+    handleCreateTask,
+    showEnforcementDialog,
+    setShowEnforcementDialog,
+    blockType,
+    blockingTasks,
+    handleReviewTask
+  } = useCreateTask()
 
   // Check for openSettings query parameter from toast
   useEffect(() => {
@@ -65,24 +69,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
     setIsSettingsOpen(true)
   }
 
-  const handleTelegramBannerDismiss = () => {
-    setIsTelegramBannerDismissed(true)
-    localStorage.setItem('telegram-banner-dismissed', 'true')
-  }
-
-  const handleTelegramConnectionChange = async () => {
-    // Refresh profile data after Telegram connection/disconnection
-    if (refreshProfile) {
-      await refreshProfile()
-    } else {
-      // Fallback: use Next.js router refresh (soft navigation, no full page reload)
-      router.refresh()
-    }
-  }
-
-  // Show banner if: not connected AND not dismissed
-  const shouldShowTelegramBanner = !profile.telegramId && !isTelegramBannerDismissed
-
   return (
     <div
       className="min-h-screen relative"
@@ -112,15 +98,12 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           profileType="customer"
         />
 
-        {/* Telegram Connection Prompt Banner */}
-        {shouldShowTelegramBanner && (
-          <div className="mb-6">
-            <TelegramPromptBanner
-              onConnect={handleTelegramConnect}
-              onDismiss={handleTelegramBannerDismiss}
-            />
-          </div>
-        )}
+        {/* Smart Notification Banner System */}
+        <NotificationBannerManager
+          emailVerified={profile.isEmailVerified || false}
+          telegramConnected={!!profile.telegramId}
+          onTelegramConnect={handleTelegramConnect}
+        />
 
         {/* Customer Quick Actions */}
         <div className="mb-4 flex gap-2">
@@ -136,7 +119,7 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           <Button
             size="sm"
             variant="bordered"
-            onPress={() => router.push(`/${lang}/create-task`)}
+            onPress={handleCreateTask}
             startContent={<Send className="w-4 h-4" />}
             className="flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
           >
@@ -169,7 +152,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           telegramConnected={!!profile.telegramId}
           telegramUsername={profile.telegramUsername}
           telegramFirstName={profile.telegramFirstName}
-          onTelegramConnectionChange={handleTelegramConnectionChange}
         />
 
         {/* Statistics Modal */}
@@ -177,6 +159,15 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           isOpen={isStatisticsOpen}
           onClose={() => setIsStatisticsOpen(false)}
           userRole="customer"
+        />
+
+        {/* Review Enforcement Dialog */}
+        <ReviewEnforcementDialog
+          isOpen={showEnforcementDialog}
+          onClose={() => setShowEnforcementDialog(false)}
+          blockType={blockType}
+          pendingTasks={blockingTasks}
+          onReviewTask={handleReviewTask}
         />
       </div>
     </div>

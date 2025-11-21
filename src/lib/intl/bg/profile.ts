@@ -226,6 +226,17 @@ export const profile = {
   // Settings Modal
   'profile.settings.description': 'Управлявайте предпочитанията и настройките за поверителност на акаунта си',
 
+  // Email Verification Banner
+  'profile.email.promptTitle': 'Потвърдете вашия имейл!',
+  'profile.email.promptDescription': 'Потвърдете вашия имейл адрес, за да получавате важни известия за вашите задачи, кандидатури и съобщения.',
+  'profile.email.promptDescriptionSecurity': 'Потвърдете вашия имейл адрес за сигурност на акаунта и за да получавате важни актуализации за вашите задачи и кандидатури.',
+  'profile.email.sendVerification': 'Изпрати имейл',
+  'profile.email.verificationSent': 'Имейлът за потвърждение е изпратен! Проверете входящата си кутия.',
+  'profile.email.verificationFailed': 'Неуспешно изпращане на имейл за потвърждение',
+  'profile.email.checkInboxTitle': 'Проверете входящата си кутия!',
+  'profile.email.checkInboxMessage': 'Изпратихме имейл за потвърждение във вашата входяща кутия. Моля, кликнете върху връзката в имейла, за да потвърдите адреса си.',
+  'profile.email.checkSpam': 'Не сте го получили? Проверете папката си за спам или кликнете бутона по-долу, за да го изпратите отново.',
+
   // Telegram Connection
   'profile.telegramNotifications': 'Telegram Известия',
   'profile.telegramDescription': 'Свържете вашия Telegram акаунт за получаване на мигновени, безплатни известия',

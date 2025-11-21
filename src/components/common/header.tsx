@@ -13,9 +13,8 @@ import { Plus, Handshake, FileText, Send, Briefcase, Search, User, HelpCircle, L
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
-// @todo FEATURE: Uncomment when reviews feature is built
-// import { ReviewDialog, ReviewEnforcementDialog } from "@/features/reviews"
-// import { mockCanCreateTask, mockSubmitReview, type PendingReviewTask } from "@/features/reviews"
+import { useCreateTask } from "@/hooks/use-create-task"
+import { ReviewEnforcementDialog } from "@/features/reviews"
 import {
  Navbar,
  NavbarBrand,
@@ -63,20 +62,18 @@ function Header() {
   { name: t('nav.browseTasks'), href: "/browse-tasks", icon: Search },
  ]
 
+ const {
+  handleCreateTask: handleCreateTaskWithEnforcement,
+  showEnforcementDialog,
+  setShowEnforcementDialog,
+  blockType,
+  blockingTasks,
+  handleReviewTask
+ } = useCreateTask()
+
  const handleCreateTask = useCallback(() => {
-  if (!isAuthenticated) {
-   // If not authenticated, show auth slide-over with create-task action
-   setAuthAction('create-task')
-   setIsAuthSlideOverOpen(true)
-   return
-  }
-
-  // @todo FEATURE: Add review enforcement when reviews feature is built
-  // Check for pending reviews and show ReviewEnforcementDialog if needed
-
-  // All clear - proceed to create task
-  router.push(`/${lang}/create-task`)
- }, [isAuthenticated, lang, router])
+  handleCreateTaskWithEnforcement()
+ }, [handleCreateTaskWithEnforcement])
 
  // @todo FEATURE: Review handlers (commented out until reviews feature is built)
  // const handleStartReviewing = useCallback(() => {
@@ -503,27 +500,14 @@ function Header() {
   </div>
   )}
 
-  {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
-  {/* <ReviewEnforcementDialog
-   isOpen={isEnforcementDialogOpen}
-   onClose={() => setIsEnforcementDialogOpen(false)}
-   blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
-   pendingTasks={pendingReviewTasks}
-   onReviewTask={handleStartReviewing}
-  /> */}
-
-  {/* <ReviewDialog - Sequential Flow */}
-  {/* {pendingReviewTasks.length > 0 && (
-   <ReviewDialog
-    isOpen={isReviewDialogOpen}
-    onClose={() => setIsReviewDialogOpen(false)}
-    onSubmit={handleSubmitReview}
-    task={pendingReviewTasks[currentReviewTaskIndex]}
-    isLoading={isSubmittingReview}
-    currentIndex={currentReviewTaskIndex}
-    totalCount={pendingReviewTasks.length}
-   />
-  )} */}
+  {/* Review Enforcement Dialog */}
+  <ReviewEnforcementDialog
+    isOpen={showEnforcementDialog}
+    onClose={() => setShowEnforcementDialog(false)}
+    blockType={blockType}
+    pendingTasks={blockingTasks}
+    onReviewTask={handleReviewTask}
+  />
  </>
  )
 }

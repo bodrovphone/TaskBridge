@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
@@ -36,6 +36,33 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
 
   // Check if user has Telegram connected
   const hasTelegramConnected = !!profile.telegramId
+
+  // Check if Telegram banner is dismissed (for showing bottom email banner)
+  const [telegramBannerDismissed, setTelegramBannerDismissed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('telegram_banner_dismissed') === 'true'
+    }
+    return false
+  })
+
+  // Listen for changes to localStorage (when banner is dismissed)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (typeof window !== 'undefined') {
+        setTelegramBannerDismissed(localStorage.getItem('telegram_banner_dismissed') === 'true')
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    // Also check periodically in case of same-tab changes
+    const interval = setInterval(handleStorageChange, 500)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
 
   // Get translated city options
   const cities = useMemo(() => getCitiesWithLabels(t), [t])
@@ -181,8 +208,9 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
         </div>
       </CardHeader>
       <CardBody className="space-y-4 px-3 md:px-6 py-4 md:py-6">
-        {/* Email Verification Banner - Shown when email is not verified */}
-        {!profile.isEmailVerified && (
+        {/* Email Verification Banner - BOTTOM */}
+        {/* Show ONLY when: email not verified AND Telegram banner is showing at TOP (Telegram not connected AND not dismissed) */}
+        {!profile.isEmailVerified && !profile.telegramId && !telegramBannerDismissed && (
           <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-400 rounded-lg shadow-sm">
             <div className="flex items-start gap-3">
               <Mail className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />

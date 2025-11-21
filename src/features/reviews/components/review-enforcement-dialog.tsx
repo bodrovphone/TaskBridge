@@ -14,6 +14,7 @@ import {
 } from '@nextui-org/react'
 import { AlertTriangle, Star, User, FileText, CheckCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useParams } from 'next/navigation'
 import type { PendingReviewTask, BlockType } from '../lib/types'
 
 interface ReviewEnforcementDialogProps {
@@ -34,14 +35,15 @@ export function ReviewEnforcementDialog({
   onProceedToTaskCreation
 }: ReviewEnforcementDialogProps) {
   const { t } = useTranslation()
+  const params = useParams()
+  const lang = (params?.lang as string) || 'bg'
 
   const isHardBlock = blockType === 'hard_block'
   const isSoftBlock = blockType === 'soft_block'
 
   const handleStartReviews = () => {
-    if (pendingTasks.length > 0) {
-      onReviewTask(pendingTasks[0].id)
-    }
+    // Redirect to pending reviews page with locale prefix
+    window.location.href = `/${lang}/reviews/pending`
   }
 
   return (
@@ -58,7 +60,8 @@ export function ReviewEnforcementDialog({
         base: 'bg-white z-[100]',
         header: 'border-b border-gray-200',
         body: 'py-6',
-        footer: 'border-t border-gray-200'
+        footer: 'border-t border-gray-200',
+        closeButton: 'hover:bg-gray-100 active:bg-gray-200 text-gray-500 hover:text-gray-700 text-xl sm:text-base mt-2 mr-2 sm:mt-0 sm:mr-0' // Larger on mobile
       }}
     >
       <ModalContent>
@@ -67,13 +70,13 @@ export function ReviewEnforcementDialog({
             {/* Header */}
             <ModalHeader className="flex flex-col gap-2">
               <div className="flex items-center gap-3">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
                   isHardBlock ? 'bg-danger-100' : 'bg-warning-100'
                 }`}>
                   {isHardBlock ? (
                     <AlertTriangle className="w-6 h-6 text-danger" />
                   ) : (
-                    <Star className="w-6 h-6 text-warning" />
+                    <Star className="w-6 h-6 text-warning fill-warning" />
                   )}
                 </div>
                 <div>
@@ -112,92 +115,46 @@ export function ReviewEnforcementDialog({
                   </div>
                 )}
 
-                {/* Pending Tasks List */}
-                <div className="space-y-3">
-                  {pendingTasks.map((task, index) => (
-                    <Card
-                      key={task.id}
-                      className="border border-gray-200"
-                    >
-                      <CardBody className="p-4">
-                        <div className="flex items-start gap-3">
-                          {/* Task Number Badge */}
-                          <div className="flex-shrink-0">
-                            <Chip
-                              size="sm"
-                              variant="flat"
-                              color="primary"
-                              className="font-semibold"
-                            >
-                              {index + 1}
-                            </Chip>
-                          </div>
-
-                          {/* Avatar */}
-                          <Avatar
-                            name={task.professionalName}
-                            src={task.professionalAvatar}
-                            size="md"
-                            classNames={{
-                              base: 'flex-shrink-0'
-                            }}
-                          />
-
-                          {/* Content */}
-                          <div className="flex-1 min-w-0">
-                            {/* Task Title */}
-                            <div className="flex items-start gap-2 mb-1">
-                              <FileText className="w-4 h-4 text-gray-600 mt-0.5 flex-shrink-0" />
-                              <h4 className="font-semibold text-gray-900 leading-tight text-sm">
-                                {task.title}
-                              </h4>
-                            </div>
-
-                            {/* Professional Name */}
-                            <div className="flex items-center gap-2 text-xs text-gray-600">
-                              <User className="w-3 h-3 flex-shrink-0" />
-                              <span>{task.professionalName}</span>
-                            </div>
-
-                            {/* Days Ago */}
-                            <div className="text-xs text-gray-500 mt-1">
-                              {t('reviews.pending.completedDaysAgo', { count: task.daysAgo })}
-                            </div>
-                          </div>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  ))}
-                </div>
-
-                {/* Progress indicator if multiple tasks */}
-                {pendingTasks.length > 1 && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-sm text-blue-800">
-                      <CheckCircle className="w-4 h-4 flex-shrink-0" />
-                      <span>
-                        {t('reviews.progress.multipleReviews', { count: pendingTasks.length })}
-                      </span>
+                {/* Pending Reviews Count */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                      <Star className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {t('reviews.enforcement.pendingCount', { count: pendingTasks.length })}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {t('reviews.enforcement.helpProfessionals')}
+                      </p>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </ModalBody>
 
             {/* Footer */}
-            <ModalFooter>
+            <ModalFooter className="gap-3 px-6 py-4">
               {isSoftBlock && (
                 <Button
-                  variant="light"
+                  variant="flat"
                   onPress={onClose}
+                  size="lg"
+                  className="flex-1 font-semibold text-sm"
                 >
                   {t('reviews.enforcement.softBlock.cancelButton')}
                 </Button>
               )}
               <Button
-                color={isHardBlock ? 'danger' : 'primary'}
                 onPress={handleStartReviews}
                 startContent={<Star className="w-4 h-4" />}
+                size="lg"
+                className={`flex-1 font-semibold text-sm ${
+                  isHardBlock
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
               >
                 {isHardBlock
                   ? t('reviews.enforcement.hardBlock.confirmButton')

@@ -817,6 +817,17 @@ export const profile = {
   // Settings Modal
   'profile.settings.description': 'Управляйте предпочтениями аккаунта и настройками конфиденциальности',
 
+  // Email Verification Banner
+  'profile.email.promptTitle': 'Подтвердите ваш email!',
+  'profile.email.promptDescription': 'Подтвердите ваш email адрес, чтобы получать важные уведомления о ваших задачах, заявках и сообщениях.',
+  'profile.email.promptDescriptionSecurity': 'Подтвердите ваш email адрес для безопасности аккаунта и чтобы получать важные обновления о ваших задачах и заявках.',
+  'profile.email.sendVerification': 'Отправить письмо',
+  'profile.email.verificationSent': 'Письмо для подтверждения отправлено! Проверьте вашу почту.',
+  'profile.email.verificationFailed': 'Не удалось отправить письмо для подтверждения',
+  'profile.email.checkInboxTitle': 'Проверьте вашу почту!',
+  'profile.email.checkInboxMessage': 'Мы отправили письмо для подтверждения на вашу почту. Пожалуйста, нажмите на ссылку в письме, чтобы подтвердить ваш адрес.',
+  'profile.email.checkSpam': 'Не получили письмо? Проверьте папку спам или нажмите кнопку ниже, чтобы отправить повторно.',
+
   // Telegram Connection
   'profile.telegramNotifications': 'Telegram Уведомления',
   'profile.telegramDescription': 'Подключите ваш Telegram аккаунт для получения мгновенных, бесплатных уведомлений',

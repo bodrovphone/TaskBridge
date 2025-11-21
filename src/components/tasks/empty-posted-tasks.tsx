@@ -7,6 +7,8 @@ import { Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
 import { Sparkles, Lightbulb, Plus } from "lucide-react";
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { DEFAULT_LOCALE } from '@/lib/constants/locales';
+import { useCreateTask } from '@/hooks/use-create-task';
+import { ReviewEnforcementDialog } from '@/features/reviews';
 
 /**
  * Empty state component for when user has no posted tasks
@@ -18,9 +20,14 @@ export default function EmptyPostedTasks() {
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
 
-  const handleCreateTask = () => {
-    router.push(`/${currentLocale}/create-task`);
-  };
+  const {
+    handleCreateTask,
+    showEnforcementDialog,
+    setShowEnforcementDialog,
+    blockType,
+    blockingTasks,
+    handleReviewTask
+  } = useCreateTask();
 
   return (
     <NextUICard className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 shadow-xl border-2 border-blue-200">
@@ -134,6 +141,15 @@ export default function EmptyPostedTasks() {
           {t('postedTasks.empty.hint')}
         </motion.p>
       </div>
+
+      {/* Review Enforcement Dialog */}
+      <ReviewEnforcementDialog
+        isOpen={showEnforcementDialog}
+        onClose={() => setShowEnforcementDialog(false)}
+        blockType={blockType}
+        pendingTasks={blockingTasks}
+        onReviewTask={handleReviewTask}
+      />
     </NextUICard>
   );
 }

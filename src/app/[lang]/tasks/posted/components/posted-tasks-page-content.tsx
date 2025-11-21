@@ -8,8 +8,7 @@ import PostedTaskCard from '@/components/ui/posted-task-card'
 import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'
 import { useCreateTask } from '@/hooks/use-create-task'
 import { usePostedTasks } from '@/hooks/use-posted-tasks'
-// @todo FEATURE: Uncomment when reviews feature is built
-// import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
+import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
 
 interface PostedTasksPageContentProps {
@@ -25,12 +24,16 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   // Use TanStack Query hook for data fetching
   const { tasks, isLoading, error } = usePostedTasks()
 
-  // Create task hook with auth
+  // Create task hook with auth and review enforcement
   const {
     handleCreateTask,
     showAuthPrompt,
-    setShowAuthPrompt
-    // @todo FEATURE: Add review-related properties when reviews feature is built
+    setShowAuthPrompt,
+    showEnforcementDialog,
+    setShowEnforcementDialog,
+    blockType,
+    blockingTasks,
+    handleReviewTask
   } = useCreateTask()
 
   const filteredTasks = tasks.filter(task => {
@@ -231,27 +234,14 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
         action="create-task"
       />
 
-      {/* @todo FEATURE: Review dialogs (commented out until reviews feature is built) */}
-      {/* <ReviewEnforcementDialog
-        isOpen={isEnforcementDialogOpen}
-        onClose={() => setIsEnforcementDialogOpen(false)}
-        blockType={pendingReviewTasks.length > 0 ? 'missing_reviews' : null}
-        pendingTasks={pendingReviewTasks}
-        onReviewTask={handleStartReviewing}
-      /> */}
-
-      {/* Review Dialog - Sequential Flow */}
-      {/* {pendingReviewTasks.length > 0 && (
-        <ReviewDialog
-          isOpen={isReviewDialogOpen}
-          onClose={() => setIsReviewDialogOpen(false)}
-          onSubmit={handleSubmitReview}
-          task={pendingReviewTasks[currentReviewTaskIndex]}
-          isLoading={isSubmittingReview}
-          currentIndex={currentReviewTaskIndex}
-          totalCount={pendingReviewTasks.length}
-        />
-      )} */}
+      {/* Review Enforcement Dialog */}
+      <ReviewEnforcementDialog
+        isOpen={showEnforcementDialog}
+        onClose={() => setShowEnforcementDialog(false)}
+        blockType={blockType}
+        pendingTasks={blockingTasks}
+        onReviewTask={handleReviewTask}
+      />
     </div>
   )
 }

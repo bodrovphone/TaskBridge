@@ -61,6 +61,9 @@ export const reviews = {
   'reviews.enforcement.softBlock.pleaseReview': 'Please review your completed tasks before creating more:',
   'reviews.enforcement.softBlock.leaveReviewsButton': 'Leave Reviews',
   'reviews.enforcement.softBlock.cancelButton': 'Cancel',
+  'reviews.enforcement.pendingCount': '{{count}} pending review',
+  'reviews.enforcement.pendingCount_plural': '{{count}} pending reviews',
+  'reviews.enforcement.helpProfessionals': 'Help professionals by sharing your feedback',
 
   // Progress
   'reviews.progress.reviewing': 'Reviewing {{current}} of {{total}}',

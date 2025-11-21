@@ -85,4 +85,11 @@ export const auth = {
   'auth.emailVerification.error': 'Не удалось отправить письмо для подтверждения. Пожалуйста, попробуйте снова.',
   'auth.emailVerification.rateLimited': 'Слишком много запросов. Пожалуйста, попробуйте позже.',
   'auth.emailVerification.checkSpam': 'Не забудьте проверить папку Спам.',
+
+  // Email verification after signup (auth slide-over)
+  'auth.emailVerification.checkInbox': 'Проверьте вашу почту!',
+  'auth.emailVerification.sentMessage': 'Мы отправили письмо для подтверждения на',
+  'auth.emailVerification.instructions': 'Нажмите на ссылку в письме, чтобы подтвердить ваш аккаунт.',
+  'auth.emailVerification.resend': 'Отправить письмо для подтверждения повторно',
+  'auth.emailVerification.continue': 'Продолжить в приложение',
 };

@@ -226,6 +226,17 @@ export const profile = {
   // Settings Modal
   'profile.settings.description': 'Manage your account preferences and privacy settings',
 
+  // Email Verification Banner
+  'profile.email.promptTitle': 'Verify Your Email!',
+  'profile.email.promptDescription': 'Verify your email address to receive important notifications about your tasks, applications, and messages.',
+  'profile.email.promptDescriptionSecurity': 'Verify your email address for account security and to receive important updates about your tasks and applications.',
+  'profile.email.sendVerification': 'Send Email',
+  'profile.email.verificationSent': 'Verification email sent! Check your inbox.',
+  'profile.email.verificationFailed': 'Failed to send verification email',
+  'profile.email.checkInboxTitle': 'Check Your Inbox!',
+  'profile.email.checkInboxMessage': 'We sent a verification email to your inbox. Please click the link in the email to verify your address.',
+  'profile.email.checkSpam': "Didn't receive it? Check your spam folder or click the button below to resend.",
+
   // Telegram Connection
   'profile.telegramNotifications': 'Telegram Notifications',
   'profile.telegramDescription': 'Connect your Telegram account to receive instant, free notifications',
