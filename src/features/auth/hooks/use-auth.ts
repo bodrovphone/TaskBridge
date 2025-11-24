@@ -37,8 +37,8 @@ export function useAuth(): UseAuthReturn {
   const [error, setError] = useState<string | null>(null)
   const [notificationToken, setNotificationToken] = useState<string | null>(null)
 
-  // Create supabase client only once
-  const [supabase] = useState(() => createClient())
+  // Note: We no longer create a Supabase client here to avoid CORS issues
+  // All auth operations go through our API routes
 
   /**
    * Fetch user profile from our API
@@ -123,35 +123,40 @@ export function useAuth(): UseAuthReturn {
       }
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-
-      if (session?.user) {
-        fetchProfile(session.user.id)
-      }
-
-      setLoading(false)
-    })
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setUser(session?.user ?? null)
-
-      if (session?.user) {
-        await fetchProfile(session.user.id)
-      } else {
+    // Check auth via our API route instead of directly calling Supabase
+    fetch('/api/auth/profile')
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json()
+          // Create a minimal user object from profile data
+          const userObj: SupabaseUser = {
+            id: data.user.id,
+            email: data.user.email,
+            app_metadata: {},
+            user_metadata: {},
+            aud: 'authenticated',
+            created_at: data.user.createdAt || new Date().toISOString(),
+          }
+          setUser(userObj)
+          setProfile(data.user)
+        } else {
+          // Not authenticated - this is fine
+          setUser(null)
+          setProfile(null)
+        }
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('[useAuth] Error checking auth status:', err)
+        setUser(null)
         setProfile(null)
-      }
+        setLoading(false)
+      })
 
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
+    // Note: We no longer use onAuthStateChange to avoid CORS issues
+    // Auth state changes will be detected when components refetch data after login/logout
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // Run only once on mount - supabase client is stable
+  }, []) // Run only once on mount
 
   /**
    * Sign up with email and password (via API route)
@@ -183,11 +188,18 @@ export function useAuth(): UseAuthReturn {
         return { error: data.error }
       }
 
-      // Fetch the session after successful signup
-      const { data: { session } } = await supabase.auth.getSession()
-
-      if (session?.user) {
-        await fetchProfile(session.user.id)
+      // Fetch the profile after successful signup (via API)
+      if (data.user) {
+        const userObj: SupabaseUser = {
+          id: data.user.id,
+          email: data.user.email,
+          app_metadata: {},
+          user_metadata: {},
+          aud: 'authenticated',
+          created_at: data.user.createdAt || new Date().toISOString(),
+        }
+        setUser(userObj)
+        setProfile(data.user)
       }
 
       return { error: null }
@@ -226,12 +238,18 @@ export function useAuth(): UseAuthReturn {
         return { error: data.error }
       }
 
-      // Refresh the session on client side to sync auth state
-      const { data: { session } } = await supabase.auth.getSession()
-
-      if (session?.user) {
-        setUser(session.user)
-        await fetchProfile(session.user.id)
+      // Fetch the profile after successful login (via API)
+      if (data.user) {
+        const userObj: SupabaseUser = {
+          id: data.user.id,
+          email: data.user.email,
+          app_metadata: {},
+          user_metadata: {},
+          aud: 'authenticated',
+          created_at: data.user.createdAt || new Date().toISOString(),
+        }
+        setUser(userObj)
+        setProfile(data.user)
       }
 
       return { error: null }
@@ -244,56 +262,20 @@ export function useAuth(): UseAuthReturn {
 
   /**
    * Sign in with Google OAuth
+   * TODO: Implement OAuth via API route to avoid CORS issues
    */
   const signInWithGoogle = async (): Promise<{ error: string | null }> => {
-    try {
-      setError(null)
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${location.origin}/auth/callback`,
-        },
-      })
-
-      if (error) {
-        setError(error.message)
-        return { error: error.message }
-      }
-
-      return { error: null }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to sign in with Google'
-      setError(message)
-      return { error: message }
-    }
+    setError('OAuth login is temporarily disabled. Please use email/password.')
+    return { error: 'OAuth login is temporarily disabled. Please use email/password.' }
   }
 
   /**
    * Sign in with Facebook OAuth
+   * TODO: Implement OAuth via API route to avoid CORS issues
    */
   const signInWithFacebook = async (): Promise<{ error: string | null }> => {
-    try {
-      setError(null)
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
-        options: {
-          redirectTo: `${location.origin}/auth/callback`,
-        },
-      })
-
-      if (error) {
-        setError(error.message)
-        return { error: error.message }
-      }
-
-      return { error: null }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to sign in with Facebook'
-      setError(message)
-      return { error: message }
-    }
+    setError('OAuth login is temporarily disabled. Please use email/password.')
+    return { error: 'OAuth login is temporarily disabled. Please use email/password.' }
   }
 
   /**

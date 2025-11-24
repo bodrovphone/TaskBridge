@@ -48,7 +48,8 @@ async function compressImage(file: File): Promise<Blob> {
 export async function uploadTaskImage(
   taskId: string,
   userId: string,
-  file: File
+  file: File,
+  index?: number
 ): Promise<{ url: string | null; error: string | null }> {
   try {
     // Validate file type
@@ -68,7 +69,7 @@ export async function uploadTaskImage(
 
     // Generate unique filename
     const fileExt = file.name.split('.').pop() || 'jpg'
-    const fileName = `${userId}/${taskId}.${fileExt}`
+    const fileName = `${userId}/${taskId}${index !== undefined ? `-${index}` : ''}.${fileExt}`
 
     // Upload to Supabase
     const supabase = createClient()

@@ -37,16 +37,31 @@ export default function BrowseTasksPage() {
  const hasActiveFilters = activeFilterCount > 0;
 
  // Always fetch featured tasks (used as fallback when filters return no results)
- const { data: featuredData } = useQuery<PaginatedTasksResponse>({
+ const { data: featuredData, error: featuredError } = useQuery<PaginatedTasksResponse>({
   queryKey: ['featured-tasks'],
   queryFn: async () => {
-   const response = await fetch('/api/tasks?featured=true');
-   if (!response.ok) throw new Error('Failed to fetch featured tasks');
-   return response.json();
+   try {
+    const response = await fetch('/api/tasks?featured=true');
+    if (!response.ok) {
+     const errorData = await response.json().catch(() => ({}));
+     console.error('Featured tasks API error:', {
+      status: response.status,
+      statusText: response.statusText,
+      error: errorData
+     });
+     throw new Error(errorData.error || 'Failed to fetch featured tasks');
+    }
+    return response.json();
+   } catch (error) {
+    console.error('Error fetching featured tasks:', error);
+    throw error;
+   }
   },
   // Always enabled - featured tasks are shown in two scenarios:
   // 1. No filters applied (primary featured section)
   // 2. Filters applied but no results (fallback/suggestion)
+  retry: 2, // Retry failed requests twice
+  retryDelay: 1000, // Wait 1 second between retries
  });
 
  // Fetch filtered tasks with infinite scroll
@@ -61,13 +76,30 @@ export default function BrowseTasksPage() {
  } = useInfiniteQuery<PaginatedTasksResponse>({
   queryKey: ['browse-tasks', buildApiQuery()],
   queryFn: async ({ pageParam = 1 }) => {
-   // Build query with current page
-   const params = new URLSearchParams(buildApiQuery());
-   params.set('page', String(pageParam));
+   try {
+    // Build query with current page
+    const params = new URLSearchParams(buildApiQuery());
+    params.set('page', String(pageParam));
 
-   const response = await fetch(`/api/tasks?${params.toString()}`);
-   if (!response.ok) throw new Error('Failed to fetch tasks');
-   return response.json();
+    const url = `/api/tasks?${params.toString()}`;
+    console.log('[BrowseTasksPage] Fetching tasks:', url);
+
+    const response = await fetch(url);
+    if (!response.ok) {
+     const errorData = await response.json().catch(() => ({}));
+     console.error('[BrowseTasksPage] Tasks API error:', {
+      status: response.status,
+      statusText: response.statusText,
+      error: errorData,
+      url
+     });
+     throw new Error(errorData.error || 'Failed to fetch tasks');
+    }
+    return response.json();
+   } catch (error) {
+    console.error('[BrowseTasksPage] Error fetching tasks:', error);
+    throw error;
+   }
   },
   getNextPageParam: (lastPage) => {
    // Return next page number if hasNext is true, otherwise undefined
@@ -76,6 +108,8 @@ export default function BrowseTasksPage() {
      : undefined;
   },
   initialPageParam: 1,
+  retry: 2, // Retry failed requests twice
+  retryDelay: 1000, // Wait 1 second between retries
  });
 
  // Flatten all pages into a single array of tasks
@@ -111,6 +145,13 @@ export default function BrowseTasksPage() {
    setSelectedTaskId(null); // Clear the selected task
   }
  }, [user, selectedTaskId, authSlideOverOpen, router, i18n.language]);
+
+ // Log featured tasks errors
+ useEffect(() => {
+  if (featuredError) {
+   console.error('[BrowseTasksPage] Featured tasks error:', featuredError);
+  }
+ }, [featuredError]);
 
  return (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">

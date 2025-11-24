@@ -135,12 +135,21 @@ export async function GET(request: NextRequest) {
     const isFeaturedRequest = searchParams.get('featured') === 'true'
 
     if (isFeaturedRequest) {
+      console.log('[Tasks API] GET: Featured tasks request')
+
       // 3. Handle featured tasks request
       const taskService = new TaskService()
       const result = await taskService.getFeaturedTasks()
 
       if (!result.success) {
         const error = result.error as Error
+
+        console.error('[Tasks API] GET: Featured tasks error:', {
+          message: error.message,
+          isAppError: isAppError(error),
+          errorType: error.constructor.name,
+          stack: error.stack
+        })
 
         if (isAppError(error)) {
           return NextResponse.json(
@@ -158,6 +167,8 @@ export async function GET(request: NextRequest) {
           { status: 500 }
         )
       }
+
+      console.log('[Tasks API] GET: Featured tasks success - returned', result.data.length, 'tasks')
 
       // Return featured tasks with simple pagination structure
       return NextResponse.json({
@@ -253,9 +264,17 @@ export async function GET(request: NextRequest) {
     // 6. Return success response
     return NextResponse.json(result.data, { status: 200 })
   } catch (error) {
-    console.error('Get tasks error:', error)
+    console.error('[Tasks API] GET: Unexpected error in route handler:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      type: error?.constructor?.name
+    })
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

@@ -117,8 +117,11 @@ export async function GET(request: NextRequest) {
     const authUser = await authenticateRequest(request)
 
     if (!authUser) {
+      console.log('[Profile API] GET: No authenticated user found')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    console.log('[Profile API] GET: Authenticated user:', authUser.id)
 
     // 2. Create service instances
     const userRepository = new UserRepository()
@@ -130,6 +133,7 @@ export async function GET(request: NextRequest) {
     // 4. Return user profile or error
     try {
       const user = result.unwrap()
+      console.log('[Profile API] GET: Successfully retrieved profile for user:', authUser.id)
       return NextResponse.json(
         {
           user: user.toProfile(),
@@ -138,6 +142,12 @@ export async function GET(request: NextRequest) {
       )
     } catch (error: any) {
       const statusCode = error.name === 'NotFoundError' ? 404 : 400
+      console.error('[Profile API] GET: Result error:', {
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        userId: authUser.id
+      })
       return NextResponse.json(
         {
           error: error.message,
@@ -147,7 +157,7 @@ export async function GET(request: NextRequest) {
       )
     }
   } catch (error) {
-    console.error('Get profile error:', error)
+    console.error('[Profile API] GET: Unexpected error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

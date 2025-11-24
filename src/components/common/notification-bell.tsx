@@ -10,11 +10,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { filterUnreadNotifications } from '@/lib/utils/notification-read-state';
 
 export default function NotificationBell() {
- const { authenticatedFetch, user } = useAuth();
+ const { authenticatedFetch, user, loading } = useAuth();
  const { toggleOpen, isOpen } = useNotificationStore();
 
- // Only fetch notifications if user is authenticated
- const { notifications } = useNotificationsQuery(authenticatedFetch, !!user);
+ // Only fetch notifications if user is authenticated AND auth is not loading
+ const { notifications } = useNotificationsQuery(authenticatedFetch, !!user && !loading);
 
  // Filter out read notifications from localStorage
  // Re-compute when the panel opens/closes to catch newly marked-as-read items

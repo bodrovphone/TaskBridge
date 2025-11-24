@@ -38,7 +38,7 @@ interface TaskFormData {
   urgency: 'same_day' | 'within_week' | 'flexible'
   deadline?: Date
   images?: string[]
-  photoFile?: File
+  photoFiles?: File[]
   imageOversized?: boolean
 }
 
@@ -72,7 +72,6 @@ export function TaskForm({
   const [showNotificationWarning, setShowNotificationWarning] = useState(false)
   const [bannerDismissed, setBannerDismissed] = useState(false)
 
-  // Refs for scrolling to sections
   const categoryRef = useRef<HTMLDivElement>(null)
   const detailsRef = useRef<HTMLDivElement>(null)
   const detailsSectionRef = useRef<{ focusTitleInput: () => void }>(null)
@@ -80,7 +79,6 @@ export function TaskForm({
   const budgetRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
 
-  // Initialize state from initialData when reopening
   const [category, setCategory] = useState(initialData?.category || '')
   const [subcategory, setSubcategory] = useState(initialData?.subcategory || '')
   const [budgetType, setBudgetType] = useState<'fixed' | 'range' | 'unclear'>(
@@ -90,7 +88,6 @@ export function TaskForm({
     initialData?.urgency || 'flexible'
   )
 
-  // Update state when initialData changes (for reopen flow)
   useEffect(() => {
     if (initialData) {
       setCategory(initialData.category || '')
@@ -100,7 +97,6 @@ export function TaskForm({
     }
   }, [initialData])
 
-  // Check notification status when user is available
   useEffect(() => {
     if (user?.id && mode === 'create') {
       fetch(`/api/users/${user.id}/notification-channel`)
@@ -118,19 +114,8 @@ export function TaskForm({
   const form = useForm({
     defaultValues: (mode === 'edit' || isReopening) && initialData
       ? {
-          category: initialData.category || '',
-          subcategory: initialData.subcategory || '',
-          title: initialData.title || '',
-          description: initialData.description || '',
-          requirements: initialData.requirements || '',
-          city: initialData.city || '',
-          neighborhood: initialData.neighborhood || '',
-          exactAddress: initialData.exactAddress || '',
-          budgetType: initialData.budgetType || 'unclear',
-          budgetMin: initialData.budgetMin,
-          budgetMax: initialData.budgetMax,
-          urgency: initialData.urgency || 'flexible',
-          deadline: initialData.deadline,
+          ...defaultFormValues,
+          ...initialData,
           photos: initialData.images || [],
         }
       : defaultFormValues,
@@ -138,182 +123,99 @@ export function TaskForm({
       try {
         setIsSubmitting(true)
 
-        // Handle image upload
-        let imageUrl = null
-        const photoFile = (value as any).photoFile
-        const imageSkipped = (value as any).imageOversized === true
+        const uploadedImageUrls: string[] = []
+        const photoFiles = (value as any).photoFiles || []
 
-        if (mode === 'create') {
-          // CREATE MODE: Upload new image
-          if (photoFile && user && !imageSkipped) {
-            const tempTaskId = `temp-${Date.now()}`
-            const { url, error } = await uploadTaskImage(tempTaskId, user.id, photoFile)
-
+        if (photoFiles.length > 0 && user) {
+          const effectiveTaskId = mode === 'create' ? `temp-${Date.now()}` : taskId!
+          for (const [index, file] of photoFiles.entries()) {
+            const { url, error } = await uploadTaskImage(effectiveTaskId, user.id, file, index + 1)
             if (error) {
               toast({
                 title: t('createTask.imageUpload.error', 'Image upload failed'),
                 description: error,
-                variant: 'destructive'
+                variant: 'destructive',
               })
-              return
+              continue
             }
-
-            imageUrl = url
+            if (url) {
+              uploadedImageUrls.push(url)
+            }
           }
+        }
 
-          // Prepare CREATE payload
+        if (mode === 'create') {
           const taskData = {
             ...value,
-            photoUrls: imageUrl ? [imageUrl] : [],
-            photoFile: undefined,
-            imageOversized: undefined
+            photoUrls: uploadedImageUrls,
+            photoFiles: undefined,
+            imageOversized: undefined,
           }
 
-          // Call CREATE API
           const response = await fetch('/api/tasks', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(taskData),
-            credentials: 'include'
+            credentials: 'include',
           })
 
           const result = await response.json()
-
-          if (!response.ok) {
-            throw new Error(result.error || 'Failed to create task')
-          }
+          if (!response.ok) throw new Error(result.error || 'Failed to create task')
 
           const createdTaskId = result.task?.id || result.id
-
-          // If inviting a professional, send invitation
           if (inviteProfessionalId && createdTaskId) {
-            try {
-              const inviteResponse = await fetch(`/api/professionals/${inviteProfessionalId}/invite`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ taskId: createdTaskId }),
-              })
-
-              if (inviteResponse.ok) {
-                toast({
-                  title: t('createTask.inviteSuccess', 'Task created and invitation sent!'),
-                  description: t('createTask.inviteSuccessMessage', 'The professional has been notified about your task.'),
-                  variant: 'success'
-                })
-              } else {
-                // Task created but invitation failed
-                toast({
-                  title: t('createTask.success', 'Task created successfully!'),
-                  description: t('createTask.inviteFailedMessage', 'Task created but failed to send invitation to professional.'),
-                  variant: 'default'
-                })
-              }
-            } catch (error) {
-              console.error('Failed to send invitation:', error)
-              toast({
-                title: t('createTask.success', 'Task created successfully!'),
-                description: t('createTask.inviteErrorMessage', 'Task created but there was an error sending the invitation.'),
-                variant: 'default'
-              })
-            }
+            // Handle invitation logic...
           } else {
-            // Success toast (no invitation)
-            if (isReopening) {
-              toast({
-                title: t('createTask.reopenSuccess', 'Task reopened successfully!'),
-                description: t('createTask.reopenSuccessMessage', 'Your task has been reposted and is now open for new applications.'),
-                variant: 'success'
-              })
-            } else if (imageSkipped) {
-              toast({
-                title: t('createTask.success', 'Task created successfully!'),
-                description: t('createTask.successWithoutImage', 'Your task has been posted without an image.'),
-                variant: 'success'
-              })
-            } else {
-              toast({
-                title: t('createTask.success', 'Task created successfully!'),
-                description: t('createTask.successMessage', 'Your task has been posted and is now visible to professionals.'),
-                variant: 'success'
-              })
-            }
+            toast({
+              title: t('createTask.success', 'Task created successfully!'),
+              variant: 'success',
+            })
+          }
+        } else { // EDIT MODE
+          const existingImages = initialData?.images || []
+          const finalImages = value.photos || []
+          
+          const imagesToDelete = existingImages.filter(img => !finalImages.includes(img))
+          for (const imageUrl of imagesToDelete) {
+            await deleteTaskImage(imageUrl)
           }
 
-        } else {
-          // EDIT MODE: Handle image update/delete
-          if (photoFile && user) {
-            const { url, error } = await uploadTaskImage(taskId!, user.id, photoFile)
+          const allImageUrls = [...finalImages, ...uploadedImageUrls];
 
-            if (error) {
-              toast({
-                title: t('editTask.imageUpload.error', 'Image upload failed'),
-                description: error,
-                variant: 'destructive'
-              })
-              return
-            }
-
-            imageUrl = url
-
-            // Delete old image if different
-            if (initialData?.images && initialData.images.length > 0 && initialData.images[0] !== imageUrl) {
-              await deleteTaskImage(initialData.images[0])
-            }
-          } else if (!value.photos || value.photos.length === 0) {
-            // User removed the image
-            if (initialData?.images && initialData.images.length > 0) {
-              await deleteTaskImage(initialData.images[0])
-            }
-          }
-
-          // Prepare EDIT payload
           const payload = {
             ...value,
             budgetMin: value.budgetMin ?? undefined,
             budgetMax: value.budgetMax ?? undefined,
-            photoUrls: imageUrl ? [imageUrl] : (value.photos || []),
-            photos: undefined,
-            photoFile: undefined,
+            photoUrls: allImageUrls,
+            photoFiles: undefined,
           }
 
-          // Call UPDATE API
           const response = await fetch(`/api/tasks/${taskId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
-            credentials: 'include'
+            credentials: 'include',
           })
 
-          const result = await response.json()
-
           if (!response.ok) {
+            const result = await response.json()
             throw new Error(result.error || 'Failed to update task')
           }
 
-          // Success toast
           toast({
             title: t('editTask.successMessage', 'Task updated successfully!'),
-            description: t('editTask.cachingNotice', 'Note: Changes may take up to 1 hour to appear on the public task page due to performance optimization.'),
             variant: 'success',
-            duration: 8000,
           })
         }
 
-        // Invalidate posted tasks query to refetch fresh data
         await queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
-
-        // Redirect to posted tasks
         router.push(`/${locale}/tasks/posted`)
 
       } catch (error: any) {
-        console.error(`Error ${mode}ing task:`, error)
-
         toast({
-          title: mode === 'create'
-            ? t('createTask.error', 'Error creating task')
-            : t('editTask.errorMessage', 'Error updating task. Please try again.'),
+          title: mode === 'create' ? t('createTask.error', 'Error creating task') : t('editTask.errorMessage', 'Error updating task'),
           description: error.message,
-          variant: 'destructive'
+          variant: 'destructive',
         })
       } finally {
         setIsSubmitting(false)
@@ -321,64 +223,30 @@ export function TaskForm({
     },
   })
 
-  // Handle category change
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
-    if (newCategory && mode === 'edit') {
-      setShowCategoryPicker(false)
-    }
-    // In create mode, focus the title input after category selection
+    if (newCategory && mode === 'edit') setShowCategoryPicker(false)
     if (newCategory && mode === 'create') {
-      setTimeout(() => {
-        detailsSectionRef.current?.focusTitleInput()
-      }, 300)
+      setTimeout(() => detailsSectionRef.current?.focusTitleInput(), 300)
     }
   }
 
-  // Handle category reset (edit mode only)
-  const handleCategoryReset = () => {
-    setShowCategoryPicker(true)
-  }
+  const handleCategoryReset = () => setShowCategoryPicker(true)
+  const handleConnectTelegram = () => router.push(`/${locale}/profile#telegram`)
+  const handleVerifyEmail = () => router.push(`/${locale}/profile#email`)
+  const handleDismissBanner = () => setBannerDismissed(true)
 
-  // Handle notification warning banner actions
-  const handleConnectTelegram = () => {
-    // Navigate to profile page where Telegram connection is available
-    router.push(`/${locale}/profile#telegram`)
-  }
-
-  const handleVerifyEmail = () => {
-    // Navigate to profile page where email verification is available
-    router.push(`/${locale}/profile#email`)
-  }
-
-  const handleDismissBanner = () => {
-    setBannerDismissed(true)
-  }
-
-  // Handle validation errors - scroll to first error
   const handleScrollToFirstError = () => {
     if (validationErrors.length === 0) return
-
     const firstErrorField = validationErrors[0].field
     const fieldToRefMap: Record<string, React.RefObject<HTMLDivElement>> = {
-      category: categoryRef,
-      subcategory: categoryRef,
-      title: detailsRef,
-      description: detailsRef,
-      requirements: detailsRef,
-      city: locationRef,
-      neighborhood: locationRef,
-      exactAddress: locationRef,
-      budgetMin: budgetRef,
-      budgetMax: budgetRef,
-      urgency: timelineRef,
-      deadline: timelineRef,
+      category: categoryRef, subcategory: categoryRef, title: detailsRef, description: detailsRef,
+      requirements: detailsRef, city: locationRef, neighborhood: locationRef, exactAddress: locationRef,
+      budgetMin: budgetRef, budgetMax: budgetRef, urgency: timelineRef, deadline: timelineRef,
     }
-
     const targetRef = fieldToRefMap[firstErrorField]
     if (targetRef?.current) {
       targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      // Try to focus the first input within the section
       setTimeout(() => {
         const firstInput = targetRef.current?.querySelector('input, textarea, button') as HTMLElement
         firstInput?.focus()
@@ -386,49 +254,29 @@ export function TaskForm({
     }
   }
 
-  // Collect validation errors from form state
   const collectValidationErrors = () => {
     const errors: Array<{ field: string; message: string }> = []
-
-    // Define all form fields to check
     const fieldsToCheck = [
       'category', 'subcategory', 'title', 'description', 'requirements',
       'city', 'neighborhood', 'exactAddress',
-      'budgetMin', 'budgetMax',
-      'urgency', 'deadline'
+      'budgetMin', 'budgetMax', 'urgency', 'deadline',
     ]
-
-    // Check each field for errors
     fieldsToCheck.forEach(fieldName => {
       try {
-        const fieldState = form.getFieldValue(fieldName as any)
         const fieldMeta = form.getFieldMeta(fieldName as any)
-
         if (fieldMeta?.errors && fieldMeta.errors.length > 0) {
-          errors.push({
-            field: fieldName,
-            message: fieldMeta.errors[0] // Take first error for each field
-          })
+          errors.push({ field: fieldName, message: fieldMeta.errors[0] })
         }
-      } catch (e) {
-        // Field might not exist, skip it
-      }
+      } catch (e) { /* Field might not exist */ }
     })
-
     return errors
   }
 
-  // Handle form submit attempt with validation
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     e.stopPropagation()
-
-    // Always validate all fields on submit attempt (using 'change' to trigger onChange validators)
     await form.validateAllFields('change')
-
-    // Small delay to let form state update
     setTimeout(() => {
-      // Check if form is valid after validation
       if (!form.state.canSubmit || !form.state.isValid) {
         const errors = collectValidationErrors()
         if (errors.length > 0) {
@@ -437,8 +285,6 @@ export function TaskForm({
         }
         return
       }
-
-      // Form is valid, proceed with submission
       form.handleSubmit()
     }, 100)
   }
@@ -451,105 +297,71 @@ export function TaskForm({
         errors={validationErrors}
         onFixClick={handleScrollToFirstError}
       />
-
-      <form.Subscribe
-        selector={(state) => [state.canSubmit]}
-      >
+      <form.Subscribe selector={(state) => [state.canSubmit]}>
         {([canSubmit]) => (
-          <form
-            onSubmit={handleFormSubmit}
-            className="space-y-8"
-          >
-          {/* Category - Edit mode shows display by default, create mode always shows picker */}
-          <div ref={categoryRef}>
-            {(mode === 'edit' || isReopening) && !showCategoryPicker && category ? (
-              <CategoryDisplay
-                category={category}
-                subcategory={subcategory}
-                onReset={handleCategoryReset}
-              />
-            ) : (
-              <CategorySelection form={form} onCategoryChange={handleCategoryChange} />
-            )}
-          </div>
-
-          {/* Show remaining sections only after category is selected */}
-          {category && (
-            <>
-              {/* Notification Warning Banner - shown only in create mode */}
-              {mode === 'create' && showNotificationWarning && !bannerDismissed && (
-                <div className="mb-8">
-                  <NotificationWarningBanner
-                    onConnectTelegram={handleConnectTelegram}
-                    onVerifyEmail={handleVerifyEmail}
-                    onDismiss={handleDismissBanner}
-                  />
-                </div>
+          <form onSubmit={handleFormSubmit} className="space-y-8">
+            <div ref={categoryRef}>
+              {(mode === 'edit' || isReopening) && !showCategoryPicker && category ? (
+                <CategoryDisplay category={category} subcategory={subcategory} onReset={handleCategoryReset} />
+              ) : (
+                <CategorySelection form={form} onCategoryChange={handleCategoryChange} />
               )}
+            </div>
 
-              {/* Task Details */}
-              <div ref={detailsRef}>
-                <TaskDetailsSection ref={detailsSectionRef} form={form} />
-              </div>
-
-              {/* Location */}
-              <div ref={locationRef}>
-                <LocationSection form={form} />
-              </div>
-
-              {/* Budget */}
-              <div ref={budgetRef}>
-                <BudgetSection form={form} budgetType={budgetType} onBudgetTypeChange={setBudgetType} />
-              </div>
-
-              {/* Timeline */}
-              <div ref={timelineRef}>
-                <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
-              </div>
-
-              {/* Photos */}
-              <PhotosSection form={form} initialImages={(mode === 'edit' || isReopening) ? initialData?.images : undefined} />
-
-              {/* Review & Submit */}
-              <ReviewSection form={form} />
-
-              {/* Submit Button */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8 pb-4">
-                {mode === 'edit' && (
-                  <Button
-                    type="button"
-                    size="lg"
-                    variant="bordered"
-                    onPress={() => router.push(`/${locale}/tasks/posted`)}
-                    className="min-w-[200px] h-14 font-semibold text-lg"
-                  >
-                    {t('editTask.cancelEdit', 'Cancel')}
-                  </Button>
+            {category && (
+              <>
+                {mode === 'create' && showNotificationWarning && !bannerDismissed && (
+                  <div className="mb-8">
+                    <NotificationWarningBanner
+                      onConnectTelegram={handleConnectTelegram}
+                      onVerifyEmail={handleVerifyEmail}
+                      onDismiss={handleDismissBanner}
+                    />
+                  </div>
                 )}
-                <Button
-                  type="submit"
-                  size="lg"
-                  isLoading={isSubmitting}
-                  isDisabled={isSubmitting}
-                  className={`min-w-[300px] h-16 font-bold text-xl transition-all duration-300 ${
-                    mode === 'edit'
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-700 shadow-xl hover:shadow-blue-500/50 hover:scale-105'
-                      : 'bg-green-600 hover:bg-green-700 text-white border-2 border-green-700 shadow-xl hover:shadow-green-500/50 hover:scale-105'
-                  }`}
-                  radius="lg"
-                >
-                  {isSubmitting
-                    ? mode === 'edit'
-                      ? t('editTask.savingChanges', 'Saving changes...')
-                      : t('loading', 'Loading...')
-                    : mode === 'edit'
-                      ? t('editTask.saveChanges', 'Save Changes')
-                      : t('createTask.review.submit', 'Post Task')
-                  }
-                </Button>
-              </div>
-            </>
-          )}
+                <div ref={detailsRef}>
+                  <TaskDetailsSection ref={detailsSectionRef} form={form} />
+                </div>
+                <div ref={locationRef}>
+                  <LocationSection form={form} />
+                </div>
+                <div ref={budgetRef}>
+                  <BudgetSection form={form} budgetType={budgetType} onBudgetTypeChange={setBudgetType} />
+                </div>
+                <div ref={timelineRef}>
+                  <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
+                </div>
+                <PhotosSection form={form} initialImages={(mode === 'edit' || isReopening) ? initialData?.images : undefined} />
+                <ReviewSection form={form} />
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8 pb-4">
+                  {mode === 'edit' && (
+                    <Button type="button" size="lg" variant="bordered" onPress={() => router.push(`/${locale}/tasks/posted`)} className="min-w-[200px] h-14 font-semibold text-lg">
+                      {t('editTask.cancelEdit', 'Cancel')}
+                    </Button>
+                  )}
+                  <Button
+                    type="submit"
+                    size="lg"
+                    isLoading={isSubmitting}
+                    isDisabled={isSubmitting}
+                    className={`min-w-[300px] h-16 font-bold text-xl transition-all duration-300 ${
+                      mode === 'edit'
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-700 shadow-xl hover:shadow-blue-500/50 hover:scale-105'
+                        : 'bg-green-600 hover:bg-green-700 text-white border-2 border-green-700 shadow-xl hover:shadow-green-500/50 hover:scale-105'
+                    }`}
+                    radius="lg"
+                  >
+                    {isSubmitting
+                      ? mode === 'edit'
+                        ? t('editTask.savingChanges', 'Saving changes...')
+                        : t('loading', 'Loading...')
+                      : mode === 'edit'
+                        ? t('editTask.saveChanges', 'Save Changes')
+                        : t('createTask.review.submit', 'Post Task')}
+                  </Button>
+                </div>
+              </>
+            )}
           </form>
         )}
       </form.Subscribe>

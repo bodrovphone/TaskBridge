@@ -189,10 +189,24 @@ export async function POST(request: Request) {
       // Don't fail signup if email sending fails - user is already created and logged in
     }
 
+    // Fetch user profile to return complete data
+    let userProfile = null
+    try {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', data.user.id)
+        .single()
+
+      userProfile = profile
+    } catch (err) {
+      console.error('[Auth] Failed to fetch user profile:', err)
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Account created successfully! Please check your email to verify your address.',
-      user: {
+      user: userProfile || {
         id: data.user.id,
         email: data.user.email,
       },

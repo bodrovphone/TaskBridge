@@ -71,6 +71,7 @@ function calculateDiversityScore(
  */
 export async function getFeaturedTasks(): Promise<Task[]> {
   try {
+    console.log('[getFeaturedTasks] Starting fetch...')
     const supabase = await createClient()
 
     // HARDCODED: Only fetch open tasks
@@ -83,13 +84,21 @@ export async function getFeaturedTasks(): Promise<Task[]> {
       .limit(50) // Fetch 50 to have good pool for diversity
 
     if (error) {
-      console.error('Error fetching featured tasks:', error)
+      console.error('[getFeaturedTasks] Database error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      })
       return []
     }
 
     if (!tasks || tasks.length === 0) {
+      console.log('[getFeaturedTasks] No open tasks found in database')
       return []
     }
+
+    console.log('[getFeaturedTasks] Found', tasks.length, 'open tasks')
 
     // Calculate diversity scores
     const seenCategories = new Set<string>()
@@ -103,9 +112,10 @@ export async function getFeaturedTasks(): Promise<Task[]> {
     tasksWithScores.sort((a, b) => b.score - a.score)
     const featuredTasks = tasksWithScores.slice(0, 8).map((item) => item.task)
 
+    console.log('[getFeaturedTasks] Returning', featuredTasks.length, 'featured tasks')
     return featuredTasks
   } catch (error) {
-    console.error('Unexpected error fetching featured tasks:', error)
+    console.error('[getFeaturedTasks] Unexpected error:', error)
     return []
   }
 }

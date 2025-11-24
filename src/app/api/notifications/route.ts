@@ -20,11 +20,14 @@ export async function GET(request: NextRequest) {
     const user = await authenticateRequest(request)
 
     if (!user) {
+      console.log('[Notifications API] GET: No authenticated user found')
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    console.log('[Notifications API] GET: Authenticated user:', user.id)
 
     const supabase = await createClient()
 
@@ -34,6 +37,8 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') // notification type filter
     const limit = Math.min(parseInt(searchParams.get('limit') || '8'), 100)
     const offset = parseInt(searchParams.get('offset') || '0')
+
+    console.log('[Notifications API] GET: Query params:', { state, type, limit, offset })
 
     // Build query - fetch most recent notifications
     let query = supabase
@@ -56,12 +61,20 @@ export async function GET(request: NextRequest) {
     const { data: notifications, error, count } = await query
 
     if (error) {
-      console.error('Error fetching notifications:', error)
+      console.error('[Notifications API] GET: Database error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        userId: user.id
+      })
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
       )
     }
+
+    console.log('[Notifications API] GET: Success - returned', notifications?.length || 0, 'notifications')
 
     return NextResponse.json({
       notifications: notifications || [],
@@ -75,7 +88,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Notifications API error:', error)
+    console.error('[Notifications API] GET: Unexpected error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

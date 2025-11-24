@@ -161,6 +161,7 @@ export class TaskRepository {
    */
   async findFeaturedTasks(): Promise<Result<Task[], DatabaseError>> {
     try {
+      console.log('[TaskRepository] findFeaturedTasks: Starting query')
       const supabase = await createClient()
 
       // Fetch more tasks than we need for diversity selection
@@ -172,7 +173,12 @@ export class TaskRepository {
         .limit(50) // Fetch 50 to ensure category diversity
 
       if (error) {
-        console.error('Database error finding featured tasks:', error)
+        console.error('[TaskRepository] findFeaturedTasks: Database error:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        })
         return err(
           new DatabaseError('Failed to find featured tasks', {
             code: error.code,
@@ -182,8 +188,11 @@ export class TaskRepository {
       }
 
       if (!tasks || tasks.length === 0) {
+        console.log('[TaskRepository] findFeaturedTasks: No tasks found in database')
         return ok([])
       }
+
+      console.log('[TaskRepository] findFeaturedTasks: Found', tasks.length, 'tasks')
 
       // Score and select featured tasks
       const scoredTasks = tasks.map((task: Task) => {
@@ -230,9 +239,10 @@ export class TaskRepository {
         }
       }
 
+      console.log('[TaskRepository] findFeaturedTasks: Returning', selectedTasks.length, 'featured tasks')
       return ok(selectedTasks)
     } catch (error) {
-      console.error('Unexpected error finding featured tasks:', error)
+      console.error('[TaskRepository] findFeaturedTasks: Unexpected error:', error)
       return err(new DatabaseError('Unexpected error finding featured tasks'))
     }
   }
@@ -434,7 +444,7 @@ export class TaskRepository {
       const { data: task, error } = await supabase
         .from('tasks')
         .select(`
-          *,
+          id, created_at, updated_at, title, description, category, subcategory, city, neighborhood, address, location_notes, budget_min_bgn, budget_max_bgn, budget_type, deadline, estimated_duration_hours, status, customer_id, selected_professional_id, accepted_application_id, completed_at, completed_by_professional_at, confirmed_by_customer_at, reviewed_by_customer, reviewed_by_professional, cancelled_at, cancelled_by, cancellation_reason, images, documents, views_count, applications_count, is_urgent, requires_license, requires_insurance,
           applications!applications_task_id_fkey(count)
         `)
         .eq('id', id)

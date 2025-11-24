@@ -43,9 +43,23 @@ export async function POST(request: Request) {
       email: data.user.email,
     })
 
+    // Fetch user profile to return complete data
+    let userProfile = null
+    try {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', data.user.id)
+        .single()
+
+      userProfile = profile
+    } catch (err) {
+      console.error('[Auth] Failed to fetch user profile:', err)
+    }
+
     return NextResponse.json({
       success: true,
-      user: {
+      user: userProfile || {
         id: data.user.id,
         email: data.user.email,
       },
