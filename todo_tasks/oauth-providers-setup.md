@@ -11,28 +11,46 @@ Configure Google and Facebook OAuth authentication for TaskBridge, including loc
 - Handle OAuth callback properly in Next.js
 
 ## Acceptance Criteria
-- [ ] Google Cloud Console project created with OAuth 2.0 credentials
-- [ ] Facebook Developer app created with Facebook Login product
-- [ ] Redirect URLs configured in both providers (localhost + production)
-- [ ] Client ID/Secret added to Supabase Authentication → Providers
-- [ ] Local testing works: Click "Continue with Google/Facebook" authenticates successfully
-- [ ] Production apps submitted for review (Google verification, Facebook app review)
-- [ ] OAuth callback route handles success/error cases properly
-- [ ] User profile auto-created on first OAuth sign-in
+- [x] Google Cloud Console project created with OAuth 2.0 credentials
+- [x] Redirect URLs configured in Google (localhost + production + Supabase callback)
+- [x] Client ID/Secret added to Supabase Authentication → Providers
+- [x] OAuth methods implemented in auth hook (use-auth.ts)
+- [x] Local testing works: Click "Continue with Google" authenticates successfully
+- [x] Existing users can link Google OAuth to their email/password accounts
+- [x] OAuth callback route handles success/error cases properly
+- [ ] Google OAuth consent screen branded (app name, logo, privacy policy, terms)
+- [ ] Privacy Policy page created (required for OAuth verification)
+- [ ] Terms of Service page created (required for OAuth verification)
+- [ ] Production: Google app submitted for verification (removes "unverified app" warning)
+- [ ] Facebook Developer app created with Facebook Login product (optional)
+- [ ] Facebook OAuth configured and tested (optional)
 
 ## Technical Notes
 
 ### Google OAuth Setup
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create new project or use existing
-3. Enable Google+ API
-4. Create OAuth 2.0 Client ID (Web application)
-5. Add authorized redirect URIs:
+1. ✅ Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. ✅ Create new project or use existing
+3. ✅ Enable Google+ API
+4. ✅ Create OAuth 2.0 Client ID (Web application)
+5. ✅ Add authorized redirect URIs:
    - `https://nyleceedixybtogrwilv.supabase.co/auth/v1/callback`
    - `http://localhost:3000/auth/callback` (for local dev)
    - Production URL when deployed
-6. Copy Client ID + Client Secret to Supabase Dashboard
-7. **For production**: Submit for Google verification (required to remove "unverified app" warning)
+6. ✅ Copy Client ID + Client Secret to Supabase Dashboard
+7. ✅ Copy Client ID + Client Secret to `.env.local`
+8. **Brand OAuth Consent Screen** (recommended before production):
+   - Go to: https://console.cloud.google.com/apis/credentials/consent
+   - Click "EDIT APP"
+   - Fill in:
+     - App name: `Trudify`
+     - App logo: Upload 120x120px logo
+     - User support email: your-email@example.com
+     - Application home page: `https://trudify.com` (or Vercel URL)
+     - Privacy policy: `https://trudify.com/en/privacy` (create page first!)
+     - Terms of service: `https://trudify.com/en/terms` (create page first!)
+     - Authorized domains: `trudify.com`, `vercel.app`, `supabase.co` (required!)
+   - Click Save
+9. **For production**: Submit for Google verification (required to remove "unverified app" warning)
 
 ### Facebook OAuth Setup
 1. Go to [Facebook Developers](https://developers.facebook.com/)

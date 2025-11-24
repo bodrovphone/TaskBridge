@@ -262,20 +262,66 @@ export function useAuth(): UseAuthReturn {
 
   /**
    * Sign in with Google OAuth
-   * TODO: Implement OAuth via API route to avoid CORS issues
    */
   const signInWithGoogle = async (): Promise<{ error: string | null }> => {
-    setError('OAuth login is temporarily disabled. Please use email/password.')
-    return { error: 'OAuth login is temporarily disabled. Please use email/password.' }
+    try {
+      setError(null)
+      const supabase = createClient()
+
+      // Get the current URL to construct proper redirect
+      const redirectTo = `${window.location.origin}/auth/callback`
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo,
+        },
+      })
+
+      if (error) {
+        setError(error.message)
+        return { error: error.message }
+      }
+
+      // The redirect will happen automatically
+      return { error: null }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to sign in with Google'
+      setError(message)
+      return { error: message }
+    }
   }
 
   /**
    * Sign in with Facebook OAuth
-   * TODO: Implement OAuth via API route to avoid CORS issues
    */
   const signInWithFacebook = async (): Promise<{ error: string | null }> => {
-    setError('OAuth login is temporarily disabled. Please use email/password.')
-    return { error: 'OAuth login is temporarily disabled. Please use email/password.' }
+    try {
+      setError(null)
+      const supabase = createClient()
+
+      // Get the current URL to construct proper redirect
+      const redirectTo = `${window.location.origin}/auth/callback`
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'facebook',
+        options: {
+          redirectTo,
+        },
+      })
+
+      if (error) {
+        setError(error.message)
+        return { error: error.message }
+      }
+
+      // The redirect will happen automatically
+      return { error: null }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to sign in with Facebook'
+      setError(message)
+      return { error: message }
+    }
   }
 
   /**
