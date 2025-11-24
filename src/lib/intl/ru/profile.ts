@@ -643,10 +643,11 @@ export const profile = {
   'profile.avatar.changeAvatar': 'Изменить аватар',
   'profile.avatar.selectImage': 'Выбрать изображение',
   'profile.avatar.remove': 'Удалить',
-  'profile.avatar.supportedFormats': 'Поддерживаемые форматы: JPG, PNG, WebP (макс 5MB)',
+  'profile.avatar.supportedFormats': 'Поддерживаемые форматы: JPG, PNG, WebP (макс 2MB)',
   'profile.avatar.invalidFileType': 'Недопустимый тип файла. Пожалуйста, выберите JPG, PNG или WebP изображение.',
-  'profile.avatar.fileTooLarge': 'Файл слишком большой. Пожалуйста, выберите изображение меньше 5MB.',
+  'profile.avatar.fileTooLarge': 'Файл слишком большой. Пожалуйста, выберите изображение меньше 2MB.',
   'profile.avatar.uploadError': 'Не удалось загрузить изображение. Пожалуйста, попробуйте еще раз.',
+  'profile.avatar.deleteError': 'Не удалось удалить аватар. Пожалуйста, попробуйте еще раз.',
 
   // Statistics Modal
   'profile.statistics.title': 'Статистика аккаунта',

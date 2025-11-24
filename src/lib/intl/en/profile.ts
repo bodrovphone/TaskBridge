@@ -52,10 +52,11 @@ export const profile = {
   'profile.avatar.changeAvatar': 'Change Avatar',
   'profile.avatar.selectImage': 'Select Image',
   'profile.avatar.remove': 'Remove',
-  'profile.avatar.supportedFormats': 'Supported formats: JPG, PNG, WebP (max 5MB)',
+  'profile.avatar.supportedFormats': 'Supported formats: JPG, PNG, WebP (max 2MB)',
   'profile.avatar.invalidFileType': 'Invalid file type. Please select JPG, PNG, or WebP image.',
-  'profile.avatar.fileTooLarge': 'File too large. Please select image smaller than 5MB.',
+  'profile.avatar.fileTooLarge': 'File too large. Please select image smaller than 2MB.',
   'profile.avatar.uploadError': 'Failed to upload image. Please try again.',
+  'profile.avatar.deleteError': 'Failed to delete avatar. Please try again.',
 
   // Statistics Modal
   'profile.statistics.title': 'Account Statistics',

@@ -52,10 +52,11 @@ export const profile = {
   'profile.avatar.changeAvatar': 'Промяна на аватар',
   'profile.avatar.selectImage': 'Избери изображение',
   'profile.avatar.remove': 'Премахни',
-  'profile.avatar.supportedFormats': 'Поддържани формати: JPG, PNG, WebP (макс 5MB)',
+  'profile.avatar.supportedFormats': 'Поддържани формати: JPG, PNG, WebP (макс 2MB)',
   'profile.avatar.invalidFileType': 'Невалиден тип файл. Моля изберете JPG, PNG или WebP изображение.',
-  'profile.avatar.fileTooLarge': 'Файлът е твърде голям. Моля изберете изображение под 5MB.',
+  'profile.avatar.fileTooLarge': 'Файлът е твърде голям. Моля изберете изображение под 2MB.',
   'profile.avatar.uploadError': 'Неуспешно качване на изображението. Моля опитайте отново.',
+  'profile.avatar.deleteError': 'Неуспешно изтриване на аватара. Моля опитайте отново.',
 
   // Statistics Modal
   'profile.statistics.title': 'Статистики на акаунта',

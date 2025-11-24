@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
 import { Camera, Upload, X, Check } from 'lucide-react'
+import { uploadAvatar, deleteAvatar } from '@/lib/utils/avatar-upload'
 
 interface AvatarUploadProps {
  currentAvatar?: string | null
@@ -23,64 +24,93 @@ export function AvatarUpload({
  const { t } = useTranslation()
  const [isModalOpen, setIsModalOpen] = useState(false)
  const [previewImage, setPreviewImage] = useState<string | null>(null)
+ const [selectedFile, setSelectedFile] = useState<File | null>(null)
  const [isLoading, setIsLoading] = useState(false)
  const [error, setError] = useState<string | null>(null)
  const fileInputRef = useRef<HTMLInputElement>(null)
 
  const handleAvatarClick = () => {
+  console.log('[AvatarUpload] Avatar clicked, opening modal')
   setIsModalOpen(true)
   setPreviewImage(null)
+  setSelectedFile(null)
   setError(null)
  }
 
  const handleFileSelect = () => {
+  console.log('[AvatarUpload] Select image button clicked')
   fileInputRef.current?.click()
  }
 
  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0]
-  if (!file) return
+  console.log('[AvatarUpload] File selected:', file?.name, file?.type, file?.size)
+
+  if (!file) {
+   console.log('[AvatarUpload] No file selected')
+   return
+  }
 
   // Validate file type
   const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
   if (!validTypes.includes(file.type)) {
+   console.error('[AvatarUpload] Invalid file type:', file.type)
    setError(t('profile.avatar.invalidFileType'))
    return
   }
 
-  // Validate file size (max 5MB)
-  const maxSize = 5 * 1024 * 1024
+  // Validate file size (max 2MB for avatars)
+  const maxSize = 2 * 1024 * 1024
   if (file.size > maxSize) {
+   console.error('[AvatarUpload] File too large:', file.size, 'bytes')
    setError(t('profile.avatar.fileTooLarge'))
    return
   }
+
+  console.log('[AvatarUpload] File validation passed, creating preview')
+
+  // Store the file for upload
+  setSelectedFile(file)
 
   // Create preview
   const reader = new FileReader()
   reader.onload = (e) => {
    const result = e.target?.result as string
+   console.log('[AvatarUpload] Preview created, length:', result?.length)
    setPreviewImage(result)
    setError(null)
+  }
+  reader.onerror = (e) => {
+   console.error('[AvatarUpload] FileReader error:', e)
+   setError('Failed to read file')
   }
   reader.readAsDataURL(file)
  }
 
  const handleSave = async () => {
-  if (!previewImage) return
+  if (!selectedFile) return
 
   setIsLoading(true)
+  setError(null)
 
   try {
-   // Mock upload process - simulate API call
-   await new Promise(resolve => setTimeout(resolve, 1500))
+   // Upload avatar via API
+   const { url, error: uploadError } = await uploadAvatar(selectedFile)
 
-   // In real implementation, this would upload to server and return URL
-   // For now, we'll use the preview image (base64) as the new avatar
-   onAvatarChange(previewImage)
+   if (uploadError) {
+    setError(uploadError)
+    return
+   }
 
-   setIsModalOpen(false)
-   setPreviewImage(null)
-  } catch {
+   if (url) {
+    // Update parent component with new avatar URL
+    onAvatarChange(url)
+    setIsModalOpen(false)
+    setPreviewImage(null)
+    setSelectedFile(null)
+   }
+  } catch (err) {
+   console.error('[AvatarUpload] Save error:', err)
    setError(t('profile.avatar.uploadError'))
   } finally {
    setIsLoading(false)
@@ -90,12 +120,36 @@ export function AvatarUpload({
  const handleCancel = () => {
   setIsModalOpen(false)
   setPreviewImage(null)
+  setSelectedFile(null)
   setError(null)
  }
 
- const handleRemoveAvatar = () => {
-  setPreviewImage('')
+ const handleRemoveAvatar = async () => {
+  setIsLoading(true)
   setError(null)
+
+  try {
+   // Delete avatar via API
+   const { success, error: deleteError } = await deleteAvatar()
+
+   if (deleteError) {
+    setError(deleteError)
+    return
+   }
+
+   if (success) {
+    // Update parent component (sets avatar to null, falls back to OAuth)
+    onAvatarChange('')
+    setIsModalOpen(false)
+    setPreviewImage(null)
+    setSelectedFile(null)
+   }
+  } catch (err) {
+   console.error('[AvatarUpload] Delete error:', err)
+   setError(t('profile.avatar.deleteError'))
+  } finally {
+   setIsLoading(false)
+  }
  }
 
  const sizeClasses = {
@@ -144,7 +198,8 @@ export function AvatarUpload({
          className="w-24 h-24 mb-3"
         />
 
-        {previewImage && (
+        {/* Show delete button only if user has a custom avatar and no preview is selected */}
+        {currentAvatar && !previewImage && (
          <div className="flex gap-2">
           <Button
            size="sm"
@@ -152,6 +207,7 @@ export function AvatarUpload({
            color="danger"
            startContent={<X className="w-4 h-4" />}
            onPress={handleRemoveAvatar}
+           isLoading={isLoading}
           >
            {t('profile.avatar.remove')}
           </Button>

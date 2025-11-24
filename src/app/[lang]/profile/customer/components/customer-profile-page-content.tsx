@@ -59,9 +59,17 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
     )
   }
 
-  const handleAvatarChange = async (newAvatar: string) => {
-    // TODO: Upload avatar and update profile
-    console.log('Avatar update not yet implemented:', newAvatar)
+  const handleAvatarChange = async (newAvatarUrl: string) => {
+    console.log('[CustomerProfile] Avatar changed:', newAvatarUrl)
+
+    // The avatar upload component already uploaded to storage and updated the database
+    // We just need to refresh the profile data to ensure consistency
+    try {
+      await refreshProfile()
+      console.log('[CustomerProfile] Profile refreshed after avatar change')
+    } catch (error) {
+      console.error('[CustomerProfile] Failed to refresh profile:', error)
+    }
   }
 
   const handleTelegramConnect = () => {

@@ -9,7 +9,7 @@ interface Application {
  id: string;
  user: {
   name: string;
-  avatar: string;
+  avatar: string | null;  // Maps to avatar_url from database
   rating: number;
   completedTasks: number;
   skills: string[];  // Maps to service_categories in database
@@ -44,7 +44,7 @@ export default function ApplicationsSection({
      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3">
       <div className="flex items-center gap-3 min-w-0">
        <Avatar
-        src={application.user.avatar}
+        src={application.user.avatar || undefined}
         name={application.user.name}
         className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0"
        />

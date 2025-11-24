@@ -17,7 +17,7 @@ export interface ProfessionalReview {
 export interface ApplicationProfessional {
   id: string
   name: string
-  avatar: string | null
+  avatar: string | null  // Maps to users.avatar_url from database
   rating: number
   completedTasks: number
   skills: string[]  // Maps to service_categories in database
