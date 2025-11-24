@@ -303,15 +303,19 @@ export function useAuth(): UseAuthReturn {
       // Get the current URL to construct proper redirect
       const redirectTo = `${window.location.origin}/auth/callback`
 
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
           redirectTo,
           // Use public_profile only for now (email requires Facebook App Review)
           // Once Privacy Policy and Terms are published, request email permission
           scopes: 'public_profile',
+          skipBrowserRedirect: false,
         },
       })
+
+      console.log('[Facebook OAuth] Data:', data)
+      console.log('[Facebook OAuth] Error:', error)
 
       if (error) {
         setError(error.message)
