@@ -307,6 +307,9 @@ export function useAuth(): UseAuthReturn {
         provider: 'facebook',
         options: {
           redirectTo,
+          // Use public_profile only for now (email requires Facebook App Review)
+          // Once Privacy Policy and Terms are published, request email permission
+          scopes: 'public_profile',
         },
       })
 
