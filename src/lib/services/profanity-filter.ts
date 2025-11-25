@@ -158,21 +158,14 @@ export function checkTextForProfanity(
       }
     }
 
-    // Determine severity based on number and type of profane words
+    // Determine severity - since we only track severe profanity now,
+    // any match is considered severe (explicit sexual terms, serious slurs)
     let severity: ProfanityCheckResult['severity'] = 'none';
 
     if (hasProfanity) {
-      // Count censored sections in cleaned text to estimate severity
-      const censoredCount = (cleanedText.match(/\*{2,}/g) || []).length;
-      const detectedWordsCount = detectedWords.length;
-
-      if (censoredCount >= 3 || detectedWordsCount >= 3) {
-        severity = 'severe';
-      } else if (censoredCount >= 2 || detectedWordsCount >= 2) {
-        severity = 'moderate';
-      } else {
-        severity = 'mild';
-      }
+      // All words in our filtered lists are severe (explicit profanity)
+      // We removed mild/moderate words to avoid false positives
+      severity = 'severe';
     }
 
     return {

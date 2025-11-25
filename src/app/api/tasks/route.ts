@@ -89,13 +89,14 @@ export async function POST(request: NextRequest) {
         detectedWords.push(...profanityResults[2].detectedWords)
       }
 
-      // Get highest severity
-      const maxSeverity = profanityResults
-        .filter(r => r.hasProfanity)
-        .reduce((max, r) => {
-          const severityOrder = { none: 0, mild: 1, moderate: 2, severe: 3 }
-          return severityOrder[r.severity] > severityOrder[max] ? r.severity : max
-        }, 'mild' as 'mild' | 'moderate' | 'severe')
+      // Get highest severity (since we only track severe profanity now, this will always be 'severe')
+      const severityOrder = { none: 0, mild: 1, moderate: 2, severe: 3 } as const
+      let maxSeverity: 'mild' | 'moderate' | 'severe' = 'severe'
+      for (const r of profanityResults.filter(r => r.hasProfanity)) {
+        if (severityOrder[r.severity] > severityOrder[maxSeverity]) {
+          maxSeverity = r.severity === 'none' ? 'mild' : r.severity
+        }
+      }
 
       return NextResponse.json(
         {

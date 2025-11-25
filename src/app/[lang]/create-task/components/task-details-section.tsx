@@ -44,6 +44,40 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
    }
   }
 
+  // Validation helper for title field
+  const validateTitle = ({ value }: { value: string }) => {
+   if (!value || value.length < 10) {
+    return 'createTask.errors.titleTooShort'
+   }
+   if (value.length > 200) {
+    return 'createTask.errors.titleTooLong'
+   }
+   const profanityCheck = validateProfanity(value, i18n.language, true)
+   if (!profanityCheck.valid) {
+    return profanityCheck.severity === 'severe'
+     ? 'validation.profanitySeverity.severe'
+     : 'validation.profanitySeverity.moderate'
+   }
+   return undefined
+  }
+
+  // Validation helper for description field
+  const validateDescription = ({ value }: { value: string }) => {
+   if (!value || value.length < 15) {
+    return 'createTask.errors.descriptionTooShort'
+   }
+   if (value.length > 2000) {
+    return 'createTask.errors.descriptionTooLong'
+   }
+   const profanityCheck = validateProfanity(value, i18n.language, true)
+   if (!profanityCheck.valid) {
+    return profanityCheck.severity === 'severe'
+     ? 'validation.profanitySeverity.severe'
+     : 'validation.profanitySeverity.moderate'
+   }
+   return undefined
+  }
+
  return (
   <Card className="shadow-md border border-gray-100">
    <CardBody className="p-6 md:p-8 space-y-6">
@@ -66,54 +100,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
    <form.Field
     name="title"
     validators={{
-     onChange: ({ value }: any) => {
-      // Length validation
-      if (!value || value.length < 10) {
-       return 'createTask.errors.titleTooShort'
-      }
-      if (value.length > 200) {
-       return 'createTask.errors.titleTooLong'
-      }
-
-      // Profanity validation
-      const profanityCheck = validateProfanity(value, i18n.language)
-      if (!profanityCheck.valid) {
-       // Return severity-specific error message
-       if (profanityCheck.severity === 'severe') {
-        return 'validation.profanitySeverity.severe'
-       } else if (profanityCheck.severity === 'moderate') {
-        return 'validation.profanitySeverity.moderate'
-       } else {
-        return 'validation.profanityTitle'
-       }
-      }
-
-      return undefined
-     },
-     onBlur: ({ value }: any) => {
-      // Length validation
-      if (!value || value.length < 10) {
-       return 'createTask.errors.titleTooShort'
-      }
-      if (value.length > 200) {
-       return 'createTask.errors.titleTooLong'
-      }
-
-      // Profanity validation
-      const profanityCheck = validateProfanity(value, i18n.language)
-      if (!profanityCheck.valid) {
-       // Return severity-specific error message
-       if (profanityCheck.severity === 'severe') {
-        return 'validation.profanitySeverity.severe'
-       } else if (profanityCheck.severity === 'moderate') {
-        return 'validation.profanitySeverity.moderate'
-       } else {
-        return 'validation.profanityTitle'
-       }
-      }
-
-      return undefined
-     }
+     onChange: validateTitle,
+     onBlur: validateTitle,
     }}
    >
     {(field: any) => (
@@ -169,54 +157,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
    <form.Field
     name="description"
     validators={{
-     onChange: ({ value }: any) => {
-      // Length validation
-      if (!value || value.length < 15) {
-       return 'createTask.errors.descriptionTooShort'
-      }
-      if (value.length > 2000) {
-       return 'createTask.errors.descriptionTooLong'
-      }
-
-      // Profanity validation
-      const profanityCheck = validateProfanity(value, i18n.language)
-      if (!profanityCheck.valid) {
-       // Return severity-specific error message
-       if (profanityCheck.severity === 'severe') {
-        return 'validation.profanitySeverity.severe'
-       } else if (profanityCheck.severity === 'moderate') {
-        return 'validation.profanitySeverity.moderate'
-       } else {
-        return 'validation.profanityDescription'
-       }
-      }
-
-      return undefined
-     },
-     onBlur: ({ value }: any) => {
-      // Length validation
-      if (!value || value.length < 15) {
-       return 'createTask.errors.descriptionTooShort'
-      }
-      if (value.length > 2000) {
-       return 'createTask.errors.descriptionTooLong'
-      }
-
-      // Profanity validation
-      const profanityCheck = validateProfanity(value, i18n.language)
-      if (!profanityCheck.valid) {
-       // Return severity-specific error message
-       if (profanityCheck.severity === 'severe') {
-        return 'validation.profanitySeverity.severe'
-       } else if (profanityCheck.severity === 'moderate') {
-        return 'validation.profanitySeverity.moderate'
-       } else {
-        return 'validation.profanityDescription'
-       }
-      }
-
-      return undefined
-     }
+     onChange: validateDescription,
+     onBlur: validateDescription,
     }}
    >
     {(field: any) => (
