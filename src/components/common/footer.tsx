@@ -23,16 +23,13 @@ function Footer() {
   { name: t('footer.quickLinks.howItWorks'), href: "/#how-it-works" },
   { name: t('footer.quickLinks.categories'), href: categoriesHref },
   { name: t('footer.quickLinks.forProfessionals'), href: "/#for-professionals" },
-  { name: t('footer.quickLinks.security'), href: "/security" },
-  { name: t('footer.quickLinks.help'), href: "/help" },
+  { name: t('footer.quickLinks.browseTasks'), href: "/browse-tasks" },
+  { name: t('footer.quickLinks.createTask'), href: "/create-task" },
  ];
 
  const legalLinks = [
   { name: t('footer.legal.terms'), href: "/terms" },
   { name: t('footer.legal.privacy'), href: "/privacy" },
-  { name: t('footer.legal.gdpr'), href: "/gdpr" },
-  { name: t('footer.legal.cookies'), href: "/cookies" },
-  { name: t('footer.legal.complaints'), href: "/complaints" },
  ];
 
  return (
@@ -79,12 +76,12 @@ function Footer() {
         <Mail className="h-5 w-5 text-white" />
        </div>
        <div>
-        <p className="text-xs sm:text-sm text-slate-400">Get in touch</p>
+        <p className="text-xs sm:text-sm text-slate-400">{t('footer.contact.subtitle')}</p>
         <a
-         href="mailto:support@obodsoft.com"
+         href="mailto:support@trudify.com"
          className="text-sm sm:text-base text-slate-200 hover:text-blue-400 transition-colors font-medium"
         >
-         support@obodsoft.com
+         support@trudify.com
         </a>
        </div>
       </div>

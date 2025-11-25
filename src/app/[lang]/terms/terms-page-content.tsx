@@ -1,0 +1,295 @@
+'use client'
+
+import { useTranslation } from 'react-i18next'
+import { Card, CardBody, Button, Link } from '@nextui-org/react'
+import { FileText, AlertCircle, Mail, Building2, Hash } from 'lucide-react'
+import { LocaleLink } from '@/components/common/locale-link'
+
+interface TermsPageContentProps {
+  lang: string
+}
+
+const LAST_UPDATED_DATE = '25 ноември 2025'
+const LAST_UPDATED_DATE_EN = 'November 25, 2025'
+const LAST_UPDATED_DATE_RU = '25 ноября 2025'
+
+export function TermsPageContent({ lang }: TermsPageContentProps) {
+  const { t } = useTranslation()
+
+  const lastUpdated = lang === 'en' ? LAST_UPDATED_DATE_EN : lang === 'ru' ? LAST_UPDATED_DATE_RU : LAST_UPDATED_DATE
+
+  // Table of contents sections
+  const tocSections = [
+    { id: 'section1', label: t('terms.toc.section1') },
+    { id: 'section2', label: t('terms.toc.section2') },
+    { id: 'section3', label: t('terms.toc.section3') },
+    { id: 'section4', label: t('terms.toc.section4') },
+    { id: 'section5', label: t('terms.toc.section5') },
+    { id: 'section6', label: t('terms.toc.section6') },
+    { id: 'section7', label: t('terms.toc.section7') },
+    { id: 'section8', label: t('terms.toc.section8') },
+    { id: 'section9', label: t('terms.toc.section9') },
+    { id: 'section10', label: t('terms.toc.section10') },
+    { id: 'section11', label: t('terms.toc.section11') },
+    { id: 'section12', label: t('terms.toc.section12') },
+  ]
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-3 bg-white/10 rounded-xl">
+              <FileText className="h-8 w-8" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold">{t('terms.title')}</h1>
+          </div>
+          <p className="text-blue-100 text-lg mb-4">{t('terms.subtitle')}</p>
+          <div className="flex flex-wrap gap-4 text-sm text-blue-200">
+            <span>{t('terms.lastUpdated', { date: lastUpdated })}</span>
+            <span>|</span>
+            <span>{t('terms.effectiveDate')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Language Notice for non-BG users */}
+        {lang !== 'bg' && (
+          <Card className="mb-8 border-amber-200 bg-amber-50">
+            <CardBody className="flex flex-row items-start gap-4 p-4">
+              <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-amber-800 mb-1">
+                  {t('terms.languageNotice.title')}
+                </h3>
+                <p className="text-amber-700 text-sm mb-3">
+                  {t('terms.languageNotice.content')}
+                </p>
+                <LocaleLink href="/terms" locale="bg">
+                  <Button size="sm" color="warning" variant="flat">
+                    {t('terms.languageNotice.switchToBg')}
+                  </Button>
+                </LocaleLink>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Company Info Card */}
+        <Card className="mb-8 bg-slate-50">
+          <CardBody className="p-6">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3">
+                <Building2 className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-slate-500">{lang === 'ru' ? 'Оператор' : lang === 'en' ? 'Operator' : 'Оператор'}</p>
+                  <p className="font-medium">{t('terms.company.name')}</p>
+                  <p className="text-sm text-slate-600">{t('terms.company.eik')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-slate-500">{lang === 'ru' ? 'Контакт' : lang === 'en' ? 'Contact' : 'Контакт'}</p>
+                  <Link href="mailto:support@trudify.com" className="font-medium text-blue-600">
+                    {t('terms.company.email')}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+
+        {/* Table of Contents */}
+        <Card className="mb-8">
+          <CardBody className="p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Hash className="h-5 w-5 text-slate-400" />
+              {t('terms.toc.title')}
+            </h2>
+            <nav className="grid sm:grid-cols-2 gap-2">
+              {tocSections.map((section) => (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className="text-sm text-slate-600 hover:text-blue-600 hover:underline transition-colors py-1"
+                >
+                  {section.label}
+                </a>
+              ))}
+            </nav>
+          </CardBody>
+        </Card>
+
+        {/* Legal Content Sections */}
+        <div className="prose prose-slate max-w-none">
+          {/* Section 1 */}
+          <section id="section1" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section1.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section1.content') }}
+            />
+          </section>
+
+          {/* Section 2 */}
+          <section id="section2" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section2.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section2.content') }}
+            />
+          </section>
+
+          {/* Section 3 */}
+          <section id="section3" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section3.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section3.content') }}
+            />
+          </section>
+
+          {/* Section 4 */}
+          <section id="section4" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section4.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section4.content') }}
+            />
+          </section>
+
+          {/* Section 5 */}
+          <section id="section5" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section5.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section5.content') }}
+            />
+          </section>
+
+          {/* Section 6 */}
+          <section id="section6" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section6.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section6.content') }}
+            />
+          </section>
+
+          {/* Section 7 */}
+          <section id="section7" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section7.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section7.content') }}
+            />
+          </section>
+
+          {/* Section 8 */}
+          <section id="section8" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section8.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section8.content') }}
+            />
+          </section>
+
+          {/* Section 9 */}
+          <section id="section9" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section9.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1 [&_a]:text-blue-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: t('terms.section9.content') }}
+            />
+          </section>
+
+          {/* Section 10 */}
+          <section id="section10" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section10.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section10.content') }}
+            />
+          </section>
+
+          {/* Section 11 */}
+          <section id="section11" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section11.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section11.content') }}
+            />
+          </section>
+
+          {/* Section 12 */}
+          <section id="section12" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.section12.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('terms.section12.content') }}
+            />
+          </section>
+
+          {/* Definitions */}
+          <section id="definitions" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('terms.definitions.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-2"
+              dangerouslySetInnerHTML={{ __html: t('terms.definitions.content') }}
+            />
+          </section>
+
+          {/* Contact */}
+          <section id="contact" className="mb-10 scroll-mt-24">
+            <Card className="bg-blue-50 border-blue-100">
+              <CardBody className="p-6">
+                <h2 className="text-xl font-bold text-slate-900 mb-4">
+                  {t('terms.contact.title')}
+                </h2>
+                <div
+                  className="text-slate-700 [&>p]:mb-3 [&>ul]:pl-6 [&>ul]:list-none [&_li]:mb-1"
+                  dangerouslySetInnerHTML={{ __html: t('terms.contact.content') }}
+                />
+              </CardBody>
+            </Card>
+          </section>
+        </div>
+
+        {/* Footer Note */}
+        <div className="mt-12 pt-8 border-t border-slate-200 text-center">
+          <p className="text-slate-500 text-sm mb-2">{t('terms.footer.copyright')}</p>
+          <p className="text-slate-600 text-sm font-medium">{t('terms.footer.acceptanceNote')}</p>
+        </div>
+      </div>
+    </div>
+  )
+}

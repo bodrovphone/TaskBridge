@@ -10,6 +10,7 @@ import { auth } from './auth';
 import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
 import { reviews } from './reviews';
+import { legal } from './legal';
 
 export const ru = {
   ...common,
@@ -24,6 +25,7 @@ export const ru = {
   ...taskCompletion,
   ...notifications,
   ...reviews,
+  ...legal,
 };
 
 export default ru;

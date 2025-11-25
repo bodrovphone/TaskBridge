@@ -1,0 +1,268 @@
+'use client'
+
+import { useTranslation } from 'react-i18next'
+import { Card, CardBody, Button, Link } from '@nextui-org/react'
+import { Shield, AlertCircle, Mail, Building2, Hash } from 'lucide-react'
+import { LocaleLink } from '@/components/common/locale-link'
+
+interface PrivacyPageContentProps {
+  lang: string
+}
+
+const LAST_UPDATED_DATE = '25 ноември 2025'
+const LAST_UPDATED_DATE_EN = 'November 25, 2025'
+const LAST_UPDATED_DATE_RU = '25 ноября 2025'
+
+export function PrivacyPageContent({ lang }: PrivacyPageContentProps) {
+  const { t } = useTranslation()
+
+  const lastUpdated = lang === 'en' ? LAST_UPDATED_DATE_EN : lang === 'ru' ? LAST_UPDATED_DATE_RU : LAST_UPDATED_DATE
+
+  // Table of contents sections
+  const tocSections = [
+    { id: 'section1', label: t('privacy.toc.section1') },
+    { id: 'section2', label: t('privacy.toc.section2') },
+    { id: 'section3', label: t('privacy.toc.section3') },
+    { id: 'section4', label: t('privacy.toc.section4') },
+    { id: 'section5', label: t('privacy.toc.section5') },
+    { id: 'section6', label: t('privacy.toc.section6') },
+    { id: 'section7', label: t('privacy.toc.section7') },
+    { id: 'section8', label: t('privacy.toc.section8') },
+    { id: 'section9', label: t('privacy.toc.section9') },
+    { id: 'section10', label: t('privacy.toc.section10') },
+    { id: 'section11', label: t('privacy.toc.section11') },
+  ]
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-3 bg-white/10 rounded-xl">
+              <Shield className="h-8 w-8" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold">{t('privacy.title')}</h1>
+          </div>
+          <p className="text-emerald-100 text-lg mb-4">{t('privacy.subtitle')}</p>
+          <div className="flex flex-wrap gap-4 text-sm text-emerald-200">
+            <span>{t('privacy.lastUpdated', { date: lastUpdated })}</span>
+            <span>|</span>
+            <span>{t('privacy.effectiveDate')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Language Notice for non-BG users */}
+        {lang !== 'bg' && (
+          <Card className="mb-8 border-amber-200 bg-amber-50">
+            <CardBody className="flex flex-row items-start gap-4 p-4">
+              <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-amber-800 mb-1">
+                  {t('privacy.languageNotice.title')}
+                </h3>
+                <p className="text-amber-700 text-sm mb-3">
+                  {t('privacy.languageNotice.content')}
+                </p>
+                <LocaleLink href="/privacy" locale="bg">
+                  <Button size="sm" color="warning" variant="flat">
+                    {t('privacy.languageNotice.switchToBg')}
+                  </Button>
+                </LocaleLink>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Company Info Card */}
+        <Card className="mb-8 bg-slate-50">
+          <CardBody className="p-6">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3">
+                <Building2 className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-slate-500">
+                    {lang === 'ru' ? 'Контролер данных' : lang === 'en' ? 'Data Controller' : 'Администратор на данни'}
+                  </p>
+                  <p className="font-medium">{t('terms.company.name')}</p>
+                  <p className="text-sm text-slate-600">{t('terms.company.eik')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-slate-500">
+                    {lang === 'ru' ? 'Контакт по вопросам конфиденциальности' : lang === 'en' ? 'Privacy Contact' : 'Контакт за поверителност'}
+                  </p>
+                  <Link href="mailto:support@trudify.com" className="font-medium text-emerald-600">
+                    {t('terms.company.email')}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+
+        {/* Table of Contents */}
+        <Card className="mb-8">
+          <CardBody className="p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Hash className="h-5 w-5 text-slate-400" />
+              {t('privacy.toc.title')}
+            </h2>
+            <nav className="grid sm:grid-cols-2 gap-2">
+              {tocSections.map((section) => (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className="text-sm text-slate-600 hover:text-emerald-600 hover:underline transition-colors py-1"
+                >
+                  {section.label}
+                </a>
+              ))}
+            </nav>
+          </CardBody>
+        </Card>
+
+        {/* Legal Content Sections */}
+        <div className="prose prose-slate max-w-none">
+          {/* Section 1 */}
+          <section id="section1" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section1.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1 [&_a]:text-emerald-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section1.content') }}
+            />
+          </section>
+
+          {/* Section 2 */}
+          <section id="section2" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section2.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section2.content') }}
+            />
+          </section>
+
+          {/* Section 3 */}
+          <section id="section3" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section3.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section3.content') }}
+            />
+          </section>
+
+          {/* Section 4 */}
+          <section id="section4" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section4.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section4.content') }}
+            />
+          </section>
+
+          {/* Section 5 - Cookies */}
+          <section id="section5" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section5.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section5.content') }}
+            />
+          </section>
+
+          {/* Section 6 - GDPR Rights */}
+          <section id="section6" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section6.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1 [&_a]:text-emerald-600 [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section6.content') }}
+            />
+          </section>
+
+          {/* Section 7 */}
+          <section id="section7" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section7.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section7.content') }}
+            />
+          </section>
+
+          {/* Section 8 */}
+          <section id="section8" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section8.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section8.content') }}
+            />
+          </section>
+
+          {/* Section 9 */}
+          <section id="section9" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section9.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section9.content') }}
+            />
+          </section>
+
+          {/* Section 10 */}
+          <section id="section10" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">
+              {t('privacy.section10.title')}
+            </h2>
+            <div
+              className="text-slate-700 leading-relaxed [&>p]:mb-4 [&>ul]:mb-4 [&>ul]:pl-6 [&>ul]:list-disc [&_li]:mb-1"
+              dangerouslySetInnerHTML={{ __html: t('privacy.section10.content') }}
+            />
+          </section>
+
+          {/* Section 11 - Contact */}
+          <section id="section11" className="mb-10 scroll-mt-24">
+            <Card className="bg-emerald-50 border-emerald-100">
+              <CardBody className="p-6">
+                <h2 className="text-xl font-bold text-slate-900 mb-4">
+                  {t('privacy.section11.title')}
+                </h2>
+                <div
+                  className="text-slate-700 [&>p]:mb-3 [&>ul]:pl-6 [&>ul]:list-none [&_li]:mb-1 [&_a]:text-emerald-600 [&_a]:underline"
+                  dangerouslySetInnerHTML={{ __html: t('privacy.section11.content') }}
+                />
+              </CardBody>
+            </Card>
+          </section>
+        </div>
+
+        {/* Footer Note */}
+        <div className="mt-12 pt-8 border-t border-slate-200 text-center">
+          <p className="text-slate-500 text-sm mb-2">{t('privacy.footer.copyright')}</p>
+          <p
+            className="text-slate-600 text-sm [&_a]:text-emerald-600 [&_a]:underline"
+            dangerouslySetInnerHTML={{ __html: t('privacy.footer.termsLink') }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
