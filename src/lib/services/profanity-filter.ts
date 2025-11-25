@@ -8,7 +8,8 @@
  * for Bulgarian and Ukrainian.
  */
 
-import * as glinProfanity from 'glin-profanity';
+import { checkProfanity as glinCheckProfanity } from 'glin-profanity';
+import type { Language } from 'glin-profanity';
 import { BULGARIAN_PROFANITY, UKRAINIAN_PROFANITY } from './profanity-wordlists';
 
 export interface ProfanityCheckResult {
@@ -23,11 +24,11 @@ export interface ProfanityCheckResult {
  * Language mapping for profanity detection
  * Maps locale codes to glin-profanity language strings
  */
-const LANGUAGE_MAP: Record<string, string[]> = {
-  en: ['en'],           // English (built-in)
-  bg: ['bg', 'en'],     // Bulgarian (custom) + English fallback
-  ru: ['ru', 'en'],     // Russian (built-in) + English fallback
-  uk: ['uk', 'ru', 'en'], // Ukrainian (custom) + Russian + English fallback
+const LANGUAGE_MAP: Record<string, Language[]> = {
+  en: ['english'],           // English (built-in)
+  bg: ['english'],           // Bulgarian (custom) + English fallback
+  ru: ['russian', 'english'], // Russian (built-in) + English fallback
+  uk: ['russian', 'english'], // Ukrainian (custom) + Russian + English fallback
 };
 
 // Cache for custom word list matching
@@ -122,16 +123,28 @@ export function checkTextForProfanity(
     // Check with glin-profanity for English and Russian
     if (locale === 'en' || locale === 'ru' || (!hasProfanity && (locale === 'bg' || locale === 'uk'))) {
       try {
-        // Use glin-profanity check function
-        const glinCheck = (glinProfanity as any).check(text, locale === 'ru' ? 'ru' : 'en');
+        // Get language list for glin-profanity
+        const languages = LANGUAGE_MAP[locale] || ['english'];
 
-        if (glinCheck && glinCheck.isProfane) {
+        // Use glin-profanity check function with correct API
+        const glinCheck = glinCheckProfanity(text, {
+          languages,
+          allowObfuscatedMatch: true, // Detect leetspeak like "sh1t", "f*ck"
+          wordBoundaries: true,       // Match whole words only
+          replaceWith: '*',           // Censorship character
+        });
+
+        if (glinCheck && glinCheck.containsProfanity) {
           hasProfanity = true;
-          cleanedText = glinCheck.censored || cleanedText;
 
-          // Extract censored words if available
-          if (glinCheck.matches) {
-            detectedWords.push(...glinCheck.matches);
+          // Use processed text if available (censored version)
+          if (glinCheck.processedText) {
+            cleanedText = glinCheck.processedText;
+          }
+
+          // Extract detected profane words
+          if (glinCheck.profaneWords && glinCheck.profaneWords.length > 0) {
+            detectedWords.push(...glinCheck.profaneWords);
           }
         }
       } catch (glinError) {
