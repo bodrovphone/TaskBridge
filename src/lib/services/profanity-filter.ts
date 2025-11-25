@@ -1,0 +1,275 @@
+/**
+ * Profanity Filter Service
+ *
+ * Provides profanity detection and filtering for user-generated content.
+ * Supports Bulgarian, Russian, Ukrainian, and English languages with Cyrillic script support.
+ *
+ * Uses glin-profanity for English and Russian (built-in) with custom word lists
+ * for Bulgarian and Ukrainian.
+ */
+
+import { checkProfanity as glinCheckProfanity } from 'glin-profanity';
+import type { Language } from 'glin-profanity';
+import { BULGARIAN_PROFANITY, UKRAINIAN_PROFANITY, RUSSIAN_PROFANITY } from './profanity-wordlists';
+
+export interface ProfanityCheckResult {
+  hasProfanity: boolean;
+  severity: 'none' | 'mild' | 'moderate' | 'severe';
+  detectedWords: string[];
+  cleanedText: string;
+  language: string;
+}
+
+/**
+ * Language mapping for profanity detection
+ * Maps locale codes to glin-profanity language strings
+ */
+const LANGUAGE_MAP: Record<string, Language[]> = {
+  en: ['english'],           // English (built-in)
+  bg: ['english'],           // Bulgarian (custom) + English fallback
+  ru: ['russian', 'english'], // Russian (built-in) + English fallback
+  uk: ['russian', 'english'], // Ukrainian (custom) + Russian + English fallback
+};
+
+// Cache for custom word list matching
+let customWordListCache: { bg: RegExp[], uk: RegExp[], ru: RegExp[] } | null = null;
+
+/**
+ * Initialize custom word list patterns
+ */
+function getCustomWordListPatterns(): { bg: RegExp[], uk: RegExp[], ru: RegExp[] } {
+  if (!customWordListCache) {
+    customWordListCache = {
+      bg: BULGARIAN_PROFANITY.map(word => new RegExp(word, 'gi')),
+      uk: UKRAINIAN_PROFANITY.map(word => new RegExp(word, 'gi')),
+      ru: RUSSIAN_PROFANITY.map(word => new RegExp(word, 'gi'))
+    };
+  }
+  return customWordListCache;
+}
+
+/**
+ * Check text against custom word list
+ */
+function checkCustomWordList(text: string, locale: string): { found: boolean, matches: string[] } {
+  const patterns = getCustomWordListPatterns();
+  const localePatterns =
+    locale === 'bg' ? patterns.bg :
+    locale === 'uk' ? patterns.uk :
+    locale === 'ru' ? patterns.ru :
+    [];
+
+  const matches: string[] = [];
+
+  for (const pattern of localePatterns) {
+    const match = text.match(pattern);
+    if (match) {
+      matches.push(...match);
+    }
+  }
+
+  return {
+    found: matches.length > 0,
+    matches
+  };
+}
+
+/**
+ * Check text for profanity in the specified language
+ *
+ * @param text - Text to check for profanity
+ * @param locale - Language locale (en, bg, ru, uk)
+ * @returns Profanity check result with severity and detected words
+ *
+ * @example
+ * ```typescript
+ * const result = await checkTextForProfanity('Some text here', 'en');
+ * if (result.hasProfanity) {
+ *   console.log('Detected profanity:', result.detectedWords);
+ *   console.log('Severity:', result.severity);
+ * }
+ * ```
+ */
+export function checkTextForProfanity(
+  text: string,
+  locale: string = 'en'
+): ProfanityCheckResult {
+  if (!text || text.trim().length === 0) {
+    return {
+      hasProfanity: false,
+      severity: 'none',
+      detectedWords: [],
+      cleanedText: text,
+      language: locale,
+    };
+  }
+
+  try {
+    let hasProfanity = false;
+    let detectedWords: string[] = [];
+    let cleanedText = text;
+
+    // Check for custom Bulgarian, Ukrainian, or Russian profanity first
+    if (locale === 'bg' || locale === 'uk' || locale === 'ru') {
+      const customCheck = checkCustomWordList(text, locale);
+      if (customCheck.found) {
+        hasProfanity = true;
+        detectedWords = customCheck.matches;
+
+        // Censor detected words
+        cleanedText = text;
+        for (const word of detectedWords) {
+          const censored = '*'.repeat(word.length);
+          cleanedText = cleanedText.replace(new RegExp(word, 'gi'), censored);
+        }
+      }
+    }
+
+    // Check with glin-profanity for English (and as fallback for other languages)
+    if (locale === 'en' || (!hasProfanity && (locale === 'bg' || locale === 'uk' || locale === 'ru'))) {
+      try {
+        // Get language list for glin-profanity
+        const languages = LANGUAGE_MAP[locale] || ['english'];
+
+        // Use glin-profanity check function with correct API
+        const glinCheck = glinCheckProfanity(text, {
+          languages,
+          allowObfuscatedMatch: true, // Detect leetspeak like "sh1t", "f*ck"
+          wordBoundaries: true,       // Match whole words only
+          replaceWith: '*',           // Censorship character
+        });
+
+        if (glinCheck && glinCheck.containsProfanity) {
+          hasProfanity = true;
+
+          // Use processed text if available (censored version)
+          if (glinCheck.processedText) {
+            cleanedText = glinCheck.processedText;
+          }
+
+          // Extract detected profane words
+          if (glinCheck.profaneWords && glinCheck.profaneWords.length > 0) {
+            detectedWords.push(...glinCheck.profaneWords);
+          }
+        }
+      } catch (glinError) {
+        // If glin-profanity fails, continue with custom check results
+        console.warn('glin-profanity check failed:', glinError);
+      }
+    }
+
+    // Determine severity - since we only track severe profanity now,
+    // any match is considered severe (explicit sexual terms, serious slurs)
+    let severity: ProfanityCheckResult['severity'] = 'none';
+
+    if (hasProfanity) {
+      // All words in our filtered lists are severe (explicit profanity)
+      // We removed mild/moderate words to avoid false positives
+      severity = 'severe';
+    }
+
+    return {
+      hasProfanity,
+      severity,
+      detectedWords,
+      cleanedText,
+      language: locale,
+    };
+  } catch (error) {
+    console.error('Profanity check error:', error);
+
+    // Fail open (allow content) if profanity check fails
+    return {
+      hasProfanity: false,
+      severity: 'none',
+      detectedWords: [],
+      cleanedText: text,
+      language: locale,
+    };
+  }
+}
+
+/**
+ * Validate text for profanity and return error if found
+ * Helper function for form validation
+ *
+ * @param text - Text to validate
+ * @param locale - Language locale
+ * @param allowMild - Whether to allow mild profanity (default: false)
+ * @returns Validation result with error message if profanity detected
+ *
+ * @example
+ * ```typescript
+ * const validation = validateProfanity(formData.title, 'en');
+ * if (!validation.valid) {
+ *   setError(validation.error);
+ * }
+ * ```
+ */
+export function validateProfanity(
+  text: string,
+  locale: string = 'en',
+  allowMild: boolean = false
+): { valid: boolean; error?: string; severity?: ProfanityCheckResult['severity'] } {
+  const result = checkTextForProfanity(text, locale);
+
+  // Check if profanity was detected
+  if (result.hasProfanity) {
+    // Allow mild profanity if specified
+    if (allowMild && result.severity === 'mild') {
+      return { valid: true };
+    }
+
+    // Block moderate and severe profanity
+    return {
+      valid: false,
+      error: 'validation.profanityDetected',
+      severity: result.severity,
+    };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Batch check multiple texts for profanity
+ * Useful for checking multiple form fields at once
+ *
+ * @param texts - Array of texts to check
+ * @param locale - Language locale
+ * @returns Array of profanity check results
+ *
+ * @example
+ * ```typescript
+ * const results = batchCheckProfanity([
+ *   formData.title,
+ *   formData.description
+ * ], 'en');
+ *
+ * const hasProfanity = results.some(r => r.hasProfanity);
+ * ```
+ */
+export function batchCheckProfanity(
+  texts: string[],
+  locale: string = 'en'
+): ProfanityCheckResult[] {
+  return texts.map(text => checkTextForProfanity(text, locale));
+}
+
+/**
+ * Clean text by replacing profanity with asterisks
+ *
+ * @param text - Text to clean
+ * @param locale - Language locale
+ * @returns Cleaned text with profanity censored
+ *
+ * @example
+ * ```typescript
+ * const cleaned = cleanProfanity('Some bad text here', 'en');
+ * console.log(cleaned); // "Some *** text here"
+ * ```
+ */
+export function cleanProfanity(text: string, locale: string = 'en'): string {
+  const result = checkTextForProfanity(text, locale);
+  return result.cleanedText;
+}

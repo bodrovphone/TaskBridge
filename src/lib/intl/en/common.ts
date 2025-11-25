@@ -142,4 +142,13 @@ export const common = {
   'notificationWarning.connectTelegram': 'Connect Telegram',
   'notificationWarning.verifyEmail': 'Verify Email',
   'notificationWarning.dismiss': 'I Understand',
+
+  // Profanity Validation
+  'validation.profanityDetected': 'Your text contains inappropriate language. Please revise.',
+  'validation.profanityTitle': 'Task title contains inappropriate language',
+  'validation.profanityDescription': 'Task description contains inappropriate language',
+  'validation.profanityWarning': 'Some words may be flagged. Review before submitting.',
+  'validation.profanitySeverity.mild': 'Please avoid using inappropriate language',
+  'validation.profanitySeverity.moderate': 'Your text contains offensive language that is not allowed',
+  'validation.profanitySeverity.severe': 'Your text contains highly offensive language that violates our community guidelines',
 };

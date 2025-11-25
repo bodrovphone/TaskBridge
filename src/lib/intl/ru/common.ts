@@ -143,4 +143,13 @@ export const common = {
   'notificationWarning.connectTelegram': 'Подключить Telegram',
   'notificationWarning.verifyEmail': 'Подтвердить email',
   'notificationWarning.dismiss': 'Понятно',
+
+  // Profanity Validation
+  'validation.profanityDetected': 'Ваш текст содержит неприемлемую лексику. Пожалуйста, измените его.',
+  'validation.profanityTitle': 'Название задачи содержит неприемлемую лексику',
+  'validation.profanityDescription': 'Описание задачи содержит неприемлемую лексику',
+  'validation.profanityWarning': 'Некоторые слова могут быть отмечены. Проверьте перед отправкой.',
+  'validation.profanitySeverity.mild': 'Пожалуйста, избегайте использования неприемлемой лексики',
+  'validation.profanitySeverity.moderate': 'Ваш текст содержит оскорбительные выражения, которые не разрешены',
+  'validation.profanitySeverity.severe': 'Ваш текст содержит крайне оскорбительные выражения, которые нарушают правила нашего сообщества',
 };

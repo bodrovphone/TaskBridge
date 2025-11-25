@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Input, Textarea, Card, CardBody, Tooltip } from '@nextui-org/react'
 import { FileText } from 'lucide-react'
 import { useRef, useState, useImperativeHandle, forwardRef } from 'react'
+import { validateProfanity } from '@/lib/services/profanity-filter'
 
 interface TaskDetailsSectionProps {
  form: any
@@ -11,7 +12,7 @@ interface TaskDetailsSectionProps {
 
 export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, TaskDetailsSectionProps>(
  function TaskDetailsSection({ form }, ref) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const titleInputRef = useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [showTitleTooltip, setShowTitleTooltip] = useState(false)
@@ -43,6 +44,40 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
    }
   }
 
+  // Validation helper for title field
+  const validateTitle = ({ value }: { value: string }) => {
+   if (!value || value.length < 10) {
+    return 'createTask.errors.titleTooShort'
+   }
+   if (value.length > 200) {
+    return 'createTask.errors.titleTooLong'
+   }
+   const profanityCheck = validateProfanity(value, i18n.language, true)
+   if (!profanityCheck.valid) {
+    return profanityCheck.severity === 'severe'
+     ? 'validation.profanitySeverity.severe'
+     : 'validation.profanitySeverity.moderate'
+   }
+   return undefined
+  }
+
+  // Validation helper for description field
+  const validateDescription = ({ value }: { value: string }) => {
+   if (!value || value.length < 15) {
+    return 'createTask.errors.descriptionTooShort'
+   }
+   if (value.length > 2000) {
+    return 'createTask.errors.descriptionTooLong'
+   }
+   const profanityCheck = validateProfanity(value, i18n.language, true)
+   if (!profanityCheck.valid) {
+    return profanityCheck.severity === 'severe'
+     ? 'validation.profanitySeverity.severe'
+     : 'validation.profanitySeverity.moderate'
+   }
+   return undefined
+  }
+
  return (
   <Card className="shadow-md border border-gray-100">
    <CardBody className="p-6 md:p-8 space-y-6">
@@ -65,24 +100,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
    <form.Field
     name="title"
     validators={{
-     onChange: ({ value }: any) => {
-      if (!value || value.length < 10) {
-       return 'createTask.errors.titleTooShort'
-      }
-      if (value.length > 200) {
-       return 'createTask.errors.titleTooLong'
-      }
-      return undefined
-     },
-     onBlur: ({ value }: any) => {
-      if (!value || value.length < 10) {
-       return 'createTask.errors.titleTooShort'
-      }
-      if (value.length > 200) {
-       return 'createTask.errors.titleTooLong'
-      }
-      return undefined
-     }
+     onChange: validateTitle,
+     onBlur: validateTitle,
     }}
    >
     {(field: any) => (
@@ -138,24 +157,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
    <form.Field
     name="description"
     validators={{
-     onChange: ({ value }: any) => {
-      if (!value || value.length < 15) {
-       return 'createTask.errors.descriptionTooShort'
-      }
-      if (value.length > 2000) {
-       return 'createTask.errors.descriptionTooLong'
-      }
-      return undefined
-     },
-     onBlur: ({ value }: any) => {
-      if (!value || value.length < 15) {
-       return 'createTask.errors.descriptionTooShort'
-      }
-      if (value.length > 2000) {
-       return 'createTask.errors.descriptionTooLong'
-      }
-      return undefined
-     }
+     onChange: validateDescription,
+     onBlur: validateDescription,
     }}
    >
     {(field: any) => (
