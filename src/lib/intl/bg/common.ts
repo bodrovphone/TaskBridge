@@ -142,4 +142,13 @@ export const common = {
   'notificationWarning.connectTelegram': 'Свържете Telegram',
   'notificationWarning.verifyEmail': 'Потвърдете имейл',
   'notificationWarning.dismiss': 'Разбрах',
+
+  // Profanity Validation
+  'validation.profanityDetected': 'Вашият текст съдържа неподходящ език. Моля, преработете го.',
+  'validation.profanityTitle': 'Заглавието на задачата съдържа неподходящ език',
+  'validation.profanityDescription': 'Описанието на задачата съдържа неподходящ език',
+  'validation.profanityWarning': 'Някои думи може да бъдат маркирани. Прегледайте преди изпращане.',
+  'validation.profanitySeverity.mild': 'Моля, избягвайте използването на неподходящ език',
+  'validation.profanitySeverity.moderate': 'Вашият текст съдържа обидни изрази, които не са разрешени',
+  'validation.profanitySeverity.severe': 'Вашият текст съдържа силно обидни изрази, които нарушават нашите правила на общността',
 };

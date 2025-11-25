@@ -9,6 +9,7 @@ import { TaskService } from '@/server/tasks/task.service'
 import { isAppError } from '@/server/shared/errors'
 import type { CreateTaskInput } from '@/server/tasks/task.types'
 import { authenticateRequest } from '@/lib/auth/api-auth'
+import { batchCheckProfanity } from '@/lib/services/profanity-filter'
 
 /**
  * POST /api/tasks
@@ -56,11 +57,64 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 3. Create service instance and execute use case
+    // 3. Server-side profanity validation
+    // Extract locale from request headers or default to 'en'
+    const locale = request.headers.get('accept-language')?.split(',')[0].split('-')[0] || 'en'
+
+    // Check title, description, and requirements for profanity
+    const textsToCheck: string[] = [
+      input.title || '',
+      input.description || '',
+      input.requirements || ''
+    ].filter(text => text.length > 0)
+
+    const profanityResults = batchCheckProfanity(textsToCheck, locale)
+    const hasProfanity = profanityResults.some(result => result.hasProfanity)
+
+    if (hasProfanity) {
+      // Find which field(s) contain profanity
+      const fieldsWithProfanity: string[] = []
+      const detectedWords: string[] = []
+
+      if (profanityResults[0]?.hasProfanity) {
+        fieldsWithProfanity.push('title')
+        detectedWords.push(...profanityResults[0].detectedWords)
+      }
+      if (profanityResults[1]?.hasProfanity) {
+        fieldsWithProfanity.push('description')
+        detectedWords.push(...profanityResults[1].detectedWords)
+      }
+      if (profanityResults[2]?.hasProfanity) {
+        fieldsWithProfanity.push('requirements')
+        detectedWords.push(...profanityResults[2].detectedWords)
+      }
+
+      // Get highest severity
+      const maxSeverity = profanityResults
+        .filter(r => r.hasProfanity)
+        .reduce((max, r) => {
+          const severityOrder = { none: 0, mild: 1, moderate: 2, severe: 3 }
+          return severityOrder[r.severity] > severityOrder[max] ? r.severity : max
+        }, 'mild' as 'mild' | 'moderate' | 'severe')
+
+      return NextResponse.json(
+        {
+          error: 'Profanity detected in task content',
+          code: 'PROFANITY_DETECTED',
+          details: {
+            fields: fieldsWithProfanity,
+            severity: maxSeverity
+          }
+        },
+        { status: 400 }
+      )
+    }
+
+    // 4. Create service instance and execute use case
     const taskService = new TaskService()
     const result = await taskService.createTask(input, authUser.id)
 
-    // 4. Handle result
+    // 5. Handle result
     if (!result.success) {
       const error = result.error as Error
 
@@ -83,7 +137,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. Increment grace period counter (for review enforcement)
+    // 6. Increment grace period counter (for review enforcement)
     // This tracks how many tasks created since last review submission
     try {
       const supabase = await createClient()
@@ -93,7 +147,7 @@ export async function POST(request: NextRequest) {
       console.warn('Failed to increment grace period counter:', error)
     }
 
-    // 6. Return success response
+    // 7. Return success response
     return NextResponse.json(
       result.data,
       { status: 201 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Input, Textarea, Card, CardBody, Tooltip } from '@nextui-org/react'
 import { FileText } from 'lucide-react'
 import { useRef, useState, useImperativeHandle, forwardRef } from 'react'
+import { validateProfanity } from '@/lib/services/profanity-filter'
 
 interface TaskDetailsSectionProps {
  form: any
@@ -11,7 +12,7 @@ interface TaskDetailsSectionProps {
 
 export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, TaskDetailsSectionProps>(
  function TaskDetailsSection({ form }, ref) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const titleInputRef = useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [showTitleTooltip, setShowTitleTooltip] = useState(false)
@@ -66,21 +67,51 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
     name="title"
     validators={{
      onChange: ({ value }: any) => {
+      // Length validation
       if (!value || value.length < 10) {
        return 'createTask.errors.titleTooShort'
       }
       if (value.length > 200) {
        return 'createTask.errors.titleTooLong'
       }
+
+      // Profanity validation
+      const profanityCheck = validateProfanity(value, i18n.language)
+      if (!profanityCheck.valid) {
+       // Return severity-specific error message
+       if (profanityCheck.severity === 'severe') {
+        return 'validation.profanitySeverity.severe'
+       } else if (profanityCheck.severity === 'moderate') {
+        return 'validation.profanitySeverity.moderate'
+       } else {
+        return 'validation.profanityTitle'
+       }
+      }
+
       return undefined
      },
      onBlur: ({ value }: any) => {
+      // Length validation
       if (!value || value.length < 10) {
        return 'createTask.errors.titleTooShort'
       }
       if (value.length > 200) {
        return 'createTask.errors.titleTooLong'
       }
+
+      // Profanity validation
+      const profanityCheck = validateProfanity(value, i18n.language)
+      if (!profanityCheck.valid) {
+       // Return severity-specific error message
+       if (profanityCheck.severity === 'severe') {
+        return 'validation.profanitySeverity.severe'
+       } else if (profanityCheck.severity === 'moderate') {
+        return 'validation.profanitySeverity.moderate'
+       } else {
+        return 'validation.profanityTitle'
+       }
+      }
+
       return undefined
      }
     }}
@@ -139,21 +170,51 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
     name="description"
     validators={{
      onChange: ({ value }: any) => {
+      // Length validation
       if (!value || value.length < 15) {
        return 'createTask.errors.descriptionTooShort'
       }
       if (value.length > 2000) {
        return 'createTask.errors.descriptionTooLong'
       }
+
+      // Profanity validation
+      const profanityCheck = validateProfanity(value, i18n.language)
+      if (!profanityCheck.valid) {
+       // Return severity-specific error message
+       if (profanityCheck.severity === 'severe') {
+        return 'validation.profanitySeverity.severe'
+       } else if (profanityCheck.severity === 'moderate') {
+        return 'validation.profanitySeverity.moderate'
+       } else {
+        return 'validation.profanityDescription'
+       }
+      }
+
       return undefined
      },
      onBlur: ({ value }: any) => {
+      // Length validation
       if (!value || value.length < 15) {
        return 'createTask.errors.descriptionTooShort'
       }
       if (value.length > 2000) {
        return 'createTask.errors.descriptionTooLong'
       }
+
+      // Profanity validation
+      const profanityCheck = validateProfanity(value, i18n.language)
+      if (!profanityCheck.valid) {
+       // Return severity-specific error message
+       if (profanityCheck.severity === 'severe') {
+        return 'validation.profanitySeverity.severe'
+       } else if (profanityCheck.severity === 'moderate') {
+        return 'validation.profanitySeverity.moderate'
+       } else {
+        return 'validation.profanityDescription'
+       }
+      }
+
       return undefined
      }
     }}
