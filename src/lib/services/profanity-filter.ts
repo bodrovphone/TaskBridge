@@ -10,7 +10,7 @@
 
 import { checkProfanity as glinCheckProfanity } from 'glin-profanity';
 import type { Language } from 'glin-profanity';
-import { BULGARIAN_PROFANITY, UKRAINIAN_PROFANITY } from './profanity-wordlists';
+import { BULGARIAN_PROFANITY, UKRAINIAN_PROFANITY, RUSSIAN_PROFANITY } from './profanity-wordlists';
 
 export interface ProfanityCheckResult {
   hasProfanity: boolean;
@@ -32,16 +32,17 @@ const LANGUAGE_MAP: Record<string, Language[]> = {
 };
 
 // Cache for custom word list matching
-let customWordListCache: { bg: RegExp[], uk: RegExp[] } | null = null;
+let customWordListCache: { bg: RegExp[], uk: RegExp[], ru: RegExp[] } | null = null;
 
 /**
  * Initialize custom word list patterns
  */
-function getCustomWordListPatterns(): { bg: RegExp[], uk: RegExp[] } {
+function getCustomWordListPatterns(): { bg: RegExp[], uk: RegExp[], ru: RegExp[] } {
   if (!customWordListCache) {
     customWordListCache = {
       bg: BULGARIAN_PROFANITY.map(word => new RegExp(word, 'gi')),
-      uk: UKRAINIAN_PROFANITY.map(word => new RegExp(word, 'gi'))
+      uk: UKRAINIAN_PROFANITY.map(word => new RegExp(word, 'gi')),
+      ru: RUSSIAN_PROFANITY.map(word => new RegExp(word, 'gi'))
     };
   }
   return customWordListCache;
@@ -52,7 +53,11 @@ function getCustomWordListPatterns(): { bg: RegExp[], uk: RegExp[] } {
  */
 function checkCustomWordList(text: string, locale: string): { found: boolean, matches: string[] } {
   const patterns = getCustomWordListPatterns();
-  const localePatterns = locale === 'bg' ? patterns.bg : locale === 'uk' ? patterns.uk : [];
+  const localePatterns =
+    locale === 'bg' ? patterns.bg :
+    locale === 'uk' ? patterns.uk :
+    locale === 'ru' ? patterns.ru :
+    [];
 
   const matches: string[] = [];
 
@@ -104,8 +109,8 @@ export function checkTextForProfanity(
     let detectedWords: string[] = [];
     let cleanedText = text;
 
-    // Check for custom Bulgarian or Ukrainian profanity first
-    if (locale === 'bg' || locale === 'uk') {
+    // Check for custom Bulgarian, Ukrainian, or Russian profanity first
+    if (locale === 'bg' || locale === 'uk' || locale === 'ru') {
       const customCheck = checkCustomWordList(text, locale);
       if (customCheck.found) {
         hasProfanity = true;
@@ -120,8 +125,8 @@ export function checkTextForProfanity(
       }
     }
 
-    // Check with glin-profanity for English and Russian
-    if (locale === 'en' || locale === 'ru' || (!hasProfanity && (locale === 'bg' || locale === 'uk'))) {
+    // Check with glin-profanity for English (and as fallback for other languages)
+    if (locale === 'en' || (!hasProfanity && (locale === 'bg' || locale === 'uk' || locale === 'ru'))) {
       try {
         // Get language list for glin-profanity
         const languages = LANGUAGE_MAP[locale] || ['english'];
