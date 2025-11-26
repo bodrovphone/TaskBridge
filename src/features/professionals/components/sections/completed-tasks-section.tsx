@@ -1,6 +1,7 @@
 'use client'
 
-import { Card, CardBody, Chip, Button, Avatar } from "@nextui-org/react";
+import { Card, CardBody, Chip, Button } from "@nextui-org/react";
+import FallbackAvatar from "@/components/ui/fallback-avatar";
 import { CheckCircle, MapPin, Star, TrendingUp, Award, Clock } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import { useDisclosure } from "@nextui-org/react";
@@ -19,6 +20,7 @@ interface CompletedTask {
  clientRating: number;
  budget: number; // Raw number from API
  durationHours: number; // Raw number from API
+ clientId?: string;
  clientName?: string;
  clientAvatar?: string;
  testimonial?: string;
@@ -219,11 +221,12 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400 mb-4">
               <p className="text-blue-800 text-sm italic mb-2">"{task.testimonial}"</p>
               <div className="flex items-center gap-2">
-               {task.clientAvatar ? (
-                <Avatar src={task.clientAvatar} size="sm" />
-               ) : (
-                <Avatar name={task.clientName} size="sm" />
-               )}
+               <FallbackAvatar
+                src={task.clientAvatar}
+                name={task.clientName || 'Client'}
+                size="sm"
+                userId={task.clientId}
+               />
                <span className="text-blue-700 font-semibold text-xs">
                 - {task.clientName}
                </span>

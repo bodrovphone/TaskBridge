@@ -1,7 +1,8 @@
 'use client'
 
 import { MyApplication } from '../lib/types'
-import { Card, CardBody, CardFooter, Chip, Button, Avatar } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, Chip, Button } from '@nextui-org/react'
+import FallbackAvatar from '@/components/ui/fallback-avatar'
 import {
   Clock,
   MapPin,
@@ -115,7 +116,12 @@ export default function MyApplicationCard({
 
         {/* Customer and Location */}
         <div className="flex items-center gap-2 mb-3 text-sm text-gray-600">
-          <Avatar src={application.customer.avatar} size="sm" name={application.customer.name} />
+          <FallbackAvatar
+            src={application.customer.avatar}
+            name={application.customer.name}
+            size="sm"
+            userId={application.customer.id}
+          />
           <span className="font-medium">{application.customer.name}</span>
           {application.customer.rating && (
             <>

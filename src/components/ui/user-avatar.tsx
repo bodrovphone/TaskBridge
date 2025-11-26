@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { UserProfile } from '@/server/domain/user/user.types'
+import { DefaultAvatar } from '@/components/ui/default-avatars'
 
 // Simplified user type for avatar display
 interface AvatarUser {
@@ -32,6 +33,13 @@ const statusSizes = {
  sm: 'w-2 h-2',
  md: 'w-2.5 h-2.5',
  lg: 'w-3 h-3'
+}
+
+// Map size to pixel values for SVG avatars
+const sizePx = {
+ sm: 32,
+ md: 40,
+ lg: 64
 }
 
 export default function UserAvatar({
@@ -79,17 +87,28 @@ export default function UserAvatar({
  }
 
  const hasValidImage = user?.avatarUrl && !imageError
+ const hasUserId = !!user?.id
  const initials = user ? getInitials(user) : ''
- const avatarColor = user ? getAvatarColor(user.id) : 'bg-gray-400'
+
+ // Determine background color:
+ // - No user: gray background for User icon
+ // - User with ID but no avatar: transparent (animal avatar has its own bg)
+ // - User without ID: colored background for initials
+ const getBackgroundClass = () => {
+  if (!user) return 'bg-gray-400' // User icon fallback
+  if (hasValidImage) return '' // Image covers everything
+  if (hasUserId) return '' // Animal avatar has its own background
+  return getAvatarColor(user.email) // Initials need colored bg
+ }
 
  return (
   <div className="relative inline-flex">
    <div
     className={cn(
-     'relative flex items-center justify-center rounded-full border-2 border-white shadow-sm transition-all duration-200',
+     'relative flex items-center justify-center rounded-full border-2 border-white shadow-sm transition-all duration-200 overflow-hidden',
      sizeClasses[size],
      isClickable && 'cursor-pointer hover:scale-105 hover:shadow-md',
-     !hasValidImage && avatarColor,
+     getBackgroundClass(),
      className
     )}
     onClick={onClick}
@@ -109,7 +128,15 @@ export default function UserAvatar({
       className="w-full h-full rounded-full object-cover"
       onError={() => setImageError(true)}
      />
+    ) : user?.id ? (
+     /* Show animal avatar for users without custom avatar */
+     <DefaultAvatar
+      userId={user.id}
+      size={sizePx[size]}
+      className="w-full h-full rounded-full"
+     />
     ) : user ? (
+     /* Fallback to initials if we have user but no ID */
      <span className="font-semibold text-white select-none">
       {initials}
      </span>

@@ -1,9 +1,9 @@
 'use client'
 
 import { ReactNode } from "react";
-import { Avatar } from "@nextui-org/react";
 import { useAuth } from "@/features/auth";
 import { useTranslation } from 'react-i18next';
+import FallbackAvatar from "@/components/ui/fallback-avatar";
 
 interface CustomerInfo {
  // Mock data fields (camelCase)
@@ -14,6 +14,7 @@ interface CustomerInfo {
  memberSince?: string;
 
  // Database fields (snake_case from API)
+ id?: string;
  full_name?: string;
  avatar_url?: string;
  tasks_completed?: number;
@@ -76,10 +77,11 @@ export default function PrivacyToggle({ customer, children, isOwner = false }: P
    </div>
 
    <div className="flex items-center gap-4 mb-4">
-    <Avatar
+    <FallbackAvatar
      src={avatarUrl}
-     name={initials}
-     className="w-16 h-16"
+     name={displayName}
+     size="lg"
+     userId={customer.id}
     />
     <div>
      <h4 className="font-semibold text-gray-900">

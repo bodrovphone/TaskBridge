@@ -73,6 +73,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
          src={avatar}
          name={name}
          size="lg"
+         userId={professional.id}
          className=""
         />
        </div>

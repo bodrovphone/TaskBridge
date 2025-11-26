@@ -213,6 +213,7 @@ export async function GET(
         clientRating: taskReview?.rating || 0,
         budget: budget,
         durationHours: duration,
+        clientId: customer?.id,
         clientName: customer?.full_name || 'Анонимен клиент',
         clientAvatar: customer?.avatar_url,
         // Get testimonial from review comment
