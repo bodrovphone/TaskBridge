@@ -1,5 +1,11 @@
 // Application-related translations - submitting, managing, accepting, rejecting applications
 export const applications = {
+  // Application Status Labels (for badges/chips)
+  'applicationStatus.pending': 'Pending Review',
+  'applicationStatus.accepted': 'Accepted',
+  'applicationStatus.rejected': 'Rejected',
+  'applicationStatus.withdrawn': 'Withdrawn',
+
   // Application Dialog
   'application.title': 'Apply for this Task',
   'application.proposedPrice': 'Your Price',
@@ -278,6 +284,7 @@ export const applications = {
 
   // Task Detail Page - Professional View
   'taskDetail.professional.withdraw': 'Withdraw from Task',
+  'taskDetail.professional.markCompleted': 'Mark as Completed',
 
   // Accept Application Success Toast
   'acceptApplication.successTitle': '🎉 Application Accepted!',

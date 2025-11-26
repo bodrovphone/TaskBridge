@@ -1,5 +1,11 @@
 // Application-related translations - submitting, managing, accepting, rejecting applications
 export const applications = {
+  // Application Status Labels (for badges/chips)
+  'applicationStatus.pending': 'На розгляді',
+  'applicationStatus.accepted': 'Прийнята',
+  'applicationStatus.rejected': 'Відхилена',
+  'applicationStatus.withdrawn': 'Відкликана',
+
   // Application Dialog
   'application.title': 'Подати заявку на завдання',
   'application.proposedPrice': 'Ваша ціна',
@@ -156,7 +162,7 @@ export const applications = {
   'myApplications.withdrawError': 'Не вдалося відкликати заявку',
   'myApplications.messageCustomer': 'Написати клієнту',
   'myApplications.markStarted': 'Позначити як розпочато',
-  'myApplications.markCompleted': 'Позначити як завершено',
+  'myApplications.markCompleted': 'Завершити',
   'myApplications.reportIssue': 'Повідомити про проблему',
   'myApplications.findSimilar': 'Знайти схожі',
   'myApplications.delete': 'Видалити',
@@ -230,7 +236,7 @@ export const applications = {
   'myWork.completedOn': 'Завершено {{date}}',
   'myWork.confirmCompletion': 'Підтвердити завершення',
   'myWork.viewReview': 'Переглянути відгук',
-  'myWork.withdrawFromTask': 'Відмовитись від завдання',
+  'myWork.withdrawFromTask': 'Відмовитись',
   'myWork.leaveReview': 'Залишити відгук',
 
   // Professional Withdrawal from Accepted Task

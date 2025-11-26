@@ -42,25 +42,25 @@ export default function TaskApplicationBadge({
   pending: {
    color: 'warning' as const,
    icon: <Clock size={16} />,
-   label: 'Pending Review',
+   label: t('applicationStatus.pending'),
    variant: 'flat' as const,
   },
   accepted: {
    color: 'success' as const,
    icon: <Check size={16} />,
-   label: 'Accepted',
+   label: t('applicationStatus.accepted'),
    variant: 'flat' as const,
   },
   rejected: {
    color: 'default' as const,
    icon: <X size={16} />,
-   label: 'Rejected',
+   label: t('applicationStatus.rejected'),
    variant: 'flat' as const,
   },
   withdrawn: {
    color: 'default' as const,
    icon: <X size={16} />,
-   label: 'Withdrawn',
+   label: t('applicationStatus.withdrawn'),
    variant: 'flat' as const,
   },
  }

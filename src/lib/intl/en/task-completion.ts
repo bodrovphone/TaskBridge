@@ -21,6 +21,8 @@ export const taskCompletion = {
   'taskCompletion.rejectCompletion': 'Reject Completion',
   'taskCompletion.alreadyMarkedByYou': 'You marked as complete',
   'taskCompletion.alreadyConfirmedByYou': 'You already confirmed',
+  'taskCompletion.success': 'Task marked as completed. Waiting for customer confirmation.',
+  'taskCompletion.error': 'Failed to mark task as completed. Please try again.',
 
   // Mark Completed Dialog (Professional)
   'taskCompletion.markDialog.title': 'Mark Task as Completed?',

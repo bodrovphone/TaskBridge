@@ -1,5 +1,11 @@
 // Application-related translations - submitting, managing, accepting, rejecting applications
 export const applications = {
+  // Application Status Labels (for badges/chips)
+  'applicationStatus.pending': 'На рассмотрении',
+  'applicationStatus.accepted': 'Принята',
+  'applicationStatus.rejected': 'Отклонена',
+  'applicationStatus.withdrawn': 'Отозвана',
+
   // Application Dialog
   'application.title': 'Откликнуться на задачу',
   'application.proposedPrice': 'Ваша цена',
@@ -156,7 +162,7 @@ export const applications = {
   'myApplications.withdrawError': 'Не удалось отозвать заявку',
   'myApplications.messageCustomer': 'Написать клиенту',
   'myApplications.markStarted': 'Отметить как начатую',
-  'myApplications.markCompleted': 'Отметить как завершенную',
+  'myApplications.markCompleted': 'Завершить',
   'myApplications.reportIssue': 'Сообщить о проблеме',
   'myApplications.findSimilar': 'Найти похожие',
   'myApplications.delete': 'Удалить',
@@ -230,7 +236,7 @@ export const applications = {
   'myWork.completedOn': 'Завершена {{date}}',
   'myWork.confirmCompletion': 'Подтвердить завершение',
   'myWork.viewReview': 'Посмотреть отзыв',
-  'myWork.withdrawFromTask': 'Отказаться от задачи',
+  'myWork.withdrawFromTask': 'Отказаться',
   'myWork.leaveReview': 'Оставить отзыв',
 
   // Professional Withdrawal from Accepted Task
@@ -278,6 +284,7 @@ export const applications = {
 
   // Task Detail Page - Professional View
   'taskDetail.professional.withdraw': 'Отказаться от задачи',
+  'taskDetail.professional.markCompleted': 'Отметить как завершенную',
 
   // Accept Application Success Toast
   'acceptApplication.successTitle': '🎉 Заявка принята!',

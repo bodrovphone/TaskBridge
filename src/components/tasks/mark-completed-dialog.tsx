@@ -28,7 +28,6 @@ interface MarkCompletedDialogProps {
 
 interface CompletionData {
   requirementsCompleted: boolean
-  customerSatisfied: boolean
 }
 
 export function MarkCompletedDialog({
@@ -42,23 +41,20 @@ export function MarkCompletedDialog({
 }: MarkCompletedDialogProps) {
   const { t } = useTranslation()
   const [requirementsCompleted, setRequirementsCompleted] = useState(false)
-  const [customerSatisfied, setCustomerSatisfied] = useState(false)
 
-  const canSubmit = requirementsCompleted && customerSatisfied
+  const canSubmit = requirementsCompleted
 
   const handleConfirm = () => {
     if (!canSubmit) return
 
     onConfirm({
-      requirementsCompleted,
-      customerSatisfied
+      requirementsCompleted
     })
   }
 
   const handleClose = () => {
     // Reset form
     setRequirementsCompleted(false)
-    setCustomerSatisfied(false)
     onClose()
   }
 
@@ -129,16 +125,6 @@ export function MarkCompletedDialog({
                 }}
               >
                 <span className="text-sm">{t('taskCompletion.markDialog.checkRequirements')}</span>
-              </Checkbox>
-
-              <Checkbox
-                isSelected={customerSatisfied}
-                onValueChange={setCustomerSatisfied}
-                classNames={{
-                  wrapper: 'after:bg-success after:text-white'
-                }}
-              >
-                <span className="text-sm">{t('taskCompletion.markDialog.checkSatisfied')}</span>
               </Checkbox>
             </div>
           </div>

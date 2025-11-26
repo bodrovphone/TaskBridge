@@ -172,8 +172,8 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
     {/* Action Buttons */}
     <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
      {notification.actionUrl && (
-      <LocaleLink href={notification.actionUrl} onClick={handleActionClick} className="block w-full sm:w-auto">
-       <Button variant="outline" size="sm" className="h-8 text-xs w-full whitespace-nowrap">
+      <Button asChild variant="outline" size="sm" className="h-8 text-xs w-full sm:w-auto whitespace-nowrap">
+       <LocaleLink href={notification.actionUrl} onClick={handleActionClick}>
         {notification.type === 'welcome_message'
          ? t('notifications.getStarted')
          : notification.type === 'application_accepted'
@@ -181,8 +181,8 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
          : notification.type.includes('application')
          ? t('notifications.viewApplication')
          : t('notifications.viewTask')}
-       </Button>
-      </LocaleLink>
+       </LocaleLink>
+      </Button>
      )}
 
      {/* Mark as Read Button */}

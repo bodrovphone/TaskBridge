@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
-import { Share2, Edit3, XCircle, Check, LogOut } from "lucide-react";
+import { Share2, Edit3, XCircle, Check, LogOut, CheckCircle } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { toast } from "@/hooks/use-toast";
@@ -10,6 +10,7 @@ import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import { ProfessionalWithdrawDialog } from "@/components/tasks/professional-withdraw-dialog";
 import { CancelTaskConfirmDialog } from "@/components/tasks/cancel-task-confirm-dialog";
+import { MarkCompletedDialog } from "@/components/tasks/mark-completed-dialog";
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { MessageCircle } from "lucide-react";
 // import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
@@ -49,6 +50,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [isWithdrawing, setIsWithdrawing] = useState(false);
  const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
  const [isCancelling, setIsCancelling] = useState(false);
+ const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false);
+ const [isMarkingCompleted, setIsMarkingCompleted] = useState(false);
 
  // @todo INTEGRATION: Fetch from user's professional profile/stats
  const withdrawalsThisMonth = 0; // Mock data
@@ -251,6 +254,40 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   }
  };
 
+ const handleMarkCompletedClick = () => {
+  setIsMarkCompletedDialogOpen(true);
+ };
+
+ const handleMarkCompletedConfirm = async () => {
+  setIsMarkingCompleted(true);
+  try {
+   const response = await authenticatedFetch(`/api/tasks/${task.id}/mark-complete`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' }
+   });
+
+   if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to mark task as completed');
+   }
+
+   toast({ title: t('taskCompletion.success') });
+   setIsMarkCompletedDialogOpen(false);
+
+   // Refresh the page to show updated status
+   router.refresh();
+  } catch (error: any) {
+   console.error('Error marking task as completed:', error);
+   toast({
+    title: t('taskCompletion.error'),
+    description: error.message,
+    variant: 'destructive',
+   });
+  } finally {
+   setIsMarkingCompleted(false);
+  }
+ };
+
  // Get task status permissions
  const taskStatus = (task.status || 'open') as TaskStatus;
  const canEdit = canEditTask(taskStatus);
@@ -260,14 +297,27 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const canCancel = canCancelTask(taskStatus);
 
  // Check if current user is the assigned professional
- const isAssignedProfessional = user && task.selectedProfessionalId === user.id;
+ // Note: API returns snake_case field names from database
+ const isAssignedProfessional = user && (task.selected_professional_id === user.id || task.selectedProfessionalId === user.id);
 
- // If assigned professional viewing their own task, show Withdraw button
+ // If assigned professional viewing their own task, show Mark Complete and Withdraw buttons
  if (isAssignedProfessional && taskStatus === 'in_progress') {
   return (
    <>
     <NextUICard className="bg-white/95 shadow-lg">
      <CardBody className="p-6 space-y-3">
+      <NextUIButton
+       color="success"
+       variant="solid"
+       size="lg"
+       className="w-full"
+       startContent={<CheckCircle size={20} />}
+       onPress={handleMarkCompletedClick}
+       isLoading={isMarkingCompleted}
+      >
+       {t('taskDetail.professional.markCompleted')}
+      </NextUIButton>
+
       <NextUIButton
        color="warning"
        variant="bordered"
@@ -291,6 +341,17 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
       </NextUIButton>
      </CardBody>
     </NextUICard>
+
+    {/* Mark Completed Dialog */}
+    <MarkCompletedDialog
+     isOpen={isMarkCompletedDialogOpen}
+     onClose={() => setIsMarkCompletedDialogOpen(false)}
+     onConfirm={handleMarkCompletedConfirm}
+     taskTitle={task.title}
+     customerName={task.customer?.name || task.customerName || 'Customer'}
+     payment={`${task.budgetMax || task.budget || 0} лв.`}
+     isLoading={isMarkingCompleted}
+    />
 
     {/* Professional Withdraw Dialog */}
     <ProfessionalWithdrawDialog

@@ -21,6 +21,8 @@ export const taskCompletion = {
   'taskCompletion.rejectCompletion': 'Отклонить завершение',
   'taskCompletion.alreadyMarkedByYou': 'Вы уже отметили как завершённую',
   'taskCompletion.alreadyConfirmedByYou': 'Вы уже подтвердили завершение',
+  'taskCompletion.success': 'Задача отмечена как завершённая. Ожидаем подтверждения от клиента.',
+  'taskCompletion.error': 'Не удалось отметить задачу. Пожалуйста, попробуйте снова.',
 
   // Mark Completed Dialog (Professional)
   'taskCompletion.markDialog.title': 'Отметить задачу как завершённую',
