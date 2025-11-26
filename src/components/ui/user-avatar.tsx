@@ -1,10 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { User } from 'lucide-react'
+import { CircleUser } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { UserProfile } from '@/server/domain/user/user.types'
-import { DefaultAvatar } from '@/components/ui/default-avatars'
 
 // Simplified user type for avatar display
 interface AvatarUser {
@@ -35,13 +34,6 @@ const statusSizes = {
  lg: 'w-3 h-3'
 }
 
-// Map size to pixel values for SVG avatars
-const sizePx = {
- sm: 32,
- md: 40,
- lg: 64
-}
-
 export default function UserAvatar({
  user,
  size = 'md',
@@ -51,19 +43,6 @@ export default function UserAvatar({
  isClickable = false
 }: UserAvatarProps) {
  const [imageError, setImageError] = useState(false)
-
- // Generate initials from user name
- const getInitials = (user: UserProfile | AvatarUser): string => {
-  if (user.fullName) {
-   const names = user.fullName.trim().split(/\s+/)
-   if (names.length === 1) {
-    return names[0].charAt(0).toUpperCase()
-   }
-   return names[0].charAt(0).toUpperCase() + names[names.length - 1].charAt(0).toUpperCase()
-  }
-
-  return user.email?.charAt(0)?.toUpperCase() || '?'
- }
 
  // Generate a consistent color based on user ID
  const getAvatarColor = (userId: string): string => {
@@ -87,18 +66,14 @@ export default function UserAvatar({
  }
 
  const hasValidImage = user?.avatarUrl && !imageError
- const hasUserId = !!user?.id
- const initials = user ? getInitials(user) : ''
 
  // Determine background color:
- // - No user: gray background for User icon
- // - User with ID but no avatar: transparent (animal avatar has its own bg)
- // - User without ID: colored background for initials
+ // - User with avatar: no background (image covers)
+ // - User without avatar: colored background for icon
  const getBackgroundClass = () => {
-  if (!user) return 'bg-gray-400' // User icon fallback
   if (hasValidImage) return '' // Image covers everything
-  if (hasUserId) return '' // Animal avatar has its own background
-  return getAvatarColor(user.email) // Initials need colored bg
+  if (user) return getAvatarColor(user.id || user.email) // Colored bg for icon
+  return 'bg-gray-400' // Fallback gray
  }
 
  return (
@@ -128,20 +103,9 @@ export default function UserAvatar({
       className="w-full h-full rounded-full object-cover"
       onError={() => setImageError(true)}
      />
-    ) : user?.id ? (
-     /* Show animal avatar for users without custom avatar */
-     <DefaultAvatar
-      userId={user.id}
-      size={sizePx[size]}
-      className="w-full h-full rounded-full"
-     />
-    ) : user ? (
-     /* Fallback to initials if we have user but no ID */
-     <span className="font-semibold text-white select-none">
-      {initials}
-     </span>
     ) : (
-     <User className="text-white" size={size === 'sm' ? 16 : size === 'md' ? 20 : 28} />
+     /* Show person icon for users without custom avatar */
+     <CircleUser className="text-white w-full h-full" />
     )}
 
     {/* Online Status Indicator */}
