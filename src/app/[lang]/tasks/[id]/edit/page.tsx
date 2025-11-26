@@ -31,7 +31,7 @@ export default function EditTaskPage() {
   const { t } = useTranslation()
   const params = useParams()
   const router = useRouter()
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, authenticatedFetch } = useAuth()
   const taskId = params?.id as string
   const lang = params?.lang as string
 
@@ -43,7 +43,7 @@ export default function EditTaskPage() {
     async function fetchTask() {
       try {
         setIsLoading(true)
-        const response = await fetch(`/api/tasks/${taskId}`, {
+        const response = await authenticatedFetch(`/api/tasks/${taskId}`, {
           credentials: 'include'
         })
 
@@ -117,7 +117,7 @@ export default function EditTaskPage() {
       // User exists, fetch the task
       fetchTask()
     }
-  }, [taskId, user, authLoading])
+  }, [taskId, user, authLoading, authenticatedFetch])
 
   // Map database budget_type to form budgetType
   function mapDbBudgetTypeToForm(budgetType: string): 'fixed' | 'range' | 'unclear' {

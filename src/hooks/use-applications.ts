@@ -67,11 +67,12 @@ function formatTimeline(hours: number | null | undefined, t: (key: string) => st
  * Fetch applications from API
  */
 async function fetchApplications(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>,
   statusFilter?: string,
   t?: (key: string) => string
 ): Promise<MyApplication[]> {
   const statusParam = statusFilter && statusFilter !== 'all' ? `?status=${statusFilter}` : ''
-  const response = await fetch(`/api/applications${statusParam}`, {
+  const response = await authenticatedFetch(`/api/applications${statusParam}`, {
     credentials: 'include'
   })
 
@@ -109,10 +110,11 @@ async function fetchApplications(
  * Withdraw application
  */
 async function withdrawApplication(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>,
   applicationId: string,
   reason?: string
 ): Promise<void> {
-  const response = await fetch(`/api/applications/${applicationId}/withdraw`, {
+  const response = await authenticatedFetch(`/api/applications/${applicationId}/withdraw`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -136,13 +138,13 @@ export function useApplications(
   statusFilter: 'all' | 'pending' | 'accepted' | 'rejected' | 'withdrawn' = 'pending',
   t?: (key: string) => string
 ) {
-  const { user } = useAuth()
+  const { user, authenticatedFetch } = useAuth()
   const queryClient = useQueryClient()
 
   // Fetch applications query
   const applicationsQuery = useQuery({
     queryKey: [...APPLICATIONS_QUERY_KEY, statusFilter],
-    queryFn: () => fetchApplications(statusFilter, t),
+    queryFn: () => fetchApplications(authenticatedFetch, statusFilter, t),
     enabled: !!user, // Only fetch if user is authenticated
     staleTime: 2 * 60 * 1000, // 2 minutes - frequently changing
     refetchOnWindowFocus: true, // Refetch when user returns to tab
@@ -151,7 +153,7 @@ export function useApplications(
   // Withdraw application mutation
   const withdrawMutation = useMutation({
     mutationFn: ({ applicationId, reason }: { applicationId: string; reason?: string }) =>
-      withdrawApplication(applicationId, reason),
+      withdrawApplication(authenticatedFetch, applicationId, reason),
     onSuccess: () => {
       // Invalidate all applications queries to refetch
       queryClient.invalidateQueries({ queryKey: APPLICATIONS_QUERY_KEY })

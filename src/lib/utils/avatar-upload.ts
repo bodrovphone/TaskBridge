@@ -44,13 +44,19 @@ async function compressAvatar(file: File): Promise<Blob> {
 }
 
 /**
+ * Authenticated fetch type for API calls
+ */
+type AuthenticatedFetch = (url: string, options?: RequestInit) => Promise<Response>
+
+/**
  * Upload user avatar via API
  * Returns avatar URL or null if failed
  *
  * Note: This calls our API route which handles authentication and upload
  */
 export async function uploadAvatar(
-  file: File
+  file: File,
+  authenticatedFetch: AuthenticatedFetch
 ): Promise<{ url: string | null; error: string | null }> {
   try {
     // Validate file type
@@ -73,7 +79,7 @@ export async function uploadAvatar(
     formData.append('avatar', compressedBlob, file.name)
 
     // Upload via API route
-    const response = await fetch('/api/profile/avatar', {
+    const response = await authenticatedFetch('/api/profile/avatar', {
       method: 'POST',
       body: formData,
     })
@@ -94,9 +100,11 @@ export async function uploadAvatar(
 /**
  * Delete user avatar via API
  */
-export async function deleteAvatar(): Promise<{ success: boolean; error: string | null }> {
+export async function deleteAvatar(
+  authenticatedFetch: AuthenticatedFetch
+): Promise<{ success: boolean; error: string | null }> {
   try {
-    const response = await fetch('/api/profile/avatar', {
+    const response = await authenticatedFetch('/api/profile/avatar', {
       method: 'DELETE',
     })
 

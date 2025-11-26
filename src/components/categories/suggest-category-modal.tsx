@@ -13,6 +13,7 @@ import {
 import { HelpCircle, Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from '@/hooks/use-toast'
+import { useAuth } from '@/features/auth'
 
 interface SuggestCategoryModalProps {
   isOpen: boolean
@@ -26,6 +27,7 @@ export function SuggestCategoryModal({
   isAuthenticated
 }: SuggestCategoryModalProps) {
   const { t } = useTranslation()
+  const { authenticatedFetch } = useAuth()
   const [suggestion, setSuggestion] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -47,7 +49,7 @@ export function SuggestCategoryModal({
 
     setIsSubmitting(true)
     try {
-      const response = await fetch('/api/category-suggestions', {
+      const response = await authenticatedFetch('/api/category-suggestions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

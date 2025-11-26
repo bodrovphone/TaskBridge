@@ -15,6 +15,7 @@ import {
 } from '@nextui-org/react'
 import { AlertTriangle, Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '@/features/auth'
 
 export interface ReportScamDialogProps {
   isOpen: boolean
@@ -44,6 +45,7 @@ export function ReportScamDialog({
   relatedTaskId,
 }: ReportScamDialogProps) {
   const { t } = useTranslation()
+  const { authenticatedFetch } = useAuth()
   const [reportType, setReportType] = useState<ReportType>('fraud_scam')
   const [description, setDescription] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,16 +62,12 @@ export function ReportScamDialog({
     setError(null)
 
     try {
-      // @todo FEATURE: Get actual current user ID from auth context
-      const currentUserId = 'current-user-id' // Placeholder - replace with actual auth
-
-      const response = await fetch('/api/safety/report', {
+      const response = await authenticatedFetch('/api/safety/report', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          reporterId: currentUserId,
           reportedUserId,
           reportType,
           description,

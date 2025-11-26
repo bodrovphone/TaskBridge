@@ -26,7 +26,7 @@ interface ProfessionalDetailPageContentProps {
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
   const { t } = useTranslation();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, authenticatedFetch } = useAuth();
   const [isShareCopied, setIsShareCopied] = useState(false);
   const [showAuthSlideOver, setShowAuthSlideOver] = useState(false);
   const [showTaskSelectionModal, setShowTaskSelectionModal] = useState(false);
@@ -148,7 +148,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
 
     setIsLoadingTasks(true);
     try {
-      const response = await fetch('/api/tasks?mode=posted&status=open', {
+      const response = await authenticatedFetch('/api/tasks?mode=posted&status=open', {
         credentials: 'include'
       });
 
@@ -199,7 +199,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
   const handleTaskSelection = async (taskId: string) => {
     setIsSendingInvitation(true);
     try {
-      const response = await fetch(`/api/professionals/${professional.id}/invite`, {
+      const response = await authenticatedFetch(`/api/professionals/${professional.id}/invite`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

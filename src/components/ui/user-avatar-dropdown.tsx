@@ -36,7 +36,7 @@ export default function UserAvatarDropdown({
  className,
  onLoginClick
 }: UserAvatarDropdownProps) {
- const { profile, signOut } = useAuth()
+ const { profile, signOut, authenticatedFetch } = useAuth()
  const { t } = useTranslation()
  const router = useRouter()
  const params = useParams()
@@ -49,7 +49,7 @@ export default function UserAvatarDropdown({
   setVerificationMessage(null)
 
   try {
-   const response = await fetch('/api/auth/resend-verification', {
+   const response = await authenticatedFetch('/api/auth/resend-verification', {
     method: 'POST',
     headers: {
      'Content-Type': 'application/json',

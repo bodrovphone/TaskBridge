@@ -18,7 +18,7 @@ interface AuthSlideOverProps {
 }
 
 export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
- const { signIn, signUp, signInWithGoogle, signInWithFacebook } = useAuth();
+ const { signIn, signUp, signInWithGoogle, signInWithFacebook, authenticatedFetch } = useAuth();
  const { t, i18n } = useTranslation();
  const router = useRouter();
  const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -148,7 +148,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   setError(null);
 
   try {
-   const response = await fetch('/api/auth/resend-verification', {
+   const response = await authenticatedFetch('/api/auth/resend-verification', {
     method: 'POST',
    });
 

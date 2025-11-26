@@ -66,7 +66,7 @@ export function useCreateTask() {
   const params = useParams()
   const lang = (params?.lang as string) || 'bg'
   const { t } = useTranslation()
-  const { user, profile } = useAuth()
+  const { user, profile, authenticatedFetch } = useAuth()
   const isAuthenticated = !!user && !!profile
   const { toast } = useToast()
   const queryClient = useQueryClient()
@@ -85,7 +85,7 @@ export function useCreateTask() {
   const { data: eligibility, isLoading } = useQuery<CanCreateResponse>({
     queryKey: ['can-create-task'],
     queryFn: async () => {
-      const res = await fetch('/api/tasks/can-create')
+      const res = await authenticatedFetch('/api/tasks/can-create')
       if (!res.ok) {
         throw new Error('Failed to check eligibility')
       }
@@ -99,7 +99,7 @@ export function useCreateTask() {
   // Submit review mutation
   const submitReviewMutation = useMutation({
     mutationFn: async ({ taskId, data }: { taskId: string; data: ReviewSubmitData }) => {
-      const res = await fetch(`/api/tasks/${taskId}/reviews`, {
+      const res = await authenticatedFetch(`/api/tasks/${taskId}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -5,6 +5,7 @@ import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFoote
 import { useTranslation } from 'react-i18next'
 import { Camera, Upload, X, Check } from 'lucide-react'
 import { uploadAvatar, deleteAvatar } from '@/lib/utils/avatar-upload'
+import { useAuth } from '@/features/auth'
 
 interface AvatarUploadProps {
  currentAvatar?: string | null
@@ -22,6 +23,7 @@ export function AvatarUpload({
  className = ''
 }: AvatarUploadProps) {
  const { t } = useTranslation()
+ const { authenticatedFetch } = useAuth()
  const [isModalOpen, setIsModalOpen] = useState(false)
  const [previewImage, setPreviewImage] = useState<string | null>(null)
  const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -95,7 +97,7 @@ export function AvatarUpload({
 
   try {
    // Upload avatar via API
-   const { url, error: uploadError } = await uploadAvatar(selectedFile)
+   const { url, error: uploadError } = await uploadAvatar(selectedFile, authenticatedFetch)
 
    if (uploadError) {
     setError(uploadError)
@@ -130,7 +132,7 @@ export function AvatarUpload({
 
   try {
    // Delete avatar via API
-   const { success, error: deleteError } = await deleteAvatar()
+   const { success, error: deleteError } = await deleteAvatar(authenticatedFetch)
 
    if (deleteError) {
     setError(deleteError)

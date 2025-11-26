@@ -1,13 +1,23 @@
 import { SupportedLocale } from '@/lib/constants/locales'
 
 /**
+ * Authenticated fetch type for API calls
+ */
+type AuthenticatedFetch = (url: string, options?: RequestInit) => Promise<Response>
+
+/**
  * Updates the authenticated user's preferred language in their profile
  * Silently fails if user is not authenticated (no error thrown)
  */
-export async function updateUserLanguagePreference(language: SupportedLocale): Promise<void> {
+export async function updateUserLanguagePreference(
+  language: SupportedLocale,
+  authenticatedFetch?: AuthenticatedFetch
+): Promise<void> {
   try {
+    // Use authenticatedFetch if provided, otherwise fall back to regular fetch
+    const fetchFn = authenticatedFetch || fetch
     // Call the profile API to update language preference
-    const response = await fetch('/api/profile', {
+    const response = await fetchFn('/api/profile', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

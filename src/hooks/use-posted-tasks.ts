@@ -60,8 +60,10 @@ interface TasksApiResponse {
 /**
  * Fetch posted tasks from API
  */
-async function fetchPostedTasks(): Promise<PostedTask[]> {
-  const response = await fetch('/api/tasks?mode=posted', {
+async function fetchPostedTasks(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
+): Promise<PostedTask[]> {
+  const response = await authenticatedFetch('/api/tasks?mode=posted', {
     credentials: 'include'
   })
 
@@ -119,8 +121,11 @@ async function fetchPostedTasks(): Promise<PostedTask[]> {
 /**
  * Mark task as complete
  */
-async function markTaskComplete(taskId: string): Promise<void> {
-  const response = await fetch(`/api/tasks/${taskId}/mark-complete`, {
+async function markTaskComplete(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>,
+  taskId: string
+): Promise<void> {
+  const response = await authenticatedFetch(`/api/tasks/${taskId}/mark-complete`, {
     method: 'POST',
     credentials: 'include'
   })
@@ -134,8 +139,13 @@ async function markTaskComplete(taskId: string): Promise<void> {
 /**
  * Remove professional from task
  */
-async function removeProfessional(taskId: string, reason: string, description?: string): Promise<void> {
-  const response = await fetch(`/api/tasks/${taskId}/remove-professional`, {
+async function removeProfessional(
+  authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>,
+  taskId: string,
+  reason: string,
+  description?: string
+): Promise<void> {
+  const response = await authenticatedFetch(`/api/tasks/${taskId}/remove-professional`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -152,13 +162,13 @@ async function removeProfessional(taskId: string, reason: string, description?: 
  * Custom hook for posted tasks with TanStack Query
  */
 export function usePostedTasks() {
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, authenticatedFetch } = useAuth()
   const queryClient = useQueryClient()
 
   // Fetch posted tasks query
   const tasksQuery = useQuery({
     queryKey: POSTED_TASKS_QUERY_KEY,
-    queryFn: fetchPostedTasks,
+    queryFn: () => fetchPostedTasks(authenticatedFetch),
     enabled: !!user, // Only fetch if user is authenticated
     staleTime: 2 * 60 * 1000, // 2 minutes - refetch sooner for task management
     refetchOnWindowFocus: true, // Refetch when user returns to tab
@@ -166,7 +176,7 @@ export function usePostedTasks() {
 
   // Mark complete mutation
   const markCompleteMutation = useMutation({
-    mutationFn: markTaskComplete,
+    mutationFn: (taskId: string) => markTaskComplete(authenticatedFetch, taskId),
     onSuccess: () => {
       // Invalidate and refetch tasks
       queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
@@ -176,7 +186,7 @@ export function usePostedTasks() {
   // Remove professional mutation
   const removeProfessionalMutation = useMutation({
     mutationFn: ({ taskId, reason, description }: { taskId: string; reason: string; description?: string }) =>
-      removeProfessional(taskId, reason, description),
+      removeProfessional(authenticatedFetch, taskId, reason, description),
     onSuccess: () => {
       // Invalidate and refetch tasks
       queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })

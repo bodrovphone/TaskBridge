@@ -9,6 +9,7 @@ import { MapPin, Phone, Mail, Calendar, Shield, Globe, MessageSquare, User as Us
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
 import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
 import { getCitiesWithLabels } from '@/features/cities'
+import { useAuth } from '@/features/auth'
 
 interface PersonalInfoSectionProps {
   profile: UserProfile
@@ -24,6 +25,7 @@ interface PersonalInfoSectionProps {
 
 export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: PersonalInfoSectionProps) {
   const { t } = useTranslation()
+  const { authenticatedFetch } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -114,7 +116,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
       setIsLoading(true)
 
       // Call API to disconnect Telegram
-      const response = await fetch('/api/telegram/disconnect', {
+      const response = await authenticatedFetch('/api/telegram/disconnect', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +171,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
     setVerificationMessage(null)
 
     try {
-      const response = await fetch('/api/auth/resend-verification', {
+      const response = await authenticatedFetch('/api/auth/resend-verification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

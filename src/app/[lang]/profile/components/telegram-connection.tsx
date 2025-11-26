@@ -5,6 +5,7 @@ import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import Image from 'next/image';
+import { useAuth } from '@/features/auth';
 
 interface TelegramConnectionProps {
   userId: string;
@@ -22,6 +23,7 @@ export function TelegramConnection({
   onConnectionChange
 }: TelegramConnectionProps) {
   const { t, i18n } = useTranslation();
+  const { authenticatedFetch } = useAuth();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +60,7 @@ export function TelegramConnection({
       // Get current app locale from i18next
       const locale = i18n.language || 'bg';
 
-      const response = await fetch('/api/telegram/connect', {
+      const response = await authenticatedFetch('/api/telegram/connect', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +106,7 @@ export function TelegramConnection({
     setError(null);
 
     try {
-      const response = await fetch('/api/telegram/disconnect', {
+      const response = await authenticatedFetch('/api/telegram/disconnect', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

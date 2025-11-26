@@ -61,7 +61,7 @@ export function TaskForm({
   const router = useRouter()
   const params = useParams()
   const { toast } = useToast()
-  const { user } = useAuth()
+  const { user, authenticatedFetch } = useAuth()
   const queryClient = useQueryClient()
   const locale = (params?.lang as string) || i18n.language || 'bg'
 
@@ -152,7 +152,7 @@ export function TaskForm({
             imageOversized: undefined,
           }
 
-          const response = await fetch('/api/tasks', {
+          const response = await authenticatedFetch('/api/tasks', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(taskData),
@@ -190,7 +190,7 @@ export function TaskForm({
             photoFiles: undefined,
           }
 
-          const response = await fetch(`/api/tasks/${taskId}`, {
+          const response = await authenticatedFetch(`/api/tasks/${taskId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),

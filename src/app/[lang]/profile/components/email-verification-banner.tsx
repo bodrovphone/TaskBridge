@@ -5,6 +5,7 @@ import { Card, CardBody, Button } from '@nextui-org/react'
 import { X, Mail } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from '@/hooks/use-toast'
+import { useAuth } from '@/features/auth'
 
 interface EmailVerificationBannerProps {
   telegramConnected: boolean
@@ -12,12 +13,13 @@ interface EmailVerificationBannerProps {
 
 export function EmailVerificationBanner({ telegramConnected }: EmailVerificationBannerProps) {
   const { t } = useTranslation()
+  const { authenticatedFetch } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleResendVerification = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch('/api/auth/resend-verification', {
+      const response = await authenticatedFetch('/api/auth/resend-verification', {
         method: 'POST',
       })
 

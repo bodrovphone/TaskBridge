@@ -31,7 +31,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const params = useParams();
  const pathname = usePathname();
  const searchParams = useSearchParams();
- const { user, profile } = useAuth();
+ const { user, profile, authenticatedFetch } = useAuth();
  const isAuthenticated = !!user && !!profile;
  const lang = params?.lang as string || 'bg';
 
@@ -61,7 +61,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   const fetchUserApplication = async () => {
    setIsLoadingApplication(true);
    try {
-    const response = await fetch(`/api/applications?status=all`);
+    const response = await authenticatedFetch(`/api/applications?status=all`);
     if (response.ok) {
      const data = await response.json();
      // Find application for this specific task
@@ -76,7 +76,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   };
 
   fetchUserApplication();
- }, [user, profile, task.id]);
+ }, [user, profile, task.id, authenticatedFetch]);
 
  // Auto-trigger dialog after successful authentication
  useEffect(() => {
@@ -140,7 +140,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const handleCancelConfirm = async () => {
   setIsCancelling(true);
   try {
-   const response = await fetch(`/api/tasks/${task.id}/cancel`, {
+   const response = await authenticatedFetch(`/api/tasks/${task.id}/cancel`, {
     method: 'DELETE',
     credentials: 'include'
    });
@@ -220,7 +220,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const handleWithdrawConfirm = async (reason: string, description?: string) => {
   setIsWithdrawing(true);
   try {
-   const response = await fetch(`/api/tasks/${task.id}/withdraw`, {
+   const response = await authenticatedFetch(`/api/tasks/${task.id}/withdraw`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -442,7 +442,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      setIsApplicationDialogOpen(false);
      // Refresh application status after closing
      if (user && profile) {
-      fetch(`/api/applications?status=all`)
+      authenticatedFetch(`/api/applications?status=all`)
        .then(r => r.json())
        .then(data => {
         const app = data.applications?.find((a: any) => a.task.id === task.id);

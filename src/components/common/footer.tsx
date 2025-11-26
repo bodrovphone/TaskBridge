@@ -8,11 +8,13 @@ import { LANGUAGE_CONFIG } from "@/lib/constants/locales";
 import { extractLocaleFromPathname, replaceLocaleInPathname } from "@/lib/utils/url-locale";
 import { saveUserLocalePreference } from "@/lib/utils/client-locale";
 import { updateUserLanguagePreference } from "@/lib/utils/update-user-language";
+import { useAuth } from "@/features/auth";
 
 function Footer() {
  const { t, i18n } = useTranslation();
  const pathname = usePathname();
  const router = useRouter();
+ const { authenticatedFetch } = useAuth();
 
  // Check if we're on the index/landing page for smart category linking
  const lang = pathname.split('/')[1] || 'bg';
@@ -142,7 +144,7 @@ function Footer() {
            saveUserLocalePreference(language.code);
 
            // Update authenticated user's profile language preference (silently fails if not logged in)
-           await updateUserLanguagePreference(language.code);
+           await updateUserLanguagePreference(language.code, authenticatedFetch);
 
            // Update i18next for immediate UI feedback
            i18n.changeLanguage(language.code);

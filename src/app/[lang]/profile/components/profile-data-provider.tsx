@@ -19,7 +19,7 @@ interface ProfileDataProviderProps {
  * Provides clean API for child components without prop drilling
  */
 export function ProfileDataProvider({ children }: ProfileDataProviderProps) {
-  const { profile: authProfile, user, refreshProfile } = useAuth()
+  const { profile: authProfile, user, refreshProfile, authenticatedFetch } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -32,7 +32,7 @@ export function ProfileDataProvider({ children }: ProfileDataProviderProps) {
     setError(null)
 
     try {
-      const response = await fetch('/api/profile', {
+      const response = await authenticatedFetch('/api/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export function ProfileDataProvider({ children }: ProfileDataProviderProps) {
     } finally {
       setIsLoading(false)
     }
-  }, [user, refreshProfile])
+  }, [user, refreshProfile, authenticatedFetch])
 
   return children({
     profile: authProfile,

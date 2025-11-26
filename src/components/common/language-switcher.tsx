@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Globe } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import {
  Dropdown,
@@ -14,6 +13,7 @@ import { LANGUAGE_CONFIG, type SupportedLocale } from '@/lib/constants/locales'
 import { extractLocaleFromPathname, replaceLocaleInPathname } from '@/lib/utils/url-locale'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
 import { updateUserLanguagePreference } from '@/lib/utils/update-user-language'
+import { useAuth } from '@/features/auth'
 
 interface LanguageSwitcherProps {
  /**
@@ -32,6 +32,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
  const { i18n } = useTranslation()
  const router = useRouter()
  const pathname = usePathname()
+ const { authenticatedFetch } = useAuth()
 
  // Extract current locale from URL with fallback
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg'
@@ -54,7 +55,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
    saveUserLocalePreference(newLocale)
 
    // Update authenticated user's profile language preference (silently fails if not logged in)
-   await updateUserLanguagePreference(newLocale)
+   await updateUserLanguagePreference(newLocale, authenticatedFetch)
 
    // Update i18next for immediate UI feedback
    i18n.changeLanguage(newLocale)

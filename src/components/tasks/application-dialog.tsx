@@ -62,7 +62,7 @@ export default function ApplicationDialog({
 }: ApplicationDialogProps) {
  const { t, i18n } = useTranslation()
  const router = useRouter()
- const { user } = useAuth()
+ const { user, authenticatedFetch } = useAuth()
  const isKeyboardOpen = useKeyboardHeight()
  const isMobile = useIsMobile() // < 640px (sm breakpoint)
  const [isSubmitting, setIsSubmitting] = useState(false)
@@ -92,7 +92,7 @@ export default function ApplicationDialog({
       'flexible': 80
     }
 
-    const response = await fetch('/api/applications', {
+    const response = await authenticatedFetch('/api/applications', {
       method: 'POST',
       credentials: 'include',
       headers: {
