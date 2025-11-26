@@ -170,9 +170,9 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
     )}
 
     {/* Action Buttons */}
-    <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
+    <div className="pt-3 flex flex-col gap-2 w-full">
      {notification.actionUrl && (
-      <Button asChild variant="outline" size="sm" className="h-8 text-xs w-full sm:w-auto whitespace-nowrap">
+      <Button asChild variant="outline" className="h-11 text-sm w-full justify-center">
        <LocaleLink href={notification.actionUrl} onClick={handleActionClick}>
         {notification.type === 'welcome_message'
          ? t('notifications.getStarted')
@@ -188,11 +188,10 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
      {/* Mark as Read Button */}
      <Button
       variant="ghost"
-      size="sm"
       onClick={handleMarkAsRead}
-      className="h-8 text-xs text-gray-600 hover:text-gray-900 w-full sm:w-auto justify-center whitespace-nowrap"
+      className="h-11 text-sm text-gray-600 hover:text-gray-900 w-full justify-center"
      >
-      <Check className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+      <Check className="h-4 w-4 mr-1.5 flex-shrink-0" />
       {t('notifications.markAsRead')}
      </Button>
     </div>

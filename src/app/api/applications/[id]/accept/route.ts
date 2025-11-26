@@ -211,32 +211,9 @@ export async function PATCH(
       error: notificationResult.error,
     });
 
-    // Get rejected applications to notify professionals (in-app only, gentle)
-    const { data: rejectedApps } = await adminClient
-      .from('applications')
-      .select('id, professional_id')
-      .eq('task_id', application.task_id)
-      .eq('status', 'rejected')
-      .neq('id', applicationId);
-
-    // Send gentle rejections (in-app only, no Telegram spam)
-    if (rejectedApps && rejectedApps.length > 0) {
-      for (const rejectedApp of rejectedApps) {
-        await createNotification({
-          userId: rejectedApp.professional_id,
-          type: 'application_rejected',
-          templateData: {
-            taskTitle: task?.title,
-          },
-          metadata: {
-            taskId: application.task_id,
-            applicationId: rejectedApp.id,
-          },
-          actionUrl: '/browse-tasks',
-          deliveryChannel: 'in_app', // In-app only - no Telegram spam
-        });
-      }
-    }
+    // NOTE: We intentionally do NOT send rejection notifications
+    // Users prefer to only receive positive news via notifications
+    // They can see rejected applications in "My Applications" section
 
     console.log('[Applications] Application accepted:', {
       applicationId,
@@ -244,10 +221,6 @@ export async function PATCH(
       taskTitle: task?.title,
       professionalId: application.professional_id,
       customerId: task?.customer_id,
-      notificationsSent: {
-        accepted: 1,
-        rejected: rejectedApps?.length || 0
-      }
     });
 
     return NextResponse.json({

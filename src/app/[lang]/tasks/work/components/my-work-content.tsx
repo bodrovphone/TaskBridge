@@ -470,6 +470,10 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
         isOpen={withdrawalSuccessModalOpen}
         onClose={() => setWithdrawalSuccessModalOpen(false)}
         size="sm"
+        classNames={{
+          base: "mx-4",
+          wrapper: "items-end sm:items-center"
+        }}
       >
         <ModalContent>
           <ModalHeader className="flex gap-2 items-center text-success">
@@ -497,6 +501,10 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
         isOpen={withdrawalErrorModalOpen}
         onClose={() => setWithdrawalErrorModalOpen(false)}
         size="sm"
+        classNames={{
+          base: "mx-4",
+          wrapper: "items-end sm:items-center"
+        }}
       >
         <ModalContent>
           <ModalHeader className="flex gap-2 items-center text-danger">
