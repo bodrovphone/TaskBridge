@@ -41,6 +41,7 @@ interface AcceptApplicationDialogProps {
 interface ContactInfo {
   method: 'phone' | 'email' | 'custom'
   customContact?: string
+  message?: string // Personal message from customer to professional
 }
 
 export default function AcceptApplicationDialog({
@@ -104,7 +105,8 @@ export default function AcceptApplicationDialog({
         // Call the async onConfirm handler
         await onConfirm(application.id, {
           method: contactMethod,
-          customContact: contactMethod === 'custom' ? customContact : undefined
+          customContact: contactMethod === 'custom' ? customContact : undefined,
+          message: message.trim() || undefined // Include personal message if provided
         })
 
         // Only reset state after successful submission

@@ -53,11 +53,11 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
  // const [questions, setQuestions] = useState<Question[]>([]);
  // const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
 
- // Fetch user profile for contact selection
+ // Fetch user profile for contact selection (use authenticatedFetch for notification token support)
  useEffect(() => {
   const fetchUserProfile = async () => {
    try {
-    const response = await fetch('/api/profile');
+    const response = await authenticatedFetch('/api/profile');
     if (response.ok) {
      const data = await response.json();
      setUserProfile({
@@ -72,7 +72,7 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
   };
 
   fetchUserProfile();
- }, []);
+ }, [authenticatedFetch]);
 
  // Fetch applications from API
  useEffect(() => {
@@ -204,8 +204,8 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
     contactPayload.customContact = contactInfo.customContact;
    }
 
-   // Call API to accept application
-   const response = await fetch(`/api/applications/${id}/accept`, {
+   // Call API to accept application (use authenticatedFetch for notification token support)
+   const response = await authenticatedFetch(`/api/applications/${id}/accept`, {
     method: 'PATCH',
     headers: {
      'Content-Type': 'application/json'
@@ -260,8 +260,8 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
 
  const handleRejectConfirm = async (id: string, reason?: string) => {
   try {
-   // Call API to reject application
-   const response = await fetch(`/api/applications/${id}/reject`, {
+   // Call API to reject application (use authenticatedFetch for notification token support)
+   const response = await authenticatedFetch(`/api/applications/${id}/reject`, {
     method: 'PATCH',
     headers: {
      'Content-Type': 'application/json'

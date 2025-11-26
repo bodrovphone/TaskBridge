@@ -27,6 +27,7 @@ export interface Notification {
     taskTitle?: string;
     price?: number;
     rating?: number;
+    customerMessage?: string; // Personal message from customer when accepting application
     contactInfo?: {
       method: 'phone' | 'email' | 'custom';
       phone?: string;

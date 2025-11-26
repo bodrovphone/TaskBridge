@@ -22,6 +22,7 @@ export const notifications = {
   'notifications.viewTask': 'View Task',
   'notifications.getStarted': 'Get Started',
   'notifications.customerContact': 'Customer Contact Information',
+  'notifications.customerMessage': 'Message from customer',
 
   // Notification Content (titles and messages)
   'notifications.content.welcome.title': 'Welcome to Trudify!',
@@ -45,7 +46,7 @@ export const notifications = {
   'notifications.telegram.viewHere': 'View here',
   'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {{userName}}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
   'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
-  'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!\n\n<b>Contact Information:</b>\n{{customerContact}}\n\n{{link}}',
+  'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!{{customerMessageSection}}\n\n<b>Contact Information:</b>\n{{customerContact}}\n\n{{link}}',
   'notifications.telegram.taskCompleted': '✅ <b>Task Completed - Review Needed!</b>\n\nYour task "<b>{{taskTitle}}</b>" was completed by {{professionalName}}.\n\n⭐ <b>Please leave a review</b> to help others find great professionals.\n\n{{link}}',
   'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{{professionalName}}</b> has withdrawn from your task:\n"{{taskTitle}}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {{link}}',
   'notifications.telegram.removedByCustomer': '⚠️ <b>Customer Removed You from Task</b>\n\nYou were removed from task:\n"<b>{{taskTitle}}</b>"\n\n📋 The task has been <b>reopened</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n• Focus on building positive client relationships\n\n🔗 Browse Tasks: {{link}}',

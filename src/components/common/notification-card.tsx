@@ -125,6 +125,19 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
 
     <p className="text-sm text-gray-600 leading-relaxed break-words overflow-wrap-anywhere">{notification.message}</p>
 
+    {/* Customer Message for Application Accepted */}
+    {notification.type === 'application_accepted' && notification.metadata?.customerMessage && (
+     <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg w-full">
+      <h5 className="text-xs font-semibold text-blue-900 mb-2 flex items-center gap-1.5">
+       <MessageCircle className="w-3.5 h-3.5" />
+       {t('notifications.customerMessage', 'Message from customer')}
+      </h5>
+      <p className="text-sm text-blue-800 italic break-words overflow-wrap-anywhere">
+       "{notification.metadata.customerMessage}"
+      </p>
+     </div>
+    )}
+
     {/* Contact Information for Application Accepted */}
     {notification.type === 'application_accepted' && notification.metadata?.contactInfo && (
      <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg w-full">

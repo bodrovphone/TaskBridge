@@ -40,7 +40,16 @@ export default function NotificationCenter() {
 
  // Data from TanStack Query (10-minute stale time, optimized fetching)
  // Only fetch notifications if user is authenticated AND auth is not loading
- const { notifications, isLoading, error, deleteAll } = useNotificationsQuery(authenticatedFetch, !!user && !loading);
+ const { notifications, isLoading, error, deleteAll, refetch } = useNotificationsQuery(authenticatedFetch, !!user && !loading);
+
+ // Handle drawer open/close - refetch notifications when opening
+ const handleOpenChange = (open: boolean) => {
+  setOpen(open);
+  // Refetch notifications when drawer opens to ensure fresh data
+  if (open && !loading && user) {
+   refetch();
+  }
+ };
 
  // Handle query errors gracefully
  const hasError = !!error;
@@ -73,7 +82,7 @@ export default function NotificationCenter() {
 
  return (
   <>
-   <Sheet open={isOpen} onOpenChange={setOpen}>
+   <Sheet open={isOpen} onOpenChange={handleOpenChange}>
     <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white h-full !overflow-x-hidden">
      <SheetHeader className="border-b pl-6 pr-12 py-4 flex-shrink-0 bg-white">
       <SheetTitle className="text-xl font-bold">

@@ -13,6 +13,7 @@ interface ContactInfo {
   phone?: string;
   email?: string;
   customContact?: string;
+  message?: string; // Personal message from customer to professional
 }
 
 export async function PATCH(
@@ -175,13 +176,22 @@ export async function PATCH(
     }
 
     // Send notification to accepted professional (critical - Telegram + in-app)
-    await createNotification({
+    console.log('[Applications] Sending acceptance notification:', {
+      recipientUserId: application.professional_id,
+      notificationType: 'application_accepted',
+      deliveryChannel: 'both',
+      taskId: application.task_id,
+      hasCustomerMessage: !!contactInfo?.message,
+    });
+
+    const notificationResult = await createNotification({
       userId: application.professional_id,
       type: 'application_accepted',
       templateData: {
         taskTitle: task?.title,
         customerName: customer?.full_name || 'the customer',
         customerContact: contactText,
+        customerMessage: contactInfo?.message || '', // Personal message from customer
       },
       metadata: {
         taskId: application.task_id,
@@ -189,9 +199,16 @@ export async function PATCH(
         customerId: task?.customer_id,
         customerName: customer?.full_name,
         contactInfo: contactInfo || null,
+        customerMessage: contactInfo?.message || null, // Store message in metadata too
       },
       actionUrl: '/tasks/work', // Professional should go to their work page
       deliveryChannel: 'both', // Critical: Telegram + In-app
+    });
+
+    console.log('[Applications] Notification result:', {
+      success: notificationResult.success,
+      notificationId: notificationResult.notificationId,
+      error: notificationResult.error,
     });
 
     // Get rejected applications to notify professionals (in-app only, gentle)

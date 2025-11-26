@@ -123,6 +123,14 @@ export async function sendTelegramNotification(
       },
     });
 
+    console.log(`[Telegram] ✅ Message sent successfully:`, {
+      userId: notification.userId,
+      userName: user.full_name,
+      notificationType: notification.notificationType,
+      messageId: data.result.message_id,
+      chatId: user.telegram_id,
+    });
+
     return {
       success: true,
       messageId: data.result.message_id,

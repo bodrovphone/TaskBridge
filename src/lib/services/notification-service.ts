@@ -233,6 +233,15 @@ export async function createNotification(
       // Check user's available notification channel
       const { channel: availableChannel } = await getUserNotificationChannel(params.userId)
 
+      // Debug logging for notification routing
+      console.log(`[Notification] External notification routing for user ${params.userId}:`, {
+        notificationType: params.type,
+        requestedDeliveryChannel: deliveryChannel,
+        availableChannel,
+        userHasTelegramId: !!user.telegram_id,
+        telegramId: user.telegram_id ? `${String(user.telegram_id).slice(0, 4)}...` : null,
+      })
+
       // Priority 1: Telegram (if user has telegram_id)
       if (availableChannel === 'telegram' && user.telegram_id) {
         try {
@@ -298,11 +307,18 @@ export async function createNotification(
                 console.warn('[Telegram] Link was empty, using emergency fallback:', link)
               }
 
+              // Build customer message section for application accepted notifications
+              let customerMessageSection = ''
+              if (params.templateData?.customerMessage) {
+                customerMessageSection = `\n\n<b>💬 Message from ${params.templateData?.customerName || 'customer'}:</b>\n"${params.templateData.customerMessage}"`
+              }
+
               // Prepare template data with localized link
               const templateData = {
                 ...params.templateData,
                 userName: user.full_name || 'there',
                 link,
+                customerMessageSection,
               }
 
               telegramMessage = getTelegramMessage(userLocale, localizedType, templateData)
@@ -350,6 +366,10 @@ export async function createNotification(
       }
       // Priority 2: Email (if user has verified email and NO Telegram)
       else if (availableChannel === 'email') {
+        // Log why Telegram was skipped if user has telegram_id but channel is email
+        if (user.telegram_id) {
+          console.warn(`[Notification] UNEXPECTED: User ${params.userId} has telegram_id but availableChannel is 'email'. This may indicate a bug in getUserNotificationChannel.`)
+        }
         try {
           // Map notification types to email notification types
           const emailTypeMap = {
