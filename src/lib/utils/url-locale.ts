@@ -3,9 +3,9 @@ import { validateLocale } from './locale-detection'
 
 /**
  * Regular expression for matching locale in URL paths
- * Matches: /en, /bg, /ru (with optional trailing slash and content)
+ * Matches: /en, /bg, /ru, /ua (with optional trailing slash and content)
  */
-const LOCALE_PATH_REGEX = /^\/(en|bg|ru)(\/|$)/
+const LOCALE_PATH_REGEX = /^\/(en|bg|ru|ua)(\/|$)/
 
 /**
  * Extracts locale from a URL pathname

@@ -10,6 +10,7 @@
 import en from './en';
 import bg from './bg';
 import ru from './ru';
+import ua from './ua';
 
 type TranslationObject = Record<string, string>;
 
@@ -31,11 +32,13 @@ function validateTranslations() {
   const enKeys = getAllKeys(en);
   const bgKeys = getAllKeys(bg);
   const ruKeys = getAllKeys(ru);
+  const uaKeys = getAllKeys(ua);
 
   console.log(`📊 Translation Key Counts:`);
   console.log(`   English (EN):   ${enKeys.length} keys`);
   console.log(`   Bulgarian (BG): ${bgKeys.length} keys`);
-  console.log(`   Russian (RU):   ${ruKeys.length} keys\n`);
+  console.log(`   Russian (RU):   ${ruKeys.length} keys`);
+  console.log(`   Ukrainian (UA): ${uaKeys.length} keys\n`);
 
   let hasErrors = false;
 
@@ -93,6 +96,35 @@ function validateTranslations() {
 
   if (ruMissing.length === 0 && ruExtra.length === 0) {
     console.log(`   ✅ Russian translations are consistent with English\n`);
+  } else {
+    console.log('');
+  }
+
+  // Validate Ukrainian
+  console.log('🇺🇦 Validating Ukrainian translations...');
+  const uaMissing = findMissingKeys(enKeys, uaKeys);
+  const uaExtra = findExtraKeys(enKeys, uaKeys);
+
+  if (uaMissing.length > 0) {
+    hasErrors = true;
+    console.error(`   ❌ Missing ${uaMissing.length} keys in Ukrainian:`);
+    uaMissing.slice(0, 10).forEach((key) => console.error(`      - ${key}`));
+    if (uaMissing.length > 10) {
+      console.error(`      ... and ${uaMissing.length - 10} more`);
+    }
+  }
+
+  if (uaExtra.length > 0) {
+    hasErrors = true;
+    console.error(`   ⚠️  Extra ${uaExtra.length} keys in Ukrainian (not in English):`);
+    uaExtra.slice(0, 10).forEach((key) => console.error(`      - ${key}`));
+    if (uaExtra.length > 10) {
+      console.error(`      ... and ${uaExtra.length - 10} more`);
+    }
+  }
+
+  if (uaMissing.length === 0 && uaExtra.length === 0) {
+    console.log(`   ✅ Ukrainian translations are consistent with English\n`);
   } else {
     console.log('');
   }

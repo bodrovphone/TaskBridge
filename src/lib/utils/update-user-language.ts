@@ -1,8 +1,10 @@
+import { SupportedLocale } from '@/lib/constants/locales'
+
 /**
  * Updates the authenticated user's preferred language in their profile
  * Silently fails if user is not authenticated (no error thrown)
  */
-export async function updateUserLanguagePreference(language: 'en' | 'bg' | 'ru'): Promise<void> {
+export async function updateUserLanguagePreference(language: SupportedLocale): Promise<void> {
   try {
     // Call the profile API to update language preference
     const response = await fetch('/api/profile', {

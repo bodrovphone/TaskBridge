@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import enMessages from './en';
 import bgMessages from './bg';
 import ruMessages from './ru';
+import uaMessages from './ua';
 
 // Translation resources (now using modular barrel exports)
 const resources = {
@@ -14,6 +15,9 @@ const resources = {
   },
   ru: {
     translation: ruMessages,
+  },
+  ua: {
+    translation: uaMessages,
   },
 };
 

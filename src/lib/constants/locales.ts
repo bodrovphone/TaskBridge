@@ -3,7 +3,7 @@
  * Centralized locale management for consistent usage across the application
  */
 
-export const SUPPORTED_LOCALES = ['en', 'bg', 'ru'] as const
+export const SUPPORTED_LOCALES = ['en', 'bg', 'ru', 'ua'] as const
 export const DEFAULT_LOCALE = 'en' as const
 
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
@@ -34,6 +34,12 @@ export const LANGUAGE_CONFIG: Record<SupportedLocale, {
     name: 'Русский',
     flag: '🇷🇺',
     region: 'RU'
+  },
+  ua: {
+    code: 'ua',
+    name: 'Українська',
+    flag: '🇺🇦',
+    region: 'UA'
   }
 } as const
 
