@@ -22,6 +22,11 @@ export class AuthService {
   /**
    * Create or sync user profile after Supabase authentication
    * This is called after successful signup or OAuth login
+   *
+   * @param authUserId - Supabase auth user ID
+   * @param email - User's email address
+   * @param metadata - Additional user metadata
+   * @param metadata.isOAuthUser - If true, email is already verified by OAuth provider (Google/Facebook)
    */
   async createOrSyncUserProfile(
     authUserId: string,
@@ -31,6 +36,7 @@ export class AuthService {
       phoneNumber?: string
       avatarUrl?: string
       locale?: 'en' | 'bg' | 'ru'
+      isOAuthUser?: boolean // OAuth providers verify email, so auto-verify for these users
     }
   ): Promise<Result<User, Error>> {
     try {
@@ -40,6 +46,14 @@ export class AuthService {
       if (existingUser) {
         // Profile exists - update last active
         existingUser.updateLastActive()
+
+        // Auto-verify email for OAuth users if not already verified
+        // This handles existing users who registered before this fix
+        if (metadata?.isOAuthUser && !existingUser.isEmailVerified) {
+          existingUser.verifyEmail()
+          console.log('[Auth] Auto-verified email for existing OAuth user:', authUserId)
+        }
+
         const updatedUser = await this.userRepository.update(existingUser)
         return Result.ok(updatedUser)
       }
@@ -64,8 +78,18 @@ export class AuthService {
       // 3. Extract created user and update avatar if provided
       const createdUser = (createResult as any).value as User
 
+      // 4. Auto-verify email for OAuth users (Google/Facebook verify email)
+      if (metadata?.isOAuthUser) {
+        createdUser.verifyEmail()
+        console.log('[Auth] Auto-verified email for OAuth user:', authUserId)
+      }
+
       if (metadata?.avatarUrl) {
         createdUser.avatarUrl = metadata.avatarUrl
+      }
+
+      // 5. Save updates (avatar and/or email verification)
+      if (metadata?.avatarUrl || metadata?.isOAuthUser) {
         const updatedUser = await this.userRepository.update(createdUser)
 
         // Send welcome notification (in-app only for now)

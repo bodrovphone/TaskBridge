@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { AuthService } from '@/server/application/auth/auth.service'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 import { authenticateRequest } from '@/lib/auth/api-auth'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * POST /api/auth/profile
@@ -60,11 +61,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 4. Create service instances
+    // 4. Check if user authenticated via OAuth (Google/Facebook)
+    // OAuth providers verify email, so we should auto-verify for these users
+    const supabase = await createClient()
+    const { data: { user: supabaseUser } } = await supabase.auth.getUser()
+
+    // Check app_metadata.provider or app_metadata.providers for OAuth
+    const provider = supabaseUser?.app_metadata?.provider
+    const providers = supabaseUser?.app_metadata?.providers as string[] | undefined
+    const isOAuthUser = provider === 'google' ||
+                        provider === 'facebook' ||
+                        providers?.includes('google') ||
+                        providers?.includes('facebook')
+
+    // 5. Create service instances
     const userRepository = new UserRepository()
     const authService = new AuthService(userRepository)
 
-    // 5. Execute use case: create or sync profile
+    // 6. Execute use case: create or sync profile
     const result = await authService.createOrSyncUserProfile(
       authUser.id,
       authUser.email!,
@@ -73,10 +87,11 @@ export async function POST(request: NextRequest) {
         phoneNumber: body.phoneNumber || authUser.user_metadata?.phone,
         avatarUrl: authUser.user_metadata?.avatar_url,
         locale: detectedLocale,
+        isOAuthUser, // Pass OAuth flag to auto-verify email
       }
     )
 
-    // 6. Return user profile or error
+    // 7. Return user profile or error
     try {
       const user = result.unwrap()
       return NextResponse.json(
