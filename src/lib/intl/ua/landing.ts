@@ -27,6 +27,8 @@ export const landing = {
   'landing.categories.activeSpecialists': 'активних фахівців',
   'landing.categories.specialists': 'фахівців',
   'landing.categories.beFirst': 'Станьте першим фахівцем',
+  'landing.categories.checkTasks': 'Переглянути завдання',
+  'landing.categories.activeTasks': 'завдань',
 
   'landing.trustStats.verified': 'Перевірено',
   'landing.trustStats.noFees': 'Без комісій',
@@ -139,7 +141,7 @@ export const landing = {
   'landing.cta.title': 'Готові почати?',
   'landing.cta.subtitle': 'Станьте частиною спільноти з першого дня',
   'landing.cta.postTask': 'Опублікувати завдання',
-  'landing.cta.joinProfessionals': 'Приєднатися як фахівець',
+  'landing.cta.joinProfessionals': 'Стати фахівцем',
   'landing.cta.freeToJoin': 'Безкоштовно, без прихованих платежів',
   'landing.cta.stats.completedTasks': 'Категорії послуг',
   'landing.cta.stats.activeSpecialists': 'Міст Болгарії',

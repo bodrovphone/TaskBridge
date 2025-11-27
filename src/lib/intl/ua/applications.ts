@@ -103,6 +103,7 @@ export const applications = {
   'acceptApplication.customContactPlaceholder': 'Телефон, Telegram (@username), Viber, WhatsApp або інше...',
   'acceptApplication.customContactHelp': 'Вкажіть будь-який зручний спосіб зв\'язку',
   'acceptApplication.customContactRequired': 'Вкажіть контактну інформацію',
+  'acceptApplication.noSavedContacts': 'Вкажіть спосіб зв\'язку, за яким фахівець може з вами зв\'язатися.',
   'acceptApplication.phoneWarning': 'Цей номер буде передано фахівцю.',
   'acceptApplication.emailWarning': 'Email повільніший для координації. Рекомендуємо телефон/Telegram.',
   'acceptApplication.privacyPolicy': 'Політика конфіденційності',

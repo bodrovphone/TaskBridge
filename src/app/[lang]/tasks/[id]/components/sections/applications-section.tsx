@@ -122,7 +122,7 @@ export default function ApplicationsSection({
        variant="bordered"
        size="sm"
        startContent={<Eye size={14} />}
-       onClick={() => onViewDetails(application.id)}
+       onPress={() => onViewDetails(application.id)}
        className="w-full sm:w-auto text-xs sm:text-sm"
       >
        {t('applications.viewDetails', 'View Details')}
@@ -135,7 +135,7 @@ export default function ApplicationsSection({
          variant="solid"
          size="sm"
          startContent={<CheckCircle size={14} />}
-         onClick={() => onAcceptApplication(application.id)}
+         onPress={() => onAcceptApplication(application.id)}
          className="w-full sm:w-auto text-xs sm:text-sm"
         >
          {t('taskDetail.accept')}
@@ -145,7 +145,7 @@ export default function ApplicationsSection({
          variant="bordered"
          size="sm"
          startContent={<X size={14} />}
-         onClick={() => onRejectApplication(application.id)}
+         onPress={() => onRejectApplication(application.id)}
          className="w-full sm:w-auto text-xs sm:text-sm"
         >
          {t('taskDetail.reject')}

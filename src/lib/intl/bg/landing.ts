@@ -27,6 +27,8 @@ export const landing = {
   'landing.categories.activeSpecialists': 'активни специалисти',
   'landing.categories.specialists': 'специалисти',
   'landing.categories.beFirst': 'Бъдете първият специалист',
+  'landing.categories.checkTasks': 'Виж задачи',
+  'landing.categories.activeTasks': 'задачи',
 
   'landing.trustStats.verified': 'Верифицирано',
   'landing.trustStats.noFees': 'Без такси',

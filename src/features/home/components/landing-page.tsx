@@ -186,7 +186,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  ];
 
  const handleCategoryClick = (category: string) => {
-  window.location.href = `/browse-tasks?category=${category}`;
+  window.location.href = `/${currentLocale}/browse-tasks?category=${category}`;
  };
 
  // Show skeleton while translations are loading
@@ -337,24 +337,24 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
         </div>
        </div>
        
-       <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-        <Button 
+       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-8 px-4 sm:px-0">
+        <Button
          size="lg"
-         className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 px-10 py-6 text-xl font-bold rounded-2xl border border-blue-400"
+         className="group w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-xl font-bold rounded-2xl border border-blue-400"
          asChild
         >
-         <LocaleLink href="/create-task" className="flex items-center gap-3">
-          <Plus className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+         <LocaleLink href="/create-task" className="flex items-center gap-2 sm:gap-3">
+          <Plus className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
           {t('landing.cta.postTask', 'Post Your Task')}
          </LocaleLink>
         </Button>
         <Button
          size="lg"
          variant="outline"
-         className="group border-2 border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50 transform hover:scale-105 transition-all duration-300 px-10 py-6 text-xl font-bold rounded-2xl"
+         className="group w-full sm:w-auto border-2 border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50 transform hover:scale-105 transition-all duration-300 px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-xl font-bold rounded-2xl"
          onClick={() => setIsAuthSlideOverOpen(true)}
         >
-         <UserCheck className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+         <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.cta.joinProfessionals', 'Join as Professional')}
         </Button>
        </div>

@@ -27,6 +27,8 @@ export const landing = {
   'landing.categories.activeSpecialists': 'активных специалистов',
   'landing.categories.specialists': 'специалистов',
   'landing.categories.beFirst': 'Будьте первым специалистом',
+  'landing.categories.checkTasks': 'Смотреть задачи',
+  'landing.categories.activeTasks': 'задач',
 
   'landing.trustStats.verified': 'Проверено',
   'landing.trustStats.noFees': 'Без комиссий',
@@ -141,7 +143,7 @@ export const landing = {
   'landing.cta.title': 'Готовы начать?',
   'landing.cta.subtitle': 'Станьте частью сообщества с первого дня',
   'landing.cta.postTask': 'Создать задачу',
-  'landing.cta.joinProfessionals': 'Присоединиться как специалист',
+  'landing.cta.joinProfessionals': 'Стать специалистом',
   'landing.cta.freeToJoin': 'Бесплатное присоединение, без скрытых комиссий',
   'landing.cta.stats.completedTasks': 'Категории услуг',
   'landing.cta.stats.activeSpecialists': 'Болгарские города',

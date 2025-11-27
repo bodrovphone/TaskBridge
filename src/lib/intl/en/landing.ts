@@ -27,6 +27,8 @@ export const landing = {
   'landing.categories.activeSpecialists': 'active specialists',
   'landing.categories.specialists': 'specialists',
   'landing.categories.beFirst': 'Be the first specialist',
+  'landing.categories.checkTasks': 'Check tasks',
+  'landing.categories.activeTasks': 'tasks',
 
   'landing.trustStats.verified': 'Verified',
   'landing.trustStats.noFees': 'No Fees',

@@ -5,17 +5,16 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogFooter,
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import { Button } from '@nextui-org/react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CheckCircle, Wallet, Calendar, AlertTriangle, MessageSquare, Phone, Mail, Send, X } from 'lucide-react'
+import { CheckCircle, Wallet, Calendar, MessageSquare, Phone, Mail, Send } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
 import { getTimelineLabel } from '@/lib/utils/timeline'
@@ -41,7 +40,7 @@ interface AcceptApplicationDialogProps {
 interface ContactInfo {
   method: 'phone' | 'email' | 'custom'
   customContact?: string
-  message?: string // Personal message from customer to professional
+  message?: string
 }
 
 export default function AcceptApplicationDialog({
@@ -53,37 +52,51 @@ export default function AcceptApplicationDialog({
 }: AcceptApplicationDialogProps) {
   const { t } = useTranslation()
   const isKeyboardOpen = useKeyboardHeight()
-  const isMobile = useIsMobile() // < 640px (sm breakpoint)
+  const isMobile = useIsMobile()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState('')
-  const [contactMethod, setContactMethod] = useState<'phone' | 'email' | 'custom'>('phone')
+  const [contactMethod, setContactMethod] = useState<'phone' | 'email' | 'custom'>('custom')
   const [customContact, setCustomContact] = useState('')
-  const [agreements, setAgreements] = useState({
-    priceTimeline: false,
-    contactSharing: false,
-    otherApplications: false
-  })
+  const [contactSharingAgreed, setContactSharingAgreed] = useState(false)
 
   const bodyRef = useRef<HTMLDivElement>(null)
+
+  // Check if user has any saved contact methods
+  const hasPhone = Boolean(userProfile?.phone)
+  const hasEmail = Boolean(userProfile?.email)
+  const hasSavedContacts = hasPhone || hasEmail
 
   // Handle input focus on mobile - scroll into view
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (isMobile && bodyRef.current) {
       setTimeout(() => {
         e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 300) // Wait for keyboard animation
+      }, 300)
     }
   }
 
-  // Auto-select custom if user has no phone
+  // Set default contact method based on available options
   useEffect(() => {
-    if (!userProfile?.phone && isOpen) {
-      setContactMethod('custom')
-    } else if (isOpen) {
-      setContactMethod('phone')
+    if (isOpen) {
+      if (hasPhone) {
+        setContactMethod('phone')
+      } else if (hasEmail) {
+        setContactMethod('email')
+      } else {
+        setContactMethod('custom')
+      }
     }
-  }, [userProfile?.phone, isOpen])
+  }, [hasPhone, hasEmail, isOpen])
+
+  // Reset form when dialog opens/closes
+  useEffect(() => {
+    if (!isOpen) {
+      setMessage('')
+      setCustomContact('')
+      setContactSharingAgreed(false)
+    }
+  }, [isOpen])
 
   if (!application) return null
 
@@ -95,31 +108,19 @@ export default function AcceptApplicationDialog({
     ? customContact.trim().length > 0
     : true
 
-  const allAgreed = agreements.priceTimeline && agreements.contactSharing && agreements.otherApplications
-  const canConfirm = allAgreed && hasValidContact && !isSubmitting
+  const canConfirm = contactSharingAgreed && hasValidContact && !isSubmitting
 
   const handleConfirm = async () => {
     if (canConfirm) {
       setIsSubmitting(true)
       try {
-        // Call the async onConfirm handler
         await onConfirm(application.id, {
           method: contactMethod,
           customContact: contactMethod === 'custom' ? customContact : undefined,
-          message: message.trim() || undefined // Include personal message if provided
-        })
-
-        // Only reset state after successful submission
-        setMessage('')
-        setCustomContact('')
-        setAgreements({
-          priceTimeline: false,
-          contactSharing: false,
-          otherApplications: false
+          message: message.trim() || undefined
         })
       } catch (error) {
         console.error('Error accepting application:', error)
-        // Don't reset form on error - let user try again
       } finally {
         setIsSubmitting(false)
       }
@@ -127,54 +128,44 @@ export default function AcceptApplicationDialog({
   }
 
   const handleClose = () => {
-    // Reset state when closing
-    setMessage('')
-    setCustomContact('')
-    setAgreements({
-      priceTimeline: false,
-      contactSharing: false,
-      otherApplications: false
-    })
-    onClose()
+    if (!isSubmitting) {
+      onClose()
+    }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
         className={cn(
-          "max-w-2xl p-0 gap-0 bg-white dark:bg-gray-900 flex flex-col",
+          "max-w-lg p-0 gap-0 bg-white dark:bg-gray-900 flex flex-col overflow-hidden",
           isMobile
             ? "h-full max-h-full w-full rounded-none !inset-0 !translate-x-0 !translate-y-0"
-            : "rounded-xl",
-          !isMobile && isKeyboardOpen && "max-h-[60vh]",
-          !isMobile && !isKeyboardOpen && "max-h-[90vh]"
+            : "rounded-2xl max-h-[90vh]"
         )}
         onInteractOutside={(e) => {
           if (isSubmitting) e.preventDefault()
         }}
       >
-        {/* Header - compact on mobile when keyboard is open */}
+        {/* Header */}
         <DialogHeader className={cn(
-          "border-b border-gray-200 flex-shrink-0 sticky top-0 z-10 bg-white dark:bg-gray-900",
-          isMobile && isKeyboardOpen ? "px-4 py-2" : "px-4 py-2 sm:px-6 sm:py-4",
-          !isMobile && "rounded-t-xl"
+          "flex-shrink-0 bg-gradient-to-r from-green-500 to-green-600 text-white",
+          isMobile && isKeyboardOpen ? "px-4 py-3" : "px-5 py-4 sm:px-6 sm:py-5"
         )}>
-          <div className="flex items-center justify-between pr-8">
-            <div className="flex items-center gap-2">
-              {!isMobile && <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />}
-              <DialogTitle className={cn(
-                "font-bold",
-                isMobile && isKeyboardOpen ? "text-sm" : "text-base sm:text-2xl"
-              )}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <DialogTitle className="text-lg sm:text-xl font-bold text-white">
                 {t('acceptApplication.title')}
               </DialogTitle>
+              {!(isMobile && isKeyboardOpen) && (
+                <DialogDescription className="text-sm text-green-100 mt-0.5">
+                  {t('acceptApplication.description', { name: professional.name })}
+                </DialogDescription>
+              )}
             </div>
           </div>
-          {!(isMobile && isKeyboardOpen) && (
-            <DialogDescription className="text-sm sm:text-base text-gray-700 mt-2">
-              {t('acceptApplication.description', { name: professional.name })}
-            </DialogDescription>
-          )}
         </DialogHeader>
 
         {/* Body */}
@@ -182,128 +173,161 @@ export default function AcceptApplicationDialog({
           ref={bodyRef}
           className={cn(
             "flex-1 overflow-y-auto overscroll-contain",
-            isMobile && isKeyboardOpen ? "px-4 py-2" : "px-4 py-3 sm:px-6 sm:py-6"
+            isMobile && isKeyboardOpen ? "px-4 py-3" : "px-5 py-4 sm:px-6 sm:py-5"
           )}
         >
-          {/* Price & Timeline Summary - hide on mobile when keyboard is open */}
-              {!(isMobile && isKeyboardOpen) && (
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-700 mb-1">
-                    <Wallet className="w-4 h-4" />
-                    <span className="text-sm font-medium">{t('acceptApplication.agreedPrice')}</span>
-                  </div>
-                  <div className="text-xl font-bold text-green-900">
-                    {proposedPrice} {currency}
-                  </div>
+          {/* Price & Timeline Summary */}
+          {!(isMobile && isKeyboardOpen) && (
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="p-3 bg-green-50 border border-green-100 rounded-xl">
+                <div className="flex items-center gap-2 text-green-600 mb-1">
+                  <Wallet className="w-4 h-4" />
+                  <span className="text-xs font-medium">{t('acceptApplication.agreedPrice')}</span>
                 </div>
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-blue-700 mb-1">
-                    <Calendar className="w-4 h-4" />
-                    <span className="text-sm font-medium">{t('acceptApplication.timeline')}</span>
-                  </div>
-                  <div className="text-xl font-bold text-blue-900">{readableTimeline}</div>
+                <div className="text-lg font-bold text-green-700">
+                  {proposedPrice} {currency}
                 </div>
               </div>
-              )}
-
-          {!(isMobile && isKeyboardOpen) && <hr className="my-3 sm:my-4 border-gray-200" />}
-
-          {/* Message to Professional */}
-          <div className="mb-4 sm:mb-6">
-            <div className="space-y-2">
-              <Label htmlFor="message" className="font-medium text-sm flex items-center gap-2">
-                {!(isMobile && isKeyboardOpen) && <MessageSquare className="w-4 h-4 text-gray-400" />}
-                {t('acceptApplication.messageLabel')}
-              </Label>
-              <Textarea
-                id="message"
-                placeholder={t('acceptApplication.messagePlaceholder')}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onFocus={handleInputFocus}
-                rows={isKeyboardOpen ? 2 : 3}
-                disabled={isSubmitting}
-                className="text-base resize-none"
-                style={{ fontSize: '16px' }} // Prevents iOS zoom
-              />
-              {!(isMobile && isKeyboardOpen) && (
-                <p className="text-xs text-gray-500">
-                  {t('acceptApplication.messageHelp', { name: professional.name })}
-                </p>
-              )}
+              <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl">
+                <div className="flex items-center gap-2 text-blue-600 mb-1">
+                  <Calendar className="w-4 h-4" />
+                  <span className="text-xs font-medium">{t('acceptApplication.timeline')}</span>
+                </div>
+                <div className="text-lg font-bold text-blue-700">{readableTimeline}</div>
+              </div>
             </div>
+          )}
+
+          {/* Message to Professional (Optional) */}
+          <div className="mb-5">
+            <Label htmlFor="message" className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-2">
+              <MessageSquare className="w-4 h-4 text-gray-400" />
+              {t('acceptApplication.messageLabel')}
+              <span className="text-xs text-gray-400 font-normal">({t('common.optional', 'optional')})</span>
+            </Label>
+            <Textarea
+              id="message"
+              placeholder={t('acceptApplication.messagePlaceholder')}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onFocus={handleInputFocus}
+              rows={2}
+              disabled={isSubmitting}
+              className="text-base resize-none rounded-xl border-gray-200 focus:border-green-500 focus:ring-green-500"
+              style={{ fontSize: '16px' }}
+            />
           </div>
 
-          {!(isMobile && isKeyboardOpen) && <hr className="my-3 sm:my-4 border-gray-200" />}
+          {/* Contact Information Section */}
+          <div className="mb-5">
+            <h4 className="text-sm font-semibold text-gray-900 mb-3">
+              {t('acceptApplication.contactInfo')}
+            </h4>
 
-          {/* Contact Information Selection */}
-          <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-            <h4 className="font-semibold text-base sm:text-lg">{t('acceptApplication.contactInfo')}</h4>
-            {/* Hide info banner on mobile when keyboard is open */}
-            {!(isMobile && isKeyboardOpen) && (
-              <div className="p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-xs sm:text-sm text-blue-800">
-                  ℹ️ {t('acceptApplication.noInAppChat')}
-                </p>
-              </div>
-            )}
-
-            {/* If user has phone/email, show radio options */}
-            {(userProfile?.phone || userProfile?.email) ? (
-              <>
+            {hasSavedContacts ? (
+              // User has saved contacts - show radio options
+              <div className="space-y-2">
                 <RadioGroup
                   value={contactMethod}
                   onValueChange={(value) => setContactMethod(value as 'phone' | 'email' | 'custom')}
                   disabled={isSubmitting}
-                  className="gap-3"
+                  className="gap-2"
                 >
-                  {userProfile?.phone && (
-                    <div className="flex items-start space-x-2">
-                      <RadioGroupItem value="phone" id="radio-phone" />
-                      <Label htmlFor="radio-phone" className="text-sm cursor-pointer flex-1">
-                        <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4" />
-                          <span>{t('acceptApplication.sharePhone')}: <strong>{maskPhoneNumber(userProfile.phone)}</strong></span>
-                        </div>
-                        <p className="text-xs text-gray-500 ml-6 mt-1">
-                          {t('acceptApplication.phoneWarning')} <a href="/privacy-policy" className="text-xs text-blue-600 underline" target="_blank" rel="noopener noreferrer">{t('acceptApplication.privacyPolicy')}</a>
-                        </p>
-                      </Label>
-                    </div>
-                  )}
-
-                  {userProfile?.email && (
-                    <div className="flex items-start space-x-2">
-                      <RadioGroupItem value="email" id="radio-email" />
-                      <Label htmlFor="radio-email" className="text-sm cursor-pointer flex-1">
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          <span>{t('acceptApplication.shareEmail')}: <strong>{maskEmail(userProfile.email)}</strong></span>
-                        </div>
-                        <p className="text-xs text-amber-600 ml-6 mt-1">
-                          ⚠️ {t('acceptApplication.emailWarning')}
-                        </p>
-                      </Label>
-                    </div>
-                  )}
-
-                  <div className="flex items-start space-x-2">
-                    <RadioGroupItem value="custom" id="radio-custom" />
-                    <Label htmlFor="radio-custom" className="text-sm cursor-pointer flex-1">
-                      <div className="flex items-center gap-2">
-                        <Send className="w-4 h-4" />
-                        <span>{t('acceptApplication.customContact')}</span>
+                  {hasPhone && (
+                    <label
+                      htmlFor="radio-phone"
+                      className={cn(
+                        "flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all",
+                        contactMethod === 'phone'
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-200 hover:border-gray-300"
+                      )}
+                    >
+                      <RadioGroupItem value="phone" id="radio-phone" className="sr-only" />
+                      <div className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center",
+                        contactMethod === 'phone' ? "bg-green-500 text-white" : "bg-gray-100 text-gray-500"
+                      )}>
+                        <Phone className="w-4 h-4" />
                       </div>
-                    </Label>
-                  </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-sm text-gray-900">
+                          {t('acceptApplication.sharePhone')}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {maskPhoneNumber(userProfile!.phone!)}
+                        </div>
+                      </div>
+                      {contactMethod === 'phone' && (
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                      )}
+                    </label>
+                  )}
+
+                  {hasEmail && (
+                    <label
+                      htmlFor="radio-email"
+                      className={cn(
+                        "flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all",
+                        contactMethod === 'email'
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-200 hover:border-gray-300"
+                      )}
+                    >
+                      <RadioGroupItem value="email" id="radio-email" className="sr-only" />
+                      <div className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center",
+                        contactMethod === 'email' ? "bg-green-500 text-white" : "bg-gray-100 text-gray-500"
+                      )}>
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-sm text-gray-900">
+                          {t('acceptApplication.shareEmail')}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {maskEmail(userProfile!.email!)}
+                        </div>
+                      </div>
+                      {contactMethod === 'email' && (
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                      )}
+                    </label>
+                  )}
+
+                  <label
+                    htmlFor="radio-custom"
+                    className={cn(
+                      "flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all",
+                      contactMethod === 'custom'
+                        ? "border-green-500 bg-green-50"
+                        : "border-gray-200 hover:border-gray-300"
+                    )}
+                  >
+                    <RadioGroupItem value="custom" id="radio-custom" className="sr-only" />
+                    <div className={cn(
+                      "w-8 h-8 rounded-full flex items-center justify-center",
+                      contactMethod === 'custom' ? "bg-green-500 text-white" : "bg-gray-100 text-gray-500"
+                    )}>
+                      <Send className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-sm text-gray-900">
+                        {t('acceptApplication.customContact')}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {t('acceptApplication.customContactHelp')}
+                      </div>
+                    </div>
+                    {contactMethod === 'custom' && (
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                    )}
+                  </label>
                 </RadioGroup>
 
+                {/* Custom contact input - shown when custom is selected */}
                 {contactMethod === 'custom' && (
-                  <div className="mt-3 space-y-2">
-                    <Label htmlFor="custom-contact" className="text-sm font-medium">
-                      {t('acceptApplication.customContactLabel')} <span className="text-red-500">*</span>
-                    </Label>
+                  <div className="mt-3 pl-11">
                     <Input
                       id="custom-contact"
                       placeholder={t('acceptApplication.customContactPlaceholder')}
@@ -311,160 +335,99 @@ export default function AcceptApplicationDialog({
                       onChange={(e) => setCustomContact(e.target.value)}
                       onFocus={handleInputFocus}
                       disabled={isSubmitting}
-                      className="text-base"
-                      style={{ fontSize: '16px' }} // Prevents iOS zoom
+                      className={cn(
+                        "text-base rounded-xl",
+                        !customContact.trim() && "border-red-300 focus:border-red-500 focus:ring-red-500"
+                      )}
+                      style={{ fontSize: '16px' }}
                     />
-                    {!(isMobile && isKeyboardOpen) && (
-                      <p className="text-xs text-gray-500">
-                        {t('acceptApplication.customContactHelp')}
-                      </p>
-                    )}
-                    {!customContact.trim() && !(isMobile && isKeyboardOpen) && (
-                      <p className="text-xs text-red-600">
+                    {!customContact.trim() && (
+                      <p className="text-xs text-red-500 mt-1">
                         {t('acceptApplication.customContactRequired')}
                       </p>
                     )}
                   </div>
                 )}
-              </>
+              </div>
             ) : (
-              // No phone/email - just show input field directly
+              // No saved contacts - show input directly
               <div className="space-y-2">
-                <Label htmlFor="custom-contact" className="text-sm font-medium">
-                  {t('acceptApplication.customContactLabel')} <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="custom-contact"
-                  placeholder={t('acceptApplication.customContactPlaceholder')}
-                  value={customContact}
-                  onChange={(e) => setCustomContact(e.target.value)}
-                  onFocus={handleInputFocus}
-                  disabled={isSubmitting}
-                  className="text-base"
-                  style={{ fontSize: '16px' }} // Prevents iOS zoom
-                />
-                {!(isMobile && isKeyboardOpen) && (
-                  <p className="text-xs text-gray-500">
-                    {t('acceptApplication.customContactHelp')}
+                <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                  <p className="text-xs text-gray-600 mb-3">
+                    {t('acceptApplication.noSavedContacts', 'Please provide a way for the professional to contact you.')}
                   </p>
-                )}
-                {!customContact.trim() && !(isMobile && isKeyboardOpen) && (
-                  <p className="text-xs text-red-600">
-                    {t('acceptApplication.customContactRequired')}
-                  </p>
-                )}
+                  <Input
+                    id="custom-contact-direct"
+                    placeholder={t('acceptApplication.customContactPlaceholder')}
+                    value={customContact}
+                    onChange={(e) => setCustomContact(e.target.value)}
+                    onFocus={handleInputFocus}
+                    disabled={isSubmitting}
+                    className={cn(
+                      "text-base rounded-xl",
+                      !customContact.trim() && "border-red-300 focus:border-red-500 focus:ring-red-500"
+                    )}
+                    style={{ fontSize: '16px' }}
+                  />
+                  {!customContact.trim() && (
+                    <p className="text-xs text-red-500 mt-2">
+                      {t('acceptApplication.customContactRequired')}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>
 
-          {!(isMobile && isKeyboardOpen) && <hr className="my-3 sm:my-4 border-gray-200" />}
-
-          {/* Agreement Checklist - hide on mobile when keyboard is open */}
-          {!(isMobile && isKeyboardOpen) && (
-            <div className="space-y-3 sm:space-y-4">
-              <h4 className="font-semibold text-base sm:text-lg">{t('acceptApplication.pleaseConfirm')}</h4>
-
-              <div className="flex items-start space-x-2">
-                <Checkbox
-                  id="agree-price"
-                  checked={agreements.priceTimeline}
-                  onCheckedChange={(checked) =>
-                    setAgreements((prev) => ({ ...prev, priceTimeline: checked as boolean }))
-                  }
-                  disabled={isSubmitting}
-                />
-                <Label htmlFor="agree-price" className="text-xs sm:text-sm cursor-pointer">
-                  {t('acceptApplication.agreement.priceTimeline', {
-                    price: proposedPrice,
-                    currency,
-                    timeline: readableTimeline
-                  })}
-                </Label>
-              </div>
-
-              <div className="flex items-start space-x-2">
-                <Checkbox
-                  id="agree-contact"
-                  checked={agreements.contactSharing}
-                  onCheckedChange={(checked) =>
-                    setAgreements((prev) => ({ ...prev, contactSharing: checked as boolean }))
-                  }
-                  disabled={isSubmitting}
-                />
-                <Label htmlFor="agree-contact" className="text-xs sm:text-sm cursor-pointer">
-                  {t('acceptApplication.agreement.contactSharing', { name: professional.name })}
-                </Label>
-              </div>
-
-              <div className="flex items-start space-x-2">
-                <Checkbox
-                  id="agree-applications"
-                  checked={agreements.otherApplications}
-                  onCheckedChange={(checked) =>
-                    setAgreements((prev) => ({ ...prev, otherApplications: checked as boolean }))
-                  }
-                  disabled={isSubmitting}
-                />
-                <Label htmlFor="agree-applications" className="text-xs sm:text-sm cursor-pointer">
-                  {t('acceptApplication.agreement.otherApplications')}
-                </Label>
-              </div>
+          {/* Single Confirmation Checkbox */}
+          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="agree-contact"
+                checked={contactSharingAgreed}
+                onCheckedChange={(checked) => setContactSharingAgreed(checked as boolean)}
+                disabled={isSubmitting}
+                className="mt-0.5"
+              />
+              <Label htmlFor="agree-contact" className="text-sm text-amber-800 cursor-pointer leading-relaxed">
+                {t('acceptApplication.agreement.contactSharing', { name: professional.name })}
+              </Label>
             </div>
-          )}
-
-          {/* Warning - hide on mobile when keyboard is open */}
-          {!(isMobile && isKeyboardOpen) && (
-            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <div className="flex items-start gap-2 sm:gap-3">
-                <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-xs sm:text-sm text-amber-800">
-                    <span className="font-semibold">{t('important')}:</span> {t('acceptApplication.warning', { name: professional.name })}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
 
-        {/* Footer - hide on mobile when keyboard is open */}
-        {!(isMobile && isKeyboardOpen) && (
-          <DialogFooter className={cn(
-            "border-t border-gray-200 flex-shrink-0 sticky bottom-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6 sm:py-4",
-            !isMobile && "rounded-b-xl"
-          )}>
-            <div className="flex flex-row gap-2 w-full sm:w-auto">
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                disabled={isSubmitting}
-                size={isMobile ? "default" : "lg"}
-                className="flex-1 sm:flex-initial sm:w-auto"
-              >
-                {t('acceptApplication.cancel')}
-              </Button>
-              <Button
-                variant="default"
-                onClick={handleConfirm}
-                disabled={!canConfirm}
-                size={isMobile ? "default" : "lg"}
-                className="flex-1 sm:flex-initial sm:w-auto bg-green-600 hover:bg-green-700 text-white"
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="animate-spin mr-2">⏳</span>
-                    {t('acceptApplication.accepting', 'Accepting...')}
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    {t('acceptApplication.confirm')}
-                  </>
-                )}
-              </Button>
-            </div>
-          </DialogFooter>
-        )}
+        {/* Footer - Always visible */}
+        <div className={cn(
+          "flex-shrink-0 border-t border-gray-100 bg-gray-50 px-5 py-4 sm:px-6",
+          isMobile ? "pb-safe" : ""
+        )}>
+          <div className="flex gap-3">
+            <Button
+              variant="flat"
+              color="default"
+              onPress={handleClose}
+              isDisabled={isSubmitting}
+              className="flex-1 font-medium"
+              size="lg"
+            >
+              {t('acceptApplication.cancel')}
+            </Button>
+            <Button
+              color="success"
+              onPress={handleConfirm}
+              isDisabled={!canConfirm}
+              isLoading={isSubmitting}
+              className="flex-1 font-medium"
+              size="lg"
+              startContent={!isSubmitting && <CheckCircle className="w-4 h-4" />}
+            >
+              {isSubmitting
+                ? t('acceptApplication.accepting', 'Accepting...')
+                : t('acceptApplication.confirm')
+              }
+            </Button>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   )

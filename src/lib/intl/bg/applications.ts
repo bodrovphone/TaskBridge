@@ -103,6 +103,7 @@ export const applications = {
   'acceptApplication.customContactPlaceholder': 'Въведете телефон, Telegram (@потребител), Viber линк, WhatsApp или друг начин за връзка...',
   'acceptApplication.customContactHelp': 'Предоставете начин за връзка, по който специалистът може да се свърже с вас',
   'acceptApplication.customContactRequired': 'Моля, предоставете информация за контакт',
+  'acceptApplication.noSavedContacts': 'Моля, предоставете начин за връзка, по който специалистът може да се свърже с вас.',
   'acceptApplication.phoneWarning': 'Този телефонен номер ще бъде споделен със специалиста.',
   'acceptApplication.emailWarning': 'Имейлът е по-бавен за координация. Помислете дали да предоставите телефон/Telegram за по-бърза комуникация.',
   'acceptApplication.privacyPolicy': 'Политика за поверителност',
