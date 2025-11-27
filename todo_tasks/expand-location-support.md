@@ -10,7 +10,15 @@ Expand TaskBridge's location system from 8 hardcoded cities to support all Bulga
 - **Missing**: ~30+ cities with 20K+ population (Dobrich, Shumen, Pernik, Yambol, etc.)
 
 ## Proposed Solution
-Hybrid approach: Local city list for instant results + Photon API for autocomplete + Vercel caching
+Hybrid approach: **User preference** → Local city list → Server cache → Photon API
+
+### Search Priority Order (Fastest to Slowest)
+```
+1. User's saved location (localStorage + DB)  → Instant (0ms)
+2. Local city list (40+ cities)               → Instant (0ms)
+3. Server-side cache (Vercel KV)              → Fast (~50ms)
+4. Photon API (external)                      → Slower (~200ms)
+```
 
 ### Why Photon API?
 | Criteria | Photon | Google Places | Mapbox | Nominatim |
@@ -34,25 +42,62 @@ Hybrid approach: Local city list for instant results + Photon API for autocomple
 ### Phase 2: Database Migration
 - [ ] Remove restrictive CHECK constraints from tasks.city and users.city
 - [ ] Add latitude/longitude columns for future distance-based features
+- [ ] Add `preferred_city` column to users table for cross-device persistence
 - [ ] Create migration script with rollback capability
 - [ ] Test migration on staging before production
 
-### Phase 3: Smart Autocomplete Component
+### Phase 3: User Location Preference System
+**Goal**: Remember user's location preference for instant suggestions on return visits
+
+**Client-side (localStorage):**
+- [ ] Create `useLocationPreference` hook to read/write localStorage
+- [ ] Store last selected city: `{ slug: 'burgas', timestamp: 1234567890 }`
+- [ ] Auto-suggest saved location as first option in city picker
+- [ ] Clear preference if user explicitly selects different city
+
+**Server-side (users table):**
+- [ ] Add `preferred_city` field to user profile (nullable)
+- [ ] Sync localStorage preference to DB on login (merge strategy: newest wins)
+- [ ] Load preference from DB on login to populate localStorage
+- [ ] Update preference when user changes city in profile settings
+
+**UX Flow:**
+```
+┌─────────────────────────────────────────────────────────┐
+│  City Selection (user has saved preference: Burgas)     │
+├─────────────────────────────────────────────────────────┤
+│  ⭐ Your location: Burgas              [Use this]       │
+│  ─────────────────────────────────────────────────      │
+│  Popular cities:                                        │
+│  [Sofia] [Plovdiv] [Varna] [Burgas]                     │
+│  ─────────────────────────────────────────────────      │
+│  🔍 Search for other cities...                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Benefits:**
+- Zero API calls for returning users
+- Instant UX - no waiting for suggestions
+- Works offline (localStorage)
+- Syncs across devices (when logged in)
+
+### Phase 4: Smart Autocomplete Component
 - [ ] Create reusable `<CityAutocomplete>` component
-- [ ] Implement 3-tier search: local cities → cached results → Photon API
+- [ ] Implement 4-tier search: user preference → local cities → cached results → Photon API
 - [ ] Add 300ms debounce to reduce API calls
+- [ ] Show "Your location" first if user has saved preference
 - [ ] Show "Popular cities" chips for quick selection (Sofia, Plovdiv, Varna, Burgas)
 - [ ] Handle loading states and API errors gracefully
 - [ ] Support keyboard navigation (arrow keys, enter to select)
 
-### Phase 4: Photon API Integration
+### Phase 5: Photon API Integration
 - [ ] Create `/api/cities/search` endpoint to proxy Photon requests
 - [ ] Implement server-side caching with Vercel KV or PostgreSQL
 - [ ] Filter results to Bulgaria only (`countrycode=bg`)
 - [ ] Parse and normalize Photon response to match local format
 - [ ] Add fallback to local search if API fails
 
-### Phase 5: Update All Location Components
+### Phase 6: Update All Location Components
 **INPUT Components to update:**
 - [ ] `src/app/[lang]/create-task/components/location-section.tsx`
 - [ ] `src/app/[lang]/browse-tasks/components/city-filter.tsx`
@@ -64,7 +109,7 @@ Hybrid approach: Local city list for instant results + Photon API for autocomple
 - [ ] Verify professional-card.tsx fallback works for unknown cities
 - [ ] Test all display components with new city data
 
-### Phase 6: Testing & Documentation
+### Phase 7: Testing & Documentation
 - [ ] Test autocomplete with Bulgarian keyboard input (Cyrillic)
 - [ ] Test with slow network conditions
 - [ ] Test edge cases: special characters, very short queries
@@ -77,8 +122,12 @@ Hybrid approach: Local city list for instant results + Photon API for autocomple
 - [ ] Users can select from 40+ Bulgarian cities (all with 20K+ population)
 - [ ] Autocomplete shows suggestions as user types (within 500ms)
 - [ ] Popular cities (top 8) appear immediately without typing
+- [ ] **User's saved location appears first as "Your location" suggestion**
+- [ ] **Location preference persists in localStorage (works offline)**
+- [ ] **Location preference syncs to users table (works across devices)**
 - [ ] Works in all 3 languages (EN/BG/RU)
 - [ ] No external API calls for the top 40 cities (local data)
+- [ ] **Zero API calls for returning users with saved preference**
 - [ ] API errors don't break the UI (graceful fallback)
 - [ ] Existing tasks/profiles with 8 original cities still work
 - [ ] Mobile-friendly touch interactions
@@ -111,6 +160,58 @@ const response = await fetch(
       }
     }
   ]
+}
+```
+
+### User Location Preference Hook
+```typescript
+// src/hooks/use-location-preference.ts
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+
+interface LocationPreference {
+  slug: string;
+  timestamp: number;
+}
+
+const STORAGE_KEY = 'trudify_location_preference';
+
+export function useLocationPreference() {
+  const { user, isAuthenticated } = useAuth();
+  const [preference, setPreference] = useState<LocationPreference | null>(null);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setPreference(JSON.parse(stored));
+    }
+  }, []);
+
+  // Sync with DB when authenticated
+  useEffect(() => {
+    if (isAuthenticated && user?.preferred_city) {
+      const dbPref = { slug: user.preferred_city, timestamp: Date.now() };
+      // Merge: use newest preference
+      if (!preference || dbPref.timestamp > preference.timestamp) {
+        setPreference(dbPref);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dbPref));
+      }
+    }
+  }, [isAuthenticated, user]);
+
+  const savePreference = async (citySlug: string) => {
+    const newPref = { slug: citySlug, timestamp: Date.now() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newPref));
+    setPreference(newPref);
+
+    // Sync to DB if authenticated
+    if (isAuthenticated) {
+      await updateUserPreferredCity(citySlug);
+    }
+  };
+
+  return { preference, savePreference };
 }
 ```
 
@@ -157,9 +258,10 @@ export const CITIES: City[] = [
 
 ### Files to Create
 1. `src/components/ui/city-autocomplete.tsx` - Reusable autocomplete component
-2. `src/app/api/cities/search/route.ts` - Photon proxy with caching
-3. `src/features/cities/lib/cities-extended.ts` - Full 40+ city list
-4. `supabase/migrations/YYYYMMDD_expand_city_support.sql` - DB migration
+2. `src/hooks/use-location-preference.ts` - Hook for localStorage + DB sync
+3. `src/app/api/cities/search/route.ts` - Photon proxy with caching
+4. `src/features/cities/lib/cities-extended.ts` - Full 40+ city list
+5. `supabase/migrations/YYYYMMDD_expand_city_support.sql` - DB migration (includes preferred_city column)
 
 ### Files to Modify
 1. `src/features/cities/lib/cities.ts` - Expand city list
