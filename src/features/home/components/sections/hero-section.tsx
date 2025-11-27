@@ -16,6 +16,7 @@ import {
  Shield,
  Star,
  Heart,
+ Bell,
  CheckCircle,
  Plus,
  Search
@@ -147,21 +148,21 @@ export default function HeroSection() {
         </div>
        </div>
        <div className="flex items-start space-x-3 p-4 bg-white/60 rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
-        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+        <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
          <Heart className="text-white h-5 w-5" />
         </div>
         <div className="flex flex-col">
          <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.freeToUse')}</span>
-         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.freeToUseDescription')}</span>
         </div>
        </div>
        <div className="flex items-start space-x-3 p-4 bg-white/60 rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
-        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
-         <Star className="text-white h-5 w-5" />
+        <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+         <Bell className="text-white h-5 w-5" />
         </div>
         <div className="flex flex-col">
-         <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.communityReviews')}</span>
-         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+         <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.instantNotifications')}</span>
+         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.instantNotificationsDescription')}</span>
         </div>
        </div>
       </div>
@@ -246,21 +247,21 @@ export default function HeroSection() {
         </div>
        </div>
        <div className="flex items-start space-x-3 p-4 bg-white/60 rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
-        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+        <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
          <Heart className="text-white h-5 w-5" />
         </div>
         <div className="flex flex-col">
          <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.freeToUse')}</span>
-         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.freeToUseDescription')}</span>
         </div>
        </div>
        <div className="flex items-start space-x-3 p-4 bg-white/60 rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
-        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
-         <Star className="text-white h-5 w-5" />
+        <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+         <Bell className="text-white h-5 w-5" />
         </div>
         <div className="flex flex-col">
-         <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.communityReviews')}</span>
-         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.ratingSystemDescription')}</span>
+         <span className="text-sm font-bold text-slate-800 leading-tight mb-1">{t('landing.trustIndicators.instantNotifications')}</span>
+         <span className="text-xs text-slate-600 leading-snug">{t('landing.trustIndicators.instantNotificationsDescription')}</span>
         </div>
        </div>
       </div>

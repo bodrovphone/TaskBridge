@@ -38,6 +38,9 @@ export const common = {
   'common.anonymous': 'Анонімний користувач',
   'common.today': 'Сьогодні',
   'common.yesterday': 'Вчора',
+  'common.reviews': 'відгуків',
+  'common.tasksCompleted': 'виконаних завдань',
+  'common.newProfessional': 'Новий в Trudify',
 
   // Countries
   'common.country.bulgaria': 'Болгарія',

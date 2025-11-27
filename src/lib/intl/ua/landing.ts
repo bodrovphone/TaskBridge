@@ -1,28 +1,24 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
-  'landing.hero.badge': 'Ваша надійна платформа послуг',
-  'landing.hero.title': 'Ваш місцевий маркетплейс послуг та можливостей',
+  'landing.hero.badge': 'Перша болгарська платформа для всіх послуг',
+  'landing.hero.title': 'Знайди спеціаліста або знайди роботу',
   'landing.hero.subtitle':
-    'Trudify об\'єднує людей, яким потрібна допомога, з кваліфікованими фахівцями. Опублікуйте завдання або знайдіть роботу - надійно, перевірено, просто.',
-  'landing.hero.getStarted': 'Опублікувати завдання',
-  'landing.hero.browseServices': 'Знайти роботу',
+    'Потрібен сантехнік, прибиральник, репетитор чи інша допомога? Опублікуй завдання та отримай пропозиції від перевірених спеціалістів. Ти обираєш найкраще.\n\nАбо якщо хочеш заробити — переглядай доступні завдання, подавай заявку зі своєю пропозицією та працюй за своїм графіком. Без посередників, без складних комісій.',
+  'landing.hero.getStarted': 'Шукаю спеціаліста',
+  'landing.hero.browseServices': 'Шукаю роботу',
 
-  'landing.trustIndicators.verified': 'Перевірена спільнота',
-  'landing.trustIndicators.securePayments': 'Безпечні платежі',
-  'landing.trustIndicators.support': 'Підтримка 24/7',
-  'landing.trustIndicators.freeToUse': 'Безкоштовно',
-  'landing.trustIndicators.communityReviews': 'Відгуки спільноти',
+  'landing.trustIndicators.verified': 'Верифіковані профілі',
   'landing.trustIndicators.verifiedDescription':
-    'Верифікація Email/SMS та відгуки спільноти',
-  'landing.trustIndicators.ratingSystem': '5-зіркова система',
-  'landing.trustIndicators.ratingSystemDescription':
-    'Якість гарантована відгуками спільноти',
-  'landing.trustIndicators.dataProtection': 'Захист даних',
-  'landing.trustIndicators.dataProtectionDescription':
-    'Ваша особиста інформація захищена',
-  'landing.trustIndicators.contracts': 'Правовий захист',
-  'landing.trustIndicators.contractsDescription':
-    'Уся робота захищена чіткими угодами',
+    'Увійдіть через Google, Facebook або Email — реальні люди, реальні акаунти',
+  'landing.trustIndicators.freeToUse': 'Безкоштовно',
+  'landing.trustIndicators.freeToUseDescription':
+    'Без прихованих комісій, без зборів. Публікуйте завдання та відгукуйтесь безкоштовно',
+  'landing.trustIndicators.instantNotifications': 'Миттєві сповіщення',
+  'landing.trustIndicators.instantNotificationsDescription':
+    'Telegram та email сповіщення при отриманні пропозицій або повідомлень',
+  'landing.trustIndicators.youreInControl': 'Ви контролюєте',
+  'landing.trustIndicators.youreInControlDescription':
+    'Встановіть бюджет, порівняйте пропозиції, оберіть з ким працювати',
 
   'landing.stats.averageRating': 'Якісний сервіс',
   'landing.stats.completedTasks': 'Зростаємо щодня',
@@ -32,10 +28,10 @@ export const landing = {
   'landing.categories.specialists': 'фахівців',
   'landing.categories.beFirst': 'Станьте першим фахівцем',
 
-  'landing.trustStats.securityUptime': 'Час роботи безпеки',
-  'landing.trustStats.avgRating': 'Середня оцінка',
-  'landing.trustStats.encryption': 'Шифрування даних',
-  'landing.trustStats.compliance': 'Правова відповідність',
+  'landing.trustStats.verified': 'Перевірено',
+  'landing.trustStats.noFees': 'Без комісій',
+  'landing.trustStats.instant': 'Миттєво',
+  'landing.trustStats.yourChoice': 'Ваш вибір',
 
   'landing.categories.title': 'Популярні категорії',
   'landing.categories.subtitle':
@@ -63,6 +59,12 @@ export const landing = {
   'landing.featured.customerDesc': 'Подивіться, що публікують інші',
   'landing.featured.noTasks': 'Ще немає завдань? Станьте першим! 😢',
   'landing.featured.postFirstTask': 'Опублікувати перше завдання',
+
+  'landing.professionals.badge': 'Топ фахівці',
+  'landing.professionals.title': 'Знайди свого фахівця',
+  'landing.professionals.subtitle': 'Сподобався хтось? Запропонуйте завдання напряму — без очікування, ви робите перший крок',
+  'landing.professionals.viewAll': 'Усі фахівці',
+  'landing.professionals.noProfessionals': 'Станьте першим фахівцем!',
 
   'landing.howItWorks.badge': 'Простий процес',
   'landing.howItWorks.title': 'Як це працює',

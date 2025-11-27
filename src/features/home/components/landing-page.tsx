@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
-import CategoryCard from "@/components/ui/category-card";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import { Logo } from "@/components/common/logo";
@@ -13,7 +12,10 @@ import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
 import LandingSkeleton from "@/components/ui/landing-skeleton";
-import { HeroSection, FeaturedTasksSection } from "./sections";
+import { HeroSection, FeaturedTasksSection, FeaturedProfessionalsSection } from "./sections";
+import type { Professional } from '@/server/professionals/professional.types';
+import CategoryCard from '@/components/ui/category-card';
+import { MAIN_CATEGORIES } from '@/features/categories';
 
 interface Task {
   id: string
@@ -37,26 +39,36 @@ interface Task {
 
 interface LandingPageProps {
   featuredTasks: Task[]
+  featuredProfessionals: Professional[]
 }
 
 // @todo REFACTORING: Continue extracting remaining sections (see ./sections/index.ts)
-import { 
- Home, 
- Truck, 
- Heart, 
- UserCheck, 
- Shield, 
- Star, 
- Lock, 
- FileText,
- CheckCircle,
+import {
+ UserCheck,
+ Shield,
+ Star,
+ Lock,
+ Bell,
+ Wallet,
  Plus,
- Search,
  ArrowRight,
- Handshake
+ Handshake,
+ Heart
 } from "lucide-react";
 
-function Landing({ featuredTasks }: LandingPageProps) {
+// Popular categories to display on landing page (ordered by expected demand in Bulgaria)
+const POPULAR_CATEGORY_SLUGS = [
+ 'handyman',
+ 'cleaning-services',
+ 'logistics',
+ 'appliance-repair',
+ 'beauty-health',
+ 'pet-services',
+ 'auto-repair',
+ 'tutoring',
+];
+
+function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  const { t, ready } = useTranslation();
  const pathname = usePathname();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
@@ -78,40 +90,29 @@ function Landing({ featuredTasks }: LandingPageProps) {
   }
  }, []);
 
- const categories = [
-  {
-   title: t('landing.categories.home'),
-   description: t('landing.categories.home.description'),
-   count: 150,
-   icon: Home,
-   color: "blue",
-   category: "home_repair"
-  },
-  {
-   title: t('landing.categories.tech'), 
-   description: t('landing.categories.tech.description'),
-   count: 85,
-   icon: Truck,
-   color: "green", 
-   category: "delivery_transport"
-  },
-  {
-   title: t('landing.categories.personal'),
-   description: t('landing.categories.personal.description'),
-   count: 65,
-   icon: Heart,
-   color: "purple",
-   category: "personal_care"
-  },
-  {
-   title: t('landing.categories.business'),
-   description: t('landing.categories.business.description'), 
-   count: 45,
-   icon: UserCheck,
-   color: "orange",
-   category: "personal_assistant"
-  },
- ];
+ // Get popular categories from centralized MAIN_CATEGORIES
+ const popularCategories = useMemo(() => {
+  // Map color values to what CategoryCard supports (blue, green, purple, orange)
+  const colorMap: Record<string, string> = {
+   'blue': 'blue',
+   'green': 'green',
+   'purple': 'purple',
+   'orange': 'orange',
+   'pink': 'purple',
+   'indigo': 'blue',
+  };
+
+  return POPULAR_CATEGORY_SLUGS
+   .map(slug => MAIN_CATEGORIES.find(cat => cat.slug === slug))
+   .filter((cat): cat is NonNullable<typeof cat> => cat !== undefined)
+   .map(cat => ({
+    slug: cat.slug,
+    title: t(`${cat.translationKey}.title`),
+    description: t(`${cat.translationKey}.description`),
+    icon: cat.icon,
+    color: colorMap[cat.color] || 'blue',
+   }));
+ }, [t]);
 
  const trustFeatures = [
   {
@@ -119,32 +120,32 @@ function Landing({ featuredTasks }: LandingPageProps) {
    title: t('landing.trustIndicators.verified'),
    description: t('landing.trustIndicators.verifiedDescription'),
    color: "bg-secondary-100 text-secondary-600",
-   stat: "99.9%",
-   statLabel: t('landing.trustStats.securityUptime')
+   stat: "✓",
+   statLabel: t('landing.trustStats.verified')
   },
   {
-   icon: Star,
-   title: t('landing.trustIndicators.ratingSystem'),
-   description: t('landing.trustIndicators.ratingSystemDescription'),
-   color: "bg-blue-100 text-blue-600",
-   stat: "4.8/5",
-   statLabel: t('landing.trustStats.avgRating')
+   icon: Heart,
+   title: t('landing.trustIndicators.freeToUse'),
+   description: t('landing.trustIndicators.freeToUseDescription'),
+   color: "bg-pink-100 text-pink-600",
+   stat: "$0",
+   statLabel: t('landing.trustStats.noFees')
   },
   {
-   icon: Lock,
-   title: t('landing.trustIndicators.dataProtection'),
-   description: t('landing.trustIndicators.dataProtectionDescription'),
+   icon: Bell,
+   title: t('landing.trustIndicators.instantNotifications'),
+   description: t('landing.trustIndicators.instantNotificationsDescription'),
    color: "bg-green-100 text-green-600",
-   stat: "256-bit",
-   statLabel: t('landing.trustStats.encryption')
+   stat: "⚡",
+   statLabel: t('landing.trustStats.instant')
   },
   {
-   icon: FileText,
-   title: t('landing.trustIndicators.contracts'),
-   description: t('landing.trustIndicators.contractsDescription'), 
+   icon: Wallet,
+   title: t('landing.trustIndicators.youreInControl'),
+   description: t('landing.trustIndicators.youreInControlDescription'),
    color: "bg-orange-100 text-orange-600",
-   stat: "GDPR",
-   statLabel: t('landing.trustStats.compliance')
+   stat: "✓",
+   statLabel: t('landing.trustStats.yourChoice')
   },
  ];
 
@@ -209,6 +210,8 @@ function Landing({ featuredTasks }: LandingPageProps) {
 
    <FeaturedTasksSection tasks={featuredTasks} />
 
+   <FeaturedProfessionalsSection professionals={featuredProfessionals} />
+
    {/* Popular Categories */}
    <section id="categories" className="py-16 relative">
     {/* Section overlay for better contrast */}
@@ -221,21 +224,22 @@ function Landing({ featuredTasks }: LandingPageProps) {
       </p>
      </div>
 
-     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {categories.map((category) => (
+     {/* Category grid */}
+     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+      {popularCategories.map((category) => (
        <CategoryCard
-        key={category.category}
+        key={category.slug}
         title={category.title}
         description={category.description}
-        count={category.count}
         icon={category.icon}
         color={category.color}
-        onClick={() => handleCategoryClick(category.category)}
+        count={0}
+        onClick={() => handleCategoryClick(category.slug)}
        />
       ))}
      </div>
 
-     <div className="text-center mt-8">
+     <div className="text-center mt-10">
       <Button variant="ghost" className="text-slate-800 hover:text-slate-900 font-semibold text-lg" asChild>
        <LocaleLink href="/categories">
         {t('landing.categories.viewAll')} <ArrowRight className="ml-2" size={16} />

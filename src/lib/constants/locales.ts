@@ -3,13 +3,14 @@
  * Centralized locale management for consistent usage across the application
  */
 
-export const SUPPORTED_LOCALES = ['en', 'bg', 'ru', 'ua'] as const
+export const SUPPORTED_LOCALES = ['bg', 'ua', 'en', 'ru'] as const
 export const DEFAULT_LOCALE = 'en' as const
 
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
 /**
  * Language configuration with display information
+ * Order: BG, UA, EN, RU (Bulgarian first as primary market)
  */
 export const LANGUAGE_CONFIG: Record<SupportedLocale, {
   code: SupportedLocale
@@ -17,29 +18,29 @@ export const LANGUAGE_CONFIG: Record<SupportedLocale, {
   flag: string
   region: string
 }> = {
-  en: {
-    code: 'en',
-    name: 'English',
-    flag: '🇬🇧',
-    region: 'GB'
-  },
   bg: {
     code: 'bg',
     name: 'Български',
     flag: '🇧🇬',
     region: 'BG'
   },
-  ru: {
-    code: 'ru',
-    name: 'Русский',
-    flag: '🇷🇺',
-    region: 'RU'
-  },
   ua: {
     code: 'ua',
     name: 'Українська',
     flag: '🇺🇦',
     region: 'UA'
+  },
+  en: {
+    code: 'en',
+    name: 'English',
+    flag: '🇬🇧',
+    region: 'GB'
+  },
+  ru: {
+    code: 'ru',
+    name: 'Русский',
+    flag: '🇷🇺',
+    region: 'RU'
   }
 } as const
 

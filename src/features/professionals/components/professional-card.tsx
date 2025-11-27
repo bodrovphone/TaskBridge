@@ -20,9 +20,11 @@ interface ProfessionalCardProps {
  professional: Professional
  featured?: boolean
  isMock?: boolean  // Flag to indicate this is mock data for reference
+ compact?: boolean // Compact mode: truncated bio, fixed height (for landing page)
+ actionText?: string // Custom button text (e.g., "Suggest a task")
 }
 
-export default function ProfessionalCard({ professional, featured = false, isMock = false }: ProfessionalCardProps) {
+export default function ProfessionalCard({ professional, featured = false, isMock = false, compact = false, actionText }: ProfessionalCardProps) {
  const { t } = useTranslation()
 
  // Direct access to API Professional properties
@@ -40,9 +42,9 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
 
  return (
   <div
-   className="group hover:-translate-y-2 hover:scale-[1.02] transition-transform duration-300 ease-out will-change-transform"
+   className={`group hover:-translate-y-2 hover:scale-[1.02] transition-transform duration-300 ease-out will-change-transform ${compact ? 'h-full' : ''}`}
   >
-   <NextUICard className="professional-card bg-white shadow-lg hover:shadow-2xl transition-all duration-500 relative border border-gray-100 group-hover:border-blue-200 overflow-hidden">
+   <NextUICard className={`professional-card bg-white shadow-lg hover:shadow-2xl transition-all duration-500 relative border border-gray-100 group-hover:border-blue-200 overflow-hidden ${compact ? 'h-full' : ''}`}>
     {/* Mock badge - shows for reference data */}
     {isMock && (
      <div className="absolute top-0 left-0 z-20">
@@ -64,7 +66,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
     {/* Hover effect overlay */}
     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 transition-all duration-500 z-10 pointer-events-none"></div>
     
-    <CardBody className="p-6 relative z-10">
+    <CardBody className={`p-6 relative z-10 ${compact ? 'h-full flex flex-col' : ''}`}>
      {/* Enhanced Header */}
      <div className="flex items-start gap-4 mb-6">
       <LocaleLink href={`/professionals/${professional.id}`} className="relative group">
@@ -99,7 +101,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
          )}
         </div>
        </div>
-       <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg whitespace-nowrap">
+       <div className="flex items-center gap-2 text-sm text-gray-600 whitespace-nowrap">
         <Briefcase size={14} className="text-blue-500 flex-shrink-0" />
         {completedJobs === 0 ? (
           <span className="font-medium text-blue-600">{t('professionals.card.lookingForFirstTask', 'Looking to get first task from you')}</span>
@@ -144,17 +146,15 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
      </div>
 
      {/* Enhanced Description */}
-     <p className="text-gray-700 text-sm mb-4 leading-relaxed group-hover:text-gray-800 transition-colors">
-      {bio}
+     <p className={`text-gray-700 text-sm mb-4 leading-relaxed group-hover:text-gray-800 transition-colors ${compact ? 'line-clamp-2' : ''}`}>
+      {bio || (compact ? '' : t('professionals.card.noBio', 'No bio available'))}
      </p>
 
      {/* Enhanced Details */}
-     <div className="space-y-4 mb-8">
-      <div className="flex items-center gap-3 text-sm p-2 rounded-lg bg-gray-50 group-hover:bg-blue-50 transition-colors">
-       <div className="p-1 bg-blue-100 rounded-md">
-        <MapPin size={14} className="text-blue-600" />
-       </div>
-       <span className="text-gray-700 font-medium">{location}</span>
+     <div className={`space-y-4 mb-8 ${compact ? 'flex-grow' : ''}`}>
+      <div className="flex items-center gap-2 text-sm text-gray-600">
+       <MapPin size={14} className="text-blue-500" />
+       <span>{location}</span>
       </div>
       {professional.hourly_rate_bgn && (
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-xl border border-green-200 group-hover:from-green-100 group-hover:to-emerald-100 transition-all duration-300">
@@ -180,7 +180,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
        </span>
       }
      >
-      {t('professionals.viewProfile')}
+      {actionText || t('professionals.viewProfile')}
      </NextUIButton>
     </CardBody>
    </NextUICard>

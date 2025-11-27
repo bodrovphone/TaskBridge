@@ -93,8 +93,8 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
     </div>
 
     {featuredTasks.length > 0 ? (
-     <div className="overflow-x-auto">
-      <div className="flex gap-8 pb-6" style={{ width: 'max-content' }}>
+     <div className="overflow-x-auto overflow-y-visible py-4 -mx-4 px-4">
+      <div className="flex gap-8" style={{ width: 'max-content' }}>
        {featuredTasks.map((task: any, index: number) => (
         <div
          key={task.id}

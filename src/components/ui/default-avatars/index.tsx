@@ -1,31 +1,44 @@
 /**
  * Default Avatars
  *
- * @todo Replace Handshake placeholder with proper custom avatars
- * Animal avatar components are available in this folder but temporarily disabled
+ * Shows a person icon with random gradient colors based on userId
  */
 
-import { Handshake } from 'lucide-react'
+import { CircleUser } from 'lucide-react'
 
-// @todo Re-enable animal avatars later - they're ready to use in ./cat.tsx, ./dog.tsx, etc.
-// import { CatAvatar } from './cat'
-// import { DogAvatar } from './dog'
-// import { OwlAvatar } from './owl'
-// import { FoxAvatar } from './fox'
-// import { BearAvatar } from './bear'
-// import { RabbitAvatar } from './rabbit'
-// import { PenguinAvatar } from './penguin'
-// import { KoalaAvatar } from './koala'
-// import { PandaAvatar } from './panda'
-// import { LionAvatar } from './lion'
-// import { getDefaultAvatarIndex, type DefaultAvatarName } from '@/lib/utils/default-avatar'
+// Color gradients for default avatars - selected to be visually distinct
+const avatarGradients = [
+  'from-blue-500 to-indigo-600',
+  'from-emerald-500 to-teal-600',
+  'from-violet-500 to-purple-600',
+  'from-rose-500 to-pink-600',
+  'from-amber-500 to-orange-600',
+  'from-cyan-500 to-blue-600',
+  'from-fuchsia-500 to-pink-600',
+  'from-lime-500 to-green-600',
+  'from-sky-500 to-indigo-600',
+  'from-red-500 to-rose-600',
+]
+
+/**
+ * Get consistent gradient index from userId
+ */
+function getGradientIndex(userId: string): number {
+  let hash = 0
+  for (let i = 0; i < userId.length; i++) {
+    const char = userId.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return Math.abs(hash) % avatarGradients.length
+}
 
 /**
  * Render the default avatar for a user
- *
- * @todo Replace with proper avatar system (animal avatars are ready in this folder)
+ * Shows a person icon with a consistent random gradient based on userId
  */
 export function DefaultAvatar({
+  userId = '',
   size = 64,
   className = '',
 }: {
@@ -33,12 +46,15 @@ export function DefaultAvatar({
   size?: number
   className?: string
 }) {
+  const gradientIndex = userId ? getGradientIndex(userId) : 0
+  const gradient = avatarGradients[gradientIndex]
+
   return (
     <div
-      className={`bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center ${className}`}
+      className={`bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center ${className}`}
       style={{ width: size, height: size }}
     >
-      <Handshake className="text-white" style={{ width: size * 0.5, height: size * 0.5 }} />
+      <CircleUser className="text-white" style={{ width: size * 0.6, height: size * 0.6 }} />
     </div>
   )
 }

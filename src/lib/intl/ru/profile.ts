@@ -37,25 +37,6 @@ export const profile = {
   'language.bg': 'Български',
   'language.ru': 'Русский',
 
-  'landing.trustStats.securityUptime': 'Безопасность',
-  'landing.trustStats.avgRating': 'Средний рейтинг',
-  'landing.trustStats.encryption': 'Шифрование данных',
-  'landing.trustStats.compliance': 'Правовое соответствие',
-
-  'landing.trustIndicators.freeToUse': 'Бесплатно в использовании',
-  'landing.trustIndicators.communityReviews': 'Отзывы сообщества',
-  'landing.trustIndicators.verifiedDescription':
-    'Все специалисты тщательно проверены',
-  'landing.trustIndicators.ratingSystem': '5-звездная система рейтинга',
-  'landing.trustIndicators.ratingSystemDescription':
-    'Качество гарантировано через отзывы сообщества',
-  'landing.trustIndicators.dataProtection': 'Защита данных',
-  'landing.trustIndicators.dataProtectionDescription':
-    'Ваша личная информация в безопасности',
-  'landing.trustIndicators.contracts': 'Правовая защита',
-  'landing.trustIndicators.contractsDescription':
-    'Вся работа защищена четкими соглашениями',
-
   'landing.featured.subtitle':
     'Последние задачи, опубликованные нашим сообществом',
   'landing.featured.professionalDesc': 'Найдите свою следующую возможность',

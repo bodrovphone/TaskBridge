@@ -143,7 +143,9 @@ export default function AcceptApplicationDialog({
       <DialogContent
         className={cn(
           "max-w-2xl p-0 gap-0 bg-white dark:bg-gray-900 flex flex-col",
-          isMobile ? "h-full max-h-full w-full rounded-none" : "rounded-xl",
+          isMobile
+            ? "h-full max-h-full w-full rounded-none !inset-0 !translate-x-0 !translate-y-0"
+            : "rounded-xl",
           !isMobile && isKeyboardOpen && "max-h-[60vh]",
           !isMobile && !isKeyboardOpen && "max-h-[90vh]"
         )}

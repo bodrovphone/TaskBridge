@@ -1,28 +1,24 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
-  'landing.hero.badge': 'Your Trusted Services Platform',
-  'landing.hero.title': 'Your Local Marketplace for Services & Opportunities',
+  'landing.hero.badge': 'First Bulgarian Platform for All Services',
+  'landing.hero.title': 'Find a Specialist or Find Work',
   'landing.hero.subtitle':
-    'Trudify connects people who need help with skilled professionals ready to earn. Post your task or find work - trusted, verified, and simple.',
-  'landing.hero.getStarted': 'Post a Task',
+    "Whether you need a handyman, a cleaner, a tutor, or any other help — post your task and receive offers from verified professionals. You pick the best one.\n\nOr if you're looking to earn — browse tasks that match your skills, apply with your offer, and work on your own terms. No middlemen, no complicated fees.",
+  'landing.hero.getStarted': 'Find a Specialist',
   'landing.hero.browseServices': 'Find Work',
 
-  'landing.trustIndicators.verified': 'Community Verified',
-  'landing.trustIndicators.securePayments': 'Secure Payments',
-  'landing.trustIndicators.support': '24/7 Support',
-  'landing.trustIndicators.freeToUse': 'Free to Use',
-  'landing.trustIndicators.communityReviews': 'Community Reviews',
+  'landing.trustIndicators.verified': 'Verified Profiles',
   'landing.trustIndicators.verifiedDescription':
-    'Email/SMS verification & community-driven reviews',
-  'landing.trustIndicators.ratingSystem': '5-Star Rating System',
-  'landing.trustIndicators.ratingSystemDescription':
-    'Quality assured through community feedback',
-  'landing.trustIndicators.dataProtection': 'Data Protection',
-  'landing.trustIndicators.dataProtectionDescription':
-    'Your personal information is secure',
-  'landing.trustIndicators.contracts': 'Legal Protection',
-  'landing.trustIndicators.contractsDescription':
-    'All work is protected by clear agreements',
+    'Sign in with Google, Facebook or Email — real people, real accounts',
+  'landing.trustIndicators.freeToUse': 'Free to Use',
+  'landing.trustIndicators.freeToUseDescription':
+    'No hidden fees, no commissions. Post tasks and apply for free',
+  'landing.trustIndicators.instantNotifications': 'Instant Notifications',
+  'landing.trustIndicators.instantNotificationsDescription':
+    'Telegram and email alerts when you get offers or messages',
+  'landing.trustIndicators.youreInControl': "You're in Control",
+  'landing.trustIndicators.youreInControlDescription':
+    'Set your budget, compare offers, choose who you work with',
 
   'landing.stats.averageRating': 'Quality Service',
   'landing.stats.completedTasks': 'Growing Daily',
@@ -32,10 +28,10 @@ export const landing = {
   'landing.categories.specialists': 'specialists',
   'landing.categories.beFirst': 'Be the first specialist',
 
-  'landing.trustStats.securityUptime': 'Security Uptime',
-  'landing.trustStats.avgRating': 'Average Rating',
-  'landing.trustStats.encryption': 'Data Encryption',
-  'landing.trustStats.compliance': 'Legal Compliance',
+  'landing.trustStats.verified': 'Verified',
+  'landing.trustStats.noFees': 'No Fees',
+  'landing.trustStats.instant': 'Instant',
+  'landing.trustStats.yourChoice': 'Your Choice',
 
   'landing.categories.title': 'Popular Categories',
   'landing.categories.subtitle':
@@ -63,6 +59,13 @@ export const landing = {
   'landing.featured.customerDesc': 'See what others are posting',
   'landing.featured.noTasks': 'No tasks yet? Be the first to create one! 😢',
   'landing.featured.postFirstTask': 'Post the first task',
+
+  'landing.professionals.badge': 'Top Professionals',
+  'landing.professionals.title': 'Find Your Specialist',
+  'landing.professionals.subtitle':
+    'Found someone you like? Suggest a task directly — no waiting, you make the first move',
+  'landing.professionals.viewAll': 'View All Professionals',
+  'landing.professionals.noProfessionals': 'Be the first professional to join!',
 
   'landing.howItWorks.badge': 'Simple Process',
   'landing.howItWorks.title': 'How It Works',

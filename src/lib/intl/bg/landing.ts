@@ -1,28 +1,24 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
-  'landing.hero.badge': 'Вашата доверена платформа за услуги',
-  'landing.hero.title': 'Вашата местна платформа за услуги и възможности',
+  'landing.hero.badge': 'Първата българска платформа за всички услуги',
+  'landing.hero.title': 'Намери специалист или намери работа',
   'landing.hero.subtitle':
-    'Trudify свързва хора, които се нуждаят от помощ, с квалифицирани специалисти, готови да печелят. Публикувайте задача или намерете работа - доверено, проверено и лесно.',
-  'landing.hero.getStarted': 'Публикувай задача',
-  'landing.hero.browseServices': 'Намери работа',
+    'Трябва ти водопроводчик, чистач, учител или друга помощ? Публикувай задачата си и получи оферти от проверени специалисти. Ти избираш най-добрата.\n\nИли ако търсиш да изкараш пари — разгледай наличните задачи, кандидатствай с офертата си и работи по свой график. Без посредници, без сложни такси.',
+  'landing.hero.getStarted': 'Търся специалист',
+  'landing.hero.browseServices': 'Търся работа',
 
-  'landing.trustIndicators.verified': 'Верифицирани от общността',
-  'landing.trustIndicators.securePayments': 'Сигурни плащания',
-  'landing.trustIndicators.support': '24/7 поддръжка',
-  'landing.trustIndicators.freeToUse': 'Безплатно за използване',
-  'landing.trustIndicators.communityReviews': 'Отзиви от общността',
+  'landing.trustIndicators.verified': 'Верифицирани профили',
   'landing.trustIndicators.verifiedDescription':
-    'Email/SMS верификация и отзиви от общността',
-  'landing.trustIndicators.ratingSystem': '5-звездна система за оценка',
-  'landing.trustIndicators.ratingSystemDescription':
-    'Качеството се гарантира чрез отзиви от общността',
-  'landing.trustIndicators.dataProtection': 'Защита на данните',
-  'landing.trustIndicators.dataProtectionDescription':
-    'Вашата лична информация е в безопасност',
-  'landing.trustIndicators.contracts': 'Правна защита',
-  'landing.trustIndicators.contractsDescription':
-    'Всички работи се защитават от ясни споразумения',
+    'Влезте с Google, Facebook или Email — истински хора, истински акаунти',
+  'landing.trustIndicators.freeToUse': 'Безплатно',
+  'landing.trustIndicators.freeToUseDescription':
+    'Без скрити такси, без комисионни. Публикувайте задачи и кандидатствайте безплатно',
+  'landing.trustIndicators.instantNotifications': 'Мигновени известия',
+  'landing.trustIndicators.instantNotificationsDescription':
+    'Telegram и имейл известия при получаване на оферти или съобщения',
+  'landing.trustIndicators.youreInControl': 'Вие контролирате',
+  'landing.trustIndicators.youreInControlDescription':
+    'Определете бюджета, сравнете офертите, изберете с кого да работите',
 
   'landing.stats.averageRating': 'Качествена услуга',
   'landing.stats.completedTasks': 'Расте всеки ден',
@@ -32,10 +28,10 @@ export const landing = {
   'landing.categories.specialists': 'специалисти',
   'landing.categories.beFirst': 'Бъдете първият специалист',
 
-  'landing.trustStats.securityUptime': 'Сигурност',
-  'landing.trustStats.avgRating': 'Средна оценка',
-  'landing.trustStats.encryption': 'Криптиране на данни',
-  'landing.trustStats.compliance': 'Правно съответствие',
+  'landing.trustStats.verified': 'Верифицирано',
+  'landing.trustStats.noFees': 'Без такси',
+  'landing.trustStats.instant': 'Мигновено',
+  'landing.trustStats.yourChoice': 'Ваш избор',
 
   'landing.categories.title': 'Популярни категории',
   'landing.categories.subtitle':
@@ -64,6 +60,12 @@ export const landing = {
   'landing.featured.customerDesc': 'Вижте какво публикуват други',
   'landing.featured.noTasks': 'Все още няма задачи? Бъдете първият, който ще създаде! 😢',
   'landing.featured.postFirstTask': 'Публикувай първата задача',
+
+  'landing.professionals.badge': 'Топ специалисти',
+  'landing.professionals.title': 'Намери своя специалист',
+  'landing.professionals.subtitle': 'Харесвате някого? Предложете задача директно — без чакане, вие правите първата стъпка',
+  'landing.professionals.viewAll': 'Всички специалисти',
+  'landing.professionals.noProfessionals': 'Бъдете първият професионалист, който ще се присъедини!',
 
   'landing.howItWorks.badge': 'Лесен процес',
   'landing.howItWorks.title': 'Как работи платформата',

@@ -1,28 +1,24 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
-  'landing.hero.badge': 'Ваша надежная платформа услуг',
-  'landing.hero.title': 'Ваша местная платформа для услуг и возможностей',
+  'landing.hero.badge': 'Первая болгарская платформа для всех услуг',
+  'landing.hero.title': 'Найди специалиста или найди работу',
   'landing.hero.subtitle':
-    'Trudify связывает людей, которым нужна помощь, с квалифицированными специалистами, готовыми зарабатывать. Разместите задачу или найдите работу - надежно, проверено и просто.',
-  'landing.hero.getStarted': 'Разместить задачу',
-  'landing.hero.browseServices': 'Найти работу',
+    'Нужен сантехник, уборщик, репетитор или другая помощь? Опубликуй задачу и получи предложения от проверенных специалистов. Ты выбираешь лучшее.\n\nИли если хочешь заработать — просматривай доступные задачи, подавай заявку со своим предложением и работай по своему графику. Без посредников, без сложных комиссий.',
+  'landing.hero.getStarted': 'Ищу специалиста',
+  'landing.hero.browseServices': 'Ищу работу',
 
-  'landing.trustIndicators.verified': 'Проверено сообществом',
-  'landing.trustIndicators.securePayments': 'Безопасные платежи',
-  'landing.trustIndicators.support': 'Поддержка 24/7',
-  'landing.trustIndicators.freeToUse': 'Бесплатно в использовании',
-  'landing.trustIndicators.communityReviews': 'Отзывы сообщества',
+  'landing.trustIndicators.verified': 'Верифицированные профили',
   'landing.trustIndicators.verifiedDescription':
-    'Email/SMS верификация и отзывы сообщества',
-  'landing.trustIndicators.ratingSystem': '5-звездная система рейтинга',
-  'landing.trustIndicators.ratingSystemDescription':
-    'Качество гарантировано через отзывы сообщества',
-  'landing.trustIndicators.dataProtection': 'Защита данных',
-  'landing.trustIndicators.dataProtectionDescription':
-    'Ваша личная информация в безопасности',
-  'landing.trustIndicators.contracts': 'Правовая защита',
-  'landing.trustIndicators.contractsDescription':
-    'Вся работа защищена четкими соглашениями',
+    'Войдите через Google, Facebook или Email — реальные люди, реальные аккаунты',
+  'landing.trustIndicators.freeToUse': 'Бесплатно',
+  'landing.trustIndicators.freeToUseDescription':
+    'Без скрытых комиссий, без сборов. Публикуйте задачи и откликайтесь бесплатно',
+  'landing.trustIndicators.instantNotifications': 'Мгновенные уведомления',
+  'landing.trustIndicators.instantNotificationsDescription':
+    'Telegram и email уведомления при получении предложений или сообщений',
+  'landing.trustIndicators.youreInControl': 'Вы контролируете',
+  'landing.trustIndicators.youreInControlDescription':
+    'Установите бюджет, сравните предложения, выберите с кем работать',
 
   'landing.stats.averageRating': 'Качественный сервис',
   'landing.stats.completedTasks': 'Растем каждый день',
@@ -32,10 +28,10 @@ export const landing = {
   'landing.categories.specialists': 'специалистов',
   'landing.categories.beFirst': 'Будьте первым специалистом',
 
-  'landing.trustStats.securityUptime': 'Безопасность',
-  'landing.trustStats.avgRating': 'Средний рейтинг',
-  'landing.trustStats.encryption': 'Шифрование данных',
-  'landing.trustStats.compliance': 'Правовое соответствие',
+  'landing.trustStats.verified': 'Проверено',
+  'landing.trustStats.noFees': 'Без комиссий',
+  'landing.trustStats.instant': 'Мгновенно',
+  'landing.trustStats.yourChoice': 'Ваш выбор',
 
   'landing.categories.title': 'Популярные категории',
   'landing.categories.subtitle':
@@ -65,6 +61,12 @@ export const landing = {
   'landing.featured.customerDesc': 'Посмотрите, что публикуют другие',
   'landing.featured.noTasks': 'Еще нет задач? Будьте первым, кто создаст! 😢',
   'landing.featured.postFirstTask': 'Разместить первую задачу',
+
+  'landing.professionals.badge': 'Лучшие специалисты',
+  'landing.professionals.title': 'Найди своего специалиста',
+  'landing.professionals.subtitle': 'Понравился кто-то? Предложите задачу напрямую — без ожидания, вы делаете первый шаг',
+  'landing.professionals.viewAll': 'Все специалисты',
+  'landing.professionals.noProfessionals': 'Станьте первым профессионалом!',
 
   'landing.howItWorks.badge': 'Простой процесс',
   'landing.howItWorks.title': 'Как это работает',
