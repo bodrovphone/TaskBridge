@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
-import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle } from 'lucide-react'
+import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
 import { ProfessionalWithdrawDialog } from '@/components/tasks/professional-withdraw-dialog'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -382,6 +382,19 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                       )}
                     </div>
                   </div>
+
+                  {/* Customer Message (from acceptance) */}
+                  {task.sharedContactInfo?.message && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                      <h4 className="text-sm font-semibold text-amber-900 mb-2 flex items-center gap-1.5">
+                        <MessageCircle className="w-4 h-4" />
+                        {t('myWork.customerMessage', 'Message from customer')}
+                      </h4>
+                      <p className="text-sm text-amber-800 italic break-words">
+                        "{task.sharedContactInfo.message}"
+                      </p>
+                    </div>
+                  )}
 
                   {/* Location */}
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">

@@ -238,7 +238,15 @@ async function translateEmailVariables(
         footer_text: t('notifications.email.applicationReceived.footerText'),
       };
 
-    case 'applicationAccepted':
+    case 'applicationAccepted': {
+      // Build info items: contact info first, then customer message if provided
+      const infoItems = [...(data.customerContactInfo || [])];
+
+      // Add customer message if provided
+      if (data.customerMessage) {
+        infoItems.push(`💬 ${t('notifications.email.applicationAccepted.customerMessageLabel', { defaultValue: 'Message' })}: "${data.customerMessage}"`);
+      }
+
       return {
         ...common,
         subject: t('notifications.email.applicationAccepted.subject'),
@@ -250,10 +258,11 @@ async function translateEmailVariables(
         primary_link: `${baseUrl}/${locale}/tasks/${data.taskId}`,
         primary_button_text: t('notifications.email.applicationAccepted.buttonText'),
         info_title: t('notifications.email.applicationAccepted.infoTitle'),
-        info_items: data.customerContactInfo || [], // e.g., ["Name: Ivan", "Phone: +359 888 123 456"]
+        info_items: infoItems,
         secondary_message: t('notifications.email.applicationAccepted.secondaryMessage'),
         footer_text: t('notifications.email.applicationAccepted.footerText'),
       };
+    }
 
     case 'applicationRejected':
       return {

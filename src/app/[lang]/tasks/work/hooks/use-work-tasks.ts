@@ -21,6 +21,7 @@ export interface WorkTask {
     phone?: string;
     email?: string;
     customContact?: string;
+    message?: string; // Personal message from customer when accepting application
   };
   agreedPrice: number;
   timeline: string;

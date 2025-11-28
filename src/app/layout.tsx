@@ -7,8 +7,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
- title: 'Trudify - Connect with Verified Professionals',
- description: 'Connect with verified local professionals for all kinds of tasks - from home repairs to deliveries and personal assistance. Secure platform with verified professionals.',
+ title: 'Trudify - Намерете проверени професионалисти',
+ description: 'Свържете се с проверени местни професионалисти за всякакви задачи - от домашни ремонти до доставки и лична помощ. Сигурна платформа с проверени специалисти.',
 }
 
 export const viewport: Viewport = {
@@ -24,7 +24,7 @@ function RootLayout({
  children: React.ReactNode
 }) {
  return (
-  <html lang="en" className="overflow-x-hidden">
+  <html lang="bg" className="overflow-x-hidden">
    <body className={`${inter.className} overflow-x-hidden w-full`}>
     {children}
     <Analytics />

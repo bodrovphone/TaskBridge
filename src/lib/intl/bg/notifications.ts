@@ -296,6 +296,7 @@ export const notifications = {
   'notifications.email.applicationAccepted.infoTitle': 'Информация за клиента:',
   'notifications.email.applicationAccepted.secondaryMessage': 'Започнете работа по задачата и поддържайте добра комуникация с клиента.',
   'notifications.email.applicationAccepted.footerText': 'Получавате този имейл, защото кандидатствахте за задача в Trudify.',
+  'notifications.email.applicationAccepted.customerMessageLabel': 'Съобщение',
 
   // 3. Отхвърлена кандидатура
   'notifications.email.applicationRejected.subject': 'Актуализация на кандидатурата за "{{task_title}}"',

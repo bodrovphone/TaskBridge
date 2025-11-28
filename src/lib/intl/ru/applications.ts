@@ -232,6 +232,7 @@ export const applications = {
   'myWork.empty.completed.title': 'Пока нет завершенной работы',
   'myWork.empty.completed.message': 'Завершенные задачи появятся здесь.',
   'myWork.customerContact': 'Контакт клиента',
+  'myWork.customerMessage': 'Сообщение от клиента',
   'myWork.taskDeadline': 'Крайний срок',
   'myWork.startedDaysAgo': 'Начата {{days}} дней назад',
   'myWork.completedOn': 'Завершена {{date}}',
