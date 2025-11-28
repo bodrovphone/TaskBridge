@@ -188,6 +188,7 @@ export async function PATCH(
       userId: application.professional_id,
       type: 'application_accepted',
       templateData: {
+        taskId: application.task_id, // Required for email link
         taskTitle: task?.title,
         customerName: customer?.full_name || 'the customer',
         customerContact: contactText,

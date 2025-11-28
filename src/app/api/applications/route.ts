@@ -156,6 +156,9 @@ export async function POST(request: NextRequest) {
       userId: task.customer_id,
       type: 'application_received',
       templateData: {
+        taskId: task.id, // Required for email link
+        applicationId: application.id, // Required for email link
+        professionalId: user.id, // Required for email link to professional profile
         professionalName: professional?.full_name || 'Someone',
         taskTitle: task.title,
       },
