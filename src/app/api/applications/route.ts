@@ -234,6 +234,7 @@ export async function GET(request: NextRequest) {
           city,
           neighborhood,
           status,
+          images,
           created_at,
           customer:users!tasks_customer_id_fkey (
             id,

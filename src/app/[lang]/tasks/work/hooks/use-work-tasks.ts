@@ -10,6 +10,7 @@ export interface WorkTask {
   taskId: string;
   taskTitle: string;
   taskDescription: string;
+  taskImages?: string[];
   customer: {
     name: string;
     avatar?: string;
@@ -46,6 +47,7 @@ interface WorkTasksApiResponse {
       id: string;
       title: string;
       description: string;
+      images?: string[] | null;
       customer?: {
         full_name: string;
         avatar_url?: string;
@@ -88,6 +90,7 @@ function transformWorkTask(app: WorkTasksApiResponse['applications'][0]): WorkTa
     taskId: app.task.id,
     taskTitle: app.task.title,
     taskDescription: app.task.description,
+    taskImages: app.task.images || undefined,
     customer: {
       name: app.task.customer?.full_name || 'Unknown',
       avatar: app.task.customer?.avatar_url,

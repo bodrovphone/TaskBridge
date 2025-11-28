@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Card, CardBody, Button, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
 import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
 import { ProfessionalWithdrawDialog } from '@/components/tasks/professional-withdraw-dialog'
@@ -193,40 +193,53 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
         </div>
 
         {/* Filter Tabs */}
-        <Card className="mb-6 shadow-xl border border-white/20 bg-white/95">
-          <CardBody className="p-4">
-            <Tabs
-              selectedKey={selectedFilter}
-              onSelectionChange={(key) => setSelectedFilter(key as WorkFilter)}
-              variant="light"
-              classNames={{
-                tabList: "gap-2 w-full bg-gray-50/50 p-2 rounded-lg",
-                cursor: "bg-white shadow-md",
-                tab: "h-10 px-4",
-                tabContent: "group-data-[selected=true]:text-primary group-data-[selected=true]:font-semibold"
-              }}
-            >
-              <Tab
-                key="in_progress"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('myWork.filter.inProgress')}</span>
-                    <Chip size="sm" className="bg-blue-600 text-white">{getTaskCountByFilter('in_progress')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
-                key="completed"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('myWork.filter.completed')}</span>
-                    <Chip size="sm" className="bg-green-600 text-white">{getTaskCountByFilter('completed')}</Chip>
-                  </div>
-                }
-              />
-            </Tabs>
-          </CardBody>
-        </Card>
+        <div className="mb-6 grid grid-cols-2 gap-2 sm:gap-3">
+          <button
+            onClick={() => setSelectedFilter('in_progress')}
+            className={`
+              flex items-center justify-center gap-2 py-3 px-3 sm:py-4 sm:px-6 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200
+              ${selectedFilter === 'in_progress'
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+            <span className="truncate">{t('myWork.filter.inProgress')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs sm:text-sm font-bold flex-shrink-0
+              ${selectedFilter === 'in_progress'
+                ? 'bg-white/20 text-white'
+                : 'bg-blue-100 text-blue-600'
+              }
+            `}>
+              {getTaskCountByFilter('in_progress')}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedFilter('completed')}
+            className={`
+              flex items-center justify-center gap-2 py-3 px-3 sm:py-4 sm:px-6 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200
+              ${selectedFilter === 'completed'
+                ? 'bg-green-600 text-white shadow-lg shadow-green-600/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+            <span className="truncate">{t('myWork.filter.completed')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs sm:text-sm font-bold flex-shrink-0
+              ${selectedFilter === 'completed'
+                ? 'bg-white/20 text-white'
+                : 'bg-green-100 text-green-600'
+              }
+            `}>
+              {getTaskCountByFilter('completed')}
+            </span>
+          </button>
+        </div>
 
         {/* Loading State */}
         {isLoading ? (
@@ -282,6 +295,25 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                 key={task.id}
                 className="shadow-lg border border-white/20 bg-white/95 hover:shadow-xl transition-shadow h-full flex flex-col"
               >
+                {/* Task Image */}
+                {task.taskImages && task.taskImages.length > 0 && (
+                  <div className="relative w-full h-52 overflow-hidden rounded-t-xl">
+                    <Image
+                      src={task.taskImages[0]}
+                      alt={task.taskTitle}
+                      classNames={{
+                        wrapper: "w-full h-full !max-w-full",
+                        img: "w-full h-full object-cover"
+                      }}
+                      radius="none"
+                    />
+                    {task.taskImages.length > 1 && (
+                      <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+                        +{task.taskImages.length - 1}
+                      </div>
+                    )}
+                  </div>
+                )}
                 <CardBody className="p-6 flex flex-col h-full">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-start gap-4 flex-1">
