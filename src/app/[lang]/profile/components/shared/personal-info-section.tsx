@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
@@ -8,8 +8,9 @@ import { usePathname } from 'next/navigation'
 import { MapPin, Phone, Mail, Calendar, Shield, Globe, MessageSquare, User as UserIcon, Edit, X, Save, AlertCircle, Send } from 'lucide-react'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
 import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
-import { getCitiesWithLabels } from '@/features/cities'
+import { getCityLabelBySlug } from '@/features/cities'
 import { useAuth } from '@/features/auth'
+import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
 
 interface PersonalInfoSectionProps {
   profile: UserProfile
@@ -65,9 +66,6 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
       clearInterval(interval)
     }
   }, [])
-
-  // Get translated city options
-  const cities = useMemo(() => getCitiesWithLabels(t), [t])
 
   // Form for personal information editing
   const personalForm = useForm({
@@ -328,7 +326,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                 <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.location')}</p>
                 <p className="font-semibold text-gray-900">
                   {profile.city
-                    ? cities.find(c => c.slug === profile.city)?.label || profile.city
+                    ? getCityLabelBySlug(profile.city, t)
                     : 'Not set'}
                 </p>
               </div>
@@ -454,25 +452,22 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                 )}
               </personalForm.Field>
 
-              {/* Location Field - City Dropdown */}
+              {/* Location Field - City Autocomplete */}
               <personalForm.Field name="location">
                 {(field) => (
-                  <Select
-                    label={t('profile.location')}
-                    placeholder={t('profile.selectCity', 'Select your city')}
-                    selectedKeys={field.state.value ? [field.state.value] : []}
-                    onSelectionChange={(keys) => {
-                      const selected = Array.from(keys)[0] as string
-                      field.handleChange(selected || null)
-                    }}
-                    startContent={<MapPin className="w-4 h-4 text-gray-500" />}
-                  >
-                    {cities.map((city) => (
-                      <SelectItem key={city.slug} value={city.slug}>
-                        {city.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                  <div className="space-y-1.5">
+                    <label className="text-sm text-gray-600">{t('profile.location')}</label>
+                    <CityAutocomplete
+                      value={field.state.value || undefined}
+                      onChange={(city: CityOption | null) => {
+                        field.handleChange(city?.slug || null)
+                      }}
+                      placeholder={t('profile.selectCity', 'Select your city')}
+                      showProfileCity={false}
+                      showLastSearched={true}
+                      showPopularCities={true}
+                    />
+                  </div>
                 )}
               </personalForm.Field>
 

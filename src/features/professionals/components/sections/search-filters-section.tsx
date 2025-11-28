@@ -8,10 +8,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
-import { Search } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { Search, MapPin } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { searchCategories, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
 import { searchCities, getCitiesWithLabels } from '@/features/cities';
+import { useSearchLocationPreference } from '@/hooks/use-search-location-preference';
 import { useProfessionalFilters } from '../../hooks/use-professional-filters';
 import { Z_INDEX } from '@/lib/constants/z-index';
 
@@ -26,6 +27,8 @@ export default function SearchFiltersSection({
 }: SearchFiltersSectionProps) {
   const { t, i18n } = useTranslation();
   const { filters, updateFilter } = useProfessionalFilters();
+  const { saveLocation } = useSearchLocationPreference();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [currentTypingIndex, setCurrentTypingIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
@@ -81,9 +84,10 @@ export default function SearchFiltersSection({
     return searchCategories(searchQuery, t).slice(0, 6); // Limit to 6 categories
   }, [searchQuery, t]);
 
+  // Search cities locally (instant, no API)
   const citySuggestions = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    return searchCities(searchQuery, t); // All matching cities (max 6 anyway)
+    if (!searchQuery.trim() || searchQuery.length < 1) return [];
+    return searchCities(searchQuery, t).slice(0, 6); // Limit to 6 cities
   }, [searchQuery, t]);
 
   const hasSuggestions = categorySuggestions.length > 0 || citySuggestions.length > 0;
@@ -101,10 +105,14 @@ export default function SearchFiltersSection({
   };
 
   // Handle city selection
-  const handleCitySelect = (citySlug: string) => {
+  const handleCitySelect = (citySlug: string, cityLabel?: string) => {
     updateFilter('city', citySlug);
     setSearchQuery(''); // Clear search input
     setShowSuggestions(false);
+    // Save to localStorage if we have the label
+    if (cityLabel) {
+      saveLocation(citySlug, cityLabel);
+    }
   };
 
   // Animated typing effect
@@ -247,11 +255,10 @@ export default function SearchFiltersSection({
                                   key={city.slug}
                                   variant="light"
                                   className="w-full justify-start text-left h-auto py-3"
-                                  onPress={() => handleCitySelect(city.slug)}
+                                  onPress={() => handleCitySelect(city.slug, city.label)}
+                                  startContent={<MapPin className="w-4 h-4 text-gray-400" />}
                                 >
-                                  <div className="flex flex-col items-start">
-                                    <span className="font-medium text-gray-900">{city.label}</span>
-                                  </div>
+                                  <span className="font-medium text-gray-900">{city.label}</span>
                                 </Button>
                               ))}
                             </div>
@@ -297,14 +304,9 @@ export default function SearchFiltersSection({
                     return (
                       <Chip
                         key={city.slug}
-                        onClick={() => handleCitySelect(city.slug)}
+                        onClick={() => handleCitySelect(city.slug, city.label)}
                         className="cursor-pointer bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 text-emerald-700 hover:from-emerald-100 hover:to-emerald-200 font-medium transition-all duration-200 hover:scale-105 hover:shadow-md"
-                        startContent={
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                        }
+                        startContent={<MapPin className="w-4 h-4" />}
                         variant="flat"
                       >
                         {city.label}

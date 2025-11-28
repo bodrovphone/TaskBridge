@@ -1,10 +1,9 @@
 'use client'
 
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Input, Select, SelectItem, Card, CardBody } from '@nextui-org/react'
+import { Input, Card, CardBody } from '@nextui-org/react'
 import { Lock, MapPin } from 'lucide-react'
-import { getCitiesWithLabels } from '@/features/cities'
+import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
 
 interface LocationSectionProps {
  form: any
@@ -12,9 +11,6 @@ interface LocationSectionProps {
 
 export function LocationSection({ form }: LocationSectionProps) {
  const { t } = useTranslation()
-
- // Get translated city options (sorted by population)
- const cities = useMemo(() => getCitiesWithLabels(t), [t])
 
  return (
   <Card className="shadow-md border border-gray-100">
@@ -57,33 +53,19 @@ export function LocationSection({ form }: LocationSectionProps) {
       <label htmlFor="task-city" className="text-sm font-medium text-gray-700">
        {t('createTask.location.cityLabel', 'City')} <span className="text-red-500">*</span>
       </label>
-      <Select
-       id="task-city"
+      <CityAutocomplete
+       value={field.state.value}
+       onChange={(city: CityOption | null) => {
+        field.handleChange(city?.slug || '')
+        field.handleBlur()
+       }}
        placeholder={t('createTask.location.cityPlaceholder', 'Select your city')}
        isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
-       errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
-       selectedKeys={field.state.value ? [field.state.value] : []}
-       onSelectionChange={(keys) => {
-        const selectedCity = Array.from(keys)[0] as string
-        field.handleChange(selectedCity)
-        field.handleBlur()
-       }}
-       onClose={() => {
-        field.handleBlur()
-       }}
-       startContent={<MapPin className="w-4 h-4 text-gray-400" />}
-       classNames={{
-        trigger: 'h-12',
-        popoverContent: 'bg-white shadow-xl border border-gray-200 rounded-lg',
-        listbox: 'bg-white',
-       }}
-      >
-       {cities.map((city) => (
-        <SelectItem key={city.slug} value={city.slug}>
-         {city.label}
-        </SelectItem>
-       ))}
-      </Select>
+       errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 ? t(field.state.meta.errors[0] as string) : undefined}
+       showProfileCity={true}
+       showLastSearched={true}
+       showPopularCities={true}
+      />
      </div>
     )}
    </form.Field>

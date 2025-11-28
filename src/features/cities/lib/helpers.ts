@@ -23,12 +23,15 @@ export const getCitiesWithLabels = (t: TFunction): CityWithLabel[] => {
 
 /**
  * Get city label by slug
+ * Returns translated name from i18n for known cities
  */
 export const getCityLabelBySlug = (slug: string, t: TFunction): string => {
   const city = getCityBySlug(slug);
-  if (!city) return slug;
-
-  return t(city.translationKey);
+  if (city) {
+    return t(city.translationKey);
+  }
+  // Fallback for unknown slugs (shouldn't happen with CHECK constraints)
+  return slug;
 };
 
 /**
