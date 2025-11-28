@@ -156,13 +156,16 @@ export function ApplicationFormState({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col h-full"
+      className={cn(
+        'flex flex-col h-full bg-white dark:bg-gray-900 overflow-hidden',
+        !isMobile && 'rounded-2xl'
+      )}
     >
       {/* Header */}
       <div
         className={cn(
           'flex-shrink-0 bg-gradient-to-r from-blue-600 to-blue-500 text-white',
-          isMobile ? 'rounded-none' : 'rounded-t-xl',
+          // No border-radius needed - parent's overflow-hidden clips the corners
           isMobile && isKeyboardOpen ? 'px-4 py-3' : 'px-5 py-4 sm:px-6 sm:py-5'
         )}
       >

@@ -5,7 +5,7 @@
 
 export type UserType = 'customer' | 'professional' | 'both'
 
-export type PreferredLanguage = 'en' | 'bg' | 'ru'
+export type PreferredLanguage = 'en' | 'bg' | 'ru' | 'ua'
 
 export type PreferredContact = 'email' | 'phone' | 'sms' | 'telegram'
 

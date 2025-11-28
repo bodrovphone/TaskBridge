@@ -48,6 +48,7 @@ export const common = {
   'language.en': 'English',
   'language.bg': 'Български',
   'language.ru': 'Русский',
+  'language.ua': 'Українська',
 
   // Locations
   'locations.sofiaCenter': 'Софія, Центр',

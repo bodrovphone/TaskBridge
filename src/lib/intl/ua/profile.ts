@@ -207,6 +207,7 @@ export const profile = {
   'profile.professional.languages.bg': '🇧🇬 Болгарська',
   'profile.professional.languages.ru': '🇷🇺 Російська',
   'profile.professional.languages.en': '🇬🇧 Англійська',
+  'profile.professional.languages.ua': '🇺🇦 Українська',
 
   // Payment Method Options
   'profile.professional.paymentMethods.cash': 'Готівка',

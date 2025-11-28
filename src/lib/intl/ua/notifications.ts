@@ -124,6 +124,12 @@ export const notifications = {
   'taskDetail.writeReply': 'Напишіть відповідь...',
   'taskDetail.sendReply': 'Надіслати відповідь',
 
+  // Language Barrier Warning
+  'taskDetail.languageWarning.title': 'Мовна примітка',
+  'taskDetail.languageWarning.message': 'Це завдання опубліковане людиною, яка може надавати перевагу спілкуванню {{language}}. Будь ласка, переконайтеся, що вам комфортно з можливими мовними відмінностями перед подачею заявки.',
+  'taskDetail.languageWarning.confirm': 'Зрозуміло, продовжити',
+  'taskDetail.languageWarning.cancel': 'Скасувати',
+
   // Ask Question Dialog
   'taskDetail.askQuestionDialog.title': 'Поставити запитання',
   'taskDetail.askQuestionDialog.placeholder': 'Що б ви хотіли дізнатися про це завдання?',

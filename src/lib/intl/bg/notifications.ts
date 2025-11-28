@@ -127,6 +127,12 @@ export const notifications = {
   'taskDetail.writeReply': 'Напишете вашия отговор...',
   'taskDetail.sendReply': 'Изпрати отговор',
 
+  // Language Barrier Warning
+  'taskDetail.languageWarning.title': 'Езикова бележка',
+  'taskDetail.languageWarning.message': 'Тази задача е публикувана от някой, който може да предпочита комуникация на {{language}}. Моля, уверете се, че се чувствате комфортно с потенциални езикови различия преди да кандидатствате.',
+  'taskDetail.languageWarning.confirm': 'Разбирам, продължи',
+  'taskDetail.languageWarning.cancel': 'Отказ',
+
   // Ask Question Dialog
   'taskDetail.askQuestionDialog.title': 'Задайте въпрос',
   'taskDetail.askQuestionDialog.placeholder': 'Какво бихте искали да знаете за тази задача?',

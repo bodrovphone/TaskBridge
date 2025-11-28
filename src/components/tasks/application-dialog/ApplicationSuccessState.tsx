@@ -33,7 +33,10 @@ export function ApplicationSuccessState({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3 }}
-      className="relative flex flex-col h-full"
+      className={cn(
+        'relative flex flex-col h-full bg-white dark:bg-gray-900 overflow-hidden',
+        !isMobile && 'rounded-2xl'
+      )}
     >
       {/* Confetti Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -64,10 +67,7 @@ export function ApplicationSuccessState({
 
       {/* Header */}
       <div
-        className={cn(
-          'flex-shrink-0 flex flex-col items-center gap-4 pt-6 px-4 pb-4 sm:pt-8 sm:px-6 sm:pb-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white',
-          isMobile ? 'rounded-none' : 'rounded-t-xl'
-        )}
+        className="flex-shrink-0 flex flex-col items-center gap-4 pt-6 px-4 pb-4 sm:pt-8 sm:px-6 sm:pb-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white"
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -120,7 +120,7 @@ export function ApplicationSuccessState({
       <div
         className={cn(
           'flex-shrink-0 border-t border-gray-100 bg-gray-50 dark:bg-gray-800',
-          isMobile ? 'px-4 py-3 pb-safe rounded-none' : 'px-5 py-4 sm:px-6 rounded-b-xl'
+          isMobile ? 'px-4 py-3 pb-safe' : 'px-5 py-4 sm:px-6'
         )}
       >
         <div className="flex flex-col sm:flex-row gap-2">

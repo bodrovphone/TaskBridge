@@ -8,13 +8,15 @@
 import enMessages from '@/lib/intl/en';
 import bgMessages from '@/lib/intl/bg';
 import ruMessages from '@/lib/intl/ru';
+import uaMessages from '@/lib/intl/ua';
 
-type Locale = 'en' | 'bg' | 'ru';
+type Locale = 'en' | 'bg' | 'ru' | 'ua';
 
 const messages = {
   en: enMessages,
   bg: bgMessages,
   ru: ruMessages,
+  ua: uaMessages,
 };
 
 /**
@@ -93,7 +95,7 @@ export function getTelegramMessage(
 export function getUserLocale(user: { preferred_language?: string }): Locale {
   const locale = user.preferred_language?.toLowerCase();
 
-  if (locale === 'bg' || locale === 'ru' || locale === 'en') {
+  if (locale === 'bg' || locale === 'ru' || locale === 'en' || locale === 'ua') {
     return locale;
   }
 

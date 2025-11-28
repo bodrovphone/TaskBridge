@@ -207,6 +207,7 @@ export const profile = {
   'profile.professional.languages.bg': '🇧🇬 Български',
   'profile.professional.languages.ru': '🇷🇺 Руски',
   'profile.professional.languages.en': '🇬🇧 Английски',
+  'profile.professional.languages.ua': '🇺🇦 Украински',
 
   // Payment Method Options
   'profile.professional.paymentMethods.cash': 'Кеш',

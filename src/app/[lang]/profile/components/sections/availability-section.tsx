@@ -19,7 +19,7 @@ interface AvailabilitySectionProps {
 
 // Response time and language options - will be translated
 const responseTimeKeys = ['1h', '2h', '4h', '24h']
-const languageCodes = ['bg', 'ru', 'en']
+const languageCodes = ['bg', 'ru', 'en', 'ua']
 
 export function AvailabilitySection({
   availability,

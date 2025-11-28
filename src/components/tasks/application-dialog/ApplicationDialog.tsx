@@ -144,10 +144,10 @@ export default function ApplicationDialog({
       <DialogContent
         hideCloseButton
         className={cn(
-          'max-w-lg p-0 gap-0 bg-white dark:bg-gray-900 flex flex-col overflow-hidden',
+          'max-w-lg p-0 gap-0 !bg-transparent flex flex-col overflow-hidden border-0',
           isMobile
             ? 'h-full max-h-full w-full rounded-none !inset-0 !translate-x-0 !translate-y-0'
-            : 'rounded-2xl max-h-[90vh]'
+            : '!rounded-2xl max-h-[90vh]'
         )}
         onInteractOutside={(e) => {
           if (isSubmitting) e.preventDefault()

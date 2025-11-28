@@ -126,6 +126,12 @@ export const notifications = {
   'taskDetail.writeReply': 'Write your reply...',
   'taskDetail.sendReply': 'Send Reply',
 
+  // Language Barrier Warning
+  'taskDetail.languageWarning.title': 'Language Note',
+  'taskDetail.languageWarning.message': 'This task was posted by someone who may prefer communicating in {{language}}. Please ensure you\'re comfortable with potential language differences before applying.',
+  'taskDetail.languageWarning.confirm': 'I understand, continue',
+  'taskDetail.languageWarning.cancel': 'Cancel',
+
   // Ask Question Dialog
   'taskDetail.askQuestionDialog.title': 'Ask a Question',
   'taskDetail.askQuestionDialog.placeholder': 'What would you like to know about this task?',

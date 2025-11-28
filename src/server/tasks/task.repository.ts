@@ -154,7 +154,7 @@ export class TaskRepository {
    *
    * Scoring criteria:
    * - Has images: +3 points
-   * - Long description (>150 chars): +2 points
+   * - Long description (>50 chars): +2 points
    * - Category diversity: Prefer different categories
    *
    * Returns top 20 tasks by quality score
@@ -204,7 +204,7 @@ export class TaskRepository {
         }
 
         // Long description: +2 points
-        if (task.description && task.description.length > 150) {
+        if (task.description && task.description.length > 50) {
           score += 2
         }
 
@@ -471,7 +471,7 @@ export class TaskRepository {
         const adminClient = createAdminClient()
         const { data: customer, error: customerError } = await adminClient
           .from('users')
-          .select('id, full_name, avatar_url, tasks_completed, created_at')
+          .select('id, full_name, avatar_url, tasks_completed, created_at, preferred_language')
           .eq('id', task.customer_id)
           .single()
 

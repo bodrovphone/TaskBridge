@@ -356,6 +356,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                   {profile.preferredLanguage === 'en' && t('language.en', 'English')}
                   {profile.preferredLanguage === 'bg' && t('language.bg', 'Български')}
                   {profile.preferredLanguage === 'ru' && t('language.ru', 'Русский')}
+                  {profile.preferredLanguage === 'ua' && t('language.ua', 'Українська')}
                 </p>
               </div>
             </div>
@@ -483,7 +484,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     selectedKeys={[field.state.value]}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
-                      if (selected === 'en' || selected === 'bg' || selected === 'ru') {
+                      if (selected === 'en' || selected === 'bg' || selected === 'ru' || selected === 'ua') {
                         field.handleChange(selected)
                       }
                     }}
@@ -492,6 +493,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     <SelectItem key="en" value="en">{t('language.en', 'English')}</SelectItem>
                     <SelectItem key="bg" value="bg">{t('language.bg', 'Български')}</SelectItem>
                     <SelectItem key="ru" value="ru">{t('language.ru', 'Русский')}</SelectItem>
+                    <SelectItem key="ua" value="ua">{t('language.ua', 'Українська')}</SelectItem>
                   </Select>
                 )}
               </personalForm.Field>
