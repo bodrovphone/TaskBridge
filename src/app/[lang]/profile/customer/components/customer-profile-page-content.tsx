@@ -114,22 +114,22 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
         />
 
         {/* Customer Quick Actions */}
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex gap-3">
           <Button
-            size="sm"
-            variant="bordered"
+            size="lg"
+            variant="flat"
             onPress={() => router.push(`/${lang}/tasks/posted`)}
-            startContent={<FileText className="w-4 h-4" />}
-            className="flex-1 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 font-medium"
+            startContent={<FileText className="w-5 h-5" />}
+            className="flex-1 bg-gradient-to-r from-slate-100 to-gray-100 hover:from-slate-200 hover:to-gray-200 text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-200 border border-slate-200"
           >
             {t('nav.myPostedTasks')}
           </Button>
           <Button
-            size="sm"
-            variant="bordered"
+            size="lg"
+            variant="flat"
             onPress={handleCreateTask}
-            startContent={<Send className="w-4 h-4" />}
-            className="flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
+            startContent={<Send className="w-5 h-5" />}
+            className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
           >
             {t('profile.quickActions.createTask')}
           </Button>

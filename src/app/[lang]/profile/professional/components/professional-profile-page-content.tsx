@@ -103,31 +103,31 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
         />
 
         {/* Professional Quick Actions */}
-        <div className="mb-4 flex flex-col md:flex-row items-center md:items-start gap-2">
+        <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Button
-            size="sm"
-            variant="bordered"
+            size="lg"
+            variant="flat"
             onPress={() => router.push(`/${lang}/browse-tasks`)}
-            startContent={<Search className="w-4 h-4" />}
-            className="min-w-[60%] md:min-w-0 md:flex-1 border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 font-medium"
+            startContent={<Search className="w-5 h-5" />}
+            className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
           >
             {t('nav.browseTasks')}
           </Button>
           <Button
-            size="sm"
-            variant="bordered"
+            size="lg"
+            variant="flat"
             onPress={() => router.push(`/${lang}/tasks/applications`)}
-            startContent={<ClipboardList className="w-4 h-4" />}
-            className="min-w-[60%] md:min-w-0 md:flex-1 border-gray-300 hover:border-purple-500 hover:bg-purple-50 text-gray-700 hover:text-purple-700 font-medium"
+            startContent={<ClipboardList className="w-5 h-5" />}
+            className="bg-gradient-to-r from-slate-100 to-gray-100 hover:from-slate-200 hover:to-gray-200 text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-200 border border-slate-200"
           >
             {t('nav.myApplications')}
           </Button>
           <Button
-            size="sm"
-            variant="bordered"
+            size="lg"
+            variant="flat"
             onPress={() => router.push(`/${lang}/tasks/work`)}
-            startContent={<Briefcase className="w-4 h-4" />}
-            className="min-w-[60%] md:min-w-0 md:flex-1 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 font-medium"
+            startContent={<Briefcase className="w-5 h-5" />}
+            className="bg-gradient-to-r from-slate-100 to-gray-100 hover:from-slate-200 hover:to-gray-200 text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-200 border border-slate-200"
           >
             {t('nav.myWork')}
           </Button>
