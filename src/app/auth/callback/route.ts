@@ -63,14 +63,14 @@ export async function GET(request: NextRequest) {
 
     // Check if this is a new user (account just created)
     if (data?.user) {
-      // Check if user has notifications (if not, it's a new user)
-      const { count } = await supabase
-        .from('notifications')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', data.user.id)
+      // Check if user was created within the last 60 seconds (new signup)
+      const createdAt = new Date(data.user.created_at)
+      const now = new Date()
+      const secondsSinceCreation = (now.getTime() - createdAt.getTime()) / 1000
+      const isNewUser = secondsSinceCreation < 60
 
-      // Send welcome notification for new users
-      if (count === 0) {
+      // Send welcome notification only for genuinely new users
+      if (isNewUser) {
         await createNotification({
           userId: data.user.id,
           type: 'welcome_message',
