@@ -444,7 +444,7 @@ export class TaskRepository {
       const { data: task, error } = await supabase
         .from('tasks')
         .select(`
-          id, created_at, updated_at, title, description, category, subcategory, city, neighborhood, address, location_notes, budget_min_bgn, budget_max_bgn, budget_type, deadline, estimated_duration_hours, status, customer_id, selected_professional_id, accepted_application_id, completed_at, completed_by_professional_at, confirmed_by_customer_at, reviewed_by_customer, reviewed_by_professional, cancelled_at, cancelled_by, cancellation_reason, images, documents, views_count, applications_count, is_urgent, requires_license, requires_insurance,
+          id, created_at, updated_at, title, description, category, subcategory, city, neighborhood, address, location_notes, budget_min_bgn, budget_max_bgn, budget_type, deadline, estimated_duration_hours, status, customer_id, selected_professional_id, accepted_application_id, completed_at, completed_by_professional_at, confirmed_by_customer_at, reviewed_by_customer, reviewed_by_professional, cancelled_at, cancelled_by, cancellation_reason, images, documents, views_count, applications_count, is_urgent, requires_license, requires_insurance, source_language, title_bg, description_bg, requirements_bg,
           applications!applications_task_id_fkey(count)
         `)
         .eq('id', id)

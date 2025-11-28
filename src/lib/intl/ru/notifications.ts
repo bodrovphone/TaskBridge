@@ -92,6 +92,9 @@ export const notifications = {
   'taskDetail.published.thisMonth': 'опубликовано в этом месяце',
   'taskDetail.published.someTimeAgo': 'опубликовано давно',
 
+  // Translation indicator
+  'taskDetail.originallyWrittenIn': 'Изначально написано на',
+
   'taskDetail.share': 'Поделиться',
   'taskDetail.shareText': 'Посмотрите эту задачу на Trudify',
   'taskDetail.shareSuccess': 'Успешно поделились!',

@@ -14,6 +14,7 @@ import { mapCreateInputToDbInsert, mapUpdateInputToDbUpdate } from './task.types
 import { Result, ok, err } from '../shared/result'
 import { ValidationError, DatabaseError, ForbiddenError, NotFoundError } from '../shared/errors'
 import type { CreateTaskInput, UpdateTaskInput, Task, CreateTaskResult } from './task.types'
+import { translateTaskToBulgarian } from '@/lib/services/translation'
 
 export class TaskService {
   private repository: TaskRepository
@@ -61,16 +62,72 @@ export class TaskService {
     // 4. Map to database format
     const dbInsert = mapCreateInputToDbInsert(validatedInput, userId)
 
-    // 5. Save to database
+    // 5. Save to database first (instant response for user)
     const createResult = await this.repository.create(dbInsert)
     if (!createResult.success) {
       return err(createResult.error)
     }
 
-    // 6. Return result
+    // 6. Translate async in background (fire-and-forget) if source is not BG
+    if (dbInsert.source_language !== 'bg') {
+      this.translateTaskInBackground(
+        createResult.data.id,
+        validatedInput.title,
+        validatedInput.description,
+        validatedInput.requirements || null,
+        dbInsert.source_language
+      )
+    }
+
+    // 7. Return result immediately (don't wait for translation)
     return ok({
       task: createResult.data
     })
+  }
+
+  /**
+   * Translate task content in background and update database
+   * Fire-and-forget pattern - errors are logged but don't affect user
+   */
+  private translateTaskInBackground(
+    taskId: string,
+    title: string,
+    description: string,
+    requirements: string | null,
+    sourceLocale: string
+  ): void {
+    // Don't await - let it run in background
+    (async () => {
+      try {
+        console.log(`[TaskService] Starting background translation for task ${taskId}`)
+
+        const translations = await translateTaskToBulgarian({
+          title,
+          description,
+          requirements,
+          sourceLocale,
+        })
+
+        // Only update if we got translations
+        const updates: Partial<Task> = {}
+        if (translations.title_bg) updates.title_bg = translations.title_bg
+        if (translations.description_bg) updates.description_bg = translations.description_bg
+        if (translations.requirements_bg) updates.requirements_bg = translations.requirements_bg
+
+        if (Object.keys(updates).length > 0) {
+          const updateResult = await this.repository.update(taskId, updates)
+          if (updateResult.success) {
+            console.log(`[TaskService] Background translation completed for task ${taskId}`)
+          } else {
+            console.error(`[TaskService] Failed to save translations for task ${taskId}:`, updateResult.error)
+          }
+        } else {
+          console.warn(`[TaskService] No translations returned for task ${taskId}`)
+        }
+      } catch (error) {
+        console.error(`[TaskService] Background translation failed for task ${taskId}:`, error)
+      }
+    })()
   }
 
   /**
@@ -161,13 +218,32 @@ export class TaskService {
     // 5. Map to database format
     const dbUpdates = mapUpdateInputToDbUpdate(validatedInput)
 
-    // 6. Update in database
+    // 6. Update in database first (instant response for user)
     const updateResult = await this.repository.update(id, dbUpdates)
     if (!updateResult.success) {
       return err(updateResult.error)
     }
 
-    // 7. Return updated task
+    // 7. Re-translate async in background if source was non-BG and content fields changed
+    if (task.source_language !== 'bg') {
+      const contentChanged =
+        validatedInput.title !== undefined ||
+        validatedInput.description !== undefined ||
+        validatedInput.requirements !== undefined
+
+      if (contentChanged) {
+        // Use new values if provided, otherwise use existing task values
+        this.translateTaskInBackground(
+          id,
+          validatedInput.title ?? task.title,
+          validatedInput.description ?? task.description,
+          validatedInput.requirements ?? task.location_notes ?? null,
+          task.source_language
+        )
+      }
+    }
+
+    // 8. Return updated task immediately (don't wait for translation)
     return ok(updateResult.data)
   }
 

@@ -89,6 +89,10 @@ export const notifications = {
   'taskDetail.published.thisWeek': 'опубліковано цього тижня',
   'taskDetail.published.thisMonth': 'опубліковано цього місяця',
   'taskDetail.published.someTimeAgo': 'опубліковано раніше',
+
+  // Translation indicator
+  'taskDetail.originallyWrittenIn': 'Спочатку написано',
+
   'taskDetail.share': 'Поділитися',
   'taskDetail.shareText': 'Подивіться це завдання на Trudify',
   'taskDetail.shareSuccess': 'Успішно поділилися!',

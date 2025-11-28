@@ -147,6 +147,7 @@ export function TaskForm({
         if (mode === 'create') {
           const taskData = {
             ...value,
+            sourceLocale: locale, // For auto-translation to Bulgarian
             photoUrls: uploadedImageUrls,
             photoFiles: undefined,
             imageOversized: undefined,

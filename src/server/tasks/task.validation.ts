@@ -40,7 +40,10 @@ export const createTaskSchema = z.object({
   deadline: z.string().optional(), // ISO date string
 
   // Media
-  photoUrls: z.array(z.string().url()).max(5, 'Maximum 5 photos allowed').optional()
+  photoUrls: z.array(z.string().url()).max(5, 'Maximum 5 photos allowed').optional(),
+
+  // Localization - for auto-translation
+  sourceLocale: z.string().optional() // Locale task was created in (en, bg, ru, ua)
 }).refine(
   (data) => {
     // If budget type is 'range' and both values provided, max must be > min

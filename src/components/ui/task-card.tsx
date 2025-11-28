@@ -20,6 +20,7 @@ import DefaultTaskImage from "@/components/ui/default-task-image";
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category';
 import { canApplyToTask, getDisabledReason, type TaskStatus } from '@/lib/utils/task-permissions';
 import { getCityLabelBySlug } from '@/features/cities';
+import { getLocalizedTaskContent } from '@/lib/utils/task-localization';
 
 // Task type definition (to be moved to global types later)
 interface Task {
@@ -41,6 +42,12 @@ interface Task {
  created_at?: Date | string; // Database field (snake_case)
  images?: string[]; // Array of photo URLs (database field)
  status?: TaskStatus; // Task status for permissions
+ // Translation fields
+ source_language?: string;
+ title_bg?: string | null;
+ description_bg?: string | null;
+ requirements_bg?: string | null;
+ location_notes?: string | null;
 }
 
 interface TaskCardProps {
@@ -78,6 +85,12 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  const displayCategory = task.subcategory || task.category;
  const categoryColor = getCategoryColor(displayCategory);
  const categoryName = getCategoryName(t, task.category, task.subcategory);
+
+ // Get locale from URL path for SSR/SEO consistency
+ const currentLocale = extractLocaleFromPathname(pathname) || i18n.language || DEFAULT_LOCALE;
+
+ // Get localized content based on user's locale
+ const localizedContent = getLocalizedTaskContent(task as any, currentLocale);
 
  const formatBudget = () => {
   // Support both camelCase and snake_case from database
@@ -174,14 +187,14 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
       <span className="text-sm text-gray-500">{timeAgo}</span>
      </div>
 
-     {/* Title with better contrast */}
+     {/* Title with better contrast - using localized content */}
      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-      {task.title}
+      {localizedContent.title}
      </h3>
 
-     {/* Description with better contrast */}
+     {/* Description with better contrast - using localized content */}
      <p className="text-sm text-gray-600 mb-3 line-clamp-3">
-      {task.description}
+      {localizedContent.description}
      </p>
 
      {/* Task details with larger icons */}

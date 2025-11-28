@@ -14,6 +14,7 @@ import { getUserApplication } from "@/components/tasks/mock-submit";
 import TaskCard from "@/components/ui/task-card";
 import { getCategoryName } from '@/lib/utils/category';
 import { getCityLabelBySlug } from '@/features/cities';
+import { getLocalizedTaskContent, getLanguageName, shouldShowTranslationIndicator } from '@/lib/utils/task-localization';
 
 interface TaskDetailContentProps {
  task: any;
@@ -190,7 +191,7 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
 }
 
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
- const { t } = useTranslation();
+ const { t, i18n } = useTranslation();
  const searchParams = useSearchParams();
  const { user, profile } = useAuth();
 
@@ -204,6 +205,12 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
 
  // Get simplified published time
  const publishedTime = getPublishedTime(task.created_at || task.createdAt, t);
+
+ // Get localized content based on user's locale (BG viewers see translations, others see original)
+ // Use `lang` prop (from URL) for SSR/SEO, not i18n.language (client-side)
+ const viewerLocale = lang || i18n.language || 'bg';
+ const localizedContent = getLocalizedTaskContent(task, viewerLocale);
+ const showTranslationIndicator = shouldShowTranslationIndicator(task, viewerLocale);
 
  return (
   <div 
@@ -283,22 +290,30 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
          </div>
 
          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-          {task.title}
+          {localizedContent.title}
          </h1>
 
+         {/* Translation indicator for BG viewers seeing translated content */}
+         {showTranslationIndicator && (
+          <p className="text-xs text-gray-500 italic">
+           {t('taskDetail.originallyWrittenIn', 'Originally written in')}
+           {' '}{getLanguageName(task.source_language, viewerLocale)}
+          </p>
+         )}
+
          <p className="text-gray-700 text-lg leading-relaxed">
-          {task.description}
+          {localizedContent.description}
          </p>
 
          {/* Requirements - supports both requirements (frontend) and location_notes (database) */}
-         {(task.requirements || task.location_notes) && (
+         {localizedContent.requirements && (
           <div>
            <h3 className="text-lg font-semibold text-gray-900 mb-2">
             {t('taskDetail.requirements')}
            </h3>
            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
             <pre className="whitespace-pre-wrap text-gray-700 font-sans">
-             {task.requirements || task.location_notes}
+             {localizedContent.requirements}
             </pre>
            </div>
           </div>

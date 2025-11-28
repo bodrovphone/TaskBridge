@@ -31,6 +31,9 @@ export interface CreateTaskInput {
 
   // Media
   photoUrls?: string[]
+
+  // Localization - for auto-translation
+  sourceLocale?: string // Locale task was created in (en, bg, ru, ua)
 }
 
 /**
@@ -122,6 +125,12 @@ export interface Task {
   is_urgent: boolean
   requires_license: boolean
   requires_insurance: boolean
+
+  // Translation fields (one-way to Bulgarian)
+  source_language: string // Locale task was created in (en, bg, ru, ua)
+  title_bg: string | null // Bulgarian translation of title
+  description_bg: string | null // Bulgarian translation of description
+  requirements_bg: string | null // Bulgarian translation of requirements
 }
 
 /**
@@ -157,6 +166,11 @@ export interface TaskDbInsert {
   status: TaskStatus
   customer_id: string
   images: string[]
+  // Translation fields
+  source_language: string
+  title_bg?: string | null
+  description_bg?: string | null
+  requirements_bg?: string | null
 }
 
 /**
@@ -238,7 +252,8 @@ export const mapCreateInputToDbInsert = (
     is_urgent: input.urgency === 'same_day',
     status: 'open',
     customer_id: customerId,
-    images: input.photoUrls || []
+    images: input.photoUrls || [],
+    source_language: input.sourceLocale || 'bg', // Default to BG if not specified
   }
 }
 
