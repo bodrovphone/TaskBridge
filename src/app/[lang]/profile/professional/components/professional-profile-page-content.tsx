@@ -165,6 +165,7 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
           isOpen={isStatisticsOpen}
           onClose={() => setIsStatisticsOpen(false)}
           userRole="professional"
+          profile={profile}
         />
       </div>
     </div>

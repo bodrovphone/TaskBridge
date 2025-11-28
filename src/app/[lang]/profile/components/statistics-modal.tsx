@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
  Modal,
@@ -12,257 +13,213 @@ import {
  CardBody,
  CardHeader,
  Divider,
- Chip
+ Spinner
 } from '@nextui-org/react'
 import {
  BarChart3,
  Star,
  Calendar,
- TrendingUp,
- Banknote,
- Eye,
  CheckCircle,
- Clock,
- Award,
- Target,
  Users,
- Briefcase
+ Briefcase,
+ FileText,
+ MessageSquare,
+ Banknote,
+ Clock
 } from 'lucide-react'
+import type { UserProfile } from '@/server/domain/user/user.types'
+import type { CustomerStats, ProfessionalStats } from '@/app/api/profile/stats/route'
 
 interface StatisticsModalProps {
  isOpen: boolean
  onClose: () => void
  userRole: 'customer' | 'professional' | 'both'
+ profile: UserProfile
 }
 
-interface CustomerStats {
- tasksPosted: number
- tasksCompleted: number
- averageRating: number
- totalSpent: number
- memberSince: string
- successRate: number
- responseRate: number
-}
-
-interface ProfessionalStats {
- completedJobs: number
- totalEarnings: number
- averageRating: number
- reviewCount: number
- responseTime: string
- profileViews: number
- successRate: number
- repeatClients: number
- monthlyEarnings: number
- completionRate: number
-}
-
-export function StatisticsModal({ isOpen, onClose, userRole }: StatisticsModalProps) {
+export function StatisticsModal({ isOpen, onClose, userRole, profile }: StatisticsModalProps) {
  const { t } = useTranslation()
+ const [customerStats, setCustomerStats] = useState<CustomerStats | null>(null)
+ const [professionalStats, setProfessionalStats] = useState<ProfessionalStats | null>(null)
+ const [isLoading, setIsLoading] = useState(false)
 
- // Mock customer statistics
- const customerStats: CustomerStats = {
-  tasksPosted: 12,
-  tasksCompleted: 8,
-  averageRating: 4.8,
-  totalSpent: 2450,
-  memberSince: '2023-01-15',
-  successRate: 92,
-  responseRate: 88
- }
+ // Fetch stats when modal opens
+ useEffect(() => {
+  if (isOpen) {
+   setIsLoading(true)
+   fetch('/api/profile/stats')
+    .then(res => res.json())
+    .then(data => {
+     if (data.customerStats) {
+      setCustomerStats(data.customerStats)
+     }
+     if (data.professionalStats) {
+      setProfessionalStats(data.professionalStats)
+     }
+    })
+    .catch(err => console.error('Failed to fetch stats:', err))
+    .finally(() => setIsLoading(false))
+  }
+ }, [isOpen])
 
- // Mock professional statistics
- const professionalStats: ProfessionalStats = {
-  completedJobs: 24,
-  totalEarnings: 3200,
-  averageRating: 4.9,
-  reviewCount: 18,
-  responseTime: '2 hours',
-  profileViews: 156,
-  successRate: 98,
-  repeatClients: 12,
-  monthlyEarnings: 850,
-  completionRate: 96
- }
-
- const formatCurrency = (amount: number) => `€${amount}`
- const formatPercentage = (value: number) => `${value}%`
+ const formatCurrency = (amount: number) => `${amount.toLocaleString()} лв.`
 
  const renderCustomerStats = () => (
-  <div className="space-y-6">
-   {/* Overview Stats */}
-   <Card>
-    <CardHeader>
-     <div className="flex items-center gap-3">
-      <Users className="w-5 h-5 text-primary" />
-      <h3 className="font-semibold">{t('profile.statistics.customer.overview')}</h3>
+  <Card>
+   <CardHeader>
+    <div className="flex items-center gap-3">
+     <Users className="w-5 h-5 text-primary" />
+     <h3 className="font-semibold">{t('profile.statistics.customer.overview')}</h3>
+    </div>
+   </CardHeader>
+   <CardBody>
+    {isLoading ? (
+     <div className="flex justify-center py-8">
+      <Spinner size="lg" />
      </div>
-    </CardHeader>
-    <CardBody>
-     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div className="text-center">
-       <p className="text-2xl font-bold text-primary">{customerStats.tasksPosted}</p>
-       <p className="text-sm text-gray-600">{t('profile.customer.tasksPosted')}</p>
-      </div>
-
-      <div className="text-center">
-       <p className="text-2xl font-bold text-success">{customerStats.tasksCompleted}</p>
-       <p className="text-sm text-gray-600">{t('profile.customer.tasksCompleted')}</p>
-      </div>
-
-      <div className="text-center">
-       <div className="flex items-center justify-center gap-1">
-        <p className="text-2xl font-bold text-warning">{customerStats.averageRating}</p>
-        <Star className="w-5 h-5 text-warning fill-current" />
+    ) : customerStats ? (
+     <>
+      <div className="grid grid-cols-3 gap-4 mb-6">
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50">
+        <div className="flex justify-center mb-2">
+         <FileText className="w-6 h-6 text-primary" />
+        </div>
+        <p className="text-2xl font-bold text-primary">{customerStats.tasksPosted}</p>
+        <p className="text-sm text-gray-600">{t('profile.statistics.customer.tasksPosted')}</p>
        </div>
-       <p className="text-sm text-gray-600">{t('profile.customer.averageRating')}</p>
-      </div>
 
-      <div className="text-center">
-       <p className="text-2xl font-bold text-secondary">{formatCurrency(customerStats.totalSpent)}</p>
-       <p className="text-sm text-gray-600">{t('profile.customer.totalSpent')}</p>
-      </div>
-     </div>
-    </CardBody>
-   </Card>
-
-   {/* Performance Metrics */}
-   <Card>
-    <CardHeader>
-     <div className="flex items-center gap-3">
-      <TrendingUp className="w-5 h-5 text-success" />
-      <h3 className="font-semibold">{t('profile.statistics.customer.performance')}</h3>
-     </div>
-    </CardHeader>
-    <CardBody>
-     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="flex items-center gap-3">
-       <div className="p-2 rounded-lg bg-success/10">
-        <Target className="w-5 h-5 text-success" />
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100/50">
+        <div className="flex justify-center mb-2">
+         <MessageSquare className="w-6 h-6 text-success" />
+        </div>
+        <p className="text-2xl font-bold text-success">{customerStats.totalApplicationsReceived}</p>
+        <p className="text-sm text-gray-600">{t('profile.statistics.customer.applicationsReceived')}</p>
        </div>
-       <div>
-        <p className="font-medium">{formatPercentage(customerStats.successRate)}</p>
-        <p className="text-sm text-gray-600">{t('profile.statistics.customer.successRate')}</p>
+
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-amber-100/50">
+        <div className="flex justify-center mb-2">
+         <Star className="w-6 h-6 text-warning" />
+        </div>
+        <p className="text-2xl font-bold text-warning">{customerStats.reviewsGiven}</p>
+        <p className="text-sm text-gray-600">{t('profile.statistics.customer.reviewsGiven')}</p>
        </div>
       </div>
 
-      <div className="flex items-center gap-3">
-       <div className="p-2 rounded-lg bg-primary/10">
-        <Clock className="w-5 h-5 text-primary" />
-       </div>
-       <div>
-        <p className="font-medium">{formatPercentage(customerStats.responseRate)}</p>
-        <p className="text-sm text-gray-600">{t('profile.statistics.customer.responseRate')}</p>
-       </div>
-      </div>
+      <Divider className="my-4" />
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
        <div className="p-2 rounded-lg bg-secondary/10">
         <Calendar className="w-5 h-5 text-secondary" />
        </div>
        <div>
-        <p className="font-medium">{new Date(customerStats.memberSince).getFullYear()}</p>
+        <p className="font-medium">
+         {new Date(profile.createdAt).toLocaleDateString()}
+        </p>
         <p className="text-sm text-gray-600">{t('profile.statistics.memberSince')}</p>
        </div>
       </div>
+     </>
+    ) : (
+     <div className="flex items-center justify-center gap-3 py-4">
+      <div className="p-2 rounded-lg bg-secondary/10">
+       <Calendar className="w-5 h-5 text-secondary" />
+      </div>
+      <div>
+       <p className="font-medium">
+        {new Date(profile.createdAt).toLocaleDateString()}
+       </p>
+       <p className="text-sm text-gray-600">{t('profile.statistics.memberSince')}</p>
+      </div>
      </div>
-    </CardBody>
-   </Card>
-  </div>
+    )}
+   </CardBody>
+  </Card>
  )
 
  const renderProfessionalStats = () => (
-  <div className="space-y-6">
-   {/* Business Overview */}
-   <Card>
-    <CardHeader>
-     <div className="flex items-center gap-3">
-      <Briefcase className="w-5 h-5 text-primary" />
-      <h3 className="font-semibold">{t('profile.statistics.professional.business')}</h3>
+  <Card>
+   <CardHeader>
+    <div className="flex items-center gap-3">
+     <Briefcase className="w-5 h-5 text-primary" />
+     <h3 className="font-semibold">{t('profile.statistics.professional.business')}</h3>
+    </div>
+   </CardHeader>
+   <CardBody>
+    {isLoading ? (
+     <div className="flex justify-center py-8">
+      <Spinner size="lg" />
      </div>
-    </CardHeader>
-    <CardBody>
-     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div className="text-center">
-       <p className="text-2xl font-bold text-primary">{professionalStats.completedJobs}</p>
-       <p className="text-sm text-gray-600">{t('profile.professional.completedJobs')}</p>
-      </div>
-
-      <div className="text-center">
-       <div className="flex items-center justify-center gap-1">
-        <p className="text-2xl font-bold text-warning">{professionalStats.averageRating}</p>
-        <Star className="w-5 h-5 text-warning fill-current" />
+    ) : professionalStats ? (
+     <>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50">
+        <div className="flex justify-center mb-2">
+         <CheckCircle className="w-6 h-6 text-primary" />
+        </div>
+        <p className="text-2xl font-bold text-primary">{professionalStats.completedJobs}</p>
+        <p className="text-sm text-gray-600">{t('profile.professional.completedJobs')}</p>
        </div>
-       <p className="text-sm text-gray-600">{professionalStats.reviewCount} {t('profile.reviews')}</p>
-      </div>
 
-      <div className="text-center">
-       <p className="text-2xl font-bold text-success">{formatCurrency(professionalStats.totalEarnings)}</p>
-       <p className="text-sm text-gray-600">{t('profile.professional.totalEarnings')}</p>
-      </div>
-
-      <div className="text-center">
-       <p className="text-2xl font-bold text-secondary">{professionalStats.responseTime}</p>
-       <p className="text-sm text-gray-600">{t('profile.professional.responseTime')}</p>
-      </div>
-     </div>
-    </CardBody>
-   </Card>
-
-   {/* Performance Metrics */}
-   <Card>
-    <CardHeader>
-     <div className="flex items-center gap-3">
-      <Award className="w-5 h-5 text-warning" />
-      <h3 className="font-semibold">{t('profile.statistics.professional.performance')}</h3>
-     </div>
-    </CardHeader>
-    <CardBody>
-     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div className="flex items-center gap-3">
-       <div className="p-2 rounded-lg bg-success/10">
-        <CheckCircle className="w-5 h-5 text-success" />
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-orange-50 to-amber-100/50">
+        <div className="flex justify-center mb-2">
+         <Clock className="w-6 h-6 text-orange-500" />
+        </div>
+        <p className="text-2xl font-bold text-orange-500">{professionalStats.activeJobs}</p>
+        <p className="text-sm text-gray-600">{t('profile.statistics.professional.activeJobs')}</p>
        </div>
-       <div>
-        <p className="font-medium">{formatPercentage(professionalStats.completionRate)}</p>
-        <p className="text-sm text-gray-600">{t('profile.professional.completionRate')}</p>
+
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100/50">
+        <div className="flex justify-center mb-2">
+         <Banknote className="w-6 h-6 text-success" />
+        </div>
+        <p className="text-2xl font-bold text-success">{formatCurrency(professionalStats.totalEarnings)}</p>
+        <p className="text-sm text-gray-600">{t('profile.professional.totalEarnings')}</p>
+       </div>
+
+       <div className="text-center p-4 rounded-xl bg-gradient-to-br from-yellow-50 to-amber-100/50">
+        <div className="flex justify-center mb-2">
+         <Star className="w-6 h-6 text-warning" />
+        </div>
+        <div className="flex items-center justify-center gap-1">
+         <p className="text-2xl font-bold text-warning">
+          {professionalStats.averageRating ? professionalStats.averageRating.toFixed(1) : '-'}
+         </p>
+        </div>
+        <p className="text-sm text-gray-600">
+         {professionalStats.reviewsReceived} {t('profile.reviews')}
+        </p>
        </div>
       </div>
 
-      <div className="flex items-center gap-3">
-       <div className="p-2 rounded-lg bg-primary/10">
-        <Eye className="w-5 h-5 text-primary" />
-       </div>
-       <div>
-        <p className="font-medium">{professionalStats.profileViews}</p>
-        <p className="text-sm text-gray-600">{t('profile.professional.profileViews')}</p>
-       </div>
-      </div>
+      <Divider className="my-4" />
 
-      <div className="flex items-center gap-3">
-       <div className="p-2 rounded-lg bg-warning/10">
-        <Users className="w-5 h-5 text-warning" />
-       </div>
-       <div>
-        <p className="font-medium">{professionalStats.repeatClients}</p>
-        <p className="text-sm text-gray-600">{t('profile.statistics.professional.repeatClients')}</p>
-       </div>
-      </div>
-
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
        <div className="p-2 rounded-lg bg-secondary/10">
-        <Banknote className="w-5 h-5 text-secondary" />
+        <Calendar className="w-5 h-5 text-secondary" />
        </div>
        <div>
-        <p className="font-medium">{formatCurrency(professionalStats.monthlyEarnings)}</p>
-        <p className="text-sm text-gray-600">{t('profile.statistics.professional.monthlyEarnings')}</p>
+        <p className="font-medium">
+         {new Date(profile.createdAt).toLocaleDateString()}
+        </p>
+        <p className="text-sm text-gray-600">{t('profile.statistics.memberSince')}</p>
        </div>
       </div>
+     </>
+    ) : (
+     <div className="flex items-center justify-center gap-3 py-4">
+      <div className="p-2 rounded-lg bg-secondary/10">
+       <Calendar className="w-5 h-5 text-secondary" />
+      </div>
+      <div>
+       <p className="font-medium">
+        {new Date(profile.createdAt).toLocaleDateString()}
+       </p>
+       <p className="text-sm text-gray-600">{t('profile.statistics.memberSince')}</p>
+      </div>
      </div>
-    </CardBody>
-   </Card>
-  </div>
+    )}
+   </CardBody>
+  </Card>
  )
 
  return (

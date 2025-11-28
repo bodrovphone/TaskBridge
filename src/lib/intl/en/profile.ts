@@ -64,16 +64,26 @@ export const profile = {
   'profile.statistics.memberSince': 'Member Since',
 
   // Customer Statistics
-  'profile.statistics.customer.overview': 'Customer Overview',
+  'profile.statistics.customer.overview': 'Account Overview',
   'profile.statistics.customer.performance': 'Performance Metrics',
   'profile.statistics.customer.successRate': 'Success Rate',
   'profile.statistics.customer.responseRate': 'Response Rate',
+  'profile.statistics.customer.noStatsYet': 'Task statistics will appear here as you use the platform.',
+  'profile.statistics.customer.tasksPosted': 'Tasks Posted',
+  'profile.statistics.customer.applicationsReceived': 'Applications Received',
+  'profile.statistics.customer.reviewsGiven': 'Reviews Given',
 
   // Professional Statistics
   'profile.statistics.professional.business': 'Business Overview',
   'profile.statistics.professional.performance': 'Performance Metrics',
   'profile.statistics.professional.repeatClients': 'Repeat Clients',
   'profile.statistics.professional.monthlyEarnings': 'Monthly Earnings',
+  'profile.statistics.professional.activeJobs': 'Active Jobs',
+  'profile.statistics.avgResponseTime': 'Avg. Response Time',
+  'profile.statistics.responseTime.minutes': '{{minutes}} min',
+  'profile.statistics.responseTime.hour': '1 hour',
+  'profile.statistics.responseTime.hours': '{{hours}} hours',
+  'profile.professional.acceptanceRate': 'Acceptance Rate',
 
   // Quick Actions
   'profile.quickActions.createTask': 'Create Task',

@@ -68,12 +68,22 @@ export const profile = {
   'profile.statistics.customer.performance': 'Метрики за производителност',
   'profile.statistics.customer.successRate': 'Процент на успех',
   'profile.statistics.customer.responseRate': 'Процент на отговор',
+  'profile.statistics.customer.noStatsYet': 'Статистиката за задачите ще се появи тук, докато използвате платформата.',
+  'profile.statistics.customer.tasksPosted': 'Публикувани задачи',
+  'profile.statistics.customer.applicationsReceived': 'Получени заявки',
+  'profile.statistics.customer.reviewsGiven': 'Дадени отзиви',
 
   // Professional Statistics
   'profile.statistics.professional.business': 'Бизнес преглед',
   'profile.statistics.professional.performance': 'Метрики за производителност',
   'profile.statistics.professional.repeatClients': 'Повторни клиенти',
   'profile.statistics.professional.monthlyEarnings': 'Месечни доходи',
+  'profile.statistics.professional.activeJobs': 'Активни задачи',
+  'profile.statistics.avgResponseTime': 'Сред. време за отговор',
+  'profile.statistics.responseTime.minutes': '{{minutes}} мин',
+  'profile.statistics.responseTime.hour': '1 час',
+  'profile.statistics.responseTime.hours': '{{hours}} часа',
+  'profile.professional.acceptanceRate': 'Приемане на задачи',
 
   // Quick Actions
   'profile.quickActions.createTask': 'Създай задача',

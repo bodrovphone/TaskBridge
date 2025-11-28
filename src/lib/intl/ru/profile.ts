@@ -623,12 +623,22 @@ export const profile = {
   'profile.statistics.customer.performance': 'Метрики производительности',
   'profile.statistics.customer.successRate': 'Процент успеха',
   'profile.statistics.customer.responseRate': 'Процент ответов',
+  'profile.statistics.customer.noStatsYet': 'Статистика задач появится здесь по мере использования платформы.',
+  'profile.statistics.customer.tasksPosted': 'Опубликовано задач',
+  'profile.statistics.customer.applicationsReceived': 'Получено заявок',
+  'profile.statistics.customer.reviewsGiven': 'Оставлено отзывов',
 
   // Professional Statistics
   'profile.statistics.professional.business': 'Обзор бизнеса',
   'profile.statistics.professional.performance': 'Метрики производительности',
   'profile.statistics.professional.repeatClients': 'Постоянные клиенты',
   'profile.statistics.professional.monthlyEarnings': 'Месячный доход',
+  'profile.statistics.professional.activeJobs': 'Активные задачи',
+  'profile.statistics.avgResponseTime': 'Среднее время ответа',
+  'profile.statistics.responseTime.minutes': '{{minutes}} мин',
+  'profile.statistics.responseTime.hour': '1 час',
+  'profile.statistics.responseTime.hours': '{{hours}} часа',
+  'profile.professional.acceptanceRate': 'Принятие задач',
 
   // Quick Actions
   'profile.quickActions.createTask': 'Создать задачу',

@@ -68,12 +68,22 @@ export const profile = {
   'profile.statistics.customer.performance': 'Показники продуктивності',
   'profile.statistics.customer.successRate': 'Рівень успіху',
   'profile.statistics.customer.responseRate': 'Рівень відповідей',
+  'profile.statistics.customer.noStatsYet': 'Статистика завдань з\'явиться тут під час використання платформи.',
+  'profile.statistics.customer.tasksPosted': 'Опубліковано завдань',
+  'profile.statistics.customer.applicationsReceived': 'Отримано заявок',
+  'profile.statistics.customer.reviewsGiven': 'Залишено відгуків',
 
   // Professional Statistics
   'profile.statistics.professional.business': 'Огляд бізнесу',
   'profile.statistics.professional.performance': 'Показники продуктивності',
   'profile.statistics.professional.repeatClients': 'Повторні клієнти',
   'profile.statistics.professional.monthlyEarnings': 'Місячний заробіток',
+  'profile.statistics.professional.activeJobs': 'Активні завдання',
+  'profile.statistics.avgResponseTime': 'Сер. час відповіді',
+  'profile.statistics.responseTime.minutes': '{{minutes}} хв',
+  'profile.statistics.responseTime.hour': '1 година',
+  'profile.statistics.responseTime.hours': '{{hours}} годин',
+  'profile.professional.acceptanceRate': 'Прийняття завдань',
 
   // Quick Actions
   'profile.quickActions.createTask': 'Створити завдання',

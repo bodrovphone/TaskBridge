@@ -167,6 +167,7 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           isOpen={isStatisticsOpen}
           onClose={() => setIsStatisticsOpen(false)}
           userRole="customer"
+          profile={profile}
         />
 
         {/* Review Enforcement Dialog */}

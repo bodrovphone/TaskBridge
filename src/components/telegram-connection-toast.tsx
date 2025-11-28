@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { createClient } from '@/lib/supabase/client';
-import Image from 'next/image';
+import { useAuth } from '@/features/auth';
 
 const TELEGRAM_TOAST_DISMISSED_KEY = 'telegram-toast-dismissed';
 const TOAST_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -14,10 +13,11 @@ const TOAST_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
 export function TelegramConnectionToast() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
+  const { user, profile } = useAuth();
   const [hasShownToast, setHasShownToast] = useState(false);
 
   useEffect(() => {
-    const checkAndShowToast = async () => {
+    const checkAndShowToast = () => {
       // Only show once per session
       if (hasShownToast) return;
 
@@ -30,20 +30,11 @@ export function TelegramConnectionToast() {
         }
       }
 
-      // Check if user is logged in and Telegram not connected
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      // Check if user is logged in
+      if (!user || !profile) return;
 
-      if (!user) return; // User not logged in
-
-      // Check if user has Telegram connected
-      const { data: userData } = await supabase
-        .from('users')
-        .select('telegram_id')
-        .eq('id', user.id)
-        .single();
-
-      if (userData?.telegram_id) return; // Telegram already connected
+      // Check if user has Telegram connected (using profile from auth context)
+      if (profile.telegramId) return; // Telegram already connected
 
       // Show the toast
       setHasShownToast(true);
@@ -101,13 +92,13 @@ export function TelegramConnectionToast() {
       });
     };
 
-    // Small delay to ensure i18n is ready
+    // Small delay to ensure i18n and auth are ready
     const timeoutId = setTimeout(() => {
       checkAndShowToast();
     }, 5000);
 
     return () => clearTimeout(timeoutId);
-  }, [hasShownToast, t, i18n.language, router]);
+  }, [hasShownToast, user, profile, t, i18n.language, router]);
 
   return null; // This component doesn't render anything
 }
