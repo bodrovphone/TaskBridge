@@ -155,8 +155,11 @@ async function markTaskComplete(
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to mark task complete');
+    const errorData = await response.json();
+    // Create error with code attached for frontend to handle localization
+    const error = new Error(errorData.error || 'Failed to mark task complete') as Error & { code?: string };
+    error.code = errorData.code;
+    throw error;
   }
 }
 

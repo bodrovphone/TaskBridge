@@ -49,6 +49,12 @@ export const reviews = {
   'reviews.pending.empty': 'Няма чакащи отзиви',
   'reviews.pending.emptyMessage': 'Всичко е наред! Всички ваши завършени задачи имат отзиви.',
 
+  // Pending Reviews Banner (My Tasks page)
+  'reviews.pending.banner.title': 'Имате {{count}} чакащ отзив',
+  'reviews.pending.banner.title_plural': 'Имате {{count}} чакащи отзива',
+  'reviews.pending.banner.description': 'Помогнете на другите клиенти, като споделите опита си',
+  'reviews.pending.banner.button': 'Оставете отзиви',
+
   // Enforcement Dialog - Hard Block
   'reviews.enforcement.hardBlock.title': 'Изисква се действие',
   'reviews.enforcement.hardBlock.message': 'Специалистът е отбелязал вашата задача като завършена и чака вашето потвърждение. Моля, потвърдете или отхвърлете завършването преди да създадете нова задача.',

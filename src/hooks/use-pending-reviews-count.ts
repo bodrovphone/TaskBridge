@@ -10,7 +10,7 @@ export function usePendingReviewsCount() {
       const res = await authenticatedFetch('/api/reviews/pending')
       if (!res.ok) return 0
       const data = await res.json()
-      return data.length || 0
+      return data.count || 0
     },
     enabled: !!user,
     staleTime: 60000, // Cache for 1 minute

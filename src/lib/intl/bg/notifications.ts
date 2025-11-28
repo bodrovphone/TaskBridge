@@ -292,11 +292,12 @@ export const notifications = {
   'notifications.email.applicationAccepted.subject': 'Вашата кандидатура беше приета!',
   'notifications.email.applicationAccepted.heading': 'Поздравления! Кандидатурата е приета',
   'notifications.email.applicationAccepted.message': 'Вашата кандидатура за "{{task_title}}" беше приета от {{customer_name}}!',
-  'notifications.email.applicationAccepted.buttonText': 'Преглед на задачата',
+  'notifications.email.applicationAccepted.buttonText': 'Виж моята работа',
   'notifications.email.applicationAccepted.infoTitle': 'Информация за клиента:',
   'notifications.email.applicationAccepted.secondaryMessage': 'Започнете работа по задачата и поддържайте добра комуникация с клиента.',
   'notifications.email.applicationAccepted.footerText': 'Получавате този имейл, защото кандидатствахте за задача в Trudify.',
   'notifications.email.applicationAccepted.customerMessageLabel': 'Съобщение',
+  'notifications.email.applicationAccepted.contactLabel': 'Контакт',
 
   // 3. Отхвърлена кандидатура
   'notifications.email.applicationRejected.subject': 'Актуализация на кандидатурата за "{{task_title}}"',

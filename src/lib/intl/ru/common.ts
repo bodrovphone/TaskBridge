@@ -36,6 +36,7 @@ export const common = {
   'common.edit': 'Редактировать',
   'common.save': 'Сохранить',
   'common.anonymous': 'Анонимный пользователь',
+  'common.goBack': 'Назад',
   'common.today': 'Сегодня',
   'common.yesterday': 'Вчера',
   'common.reviews': 'отзывов',

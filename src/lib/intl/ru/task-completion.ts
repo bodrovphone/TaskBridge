@@ -23,6 +23,8 @@ export const taskCompletion = {
   'taskCompletion.alreadyConfirmedByYou': 'Вы уже подтвердили завершение',
   'taskCompletion.success': 'Задача отмечена как завершённая. Ожидаем подтверждения от клиента.',
   'taskCompletion.error': 'Не удалось отметить задачу. Пожалуйста, попробуйте снова.',
+  'taskCompletion.error.alreadyCompleted': 'Эта задача уже была завершена другой стороной.',
+  'taskCompletion.error.invalidStatus': 'Эта задача не может быть отмечена как завершённая в её текущем статусе.',
 
   // Mark Completed Dialog (Professional)
   'taskCompletion.markDialog.title': 'Отметить задачу как завершённую',

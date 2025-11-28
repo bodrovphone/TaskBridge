@@ -49,6 +49,12 @@ export const reviews = {
   'reviews.pending.empty': 'No Pending Reviews',
   'reviews.pending.emptyMessage': 'You\'re all caught up! All your completed tasks have been reviewed.',
 
+  // Pending Reviews Banner (My Tasks page)
+  'reviews.pending.banner.title': 'You have {{count}} pending review',
+  'reviews.pending.banner.title_plural': 'You have {{count}} pending reviews',
+  'reviews.pending.banner.description': 'Help other customers by sharing your experience',
+  'reviews.pending.banner.button': 'Leave Reviews',
+
   // Enforcement Dialog - Hard Block
   'reviews.enforcement.hardBlock.title': 'Action Required',
   'reviews.enforcement.hardBlock.message': 'A professional has marked your task as complete and is waiting for your confirmation. Please confirm or reject the completion before creating a new task.',

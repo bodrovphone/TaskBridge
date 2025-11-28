@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Spinner } from '@nextui-org/react'
-import { FileText, Plus, Filter } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Card, CardBody, Button, Spinner } from '@nextui-org/react'
+import { FileText, Plus, Filter, Star, ArrowRight, Clock, Briefcase, CheckCircle, XCircle, List } from 'lucide-react'
 import PostedTaskCard from '@/components/ui/posted-task-card'
 import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'
 import { useCreateTask } from '@/hooks/use-create-task'
 import { usePostedTasks } from '@/hooks/use-posted-tasks'
+import { usePendingReviewsCount } from '@/hooks/use-pending-reviews-count'
 import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
 
@@ -19,10 +21,14 @@ type TaskStatus = 'all' | 'open' | 'in_progress' | 'completed' | 'cancelled'
 
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const { t } = useTranslation()
+  const router = useRouter()
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('open')
 
   // Use TanStack Query hook for data fetching
   const { tasks, isLoading, error } = usePostedTasks()
+
+  // Pending reviews count
+  const { data: pendingReviewsCount = 0 } = usePendingReviewsCount()
 
   // Create task hook with auth and review enforcement
   const {
@@ -86,68 +92,156 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
           </div>
         </div>
 
+        {/* Pending Reviews Banner */}
+        {pendingReviewsCount > 0 && (
+          <Card className="mb-6 shadow-xl border-2 border-yellow-300 bg-gradient-to-r from-yellow-50 to-amber-50">
+            <CardBody className="p-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <Star className="w-6 h-6 text-white fill-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">
+                      {t('reviews.pending.banner.title', { count: pendingReviewsCount })}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {t('reviews.pending.banner.description')}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  color="warning"
+                  variant="solid"
+                  size="lg"
+                  endContent={<ArrowRight className="w-4 h-4" />}
+                  onPress={() => router.push(`/${lang}/reviews/pending`)}
+                  className="w-full sm:w-auto font-semibold"
+                >
+                  {t('reviews.pending.banner.button')}
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
         {/* Filter Tabs */}
-        <Card className="mb-6 shadow-xl border border-white/20 bg-white/95">
-          <CardBody className="p-4">
-            <Tabs
-              selectedKey={selectedStatus}
-              onSelectionChange={(key) => setSelectedStatus(key as TaskStatus)}
-              variant="light"
-              classNames={{
-                tabList: "gap-2 w-full bg-gray-50/50 p-2 rounded-lg",
-                cursor: "bg-white shadow-md",
-                tab: "h-10 px-4",
-                tabContent: "group-data-[selected=true]:text-primary group-data-[selected=true]:font-semibold"
-              }}
-            >
-              <Tab
-                key="open"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.open')}</span>
-                    <Chip size="sm" variant="solid" color="primary">{getTaskCountByStatus('open')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
-                key="in_progress"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.inProgress')}</span>
-                    <Chip size="sm" variant="solid" color="warning">{getTaskCountByStatus('in_progress')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
-                key="all"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.all')}</span>
-                    <Chip size="sm" variant="flat" color="default">{getTaskCountByStatus('all')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
-                key="completed"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.completed')}</span>
-                    <Chip size="sm" variant="solid" color="success">{getTaskCountByStatus('completed')}</Chip>
-                  </div>
-                }
-              />
-              <Tab
-                key="cancelled"
-                title={
-                  <div className="flex items-center gap-2">
-                    <span>{t('postedTasks.filter.cancelled')}</span>
-                    <Chip size="sm" variant="solid" color="danger">{getTaskCountByStatus('cancelled')}</Chip>
-                  </div>
-                }
-              />
-            </Tabs>
-          </CardBody>
-        </Card>
+        <div className="mb-6 flex flex-wrap gap-2 sm:gap-3">
+          <button
+            onClick={() => setSelectedStatus('open')}
+            className={`
+              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
+              ${selectedStatus === 'open'
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <Clock className="w-4 h-4 flex-shrink-0" />
+            <span>{t('postedTasks.filter.open')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+              ${selectedStatus === 'open'
+                ? 'bg-white/20 text-white'
+                : 'bg-blue-100 text-blue-600'
+              }
+            `}>
+              {getTaskCountByStatus('open')}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedStatus('in_progress')}
+            className={`
+              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
+              ${selectedStatus === 'in_progress'
+                ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <Briefcase className="w-4 h-4 flex-shrink-0" />
+            <span>{t('postedTasks.filter.inProgress')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+              ${selectedStatus === 'in_progress'
+                ? 'bg-white/20 text-white'
+                : 'bg-amber-100 text-amber-600'
+              }
+            `}>
+              {getTaskCountByStatus('in_progress')}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedStatus('completed')}
+            className={`
+              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
+              ${selectedStatus === 'completed'
+                ? 'bg-green-600 text-white shadow-lg shadow-green-600/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <CheckCircle className="w-4 h-4 flex-shrink-0" />
+            <span>{t('postedTasks.filter.completed')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+              ${selectedStatus === 'completed'
+                ? 'bg-white/20 text-white'
+                : 'bg-green-100 text-green-600'
+              }
+            `}>
+              {getTaskCountByStatus('completed')}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedStatus('cancelled')}
+            className={`
+              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
+              ${selectedStatus === 'cancelled'
+                ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <XCircle className="w-4 h-4 flex-shrink-0" />
+            <span>{t('postedTasks.filter.cancelled')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+              ${selectedStatus === 'cancelled'
+                ? 'bg-white/20 text-white'
+                : 'bg-red-100 text-red-600'
+              }
+            `}>
+              {getTaskCountByStatus('cancelled')}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedStatus('all')}
+            className={`
+              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
+              ${selectedStatus === 'all'
+                ? 'bg-gray-700 text-white shadow-lg shadow-gray-700/30'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }
+            `}
+          >
+            <List className="w-4 h-4 flex-shrink-0" />
+            <span>{t('postedTasks.filter.all')}</span>
+            <span className={`
+              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+              ${selectedStatus === 'all'
+                ? 'bg-white/20 text-white'
+                : 'bg-gray-200 text-gray-600'
+              }
+            `}>
+              {getTaskCountByStatus('all')}
+            </span>
+          </button>
+        </div>
 
         {/* Tasks List */}
         {isLoading ? (

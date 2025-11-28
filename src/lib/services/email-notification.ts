@@ -240,12 +240,25 @@ async function translateEmailVariables(
 
     case 'applicationAccepted': {
       // Build info items: contact info first, then customer message if provided
-      const infoItems = [...(data.customerContactInfo || [])];
+      const infoItems: string[] = [];
+
+      // Add customer contact info (passed as string like "📞 +359..." or "📧 email@...")
+      if (data.customerContact) {
+        infoItems.push(`${t('notifications.email.applicationAccepted.contactLabel', { defaultValue: 'Contact' })}: ${data.customerContact}`);
+      }
 
       // Add customer message if provided
       if (data.customerMessage) {
         infoItems.push(`💬 ${t('notifications.email.applicationAccepted.customerMessageLabel', { defaultValue: 'Message' })}: "${data.customerMessage}"`);
       }
+
+      // Generate magic link to /tasks/work page
+      const workPageUrl = await generateNotificationAutoLoginUrl(
+        userId,
+        'email',
+        `/${locale}/tasks/work`,
+        baseUrl
+      );
 
       return {
         ...common,
@@ -255,7 +268,7 @@ async function translateEmailVariables(
           task_title: data.taskTitle,
           customer_name: data.customerName,
         }),
-        primary_link: `${baseUrl}/${locale}/tasks/${data.taskId}`,
+        primary_link: workPageUrl,
         primary_button_text: t('notifications.email.applicationAccepted.buttonText'),
         info_title: t('notifications.email.applicationAccepted.infoTitle'),
         info_items: infoItems,

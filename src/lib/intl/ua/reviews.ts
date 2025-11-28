@@ -49,6 +49,12 @@ export const reviews = {
   'reviews.pending.empty': 'Немає очікуваних відгуків',
   'reviews.pending.emptyMessage': 'Усі завершені завдання оцінено!',
 
+  // Pending Reviews Banner (My Tasks page)
+  'reviews.pending.banner.title': 'У вас {{count}} очікуваний відгук',
+  'reviews.pending.banner.title_plural': 'У вас {{count}} очікуваних відгуків',
+  'reviews.pending.banner.description': 'Допоможіть іншим клієнтам, поділившись своїм досвідом',
+  'reviews.pending.banner.button': 'Залишити відгуки',
+
   // Enforcement Dialog - Hard Block
   'reviews.enforcement.hardBlock.title': 'Потрібна дія',
   'reviews.enforcement.hardBlock.message': 'Фахівець позначив завдання як завершене і чекає підтвердження. Підтвердіть або відхиліть завершення перед створенням нового завдання.',

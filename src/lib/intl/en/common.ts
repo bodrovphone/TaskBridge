@@ -36,6 +36,7 @@ export const common = {
   'common.edit': 'Edit',
   'common.save': 'Save',
   'common.anonymous': 'Anonymous User',
+  'common.goBack': 'Go Back',
   'common.today': 'Today',
   'common.yesterday': 'Yesterday',
   'common.reviews': 'reviews',

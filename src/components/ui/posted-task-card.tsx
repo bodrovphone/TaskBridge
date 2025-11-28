@@ -171,7 +171,16 @@ function PostedTaskCard({
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to mark task complete')
+        // Map error codes to localized messages
+        let errorMessage = t('common.errorGeneric')
+        if (result.code === 'TASK_ALREADY_COMPLETED') {
+          errorMessage = t('taskCompletion.error.alreadyCompleted')
+        } else if (result.code === 'TASK_INVALID_STATUS') {
+          errorMessage = t('taskCompletion.error.invalidStatus')
+        } else if (result.error) {
+          errorMessage = result.error
+        }
+        throw new Error(errorMessage)
       }
 
       toast({
@@ -290,7 +299,8 @@ function PostedTaskCard({
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit review')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to submit review')
       }
 
       toast({
@@ -303,6 +313,7 @@ function PostedTaskCard({
     } catch (error) {
       toast({
         title: t('reviews.error'),
+        description: error instanceof Error ? error.message : t('common.errorGeneric'),
         variant: 'destructive'
       })
     } finally {

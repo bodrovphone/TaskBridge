@@ -287,10 +287,12 @@ export const notifications = {
   'notifications.email.applicationAccepted.subject': 'Вашу заявку прийнято!',
   'notifications.email.applicationAccepted.heading': 'Вітаємо! Заявку прийнято',
   'notifications.email.applicationAccepted.message': 'Вашу заявку на "{{task_title}}" прийнято {{customer_name}}!',
-  'notifications.email.applicationAccepted.buttonText': 'Переглянути деталі завдання',
+  'notifications.email.applicationAccepted.buttonText': 'Переглянути мою роботу',
   'notifications.email.applicationAccepted.infoTitle': 'Контактна інформація замовника:',
   'notifications.email.applicationAccepted.secondaryMessage': 'Почніть роботу над завданням та підтримуйте зв\'язок із замовником.',
   'notifications.email.applicationAccepted.footerText': 'Ви отримали цей лист, тому що подали заявку на завдання на Trudify.',
+  'notifications.email.applicationAccepted.customerMessageLabel': 'Повідомлення',
+  'notifications.email.applicationAccepted.contactLabel': 'Контакт',
 
   'notifications.email.applicationRejected.subject': 'Оновлення заявки на "{{task_title}}"',
   'notifications.email.applicationRejected.heading': 'Заявку не прийнято',

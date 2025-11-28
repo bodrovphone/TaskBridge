@@ -91,7 +91,16 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
       setSelectedTaskForCompletion(null)
     } catch (error: any) {
       console.error('Error marking task complete:', error)
-      alert(error.message || 'Failed to mark task complete')
+      // Map error codes to localized messages
+      let errorMessage = t('common.errorGeneric')
+      if (error.code === 'TASK_ALREADY_COMPLETED') {
+        errorMessage = t('taskCompletion.error.alreadyCompleted')
+      } else if (error.code === 'TASK_INVALID_STATUS') {
+        errorMessage = t('taskCompletion.error.invalidStatus')
+      } else if (error.message) {
+        errorMessage = error.message
+      }
+      alert(errorMessage)
     } finally {
       setIsMarkingComplete(false)
     }

@@ -67,8 +67,16 @@ export async function PATCH(
 
     // Validation: Task must be in 'in_progress' status
     if (task.status !== 'in_progress') {
+      // Provide specific error code for frontend to show localized message
+      const errorCode = task.status === 'completed'
+        ? 'TASK_ALREADY_COMPLETED'
+        : 'TASK_INVALID_STATUS'
       return NextResponse.json(
-        { error: 'Task must be in "in_progress" status to be marked complete' },
+        {
+          error: 'Task must be in "in_progress" status to be marked complete',
+          code: errorCode,
+          currentStatus: task.status
+        },
         { status: 400 }
       )
     }

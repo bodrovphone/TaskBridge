@@ -23,6 +23,8 @@ export const taskCompletion = {
   'taskCompletion.alreadyConfirmedByYou': 'Вече сте потвърдили',
   'taskCompletion.success': 'Задачата е маркирана като завършена. Очаква се потвърждение от клиента.',
   'taskCompletion.error': 'Неуспешно маркиране на задачата. Моля, опитайте отново.',
+  'taskCompletion.error.alreadyCompleted': 'Тази задача вече е завършена от другата страна.',
+  'taskCompletion.error.invalidStatus': 'Тази задача не може да бъде маркирана като завършена в текущия ѝ статус.',
 
   // Mark Completed Dialog (Professional)
   'taskCompletion.markDialog.title': 'Маркиране на задача като завършена?',

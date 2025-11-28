@@ -117,40 +117,42 @@ export default function ApplicationsSection({
 
      {/* Action Buttons */}
      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+      {/* Accept button first on mobile */}
+      {application.status === "pending" && (
+       <NextUIButton
+        color="success"
+        variant="solid"
+        size="sm"
+        startContent={<CheckCircle size={14} />}
+        onPress={() => onAcceptApplication(application.id)}
+        className="w-full sm:w-auto text-xs sm:text-sm h-10 sm:h-auto"
+       >
+        {t('taskDetail.accept')}
+       </NextUIButton>
+      )}
+
       <NextUIButton
        color="primary"
        variant="bordered"
        size="sm"
        startContent={<Eye size={14} />}
        onPress={() => onViewDetails(application.id)}
-       className="w-full sm:w-auto text-xs sm:text-sm"
+       className="w-full sm:w-auto text-xs sm:text-sm h-10 sm:h-auto"
       >
        {t('applications.viewDetails', 'View Details')}
       </NextUIButton>
 
       {application.status === "pending" && (
-       <>
-        <NextUIButton
-         color="success"
-         variant="solid"
-         size="sm"
-         startContent={<CheckCircle size={14} />}
-         onPress={() => onAcceptApplication(application.id)}
-         className="w-full sm:w-auto text-xs sm:text-sm"
-        >
-         {t('taskDetail.accept')}
-        </NextUIButton>
-        <NextUIButton
-         color="danger"
-         variant="bordered"
-         size="sm"
-         startContent={<X size={14} />}
-         onPress={() => onRejectApplication(application.id)}
-         className="w-full sm:w-auto text-xs sm:text-sm"
-        >
-         {t('taskDetail.reject')}
-        </NextUIButton>
-       </>
+       <NextUIButton
+        color="danger"
+        variant="bordered"
+        size="sm"
+        startContent={<X size={14} />}
+        onPress={() => onRejectApplication(application.id)}
+        className="w-full sm:w-auto text-xs sm:text-sm h-10 sm:h-auto"
+       >
+        {t('taskDetail.reject')}
+       </NextUIButton>
       )}
      </div>
     </div>
