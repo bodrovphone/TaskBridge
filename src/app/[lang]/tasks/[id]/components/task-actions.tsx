@@ -298,7 +298,9 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
 
  // Check if current user is the assigned professional
  // Note: API returns snake_case field names from database
- const isAssignedProfessional = user && (task.selected_professional_id === user.id || task.selectedProfessionalId === user.id);
+ // Use profile.id for notification sessions (magic links), user.id for regular auth
+ const currentUserId = profile?.id || user?.id;
+ const isAssignedProfessional = currentUserId && (task.selected_professional_id === currentUserId || task.selectedProfessionalId === currentUserId);
 
  // If assigned professional viewing their own task, show Mark Complete and Withdraw buttons
  if (isAssignedProfessional && taskStatus === 'in_progress') {
