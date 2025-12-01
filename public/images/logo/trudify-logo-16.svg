@@ -6,10 +6,6 @@
       <stop offset="0%" stop-color="#2563EB"/>
       <stop offset="100%" stop-color="#4F46E5"/>
     </linearGradient>
-    <linearGradient id="accentGradient16" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FB923C"/>
-      <stop offset="100%" stop-color="#EF4444"/>
-    </linearGradient>
   </defs>
 
   <!-- Background rounded square -->
@@ -23,6 +19,4 @@
     <path d="M10 5 H13"/>
   </g>
 
-  <!-- Accent dot -->
-  <circle cx="14" cy="2" r="1.5" fill="url(#accentGradient16)"/>
 </svg>
