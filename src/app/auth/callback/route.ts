@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { type NextRequest } from 'next/server'
-import { createNotification } from '@/lib/services/notification-service'
+import { AuthService } from '@/server/application/auth/auth.service'
+import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
@@ -11,25 +12,26 @@ export async function GET(request: NextRequest) {
   const errorDescription = requestUrl.searchParams.get('error_description')
   const origin = requestUrl.origin
 
-  // Detect locale from referer or 'next' parameter or default to 'en'
-  let redirectLocale: 'en' | 'bg' | 'ru' = 'en'
+  // Detect locale - priority: query param > 'next' parameter > cookie > default 'bg'
+  let redirectLocale: 'en' | 'bg' | 'ru' | 'ua' = 'bg' // Default to Bulgarian
 
-  // Try to extract locale from 'next' parameter first
-  if (next) {
-    const nextLocaleMatch = next.match(/\/(en|bg|ru)\//)
+  // 1. Check for locale query parameter (passed from OAuth redirect URL)
+  const localeParam = requestUrl.searchParams.get('locale')
+  if (localeParam && ['en', 'bg', 'ru', 'ua'].includes(localeParam)) {
+    redirectLocale = localeParam as 'en' | 'bg' | 'ru' | 'ua'
+  }
+  // 2. Try to extract locale from 'next' parameter (password reset flows)
+  else if (next) {
+    const nextLocaleMatch = next.match(/\/(en|bg|ru|ua)\//)
     if (nextLocaleMatch) {
-      redirectLocale = nextLocaleMatch[1] as 'en' | 'bg' | 'ru'
+      redirectLocale = nextLocaleMatch[1] as 'en' | 'bg' | 'ru' | 'ua'
     }
   }
-
-  // Fallback to referer
-  if (redirectLocale === 'en') {
-    const referer = request.headers.get('referer')
-    if (referer) {
-      const localeMatch = referer.match(/\/(en|bg|ru)\//)
-      if (localeMatch) {
-        redirectLocale = localeMatch[1] as 'en' | 'bg' | 'ru'
-      }
+  // 3. Fallback to locale cookie
+  else {
+    const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
+    if (localeCookie && ['en', 'bg', 'ru', 'ua'].includes(localeCookie)) {
+      redirectLocale = localeCookie as 'en' | 'bg' | 'ru' | 'ua'
     }
   }
 
@@ -61,26 +63,41 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(next)
     }
 
-    // Check if this is a new user (account just created)
+    // Create or sync user profile for OAuth users
+    // This is CRITICAL - without this, the user won't have a profile in the users table
     if (data?.user) {
-      // Check if user was created within the last 60 seconds (new signup)
-      const createdAt = new Date(data.user.created_at)
-      const now = new Date()
-      const secondsSinceCreation = (now.getTime() - createdAt.getTime()) / 1000
-      const isNewUser = secondsSinceCreation < 60
+      try {
+        const userRepository = new UserRepository()
+        const authService = new AuthService(userRepository)
 
-      // Send welcome notification only for genuinely new users
-      if (isNewUser) {
-        await createNotification({
-          userId: data.user.id,
-          type: 'welcome_message',
-          templateData: {
-            userName: data.user.user_metadata?.full_name || 'there',
-          },
-          actionUrl: '/browse-tasks',
-          deliveryChannel: 'in_app', // In-app only - no Telegram needed for welcome
-          locale: redirectLocale, // Use detected locale for notification
-        })
+        // Determine if this is an OAuth user (Google/Facebook)
+        const provider = data.user.app_metadata?.provider
+        const providers = data.user.app_metadata?.providers as string[] | undefined
+        const isOAuthUser = provider === 'google' ||
+                            provider === 'facebook' ||
+                            providers?.includes('google') ||
+                            providers?.includes('facebook')
+
+        // Create or sync profile
+        const result = await authService.createOrSyncUserProfile(
+          data.user.id,
+          data.user.email!,
+          {
+            fullName: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
+            avatarUrl: data.user.user_metadata?.avatar_url || data.user.user_metadata?.picture,
+            locale: redirectLocale,
+            isOAuthUser, // Auto-verifies email for OAuth users
+          }
+        )
+
+        if (result.isError()) {
+          console.error('[Auth Callback] Failed to create/sync profile:', result)
+        } else {
+          console.log('[Auth Callback] Profile created/synced for user:', data.user.id)
+        }
+      } catch (profileError) {
+        console.error('[Auth Callback] Error creating/syncing profile:', profileError)
+        // Don't fail the auth flow - user can retry profile creation later
       }
     }
   }

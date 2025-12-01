@@ -139,12 +139,45 @@ export function useAuth(): UseAuthReturn {
           }
           setUser(userObj)
           setProfile(data.user)
+          setLoading(false)
+        } else if (response.status === 404) {
+          // 404 means auth user exists but no profile - create it
+          console.log('[useAuth] Profile not found, creating...')
+          try {
+            const createResponse = await fetch('/api/auth/profile', {
+              method: 'POST',
+            })
+
+            if (createResponse.ok) {
+              const data = await createResponse.json()
+              const userObj: SupabaseUser = {
+                id: data.user.id,
+                email: data.user.email,
+                app_metadata: {},
+                user_metadata: {},
+                aud: 'authenticated',
+                created_at: data.user.createdAt || new Date().toISOString(),
+              }
+              setUser(userObj)
+              setProfile(data.user)
+              console.log('[useAuth] Profile created successfully')
+            } else {
+              console.error('[useAuth] Failed to create profile:', await createResponse.text())
+              setUser(null)
+              setProfile(null)
+            }
+          } catch (err) {
+            console.error('[useAuth] Error creating profile:', err)
+            setUser(null)
+            setProfile(null)
+          }
+          setLoading(false)
         } else {
-          // Not authenticated - this is fine
+          // 401 or other error - not authenticated
           setUser(null)
           setProfile(null)
+          setLoading(false)
         }
-        setLoading(false)
       })
       .catch((err) => {
         console.error('[useAuth] Error checking auth status:', err)
@@ -268,8 +301,11 @@ export function useAuth(): UseAuthReturn {
       setError(null)
       const supabase = createClient()
 
-      // Get the current URL to construct proper redirect
-      const redirectTo = `${window.location.origin}/auth/callback`
+      // Extract current locale from URL path (e.g., /bg/tasks -> bg)
+      const pathLocale = window.location.pathname.match(/^\/(en|bg|ru|ua)\//)?.[1] || 'bg'
+
+      // Pass locale in redirect URL so callback can preserve it
+      const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}`
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -300,10 +336,13 @@ export function useAuth(): UseAuthReturn {
       setError(null)
       const supabase = createClient()
 
-      // Get the current URL to construct proper redirect
-      const redirectTo = `${window.location.origin}/auth/callback`
+      // Extract current locale from URL path (e.g., /bg/tasks -> bg)
+      const pathLocale = window.location.pathname.match(/^\/(en|bg|ru|ua)\//)?.[1] || 'bg'
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      // Pass locale in redirect URL so callback can preserve it
+      const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}`
+
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
           redirectTo,
@@ -313,9 +352,6 @@ export function useAuth(): UseAuthReturn {
           skipBrowserRedirect: false,
         },
       })
-
-      console.log('[Facebook OAuth] Data:', data)
-      console.log('[Facebook OAuth] Error:', error)
 
       if (error) {
         setError(error.message)

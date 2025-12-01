@@ -9,6 +9,19 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
  title: 'Trudify - Намерете проверени професионалисти',
  description: 'Свържете се с проверени местни професионалисти за всякакви задачи - от домашни ремонти до доставки и лична помощ. Сигурна платформа с проверени специалисти.',
+ icons: {
+  icon: [
+   { url: '/images/logo/trudify-logo-32.png', sizes: '32x32', type: 'image/png' },
+  ],
+  apple: [
+   { url: '/images/logo/trudify-logo-180.png', sizes: '180x180', type: 'image/png' },
+  ],
+  other: [
+   { rel: 'icon', url: '/images/logo/trudify-logo-192.png', sizes: '192x192', type: 'image/png' },
+   { rel: 'icon', url: '/images/logo/trudify-logo-512.png', sizes: '512x512', type: 'image/png' },
+  ],
+ },
+ manifest: '/manifest.json',
 }
 
 export const viewport: Viewport = {

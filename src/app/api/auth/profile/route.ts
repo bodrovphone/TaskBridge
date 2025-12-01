@@ -136,6 +136,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Check if this is an auth-only user (no profile yet)
+    // This happens when OAuth callback profile creation failed or is pending
+    if ((authUser as any)._authOnly) {
+      console.log('[Profile API] GET: Auth user exists but no profile:', authUser.id)
+      return NextResponse.json(
+        { error: 'Profile not found', code: 'PROFILE_NOT_FOUND' },
+        { status: 404 }
+      )
+    }
+
     console.log('[Profile API] GET: Authenticated user:', authUser.id)
 
     // 2. Create service instances

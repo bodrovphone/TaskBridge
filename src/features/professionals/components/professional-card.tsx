@@ -173,7 +173,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
       color="primary"
       variant="shadow"
       size="lg"
-      className="w-full font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transform"
+      className="w-full font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 group-hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transform"
       endContent={
        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
         →

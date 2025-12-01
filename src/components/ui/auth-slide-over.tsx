@@ -101,15 +101,37 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
  const handleGoogleAuth = async () => {
   setIsLoading(true);
   setError(null);
-  await signInWithGoogle();
-  // Redirect happens automatically
+
+  try {
+    const result = await signInWithGoogle();
+    if (result.error) {
+      setError(result.error);
+      setIsLoading(false);
+    }
+    // If no error, redirect happens automatically
+  } catch (err) {
+    // Handle popup blockers or other errors
+    setError(t('auth.popupBlocked', 'Please allow popups for this site to sign in with Google'));
+    setIsLoading(false);
+  }
  };
 
  const handleFacebookAuth = async () => {
   setIsLoading(true);
   setError(null);
-  await signInWithFacebook();
-  // Redirect happens automatically
+
+  try {
+    const result = await signInWithFacebook();
+    if (result.error) {
+      setError(result.error);
+      setIsLoading(false);
+    }
+    // If no error, redirect happens automatically
+  } catch (err) {
+    // Handle popup blockers or other errors
+    setError(t('auth.popupBlocked', 'Please allow popups for this site to sign in with Facebook'));
+    setIsLoading(false);
+  }
  };
 
  const handleTelegramAuth = async (data: TelegramUserData) => {

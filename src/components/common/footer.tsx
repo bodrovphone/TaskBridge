@@ -1,6 +1,7 @@
 'use client'
 
-import { Mail, Shield, Star, Award, Heart, Handshake } from "lucide-react";
+import { Mail, Shield, Star, Award, Heart } from "lucide-react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { usePathname, useRouter } from "next/navigation";
 import { LocaleLink } from "./locale-link";
@@ -47,9 +48,13 @@ function Footer() {
      {/* Company Info - Full Width on Mobile */}
      <div className="mb-12 col-span-full">
       <div className="flex items-center gap-3 mb-4">
-       <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-        <Handshake className="text-white" size={20} />
-       </div>
+       <Image
+        src="/images/logo/trudify-logo-64.svg"
+        alt="Trudify"
+        width={48}
+        height={48}
+        className="w-12 h-12 sm:w-16 sm:h-16"
+       />
        <span className="text-xl sm:text-2xl font-bold text-white">Trudify</span>
       </div>
       <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-md mb-4">

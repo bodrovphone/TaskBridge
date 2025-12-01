@@ -52,7 +52,6 @@ import {
  Wallet,
  Plus,
  ArrowRight,
- Handshake,
  Heart
 } from "lucide-react";
 
@@ -306,8 +305,14 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
       </div>
       
       <div className="relative text-center">
-       <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl mb-8 shadow-2xl group animate-pulse">
-        <Handshake className="text-white h-10 w-10 group-hover:scale-110 transition-transform duration-300" />
+       <div className="inline-flex items-center justify-center mb-8 group animate-pulse">
+        <Image
+         src="/images/logo/trudify-logo-128.svg"
+         alt="Trudify"
+         width={96}
+         height={96}
+         className="group-hover:scale-110 transition-transform duration-300 drop-shadow-2xl"
+        />
        </div>
        
        <h3 className="text-4xl lg:text-7xl font-bold mb-8 leading-[1.1] bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent tracking-tight">

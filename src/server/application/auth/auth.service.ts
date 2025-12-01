@@ -35,7 +35,7 @@ export class AuthService {
       fullName?: string
       phoneNumber?: string
       avatarUrl?: string
-      locale?: 'en' | 'bg' | 'ru'
+      locale?: 'en' | 'bg' | 'ru' | 'ua'
       isOAuthUser?: boolean // OAuth providers verify email, so auto-verify for these users
     }
   ): Promise<Result<User, Error>> {

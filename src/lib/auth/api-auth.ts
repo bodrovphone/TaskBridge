@@ -62,7 +62,20 @@ export async function authenticateRequest(
     .eq('id', user.id)
     .single()
 
-  return profile as AuthenticatedUser
+  // If profile exists, return it
+  if (profile) {
+    return profile as AuthenticatedUser
+  }
+
+  // If no profile but auth user exists, return minimal user data
+  // This allows APIs to differentiate between "not authenticated" (401)
+  // and "authenticated but no profile" (404)
+  return {
+    id: user.id,
+    email: user.email || '',
+    // Flag to indicate this is from auth only, no profile yet
+    _authOnly: true,
+  } as AuthenticatedUser
 }
 
 /**

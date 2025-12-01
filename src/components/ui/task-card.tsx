@@ -144,7 +144,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
    radius="lg"
   >
    <CardBody
-    className="p-0 flex-1 flex flex-col cursor-pointer overflow-y-auto"
+    className="p-0 cursor-pointer flex-1 overflow-hidden min-w-0"
     onClick={handleCardPress}
    >
     {/* Image or Default Gradient */}
@@ -177,38 +177,38 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
      )}
     </div>
 
-    {/* Content with better spacing */}
-    <div className="p-4 flex-grow flex flex-col min-h-0">
+    {/* Content */}
+    <div className="p-4 flex flex-col min-w-0">
      {/* Category badge and time */}
-     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor} w-fit`}>
+     <div className="flex justify-between items-start gap-2 mb-2 min-w-0">
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor} truncate`}>
        {categoryName}
       </span>
-      <span className="text-sm text-gray-500">{timeAgo}</span>
+      <span className="text-xs text-gray-500 flex-shrink-0">{timeAgo}</span>
      </div>
 
-     {/* Title with better contrast - using localized content */}
-     <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+     {/* Title - max 1 line with ellipsis */}
+     <h3 className="text-base font-semibold text-gray-900 mb-1 truncate min-w-0">
       {localizedContent.title}
      </h3>
 
-     {/* Description with better contrast - using localized content */}
-     <p className="text-sm text-gray-600 mb-3 line-clamp-3">
+     {/* Description - max 2 lines with ellipsis */}
+     <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-w-0">
       {localizedContent.description}
      </p>
 
      {/* Task details with larger icons */}
-     <div className="space-y-2 mt-auto">
+     <div className="space-y-1.5 mt-auto">
       <div className="flex items-center text-sm text-gray-600">
-       <MapPin size={16} className="mr-2 flex-shrink-0" />
+       <MapPin size={14} className="mr-2 flex-shrink-0" />
        <span className="truncate">{getCityLabelBySlug(task.city, t)}{task.neighborhood && `, ${task.neighborhood}`}</span>
       </div>
       <div className="flex items-center text-sm text-gray-600">
-       <Clock size={16} className="mr-2 flex-shrink-0" />
+       <Clock size={14} className="mr-2 flex-shrink-0" />
        <span>{formatDeadline()}</span>
       </div>
       <div className="flex items-center text-sm text-gray-600">
-       <Wallet size={16} className="mr-2 flex-shrink-0" />
+       <Wallet size={14} className="mr-2 flex-shrink-0" />
        <span>{formatBudget()}</span>
       </div>
      </div>

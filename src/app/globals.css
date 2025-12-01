@@ -80,7 +80,8 @@
     box-sizing: border-box;
   }
 
-  html, body {
+  html,
+  body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
     max-width: 100%;
@@ -98,11 +99,21 @@
 }
 
 @layer utilities {
+  /* Hide scrollbar while keeping scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .line-clamp-3 {
@@ -110,6 +121,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+    line-clamp: 2;
   }
 
   /* Safe area utilities for mobile devices */
@@ -133,56 +145,136 @@
 /* Custom utility classes */
 @layer components {
   .primary-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary-500)) 0%, hsl(var(--primary-600)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary-500)) 0%,
+      hsl(var(--primary-600)) 100%
+    );
   }
-  
+
   .hero-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary-50)) 0%, hsl(var(--primary-100)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary-50)) 0%,
+      hsl(var(--primary-100)) 100%
+    );
   }
 }
 
 /* Custom primary color utilities */
 @layer utilities {
-  .bg-primary-50 { background-color: hsl(var(--primary-50)); }
-  .bg-primary-100 { background-color: hsl(var(--primary-100)); }
-  .bg-primary-200 { background-color: hsl(var(--primary-200)); }
-  .bg-primary-300 { background-color: hsl(var(--primary-300)); }
-  .bg-primary-400 { background-color: hsl(var(--primary-400)); }
-  .bg-primary-500 { background-color: hsl(var(--primary-500)); }
-  .bg-primary-600 { background-color: hsl(var(--primary-600)); }
-  .bg-primary-700 { background-color: hsl(var(--primary-700)); }
-  .bg-primary-800 { background-color: hsl(var(--primary-800)); }
-  .bg-primary-900 { background-color: hsl(var(--primary-900)); }
-  
-  .text-primary-50 { color: hsl(var(--primary-50)); }
-  .text-primary-100 { color: hsl(var(--primary-100)); }
-  .text-primary-200 { color: hsl(var(--primary-200)); }
-  .text-primary-300 { color: hsl(var(--primary-300)); }
-  .text-primary-400 { color: hsl(var(--primary-400)); }
-  .text-primary-500 { color: hsl(var(--primary-500)); }
-  .text-primary-600 { color: hsl(var(--primary-600)); }
-  .text-primary-700 { color: hsl(var(--primary-700)); }
-  .text-primary-800 { color: hsl(var(--primary-800)); }
-  .text-primary-900 { color: hsl(var(--primary-900)); }
-  
-  .border-primary-50 { border-color: hsl(var(--primary-50)); }
-  .border-primary-100 { border-color: hsl(var(--primary-100)); }
-  .border-primary-200 { border-color: hsl(var(--primary-200)); }
-  .border-primary-300 { border-color: hsl(var(--primary-300)); }
-  .border-primary-400 { border-color: hsl(var(--primary-400)); }
-  .border-primary-500 { border-color: hsl(var(--primary-500)); }
-  .border-primary-600 { border-color: hsl(var(--primary-600)); }
-  .border-primary-700 { border-color: hsl(var(--primary-700)); }
-  .border-primary-800 { border-color: hsl(var(--primary-800)); }
-  .border-primary-900 { border-color: hsl(var(--primary-900)); }
-  
-  .hover\\:bg-primary-50:hover { background-color: hsl(var(--primary-50)); }
-  .hover\\:bg-primary-100:hover { background-color: hsl(var(--primary-100)); }
-  .hover\\:bg-primary-600:hover { background-color: hsl(var(--primary-600)); }
-  .hover\\:bg-primary-700:hover { background-color: hsl(var(--primary-700)); }
-  
-  .hover\\:text-primary-600:hover { color: hsl(var(--primary-600)); }
-  .hover\\:text-primary-700:hover { color: hsl(var(--primary-700)); }
+  .bg-primary-50 {
+    background-color: hsl(var(--primary-50));
+  }
+  .bg-primary-100 {
+    background-color: hsl(var(--primary-100));
+  }
+  .bg-primary-200 {
+    background-color: hsl(var(--primary-200));
+  }
+  .bg-primary-300 {
+    background-color: hsl(var(--primary-300));
+  }
+  .bg-primary-400 {
+    background-color: hsl(var(--primary-400));
+  }
+  .bg-primary-500 {
+    background-color: hsl(var(--primary-500));
+  }
+  .bg-primary-600 {
+    background-color: hsl(var(--primary-600));
+  }
+  .bg-primary-700 {
+    background-color: hsl(var(--primary-700));
+  }
+  .bg-primary-800 {
+    background-color: hsl(var(--primary-800));
+  }
+  .bg-primary-900 {
+    background-color: hsl(var(--primary-900));
+  }
+
+  .text-primary-50 {
+    color: hsl(var(--primary-50));
+  }
+  .text-primary-100 {
+    color: hsl(var(--primary-100));
+  }
+  .text-primary-200 {
+    color: hsl(var(--primary-200));
+  }
+  .text-primary-300 {
+    color: hsl(var(--primary-300));
+  }
+  .text-primary-400 {
+    color: hsl(var(--primary-400));
+  }
+  .text-primary-500 {
+    color: hsl(var(--primary-500));
+  }
+  .text-primary-600 {
+    color: hsl(var(--primary-600));
+  }
+  .text-primary-700 {
+    color: hsl(var(--primary-700));
+  }
+  .text-primary-800 {
+    color: hsl(var(--primary-800));
+  }
+  .text-primary-900 {
+    color: hsl(var(--primary-900));
+  }
+
+  .border-primary-50 {
+    border-color: hsl(var(--primary-50));
+  }
+  .border-primary-100 {
+    border-color: hsl(var(--primary-100));
+  }
+  .border-primary-200 {
+    border-color: hsl(var(--primary-200));
+  }
+  .border-primary-300 {
+    border-color: hsl(var(--primary-300));
+  }
+  .border-primary-400 {
+    border-color: hsl(var(--primary-400));
+  }
+  .border-primary-500 {
+    border-color: hsl(var(--primary-500));
+  }
+  .border-primary-600 {
+    border-color: hsl(var(--primary-600));
+  }
+  .border-primary-700 {
+    border-color: hsl(var(--primary-700));
+  }
+  .border-primary-800 {
+    border-color: hsl(var(--primary-800));
+  }
+  .border-primary-900 {
+    border-color: hsl(var(--primary-900));
+  }
+
+  .hover\\:bg-primary-50:hover {
+    background-color: hsl(var(--primary-50));
+  }
+  .hover\\:bg-primary-100:hover {
+    background-color: hsl(var(--primary-100));
+  }
+  .hover\\:bg-primary-600:hover {
+    background-color: hsl(var(--primary-600));
+  }
+  .hover\\:bg-primary-700:hover {
+    background-color: hsl(var(--primary-700));
+  }
+
+  .hover\\:text-primary-600:hover {
+    color: hsl(var(--primary-600));
+  }
+  .hover\\:text-primary-700:hover {
+    color: hsl(var(--primary-700));
+  }
 }
 
 /* Performance Optimizations */

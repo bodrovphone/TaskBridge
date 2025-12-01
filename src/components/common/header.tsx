@@ -9,7 +9,8 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
-import { Plus, Handshake, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Grid3x3, Users } from "lucide-react"
+import { Plus, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Grid3x3, Users } from "lucide-react"
+import Image from "next/image"
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
@@ -146,9 +147,14 @@ function Header() {
    {/* Logo/Brand */}
    <NavbarBrand>
     <LocaleLink href="/" className="flex items-center">
-     <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mr-3">
-      <Handshake className="text-white" size={20} />
-     </div>
+     <Image
+      src="/images/logo/trudify-logo-64.svg"
+      alt="Trudify"
+      width={40}
+      height={40}
+      className="mr-3"
+      priority
+     />
      <span className="text-xl font-bold text-gray-900">Trudify</span>
     </LocaleLink>
    </NavbarBrand>
