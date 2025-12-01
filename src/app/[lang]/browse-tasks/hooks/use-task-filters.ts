@@ -8,6 +8,7 @@ import type { TaskSortOption } from '@/server/tasks/task.query-types'
  * Task filter state
  */
 export interface TaskFilters {
+  q?: string              // Full-text search query
   category?: string
   city?: string
   budgetMin?: number
@@ -28,6 +29,7 @@ export function useTaskFilters() {
   // Initialize filters from URL
   const [filters, setFilters] = useState<TaskFilters>(() => {
     return {
+      q: searchParams.get('q') || undefined,
       category: searchParams.get('category') || undefined,
       city: searchParams.get('city') || undefined,
       budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
@@ -41,6 +43,7 @@ export function useTaskFilters() {
   // Sync filters with URL changes
   useEffect(() => {
     const newFilters: TaskFilters = {
+      q: searchParams.get('q') || undefined,
       category: searchParams.get('category') || undefined,
       city: searchParams.get('city') || undefined,
       budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
@@ -119,6 +122,8 @@ export function useTaskFilters() {
    *
    * IMPORTANT: In browse mode, 'category' filter actually represents subcategory slugs
    * (e.g., 'fish-care', 'plumber'). We send these as 'subcategory' to match the DB schema.
+   *
+   * When 'q' is provided, the API will use full-text search on task content.
    */
   const buildApiQuery = useCallback(() => {
     const params = new URLSearchParams()

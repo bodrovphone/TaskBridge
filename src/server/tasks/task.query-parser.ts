@@ -86,7 +86,11 @@ export const parseTaskQuery = (
       budgetMax
     )
 
+    // Parse search query (sanitize and trim)
+    const searchQuery = params.q?.trim() || undefined
+
     const options: TaskQueryOptions = {
+      searchQuery,
       filters,
       sort,
       pagination: { page, limit, offset },

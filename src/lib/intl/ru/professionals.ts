@@ -13,6 +13,7 @@ export const professionals = {
   'professionals.searchPlaceholder':
     'Поиск категорий... (например, ремонт, уборка, уроки)',
   'professionals.search.popular': 'Популярные',
+  'professionals.search.categories': 'Категории услуг',
   'professionals.allCategories': 'Все категории',
   'professionals.featuredTitle': 'Рекомендуемые специалисты',
   'professionals.viewProfile': 'Посмотреть профиль',

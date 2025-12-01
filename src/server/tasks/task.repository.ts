@@ -8,6 +8,29 @@ import { DatabaseError } from '../shared/errors'
 import { Result, ok, err } from '../shared/result'
 import type { Task, TaskDbInsert } from './task.types'
 
+/**
+ * Result from full-text search RPC function
+ */
+interface TextSearchResult {
+  id: string
+  title: string
+  description: string
+  category: string
+  subcategory: string
+  city: string
+  neighborhood: string
+  budget_min_bgn: number | null
+  budget_max_bgn: number | null
+  budget_type: string
+  deadline: string | null
+  status: string
+  customer_id: string
+  images: string[] | null
+  is_urgent: boolean
+  created_at: string
+  search_rank: number
+}
+
 export class TaskRepository {
   /**
    * Create a new task
@@ -493,6 +516,69 @@ export class TaskRepository {
     } catch (error) {
       console.error('Unexpected error finding task:', error)
       return err(new DatabaseError('Unexpected error finding task'))
+    }
+  }
+
+  /**
+   * Full-text search for tasks using PostgreSQL tsvector
+   * Searches title, title_bg, description, description_bg, and location_notes
+   * Results are ranked by relevance
+   */
+  async searchByText(
+    searchQuery: string,
+    options: {
+      status?: string
+      city?: string
+      category?: string
+      limit?: number
+    } = {}
+  ): Promise<Result<(Task & { searchRank: number })[], DatabaseError>> {
+    try {
+      const supabase = createAdminClient()
+
+      const { data, error } = await supabase.rpc('search_tasks_by_text', {
+        search_query: searchQuery,
+        status_filter: options.status || 'open',
+        city_filter: options.city || null,
+        category_filter: options.category || null,
+        result_limit: options.limit || 20
+      })
+
+      if (error) {
+        console.error('Database error searching tasks:', error)
+        return err(
+          new DatabaseError('Failed to search tasks', {
+            code: error.code,
+            message: error.message
+          })
+        )
+      }
+
+      // Map results to Task format with search rank
+      const tasks = (data as TextSearchResult[] || []).map((result) => ({
+        id: result.id,
+        title: result.title,
+        description: result.description,
+        category: result.category,
+        subcategory: result.subcategory,
+        city: result.city,
+        neighborhood: result.neighborhood,
+        budget_min_bgn: result.budget_min_bgn,
+        budget_max_bgn: result.budget_max_bgn,
+        budget_type: result.budget_type,
+        deadline: result.deadline,
+        status: result.status,
+        customer_id: result.customer_id,
+        images: result.images,
+        is_urgent: result.is_urgent,
+        created_at: result.created_at,
+        searchRank: result.search_rank
+      })) as (Task & { searchRank: number })[]
+
+      return ok(tasks)
+    } catch (error) {
+      console.error('Unexpected error searching tasks:', error)
+      return err(new DatabaseError('Unexpected error searching tasks'))
     }
   }
 }

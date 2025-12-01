@@ -13,6 +13,7 @@ export const professionals = {
   'professionals.searchPlaceholder':
     'Шукайте категорії... (напр., ремонт, прибирання, репетитор)',
   'professionals.search.popular': 'Популярне',
+  'professionals.search.categories': 'Категорії послуг',
   'professionals.allCategories': 'Усі категорії',
   'professionals.featuredTitle': 'Рекомендовані фахівці',
   'professionals.viewProfile': 'Переглянути профіль',

@@ -8,6 +8,33 @@ import {
   CategoryOption,
 } from './types';
 
+// Lazy-loaded keywords module
+let keywordsModule: typeof import('./category-keywords') | null = null;
+let keywordsLoadPromise: Promise<typeof import('./category-keywords')> | null = null;
+
+/**
+ * Preload keywords module (call on focus or after 2s delay)
+ */
+export const preloadCategoryKeywords = (): Promise<void> => {
+  if (keywordsModule) return Promise.resolve();
+  if (!keywordsLoadPromise) {
+    keywordsLoadPromise = import('./category-keywords').then(mod => {
+      keywordsModule = mod;
+      return mod;
+    });
+  }
+  return keywordsLoadPromise.then(() => {});
+};
+
+/**
+ * Get keywords module (lazy load if not preloaded)
+ */
+const getKeywordsModule = async () => {
+  if (keywordsModule) return keywordsModule;
+  await preloadCategoryKeywords();
+  return keywordsModule!;
+};
+
 /**
  * Get all main categories with translated labels
  */
@@ -104,7 +131,8 @@ export const getMainCategoryForSubcategory = (subcategorySlug: string) => {
 };
 
 /**
- * Search categories by query string
+ * Search categories by query string (sync version - no keyword matching)
+ * Use searchCategoriesAsync for full keyword support
  */
 export const searchCategories = (query: string, t: TFunction): CategoryOption[] => {
   if (!query.trim()) return [];
@@ -112,12 +140,97 @@ export const searchCategories = (query: string, t: TFunction): CategoryOption[] 
   const lowerQuery = query.toLowerCase();
   const subcategories = getAllSubcategoriesWithLabels(t);
 
-  return subcategories
-    .filter(cat =>
-      cat.label.toLowerCase().includes(lowerQuery) ||
-      cat.slug.toLowerCase().includes(lowerQuery)
-    )
-    .map(cat => ({
+  // Score all subcategories (label + slug only, no keywords)
+  const scoredResults: { cat: SubcategoryWithLabel; score: number }[] = [];
+
+  for (const cat of subcategories) {
+    let score = 0;
+    const lowerLabel = cat.label.toLowerCase();
+
+    if (lowerLabel === lowerQuery) {
+      score = 100;
+    } else if (lowerLabel.startsWith(lowerQuery)) {
+      score = 90;
+    } else if (lowerLabel.includes(lowerQuery)) {
+      score = 70;
+    } else if (cat.slug.includes(lowerQuery)) {
+      score = 50;
+    }
+
+    if (score > 0) {
+      scoredResults.push({ cat, score });
+    }
+  }
+
+  return scoredResults
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10)
+    .map(({ cat }) => ({
+      value: cat.slug,
+      label: cat.label,
+      mainCategoryId: cat.mainCategoryId,
+    }));
+};
+
+/**
+ * Search categories by query string (async version with keyword matching)
+ * Keywords are lazy-loaded for better initial bundle size
+ */
+export const searchCategoriesAsync = async (
+  query: string,
+  t: TFunction,
+  language?: string
+): Promise<CategoryOption[]> => {
+  if (!query.trim()) return [];
+
+  const lowerQuery = query.toLowerCase();
+  const subcategories = getAllSubcategoriesWithLabels(t);
+
+  // Detect language from i18n or default to 'en'
+  const lang = (language || t('language', { defaultValue: 'en' })) as 'en' | 'bg' | 'ru';
+
+  // Get keyword matches with scores (lazy loaded)
+  const keywords = await getKeywordsModule();
+  const keywordMatches = keywords.searchKeywords(lowerQuery, lang);
+  const keywordMatchMap = new Map(keywordMatches.map(m => [m.slug, m.score]));
+
+  // Score all subcategories
+  const scoredResults: { cat: SubcategoryWithLabel; score: number }[] = [];
+
+  for (const cat of subcategories) {
+    let score = 0;
+
+    // Check label match (highest priority for exact matches)
+    const lowerLabel = cat.label.toLowerCase();
+    if (lowerLabel === lowerQuery) {
+      score = 100;
+    } else if (lowerLabel.startsWith(lowerQuery)) {
+      score = Math.max(score, 90);
+    } else if (lowerLabel.includes(lowerQuery)) {
+      score = Math.max(score, 70);
+    }
+
+    // Check slug match
+    if (cat.slug.includes(lowerQuery)) {
+      score = Math.max(score, 50);
+    }
+
+    // Check keyword match
+    const keywordScore = keywordMatchMap.get(cat.slug);
+    if (keywordScore) {
+      score = Math.max(score, keywordScore);
+    }
+
+    if (score > 0) {
+      scoredResults.push({ cat, score });
+    }
+  }
+
+  // Sort by score (highest first) and return
+  return scoredResults
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10)
+    .map(({ cat }) => ({
       value: cat.slug,
       label: cat.label,
       mainCategoryId: cat.mainCategoryId,

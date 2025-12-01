@@ -8,10 +8,11 @@ import { validateProfanity } from '@/lib/services/profanity-filter'
 
 interface TaskDetailsSectionProps {
  form: any
+ hideTitle?: boolean
 }
 
 export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, TaskDetailsSectionProps>(
- function TaskDetailsSection({ form }, ref) {
+ function TaskDetailsSection({ form, hideTitle }, ref) {
   const { t, i18n } = useTranslation()
   const titleInputRef = useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null)
@@ -96,7 +97,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
      </div>
     </div>
 
-   {/* Task Title */}
+   {/* Task Title - hidden when title is captured elsewhere (title-first flow) */}
+   {!hideTitle && (
    <form.Field
     name="title"
     validators={{
@@ -152,6 +154,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, Ta
      </div>
     )}
    </form.Field>
+   )}
 
    {/* Task Description */}
    <form.Field

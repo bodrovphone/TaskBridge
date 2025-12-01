@@ -9,6 +9,9 @@ import type { TaskStatus } from './task.types'
  * Raw query parameters from URL (before parsing)
  */
 export interface TaskQueryParams {
+  // Text search
+  q?: string                 // Full-text search query
+
   // Filtering
   customerId?: string        // Filter by task owner (for posted mode)
   status?: string | string[]
@@ -35,6 +38,9 @@ export interface TaskQueryParams {
  * Parsed and validated query options (after parsing)
  */
 export interface TaskQueryOptions {
+  // Text search (full-text search on title, description, location_notes)
+  searchQuery?: string
+
   // Filters (all optional)
   filters: {
     customerId?: string      // Filter by task owner
@@ -75,6 +81,7 @@ export type TaskSortOption =
   | 'budget_high'      // budget_max_bgn DESC
   | 'budget_low'       // budget_min_bgn ASC
   | 'urgent'           // is_urgent DESC, created_at DESC
+  | 'relevance'        // search_rank DESC (for text search results)
 
 /**
  * Preset query modes for common use cases

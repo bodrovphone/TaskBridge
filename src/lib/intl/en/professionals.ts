@@ -13,6 +13,7 @@ export const professionals = {
   'professionals.searchPlaceholder':
     'Search categories... (e.g., repair, cleaning, tutoring)',
   'professionals.search.popular': 'Popular',
+  'professionals.search.categories': 'Service Categories',
   'professionals.allCategories': 'All Categories',
   'professionals.featuredTitle': 'Featured Professionals',
   'professionals.viewProfile': 'View Profile',

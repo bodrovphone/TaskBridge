@@ -172,8 +172,15 @@ A comprehensive regional task platform connecting people in the Balkans with ver
 
 #### Task Creation (Customers)
 
+**Title-First Flow (✅ Implemented):**
+1. User enters task title describing what they need
+2. System auto-suggests category using keyword matching (see Section 3.7)
+3. User confirms suggestion or manually selects category
+4. Rest of form appears after category confirmation
+
+**Task Fields:**
 - Task title and detailed description
-- Category selection:
+- Category selection (auto-suggested or manual):
   - **Home & Repair:** Electrical, plumbing, cleaning, maintenance, moving
   - **Delivery & Transport:** Package delivery, grocery shopping, pickup/dropoff
   - **Personal Care:** Pet sitting, dog walking, babysitting, elderly care
@@ -751,6 +758,202 @@ const cities = getCitiesWithLabels(t)
 - Location verification via Google Maps API
 - Automatic city detection from address input
 
+### 3.7 Smart Category Search & Discovery
+
+**Status**: ✅ **IMPLEMENTED** - Full keyword-based search with feedback loop
+
+**Implementation Date:** December 1, 2025
+
+#### Architecture Overview
+
+**Problem Solved:** Users search using natural language ("fix faucet", "установка замка") but categories use formal names ("Plumber", "Locksmith"). Direct label matching fails for common searches.
+
+**Solution:** Multi-language keyword database mapping natural search terms to subcategories with intelligent scoring.
+
+#### Keyword Database
+
+**Location:** `/src/features/categories/lib/category-keywords.ts`
+
+**Structure:**
+```typescript
+export const CATEGORY_KEYWORDS: CategoryKeywords = {
+  'plumber': {
+    en: ['plumber', 'plumbing', 'pipe', 'fix pipe', 'fix faucet', 'leak', ...],
+    bg: ['водопроводчик', 'ВиК', 'тръба', 'течове', 'поправка кран', ...],
+    ru: ['сантехник', 'труба', 'кран', 'течь', 'починить кран', ...],
+  },
+  // ~120 subcategories with 10-15 keywords each per language
+};
+```
+
+**Coverage:**
+- **120+ subcategories** with keywords
+- **3 languages:** English, Bulgarian, Russian
+- **10-15 keywords per subcategory** including:
+  - Action phrases ("fix pipe", "install lock")
+  - Objects ("faucet", "door", "washing machine")
+  - Common verbs ("fix", "repair", "clean", "broken")
+  - Profession names ("plumber", "electrician")
+
+#### Search Algorithm
+
+**Scoring System:**
+| Match Type | Score | Example |
+|------------|-------|---------|
+| Exact match | 100 | `fix` → `fix` |
+| Prefix match | 80 | `plumb` → `plumber` |
+| Contains match | 60 | `pipe` → `fix pipe` |
+
+**Search Flow:**
+1. User types query (e.g., "fix")
+2. Query compared against all keywords in user's language
+3. Categories scored and ranked by best match
+4. Top 10 results returned with scores
+
+**Performance Optimization - Lazy Loading:**
+- Keywords module (~30KB) loaded via dynamic import
+- Preloaded after 2-second delay OR on input focus
+- Zero impact on initial page load
+- Instant results after preload
+
+```typescript
+// Lazy loading implementation
+export const preloadCategoryKeywords = () => {
+  if (!keywordsModule) {
+    keywordsModule = import('./category-keywords');
+  }
+};
+```
+
+#### Title-First Task Creation Flow
+
+**Status:** ✅ **IMPLEMENTED**
+
+**User Flow:**
+1. User enters task title (e.g., "Need to fix leaking faucet")
+2. After 800ms pause, system searches keywords
+3. **If match found:** Shows suggestion card with category
+   - "This looks like: Plumber" with Confirm/Different buttons
+4. **If no match:** Shows manual category picker
+   - Amber banner: "Help us find the right specialists"
+5. After confirmation, rest of form appears
+
+**Benefits:**
+- ✅ **Faster task creation** - Category auto-selected in most cases
+- ✅ **Better UX** - Users describe task naturally, not forced to browse categories
+- ✅ **Learning system** - Misses collected for improvement
+
+#### Feedback Collection System
+
+**Purpose:** Continuously improve keyword coverage by learning from user behavior.
+
+**Trigger:** When keyword matching fails and user manually selects a category.
+
+**Data Collected:**
+```typescript
+{
+  title: "установка дверного замка",  // What user typed
+  matched_subcategory: "locksmith",    // What they selected
+  language: "ru",                       // User's language
+  created_at: timestamp
+}
+```
+
+**Database Table:** `category_suggestions_feedback`
+```sql
+CREATE TABLE category_suggestions_feedback (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  matched_subcategory TEXT NOT NULL,
+  language VARCHAR(5) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+**API Endpoint:** `POST /api/category-feedback`
+- Fire-and-forget (non-blocking)
+- No authentication required
+- Best-effort analytics
+
+#### Monthly Keyword Update Process
+
+**Script:** `/scripts/process-category-feedback.ts`
+
+**Usage:**
+```bash
+# Preview changes
+npx tsx scripts/process-category-feedback.ts --dry-run
+
+# Process and update keywords
+npx tsx scripts/process-category-feedback.ts
+```
+
+**Process:**
+1. Fetch all feedback records from database
+2. Group by subcategory + language, count occurrences
+3. Identify top 10 most common missing matches
+4. Extract keywords from user titles (filter stop words)
+5. Update `category-keywords.ts` with new keywords
+6. Clear feedback table
+
+**Recurring Task:** `/todo_tasks/recurring-process-category-feedback.md`
+- Run monthly on the 1st
+- 5-minute process
+- Maintains history of runs
+
+#### Where Search is Used
+
+| Location | Component | Behavior |
+|----------|-----------|----------|
+| Browse Tasks | `search-filters-section.tsx` | Dropdown shows matching categories |
+| Browse Professionals | `search-filters-section.tsx` | Same as Browse Tasks |
+| Create Task | `title-category-section.tsx` | Auto-suggests category from title |
+
+#### Search Results Example
+
+```
+Query: "fix" (English)
+
+Results:
+1. handyman-service (score: 100) - exact match
+2. plumber (score: 80) - "fix pipe", "fix faucet"
+3. electrician (score: 80) - "fix outlet", "fix light"
+4. locksmith (score: 80) - "fix lock"
+5. large-appliance-repair (score: 80) - "fix appliance"
+... (12 total matches)
+```
+
+### 3.8 Auto-Translation System
+
+**Status**: ✅ **IMPLEMENTED** - Task titles and descriptions auto-translated to Bulgarian
+
+**Purpose:** Ensure all task content is searchable and readable in Bulgarian (primary market language) regardless of source language.
+
+**Flow:**
+1. User creates task in any supported language (EN/BG/RU)
+2. `sourceLocale` captured from user's current locale
+3. If source is not Bulgarian, content sent to translation API
+4. Translated title/description stored in `title_bg`/`description_bg` columns
+5. Browse Tasks page searches both original and Bulgarian versions
+
+**API Integration:** Microsoft Translator API with Google Translate fallback
+
+**Database Fields:**
+```sql
+tasks table:
+  title TEXT NOT NULL,           -- Original language
+  description TEXT NOT NULL,     -- Original language
+  title_bg TEXT,                 -- Bulgarian translation (if source != bg)
+  description_bg TEXT,           -- Bulgarian translation (if source != bg)
+  source_locale VARCHAR(5)       -- Original content language
+```
+
+**Benefits:**
+- ✅ Bulgarian users can find all tasks in their language
+- ✅ Full-text search works across all content
+- ✅ Original content preserved for poster's language
+- ✅ Transparent to users - automatic background process
+
 ## 4. Technical Requirements
 
 ### 4.1 Platform Architecture
@@ -1031,9 +1234,23 @@ General:
 
 -----
 
-**Document Version:** 2.7
-**Last Updated:** January 12, 2025
-**Next Review:** February 2025
+**Document Version:** 2.8
+**Last Updated:** December 1, 2025
+**Next Review:** January 2026
+
+**Major Changes in v2.8:**
+- ✅ **Smart Category Search & Discovery System - FULLY IMPLEMENTED** (Section 3.7)
+  - **Keyword Database:** 120+ subcategories with 10-15 keywords each in EN/BG/RU
+  - **Search Algorithm:** Scoring system (exact=100, prefix=80, contains=60)
+  - **Lazy Loading:** Keywords loaded via dynamic import after 2s delay or on input focus
+  - **Title-First Task Creation:** Auto-suggests category from task title with 800ms debounce
+  - **Feedback Collection:** Collects title+category misses for monthly keyword improvement
+  - **Monthly Processing Script:** `/scripts/process-category-feedback.ts` updates keywords automatically
+  - **Files:** `category-keywords.ts`, `title-category-section.tsx`, `/api/category-feedback`
+- ✅ **Auto-Translation System** (Section 3.8)
+  - Tasks auto-translated to Bulgarian for searchability
+  - Microsoft Translator API with Google fallback
+  - Original content preserved, translations stored in `title_bg`/`description_bg`
 
 **Major Changes in v2.7:**
 - ✅ **Tasks Completed Counter System** - Database trigger and sync migrations created for automatic counter updates. Professional cards display completed jobs count, with filters for "Most Active" (50+ jobs) and "Sort by Jobs" fully implemented.

@@ -167,6 +167,7 @@ export async function POST(request: NextRequest) {
  * Get tasks with flexible filtering, sorting, and pagination
  *
  * Query parameters:
+ * - q: Full-text search query (searches title, description, location_notes)
  * - mode: 'browse' | 'posted' | 'applications'
  * - featured: 'true' - Get high-quality featured tasks (10 tasks with diversity)
  * - status: Task status filter (comma-separated)
@@ -174,7 +175,7 @@ export async function POST(request: NextRequest) {
  * - city: Filter by city
  * - isUrgent: Filter urgent tasks
  * - budgetMin, budgetMax: Budget range
- * - sortBy: 'newest' | 'urgent' | 'budget_high' | 'budget_low' | 'deadline'
+ * - sortBy: 'newest' | 'urgent' | 'budget_high' | 'budget_low' | 'deadline' | 'relevance'
  * - page, limit: Pagination
  */
 export async function GET(request: NextRequest) {
@@ -240,6 +241,7 @@ export async function GET(request: NextRequest) {
     }
 
     const params: import('@/server/tasks/task.query-types').TaskQueryParams = {
+      q: searchParams.get('q') || undefined,
       status: searchParams.get('status') || undefined,
       category: searchParams.get('category') || undefined,
       subcategory: searchParams.get('subcategory') || undefined,
@@ -291,11 +293,49 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // 4. Execute query with viewerId from session
+    // 4. Handle text search if 'q' parameter is provided
     const taskService = new TaskService()
+
+    if (params.q && params.q.trim().length > 0) {
+      // Text search mode - use full-text search
+      const searchResult = await taskService.searchTasks(
+        params.q,
+        {
+          status: params.status as string || 'open',
+          city: params.city,
+          category: params.category || params.subcategory, // subcategory can also be used
+          limit: parseInt(String(params.limit || '20'))
+        },
+        authUser?.id
+      )
+
+      if (!searchResult.success) {
+        const error = searchResult.error as Error
+        return NextResponse.json(
+          { error: 'message' in error ? error.message : 'Search failed' },
+          { status: 500 }
+        )
+      }
+
+      // Return search results with pagination metadata
+      return NextResponse.json({
+        tasks: searchResult.data.tasks,
+        pagination: {
+          page: 1,
+          limit: searchResult.data.tasks.length,
+          total: searchResult.data.tasks.length,
+          totalPages: 1,
+          hasNext: false,
+          hasPrevious: false
+        },
+        isTextSearch: true
+      }, { status: 200 })
+    }
+
+    // 5. Standard query (no text search)
     const result = await taskService.getTasks(params, authUser?.id)
 
-    // 5. Handle result
+    // 6. Handle result
     if (!result.success) {
       const error = result.error as Error
 
@@ -316,7 +356,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // 6. Return success response
+    // 7. Return success response
     return NextResponse.json(result.data, { status: 200 })
   } catch (error) {
     console.error('[Tasks API] GET: Unexpected error in route handler:', {

@@ -12,6 +12,7 @@ import { uploadTaskImage, deleteTaskImage } from '@/lib/utils/image-upload'
 import { POSTED_TASKS_QUERY_KEY } from '@/hooks/use-posted-tasks'
 import { defaultFormValues } from '@/app/[lang]/create-task/lib/validation'
 import { CategorySelection } from '@/app/[lang]/create-task/components/category-selection'
+import { TitleCategorySection } from '@/app/[lang]/create-task/components/title-category-section'
 import { TaskDetailsSection } from '@/app/[lang]/create-task/components/task-details-section'
 import { LocationSection } from '@/app/[lang]/create-task/components/location-section'
 import { BudgetSection } from '@/app/[lang]/create-task/components/budget-section'
@@ -302,14 +303,32 @@ export function TaskForm({
         {([canSubmit]) => (
           <form onSubmit={handleFormSubmit} className="space-y-8">
             <div ref={categoryRef}>
-              {(mode === 'edit' || isReopening) && !showCategoryPicker && category ? (
-                <CategoryDisplay category={category} subcategory={subcategory} onReset={handleCategoryReset} />
+              {(mode === 'edit' || isReopening) ? (
+                // Edit/reopen mode: use existing category flow
+                !showCategoryPicker && category ? (
+                  <CategoryDisplay category={category} subcategory={subcategory} onReset={handleCategoryReset} />
+                ) : (
+                  <CategorySelection form={form} onCategoryChange={handleCategoryChange} />
+                )
               ) : (
-                <CategorySelection form={form} onCategoryChange={handleCategoryChange} />
+                // Create mode: use title-first flow with smart category matching
+                <TitleCategorySection
+                  form={form}
+                  onCategoryConfirmed={(cat, subcat) => {
+                    setCategory(cat)
+                    setSubcategory(subcat)
+                    form.setFieldValue('category', cat)
+                    form.setFieldValue('subcategory', subcat)
+                  }}
+                  initialTitle={initialData?.title}
+                  initialCategory={initialData?.category}
+                  initialSubcategory={initialData?.subcategory}
+                />
               )}
             </div>
 
-            {category && (
+            {/* Create mode: gate on subcategory (from title-first flow), Edit mode: gate on category */}
+            {(mode === 'create' ? subcategory : category) && (
               <>
                 {mode === 'create' && showNotificationWarning && !bannerDismissed && (
                   <div className="mb-8">
@@ -321,7 +340,11 @@ export function TaskForm({
                   </div>
                 )}
                 <div ref={detailsRef}>
-                  <TaskDetailsSection ref={detailsSectionRef} form={form} />
+                  <TaskDetailsSection
+                    ref={detailsSectionRef}
+                    form={form}
+                    hideTitle={mode === 'create'}
+                  />
                 </div>
                 <div ref={locationRef}>
                   <LocationSection form={form} />

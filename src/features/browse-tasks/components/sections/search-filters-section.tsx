@@ -3,9 +3,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
-import { Search } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
-import { searchCategories, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
+import { Search, X } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { searchCategoriesAsync, preloadCategoryKeywords, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
 import { searchCities, getCitiesWithLabels } from '@/features/cities';
 import { useTaskFilters } from '@/app/[lang]/browse-tasks/hooks/use-task-filters';
 import { Z_INDEX } from '@/lib/constants/z-index';
@@ -21,12 +21,71 @@ export default function SearchFiltersSection({
 }: SearchFiltersSectionProps) {
  const { t, i18n } = useTranslation();
  const { filters, updateFilter } = useTaskFilters();
- const [searchQuery, setSearchQuery] = useState('');
+ // Initialize searchQuery from URL filter if present
+ const [searchQuery, setSearchQuery] = useState(filters.q || '');
  const [currentTypingIndex, setCurrentTypingIndex] = useState(0);
  const [displayText, setDisplayText] = useState('');
  const [isDeleting, setIsDeleting] = useState(false);
  const [isPaused, setIsPaused] = useState(false);
  const [showSuggestions, setShowSuggestions] = useState(false);
+ const [categorySuggestions, setCategorySuggestions] = useState<{ value: string; label: string; mainCategoryId?: string }[]>([]);
+ const keywordsPreloaded = useRef(false);
+
+ // Preload keywords after 2s delay
+ useEffect(() => {
+  const timer = setTimeout(() => {
+   if (!keywordsPreloaded.current) {
+    preloadCategoryKeywords();
+    keywordsPreloaded.current = true;
+   }
+  }, 2000);
+  return () => clearTimeout(timer);
+ }, []);
+
+ // Preload keywords on input focus
+ const handleInputFocus = useCallback(() => {
+  if (!keywordsPreloaded.current) {
+   preloadCategoryKeywords();
+   keywordsPreloaded.current = true;
+  }
+  if (searchQuery.trim().length >= 2) {
+   setShowSuggestions(true);
+  }
+ }, [searchQuery]);
+
+ // Sync searchQuery with URL filter when it changes externally
+ useEffect(() => {
+  if (filters.q !== undefined && filters.q !== searchQuery) {
+   setSearchQuery(filters.q);
+  }
+ }, [filters.q]);
+
+ // Handle full-text search submission
+ const handleTextSearch = useCallback(() => {
+  const trimmedQuery = searchQuery.trim();
+  if (trimmedQuery.length >= 2) {
+   // Clear category filter when doing text search to avoid confusion
+   if (filters.category) {
+    updateFilter('category', undefined);
+   }
+   updateFilter('q', trimmedQuery);
+   setShowSuggestions(false);
+  }
+ }, [searchQuery, filters.category, updateFilter]);
+
+ // Clear text search
+ const handleClearSearch = useCallback(() => {
+  setSearchQuery('');
+  updateFilter('q', undefined);
+ }, [updateFilter]);
+
+ // Handle Enter key for text search
+ const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+  if (e.key === 'Enter') {
+   e.preventDefault();
+   handleTextSearch();
+  }
+ }, [handleTextSearch]);
 
  // Get popular subcategories (not main categories) since tasks store subcategories
  // Note: 'category' filter actually stores subcategory slugs (see use-task-filters.ts)
@@ -71,16 +130,23 @@ export default function SearchFiltersSection({
 
  const currentExamples = typingExamples;
 
- // Search categories and cities based on input
- const categorySuggestions = useMemo(() => {
-  if (!searchQuery.trim()) return [];
-  return searchCategories(searchQuery, t).slice(0, 6); // Limit to 6 categories
- }, [searchQuery, t]);
+ // Search categories async (with lazy-loaded keywords)
+ useEffect(() => {
+  if (!searchQuery.trim()) {
+   setCategorySuggestions([]);
+   return;
+  }
+  let cancelled = false;
+  searchCategoriesAsync(searchQuery, t, i18n.language).then(results => {
+   if (!cancelled) {
+    setCategorySuggestions(results.slice(0, 6));
+   }
+  });
+  return () => { cancelled = true; };
+ }, [searchQuery, t, i18n.language]);
 
- const citySuggestions = useMemo(() => {
-  if (!searchQuery.trim()) return [];
-  return searchCities(searchQuery, t); // All matching cities (max 6 anyway)
- }, [searchQuery, t]);
+ // Search cities (sync - no heavy data)
+ const citySuggestions = searchQuery.trim() ? searchCities(searchQuery, t) : [];
 
  const hasSuggestions = categorySuggestions.length > 0 || citySuggestions.length > 0;
 
@@ -170,95 +236,153 @@ export default function SearchFiltersSection({
      >
       {/* Enhanced Search Input */}
       <div className="relative mb-8 overflow-visible">
-       <div className="relative">
-        <Search
-          className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
-          style={{ zIndex: Z_INDEX.STICKY_ELEMENTS }}
-          size={24}
-        />
-        <Input
-         size="lg"
-         value={searchQuery}
-         onChange={(e) => setSearchQuery(e.target.value)}
-         onFocus={() => {
-          if (hasSuggestions) setShowSuggestions(true);
-         }}
-         onBlur={() => {
-          // Delay to allow button click to register before closing
-          setTimeout(() => setShowSuggestions(false), 200);
-         }}
-         classNames={{
-          input: "pl-16 pr-4 text-xl font-light h-16",
-          inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl h-16"
-         }}
-         placeholder={
-          searchQuery
-           ? t('browseTasks.search.searchingCategories', 'Searching categories...')
-           : `${displayText}${!isPaused ? '|' : ''}`
-         }
-        />
-
-        {/* Category Suggestions Dropdown */}
-        <AnimatePresence>
-         {showSuggestions && (
-          <motion.div
-           initial={{ opacity: 0, y: -10 }}
-           animate={{ opacity: 1, y: 0 }}
-           exit={{ opacity: 0, y: -10 }}
-           transition={{ duration: 0.2 }}
-           className="absolute top-full left-0 right-0 mt-2"
-           style={{ zIndex: Z_INDEX.SEARCH_SUGGESTIONS }}
-          >
-           <div className="bg-white border-2 border-gray-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh] mx-1 mb-1">
-            <div className="overflow-y-auto px-2 pb-2">
-             {/* Categories Section */}
-             {categorySuggestions.length > 0 && (
-              <div className="mb-2">
-               <p className="px-4 pt-3 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                {t('browseTasks.search.categories', 'Categories')}
-               </p>
-               {categorySuggestions.map((category) => (
-                <Button
-                 key={category.value}
-                 variant="light"
-                 className="w-full justify-start text-left h-auto py-3"
-                 onPress={() => handleCategorySelect(category.value)}
-                >
-                 <div className="flex flex-col items-start">
-                  <span className="font-medium text-gray-900">{category.label}</span>
-                 </div>
-                </Button>
-               ))}
+       {/* Active Search Query Display */}
+       {filters.q && (
+        <div className="mb-3 flex items-center gap-2">
+         <span className="text-sm text-gray-600">{t('browseTasks.search.searchingFor', 'Searching for')}:</span>
+         <Chip
+          onClose={handleClearSearch}
+          variant="flat"
+          color="primary"
+          classNames={{
+           base: "bg-blue-100",
+           content: "font-medium"
+          }}
+         >
+          "{filters.q}"
+         </Chip>
+        </div>
+       )}
+       <div className="relative flex flex-col sm:flex-row gap-3 sm:gap-2">
+        <div className="relative w-full sm:flex-1">
+         <Search
+           className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
+           style={{ zIndex: Z_INDEX.STICKY_ELEMENTS }}
+           size={24}
+         />
+         <Input
+          size="lg"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={handleInputFocus}
+          onBlur={() => {
+           // Delay to allow button click to register before closing
+           setTimeout(() => setShowSuggestions(false), 200);
+          }}
+          classNames={{
+           input: "pl-16 pr-4 text-xl font-light h-16",
+           inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl h-16"
+          }}
+          placeholder={
+           searchQuery
+            ? t('browseTasks.search.typeToSearch', 'Type to search tasks...')
+            : `${displayText}${!isPaused ? '|' : ''}`
+          }
+          endContent={
+           searchQuery && (
+            <button
+             onClick={() => setSearchQuery('')}
+             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+             type="button"
+            >
+             <X size={18} className="text-gray-400" />
+            </button>
+           )
+          }
+         />
+         {/* Suggestions Dropdown - inside input wrapper for correct positioning */}
+         <AnimatePresence>
+          {showSuggestions && searchQuery.trim().length >= 2 && (
+           <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 right-0 mt-2"
+            style={{ zIndex: Z_INDEX.SEARCH_SUGGESTIONS }}
+           >
+            <div className="bg-white border-2 border-gray-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">
+             <div className="overflow-y-auto px-2 pb-2">
+              {/* Search in task content option - always show at top */}
+              <div className="border-b border-gray-100 mb-2">
+               <Button
+                variant="light"
+                className="w-full justify-start text-left h-auto py-4 hover:bg-blue-50"
+                onPress={handleTextSearch}
+               >
+                <Search size={18} className="mr-3 text-blue-600" />
+                <div className="flex flex-col items-start">
+                 <span className="font-medium text-blue-700">
+                  {t('browseTasks.search.searchInTasks', 'Search in task content')}
+                 </span>
+                 <span className="text-sm text-gray-500">
+                  {t('browseTasks.search.searchInTasksDesc', 'Find tasks matching "{query}"', { query: searchQuery.trim() })}
+                 </span>
+                </div>
+               </Button>
               </div>
-             )}
 
-             {/* Cities Section */}
-             {citySuggestions.length > 0 && (
-              <div>
-               <p className="px-4 pt-2 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                {t('browseTasks.search.cities', 'Cities')}
-               </p>
-               {citySuggestions.map((city) => (
-                <Button
-                 key={city.slug}
-                 variant="light"
-                 className="w-full justify-start text-left h-auto py-3"
-                 onPress={() => handleCitySelect(city.slug)}
-                >
-                 <div className="flex flex-col items-start">
-                  <span className="font-medium text-gray-900">{city.label}</span>
-                 </div>
-                </Button>
-               ))}
-              </div>
-             )}
+              {/* Categories Section */}
+              {categorySuggestions.length > 0 && (
+               <div className="mb-2">
+                <p className="px-4 pt-2 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                 {t('browseTasks.search.filterByCategory', 'Filter by category')}
+                </p>
+                {categorySuggestions.map((category) => (
+                 <Button
+                  key={category.value}
+                  variant="light"
+                  className="w-full justify-start text-left h-auto py-3"
+                  onPress={() => handleCategorySelect(category.value)}
+                 >
+                  <div className="flex flex-col items-start">
+                   <span className="font-medium text-gray-900">{category.label}</span>
+                  </div>
+                 </Button>
+                ))}
+               </div>
+              )}
+
+              {/* Cities Section */}
+              {citySuggestions.length > 0 && (
+               <div>
+                <p className="px-4 pt-2 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                 {t('browseTasks.search.filterByCity', 'Filter by city')}
+                </p>
+                {citySuggestions.map((city) => (
+                 <Button
+                  key={city.slug}
+                  variant="light"
+                  className="w-full justify-start text-left h-auto py-3"
+                  onPress={() => handleCitySelect(city.slug)}
+                 >
+                  <div className="flex flex-col items-start">
+                   <span className="font-medium text-gray-900">{city.label}</span>
+                  </div>
+                 </Button>
+                ))}
+               </div>
+              )}
+             </div>
             </div>
-           </div>
-          </motion.div>
-         )}
-        </AnimatePresence>
+           </motion.div>
+          )}
+         </AnimatePresence>
+        </div>
+        {/* Search Button */}
+        <Button
+         size="lg"
+         color="primary"
+         className="h-16 w-full sm:w-auto sm:px-8 font-semibold text-lg rounded-2xl"
+         isDisabled={searchQuery.trim().length < 2}
+         onPress={handleTextSearch}
+        >
+         <Search size={20} className="mr-2" />
+         {t('browseTasks.search.searchButton', 'Search')}
+        </Button>
        </div>
-       
+
        {/* Popular Categories & Cities */}
        <div className="mt-6">
         <p className="text-sm text-gray-600 mb-3 font-medium">{t('browseTasks.search.popular')}:</p>
@@ -312,7 +436,6 @@ export default function SearchFiltersSection({
       </div>
      </motion.div>
 
-     
      {/* Results Count */}
      <div className="pt-4 border-t border-gray-100">
       <span className="text-sm text-gray-600">

@@ -302,6 +302,41 @@ export class TaskService {
   }
 
   /**
+   * Search tasks by text using full-text search
+   * Returns results ranked by relevance
+   */
+  async searchTasks(
+    searchQuery: string,
+    options: {
+      status?: string
+      city?: string
+      category?: string
+      limit?: number
+    } = {},
+    viewerId?: string
+  ): Promise<Result<{ tasks: Task[]; isTextSearch: true }, DatabaseError>> {
+    // 1. Execute text search
+    const result = await this.repository.searchByText(searchQuery, options)
+
+    if (!result.success) {
+      return err(result.error)
+    }
+
+    // 2. Apply privacy filtering
+    const { applyPrivacyFilterBulk } = await import('./task.privacy')
+    const filteredTasks = applyPrivacyFilterBulk(
+      result.data as Task[],
+      viewerId
+    )
+
+    // 3. Return results (search rank already in data)
+    return ok({
+      tasks: filteredTasks,
+      isTextSearch: true
+    })
+  }
+
+  /**
    * Get single task by ID with privacy filtering
    */
   async getTaskDetail(
