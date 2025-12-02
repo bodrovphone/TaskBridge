@@ -216,7 +216,7 @@ CREATE TABLE public.users (
   neighborhood TEXT,
   country TEXT DEFAULT 'Bulgaria',
   bio TEXT,
-  preferred_language TEXT CHECK (preferred_language IN ('en', 'bg', 'ru')) DEFAULT 'bg',
+  preferred_language TEXT CHECK (preferred_language IN ('en', 'bg', 'ru', 'ua')) DEFAULT 'bg',
 
   -- Verification Status
   is_phone_verified BOOLEAN DEFAULT FALSE,

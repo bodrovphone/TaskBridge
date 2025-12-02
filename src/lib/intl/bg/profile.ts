@@ -42,7 +42,7 @@ export const profile = {
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
   'profile.memberSince': 'Член от',
-  'profile.editPersonalInfo': 'Редактиране на лични данни',
+  'profile.editPersonalInfo': 'Редактирай',
   'profile.statistics': 'Статистики',
   'profile.verified': 'Потвърден',
   'profile.completed': 'Завършено',

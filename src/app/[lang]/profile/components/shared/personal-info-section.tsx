@@ -290,7 +290,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                   <p className="font-semibold text-gray-900 truncate">{profile.email}</p>
                   {profile.isEmailVerified && (
                     <Chip size="sm" variant="flat" color="success" startContent={<Shield className="w-3 h-3" />} className="flex-shrink-0">
-                      Verified
+                      {t('profile.verified')}
                     </Chip>
                   )}
                 </div>
@@ -304,14 +304,14 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.phone')}</p>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-semibold text-gray-900">{profile.phoneNumber || 'Not set'}</p>
+                  <p className="font-semibold text-gray-900">{profile.phoneNumber || t('profile.professional.notSet')}</p>
                   {profile.isPhoneVerified ? (
                     <Chip size="sm" variant="flat" color="success" startContent={<Shield className="w-3 h-3" />} className="flex-shrink-0">
-                      Verified
+                      {t('profile.verified')}
                     </Chip>
                   ) : (
                     <Chip size="sm" variant="flat" color="warning" className="flex-shrink-0">
-                      Not Verified
+                      {t('profile.professional.notVerified')}
                     </Chip>
                   )}
                 </div>
@@ -327,7 +327,7 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                 <p className="font-semibold text-gray-900">
                   {profile.city
                     ? getCityLabelBySlug(profile.city, t)
-                    : 'Not set'}
+                    : t('profile.professional.notSet')}
                 </p>
               </div>
             </div>

@@ -42,7 +42,7 @@ export const profile = {
   'profile.phone': 'Phone',
   'profile.location': 'Location',
   'profile.memberSince': 'Member since',
-  'profile.editPersonalInfo': 'Edit Personal Info',
+  'profile.editPersonalInfo': 'Edit',
   'profile.statistics': 'Statistics',
   'profile.verified': 'Verified',
   'profile.completed': 'Completed',

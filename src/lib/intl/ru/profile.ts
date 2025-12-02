@@ -597,7 +597,7 @@ export const profile = {
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
   'profile.memberSince': 'Участник с',
-  'profile.editPersonalInfo': 'Редактировать личную информацию',
+  'profile.editPersonalInfo': 'Редактировать',
   'profile.statistics': 'Статистика',
   'profile.verified': 'Верифицирован',
   'profile.completed': 'Завершено',

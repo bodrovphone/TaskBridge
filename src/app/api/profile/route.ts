@@ -88,7 +88,10 @@ export async function PUT(request: NextRequest) {
     if (updates.phoneNumber !== undefined && updates.phoneNumber !== null && updates.phoneNumber.trim() !== '') {
       user.phoneNumber = updates.phoneNumber
     }
-    if (updates.city !== undefined) user.city = updates.city
+    // Convert empty city string to null (CHECK constraint only allows NULL or valid city slugs)
+    if (updates.city !== undefined) {
+      user.city = updates.city && updates.city.trim() !== '' ? updates.city : null
+    }
     if (updates.neighborhood !== undefined) user.neighborhood = updates.neighborhood
     if (updates.country !== undefined) user.country = updates.country
     if (updates.bio !== undefined) user.bio = updates.bio
