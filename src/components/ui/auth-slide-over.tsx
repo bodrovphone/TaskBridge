@@ -426,7 +426,10 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          {t('auth.continueWith')} Google
         </NextUIButton>
 
-        <NextUIButton
+        {/* Facebook Login Button - HIDDEN until app is in Live Mode */}
+        {/* @todo BEFORE-PROD: Uncomment when Facebook app is switched to Live Mode */}
+        {/* See: todo_tasks/before-prod-release/facebook-oauth-live-mode.md */}
+        {/* <NextUIButton
          variant="bordered"
          size="lg"
          className="w-full"
@@ -439,7 +442,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          }
         >
          {t('auth.continueWith')} Facebook
-         </NextUIButton>
+         </NextUIButton> */}
 
          {/* Telegram Login Button - COMMENTED OUT - Will be re-enabled later */}
          {/* <div className="w-full flex flex-col items-center gap-2">

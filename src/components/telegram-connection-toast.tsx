@@ -61,8 +61,11 @@ export function TelegramConnectionToast() {
                   localStorage.setItem(TELEGRAM_TOAST_DISMISSED_KEY, Date.now().toString());
                   // Dismiss the toast immediately
                   toastInstance.dismiss();
-                  // Navigate to profile with settings hash
-                  router.push(`/${currentLocale}/profile?openSettings=telegram`);
+                  // Navigate to appropriate profile based on user type
+                  const profileType = profile?.userType === 'professional' || profile?.userType === 'both'
+                    ? 'professional'
+                    : 'customer';
+                  router.push(`/${currentLocale}/profile/${profileType}?openSettings=telegram`);
                 }}
               >
                 {t('profile.telegram.toast.action')}

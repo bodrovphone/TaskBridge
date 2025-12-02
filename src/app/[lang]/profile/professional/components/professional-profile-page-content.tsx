@@ -19,11 +19,18 @@ interface ProfessionalProfilePageContentProps {
 
 export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePageContentProps) {
   const { t } = useTranslation()
-  const { user, profile, refreshProfile } = useAuth()
+  const { user, profile, loading, refreshProfile } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isStatisticsOpen, setIsStatisticsOpen] = useState(false)
+
+  // Redirect to home if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push(`/${lang}`)
+    }
+  }, [user, loading, router, lang])
 
   // Check for openSettings query parameter from toast
   useEffect(() => {
@@ -37,15 +44,21 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
     }
   }, [searchParams])
 
-  // Redirect if not authenticated
-  if (!user || !profile) {
+  // Show loading while checking auth
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">{t('loading', 'Loading...')}</p>
         </div>
       </div>
     )
+  }
+
+  // Don't render if not authenticated (redirect will happen)
+  if (!user || !profile) {
+    return null
   }
 
   const handleAvatarChange = async (newAvatarUrl: string) => {

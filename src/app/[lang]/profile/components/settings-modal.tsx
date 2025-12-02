@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
  Modal,
@@ -10,13 +9,10 @@ import {
  ModalFooter,
  Button,
  Card,
- CardBody,
- Switch,
- Divider
+ CardBody
 } from '@nextui-org/react'
 import {
  Settings,
- Shield,
  Trash2
 } from 'lucide-react'
 import { TelegramConnection } from './telegram-connection'
@@ -78,41 +74,6 @@ export function SettingsModal({
        telegramFirstName={telegramFirstName}
        onConnectionChange={onTelegramConnectionChange}
       />
-
-      {/* Privacy */}
-      <Card>
-       <CardBody className="p-4">
-        <div className="flex items-center gap-3 mb-4">
-         <Shield className="w-5 h-5 text-gray-600" />
-         <h3 className="font-semibold">{t('profile.settings.privacy')}</h3>
-        </div>
-
-        <div className="space-y-3">
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.profileVisibility')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.profileVisibilityDesc')}
-           </p>
-          </div>
-          <Switch defaultSelected />
-         </div>
-
-         <Divider />
-
-         <div className="flex justify-between items-center">
-          <div>
-           <p className="font-medium">{t('profile.settings.showContactInfo')}</p>
-           <p className="text-sm text-gray-600">
-            {t('profile.settings.showContactInfoDesc')}
-           </p>
-          </div>
-          <Switch defaultSelected />
-         </div>
-        </div>
-       </CardBody>
-      </Card>
-
 
       {/* Danger Zone */}
       <Card className="border-danger-200">

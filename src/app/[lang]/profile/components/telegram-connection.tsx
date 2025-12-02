@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, ClipboardPaste } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from '@/features/auth';
 
@@ -41,14 +41,17 @@ export function TelegramConnection({
     setError(null);
   };
 
-  const handleConnect = async () => {
-    if (!telegramId || telegramId.trim() === '') {
+  // Core connect function that can be called with any ID
+  const connectWithId = async (id: string) => {
+    const cleanId = id.replace(/\D/g, ''); // Remove non-digits
+
+    if (!cleanId || cleanId.trim() === '') {
       setError(t('profile.telegram.invalidIdFormat'));
       return;
     }
 
     // Validate it's a number
-    if (!/^\d+$/.test(telegramId)) {
+    if (!/^\d+$/.test(cleanId)) {
       setError(t('profile.telegram.invalidIdFormat'));
       return;
     }
@@ -65,7 +68,7 @@ export function TelegramConnection({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ telegramId, userId, locale })
+        body: JSON.stringify({ telegramId: cleanId, userId, locale })
       });
 
       if (!response.ok) {
@@ -94,6 +97,46 @@ export function TelegramConnection({
       setError(err instanceof Error ? err.message : t('profile.telegramConnectError'));
     } finally {
       setIsConnecting(false);
+    }
+  };
+
+  // Handle manual connect button click
+  const handleConnect = async () => {
+    await connectWithId(telegramId);
+  };
+
+  // Handle paste from clipboard button
+  const handlePasteFromClipboard = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const cleanId = text.replace(/\D/g, ''); // Extract only digits
+
+      if (cleanId) {
+        setTelegramId(cleanId);
+        // Auto-connect after paste
+        await connectWithId(cleanId);
+      } else {
+        setError(t('profile.telegram.invalidIdFormat'));
+      }
+    } catch (err) {
+      console.error('Failed to read clipboard:', err);
+      // Fallback: just focus the input if clipboard access denied
+      setError(t('profile.telegram.clipboardError', 'Please paste the ID manually'));
+    }
+  };
+
+  // Handle paste event on input - auto-save
+  const handleInputPaste = async (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData('text');
+    const cleanId = pastedText.replace(/\D/g, ''); // Extract only digits
+
+    if (cleanId) {
+      setTelegramId(cleanId);
+      // Small delay to show the pasted value, then auto-connect
+      setTimeout(() => {
+        connectWithId(cleanId);
+      }, 300);
     }
   };
 
@@ -233,30 +276,44 @@ export function TelegramConnection({
                 </div>
               </div>
 
+              {/* Paste Button - Primary action */}
+              <Button
+                color="primary"
+                size="lg"
+                fullWidth
+                onPress={handlePasteFromClipboard}
+                isLoading={isConnecting}
+                startContent={!isConnecting && <ClipboardPaste className="w-5 h-5" />}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3"
+              >
+                {isConnecting ? t('profile.telegram.connecting', 'Connecting...') : t('profile.telegram.pasteAndConnect', 'Paste ID & Connect')}
+              </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-500">
+                    {t('common.or', 'or paste manually')}
+                  </span>
+                </div>
+              </div>
+
               <Input
                 type="text"
                 label={t('profile.telegram.enterId')}
                 placeholder="5108679736"
                 value={telegramId}
                 onChange={(e) => setTelegramId(e.target.value.replace(/\D/g, ''))}
+                onPaste={handleInputPaste}
                 size="lg"
-                className="mb-3"
+                className="mt-3"
                 classNames={{
                   input: 'text-center text-xl font-bold tracking-wide'
                 }}
+                description={t('profile.telegram.autoSaveHint', 'Paste your ID here - it will connect automatically')}
               />
-
-              <Button
-                color="primary"
-                size="lg"
-                fullWidth
-                onPress={handleConnect}
-                isLoading={isConnecting}
-                isDisabled={!telegramId || telegramId.trim() === ''}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold"
-              >
-                {t('profile.telegram.connect')}
-              </Button>
             </div>
           </>
         )}
