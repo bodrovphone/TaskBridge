@@ -41,6 +41,7 @@ export const profile = {
   'profile.email': 'Email',
   'profile.phone': 'Phone',
   'profile.location': 'Location',
+  'profile.selectCity': 'Select your city',
   'profile.memberSince': 'Member since',
   'profile.editPersonalInfo': 'Edit',
   'profile.statistics': 'Statistics',

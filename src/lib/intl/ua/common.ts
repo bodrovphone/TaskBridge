@@ -126,7 +126,9 @@ export const common = {
   'common.noResults': 'Завдань не знайдено',
   'common.noResultsFilter': 'Спробуйте вибрати інший фільтр статусу',
   'common.clearFilters': 'Переглянути всі завдання',
+  'common.error': 'Помилка',
   'common.errorGeneric': 'Щось пішло не так. Спробуйте ще раз.',
+  'common.internalServerError': 'Щось пішло не так. Спробуйте пізніше.',
 
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Телефон підтверджено',

@@ -596,6 +596,7 @@ export const profile = {
   'profile.email': 'Email',
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
+  'profile.selectCity': 'Выберите ваш город',
   'profile.memberSince': 'Участник с',
   'profile.editPersonalInfo': 'Редактировать',
   'profile.statistics': 'Статистика',

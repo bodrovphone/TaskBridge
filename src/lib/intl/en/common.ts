@@ -127,7 +127,9 @@ export const common = {
   'common.noResults': 'No tasks found',
   'common.noResultsFilter': 'Try selecting a different status filter',
   'common.clearFilters': 'View All Tasks',
+  'common.error': 'Error',
   'common.errorGeneric': 'Something went wrong. Please try again.',
+  'common.internalServerError': 'Something went wrong. Please try again later.',
 
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Phone Verified',

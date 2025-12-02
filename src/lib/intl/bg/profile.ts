@@ -41,6 +41,7 @@ export const profile = {
   'profile.email': 'Имейл',
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
+  'profile.selectCity': 'Изберете вашия град',
   'profile.memberSince': 'Член от',
   'profile.editPersonalInfo': 'Редактирай',
   'profile.statistics': 'Статистики',

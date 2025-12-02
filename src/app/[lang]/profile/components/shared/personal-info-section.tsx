@@ -92,8 +92,13 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
         setIsEditing(false)
       } catch (err: any) {
         console.error('Profile update error:', err)
-        // Display user-friendly error message
-        setErrorMessage(err.message || 'Failed to update profile. Please try again.')
+        // Display user-friendly translated error message
+        const errorMsg = err.message || ''
+        if (errorMsg.toLowerCase().includes('internal server error')) {
+          setErrorMessage(t('common.internalServerError'))
+        } else {
+          setErrorMessage(errorMsg || t('common.errorGeneric'))
+        }
       } finally {
         setIsLoading(false)
       }

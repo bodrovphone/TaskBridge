@@ -128,7 +128,9 @@ export const common = {
   'common.noResults': 'Задачи не найдены',
   'common.noResultsFilter': 'Попробуйте выбрать другой фильтр статуса',
   'common.clearFilters': 'Показать все задачи',
+  'common.error': 'Ошибка',
   'common.errorGeneric': 'Что-то пошло не так. Пожалуйста, попробуйте еще раз.',
+  'common.internalServerError': 'Что-то пошло не так. Пожалуйста, попробуйте позже.',
 
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Телефон подтвержден',

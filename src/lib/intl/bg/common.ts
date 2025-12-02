@@ -127,7 +127,9 @@ export const common = {
   'common.noResults': 'Не са намерени задачи',
   'common.noResultsFilter': 'Опитайте да изберете различен филтър за статус',
   'common.clearFilters': 'Виж всички задачи',
+  'common.error': 'Грешка',
   'common.errorGeneric': 'Нещо се обърка. Моля, опитайте отново.',
+  'common.internalServerError': 'Нещо се обърка. Моля, опитайте отново по-късно.',
 
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Потвърден телефон',
