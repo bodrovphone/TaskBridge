@@ -304,6 +304,10 @@ export function useAuth(): UseAuthReturn {
       // Extract current locale from URL path (e.g., /bg/tasks -> bg)
       const pathLocale = window.location.pathname.match(/^\/(en|bg|ru|ua)\//)?.[1] || 'bg'
 
+      // Store locale in cookie BEFORE OAuth redirect (most reliable way to preserve it)
+      // The callback will read this cookie if the query param is lost during OAuth flow
+      document.cookie = `NEXT_LOCALE=${pathLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
+
       // Pass locale in redirect URL so callback can preserve it
       const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}`
 
@@ -338,6 +342,10 @@ export function useAuth(): UseAuthReturn {
 
       // Extract current locale from URL path (e.g., /bg/tasks -> bg)
       const pathLocale = window.location.pathname.match(/^\/(en|bg|ru|ua)\//)?.[1] || 'bg'
+
+      // Store locale in cookie BEFORE OAuth redirect (most reliable way to preserve it)
+      // The callback will read this cookie if the query param is lost during OAuth flow
+      document.cookie = `NEXT_LOCALE=${pathLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
 
       // Pass locale in redirect URL so callback can preserve it
       const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}`

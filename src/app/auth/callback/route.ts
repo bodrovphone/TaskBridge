@@ -12,27 +12,41 @@ export async function GET(request: NextRequest) {
   const errorDescription = requestUrl.searchParams.get('error_description')
   const origin = requestUrl.origin
 
-  // Detect locale - priority: query param > 'next' parameter > cookie > default 'bg'
+  // Detect locale - priority: query param > cookie > 'next' parameter > default 'bg'
+  // Cookie is checked early because it's set RIGHT BEFORE OAuth redirect (most reliable)
   let redirectLocale: 'en' | 'bg' | 'ru' | 'ua' = 'bg' // Default to Bulgarian
 
   // 1. Check for locale query parameter (passed from OAuth redirect URL)
   const localeParam = requestUrl.searchParams.get('locale')
+  // 2. Check cookie (set before OAuth redirect - most reliable source)
+  const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
+
   if (localeParam && ['en', 'bg', 'ru', 'ua'].includes(localeParam)) {
     redirectLocale = localeParam as 'en' | 'bg' | 'ru' | 'ua'
   }
-  // 2. Try to extract locale from 'next' parameter (password reset flows)
+  // Cookie takes priority over 'next' parameter since it's set right before OAuth
+  else if (localeCookie && ['en', 'bg', 'ru', 'ua'].includes(localeCookie)) {
+    redirectLocale = localeCookie as 'en' | 'bg' | 'ru' | 'ua'
+  }
+  // 3. Try to extract locale from 'next' parameter (password reset flows)
   else if (next) {
     const nextLocaleMatch = next.match(/\/(en|bg|ru|ua)\//)
     if (nextLocaleMatch) {
       redirectLocale = nextLocaleMatch[1] as 'en' | 'bg' | 'ru' | 'ua'
     }
   }
-  // 3. Fallback to locale cookie
-  else {
-    const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
-    if (localeCookie && ['en', 'bg', 'ru', 'ua'].includes(localeCookie)) {
-      redirectLocale = localeCookie as 'en' | 'bg' | 'ru' | 'ua'
-    }
+
+  console.log('[Auth Callback] Locale detection:', { localeParam, localeCookie, redirectLocale })
+
+  // Helper to create redirect response with locale cookie
+  const createRedirectWithLocale = (url: string) => {
+    const response = NextResponse.redirect(url)
+    response.cookies.set('NEXT_LOCALE', redirectLocale, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+      sameSite: 'lax',
+    })
+    return response
   }
 
   // Handle Supabase errors (like expired tokens)
@@ -41,10 +55,10 @@ export async function GET(request: NextRequest) {
 
     if (error === 'access_denied' && errorDescription?.includes('expired')) {
       // Redirect to forgot password page with error message
-      return NextResponse.redirect(`${origin}/${redirectLocale}/forgot-password?error=expired`)
+      return createRedirectWithLocale(`${origin}/${redirectLocale}/forgot-password?error=expired`)
     }
 
-    return NextResponse.redirect(`${origin}/${redirectLocale}?error=${error}`)
+    return createRedirectWithLocale(`${origin}/${redirectLocale}?error=${error}`)
   }
 
   if (code) {
@@ -53,7 +67,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('[Auth Callback] Error exchanging code for session:', error)
-      return NextResponse.redirect(`${origin}/${redirectLocale}?error=auth_error`)
+      return createRedirectWithLocale(`${origin}/${redirectLocale}?error=auth_error`)
     }
 
     // Check if this is a password reset flow (indicated by 'next' parameter)
@@ -102,6 +116,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Redirect to home page with detected locale
-  return NextResponse.redirect(`${origin}/${redirectLocale}`)
+  // Redirect to home page with detected locale (cookie is set by helper)
+  return createRedirectWithLocale(`${origin}/${redirectLocale}`)
 }
