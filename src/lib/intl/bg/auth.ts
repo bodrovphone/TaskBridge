@@ -35,6 +35,13 @@ export const auth = {
   'auth.continueWith': 'Продължи с',
   'auth.telegramHint': 'Отваря Telegram приложението или десктоп клиента',
 
+  // Unified auth form
+  'auth.fullName': 'Вашето име',
+  'auth.nameRequired': 'Моля, въведете името си за да създадете акаунт',
+  'auth.nameRequiredHint': 'Името е задължително за създаване на акаунт',
+  'auth.nameHint': 'Само при създаване на нов акаунт',
+  'auth.unexpectedError': 'Възникна неочаквана грешка. Моля, опитайте отново.',
+
   // Email verification
   'auth.email.subject': 'Trudify - Потвърдете имейл адреса си',
   'auth.email.heading': 'Добре дошли в Trudify!',

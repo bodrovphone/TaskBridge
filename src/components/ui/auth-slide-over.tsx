@@ -17,18 +17,50 @@ interface AuthSlideOverProps {
  action: 'apply' | 'question' | 'create-task' | 'join-professional' | null;
 }
 
+/**
+ * =============================================================================
+ * AUTH SLIDE-OVER COMPONENT - Unified Login/Register Form
+ * =============================================================================
+ *
+ * This component provides a single form for both login and registration.
+ * The API automatically detects whether to login or register based on
+ * whether the email already exists in the database.
+ *
+ * KEY STATES:
+ * - fullName: User's name (only required for registration)
+ * - email: User's email address
+ * - password: User's password (min 6 chars)
+ * - nameRequired: When true, highlights name field red (registration needed)
+ * - showVerificationPrompt: Shows email verification UI after registration
+ *
+ * VISUAL BEHAVIOR:
+ * - Name field is always visible but muted (60% opacity, gray bg)
+ * - Name field shows hint "Only needed when creating a new account"
+ * - If registration fails due to missing name:
+ *   - nameRequired becomes true
+ *   - Name field turns red with error styling
+ *   - Hint changes to "Name is required to create your account"
+ *
+ * API ENDPOINT: /api/auth/unified
+ * See that file for detailed flow documentation.
+ */
 export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
- const { signIn, signUp, signInWithGoogle, signInWithFacebook, authenticatedFetch } = useAuth();
+ const { signInWithGoogle, signInWithFacebook, authenticatedFetch, refreshProfile } = useAuth();
  const { t, i18n } = useTranslation();
  const router = useRouter();
- const [mode, setMode] = useState<'login' | 'signup'>('login');
- const [fullName, setFullName] = useState("");
- const [email, setEmail] = useState("");
- const [password, setPassword] = useState("");
- const [confirmPassword, setConfirmPassword] = useState("");
+
+ // Form fields
+ const [fullName, setFullName] = useState("");   // Only required for registration
+ const [email, setEmail] = useState("");         // Required for all auth
+ const [password, setPassword] = useState("");   // Required for all auth (min 6 chars)
+
+ // UI state
  const [isLoading, setIsLoading] = useState(false);
  const [error, setError] = useState<string | null>(null);
- const [mounted, setMounted] = useState(false);
+ const [nameRequired, setNameRequired] = useState(false);  // Controls name field red highlight
+ const [mounted, setMounted] = useState(false);            // Portal mounting state
+
+ // Post-registration state
  const [showVerificationPrompt, setShowVerificationPrompt] = useState(false);
  const [isResendingVerification, setIsResendingVerification] = useState(false);
 
@@ -54,46 +86,93 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   }, 100);
  };
 
- const handleLogin = async () => {
-  if (!email || !password) return;
+ /**
+  * ==========================================================================
+  * UNIFIED AUTH HANDLER - Smart Login/Register Detection
+  * ==========================================================================
+  *
+  * This is the main submit handler for the unified auth form. It calls the
+  * /api/auth/unified endpoint which automatically determines whether to
+  * login or register based on email existence.
+  *
+  * FLOW:
+  * 1. User enters email + password (name is optional, shown but muted)
+  * 2. Submit calls /api/auth/unified
+  * 3. API checks if email exists:
+  *    - EXISTS + correct password → LOGIN success
+  *    - EXISTS + wrong password → ERROR "Invalid email or password"
+  *    - NOT EXISTS + has name → REGISTER success
+  *    - NOT EXISTS + no name → ERROR with name_required flag
+  *
+  * UI BEHAVIOR:
+  * - nameRequired state controls name field highlighting
+  * - When name_required error received: name field turns red, shows error
+  * - User fills name and resubmits → registration proceeds
+  *
+  * DEBUG:
+  * - Check browser console for 'Auth error' logs
+  * - Check server logs for '[Auth/Unified]' prefixed messages
+  * - Network tab: look at /api/auth/unified response
+  */
+ const handleSubmit = async () => {
+  // Early return if required fields missing
+  if (!email || !password) {
+   console.log('[AuthSlideOver] Submit blocked: missing email or password');
+   return;
+  }
+
+  console.log('[AuthSlideOver] Submitting unified auth:', {
+   email,
+   hasPassword: true,
+   hasName: !!fullName.trim()
+  });
 
   setIsLoading(true);
   setError(null);
+  setNameRequired(false);  // Reset name highlight on new submission
 
-  const result = await signIn(email, password);
+  try {
+   const response = await fetch('/api/auth/unified', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, fullName: fullName.trim() }),
+   });
 
-  if (result.error) {
-   setError(result.error);
-   setIsLoading(false);
-  } else {
+   const result = await response.json();
+   console.log('[AuthSlideOver] API response:', {
+    ok: response.ok,
+    status: response.status,
+    action: result.action,
+    nameRequired: result.name_required
+   });
+
+   if (!response.ok) {
+    // Check if this is a "name required" error (email is new, needs registration)
+    if (result.name_required) {
+     console.log('[AuthSlideOver] Name required - highlighting name field');
+     setNameRequired(true);  // This triggers red border on name field
+     setError(t('auth.nameRequired', 'Please provide your name to create an account'));
+    } else {
+     // Other errors (wrong password, validation, etc.)
+     setError(result.error || 'Authentication failed');
+    }
+    setIsLoading(false);
+    return;
+   }
+
+   // SUCCESS: Refresh auth context to pick up new session
+   console.log('[AuthSlideOver] Auth success, refreshing profile...');
+   await refreshProfile();
+
+   // Close slide-over for both login and registration
+   // Note: Email verification prompts are shown elsewhere in the app (banners)
+   // so we don't need to block the user here after registration
+   console.log(`[AuthSlideOver] ${result.action} complete - closing slide-over`);
    handleAuthSuccess();
-  }
- };
-
- const handleSignUp = async () => {
-  if (!email || !password || !fullName) return;
-
-  if (password !== confirmPassword) {
-   setError('Passwords do not match');
-   return;
-  }
-
-  if (password.length < 6) {
-   setError('Password must be at least 6 characters');
-   return;
-  }
-
-  setIsLoading(true);
-  setError(null);
-
-  const result = await signUp(email, password, fullName);
-
-  if (result.error) {
-   setError(result.error);
-   setIsLoading(false);
-  } else {
-   // Show verification prompt after successful signup
-   setShowVerificationPrompt(true);
+  } catch (err) {
+   // Network error or unexpected exception
+   console.error('[AuthSlideOver] Auth error:', err);
+   setError(t('auth.unexpectedError', 'An unexpected error occurred. Please try again.'));
    setIsLoading(false);
   }
  };
@@ -307,21 +386,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
        {/* Auth Form */}
        {!showVerificationPrompt && (
         <div className="space-y-4">
-         {mode === 'signup' && (
-         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-           Full Name
-          </label>
-          <input
-           type="text"
-           value={fullName}
-           onChange={(e) => setFullName(e.target.value)}
-           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-           placeholder="John Doe"
-          />
-         </div>
-        )}
-
+        {/* Email Field */}
         <div>
          <label className="block text-sm font-medium text-gray-700 mb-2">
           {t('auth.email')}
@@ -331,8 +396,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={(e) => {
-           if (e.key === 'Enter' && mode === 'login' && email && password) {
-            handleLogin();
+           if (e.key === 'Enter' && email && password) {
+            handleSubmit();
            }
           }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
@@ -340,6 +405,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          />
         </div>
 
+        {/* Password Field */}
         <div>
          <label className="block text-sm font-medium text-gray-700 mb-2">
           {t('auth.password')}
@@ -349,8 +415,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onKeyDown={(e) => {
-           if (e.key === 'Enter' && mode === 'login' && email && password) {
-            handleLogin();
+           if (e.key === 'Enter' && email && password) {
+            handleSubmit();
            }
           }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
@@ -358,52 +424,74 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          />
         </div>
 
-        {mode === 'signup' && (
-         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-           Confirm Password
-          </label>
-          <input
-           type="password"
-           value={confirmPassword}
-           onChange={(e) => setConfirmPassword(e.target.value)}
-           onKeyDown={(e) => {
-            if (e.key === 'Enter' && mode === 'signup' && email && password && fullName && confirmPassword) {
-             handleSignUp();
-            }
-           }}
-           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-           placeholder="••••••••"
-          />
-         </div>
-        )}
+        {/*
+          NAME FIELD - Always visible but muted (unified auth UX)
 
-        {mode === 'login' && (
-         <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center">
-           <input type="checkbox" className="mr-2 rounded" />
-           {t('auth.rememberMe')}
-          </label>
-          <Link
-           href={`/${i18n.language}/forgot-password`}
-           className="text-blue-600 hover:text-blue-800"
-           onClick={onClose}
-          >
-           {t('auth.forgotPassword')}
-          </Link>
-         </div>
-        )}
+          Visual states:
+          1. Default (nameRequired=false):
+             - 60% opacity, gray background, gray hint text
+             - Shows "Only needed when creating a new account"
+
+          2. Required (nameRequired=true):
+             - Full opacity, red border, red background tint
+             - Shows "Name is required to create your account"
+             - Triggered when API returns { name_required: true }
+
+          When user starts typing in name field while nameRequired=true,
+          the onChange handler resets nameRequired to false (removes red styling)
+        */}
+        <div className={`transition-all duration-200 ${nameRequired ? '' : 'opacity-60'}`}>
+         <label className={`block text-sm font-medium mb-2 ${nameRequired ? 'text-red-600' : 'text-gray-500'}`}>
+          {t('auth.fullName', 'Your Name')}
+         </label>
+         <input
+          type="text"
+          value={fullName}
+          onChange={(e) => {
+           setFullName(e.target.value);
+           if (nameRequired) setNameRequired(false);
+          }}
+          onKeyDown={(e) => {
+           if (e.key === 'Enter' && email && password) {
+            handleSubmit();
+           }
+          }}
+          className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base transition-colors ${
+           nameRequired
+            ? 'border-2 border-red-500 bg-red-50'
+            : 'border border-gray-300 bg-gray-50/50'
+          }`}
+          placeholder="John Doe"
+         />
+         <p className={`text-xs mt-1.5 ${nameRequired ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
+          {nameRequired
+           ? t('auth.nameRequiredHint', 'Name is required to create your account')
+           : t('auth.nameHint', 'Only needed when creating a new account')
+          }
+         </p>
+        </div>
+
+        {/* Forgot Password Link */}
+        <div className="flex items-center justify-end text-sm">
+         <Link
+          href={`/${i18n.language}/forgot-password`}
+          className="text-blue-600 hover:text-blue-800"
+          onClick={onClose}
+         >
+          {t('auth.forgotPassword')}
+         </Link>
+        </div>
 
         {/* Submit Button */}
         <NextUIButton
         color="primary"
         size="lg"
         className="w-full font-semibold shadow-md border-2 border-blue-700"
-        onPress={mode === 'login' ? handleLogin : handleSignUp}
+        onPress={handleSubmit}
         isLoading={isLoading}
-        isDisabled={mode === 'login' ? (!email || !password) : (!email || !password || !fullName || !confirmPassword)}
+        isDisabled={!email || !password}
        >
-        {mode === 'login' ? t('auth.continue') : t('auth.createAccount')}
+        {t('auth.continue')}
         </NextUIButton>
 
         {/* Social Login */}
@@ -464,20 +552,6 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </div> */}
         </div>
 
-        {/* Toggle Mode */}
-        <div className="text-center">
-        <p className="text-sm text-gray-600">
-         {mode === 'login' ? t('auth.noAccount') : 'Already have an account?'}
-         {' '}
-         <button
-          onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-          className="text-blue-600 hover:text-blue-800 font-medium"
-          disabled={isLoading}
-         >
-          {mode === 'login' ? t('auth.createAccount') : t('auth.login')}
-         </button>
-        </p>
-        </div>
        </div>
        )}
 
