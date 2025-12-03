@@ -47,6 +47,7 @@ export function TitleCategorySection({
   const [confirmedSubcategory, setConfirmedSubcategory] = useState(initialSubcategory)
   const [isSearching, setIsSearching] = useState(false)
   const [manualSelectionTriggered, setManualSelectionTriggered] = useState(false)
+  const [hasSelectedCategory, setHasSelectedCategory] = useState(!!initialSubcategory)
 
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const titleForFeedbackRef = useRef<string>('')
@@ -55,6 +56,7 @@ export function TitleCategorySection({
   useEffect(() => {
     preloadCategoryKeywords()
   }, [])
+
 
   // Sync with form
   useEffect(() => {
@@ -100,11 +102,10 @@ export function TitleCategorySection({
   const handleTitleChange = useCallback((value: string) => {
     setTitle(value)
 
-    // Reset state if title changes after confirmation
-    if (flowState === 'confirmed' || flowState === 'suggesting') {
+    // If we're in 'suggesting' state and user hasn't selected yet, reset to allow re-search
+    if (flowState === 'suggesting' && !hasSelectedCategory) {
       setFlowState('entering_title')
       setSuggestedCategory(null)
-      setConfirmedSubcategory('')
     }
 
     // Clear previous timeout
@@ -112,19 +113,21 @@ export function TitleCategorySection({
       clearTimeout(searchTimeoutRef.current)
     }
 
-    // Debounce: search 800ms after user stops typing
-    if (value.trim().length >= 3) {
+    // Only run auto-suggestion if user hasn't selected a category yet
+    // Once selected, user can change category manually via "Change" button
+    if (!hasSelectedCategory && value.trim().length >= 3) {
       searchTimeoutRef.current = setTimeout(() => {
         searchForCategory(value)
       }, 800)
     }
-  }, [flowState, searchForCategory])
+  }, [flowState, hasSelectedCategory, searchForCategory])
 
   // User confirms suggested category
   const handleConfirmSuggestion = useCallback(() => {
     if (suggestedCategory) {
       setConfirmedSubcategory(suggestedCategory.slug)
       setFlowState('confirmed')
+      setHasSelectedCategory(true)
       onCategoryConfirmed(suggestedCategory.mainCategoryId, suggestedCategory.slug)
     }
   }, [suggestedCategory, onCategoryConfirmed])
@@ -140,6 +143,7 @@ export function TitleCategorySection({
   const handleManualCategorySelect = useCallback((category: string, subcategory: string) => {
     setConfirmedSubcategory(subcategory)
     setFlowState('confirmed')
+    setHasSelectedCategory(true)
     onCategoryConfirmed(category, subcategory)
 
     // Send feedback if this was triggered by no match
@@ -181,7 +185,6 @@ export function TitleCategorySection({
             input: "text-lg",
             inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500"
           }}
-          isDisabled={flowState === 'confirmed'}
         />
         <p className="mt-1 text-sm text-gray-500">
           {t('createTask.title.hint', 'Be specific - this helps us match you with the right professionals')}
@@ -200,38 +203,36 @@ export function TitleCategorySection({
           >
             <Card className="border-2 border-blue-200 bg-blue-50">
               <CardBody className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-blue-100 rounded-full">
-                    <Sparkles className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-blue-800 font-medium mb-2">
-                      {t('createTask.category.suggestion', 'This looks like:')}
-                    </p>
-                    <Chip
-                      size="lg"
-                      variant="flat"
-                      className="bg-blue-100 text-blue-800 font-semibold"
-                    >
-                      {suggestedCategory.label}
-                    </Chip>
-                    <div className="flex gap-2 mt-4">
-                      <Button
-                        color="primary"
-                        startContent={<Check className="w-4 h-4" />}
-                        onPress={handleConfirmSuggestion}
-                      >
-                        {t('createTask.category.confirm', 'Yes, correct')}
-                      </Button>
-                      <Button
-                        variant="flat"
-                        startContent={<X className="w-4 h-4" />}
-                        onPress={handleRejectSuggestion}
-                      >
-                        {t('createTask.category.different', 'Choose different')}
-                      </Button>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                  <p className="text-sm text-blue-800 font-medium">
+                    {t('createTask.category.suggestion', 'This looks like:')}
+                  </p>
+                </div>
+                <Chip
+                  size="lg"
+                  variant="flat"
+                  className="bg-blue-100 text-blue-800 font-semibold mb-4"
+                >
+                  {suggestedCategory.label}
+                </Chip>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button
+                    color="primary"
+                    startContent={<Check className="w-4 h-4" />}
+                    onPress={handleConfirmSuggestion}
+                    className="w-full sm:w-auto"
+                  >
+                    {t('createTask.category.confirm', 'Yes, correct')}
+                  </Button>
+                  <Button
+                    variant="flat"
+                    startContent={<X className="w-4 h-4" />}
+                    onPress={handleRejectSuggestion}
+                    className="w-full sm:w-auto"
+                  >
+                    {t('createTask.category.different', 'Choose different')}
+                  </Button>
                 </div>
               </CardBody>
             </Card>

@@ -204,6 +204,7 @@ export const tasks = {
   'createTask.photos.title': 'Додайте фото (необов\'язково)',
   'createTask.photos.help': 'Фото допомагає фахівцям краще зрозуміти завдання',
   'createTask.photos.dragDrop': 'Перетягніть зображення сюди',
+  'createTask.photos.tapToSelect': 'Торкніться, щоб вибрати фото',
   'createTask.photos.orBrowse': 'або натисніть для вибору',
   'createTask.photos.takePhoto': 'Зробити фото',
   'createTask.photos.maxSize': 'Максимум 5 МБ',

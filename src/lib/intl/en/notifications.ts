@@ -332,16 +332,7 @@ export const notifications = {
   'notifications.email.taskCompleted.secondaryMessage': 'Your review helps other users find great professionals (or customers) and improves the Trudify community.',
   'notifications.email.taskCompleted.footerText': "You're receiving this because you were involved in a task on Trudify.",
 
-  // 6. Payment Received
-  'notifications.email.paymentReceived.subject': 'Payment received for "{{task_title}}"',
-  'notifications.email.paymentReceived.heading': 'Payment Received!',
-  'notifications.email.paymentReceived.message': 'You received {{amount}} BGN for completing "{{task_title}}". Keep up the great work!',
-  'notifications.email.paymentReceived.buttonText': 'View Balance',
-  'notifications.email.paymentReceived.infoTitle': 'Payment Details:',
-  'notifications.email.paymentReceived.secondaryMessage': 'Earnings are available in your profile. Continue providing excellent service to earn more!',
-  'notifications.email.paymentReceived.footerText': "You're receiving this because you completed a task on Trudify.",
-
-  // 7. Welcome Email
+  // 6. Welcome Email
   'notifications.email.welcome.subject': 'Welcome to Trudify, {{user_name}}!',
   'notifications.email.welcome.heading': 'Welcome to Trudify!',
   'notifications.email.welcome.message': 'Congratulations! Your account has been created successfully.',

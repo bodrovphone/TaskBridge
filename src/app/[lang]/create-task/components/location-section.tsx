@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { Input, Card, CardBody } from '@nextui-org/react'
-import { Lock, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
 
 interface LocationSectionProps {
@@ -92,32 +92,6 @@ export function LocationSection({ form }: LocationSectionProps) {
     )}
    </form.Field>
 
-   {/* Exact Address */}
-   <form.Field name="exactAddress">
-    {(field: any) => (
-     <div className="space-y-2">
-      <label htmlFor="task-address" className="text-sm font-medium text-gray-700">
-       {t('createTask.location.addressLabel', 'Full Address (Optional)')}
-      </label>
-      <Input
-       id="task-address"
-       placeholder={t('createTask.location.addressPlaceholder', 'Street, building number, entrance, floor, apartment')}
-       description={
-        <span className="flex items-center gap-1 text-warning">
-         <Lock className="w-3 h-3" />
-         {t('createTask.location.addressSecurity', 'Address will only be shown to the professional you hire')}
-        </span>
-       }
-       value={field.state.value || ''}
-       onValueChange={field.handleChange}
-       startContent={<Lock className="w-4 h-4 text-gray-400" />}
-       classNames={{
-        input: 'text-base',
-       }}
-      />
-     </div>
-    )}
-   </form.Field>
    </CardBody>
   </Card>
  )

@@ -1,12 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, CardHeader, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
 import { FileText, Edit, X, Save } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Button as RadixButton } from '@/components/ui/button'
 import { ServiceCategoriesSelector } from '../service-categories-selector'
 import { getCategoryColor } from '@/lib/utils/category'
 import { getSubcategoryBySlug } from '@/features/categories/lib/subcategories'
+import { useIsMobile } from '@/hooks/use-is-mobile'
+import { cn } from '@/lib/utils'
 
 interface ServiceCategoriesSectionProps {
   serviceCategories: string[]
@@ -15,6 +25,7 @@ interface ServiceCategoriesSectionProps {
 
 export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceCategoriesSectionProps) {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [tempCategories, setTempCategories] = useState<string[]>([])
 
@@ -104,42 +115,62 @@ export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceC
         </CardBody>
       </Card>
 
-      {/* Service Categories Modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={cancelModal}
-        size="2xl"
-        scrollBehavior="inside"
-      >
-        <ModalContent>
-          <ModalHeader className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-primary" />
-            {t('profile.professional.selectCategories')}
-          </ModalHeader>
-          <ModalBody>
+      {/* Service Categories Dialog - Radix UI */}
+      <Dialog open={isModalOpen} onOpenChange={(open) => !open && cancelModal()}>
+        <DialogContent
+          className={cn(
+            "p-0 gap-0 bg-white dark:bg-gray-900 flex flex-col overflow-hidden",
+            isMobile
+              ? "h-full max-h-full w-full max-w-full rounded-none !inset-0 !translate-x-0 !translate-y-0"
+              : "rounded-2xl max-h-[85vh] max-w-2xl"
+          )}
+          hideCloseButton
+        >
+          {/* Header */}
+          <DialogHeader className="flex-shrink-0 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-green-50 px-4 py-4 sm:px-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500/20 to-green-200">
+                <FileText className="w-5 h-5 text-emerald-600" />
+              </div>
+              <DialogTitle className="text-lg sm:text-xl font-bold text-gray-900">
+                {t('profile.professional.selectCategories')}
+              </DialogTitle>
+            </div>
+          </DialogHeader>
+
+          {/* Body - Scrollable */}
+          <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6">
             <ServiceCategoriesSelector
               selectedCategories={tempCategories}
               onChange={setTempCategories}
             />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="bordered"
-              onPress={cancelModal}
-              startContent={<X className="w-4 h-4" />}
-            >
-              {t('common.cancel', 'Cancel')}
-            </Button>
-            <Button
-              color="primary"
-              onPress={saveModal}
-              startContent={<Save className="w-4 h-4" />}
-            >
-              {t('profile.serviceCategories.saveCategories', 'Save Categories')}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </div>
+
+          {/* Footer - Fixed at bottom */}
+          <DialogFooter className={cn(
+            "flex-shrink-0 border-t border-gray-100 bg-gray-50 px-4 py-4 sm:px-6",
+            isMobile ? "pb-safe" : ""
+          )}>
+            <div className="flex gap-3 w-full sm:w-auto sm:justify-end">
+              <RadixButton
+                variant="outline"
+                onClick={cancelModal}
+                className="flex-1 sm:flex-initial"
+              >
+                <X className="w-4 h-4 mr-2" />
+                {t('common.cancel', 'Cancel')}
+              </RadixButton>
+              <RadixButton
+                onClick={saveModal}
+                className="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {t('profile.serviceCategories.saveCategories', 'Save Categories')}
+              </RadixButton>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

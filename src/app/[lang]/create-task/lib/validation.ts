@@ -21,7 +21,6 @@ export const createTaskSchema = z.object({
   // Location
   city: z.string().min(1, 'createTask.errors.cityRequired'),
   neighborhood: z.string().optional(),
-  exactAddress: z.string().optional(),
 
   // Budget (completely optional)
   budgetType: z.enum(['fixed', 'range', 'unclear']).optional().default('unclear'),
@@ -81,7 +80,6 @@ export const defaultFormValues: Partial<CreateTaskFormData> & {
   requirements: '',
   city: '',
   neighborhood: '',
-  exactAddress: '',
   budgetType: 'unclear',
   urgency: 'flexible',
   photos: [],

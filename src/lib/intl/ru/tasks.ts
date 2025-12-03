@@ -146,6 +146,11 @@ export const tasks = {
   'createTask.hero.verifiedPros': 'Проверенные специалисты',
   'createTask.hero.help': 'Нужна помощь? Свяжитесь с нашей командой поддержки',
 
+  // Title Input Section (smart category matching)
+  'createTask.title.label': 'Что вам нужно сделать?',
+  'createTask.title.placeholder': 'напр. Починить протекающий кран в ванной',
+  'createTask.title.hint': 'Будьте конкретны - это поможет нам найти вам подходящих специалистов',
+
   // Category Section
   'createTask.category.title': 'Какая услуга вам нужна?',
   'createTask.category.subtitle': 'Выберите категорию, которая лучше всего описывает вашу задачу',
@@ -154,6 +159,12 @@ export const tasks = {
   'createTask.category.selected': 'Выбранная услуга',
   'createTask.category.categorySelected': 'Выбранная категория. Нажмите X, чтобы изменить.',
   'createTask.category.tryDifferent': 'Попробуйте другой поисковый запрос',
+  'createTask.category.suggestion': 'Это похоже на:',
+  'createTask.category.confirm': 'Да, верно',
+  'createTask.category.different': 'Выбрать другую',
+  'createTask.category.helpUs': 'Помогите нам найти правильных специалистов - пожалуйста, выберите категорию:',
+  'createTask.category.analyzing': 'Анализируем ваш запрос...',
+  'createTask.category.change': 'Изменить',
 
   // Details Section
   'createTask.details.title': 'Опишите вашу задачу',
@@ -178,9 +189,6 @@ export const tasks = {
   'createTask.location.neighborhoodLabel': 'Район/Квартал',
   'createTask.location.neighborhoodPlaceholder': 'напр. Центр, Люлин, Студенческий городок',
   'createTask.location.neighborhoodHelp': 'Помогает специалистам определить, смогут ли они до вас добраться',
-  'createTask.location.addressLabel': 'Точный адрес (по желанию)',
-  'createTask.location.addressPlaceholder': 'Улица, номер дома, подъезд, этаж, квартира',
-  'createTask.location.addressSecurity': 'Адрес будет показан только профессионалу, которого вы наймете',
 
   // Budget Section
   'createTask.budget.title': 'Какой ваш бюджет?',
@@ -212,6 +220,7 @@ export const tasks = {
   'createTask.photos.title': 'Добавьте фотографию (по желанию)',
   'createTask.photos.help': 'Фотография помогает профессионалам лучше понять вашу задачу',
   'createTask.photos.dragDrop': 'Перетащите изображение сюда',
+  'createTask.photos.tapToSelect': 'Нажмите, чтобы выбрать фото',
   'createTask.photos.orBrowse': 'или кликните для обзора',
   'createTask.photos.takePhoto': 'Сделать фото',
   'createTask.photos.maxSize': 'Максимум 5MB',
@@ -259,7 +268,6 @@ export const tasks = {
   'createTask.validationDialog.fieldName.requirements': 'Требования',
   'createTask.validationDialog.fieldName.city': 'Город',
   'createTask.validationDialog.fieldName.neighborhood': 'Район',
-  'createTask.validationDialog.fieldName.exactAddress': 'Точный адрес',
   'createTask.validationDialog.fieldName.budgetMin': 'Минимальный бюджет',
   'createTask.validationDialog.fieldName.budgetMax': 'Максимальный бюджет',
   'createTask.validationDialog.fieldName.urgency': 'Срочность',

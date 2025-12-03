@@ -38,6 +38,8 @@ export const profile = {
   'profile.settings': 'Налаштування',
   'profile.tabs.customer': 'Замовник',
   'profile.tabs.professional': 'Фахівець',
+  'profile.switchToCustomer': 'Перейти до профілю Замовника',
+  'profile.switchToProfessional': 'Перейти до профілю Фахівця',
   'profile.email': 'Email',
   'profile.phone': 'Телефон',
   'profile.location': 'Місце',
@@ -177,6 +179,16 @@ export const profile = {
   'profile.professional.titleField': 'Професійна назва',
   'profile.professional.recommended': 'Рекомендовано',
   'profile.professional.recommendedFields': 'Категорії (Послуги), Місце та Про себе',
+
+  // Professional Listing Banner
+  'profile.listing.notListed': 'Ваш профіль ще не опубліковано',
+  'profile.listing.notListedMessage': 'Додайте професійну назву, щоб з\'явитися в нашому пошуку та отримувати пропозиції роботи від клієнтів.',
+  'profile.listing.incomplete': 'Заповніть профіль',
+  'profile.listing.incompleteMessage': 'Заповніть відсутню інформацію, щоб покращити видимість та залучити більше клієнтів.',
+  'profile.listing.requirement.title': 'Професійна назва',
+  'profile.listing.requirement.bio': 'Опис/Про себе',
+  'profile.listing.requirement.rate': 'Погодинна ставка',
+  'profile.listing.requirement.skills': 'Категорії послуг',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Натисніть для підключення',

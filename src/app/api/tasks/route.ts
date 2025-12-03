@@ -25,7 +25,6 @@ import { batchCheckProfanity } from '@/lib/services/profanity-filter'
  *   city: string
  *   subcategory?: string
  *   neighborhood?: string
- *   exactAddress?: string
  *   budgetType?: 'fixed' | 'range'
  *   budgetMin?: number
  *   budgetMax?: number

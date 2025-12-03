@@ -31,7 +31,6 @@ interface TaskFormData {
   subcategory?: string
   city: string
   neighborhood?: string
-  exactAddress?: string
   requirements?: string
   budgetType: 'fixed' | 'range' | 'unclear'
   budgetMin?: number | null
@@ -243,7 +242,7 @@ export function TaskForm({
     const firstErrorField = validationErrors[0].field
     const fieldToRefMap: Record<string, React.RefObject<HTMLDivElement>> = {
       category: categoryRef, subcategory: categoryRef, title: detailsRef, description: detailsRef,
-      requirements: detailsRef, city: locationRef, neighborhood: locationRef, exactAddress: locationRef,
+      requirements: detailsRef, city: locationRef, neighborhood: locationRef,
       budgetMin: budgetRef, budgetMax: budgetRef, urgency: timelineRef, deadline: timelineRef,
     }
     const targetRef = fieldToRefMap[firstErrorField]
@@ -260,7 +259,7 @@ export function TaskForm({
     const errors: Array<{ field: string; message: string }> = []
     const fieldsToCheck = [
       'category', 'subcategory', 'title', 'description', 'requirements',
-      'city', 'neighborhood', 'exactAddress',
+      'city', 'neighborhood',
       'budgetMin', 'budgetMax', 'urgency', 'deadline',
     ]
     fieldsToCheck.forEach(fieldName => {

@@ -146,11 +146,16 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
                   <Upload className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">
+                  {/* Desktop: show drag & drop text */}
+                  <p className="hidden sm:block font-semibold text-gray-900">
                     {t('createTask.photos.dragDrop', 'Drag and drop an image here')}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="hidden sm:block text-sm text-gray-500">
                     {t('createTask.photos.orBrowse', 'or click to browse')}
+                  </p>
+                  {/* Mobile: show tap to select text */}
+                  <p className="block sm:hidden font-semibold text-gray-900">
+                    {t('createTask.photos.tapToSelect', 'Tap to select a photo')}
                   </p>
                 </div>
                 <div className="text-xs text-gray-400 space-y-1">

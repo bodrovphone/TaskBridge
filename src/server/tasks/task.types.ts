@@ -17,7 +17,6 @@ export interface CreateTaskInput {
   // Optional fields
   subcategory?: string
   neighborhood?: string
-  exactAddress?: string
   requirements?: string
 
   // Budget (optional)
@@ -51,7 +50,6 @@ export interface UpdateTaskInput {
   // Location
   city?: string
   neighborhood?: string
-  exactAddress?: string
 
   // Budget
   budgetType?: 'fixed' | 'range' | 'unclear'
@@ -83,7 +81,6 @@ export interface Task {
   // Location
   city: string
   neighborhood: string | null
-  address: string | null
   location_notes: string | null
 
   // Budget
@@ -156,7 +153,6 @@ export interface TaskDbInsert {
   subcategory: string | null
   city: string
   neighborhood: string | null
-  address: string | null
   location_notes: string | null
   budget_min_bgn: number | null
   budget_max_bgn: number | null
@@ -243,7 +239,6 @@ export const mapCreateInputToDbInsert = (
     subcategory: input.subcategory || null,
     city: input.city,
     neighborhood: input.neighborhood || null,
-    address: input.exactAddress || null,
     location_notes: input.requirements || null,
     budget_min_bgn: input.budgetMin || null,
     budget_max_bgn: input.budgetMax || null,
@@ -273,7 +268,6 @@ export const mapUpdateInputToDbUpdate = (
   if (input.subcategory !== undefined) updates.subcategory = input.subcategory || null
   if (input.city !== undefined) updates.city = input.city
   if (input.neighborhood !== undefined) updates.neighborhood = input.neighborhood || null
-  if (input.exactAddress !== undefined) updates.address = input.exactAddress || null
   if (input.requirements !== undefined) updates.location_notes = input.requirements || null
 
   // Budget fields

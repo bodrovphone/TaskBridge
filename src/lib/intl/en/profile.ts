@@ -38,6 +38,8 @@ export const profile = {
   'profile.settings': 'Settings',
   'profile.tabs.customer': 'Customer',
   'profile.tabs.professional': 'Professional',
+  'profile.switchToCustomer': 'Switch to Customer Profile',
+  'profile.switchToProfessional': 'Switch to Professional Profile',
   'profile.email': 'Email',
   'profile.phone': 'Phone',
   'profile.location': 'Location',
@@ -177,6 +179,16 @@ export const profile = {
   'profile.professional.titleField': 'Professional Title',
   'profile.professional.recommended': 'Recommended',
   'profile.professional.recommendedFields': 'Categories (Services), Location, and Bio',
+
+  // Professional Listing Banner
+  'profile.listing.notListed': 'Your profile is not listed yet',
+  'profile.listing.notListedMessage': 'Add a professional title to appear in our search and receive job opportunities from customers.',
+  'profile.listing.incomplete': 'Complete your profile',
+  'profile.listing.incompleteMessage': 'Fill in the missing information to improve your visibility and attract more customers.',
+  'profile.listing.requirement.title': 'Professional title',
+  'profile.listing.requirement.bio': 'Description/Bio',
+  'profile.listing.requirement.rate': 'Hourly rate',
+  'profile.listing.requirement.skills': 'Service categories',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Click to connect',

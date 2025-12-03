@@ -145,6 +145,11 @@ export const tasks = {
   'createTask.hero.verifiedPros': 'Verified professionals',
   'createTask.hero.help': 'Need help? Contact our support team',
 
+  // Title Input Section (smart category matching)
+  'createTask.title.label': 'What do you need done?',
+  'createTask.title.placeholder': 'e.g., Fix a leaking faucet in the bathroom',
+  'createTask.title.hint': 'Be specific - this helps us match you with the right professionals',
+
   // Category Section
   'createTask.category.title': 'What type of service do you need?',
   'createTask.category.subtitle': 'Select the category that best matches your task',
@@ -153,6 +158,12 @@ export const tasks = {
   'createTask.category.selected': 'Selected Service',
   'createTask.category.categorySelected': 'Selected category. Click the X to change.',
   'createTask.category.tryDifferent': 'Try a different search term',
+  'createTask.category.suggestion': 'This looks like:',
+  'createTask.category.confirm': 'Yes, correct',
+  'createTask.category.different': 'Choose different',
+  'createTask.category.helpUs': 'Help us find the right specialists - please select a category:',
+  'createTask.category.analyzing': 'Analyzing your request...',
+  'createTask.category.change': 'Change',
 
   // Details Section
   'createTask.details.title': 'Tell us about your task',
@@ -177,9 +188,6 @@ export const tasks = {
   'createTask.location.neighborhoodLabel': 'Neighborhood/District',
   'createTask.location.neighborhoodPlaceholder': 'e.g., Лозенец, Витоша, Център',
   'createTask.location.neighborhoodHelp': 'Helps professionals determine if they can reach you',
-  'createTask.location.addressLabel': 'Full Address (Optional)',
-  'createTask.location.addressPlaceholder': 'Street, building number, entrance, floor, apartment',
-  'createTask.location.addressSecurity': 'Address will only be shown to the professional you hire',
 
   // Budget Section
   'createTask.budget.title': 'What is your budget?',
@@ -211,6 +219,7 @@ export const tasks = {
   'createTask.photos.title': 'Add a photo (optional)',
   'createTask.photos.help': 'A photo helps professionals understand your task better',
   'createTask.photos.dragDrop': 'Drag and drop an image here',
+  'createTask.photos.tapToSelect': 'Tap to select a photo',
   'createTask.photos.orBrowse': 'or click to browse',
   'createTask.photos.takePhoto': 'Take a Photo',
   'createTask.photos.maxSize': '5MB maximum',
@@ -258,7 +267,6 @@ export const tasks = {
   'createTask.validationDialog.fieldName.requirements': 'Requirements',
   'createTask.validationDialog.fieldName.city': 'City',
   'createTask.validationDialog.fieldName.neighborhood': 'Neighborhood',
-  'createTask.validationDialog.fieldName.exactAddress': 'Exact Address',
   'createTask.validationDialog.fieldName.budgetMin': 'Minimum Budget',
   'createTask.validationDialog.fieldName.budgetMax': 'Maximum Budget',
   'createTask.validationDialog.fieldName.urgency': 'Urgency',

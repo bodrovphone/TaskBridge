@@ -1,10 +1,11 @@
 'use client'
 
 import { Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { Shield, BarChart3, Settings, Bell, AlertCircle, Mail, Send } from 'lucide-react'
+import { Shield, BarChart3, Settings, AlertCircle, Mail, Send, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AvatarUpload } from '../avatar-upload'
 import type { UserProfile } from '@/server/domain/user/user.types'
+import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
 
 interface ProfileHeaderProps {
   profile: UserProfile
@@ -72,8 +73,15 @@ export function ProfileHeader({
 
   const completionPercentage = calculateCompletion()
 
-  // Check if professional profile is incomplete
-  const isProfessionalIncomplete = profileType === 'professional' && !profile.professionalTitle
+  // Professional listing status (uses shared hook)
+  const {
+    requirements: professionalRequirements,
+    isListed,
+    isComplete: allProfessionalRequirementsMet,
+  } = useProfessionalListingStatus(profileType === 'professional' ? profile : null)
+
+  // Check if professional profile is incomplete (not listed)
+  const isProfessionalIncomplete = profileType === 'professional' && !isListed
 
   return (
     <div className="mb-8">
@@ -158,23 +166,53 @@ export function ProfileHeader({
                   </div>
                 </div>
 
-                {/* Professional Profile Incomplete Warning */}
-                {isProfessionalIncomplete && (
-                  <div className="mb-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 rounded-lg shadow-sm">
+                {/* Professional Listing Requirements Checklist */}
+                {profileType === 'professional' && !allProfessionalRequirementsMet && (
+                  <div className={`mb-4 p-4 rounded-xl border-2 ${
+                    isProfessionalIncomplete
+                      ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300'
+                      : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
+                  }`}>
                     <div className="flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div className={`p-2 rounded-lg ${isProfessionalIncomplete ? 'bg-amber-100' : 'bg-blue-100'}`}>
+                        <AlertCircle className={`w-5 h-5 ${isProfessionalIncomplete ? 'text-amber-600' : 'text-blue-600'}`} />
+                      </div>
                       <div className="flex-1">
-                        <p className="text-sm font-semibold text-amber-900 mb-1">
-                          {t('profile.professional.incompleteTitle', 'Complete Your Professional Profile')}
+                        <h4 className={`font-bold mb-1 ${isProfessionalIncomplete ? 'text-amber-900' : 'text-blue-900'}`}>
+                          {isProfessionalIncomplete
+                            ? t('profile.listing.notListed', 'Your profile is not listed yet')
+                            : t('profile.listing.incomplete', 'Complete your profile')
+                          }
+                        </h4>
+                        <p className={`text-sm mb-3 ${isProfessionalIncomplete ? 'text-amber-800' : 'text-blue-800'}`}>
+                          {isProfessionalIncomplete
+                            ? t('profile.listing.notListedMessage', 'Add a professional title to appear in our search and receive job opportunities from customers.')
+                            : t('profile.listing.incompleteMessage', 'Fill in the missing information to improve your visibility and attract more customers.')
+                          }
                         </p>
-                        <p className="text-sm text-amber-800">
-                          <span className="font-medium">{t('profile.professional.minimumRequired', 'Minimum required')}:</span>{' '}
-                          {t('profile.professional.titleField', 'Professional Title')}
-                        </p>
-                        <p className="text-sm text-amber-700 mt-1">
-                          <span className="font-medium">{t('profile.professional.recommended', 'Recommended')}:</span>{' '}
-                          {t('profile.professional.recommendedFields', 'Categories (Services), Location, and Bio')}
-                        </p>
+
+                        {/* Requirements checklist */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          {professionalRequirements.map((req) => (
+                            <div
+                              key={req.key}
+                              className={`flex items-center gap-2 text-sm ${
+                                req.met ? 'text-green-700' : isProfessionalIncomplete ? 'text-amber-700' : 'text-blue-700'
+                              }`}
+                            >
+                              {req.met ? (
+                                <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              ) : (
+                                <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                                  isProfessionalIncomplete ? 'border-amber-400' : 'border-blue-400'
+                                }`} />
+                              )}
+                              <span className={req.met ? 'line-through opacity-60' : 'font-medium'}>
+                                {req.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -689,6 +689,11 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
 /**
  * Search keywords for a query in a specific language
  * Returns matching subcategory slugs with relevance score
+ *
+ * Improved algorithm:
+ * - Splits query into words for better matching
+ * - "need an electric" matches "electrician" via prefix matching
+ * - Each word is checked independently against keywords
  */
 export const searchKeywords = (
   query: string,
@@ -697,32 +702,70 @@ export const searchKeywords = (
   const lowerQuery = query.toLowerCase().trim();
   if (!lowerQuery) return [];
 
-  const results: { slug: string; score: number }[] = [];
+  // Split query into words, filter out short words (< 3 chars) and common stop words
+  const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'to', 'for', 'in', 'on', 'at', 'is', 'it', 'my', 'me', 'i', 'need', 'want', 'have', 'get', 'can', 'do', 'be', 'с', 'в', 'на', 'и', 'для', 'мне', 'нужен', 'нужна', 'нужно', 'за', 'от', 'към', 'ми', 'трябва']);
+  const queryWords = lowerQuery
+    .split(/\s+/)
+    .filter(word => word.length >= 3 && !stopWords.has(word));
+
+  // Also try the full query for phrase matching
+  const allQueries = [...queryWords];
+  if (queryWords.length > 1) {
+    allQueries.push(lowerQuery); // Add full query for phrase matching
+  }
+
+  const results: Map<string, number> = new Map();
 
   for (const [slug, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
     const langKeywords = keywords[language] || [];
+    let bestScore = 0;
 
-    for (const keyword of langKeywords) {
-      const lowerKeyword = keyword.toLowerCase();
+    // Check each query word/phrase against all keywords
+    for (const queryPart of allQueries) {
+      for (const keyword of langKeywords) {
+        const lowerKeyword = keyword.toLowerCase();
+        let score = 0;
 
-      // Exact match - highest score
-      if (lowerKeyword === lowerQuery) {
-        results.push({ slug, score: 100 });
-        break;
+        // Exact match - highest score
+        if (lowerKeyword === queryPart) {
+          score = 100;
+        }
+        // Keyword starts with query word (e.g., "electrician".startsWith("electric"))
+        else if (lowerKeyword.startsWith(queryPart) && queryPart.length >= 4) {
+          score = 90;
+        }
+        // Query word starts with keyword (e.g., "plumbing".startsWith("plumb"))
+        else if (queryPart.startsWith(lowerKeyword) && lowerKeyword.length >= 4) {
+          score = 85;
+        }
+        // Keyword contains query word
+        else if (lowerKeyword.includes(queryPart) && queryPart.length >= 4) {
+          score = 70;
+        }
+        // Query word contains keyword (for short keywords)
+        else if (queryPart.includes(lowerKeyword) && lowerKeyword.length >= 4) {
+          score = 65;
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+        }
+
+        // Found exact match, no need to check more keywords
+        if (score === 100) break;
       }
-      // Query starts with keyword or keyword starts with query
-      else if (lowerKeyword.startsWith(lowerQuery) || lowerQuery.startsWith(lowerKeyword)) {
-        results.push({ slug, score: 80 });
-        break;
-      }
-      // Keyword contains query
-      else if (lowerKeyword.includes(lowerQuery)) {
-        results.push({ slug, score: 60 });
-        break;
-      }
+
+      if (bestScore === 100) break;
+    }
+
+    if (bestScore > 0) {
+      const existing = results.get(slug) || 0;
+      results.set(slug, Math.max(existing, bestScore));
     }
   }
 
-  // Sort by score descending
-  return results.sort((a, b) => b.score - a.score);
+  // Convert to array and sort by score descending
+  return Array.from(results.entries())
+    .map(([slug, score]) => ({ slug, score }))
+    .sort((a, b) => b.score - a.score);
 };

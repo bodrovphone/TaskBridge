@@ -17,7 +17,6 @@ interface TaskFormData {
   subcategory?: string
   city: string
   neighborhood?: string
-  exactAddress?: string
   requirements?: string
   budgetType: 'fixed' | 'range' | 'unclear'
   budgetMin?: number | null
@@ -81,7 +80,6 @@ export default function EditTaskPage() {
           subcategory: task.subcategory || '',
           city: task.city,
           neighborhood: task.neighborhood || '',
-          exactAddress: task.address || '',
           requirements: task.location_notes || '',
           budgetType: mapDbBudgetTypeToForm(task.budget_type),
           budgetMin: task.budget_min_bgn,

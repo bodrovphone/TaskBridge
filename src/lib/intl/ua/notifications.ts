@@ -326,14 +326,6 @@ export const notifications = {
   'notifications.email.taskCompleted.secondaryMessage': 'Ваш відгук допоможе іншим користувачам знайти чудових фахівців та покращить спільноту Trudify.',
   'notifications.email.taskCompleted.footerText': 'Ви отримали цей лист, тому що брали участь у завданні на Trudify.',
 
-  'notifications.email.paymentReceived.subject': 'Отримано оплату за "{{task_title}}"',
-  'notifications.email.paymentReceived.heading': 'Оплату отримано!',
-  'notifications.email.paymentReceived.message': 'Ви отримали {{amount}} BGN за виконання "{{task_title}}". Продовжуйте чудову роботу!',
-  'notifications.email.paymentReceived.buttonText': 'Переглянути баланс',
-  'notifications.email.paymentReceived.infoTitle': 'Деталі оплати:',
-  'notifications.email.paymentReceived.secondaryMessage': 'Заробіток доступний у вашому профілі. Продовжуйте надавати відмінний сервіс, щоб заробляти більше!',
-  'notifications.email.paymentReceived.footerText': 'Ви отримали цей лист, тому що виконали завдання на Trudify.',
-
   'notifications.email.welcome.subject': 'Ласкаво просимо до Trudify, {{user_name}}!',
   'notifications.email.welcome.heading': 'Ласкаво просимо до Trudify!',
   'notifications.email.welcome.message': 'Вітаємо! Ваш обліковий запис успішно створено.',

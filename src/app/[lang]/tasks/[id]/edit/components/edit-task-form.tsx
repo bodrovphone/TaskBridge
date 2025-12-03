@@ -11,7 +11,6 @@ interface EditTaskFormProps {
     subcategory?: string
     city: string
     neighborhood?: string
-    exactAddress?: string
     budgetType: 'fixed' | 'range' | 'unclear'
     budgetMin?: number | null
     budgetMax?: number | null

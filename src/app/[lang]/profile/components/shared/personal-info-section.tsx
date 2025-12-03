@@ -399,6 +399,9 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     value={field.state.value}
                     onValueChange={field.handleChange}
                     startContent={<UserIcon className="w-4 h-4 text-gray-500" />}
+                    classNames={{
+                      input: 'text-base', // 16px font size prevents iOS zoom
+                    }}
                   />
                 )}
               </personalForm.Field>
@@ -427,6 +430,9 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     isInvalid={!!field.state.meta.errors.length}
                     errorMessage={field.state.meta.errors[0]}
                     startContent={<Mail className="w-4 h-4 text-gray-500" />}
+                    classNames={{
+                      input: 'text-base', // 16px font size prevents iOS zoom
+                    }}
                   />
                 )}
               </personalForm.Field>
@@ -453,6 +459,9 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                     errorMessage={field.state.meta.errors[0]}
                     startContent={<Phone className="w-4 h-4 text-gray-500" />}
                     placeholder="+359 88 123 4567"
+                    classNames={{
+                      input: 'text-base', // 16px font size prevents iOS zoom
+                    }}
                   />
                 )}
               </personalForm.Field>

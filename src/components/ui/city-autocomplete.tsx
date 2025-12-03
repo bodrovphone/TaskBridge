@@ -203,7 +203,15 @@ export function CityAutocomplete({
           }
           handleInputChange(newValue)
         }}
-        onFocus={() => setIsOpen(true)}
+        onFocus={() => {
+          setIsOpen(true)
+          // On mobile, scroll down 60px to make room for dropdown
+          if (window.innerWidth < 768) {
+            setTimeout(() => {
+              window.scrollBy({ top: 60, behavior: 'smooth' })
+            }, 100)
+          }
+        }}
         onKeyDown={handleKeyDown}
         isInvalid={isInvalid}
         errorMessage={errorMessage}

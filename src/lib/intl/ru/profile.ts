@@ -593,6 +593,8 @@ export const profile = {
   'profile.settings': 'Настройки',
   'profile.tabs.customer': 'Клиент',
   'profile.tabs.professional': 'Специалист',
+  'profile.switchToCustomer': 'Перейти в профиль Клиента',
+  'profile.switchToProfessional': 'Перейти в профиль Специалиста',
   'profile.email': 'Email',
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
@@ -732,6 +734,16 @@ export const profile = {
   'profile.professional.titleField': 'Профессиональное название',
   'profile.professional.recommended': 'Рекомендуется',
   'profile.professional.recommendedFields': 'Категории (Услуги), Местоположение и Биография',
+
+  // Professional Listing Banner
+  'profile.listing.notListed': 'Ваш профиль еще не опубликован',
+  'profile.listing.notListedMessage': 'Добавьте профессиональное название, чтобы появиться в нашем поиске и получать предложения работы от клиентов.',
+  'profile.listing.incomplete': 'Заполните профиль',
+  'profile.listing.incompleteMessage': 'Заполните недостающую информацию, чтобы улучшить видимость и привлечь больше клиентов.',
+  'profile.listing.requirement.title': 'Профессиональное название',
+  'profile.listing.requirement.bio': 'Описание/Биография',
+  'profile.listing.requirement.rate': 'Почасовая ставка',
+  'profile.listing.requirement.skills': 'Категории услуг',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Нажмите для подключения',

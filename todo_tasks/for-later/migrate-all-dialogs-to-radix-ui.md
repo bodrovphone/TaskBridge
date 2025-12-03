@@ -42,7 +42,7 @@ All other dialogs in the codebase should be migrated to use the same Radix UI Di
 ### Inline Modals in Components (8)
 - [ ] `src/app/[lang]/profile/components/shared/personal-info-section.tsx`
 - [ ] `src/app/[lang]/profile/components/avatar-upload.tsx`
-- [ ] `src/app/[lang]/profile/components/sections/service-categories-section.tsx`
+- [x] `src/app/[lang]/profile/components/sections/service-categories-section.tsx`
 - [ ] `src/app/[lang]/profile/components/portfolio-gallery-manager.tsx`
 - [ ] `src/app/[lang]/profile/components/professional-setup-form.tsx`
 - [ ] `src/app/[lang]/tasks/[id]/components/task-actions.tsx`
@@ -50,8 +50,9 @@ All other dialogs in the codebase should be migrated to use the same Radix UI Di
 - [ ] `src/app/[lang]/tasks/work/components/my-work-content.tsx`
 - [ ] `src/app/[lang]/tasks/applications/components/applications-page-content.tsx`
 
-### Already Migrated (1)
+### Already Migrated (2)
 - [x] `src/components/tasks/accept-application-dialog.tsx` - Reference implementation
+- [x] `src/app/[lang]/profile/components/sections/service-categories-section.tsx` - Service categories picker
 
 ## Migration Pattern
 

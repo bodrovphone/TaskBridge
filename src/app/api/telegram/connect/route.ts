@@ -102,11 +102,11 @@ async function sendConfirmationMessage(telegramId: number, locale: string = 'en'
 
   // Multilingual confirmation messages
   const confirmationMessages: Record<string, string> = {
-    en: `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n• Payment notifications\n\nYou can manage notification preferences in your profile settings on the website.`,
+    en: `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now connected to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• New messages from clients/professionals\n• Task completion confirmations\n\nYou can manage notification preferences in your profile settings on the website.`,
 
-    bg: `✅ <b>Успешно свързване!</b>\n\nВашият Telegram акаунт вече е свързан с Trudify.\n\n<b>Ще получавате мигновени известия за:</b>\n• Нови кандидатури за вашите задачи\n• Актуализации на статуса на кандидатури\n• Нови съобщения от клиенти/специалисти\n• Потвърждения за завършване на задачи\n• Известия за плащания\n\nМожете да управлявате предпочитанията за известия в настройките на профила си на уебсайта.`,
+    bg: `✅ <b>Успешно свързване!</b>\n\nВашият Telegram акаунт вече е свързан с Trudify.\n\n<b>Ще получавате мигновени известия за:</b>\n• Нови кандидатури за вашите задачи\n• Актуализации на статуса на кандидатури\n• Нови съобщения от клиенти/специалисти\n• Потвърждения за завършване на задачи\n\nМожете да управлявате предпочитанията за известия в настройките на профила си на уебсайта.`,
 
-    ru: `✅ <b>Успешно подключено!</b>\n\nВаш Telegram аккаунт теперь подключен к Trudify.\n\n<b>Вы будете получать мгновенные уведомления о:</b>\n• Новых заявках на ваши задачи\n• Обновлениях статуса заявок\n• Новых сообщениях от клиентов/специалистов\n• Подтверждениях завершения задач\n• Уведомлениях о платежах\n\nВы можете управлять настройками уведомлений в настройках профиля на сайте.`
+    ru: `✅ <b>Успешно подключено!</b>\n\nВаш Telegram аккаунт теперь подключен к Trudify.\n\n<b>Вы будете получать мгновенные уведомления о:</b>\n• Новых заявках на ваши задачи\n• Обновлениях статуса заявок\n• Новых сообщениях от клиентов/специалистов\n• Подтверждениях завершения задач\n\nВы можете управлять настройками уведомлений в настройках профиля на сайте.`
   };
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;

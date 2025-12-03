@@ -333,16 +333,7 @@ export const notifications = {
   'notifications.email.taskCompleted.secondaryMessage': 'Вашият отзив помага на другите потребители да намерят страхотни специалисти (или клиенти) и подобрява общността на Trudify.',
   'notifications.email.taskCompleted.footerText': 'Получавате този имейл, защото участвахте в задача в Trudify.',
 
-  // 6. Получено плащане
-  'notifications.email.paymentReceived.subject': 'Получено плащане за "{{task_title}}"',
-  'notifications.email.paymentReceived.heading': 'Плащането е получено!',
-  'notifications.email.paymentReceived.message': 'Получихте {{amount}} лв. за завършването на "{{task_title}}". Продължавайте страхотната работа!',
-  'notifications.email.paymentReceived.buttonText': 'Преглед на баланса',
-  'notifications.email.paymentReceived.infoTitle': 'Детайли за плащането:',
-  'notifications.email.paymentReceived.secondaryMessage': 'Приходите са налични във вашия профил. Продължете да предоставяте отлични услуги, за да печелите повече!',
-  'notifications.email.paymentReceived.footerText': 'Получавате този имейл, защото завършихте задача в Trudify.',
-
-  // 7. Приветствен имейл
+  // 6. Приветствен имейл
   'notifications.email.welcome.subject': 'Добре дошли в Trudify, {{user_name}}!',
   'notifications.email.welcome.heading': 'Добре дошли в Trudify!',
   'notifications.email.welcome.message': 'Поздравления! Вашият акаунт беше създаден успешно.',

@@ -77,7 +77,6 @@ export default function CreateTaskPage() {
             subcategory: taskData.subcategory,
             city: taskData.location?.city || taskData.city,
             neighborhood: taskData.location?.neighborhood || taskData.neighborhood,
-            exactAddress: taskData.location?.exactAddress || taskData.exactAddress,
             requirements: taskData.requirements,
             budgetType: taskData.budgetType || 'unclear',
             budgetMin: taskData.budgetMin || taskData.budget,

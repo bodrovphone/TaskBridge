@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardBody, Button } from '@nextui-org/react'
-import { FileText, Send } from 'lucide-react'
+import { FileText, Send, ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { CustomerProfile } from '../../components/customer-profile'
 import { SettingsModal } from '../../components/settings-modal'
@@ -118,6 +118,19 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           onStatisticsOpen={() => setIsStatisticsOpen(true)}
           profileType="customer"
         />
+
+        {/* Switch to Professional Profile */}
+        <div className="mb-4 flex justify-end">
+          <Button
+            size="md"
+            variant="flat"
+            onPress={() => router.push(`/${lang}/profile/professional`)}
+            startContent={<ArrowRightLeft className="w-4 h-4" />}
+            className="bg-gradient-to-r from-emerald-100 to-teal-100 hover:from-emerald-200 hover:to-teal-200 text-emerald-700 font-semibold border border-emerald-200 shadow-sm"
+          >
+            {t('profile.switchToProfessional', 'Switch to Professional Profile')}
+          </Button>
+        </div>
 
         {/* Smart Notification Banner System */}
         <NotificationBannerManager

@@ -103,11 +103,6 @@ export function ReviewSection({ form }: ReviewSectionProps) {
        {deferredFormData.city ? getCityLabelBySlug(deferredFormData.city, t) : t('createTask.review.noCity', 'No city selected')}
        {deferredFormData.neighborhood && `, ${deferredFormData.neighborhood}`}
       </p>
-      {deferredFormData.exactAddress && (
-       <p className="text-sm text-gray-500 ml-7 mt-1">
-        {t('createTask.location.addressSecurity', 'Full address hidden until professional is hired')}
-       </p>
-      )}
      </div>
 
      <Divider />

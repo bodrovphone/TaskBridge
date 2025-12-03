@@ -146,6 +146,11 @@ export const tasks = {
   'createTask.hero.verifiedPros': 'Проверени специалисти',
   'createTask.hero.help': 'Нуждаете се от помощ? Свържете се с нашия екип за поддръжка',
 
+  // Title Input Section (smart category matching)
+  'createTask.title.label': 'От какво се нуждаете?',
+  'createTask.title.placeholder': 'напр. Поправка на течаща чешма в банята',
+  'createTask.title.hint': 'Бъдете конкретни - това ни помага да ви намерим правилните специалисти',
+
   // Category Section
   'createTask.category.title': 'Каква услуга ви трябва?',
   'createTask.category.subtitle': 'Изберете категория, която най-добре описва вашата задача',
@@ -154,6 +159,12 @@ export const tasks = {
   'createTask.category.selected': 'Избрана услуга',
   'createTask.category.categorySelected': 'Избрана категория. Натиснете X, за да промените.',
   'createTask.category.tryDifferent': 'Опитайте с различна търсачка',
+  'createTask.category.suggestion': 'Това изглежда като:',
+  'createTask.category.confirm': 'Да, правилно',
+  'createTask.category.different': 'Избери друга',
+  'createTask.category.helpUs': 'Помогнете ни да намерим правилните специалисти - моля, изберете категория:',
+  'createTask.category.analyzing': 'Анализираме вашата заявка...',
+  'createTask.category.change': 'Промени',
 
   // Details Section
   'createTask.details.title': 'Опишете вашата задача',
@@ -178,9 +189,6 @@ export const tasks = {
   'createTask.location.neighborhoodLabel': 'Квартал/Район',
   'createTask.location.neighborhoodPlaceholder': 'напр. Лозенец, Витоша, Център',
   'createTask.location.neighborhoodHelp': 'Помага на професионалистите да определят дали могат да ви достигнат',
-  'createTask.location.addressLabel': 'Пълен адрес (по избор)',
-  'createTask.location.addressPlaceholder': 'Улица, номер на сградата, вход, етаж, апартамент',
-  'createTask.location.addressSecurity': 'Адресът ще бъде показан само на професионалиста, когото наемете',
 
   // Budget Section
   'createTask.budget.title': 'Какъв е вашият бюджет?',
@@ -212,6 +220,7 @@ export const tasks = {
   'createTask.photos.title': 'Добавете снимка (по избор)',
   'createTask.photos.help': 'Снимката помага на професионалистите да разберат по-добре задачата ви',
   'createTask.photos.dragDrop': 'Плъзнете и пуснете изображение тук',
+  'createTask.photos.tapToSelect': 'Докоснете, за да изберете снимка',
   'createTask.photos.orBrowse': 'или кликнете за преглед',
   'createTask.photos.takePhoto': 'Направете снимка',
   'createTask.photos.maxSize': 'Максимум 5MB',
@@ -259,7 +268,6 @@ export const tasks = {
   'createTask.validationDialog.fieldName.requirements': 'Изисквания',
   'createTask.validationDialog.fieldName.city': 'Град',
   'createTask.validationDialog.fieldName.neighborhood': 'Квартал',
-  'createTask.validationDialog.fieldName.exactAddress': 'Точен адрес',
   'createTask.validationDialog.fieldName.budgetMin': 'Минимален бюджет',
   'createTask.validationDialog.fieldName.budgetMax': 'Максимален бюджет',
   'createTask.validationDialog.fieldName.urgency': 'Спешност',

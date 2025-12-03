@@ -172,8 +172,8 @@ export function ServiceCategoriesSelector({
         </div>
       )}
 
-      {/* All Categories by Main Category - Fixed Height Container */}
-      <div className="space-y-4 h-96 overflow-y-auto pr-2">
+      {/* All Categories by Main Category */}
+      <div className="space-y-4">
         {filteredCategoriesByMainCategory.map(mainCat => {
           const Icon = mainCat.icon
 

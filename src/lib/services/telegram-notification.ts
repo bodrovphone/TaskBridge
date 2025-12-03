@@ -187,14 +187,6 @@ export const NotificationTemplates = {
   }),
 
   /**
-   * Notification when payment is received
-   */
-  paymentReceived: (amount: number, taskTitle: string) => ({
-    message: `💰 <b>Payment Received!</b>\n\nYou received ${amount} BGN for completing "${taskTitle}"\n\nCheck your balance in your profile.`,
-    parseMode: 'HTML' as const,
-  }),
-
-  /**
    * Welcome notification for new users
    */
   welcome: (userName: string) => ({

@@ -27,7 +27,6 @@ export const createTaskSchema = z.object({
   // Optional fields
   subcategory: z.string().optional(),
   neighborhood: z.string().optional(),
-  exactAddress: z.string().optional(),
   requirements: z.string().optional(),
 
   // Budget (optional)
@@ -81,7 +80,6 @@ export const updateTaskSchema = z.object({
   // Location
   city: z.string().min(1, 'City is required').optional(),
   neighborhood: z.string().optional(),
-  exactAddress: z.string().optional(),
 
   // Budget
   budgetType: z.enum(['fixed', 'range', 'unclear']).optional(),
