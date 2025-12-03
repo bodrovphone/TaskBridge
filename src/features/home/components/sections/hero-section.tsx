@@ -41,7 +41,7 @@ export default function HeroSection() {
  } = useCreateTask();
 
  return (
-  <section className="relative overflow-hidden py-20 lg:py-32 z-10">
+  <section className="relative overflow-hidden py-20 lg:py-32 z-10" style={{ contain: 'layout style' }}>
    {/* Cardboard background with hero overlay */}
    <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 via-blue-50/70 to-indigo-100/80 "></div>
    {/* Background Pattern */}
@@ -169,10 +169,11 @@ export default function HeroSection() {
      </div>
 
      {/* Hero Image/Video - Order 2 on mobile, Order 2 on desktop */}
-     <div className="relative hover:scale-105 transition-transform duration-500 order-2">
+     {/* Note: hover:scale disabled on mobile to prevent scroll-triggered animations */}
+     <div className="relative lg:hover:scale-105 lg:transition-transform lg:duration-500 order-2">
       {/* Hero Video/Image with enhanced styling */}
       <div className="relative group">
-       <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-lg opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+       <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-lg opacity-20 lg:group-hover:opacity-30 lg:transition-opacity lg:duration-500"></div>
        <OptimizedVideoHero
         videoSrc="/assets/hero_video_2.mp4"
         poster="/images/hero_image_1.jpg"
@@ -183,9 +184,10 @@ export default function HeroSection() {
         maxHeight="420px"
        />
       </div>
-      
+
       {/* Enhanced Floating Stats Cards - Responsive positioning */}
-      <div className="absolute top-2 left-2 lg:-top-6 lg:-left-6 bg-white/90 rounded-2xl shadow-xl p-3 lg:p-6 border border-slate-200 hover:scale-105 transition-transform duration-300">
+      {/* Note: hover:scale disabled on mobile to prevent scroll-triggered animations */}
+      <div className="absolute top-2 left-2 lg:-top-6 lg:-left-6 bg-white/90 rounded-2xl shadow-xl p-3 lg:p-6 border border-slate-200 lg:hover:scale-105 lg:transition-transform lg:duration-300">
        <div className="flex items-center space-x-2 lg:space-x-4">
         <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
          <Star className="text-white h-5 w-5 lg:h-6 lg:w-6" />
@@ -197,7 +199,7 @@ export default function HeroSection() {
        </div>
       </div>
 
-      <div className="absolute bottom-2 right-2 lg:-bottom-6 lg:-right-6 bg-white/90 rounded-2xl shadow-xl p-3 lg:p-6 border border-slate-200 hover:scale-105 transition-transform duration-300">
+      <div className="absolute bottom-2 right-2 lg:-bottom-6 lg:-right-6 bg-white/90 rounded-2xl shadow-xl p-3 lg:p-6 border border-slate-200 lg:hover:scale-105 lg:transition-transform lg:duration-300">
        <div className="flex items-center space-x-2 lg:space-x-4">
         <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
          <CheckCircle className="text-white h-5 w-5 lg:h-6 lg:w-6" />

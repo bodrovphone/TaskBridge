@@ -1,7 +1,7 @@
 'use client'
 
-import { Card, CardBody, Button, Chip } from '@nextui-org/react'
-import { Shield, BarChart3, Settings, AlertCircle, Mail, Send, CheckCircle2 } from 'lucide-react'
+import { Card, CardBody, Chip } from '@nextui-org/react'
+import { Shield, AlertCircle, Mail, Send, CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { AvatarUpload } from '../avatar-upload'
 import type { UserProfile } from '@/server/domain/user/user.types'
@@ -10,16 +10,12 @@ import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-s
 interface ProfileHeaderProps {
   profile: UserProfile
   onAvatarChange: (newAvatar: string) => Promise<void>
-  onSettingsOpen: () => void
-  onStatisticsOpen: () => void
   profileType?: 'customer' | 'professional' // Determines completion calculation logic
 }
 
 export function ProfileHeader({
   profile,
   onAvatarChange,
-  onSettingsOpen,
-  onStatisticsOpen,
   profileType = 'customer'
 }: ProfileHeaderProps) {
   const { t } = useTranslation()
@@ -218,26 +214,6 @@ export function ProfileHeader({
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    size="sm"
-                    startContent={<BarChart3 className="w-4 h-4 text-white" />}
-                    onPress={onStatisticsOpen}
-                    className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
-                  >
-                    {t('profile.statistics')}
-                  </Button>
-
-                  <Button
-                    size="sm"
-                    variant="bordered"
-                    startContent={<Settings className="w-4 h-4" />}
-                    onPress={onSettingsOpen}
-                    className="hover:scale-105 transition-transform border-gray-300 hover:border-primary hover:bg-primary/5"
-                  >
-                    {t('profile.settings')}
-                  </Button>
-                </div>
               </div>
             </div>
           </div>

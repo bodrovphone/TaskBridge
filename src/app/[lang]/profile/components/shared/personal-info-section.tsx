@@ -21,10 +21,9 @@ interface PersonalInfoSectionProps {
     preferredLanguage: PreferredLanguage
     preferredContact: PreferredContact
   }) => Promise<void>
-  onSettingsOpen?: () => void // Optional callback to open settings modal
 }
 
-export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: PersonalInfoSectionProps) {
+export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProps) {
   const { t } = useTranslation()
   const { authenticatedFetch } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
@@ -520,11 +519,9 @@ export function PersonalInfoSection({ profile, onSave, onSettingsOpen }: Persona
                           return // Invalid value, don't change
                         }
 
-                        // If user tries to select Telegram without having it connected, open settings
+                        // If user tries to select Telegram without having it connected, scroll to settings section
                         if (value === 'telegram' && !hasTelegramConnected) {
-                          if (onSettingsOpen) {
-                            onSettingsOpen()
-                          }
+                          document.getElementById('account-settings')?.scrollIntoView({ behavior: 'smooth' })
                           return // Don't change the value
                         }
 

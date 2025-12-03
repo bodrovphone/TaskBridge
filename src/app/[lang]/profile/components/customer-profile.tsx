@@ -6,10 +6,9 @@ import { PersonalInfoSection } from './shared/personal-info-section'
 interface CustomerProfileProps {
  profile: UserProfile
  onProfileUpdate: (updates: Partial<UserProfile>) => Promise<void>
- onSettingsOpen?: () => void
 }
 
-export function CustomerProfile({ profile, onProfileUpdate, onSettingsOpen }: CustomerProfileProps) {
+export function CustomerProfile({ profile, onProfileUpdate }: CustomerProfileProps) {
  const handlePersonalInfoSave = async (data: {
   name: string
   phone: string
@@ -32,7 +31,6 @@ export function CustomerProfile({ profile, onProfileUpdate, onSettingsOpen }: Cu
    <PersonalInfoSection
     profile={profile}
     onSave={handlePersonalInfoSave}
-    onSettingsOpen={onSettingsOpen}
    />
   </div>
  )

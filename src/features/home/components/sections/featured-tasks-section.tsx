@@ -53,9 +53,10 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
   }
  };
 
- // Center the scroll position on mount (only on 500px+ screens)
+ // Center the scroll position on mount (desktop only - 1024px+)
+ // Disabled on mobile/tablet to prevent layout shifts during scroll
  useEffect(() => {
-  if (scrollContainerRef.current && tasks.length > 2 && window.innerWidth >= 500) {
+  if (scrollContainerRef.current && tasks.length > 2 && window.innerWidth >= 1024) {
    const container = scrollContainerRef.current;
    // Small delay to ensure DOM is rendered
    requestAnimationFrame(() => {
@@ -66,9 +67,10 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
   }
  }, [tasks.length]);
 
- // One-time quick animation when section becomes visible (only on 500px+ screens)
+ // One-time quick animation when section becomes visible (desktop only - 1024px+)
+ // Disabled on mobile/tablet to prevent layout drops during scroll
  useEffect(() => {
-  if (tasks.length === 0 || animationDoneRef.current || window.innerWidth < 500) return;
+  if (tasks.length === 0 || animationDoneRef.current || window.innerWidth < 1024) return;
 
   const container = scrollContainerRef.current;
   if (!container) return;
@@ -138,7 +140,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
  };
 
  return (
-  <section id="browse-tasks" className="py-12 relative overflow-hidden">
+  <section id="browse-tasks" className="py-12 relative overflow-hidden" style={{ contain: 'layout style', minHeight: '700px' }}>
    {/* Cardboard background with slate overlay */}
    <div className="absolute inset-0 bg-slate-50/70 "></div>
    {/* Background Elements */}
@@ -173,7 +175,8 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
     <div
      ref={scrollContainerRef}
      onWheel={handleWheel}
-     className="overflow-x-auto overflow-y-visible py-8 relative z-10 scrollbar-hide"
+     className="overflow-x-auto overflow-y-hidden py-8 relative z-10 scrollbar-hide"
+     style={{ contain: 'layout style' }}
     >
      <div className="flex gap-8 px-4 sm:px-6 lg:px-8" style={{ width: 'max-content', paddingLeft: 'max(1rem, calc((100vw - 80rem) / 2 + 2rem))' }}>
       {featuredTasks.map((task: any, index: number) => (

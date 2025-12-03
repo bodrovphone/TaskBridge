@@ -103,29 +103,29 @@ export default function OptimizedVideoHero({
  // Show static image on mobile or if video errors
  if (!isDesktop || hasError) {
   return (
-   <Image
-    src={poster}
-    alt={alt}
-    width={width}
-    height={height}
-    className={className}
-    style={{ maxHeight }}
-    priority
-   />
+   <div style={{ width: '100%', height: maxHeight, position: 'relative' }}>
+    <Image
+     src={poster}
+     alt={alt}
+     fill
+     sizes="(max-width: 1024px) 100vw, 50vw"
+     className={`${className} object-cover`}
+     priority
+    />
+   </div>
   )
  }
 
  return (
-  <>
+  <div style={{ width: '100%', height: maxHeight, position: 'relative' }}>
    {/* Poster image - shown until video loads */}
    {!isLoaded && (
     <Image
      src={poster}
      alt={alt}
-     width={width}
-     height={height}
-     className={className}
-     style={{ maxHeight }}
+     fill
+     sizes="(max-width: 1024px) 100vw, 50vw"
+     className={`${className} object-cover`}
      priority
     />
    )}
@@ -138,9 +138,8 @@ export default function OptimizedVideoHero({
     muted
     playsInline
     preload="none"
-    className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0 absolute inset-0'} transition-opacity duration-500`}
+    className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} absolute inset-0 w-full h-full object-cover transition-opacity duration-500`}
     style={{
-     maxHeight,
      // Force GPU acceleration
      transform: 'translateZ(0)',
      backfaceVisibility: 'hidden',
@@ -155,7 +154,7 @@ export default function OptimizedVideoHero({
     <source src={videoSrc} type="video/mp4" />
     Your browser does not support the video tag.
    </video>
-  </>
+  </div>
  )
 }
 

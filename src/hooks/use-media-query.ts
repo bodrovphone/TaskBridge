@@ -1,18 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
+/**
+ * SSR-safe media query hook that avoids hydration mismatches.
+ * Returns false during SSR and initial render, then updates to actual value.
+ * Uses useCallback for stable listener reference.
+ */
 export function useMediaQuery(query: string): boolean {
+  // Start with false to match SSR output and avoid hydration mismatch
   const [matches, setMatches] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+
+  const updateMatches = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      setMatches(window.matchMedia(query).matches)
+    }
+  }, [query])
 
   useEffect(() => {
+    // Mark as mounted and get initial value
+    setHasMounted(true)
+    updateMatches()
+
     const media = window.matchMedia(query)
-    if (media.matches !== matches) {
-      setMatches(media.matches)
-    }
-    
+
     const listener = (event: MediaQueryListEvent) => {
       setMatches(event.matches)
     }
-    
+
     // Modern browsers
     if (media.addEventListener) {
       media.addEventListener('change', listener)
@@ -22,7 +36,12 @@ export function useMediaQuery(query: string): boolean {
       media.addListener(listener)
       return () => media.removeListener(listener)
     }
-  }, [matches, query])
+  }, [query, updateMatches])
+
+  // During SSR or before hydration, return false to match initial state
+  if (!hasMounted) {
+    return false
+  }
 
   return matches
 }

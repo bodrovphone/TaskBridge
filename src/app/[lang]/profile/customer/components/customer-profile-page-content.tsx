@@ -1,17 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { FileText, Send, ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { CustomerProfile } from '../../components/customer-profile'
-import { SettingsModal } from '../../components/settings-modal'
-import { StatisticsModal } from '../../components/statistics-modal'
 import { ProfileDataProvider } from '../../components/profile-data-provider'
 import { NotificationBannerManager } from '../../components/notification-banner-manager'
 import { ProfileHeader } from '../../components/shared/profile-header'
+import { StatisticsSection } from '../../components/sections/statistics-section'
+import { AccountSettingsSection } from '../../components/sections/account-settings-section'
 import { useCreateTask } from '@/hooks/use-create-task'
 import { ReviewEnforcementDialog } from '@/features/reviews'
 
@@ -24,8 +24,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
   const { user, profile, loading, refreshProfile } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const [isStatisticsOpen, setIsStatisticsOpen] = useState(false)
 
   const {
     handleCreateTask,
@@ -43,15 +41,18 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
     }
   }, [user, loading, router, lang])
 
-  // Check for openSettings query parameter from toast
+  // Check for openSettings query parameter from toast - scroll to settings section
   useEffect(() => {
     const openSettings = searchParams.get('openSettings')
     if (openSettings === 'telegram') {
-      setIsSettingsOpen(true)
       // Clean up URL without reloading
       const url = new URL(window.location.href)
       url.searchParams.delete('openSettings')
       window.history.replaceState({}, '', url.toString())
+      // Scroll to settings section
+      setTimeout(() => {
+        document.getElementById('account-settings')?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
     }
   }, [searchParams])
 
@@ -86,8 +87,8 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
   }
 
   const handleTelegramConnect = () => {
-    // Open settings modal (Telegram section is at the top)
-    setIsSettingsOpen(true)
+    // Scroll to settings section where Telegram connection is
+    document.getElementById('account-settings')?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -114,8 +115,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
         <ProfileHeader
           profile={profile}
           onAvatarChange={handleAvatarChange}
-          onSettingsOpen={() => setIsSettingsOpen(true)}
-          onStatisticsOpen={() => setIsStatisticsOpen(true)}
           profileType="customer"
         />
 
@@ -162,7 +161,7 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
         </div>
 
         {/* Customer Profile Content */}
-        <Card className="shadow-xl border border-white/20 bg-white/95 hover:shadow-2xl transition-shadow duration-300">
+        <Card className="shadow-xl border border-white/20 bg-white/95 hover:shadow-2xl transition-shadow duration-300 mb-4">
           <CardBody className="p-3 md:p-8">
             <ProfileDataProvider>
               {({ profile: currentProfile, updateProfile }) => (
@@ -170,7 +169,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
                   <CustomerProfile
                     profile={currentProfile}
                     onProfileUpdate={updateProfile}
-                    onSettingsOpen={() => setIsSettingsOpen(true)}
                   />
                 )
               )}
@@ -178,23 +176,24 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           </CardBody>
         </Card>
 
-        {/* Settings Modal */}
-        <SettingsModal
-          isOpen={isSettingsOpen}
-          onClose={() => setIsSettingsOpen(false)}
-          userId={profile.id}
-          telegramConnected={!!profile.telegramId}
-          telegramUsername={profile.telegramUsername}
-          telegramFirstName={profile.telegramFirstName}
-        />
+        {/* Statistics Section (inline) */}
+        <div className="mb-4">
+          <StatisticsSection
+            userRole="customer"
+            profile={profile}
+          />
+        </div>
 
-        {/* Statistics Modal */}
-        <StatisticsModal
-          isOpen={isStatisticsOpen}
-          onClose={() => setIsStatisticsOpen(false)}
-          userRole="customer"
-          profile={profile}
-        />
+        {/* Account Settings Section (inline) */}
+        <div id="account-settings" className="mb-4">
+          <AccountSettingsSection
+            userId={profile.id}
+            telegramConnected={!!profile.telegramId}
+            telegramUsername={profile.telegramUsername}
+            telegramFirstName={profile.telegramFirstName}
+            onTelegramConnectionChange={refreshProfile}
+          />
+        </div>
 
         {/* Review Enforcement Dialog */}
         <ReviewEnforcementDialog

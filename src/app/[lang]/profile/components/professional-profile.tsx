@@ -12,10 +12,9 @@ import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domai
 interface ProfessionalProfileProps {
   profile: UserProfile
   onProfileUpdate: (updates: Partial<UserProfile>) => Promise<void>
-  onSettingsOpen?: () => void
 }
 
-export function ProfessionalProfile({ profile, onProfileUpdate, onSettingsOpen }: ProfessionalProfileProps) {
+export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalProfileProps) {
   const { t } = useTranslation()
   const [error, setError] = useState<string | null>(null)
 
@@ -157,7 +156,6 @@ export function ProfessionalProfile({ profile, onProfileUpdate, onSettingsOpen }
       <PersonalInfoSection
         profile={profile}
         onSave={handlePersonalInfoSave}
-        onSettingsOpen={onSettingsOpen}
       />
 
       {/* 1. Professional Identity */}
