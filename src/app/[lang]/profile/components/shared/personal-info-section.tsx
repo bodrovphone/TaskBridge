@@ -5,7 +5,8 @@ import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
 import { usePathname } from 'next/navigation'
-import { MapPin, Phone, Mail, Calendar, Shield, Globe, MessageSquare, User as UserIcon, Edit, X, Save, AlertCircle, Send } from 'lucide-react'
+import { MapPin, Phone, Mail, Calendar, Shield, Globe, User as UserIcon, Edit, X, AlertCircle, Send } from 'lucide-react'
+import { FormActionButtons } from './form-action-buttons'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
 import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -593,26 +594,11 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               {t('profile.editPersonalInfo')}
             </Button>
           ) : (
-            <>
-              <Button
-                variant="bordered"
-                size="sm"
-                startContent={<X className="w-4 h-4" />}
-                onPress={handleCancel}
-                isDisabled={isLoading}
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                color="primary"
-                size="sm"
-                startContent={<Save className="w-4 h-4" />}
-                onPress={() => personalForm.handleSubmit()}
-                isLoading={isLoading}
-              >
-                {isLoading ? t('profile.form.saving') : t('save')}
-              </Button>
-            </>
+            <FormActionButtons
+              onCancel={handleCancel}
+              onSave={() => personalForm.handleSubmit()}
+              isLoading={isLoading}
+            />
           )}
         </div>
       </CardBody>

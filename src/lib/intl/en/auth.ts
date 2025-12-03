@@ -50,6 +50,7 @@ export const auth = {
     'Thank you for signing up! Please verify your email address to enable email notifications.',
   'auth.email.buttonText': 'Verify Email Address',
   'auth.email.linkInstruction': 'Or copy and paste this link into your browser:',
+  'auth.email.expiresIn': '24 hours',
   'auth.email.footerText': "If you didn't create an account, you can safely ignore this email.",
   'auth.email.footerRights': 'All rights reserved.',
 

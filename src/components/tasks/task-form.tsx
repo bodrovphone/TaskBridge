@@ -233,8 +233,8 @@ export function TaskForm({
   }
 
   const handleCategoryReset = () => setShowCategoryPicker(true)
-  const handleConnectTelegram = () => router.push(`/${locale}/profile#telegram`)
-  const handleVerifyEmail = () => router.push(`/${locale}/profile#email`)
+  const handleConnectTelegram = () => router.push(`/${locale}/profile/customer#telegram`)
+  const handleVerifyEmail = () => router.push(`/${locale}/profile/customer#email`)
   const handleDismissBanner = () => setBannerDismissed(true)
 
   const handleScrollToFirstError = () => {

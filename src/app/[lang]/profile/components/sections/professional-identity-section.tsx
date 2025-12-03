@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
-import { Briefcase, Award, Edit, Save, X } from 'lucide-react'
+import { Briefcase, Award, Edit } from 'lucide-react'
+import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslation } from 'react-i18next'
 
 interface ProfessionalIdentitySectionProps {
@@ -137,26 +138,11 @@ export function ProfessionalIdentitySection({
               {t('common.edit', 'Edit')}
             </Button>
           ) : (
-            <>
-              <Button
-                variant="bordered"
-                size="sm"
-                startContent={<X className="w-4 h-4" />}
-                onPress={() => { form.reset(); setIsEditing(false) }}
-                isDisabled={isLoading}
-              >
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button
-                color="primary"
-                size="sm"
-                startContent={<Save className="w-4 h-4" />}
-                onPress={() => form.handleSubmit()}
-                isLoading={isLoading}
-              >
-                {t('common.save', 'Save')}
-              </Button>
-            </>
+            <FormActionButtons
+              onCancel={() => { form.reset(); setIsEditing(false) }}
+              onSave={() => form.handleSubmit()}
+              isLoading={isLoading}
+            />
           )}
         </div>
       </CardBody>

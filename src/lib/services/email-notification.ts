@@ -348,7 +348,7 @@ async function translateEmailVariables(
           amount: data.amount,
           task_title: data.taskTitle,
         }),
-        primary_link: `${baseUrl}/${locale}/profile`,
+        primary_link: `${baseUrl}/${locale}/profile/professional`,
         primary_button_text: t('notifications.email.paymentReceived.buttonText'),
         info_title: t('notifications.email.paymentReceived.infoTitle'),
         info_items: data.paymentDetails || [

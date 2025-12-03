@@ -549,6 +549,11 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
     bg: ['вежди', 'оформяне вежди', 'микроблейдинг', 'ламиниране вежди'],
     ru: ['брови', 'оформление бровей', 'микроблейдинг', 'ламинирование бровей'],
   },
+  'psychologist': {
+    en: ['psychologist', 'psychology', 'therapist', 'therapy', 'counselor', 'counseling', 'mental health', 'anxiety', 'depression', 'stress', 'psychotherapy', 'counselling', 'life coach', 'emotional support', 'trauma', 'ptsd', 'relationship counseling', 'couples therapy', 'family therapy'],
+    bg: ['психолог', 'психология', 'терапевт', 'терапия', 'консултация', 'психично здраве', 'тревожност', 'депресия', 'стрес', 'психотерапия', 'емоционална подкрепа', 'травма', 'семейна терапия', 'двойки терапия'],
+    ru: ['психолог', 'психология', 'терапевт', 'терапия', 'консультация', 'психическое здоровье', 'тревожность', 'депрессия', 'стресс', 'психотерапия', 'эмоциональная поддержка', 'травма', 'семейная терапия', 'психологическая помощь'],
+  },
 
   // ===== EVENT PLANNING =====
   'event-host': {

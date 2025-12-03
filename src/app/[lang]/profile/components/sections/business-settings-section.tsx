@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Chip } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
-import { Settings, Banknote, Clock, Edit, Save, X } from 'lucide-react'
+import { Settings, Banknote, Clock, Edit } from 'lucide-react'
+import { FormActionButtons } from '../shared/form-action-buttons'
 
 interface BusinessSettingsSectionProps {
   paymentMethods: string[]
@@ -202,24 +203,10 @@ export function BusinessSettingsSection({
               {t('common.edit', 'Edit')}
             </Button>
           ) : (
-            <>
-              <Button
-                variant="bordered"
-                size="sm"
-                startContent={<X className="w-4 h-4" />}
-                onPress={handleCancel}
-              >
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button
-                color="primary"
-                size="sm"
-                startContent={<Save className="w-4 h-4" />}
-                onPress={handleSave}
-              >
-                {t('common.save', 'Save')}
-              </Button>
-            </>
+            <FormActionButtons
+              onCancel={handleCancel}
+              onSave={handleSave}
+            />
           )}
         </div>
       </CardBody>

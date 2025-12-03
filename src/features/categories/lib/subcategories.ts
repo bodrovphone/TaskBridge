@@ -785,6 +785,13 @@ export const SUBCATEGORIES: Subcategory[] = [
     translationKey: 'categories.sub.browCare',
     sortOrder: 5,
   },
+  {
+    id: 'psychologist',
+    slug: 'psychologist',
+    mainCategoryId: 'beauty-health',
+    translationKey: 'categories.sub.psychologist',
+    sortOrder: 6,
+  },
 
   // ===== EVENT PLANNING (Организация праздников) =====
   {

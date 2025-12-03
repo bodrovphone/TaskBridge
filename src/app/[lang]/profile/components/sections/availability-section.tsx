@@ -3,7 +3,8 @@
 import { useState, useMemo } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, RadioGroup, Radio, Chip } from '@nextui-org/react'
-import { Clock, CheckCircle, MapPinned, Languages, Edit, Save, X } from 'lucide-react'
+import { Clock, CheckCircle, MapPinned, Languages, Edit } from 'lucide-react'
+import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslation } from 'react-i18next'
 import { getCityLabelBySlug } from '@/features/cities'
 
@@ -237,30 +238,15 @@ export function AvailabilitySection({
               {t('common.edit', 'Edit')}
             </Button>
           ) : (
-            <>
-              <Button
-                variant="bordered"
-                size="sm"
-                startContent={<X className="w-4 h-4" />}
-                onPress={() => {
-                  form.reset()
-                  setCurrentLanguages(languages)
-                  setIsEditing(false)
-                }}
-                isDisabled={isLoading}
-              >
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button
-                color="primary"
-                size="sm"
-                startContent={<Save className="w-4 h-4" />}
-                onPress={() => form.handleSubmit()}
-                isLoading={isLoading}
-              >
-                {t('common.save', 'Save')}
-              </Button>
-            </>
+            <FormActionButtons
+              onCancel={() => {
+                form.reset()
+                setCurrentLanguages(languages)
+                setIsEditing(false)
+              }}
+              onSave={() => form.handleSubmit()}
+              isLoading={isLoading}
+            />
           )}
         </div>
       </CardBody>

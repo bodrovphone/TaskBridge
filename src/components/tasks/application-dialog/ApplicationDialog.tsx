@@ -135,7 +135,7 @@ export default function ApplicationDialog({
   }, [handleClose, router, currentLang])
 
   const handleSetupNotifications = useCallback(() => {
-    router.push(`/${currentLang}/profile`)
+    router.push(`/${currentLang}/profile/professional`)
     handleClose()
   }, [router, currentLang, handleClose])
 

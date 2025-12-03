@@ -212,7 +212,11 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile/Tablet Actions Section */}
-   <NavbarContent justify="end" className="lg:hidden gap-4">
+   <NavbarContent justify="end" className="lg:hidden gap-2">
+    {/* Language Switcher - Always visible on mobile */}
+    <NavbarItem>
+     <LanguageSwitcher />
+    </NavbarItem>
     {/* Hide notification bell and avatar when mobile menu is open to prevent conflicts */}
     {!isMenuOpen && (
      <>
@@ -470,11 +474,6 @@ function Header() {
 
     {/* Sticky Bottom Section - Always visible */}
     <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-3 safe-area-pb">
-     {/* Language Switcher */}
-     <div className="w-full px-4 pb-2">
-      <LanguageSwitcher mode="full" />
-     </div>
-
      {/* Create Task Button - Sticky */}
      <div className="px-4 pb-2 w-full">
       <Button

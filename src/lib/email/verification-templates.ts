@@ -22,6 +22,7 @@ interface EmailVerificationData {
   message: string
   button_text: string
   link_instruction: string
+  expires_in: string
   footer_text: string
   footer_rights: string
   current_year: string
@@ -40,6 +41,7 @@ export function getEmailVerificationContent(locale: SupportedLocale): EmailVerif
     message: t['auth.email.message'],
     button_text: t['auth.email.buttonText'],
     link_instruction: t['auth.email.linkInstruction'],
+    expires_in: t['auth.email.expiresIn'],
     footer_text: t['auth.email.footerText'],
     footer_rights: t['auth.email.footerRights'],
     current_year: new Date().getFullYear().toString(),

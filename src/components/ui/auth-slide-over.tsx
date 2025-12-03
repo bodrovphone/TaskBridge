@@ -31,7 +31,6 @@ interface AuthSlideOverProps {
  * - email: User's email address
  * - password: User's password (min 6 chars)
  * - nameRequired: When true, highlights name field red (registration needed)
- * - showVerificationPrompt: Shows email verification UI after registration
  *
  * VISUAL BEHAVIOR:
  * - Name field is always visible but muted (60% opacity, gray bg)
@@ -45,7 +44,7 @@ interface AuthSlideOverProps {
  * See that file for detailed flow documentation.
  */
 export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
- const { signInWithGoogle, signInWithFacebook, authenticatedFetch, refreshProfile } = useAuth();
+ const { signInWithGoogle, signInWithFacebook, refreshProfile } = useAuth();
  const { t, i18n } = useTranslation();
  const router = useRouter();
 
@@ -60,9 +59,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
  const [nameRequired, setNameRequired] = useState(false);  // Controls name field red highlight
  const [mounted, setMounted] = useState(false);            // Portal mounting state
 
- // Post-registration state
- const [showVerificationPrompt, setShowVerificationPrompt] = useState(false);
- const [isResendingVerification, setIsResendingVerification] = useState(false);
+ // Portal mounting state is tracked separately
+ // Note: Email verification prompt was removed - handled by banners elsewhere in app
 
  useEffect(() => {
   setMounted(true);
@@ -244,35 +242,6 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   }
  };
 
- const handleResendVerification = async () => {
-  setIsResendingVerification(true);
-  setError(null);
-
-  try {
-   const response = await authenticatedFetch('/api/auth/resend-verification', {
-    method: 'POST',
-   });
-
-   const data = await response.json();
-
-   if (!response.ok) {
-    setError(data.error || t('auth.emailVerification.error', 'Failed to send verification email'));
-   } else {
-    // Show success message and close slide-over after delay
-    setError(null);
-    setTimeout(() => {
-     handleAuthSuccess();
-    }, 2000);
-   }
-  } catch (err) {
-   console.error('Failed to resend verification email:', err);
-   setError(t('auth.emailVerification.error', 'Failed to send verification email'));
-  } finally {
-   setIsResendingVerification(false);
-  }
- };
-
-
  return createPortal(
   <>
    {/* Backdrop */}
@@ -349,42 +318,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </div>
        )}
 
-       {/* Verification Prompt - Shown after successful signup */}
-       {showVerificationPrompt && (
-        <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg">
-         <h4 className="font-bold text-gray-900 mb-2">
-          📧 {t('auth.emailVerification.checkInbox', 'Check your inbox!')}
-         </h4>
-         <p className="text-sm text-gray-700 mb-3">
-          {t('auth.emailVerification.sentMessage', 'We sent a verification email to')} <strong>{email}</strong>
-         </p>
-         <p className="text-sm text-gray-600 mb-3">
-          {t('auth.emailVerification.instructions', 'Click the link in the email to verify your account.')}
-         </p>
-         <div className="flex flex-col sm:flex-row gap-2">
-          <NextUIButton
-           size="sm"
-           variant="flat"
-           color="primary"
-           onPress={handleResendVerification}
-           isLoading={isResendingVerification}
-           className="font-semibold"
-          >
-           {t('auth.emailVerification.resend', 'Resend Verification Email')}
-          </NextUIButton>
-          <NextUIButton
-           size="sm"
-           variant="bordered"
-           onPress={handleAuthSuccess}
-          >
-           {t('auth.emailVerification.continue', 'Continue to App')}
-          </NextUIButton>
-         </div>
-        </div>
-       )}
-
        {/* Auth Form */}
-       {!showVerificationPrompt && (
         <div className="space-y-4">
         {/* Email Field */}
         <div>
@@ -553,7 +487,6 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         </div>
 
        </div>
-       )}
 
       </div>
      </div>

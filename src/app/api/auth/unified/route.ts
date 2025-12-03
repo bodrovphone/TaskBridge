@@ -2,52 +2,228 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { generateEmailVerificationToken } from '@/lib/auth/email-verification'
 import { getEmailVerificationContent, getLocaleFromRequest } from '@/lib/email/verification-templates'
+import { AuthService } from '@/server/application/auth/auth.service'
+import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Handle successful login - fetch profile and return response
+ */
+async function handleSuccessfulLogin(supabase: SupabaseClient, signInData: { user: any }) {
+  let userProfile = null
+  try {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', signInData.user.id)
+      .single()
+    userProfile = profile
+    console.log('[Auth/Unified] Profile fetched:', { hasProfile: !!profile })
+  } catch (err) {
+    console.error('[Auth/Unified] Failed to fetch user profile:', err)
+  }
+
+  return NextResponse.json({
+    success: true,
+    action: 'login',
+    user: userProfile || {
+      id: signInData.user.id,
+      email: signInData.user.email,
+    },
+  })
+}
+
+/**
+ * Handle successful registration - create profile, setup locale, send verification email
+ *
+ * IMPORTANT: We must call createOrSyncUserProfile to properly set the user's name.
+ * The database trigger that creates users on auth.users insert doesn't have access
+ * to the full_name from user_metadata, so we need to update it here.
+ */
+async function handleSuccessfulRegistration(
+  supabase: SupabaseClient,
+  signUpData: { user: any; session: any },
+  email: string,
+  fullName: string,
+  request: Request
+) {
+  const locale = getLocaleFromRequest(request)
+  console.log('[Auth/Unified] Creating/syncing profile with name:', fullName, 'locale:', locale)
+
+  // =========================================================================
+  // STEP 1: Create or sync user profile with the provided name
+  // This is CRITICAL - without this, the user's name won't be saved!
+  // =========================================================================
+  try {
+    const userRepository = new UserRepository()
+    const authService = new AuthService(userRepository)
+
+    const result = await authService.createOrSyncUserProfile(
+      signUpData.user.id,
+      email,
+      {
+        fullName: fullName.trim(),
+        locale: locale as 'en' | 'bg' | 'ru',
+        isOAuthUser: false, // Email/password signup - email not verified yet
+      }
+    )
+
+    if (result.isError()) {
+      console.error('[Auth/Unified] Failed to create profile:', result)
+    } else {
+      console.log('[Auth/Unified] ✅ Profile created with name:', fullName)
+    }
+  } catch (profileError) {
+    console.error('[Auth/Unified] Profile creation error (non-fatal):', profileError)
+  }
+
+  // =========================================================================
+  // STEP 2: Send verification email
+  // =========================================================================
+  console.log('[Auth/Unified] Sending verification email...')
+  try {
+    const emailContent = getEmailVerificationContent(locale)
+    const verificationToken = await generateEmailVerificationToken(email, signUpData.user.id)
+    const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
+
+    const sendGridPayload: any = {
+      personalizations: [{
+        to: [{ email }],
+        dynamic_template_data: {
+          user_name: fullName || email.split('@')[0],
+          verification_link: verificationUrl,
+          ...emailContent,
+        },
+      }],
+      from: { email: 'noreply@trudify.com', name: 'Trudify' },
+    }
+
+    if (process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION) {
+      sendGridPayload.template_id = process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION
+    } else {
+      sendGridPayload.subject = `${emailContent.button_text} - Trudify`
+      sendGridPayload.content = [{
+        type: 'text/html',
+        value: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background-color: #0066CC; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+              <div style="color: white; font-size: 28px; font-weight: bold;">Trudify</div>
+            </div>
+            <div style="padding: 40px 30px; background-color: white;">
+              <h2 style="color: #333; margin-top: 0;">${emailContent.heading}</h2>
+              <p>${emailContent.greeting} ${fullName || email.split('@')[0]},</p>
+              <p>${emailContent.message}</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${verificationUrl}" style="background-color: #0066CC; color: white; padding: 14px 40px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;">
+                  ${emailContent.button_text}
+                </a>
+              </div>
+            </div>
+          </div>
+        `,
+      }]
+    }
+
+    const sendGridResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sendGridPayload),
+    })
+
+    if (sendGridResponse.ok) {
+      console.log('[Auth/Unified] ✅ Verification email sent')
+    } else {
+      console.error('[Auth/Unified] SendGrid error:', await sendGridResponse.text())
+    }
+  } catch (emailError) {
+    console.error('[Auth/Unified] Email sending failed (non-fatal):', emailError)
+  }
+
+  // =========================================================================
+  // STEP 3: Fetch and return the profile
+  // =========================================================================
+  let userProfile = null
+  try {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', signUpData.user.id)
+      .single()
+    userProfile = profile
+    console.log('[Auth/Unified] Profile fetched, full_name:', profile?.full_name)
+  } catch (err) {
+    console.error('[Auth/Unified] Failed to fetch new user profile:', err)
+  }
+
+  console.log('[Auth/Unified] 🎉 REGISTRATION COMPLETE')
+
+  return NextResponse.json({
+    success: true,
+    action: 'register',
+    message: 'Account created successfully!',
+    user: userProfile || {
+      id: signUpData.user.id,
+      email: signUpData.user.email,
+    },
+  })
+}
 
 /**
  * =============================================================================
  * UNIFIED AUTH API - Smart Login/Register Detection
  * =============================================================================
  *
- * This endpoint merges login and registration into a single smart flow:
+ * This endpoint merges login and registration into a single smart flow.
  *
  * FLOW DIAGRAM:
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │  User submits: email + password + (optional) fullName                   │
- * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ *                  ┌─────────────────────────────────────┐
+ *                  │  User submits: email + password +   │
+ *                  │  (optional) fullName                │
+ *                  └─────────────────────────────────────┘
  *                                    │
- *                                    ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │  Step 1: Try to sign in with email + password                           │
- * └─────────────────────────────────────────────────────────────────────────┘
- *                    │                              │
- *            SUCCESS │                              │ FAILURE
- *                    ▼                              ▼
- *    ┌──────────────────────┐      ┌────────────────────────────────────────┐
- *    │ User exists & pwd OK │      │ Step 2: Check WHY it failed            │
- *    │ → Return LOGIN       │      │ (wrong password OR user doesn't exist) │
- *    └──────────────────────┘      └────────────────────────────────────────┘
- *                                                   │
- *                                                   ▼
- *                              ┌─────────────────────────────────────────────┐
- *                              │ Step 3: Try dummy signUp to check if email  │
- *                              │ is already registered                       │
- *                              └─────────────────────────────────────────────┘
- *                                       │                    │
- *                            "already   │                    │ No error
- *                            registered"│                    │ (email is new)
- *                                       ▼                    ▼
- *                    ┌──────────────────────┐   ┌────────────────────────────┐
- *                    │ User exists, wrong   │   │ Step 4: Check if fullName  │
- *                    │ password             │   │ was provided               │
- *                    │ → Return 401 error   │   └────────────────────────────┘
- *                    └──────────────────────┘            │           │
- *                                                 NO name│           │HAS name
- *                                                        ▼           ▼
- *                                    ┌─────────────────────┐  ┌─────────────┐
- *                                    │ Return 400 error    │  │ CREATE new  │
- *                                    │ with name_required  │  │ account     │
- *                                    │ flag for UI         │  │ → REGISTER  │
- *                                    └─────────────────────┘  └─────────────┘
+ *                    ┌───────────────┴───────────────┐
+ *                    │                               │
+ *              HAS NAME                         NO NAME
+ *                    │                               │
+ *                    ▼                               ▼
+ *          ┌─────────────────┐            ┌─────────────────┐
+ *          │ Try SIGNUP      │            │ Try SIGNIN      │
+ *          │ first           │            │ first           │
+ *          └─────────────────┘            └─────────────────┘
+ *                    │                               │
+ *          ┌────────┴────────┐            ┌────────┴────────┐
+ *          │                 │            │                 │
+ *       SUCCESS      "already exists"  SUCCESS          FAILURE
+ *          │                 │            │                 │
+ *          ▼                 ▼            ▼                 ▼
+ *    ┌──────────┐    ┌──────────────┐  ┌──────────┐  ┌──────────────┐
+ *    │ REGISTER │    │ Try SIGNIN   │  │ LOGIN    │  │ Return       │
+ *    │ success  │    │ with pwd     │  │ success  │  │ name_required│
+ *    └──────────┘    └──────────────┘  └──────────┘  └──────────────┘
+ *                            │
+ *                  ┌────────┴────────┐
+ *                  │                 │
+ *               SUCCESS          FAILURE
+ *                  │                 │
+ *                  ▼                 ▼
+ *            ┌──────────┐    ┌──────────────┐
+ *            │ LOGIN    │    │ Wrong        │
+ *            │ success  │    │ password     │
+ *            └──────────┘    └──────────────┘
+ *
+ * KEY INSIGHT: We don't do "dummy signups" to check email existence.
+ * Instead:
+ * - If user provides name → try signup first (natural for new users)
+ * - If no name → try signin first (natural for returning users)
+ * - This avoids accidentally creating users during existence checks
  *
  * RESPONSE FORMAT:
  * - Success login:    { success: true, action: 'login', user: {...} }
@@ -58,8 +234,8 @@ import { getEmailVerificationContent, getLocaleFromRequest } from '@/lib/email/v
  *
  * DEBUG TIPS:
  * - All logs prefixed with [Auth/Unified] for easy filtering
- * - Check Supabase logs for auth.signInWithPassword and auth.signUp errors
- * - The "dummy signup" check may create orphan users in edge cases (rare)
+ * - Check browser Network tab for request/response details
+ * - Check Supabase Dashboard → Authentication → Logs for auth errors
  */
 export async function POST(request: Request) {
   try {
@@ -103,9 +279,88 @@ export async function POST(request: Request) {
     const supabase = await createClient()
 
     // =========================================================================
-    // STEP 1: Try to sign in - if it works, user exists with correct password
+    // STEP 1: Try to sign up first (if name provided) OR sign in (if no name)
     // =========================================================================
-    console.log('[Auth/Unified] Step 1: Attempting sign in for:', email)
+    // Strategy: We try signup first if user provided a name. This avoids the
+    // "dummy signup" bug where checking email existence would create a user.
+    //
+    // If no name provided, we try signin first (assuming returning user).
+    // =========================================================================
+
+    if (fullName && fullName.trim() !== '') {
+      // User provided a name - likely trying to register
+      console.log('[Auth/Unified] Step 1a: Name provided, attempting signup first:', email)
+
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName.trim(),
+          },
+        },
+      })
+
+      // SIGNUP SUCCESS: New user created
+      if (signUpData?.user && !signUpError) {
+        console.log('[Auth/Unified] ✅ REGISTRATION SUCCESS:', {
+          userId: signUpData.user.id,
+          email: signUpData.user.email,
+          hasSession: !!signUpData.session,
+        })
+
+        // Continue to post-registration setup (locale, email verification)
+        return await handleSuccessfulRegistration(supabase, signUpData, email, fullName, request)
+      }
+
+      // SIGNUP FAILED: Check if it's because user already exists
+      if (signUpError) {
+        console.log('[Auth/Unified] Signup failed:', signUpError.message)
+
+        // If "already registered" - try to sign in instead
+        if (signUpError.message?.includes('already registered') || signUpError.message?.includes('already been registered')) {
+          console.log('[Auth/Unified] Email already registered, attempting sign in...')
+
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          })
+
+          if (signInData?.user) {
+            console.log('[Auth/Unified] ✅ LOGIN SUCCESS (user provided name but already existed):', {
+              userId: signInData.user.id,
+            })
+            return await handleSuccessfulLogin(supabase, signInData)
+          }
+
+          // Sign in failed - wrong password
+          console.log('[Auth/Unified] ❌ WRONG PASSWORD:', signInError?.message)
+          return NextResponse.json(
+            { error: 'Invalid email or password' },
+            { status: 401 }
+          )
+        }
+
+        // Rate limit or other error
+        if (signUpError.message.includes('rate limit')) {
+          return NextResponse.json(
+            { error: 'Too many attempts. Please try again in a few minutes.' },
+            { status: 429 }
+          )
+        }
+
+        console.error('[Auth/Unified] ❌ SIGNUP ERROR:', signUpError)
+        return NextResponse.json(
+          { error: 'Failed to create account. Please try again.' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // =========================================================================
+    // STEP 1b: No name provided - try sign in first (returning user)
+    // =========================================================================
+    console.log('[Auth/Unified] Step 1b: No name provided, attempting sign in:', email)
 
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
@@ -118,278 +373,42 @@ export async function POST(request: Request) {
         userId: signInData.user.id,
         email: signInData.user.email,
       })
-
-      // Fetch user profile to return complete data
-      let userProfile = null
-      try {
-        const { data: profile } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', signInData.user.id)
-          .single()
-
-        userProfile = profile
-        console.log('[Auth/Unified] Profile fetched:', { hasProfile: !!profile })
-      } catch (err) {
-        console.error('[Auth/Unified] Failed to fetch user profile:', err)
-      }
-
-      return NextResponse.json({
-        success: true,
-        action: 'login',
-        user: userProfile || {
-          id: signInData.user.id,
-          email: signInData.user.email,
-        },
-      })
+      return await handleSuccessfulLogin(supabase, signInData)
     }
 
     // =========================================================================
-    // STEP 2 & 3: Sign in failed - determine WHY (wrong pwd vs new user)
+    // STEP 2: Sign in failed - user needs to provide name to register
+    // =========================================================================
+    // Since sign in failed and no name was provided, we can't determine if:
+    // - Email exists but wrong password, OR
+    // - Email is new
+    //
+    // We simply ask for the name. On next submit with name:
+    // - If email exists: signup fails → we try signin → shows "wrong password"
+    // - If email is new: signup succeeds → account created
     // =========================================================================
     if (signInError) {
-      console.log('[Auth/Unified] Step 2: Sign in failed:', signInError.message)
+      console.log('[Auth/Unified] Sign in failed, no name provided:', signInError.message)
+      console.log('[Auth/Unified] ⚠️ NAME REQUIRED: Prompting user to provide name')
 
-      // Supabase returns "Invalid login credentials" for BOTH:
-      // - User exists but wrong password
-      // - User doesn't exist at all
-      // We need to distinguish these cases to provide correct UX
-
-      // Try a dummy signup to check if email is already registered
-      // NOTE: This is a workaround; Supabase doesn't have a "check email exists" API
-      console.log('[Auth/Unified] Step 3: Checking if email already registered via dummy signup')
-
-      const { error: checkError } = await supabase.auth.signUp({
-        email,
-        password: 'dummy_password_for_check_only_12345',
-        options: {
-          data: { full_name: '' },
+      return NextResponse.json(
+        {
+          error: 'Please provide your name to create an account',
+          name_required: true
         },
-      })
-
-      console.log('[Auth/Unified] Dummy signup result:', {
-        hasError: !!checkError,
-        errorMessage: checkError?.message
-      })
-
-      // If we get "already registered" error, user exists but password was wrong
-      if (checkError?.message?.includes('already registered') || checkError?.message?.includes('already been registered')) {
-        console.log('[Auth/Unified] ❌ WRONG PASSWORD: User exists but provided wrong password:', email)
-        return NextResponse.json(
-          { error: 'Invalid email or password' },
-          { status: 401 }
-        )
-      }
-
-      // =========================================================================
-      // STEP 4: User doesn't exist - check if we can register them
-      // =========================================================================
-      console.log('[Auth/Unified] Step 4: Email is new, checking if name provided')
-
-      if (!fullName || fullName.trim() === '') {
-        console.log('[Auth/Unified] ⚠️ NAME REQUIRED: New email but no name provided:', email)
-        return NextResponse.json(
-          {
-            error: 'Please provide your name to create an account',
-            name_required: true  // UI uses this flag to highlight name field
-          },
-          { status: 400 }
-        )
-      }
-
-      // =========================================================================
-      // STEP 5: Create new account
-      // =========================================================================
-      console.log('[Auth/Unified] Step 5: Creating new user:', { email, fullName: fullName.trim() })
-
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName.trim(),
-          },
-        },
-      })
-
-      // Handle signup errors
-      if (signUpError) {
-        console.error('[Auth/Unified] ❌ SIGNUP ERROR:', signUpError)
-
-        if (signUpError.message.includes('rate limit')) {
-          console.log('[Auth/Unified] Rate limited - too many signup attempts')
-          return NextResponse.json(
-            { error: 'Too many attempts. Please try again in a few minutes.' },
-            { status: 429 }
-          )
-        }
-
-        return NextResponse.json(
-          { error: 'Failed to create account. Please try again.' },
-          { status: 400 }
-        )
-      }
-
-      if (!signUpData.user) {
-        console.error('[Auth/Unified] ❌ SIGNUP FAILED: No user returned from Supabase')
-        return NextResponse.json(
-          { error: 'Failed to create account. Please try again.' },
-          { status: 500 }
-        )
-      }
-
-      console.log('[Auth/Unified] ✅ REGISTRATION SUCCESS:', {
-        userId: signUpData.user.id,
-        email: signUpData.user.email,
-        hasSession: !!signUpData.session,
-      })
-
-      // =========================================================================
-      // STEP 6: Post-registration setup (locale, verification email)
-      // =========================================================================
-
-      // Detect and save user's preferred locale for future emails
-      const locale = getLocaleFromRequest(request)
-      console.log('[Auth/Unified] Step 6a: Saving user locale:', locale)
-
-      try {
-        await supabase
-          .from('users')
-          .update({ preferred_language: locale })
-          .eq('id', signUpData.user.id)
-
-        console.log('[Auth/Unified] Locale saved successfully')
-      } catch (error) {
-        // Non-fatal: user is created, just locale preference not saved
-        console.error('[Auth/Unified] Failed to save preferred language (non-fatal):', error)
-      }
-
-      // =========================================================================
-      // STEP 7: Send verification email via SendGrid
-      // =========================================================================
-      console.log('[Auth/Unified] Step 7: Sending verification email')
-      try {
-        const emailContent = getEmailVerificationContent(locale)
-        const verificationToken = await generateEmailVerificationToken(email, signUpData.user.id)
-        const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
-
-        console.log('[Auth/Unified] Generated verification URL:', verificationUrl)
-
-        const sendGridPayload: any = {
-          personalizations: [{
-            to: [{ email: email }],
-            dynamic_template_data: {
-              user_name: fullName || email.split('@')[0],
-              verification_link: verificationUrl,
-              ...emailContent,
-            },
-          }],
-          from: {
-            email: 'noreply@trudify.com',
-            name: 'Trudify',
-          },
-        }
-
-        if (process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION) {
-          sendGridPayload.template_id = process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION
-        } else {
-          sendGridPayload.subject = `${emailContent.button_text} - Trudify`
-          sendGridPayload.content = [{
-            type: 'text/html',
-            value: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <div style="background-color: #0066CC; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <div style="color: white; font-size: 28px; font-weight: bold;">Trudify</div>
-                </div>
-                <div style="padding: 40px 30px; background-color: white;">
-                  <h2 style="color: #333; margin-top: 0;">${emailContent.heading}</h2>
-                  <p>${emailContent.greeting} ${fullName || email.split('@')[0]},</p>
-                  <p>${emailContent.message}</p>
-                  <div style="text-align: center; margin: 30px 0;">
-                    <a href="${verificationUrl}"
-                       style="background-color: #0066CC; color: white; padding: 14px 40px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;">
-                      ${emailContent.button_text}
-                    </a>
-                  </div>
-                  <p style="color: #666; font-size: 14px; margin-top: 30px;">
-                    ${emailContent.link_instruction}<br>
-                    <a href="${verificationUrl}">${verificationUrl}</a>
-                  </p>
-                </div>
-                <div style="padding: 20px 30px; background-color: #f9f9f9; border-radius: 0 0 8px 8px; text-align: center;">
-                  <p style="color: #666; font-size: 14px;">${emailContent.footer_text}</p>
-                  <p style="color: #666; font-size: 14px;">© ${emailContent.current_year} Trudify. ${emailContent.footer_rights}</p>
-                </div>
-              </div>
-            `,
-          }]
-        }
-
-        const sendGridResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sendGridPayload),
-        })
-
-        if (!sendGridResponse.ok) {
-          const errorText = await sendGridResponse.text()
-          console.error('[Auth/Unified] SendGrid API error:', sendGridResponse.status, errorText)
-        } else {
-          console.log('[Auth/Unified] ✅ Verification email sent successfully to:', email)
-        }
-      } catch (emailError) {
-        // Non-fatal: user is created, just email not sent
-        // User can request resend from the app
-        console.error('[Auth/Unified] Verification email exception (non-fatal):', emailError)
-      }
-
-      // =========================================================================
-      // STEP 8: Return success response with user profile
-      // =========================================================================
-      console.log('[Auth/Unified] Step 8: Fetching profile and returning success')
-
-      let userProfile = null
-      try {
-        const { data: profile } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', signUpData.user.id)
-          .single()
-
-        userProfile = profile
-        console.log('[Auth/Unified] Profile fetched for new user:', { hasProfile: !!profile })
-      } catch (err) {
-        console.error('[Auth/Unified] Failed to fetch new user profile (non-fatal):', err)
-      }
-
-      console.log('[Auth/Unified] 🎉 REGISTRATION COMPLETE - returning success')
-
-      return NextResponse.json({
-        success: true,
-        action: 'register',  // UI uses this to show verification prompt
-        message: 'Account created successfully! Please check your email to verify your address.',
-        user: userProfile || {
-          id: signUpData.user.id,
-          email: signUpData.user.email,
-        },
-      })
+        { status: 400 }
+      )
     }
 
     // =========================================================================
-    // FALLBACK: Should never reach here, but handle gracefully
+    // FALLBACK: Should never reach here
     // =========================================================================
-    console.error('[Auth/Unified] ❌ UNEXPECTED: Reached fallback - no signInError but also no user')
+    console.error('[Auth/Unified] ❌ UNEXPECTED: Reached fallback')
     return NextResponse.json(
       { error: 'An unexpected error occurred. Please try again.' },
       { status: 500 }
     )
   } catch (error) {
-    // =========================================================================
-    // GLOBAL ERROR HANDLER: Catch any unhandled exceptions
-    // =========================================================================
     console.error('[Auth/Unified] ❌ UNHANDLED EXCEPTION:', error)
     return NextResponse.json(
       { error: 'An unexpected error occurred. Please try again.' },
