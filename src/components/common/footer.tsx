@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { usePathname, useRouter } from "next/navigation";
 import { LocaleLink } from "./locale-link";
 import { LANGUAGE_CONFIG } from "@/lib/constants/locales";
+import { FlagIcon } from "@/components/ui/flag-icon";
 import { extractLocaleFromPathname, replaceLocaleInPathname } from "@/lib/utils/url-locale";
 import { saveUserLocalePreference } from "@/lib/utils/client-locale";
 import { updateUserLanguagePreference } from "@/lib/utils/update-user-language";
@@ -167,16 +168,16 @@ function Footer() {
            key={language.code}
            onClick={handleLanguageChange}
            className={`
-            text-3xl sm:text-4xl transition-all duration-200
+            p-1.5 transition-all duration-200 rounded-md
             ${isActive
-             ? 'scale-110 opacity-100 ring-2 ring-blue-400 ring-offset-2 ring-offset-slate-900 rounded-lg'
+             ? 'scale-110 opacity-100 ring-2 ring-blue-400 ring-offset-2 ring-offset-slate-900'
              : 'opacity-50 hover:opacity-100 hover:scale-105'
             }
            `}
            aria-label={`Switch to ${language.name}`}
            title={language.name}
           >
-           {language.flag}
+           <FlagIcon locale={language.code} size={28} />
           </button>
          );
         })}

@@ -10,6 +10,7 @@ import {
  Button
 } from '@nextui-org/react'
 import { LANGUAGE_CONFIG, type SupportedLocale } from '@/lib/constants/locales'
+import { FlagIcon } from '@/components/ui/flag-icon'
 import { extractLocaleFromPathname, replaceLocaleInPathname } from '@/lib/utils/url-locale'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
 import { updateUserLanguagePreference } from '@/lib/utils/update-user-language'
@@ -78,14 +79,14 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
       className="h-8 px-2 min-w-[32px] flex-shrink-0"
       isIconOnly
      >
-      <span className="text-xl">{currentLanguage.flag}</span>
+      <FlagIcon locale={currentLocale} size={22} />
      </Button>
     ) : (
      <Button
       variant="light"
       size="lg"
       className="w-full justify-between px-0 font-medium text-gray-900"
-      endContent={<span className="text-xl">{currentLanguage.flag}</span>}
+      endContent={<FlagIcon locale={currentLocale} size={22} />}
      >
       {currentLanguage.name}
      </Button>
@@ -100,7 +101,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
     {Object.values(LANGUAGE_CONFIG).map((language) => (
      <DropdownItem
       key={language.code}
-      startContent={<span className="text-lg">{language.flag}</span>}
+      startContent={<FlagIcon locale={language.code} size={20} />}
      >
       {language.name}
      </DropdownItem>
