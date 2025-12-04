@@ -4,7 +4,7 @@
  */
 
 export const SUPPORTED_LOCALES = ['bg', 'ua', 'en', 'ru'] as const
-export const DEFAULT_LOCALE = 'en' as const
+export const DEFAULT_LOCALE = 'bg' as const // Bulgarian as primary market fallback
 
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 

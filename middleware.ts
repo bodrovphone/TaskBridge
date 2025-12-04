@@ -57,9 +57,13 @@ export async function middleware(request: NextRequest) {
     // Create redirect URL with detected locale
     const url = request.nextUrl.clone()
     url.pathname = addLocaleToPathname(pathname, localeResult.locale)
-    
+
     const response = NextResponse.redirect(url)
-    
+
+    // IMPORTANT: Add Vary header to prevent Vercel from caching redirect for all users
+    // Without this, first user's redirect might be cached and served to all subsequent users
+    response.headers.set('Vary', 'Accept-Language, Cookie')
+
     // Set cookie if this is browser-detected or first visit (not from user's explicit choice)
     if (localeResult.source !== 'cookie') {
       response.cookies.set(LOCALE_COOKIE.NAME, localeResult.locale, {
