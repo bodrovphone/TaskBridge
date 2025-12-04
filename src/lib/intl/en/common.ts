@@ -131,6 +131,14 @@ export const common = {
   'common.errorGeneric': 'Something went wrong. Please try again.',
   'common.internalServerError': 'Something went wrong. Please try again later.',
 
+  // 404 Page
+  'error.404.title': 'Oops! This page went on vacation 🏖️',
+  'error.404.description': "It packed its bags and forgot to leave a forwarding address. Even our GPS can't find it!",
+  'error.404.subtext': "But don't worry, there's plenty more to explore!",
+  'error.404.goHome': 'Go Home',
+  'error.404.browseTasks': 'Browse Tasks',
+  'error.404.createTask': 'Create Task',
+
   // Safety & Trust Indicators
   'safety.phoneVerified': 'Phone Verified',
   'safety.emailVerified': 'Email Verified',
