@@ -168,7 +168,7 @@ export default function ProfessionalsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-wrap justify-center gap-6 mt-12"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 max-w-2xl mx-auto px-4"
             >
               {[
                 { icon: '✅', labelKey: 'professionals.hero.stats.verified.label', valueKey: 'professionals.hero.stats.verified.value' },
@@ -180,7 +180,7 @@ export default function ProfessionalsPage() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.9 + (index * 0.1) }}
-                  className="bg-white/10 rounded-xl px-4 py-3 border border-white/20 text-center min-w-[140px]"
+                  className="bg-white/10 rounded-xl px-4 py-4 border border-white/20 text-center"
                 >
                   <div className="text-2xl mb-1">{item.icon}</div>
                   <div className="text-lg font-bold text-white">{t(item.valueKey)}</div>

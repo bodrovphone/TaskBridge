@@ -4,7 +4,7 @@ export const professionals = {
   'professionals.hero.subtitle':
     'Просматривайте верифицированных специалистов по категориям и найдите идеальное соответствие для ваших потребностей',
   'professionals.hero.badge': 'Сеть профессионалов',
-  'professionals.hero.stats.verified.value': 'Верифицированные специалисты',
+  'professionals.hero.stats.verified.value': 'Надежные специалисты',
   'professionals.hero.stats.verified.label': 'Становится больше каждый день',
   'professionals.hero.stats.ratings.value': 'Проверенное качество',
   'professionals.hero.stats.ratings.label': 'На основе реальных рейтингов и отзывов',
@@ -116,6 +116,7 @@ export const professionals = {
   'professionals.results.noResults.description':
     'Попробуйте изменить фильтры или поискать в другом районе',
   'professionals.results.noResults.clearFilters': 'Очистить фильтры',
+  'professionals.results.noResults.subtext': 'Или посмотрите рекомендуемых специалистов ниже',
   'professionals.results.error.title': 'Упс! Что-то пошло не так',
   'professionals.results.error.description': 'Нашим серверам нужен кофе-брейк',
   'professionals.results.error.subtext': 'Не волнуйтесь, мы уже работаем над этим!',
@@ -225,6 +226,8 @@ export const professionals = {
   'inviteModal.alreadyInvitedDescription': 'Вы уже пригласили {{name}} на эту задачу.',
   'inviteModal.alreadyInvitedProfessional': 'Уже приглашён',
   'inviteModal.alreadyInvitedProfessionalDescription': 'Вы уже пригласили {{name}} на вашу задачу. Они могут откликнуться в течение 24 часов, если доступны.',
+  'inviteModal.selfInviteTitle': '🤔 Хорошая попытка!',
+  'inviteModal.selfInviteDescription': 'Нельзя предложить задачу самому себе. Но мы ценим креативность!',
   'inviteModal.createNewTask': 'Создать новую задачу',
   'inviteModal.loadingTasks': 'Загрузка ваших задач...',
   'inviteModal.continue': 'Продолжить',

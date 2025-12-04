@@ -117,6 +117,7 @@ export const professionals = {
   'professionals.results.noResults.description':
     'Опитайте да промените филтрите или да търсите в друг район',
   'professionals.results.noResults.clearFilters': 'Изчисти филтрите',
+  'professionals.results.noResults.subtext': 'Или разгледайте препоръчаните професионалисти по-долу',
   'professionals.results.error.title': 'Опа! Нещо се обърка',
   'professionals.results.error.description': 'Сървърите ни имат нужда от почивка с кафе',
   'professionals.results.error.subtext': 'Не се притеснявайте, работим по проблема!',
@@ -223,6 +224,8 @@ export const professionals = {
   'inviteModal.alreadyInvitedDescription': 'Вече сте поканили {{name}} за тази задача.',
   'inviteModal.alreadyInvitedProfessional': 'Вече поканен',
   'inviteModal.alreadyInvitedProfessionalDescription': 'Вече сте поканили {{name}} за вашата задача. Те могат да кандидатстват в рамките на 24 часа, ако са налични.',
+  'inviteModal.selfInviteTitle': '🤔 Хубав опит!',
+  'inviteModal.selfInviteDescription': 'Не можете да предложите задача на себе си. Но оценяваме креативността!',
   'inviteModal.createNewTask': 'Създай нова задача',
   'inviteModal.loadingTasks': 'Зареждане на вашите задачи...',
   'inviteModal.continue': 'Продължи',

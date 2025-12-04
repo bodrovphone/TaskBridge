@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Modal,
@@ -19,7 +20,7 @@ import { CityFilter } from './city-filter'
 import { BudgetFilter } from './budget-filter'
 import { UrgencyFilter } from './urgency-filter'
 import { SortDropdown } from './sort-dropdown'
-import { useTaskFilters } from '../hooks/use-task-filters'
+import { useTaskFilters, type TaskFilters } from '../hooks/use-task-filters'
 
 const filterSections = [
   { key: 'category', icon: Grid3X3, labelKey: 'browseTasks.filters.category', color: 'text-blue-500' },
@@ -32,7 +33,50 @@ const filterSections = [
 export function FiltersModal() {
   const { t } = useTranslation()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { filters, updateFilter, updateFilters, resetFilters, activeFilterCount } = useTaskFilters()
+  const { filters, updateFilters, resetFilters, activeFilterCount } = useTaskFilters()
+
+  // Local state for filters - only applied when user clicks "Show Results"
+  const [localFilters, setLocalFilters] = useState<TaskFilters>(filters)
+
+  // Sync local filters when modal opens or external filters change
+  useEffect(() => {
+    if (isOpen) {
+      setLocalFilters(filters)
+    }
+  }, [isOpen, filters])
+
+  // Update local filter without triggering API call
+  const updateLocalFilter = (key: keyof TaskFilters, value: any) => {
+    setLocalFilters(prev => ({ ...prev, [key]: value }))
+  }
+
+  // Update multiple local filters at once
+  const updateLocalFilters = (updates: Partial<TaskFilters>) => {
+    setLocalFilters(prev => ({ ...prev, ...updates }))
+  }
+
+  // Apply filters and close modal
+  const handleApplyFilters = () => {
+    updateFilters(localFilters)
+    onClose()
+  }
+
+  // Reset local filters
+  const handleResetFilters = () => {
+    const defaultFilters: TaskFilters = { sortBy: 'newest', page: 1 }
+    setLocalFilters(defaultFilters)
+  }
+
+  // Count active local filters (for UI display in modal)
+  const localActiveFilterCount = Object.entries(localFilters).filter(
+    ([key, value]) =>
+      key !== 'sortBy' &&
+      key !== 'page' &&
+      key !== 'q' &&
+      value !== undefined &&
+      value !== null &&
+      value !== ''
+  ).length
 
   return (
     <>
@@ -104,10 +148,10 @@ export function FiltersModal() {
                       <h2 className="text-xl font-bold text-gray-900">
                         {t('browseTasks.filters.filters', 'Filters')}
                       </h2>
-                      {activeFilterCount > 0 && (
+                      {localActiveFilterCount > 0 && (
                         <div className="flex items-center gap-2 mt-0.5">
                           <Chip size="sm" variant="flat" className="bg-orange-100 text-orange-700 border border-orange-300">
-                            {activeFilterCount} {t('browseTasks.filters.active', 'active')}
+                            {localActiveFilterCount} {t('browseTasks.filters.active', 'active')}
                           </Chip>
                         </div>
                       )}
@@ -147,34 +191,34 @@ export function FiltersModal() {
                       <div className="pl-7">
                         {key === 'category' && (
                           <CategoryFilter
-                            value={filters.category}
-                            onChange={(value) => updateFilter('category', value)}
+                            value={localFilters.category}
+                            onChange={(value) => updateLocalFilter('category', value)}
                           />
                         )}
                         {key === 'city' && (
                           <CityFilter
-                            value={filters.city}
-                            onChange={(value) => updateFilter('city', value)}
+                            value={localFilters.city}
+                            onChange={(value) => updateLocalFilter('city', value)}
                           />
                         )}
                         {key === 'budget' && (
                           <BudgetFilter
-                            value={{ min: filters.budgetMin, max: filters.budgetMax }}
+                            value={{ min: localFilters.budgetMin, max: localFilters.budgetMax }}
                             onChange={(value) => {
-                              updateFilters({ budgetMin: value.min, budgetMax: value.max })
+                              updateLocalFilters({ budgetMin: value.min, budgetMax: value.max })
                             }}
                           />
                         )}
                         {key === 'urgency' && (
                           <UrgencyFilter
-                            value={filters.urgency}
-                            onChange={(value) => updateFilter('urgency', value)}
+                            value={localFilters.urgency}
+                            onChange={(value) => updateLocalFilter('urgency', value)}
                           />
                         )}
                         {key === 'sort' && (
                           <SortDropdown
-                            value={filters.sortBy || 'newest'}
-                            onChange={(value) => updateFilter('sortBy', value)}
+                            value={localFilters.sortBy || 'newest'}
+                            onChange={(value) => updateLocalFilter('sortBy', value)}
                           />
                         )}
                       </div>
@@ -212,7 +256,7 @@ export function FiltersModal() {
                   {/* First row - Primary action */}
                   <Button
                     size="lg"
-                    onPress={onClose}
+                    onPress={handleApplyFilters}
                     className="w-full font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
                   >
                     {t('browseTasks.filters.showResults', 'Show Results')}
@@ -231,10 +275,8 @@ export function FiltersModal() {
                     <Button
                       size="lg"
                       startContent={<X className="w-4 h-4" />}
-                      onPress={() => {
-                        resetFilters()
-                      }}
-                      isDisabled={activeFilterCount === 0}
+                      onPress={handleResetFilters}
+                      isDisabled={localActiveFilterCount === 0}
                       className="flex-1 bg-red-500 text-white hover:bg-red-600 disabled:bg-gray-200 disabled:text-gray-400"
                     >
                       {t('browseTasks.filters.reset', 'Reset')}

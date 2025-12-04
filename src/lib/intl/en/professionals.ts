@@ -222,6 +222,8 @@ export const professionals = {
   'inviteModal.alreadyInvitedDescription': 'You have already invited {{name}} to this task.',
   'inviteModal.alreadyInvitedProfessional': 'Already invited',
   'inviteModal.alreadyInvitedProfessionalDescription': 'You have already invited {{name}} to your task. They may apply within 24 hours if available.',
+  'inviteModal.selfInviteTitle': '🤔 Nice try!',
+  'inviteModal.selfInviteDescription': "You can't suggest a task to yourself. But we appreciate the creativity!",
   'inviteModal.createNewTask': 'Create New Task',
   'inviteModal.loadingTasks': 'Loading your tasks...',
   'inviteModal.continue': 'Continue',
