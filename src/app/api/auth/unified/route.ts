@@ -377,20 +377,33 @@ export async function POST(request: Request) {
     }
 
     // =========================================================================
-    // STEP 2: Sign in failed - user needs to provide name to register
-    // =========================================================================
-    // Since sign in failed and no name was provided, we can't determine if:
-    // - Email exists but wrong password, OR
-    // - Email is new
-    //
-    // We simply ask for the name. On next submit with name:
-    // - If email exists: signup fails → we try signin → shows "wrong password"
-    // - If email is new: signup succeeds → account created
+    // STEP 2: Sign in failed - determine if wrong password or new user
     // =========================================================================
     if (signInError) {
-      console.log('[Auth/Unified] Sign in failed, no name provided:', signInError.message)
-      console.log('[Auth/Unified] ⚠️ NAME REQUIRED: Prompting user to provide name')
+      console.log('[Auth/Unified] Sign in failed:', signInError.message)
 
+      // Check if this email already exists in our database
+      // Use service role to bypass RLS
+      const { createAdminClient } = await import('@/lib/supabase/server')
+      const adminSupabase = createAdminClient()
+
+      const { data: existingUser } = await adminSupabase
+        .from('users')
+        .select('id')
+        .eq('email', email.toLowerCase())
+        .single()
+
+      if (existingUser) {
+        // User EXISTS but wrong password - show clear error
+        console.log('[Auth/Unified] ❌ WRONG PASSWORD: User exists but password incorrect')
+        return NextResponse.json(
+          { error: 'Invalid email or password' },
+          { status: 401 }
+        )
+      }
+
+      // User does NOT exist - ask for name to register
+      console.log('[Auth/Unified] ⚠️ NAME REQUIRED: Email not found, prompting for name')
       return NextResponse.json(
         {
           error: 'Please provide your name to create an account',

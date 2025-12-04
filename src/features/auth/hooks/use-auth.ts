@@ -404,10 +404,31 @@ export function useAuth(): UseAuthReturn {
 
   /**
    * Manually refresh profile data
+   * Fetches fresh profile from API and updates state
    */
   const refreshProfile = async () => {
-    if (user) {
-      await fetchProfile(user.id)
+    try {
+      const response = await fetch('/api/auth/profile')
+
+      if (response.ok) {
+        const data = await response.json()
+        const userObj: SupabaseUser = {
+          id: data.user.id,
+          email: data.user.email,
+          app_metadata: {},
+          user_metadata: {},
+          aud: 'authenticated',
+          created_at: data.user.createdAt || new Date().toISOString(),
+        }
+        setUser(userObj)
+        setProfile(data.user)
+      } else {
+        // Not authenticated
+        setUser(null)
+        setProfile(null)
+      }
+    } catch (err) {
+      console.error('[useAuth] Error refreshing profile:', err)
     }
   }
 
