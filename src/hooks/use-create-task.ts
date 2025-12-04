@@ -74,6 +74,10 @@ export function useCreateTask() {
   // Auth state
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
 
+  // Professional invitation context (stored to preserve through review enforcement flow)
+  const [pendingInviteProfessionalId, setPendingInviteProfessionalId] = useState<string | null>(null)
+  const [pendingInviteProfessionalName, setPendingInviteProfessionalName] = useState<string | null>(null)
+
   // Review enforcement state
   const [showEnforcementDialog, setShowEnforcementDialog] = useState(false)
   const [showReviewDialog, setShowReviewDialog] = useState(false)
@@ -141,8 +145,9 @@ export function useCreateTask() {
       if (blockingTasks.length <= 1) {
         setShowEnforcementDialog(false)
         // Small delay to let dialog close before navigating
+        // Preserve professional invitation context if set
         setTimeout(() => {
-          router.push(`/${lang}/create-task`)
+          router.push(buildCreateTaskUrl(pendingInviteProfessionalId, pendingInviteProfessionalName))
         }, 300)
       }
     },
@@ -156,10 +161,39 @@ export function useCreateTask() {
   })
 
   /**
+   * Helper to build the create-task URL with optional professional invitation params
+   */
+  const buildCreateTaskUrl = (professionalId?: string | null, professionalName?: string | null) => {
+    let url = `/${lang}/create-task`
+    if (professionalId) {
+      const params = new URLSearchParams()
+      params.set('inviteProfessionalId', professionalId)
+      if (professionalName) {
+        params.set('inviteProfessionalName', professionalName)
+      }
+      url += `?${params.toString()}`
+    }
+    return url
+  }
+
+  /**
    * Main handler for "Create Task" button clicks
    * Checks authentication and review enforcement before navigation
+   * @param optionsOrEvent - Optional parameters for professional invitation context, or event (ignored)
    */
-  const handleCreateTask = async () => {
+  const handleCreateTask = async (optionsOrEvent?: { inviteProfessionalId?: string; inviteProfessionalName?: string } | React.MouseEvent | unknown) => {
+    // Handle both event handler calls (onClick={handleCreateTask}) and direct calls with options
+    // If it looks like an event (has 'target' property), treat it as no options
+    const options = optionsOrEvent && typeof optionsOrEvent === 'object' && 'inviteProfessionalId' in optionsOrEvent
+      ? optionsOrEvent as { inviteProfessionalId?: string; inviteProfessionalName?: string }
+      : undefined
+
+    // Store professional context if provided (will be preserved through review enforcement flow)
+    if (options?.inviteProfessionalId) {
+      setPendingInviteProfessionalId(options.inviteProfessionalId)
+      setPendingInviteProfessionalName(options.inviteProfessionalName || null)
+    }
+
     // Check authentication first
     if (!isAuthenticated) {
       setShowAuthPrompt(true)
@@ -179,8 +213,10 @@ export function useCreateTask() {
       return
     }
 
-    // All clear - proceed to create task
-    router.push(`/${lang}/create-task`)
+    // All clear - proceed to create task (use stored or passed professional context)
+    const professionalId = options?.inviteProfessionalId || pendingInviteProfessionalId
+    const professionalName = options?.inviteProfessionalName || pendingInviteProfessionalName
+    router.push(buildCreateTaskUrl(professionalId, professionalName))
   }
 
   /**

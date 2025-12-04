@@ -167,7 +167,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
   };
 
   // Handle invite button click - Implements all three branches
-  const handleInviteClick = () => {
+  const handleInviteClick = async () => {
     // Check if already invited this session
     if (hasInvitedThisSession) {
       toast({
@@ -186,13 +186,24 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       return;
     }
 
-    // Show modal immediately and fetch tasks in background
-    setShowTaskSelectionModal(true);
+    // Fetch tasks first to determine which flow to use
+    setIsLoadingTasks(true);
+    const tasks = await fetchUserTasks();
+    setUserTasks(tasks);
+    setIsLoadingTasks(false);
 
-    // Fetch tasks in background
-    fetchUserTasks().then((tasks) => {
-      setUserTasks(tasks);
-    });
+    // If user has no tasks, skip modal and go directly to create task
+    // Use handleCreateTask to respect review enforcement
+    if (tasks.length === 0) {
+      handleCreateTask({
+        inviteProfessionalId: professional.id,
+        inviteProfessionalName: transformedProfessional.name,
+      });
+      return;
+    }
+
+    // If user has existing tasks, show the selection modal
+    setShowTaskSelectionModal(true);
   };
 
   // Handle task selection and send invitation
@@ -330,7 +341,11 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
         onSelectTask={handleTaskSelection}
         onCreateNewTask={() => {
           setShowTaskSelectionModal(false);
-          handleCreateTask();
+          // Use handleCreateTask to respect review enforcement while preserving professional context
+          handleCreateTask({
+            inviteProfessionalId: professional.id,
+            inviteProfessionalName: transformedProfessional.name,
+          });
         }}
         isLoading={isSendingInvitation}
         isLoadingTasks={isLoadingTasks}
