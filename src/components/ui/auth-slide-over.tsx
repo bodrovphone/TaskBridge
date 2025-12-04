@@ -244,19 +244,23 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
 
  return createPortal(
   <>
-   {/* Backdrop */}
+   {/* Backdrop - Full screen coverage */}
    <div
-    className="fixed inset-0 bg-black/50 transition-opacity"
-    style={{ zIndex: 999998 }}
+    className="fixed inset-0 bg-black/70 transition-opacity"
+    style={{ zIndex: 999998, top: 0, left: 0, right: 0, bottom: 0, position: 'fixed' }}
     onClick={onClose}
    />
 
-   {/* Slide-over Panel */}
+   {/* Slide-over Panel - Full height on mobile */}
    <div
-    className="fixed inset-0 w-full max-w-md h-full transform transition-transform duration-300 ease-in-out overflow-hidden bg-white ml-auto"
-    style={{ zIndex: 999999, height: '100dvh', minHeight: '100vh' }}
+    className="fixed top-0 right-0 bottom-0 w-full max-w-md transform transition-transform duration-300 ease-in-out overflow-hidden bg-white"
+    style={{
+     zIndex: 999999,
+     height: '100dvh',
+     minHeight: '-webkit-fill-available',
+    }}
    >
-    <div className="flex h-full flex-col bg-white shadow-xl overflow-hidden">
+    <div className="flex flex-col bg-white shadow-xl overflow-hidden" style={{ height: '100dvh', minHeight: '-webkit-fill-available' }}>
      {/* Header */}
      <div className="bg-blue-600 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -286,8 +290,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
       </div>
      </div>
 
-     {/* Content */}
-     <div className="flex-1 px-6 py-6 overflow-y-auto">
+     {/* Content - with safe area padding for iOS */}
+     <div className="flex-1 px-6 py-6 overflow-y-auto pb-safe" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
       <div className="space-y-6">
        {/* Action Description */}
        <div className="bg-blue-50 p-4 rounded-lg">
