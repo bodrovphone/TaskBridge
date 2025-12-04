@@ -3,9 +3,11 @@
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, CardHeader, Button } from '@nextui-org/react'
 import { Settings, Trash2 } from 'lucide-react'
+import Link from 'next/link'
 import { TelegramConnection } from '../telegram-connection'
 
 interface AccountSettingsSectionProps {
+  lang: string
   userId: string
   telegramConnected: boolean
   telegramUsername?: string | null
@@ -14,6 +16,7 @@ interface AccountSettingsSectionProps {
 }
 
 export function AccountSettingsSection({
+  lang,
   userId,
   telegramConnected,
   telegramUsername,
@@ -59,13 +62,11 @@ export function AccountSettingsSection({
               {t('profile.settings.deleteAccountDesc')}
             </p>
             <Button
+              as={Link}
+              href={`/${lang}/account/delete`}
               variant="bordered"
               color="danger"
               size="sm"
-              onPress={() => {
-                // TODO: Implement account deletion flow
-                alert(t('profile.settings.deleteAccountConfirm'))
-              }}
             >
               {t('profile.settings.deleteAccount')}
             </Button>

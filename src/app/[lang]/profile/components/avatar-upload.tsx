@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
-import { Camera, Upload, X, Check } from 'lucide-react'
+import { Camera, Upload, X, Check, CircleUser } from 'lucide-react'
 import { uploadAvatar, deleteAvatar } from '@/lib/utils/avatar-upload'
 import { useAuth } from '@/features/auth'
 
@@ -160,16 +160,29 @@ export function AvatarUpload({
   lg: 'w-20 h-20'
  }
 
+ const iconSizeClasses = {
+  sm: 'w-12 h-12',
+  md: 'w-16 h-16',
+  lg: 'w-20 h-20'
+ }
+
  return (
   <>
    {/* Avatar with upload indicator */}
    <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
-    <Avatar
-     src={currentAvatar || undefined}
-     name={userName}
-     size={size}
-     className={`${sizeClasses[size]} ${className} transition-all duration-200 group-hover:opacity-80`}
-    />
+    {currentAvatar ? (
+     <Avatar
+      src={currentAvatar}
+      name={userName}
+      size={size}
+      className={`${sizeClasses[size]} ${className} transition-all duration-200 group-hover:opacity-80`}
+     />
+    ) : (
+     /* Default avatar with icon - matches navbar style */
+     <div className={`${iconSizeClasses[size]} rounded-full bg-primary-500 flex items-center justify-center transition-all duration-200 group-hover:opacity-80 border-2 border-white shadow-sm ${className}`}>
+      <CircleUser className="text-white w-full h-full p-1" />
+     </div>
+    )}
 
     {/* Upload overlay on hover */}
     <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -193,12 +206,18 @@ export function AvatarUpload({
       <div className="space-y-4">
        {/* Current/Preview Avatar */}
        <div className="flex flex-col items-center">
-        <Avatar
-         src={previewImage || currentAvatar || undefined}
-         name={userName}
-         size="lg"
-         className="w-24 h-24 mb-3"
-        />
+        {(previewImage || currentAvatar) ? (
+         <Avatar
+          src={previewImage || currentAvatar || undefined}
+          name={userName}
+          size="lg"
+          className="w-24 h-24 mb-3"
+         />
+        ) : (
+         <div className="w-24 h-24 mb-3 rounded-full bg-primary-500 flex items-center justify-center border-2 border-white shadow-sm">
+          <CircleUser className="text-white w-full h-full p-2" />
+         </div>
+        )}
 
         {/* Show delete button only if user has a custom avatar and no preview is selected */}
         {currentAvatar && !previewImage && (

@@ -187,6 +187,7 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
         {/* Account Settings Section (inline) */}
         <div id="account-settings" className="mb-4">
           <AccountSettingsSection
+            lang={lang}
             userId={profile.id}
             telegramConnected={!!profile.telegramId}
             telegramUsername={profile.telegramUsername}
