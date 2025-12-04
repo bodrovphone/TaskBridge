@@ -396,158 +396,30 @@ These features show authentication prompts but don't enforce backend auth:
 
 ## User Flows
 
-### 1. Customer Journey: Finding and Hiring a Professional
+TaskBridge supports two main user types with distinct journeys. See the detailed documentation for complete flow diagrams:
 
-```mermaid
-graph TD
-    A[Landing Page] --> B{User Intent}
-    B -->|Browse Tasks| C[Browse Tasks Page]
-    B -->|Find Professional| D[Professionals Directory]
+### Customer Journeys
 
-    C --> E[Task Detail Page]
-    E --> F{Action}
-    F -->|Apply| G[Auth Prompt]
-    F -->|Ask Question| G
-    G --> H[Login/Register]
-    H --> I[Submit Application]
+Flows for customers who want to find professionals and get work done.
 
-    D --> J[Professional Detail]
-    J --> K[Contact Professional]
-    K --> G
-```
+**[View Customer Journeys Documentation](./docs/customer-journeys.md)**
 
-### 2. Professional Journey: Finding Work
+- Finding and Hiring a Professional
+- Posting a Job (Task Creation)
+- Managing Applications
+- Profile Management
+- Authentication Flow
 
-```mermaid
-graph TD
-    A[Landing Page] --> B[Browse Tasks]
-    B --> C[Filter by Category/Location]
-    C --> D[View Task Details]
-    D --> E{Interested?}
-    E -->|Yes| F[Click Apply]
-    E -->|Questions| G[Ask Question]
+### Professional Journeys
 
-    F --> H{Authenticated?}
-    G --> H
-    H -->|No| I[Auth Slide-over]
-    H -->|Yes| J[Submit Application]
+Flows for professionals who want to find work and connect with customers.
 
-    I --> K[Login with Google/Facebook]
-    K --> J
-    J --> L[Application Submitted]
-```
+**[View Professional Journeys Documentation](./docs/professional-journeys.md)**
 
-### 3. Task Creator Journey: Posting a Job
-
-```mermaid
-graph TD
-    A[Landing Page] --> B[Create Task Button]
-    B --> C{Authenticated?}
-    C -->|No| D[Auth Prompt]
-    C -->|Yes| E[Create Task Form]
-
-    D --> F[Login/Register]
-    F --> E
-
-    E --> G[Step 1: Category & Title]
-    G --> H[Step 2: Description & Details]
-    H --> I[Step 3: Location & Budget]
-    I --> J[Step 4: Photos Upload]
-    J --> K[Review & Submit]
-    K --> L[Task Published]
-    L --> M[Task Detail Page]
-    M --> N[Manage Applications]
-```
-
-### 6. Applications Management Flow (Task Owner)
-
-```mermaid
-graph TD
-    A[Task Detail Page] --> B[Notification Received]
-    B --> C[Click View Application]
-    C --> D[Applications Tab Opens]
-
-    D --> E[Applications List]
-    E --> F{Filter/Sort}
-    F -->|Filter| G[All/Pending/Accepted/Rejected]
-    F -->|Sort| H[Newest/Price/Rating/Experience]
-
-    G --> I[Application Cards]
-    H --> I
-
-    I --> J{Action}
-    J -->|View Details| K[Application Detail Modal]
-    J -->|Accept| L[Accept Confirmation Dialog]
-    J -->|Reject| M[Reject Reason Dialog]
-
-    K --> N[See Portfolio]
-    K --> O[See Reviews]
-    K --> P[See Proposal]
-
-    L --> Q[Confirm Agreements]
-    Q --> R[Accept Application]
-    R --> S[Auto-reject Other Applications]
-    S --> T[Task Status: In Progress]
-    T --> U[Contact Info Exchanged]
-
-    M --> V[Select Rejection Reason]
-    V --> W[Confirm Rejection]
-    W --> X[Application Rejected]
-    X --> Y[Notification Sent]
-```
-
-### 4. Authentication Flow
-
-```mermaid
-graph TD
-    A[Unauthenticated User] --> B[Clicks Protected Action]
-    B --> C[Auth Slide-over Opens]
-    C --> D{Login Method}
-
-    D -->|Google| E[Google OAuth]
-    D -->|Facebook| F[Facebook OAuth]
-    D -->|Email| G[Email/Password Form]
-
-    E --> H[OAuth Redirect]
-    F --> H
-    G --> I[Validate Credentials]
-
-    H --> J{Success?}
-    I --> J
-
-    J -->|Yes| K[Create Session]
-    J -->|No| L[Show Error]
-
-    K --> M[Close Slide-over]
-    M --> N[Complete Original Action]
-    L --> C
-```
-
-### 5. Profile Management Flow
-
-```mermaid
-graph TD
-    A[Profile Page] --> B{User Type}
-
-    B -->|Customer| C[Customer Tab]
-    B -->|Professional| D[Professional Tab]
-
-    C --> E[Edit Personal Info]
-    E --> F[Upload Avatar]
-    F --> G[Save Changes]
-
-    D --> H[Edit Professional Info]
-    H --> I[Add Categories]
-    I --> J[Upload Portfolio]
-    J --> K[Set Hourly Rate]
-    K --> L[Verification Status]
-    L --> G
-
-    G --> M{Valid?}
-    M -->|Yes| N[Update Database]
-    M -->|No| O[Show Validation Errors]
-    N --> P[Success Message]
-```
+- Finding Work
+- Application Lifecycle
+- Profile Management
+- Authentication Flow
 
 ## Internationalization
 
@@ -1319,6 +1191,8 @@ MIT
 
 - [PRD.md](./PRD.md) - Product Requirements Document
 - [CLAUDE.md](./CLAUDE.md) - Development guidelines for Claude Code
+- [Customer Journeys](./docs/customer-journeys.md) - User flows for customers
+- [Professional Journeys](./docs/professional-journeys.md) - User flows for professionals
 - [docs/](./docs/) - Additional documentation
 
 ---

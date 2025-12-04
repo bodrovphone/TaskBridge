@@ -54,11 +54,10 @@ export class AuthService {
           console.log('[Auth] Auto-verified email for existing OAuth user:', authUserId)
         }
 
-        // Update preferred language if locale is provided (preserves locale through OAuth flow)
-        if (metadata?.locale && existingUser.preferredLanguage !== metadata.locale) {
-          existingUser.preferredLanguage = metadata.locale
-          console.log('[Auth] Updated preferred language for user:', authUserId, 'to:', metadata.locale)
-        }
+        // NOTE: We do NOT auto-update preferredLanguage for existing users here.
+        // Language should only be changed via the language picker in the header/footer.
+        // This prevents the user's language preference from being overwritten based on
+        // which URL locale they happened to be on when logging in.
 
         const updatedUser = await this.userRepository.update(existingUser)
         return Result.ok(updatedUser)

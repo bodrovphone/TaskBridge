@@ -124,6 +124,12 @@ export const common = {
   'error.unauthorized':
     'Вам нужно войти в систему, чтобы получить доступ к этой странице.',
 
+  // Auth Required Banner (protected pages)
+  'authRequired.title': 'Войдите, чтобы продолжить',
+  'authRequired.description': 'Вам необходимо войти, чтобы просмотреть эту страницу.',
+  'authRequired.signIn': 'Войти',
+  'authRequired.hint': 'Войдите в существующий аккаунт или создайте новый.',
+
   // Empty states
   'common.noResults': 'Задачи не найдены',
   'common.noResultsFilter': 'Попробуйте выбрать другой фильтр статуса',

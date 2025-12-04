@@ -123,6 +123,12 @@ export const common = {
   'error.network': 'Network error. Please check your connection.',
   'error.unauthorized': 'You need to log in to access this page.',
 
+  // Auth Required Banner (protected pages)
+  'authRequired.title': 'Sign in to continue',
+  'authRequired.description': 'You need to be signed in to view this page.',
+  'authRequired.signIn': 'Sign In',
+  'authRequired.hint': 'Sign in with your existing account or create a new one.',
+
   // Empty states
   'common.noResults': 'No tasks found',
   'common.noResultsFilter': 'Try selecting a different status filter',

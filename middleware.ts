@@ -11,6 +11,7 @@ import { updateSession } from '@/lib/supabase/middleware'
 const SKIP_LOCALE_PATTERNS = [
   /^\/_next/, // Next.js internal files
   /^\/api/,   // API routes (need session but not locale)
+  /^\/auth/,  // Auth callback routes (OAuth, password reset) - handles locale internally
   /\./,       // Files with extensions
   /^\/favicon\.ico$/ // Favicon
 ] as const

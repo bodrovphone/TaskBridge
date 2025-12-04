@@ -123,6 +123,12 @@ export const common = {
   'error.network': 'Грешка в мрежата. Моля, проверете връзката си.',
   'error.unauthorized': 'Трябва да влезете, за да достъпите тази страница.',
 
+  // Auth Required Banner (protected pages)
+  'authRequired.title': 'Влезте, за да продължите',
+  'authRequired.description': 'Трябва да сте влезли, за да видите тази страница.',
+  'authRequired.signIn': 'Вход',
+  'authRequired.hint': 'Влезте със съществуващ акаунт или създайте нов.',
+
   // Empty states
   'common.noResults': 'Не са намерени задачи',
   'common.noResultsFilter': 'Опитайте да изберете различен филтър за статус',

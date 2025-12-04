@@ -12,6 +12,9 @@ export async function GET(request: NextRequest) {
   const errorDescription = requestUrl.searchParams.get('error_description')
   const origin = requestUrl.origin
 
+  console.log('[Auth Callback] Full URL:', request.url)
+  console.log('[Auth Callback] All params:', Object.fromEntries(requestUrl.searchParams.entries()))
+
   // Detect locale - priority: query param > cookie > 'next' parameter > default 'bg'
   // Cookie is checked early because it's set RIGHT BEFORE OAuth redirect (most reliable)
   let redirectLocale: 'en' | 'bg' | 'ru' | 'ua' = 'bg' // Default to Bulgarian
@@ -21,22 +24,29 @@ export async function GET(request: NextRequest) {
   // 2. Check cookie (set before OAuth redirect - most reliable source)
   const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
 
+  console.log('[Auth Callback] Locale sources:', { localeParam, localeCookie, next })
+
   if (localeParam && ['en', 'bg', 'ru', 'ua'].includes(localeParam)) {
     redirectLocale = localeParam as 'en' | 'bg' | 'ru' | 'ua'
+    console.log('[Auth Callback] Using locale from query param:', redirectLocale)
   }
   // Cookie takes priority over 'next' parameter since it's set right before OAuth
   else if (localeCookie && ['en', 'bg', 'ru', 'ua'].includes(localeCookie)) {
     redirectLocale = localeCookie as 'en' | 'bg' | 'ru' | 'ua'
+    console.log('[Auth Callback] Using locale from cookie:', redirectLocale)
   }
   // 3. Try to extract locale from 'next' parameter (password reset flows)
   else if (next) {
     const nextLocaleMatch = next.match(/\/(en|bg|ru|ua)\//)
     if (nextLocaleMatch) {
       redirectLocale = nextLocaleMatch[1] as 'en' | 'bg' | 'ru' | 'ua'
+      console.log('[Auth Callback] Using locale from next param:', redirectLocale)
     }
+  } else {
+    console.log('[Auth Callback] No locale found, using default:', redirectLocale)
   }
 
-  console.log('[Auth Callback] Locale detection:', { localeParam, localeCookie, redirectLocale })
+  console.log('[Auth Callback] Final redirect locale:', redirectLocale)
 
   // Helper to create redirect response with locale cookie
   const createRedirectWithLocale = (url: string) => {

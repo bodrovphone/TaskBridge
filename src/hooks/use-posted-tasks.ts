@@ -203,5 +203,8 @@ export function usePostedTasks() {
     removeProfessional: removeProfessionalMutation.mutateAsync,
     isMarkingComplete: markCompleteMutation.isPending,
     isRemovingProfessional: removeProfessionalMutation.isPending,
+    // Auth state for protected route handling
+    isAuthenticated: !!user,
+    authLoading,
   }
 }

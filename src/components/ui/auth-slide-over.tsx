@@ -14,7 +14,7 @@ import type { TelegramUserData } from '@telegram-auth/server';
 interface AuthSlideOverProps {
  isOpen: boolean;
  onClose: () => void;
- action: 'apply' | 'question' | 'create-task' | 'join-professional' | null;
+ action: 'apply' | 'question' | 'create-task' | 'join-professional' | 'view-posted-tasks' | null;
 }
 
 /**

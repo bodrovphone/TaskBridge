@@ -10,8 +10,9 @@ import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'
 import { useCreateTask } from '@/hooks/use-create-task'
 import { usePostedTasks } from '@/hooks/use-posted-tasks'
 import { usePendingReviewsCount } from '@/hooks/use-pending-reviews-count'
-import { ReviewDialog, ReviewEnforcementDialog } from '@/features/reviews'
+import { ReviewEnforcementDialog } from '@/features/reviews'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
+import { AuthRequiredBanner } from '@/components/common/auth-required-banner'
 
 interface PostedTasksPageContentProps {
   lang: string
@@ -25,7 +26,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('open')
 
   // Use TanStack Query hook for data fetching
-  const { tasks, isLoading, error } = usePostedTasks()
+  const { tasks, isLoading, error, isAuthenticated } = usePostedTasks()
 
   // Pending reviews count
   const { data: pendingReviewsCount = 0 } = usePendingReviewsCount()
@@ -125,7 +126,8 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
           </Card>
         )}
 
-        {/* Filter Tabs */}
+        {/* Filter Tabs - only show when authenticated */}
+        {isAuthenticated && (
         <div className="mb-6 flex flex-wrap gap-2 sm:gap-3">
           <button
             onClick={() => setSelectedStatus('open')}
@@ -242,6 +244,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             </span>
           </button>
         </div>
+        )}
 
         {/* Tasks List */}
         {isLoading ? (
@@ -268,6 +271,9 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               </Button>
             </CardBody>
           </Card>
+        ) : !isAuthenticated ? (
+          // User not authenticated - show sign-in prompt
+          <AuthRequiredBanner />
         ) : filteredTasks.length === 0 ? (
           // Check if truly empty (no tasks at all) or just filtered empty
           tasks.length === 0 ? (
@@ -321,7 +327,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
         )}
       </div>
 
-      {/* Auth Slide Over */}
+      {/* Auth Slide Over - for Create Task button */}
       <AuthSlideOver
         isOpen={showAuthPrompt}
         onClose={() => setShowAuthPrompt(false)}
