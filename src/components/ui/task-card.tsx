@@ -42,6 +42,8 @@ interface Task {
  created_at?: Date | string; // Database field (snake_case)
  images?: string[]; // Array of photo URLs (database field)
  status?: TaskStatus; // Task status for permissions
+ is_urgent?: boolean; // Database field for urgent tasks
+ urgency?: 'same_day' | 'within_week' | 'flexible'; // Urgency type
  // Translation fields
  source_language?: string;
  title_bg?: string | null;
@@ -113,18 +115,41 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  };
 
  const formatDeadline = () => {
-  if (!task.deadline) return t('taskCard.deadline.flexible');
+  // Check explicit urgency type first (mock data or form data)
+  if (task.urgency === 'same_day') {
+   return t('taskDetail.urgency.same_day', 'Urgent');
+  }
+  if (task.urgency === 'within_week') {
+   return t('taskDetail.urgency.within_week', 'Within a week');
+  }
+  if (task.urgency === 'flexible') {
+   return t('taskCard.deadline.flexible', 'Flexible');
+  }
+
+  // Derive urgency from database fields (is_urgent + deadline)
+  // This matches the logic in task-detail-content.tsx
+  if (task.is_urgent) {
+   return t('taskDetail.urgency.same_day', 'Urgent');
+  }
+
+  if (!task.deadline) {
+   return t('taskCard.deadline.flexible', 'Flexible');
+  }
+
   const deadline = new Date(task.deadline);
   const now = new Date();
   const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 
-  // Past deadline - show as urgent/ASAP
+  // Past deadline - show as ASAP
   if (diffDays < 0) return t('taskDetail.asap', 'ASAP');
 
-  if (diffDays === 0) return t('taskCard.deadline.today');
-  if (diffDays === 1) return t('taskCard.deadline.tomorrow');
-  if (diffDays <= 7) return `${diffDays} ${t('taskCard.deadline.days')}`;
-  return deadline.toLocaleDateString();
+  // Within 7 days = "Within a week"
+  if (diffDays <= 7) {
+   return t('taskDetail.urgency.within_week', 'Within a week');
+  }
+
+  // More than 7 days = "Flexible"
+  return t('taskCard.deadline.flexible', 'Flexible');
  };
 
  const handleCardPress = () => {

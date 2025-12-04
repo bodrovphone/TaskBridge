@@ -74,7 +74,7 @@ export const notifications = {
   'taskDetail.flexible': 'Гибкий',
   'taskDetail.asap': 'Как можно скорее',
   'taskDetail.negotiable': 'По договоренности',
-  'taskDetail.urgency.same_day': 'Срочно - сегодня',
+  'taskDetail.urgency.same_day': 'Срочно',
   'taskDetail.urgency.within_week': 'На этой неделе',
   'taskDetail.urgency.flexible': 'Гибкий срок',
   'taskDetail.urgency.default': 'Не указано',

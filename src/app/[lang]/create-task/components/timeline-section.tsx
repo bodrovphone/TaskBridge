@@ -150,7 +150,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
          minDate={minDate}
          dateFormat="dd/MM/yyyy"
          locale={dateLocale}
-         disabled={urgency === 'same_day'}
+         disabled={urgency === 'same_day' && !isPastDate}
          placeholderText={t('createTask.timeline.selectDate', 'Select date')}
          calendarStartDay={1}
          portalId="root-portal"

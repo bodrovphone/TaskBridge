@@ -494,7 +494,7 @@ export const profile = {
   'taskDetail.days': 'дней',
   'taskDetail.flexible': 'Гибкий',
   'taskDetail.negotiable': 'По договоренности',
-  'taskDetail.urgency.same_day': 'Срочно - сегодня',
+  'taskDetail.urgency.same_day': 'Срочно',
   'taskDetail.urgency.within_week': 'В течение недели',
   'taskDetail.urgency.flexible': 'Гибкий срок',
   'taskDetail.urgency.default': 'Не указано',

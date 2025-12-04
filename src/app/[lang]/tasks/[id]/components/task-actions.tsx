@@ -69,8 +69,13 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const shouldShowLanguageWarning = (): boolean => {
   const authorLanguage = task.customer?.preferred_language;
 
-  // Only show warning if author's language is not Bulgarian
+  // Don't show warning if author's language is Bulgarian (default)
   if (!authorLanguage || authorLanguage === 'bg') {
+   return false;
+  }
+
+  // Don't show warning if current user's locale matches author's language
+  if (authorLanguage === lang) {
    return false;
   }
 
