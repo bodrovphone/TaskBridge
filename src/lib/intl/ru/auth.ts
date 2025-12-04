@@ -101,6 +101,15 @@ export const auth = {
   'auth.emailVerification.resend': 'Отправить письмо для подтверждения повторно',
   'auth.emailVerification.continue': 'Продолжить в приложение',
 
+  // Email verified success page
+  'auth.emailVerified.title': 'Email подтвержден!',
+  'auth.emailVerified.description': 'Ваш email успешно подтвержден. Теперь у вас есть полный доступ ко всем функциям.',
+  'auth.emailVerified.whatNext': 'Что вы хотите сделать дальше?',
+  'auth.emailVerified.browseTasks': 'Найти работу',
+  'auth.emailVerified.createTask': 'Создать задачу',
+  'auth.emailVerified.completeProfile': 'Заполнить профиль',
+  'auth.emailVerified.goHome': 'На главную страницу',
+
   // Account Deletion
   'accountDeletion.title': 'Удаление аккаунта',
   'accountDeletion.loginRequired': 'Чтобы удалить свой аккаунт, вам нужно войти в систему.',

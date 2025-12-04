@@ -1,11 +1,26 @@
 # Staging Environment Setup
 
+## Status: ON HOLD
+
+**Reason**: Cost considerations - Supabase Pro Plan is $25/month base + $10 per additional project. Already running 2 projects, so this would add ~$10/month minimum for a staging database.
+
+**Decision**: Defer until revenue justifies the cost. For now, test carefully on production with real test accounts.
+
+**Completed**: `staging` branch created and pushed to origin.
+
+---
+
 ## Task Description
 Create a separate staging environment with its own Supabase database and Vercel deployment, while sharing OAuth providers (Google, Facebook, Telegram) with production.
+
+## Alternative Considered (Rejected)
+**Test data flagging approach** - Add `is_test` column to tasks/users and filter in queries.
+- ❌ Rejected because: Becomes complex quickly (need to flag tasks, users, professionals, applications, reviews, messages). Risk of test data leaking to production. Too many query changes needed.
 
 ## Current State
 - **Production**: Existing setup is production-ready with all env vars configured
 - **Need**: Isolated staging environment to test fixes before deploying to production
+- **Staging branch**: ✅ Created and pushed
 
 ## Architecture
 
@@ -96,4 +111,4 @@ git push origin main
 - Database migrations should be applied to staging first, then production
 
 ## Priority
-High - Required before production launch for safe testing workflow
+~~High~~ → **Low (On Hold)** - Deferred due to Supabase cost. Revisit when revenue justifies ~$10/month for staging database.

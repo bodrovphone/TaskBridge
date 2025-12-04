@@ -1,15 +1,24 @@
 import { NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { verifyEmailVerificationToken } from '@/lib/auth/email-verification'
 import { createClient } from '@/lib/supabase/server'
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  // Detect locale from cookie (most reliable) or default to 'bg'
+  const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
+  const locale = localeCookie && ['en', 'bg', 'ru', 'ua'].includes(localeCookie)
+    ? localeCookie
+    : 'bg'
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!
+
   try {
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')
 
     if (!token) {
       return NextResponse.redirect(
-        new URL('/en?error=missing_token', process.env.NEXT_PUBLIC_BASE_URL!)
+        new URL(`/${locale}?error=missing_token`, baseUrl)
       )
     }
 
@@ -19,7 +28,7 @@ export async function GET(request: Request) {
     if (!payload) {
       console.error('[Auth] Invalid or expired verification token')
       return NextResponse.redirect(
-        new URL('/en?error=invalid_token', process.env.NEXT_PUBLIC_BASE_URL!)
+        new URL(`/${locale}?error=invalid_token`, baseUrl)
       )
     }
 
@@ -36,7 +45,7 @@ export async function GET(request: Request) {
     if (updateError) {
       console.error('[Auth] Failed to update email verification status:', updateError)
       return NextResponse.redirect(
-        new URL('/en?error=verification_failed', process.env.NEXT_PUBLIC_BASE_URL!)
+        new URL(`/${locale}?error=verification_failed`, baseUrl)
       )
     }
 
@@ -45,14 +54,14 @@ export async function GET(request: Request) {
       email,
     })
 
-    // Redirect to app with success message
+    // Redirect to email verified success page
     return NextResponse.redirect(
-      new URL('/en?verified=true', process.env.NEXT_PUBLIC_BASE_URL!)
+      new URL(`/${locale}/auth/email-verified`, baseUrl)
     )
   } catch (error) {
     console.error('[Auth] Email verification exception:', error)
     return NextResponse.redirect(
-      new URL('/en?error=server_error', process.env.NEXT_PUBLIC_BASE_URL!)
+      new URL(`/${locale}?error=server_error`, baseUrl)
     )
   }
 }

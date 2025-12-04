@@ -101,6 +101,15 @@ export const auth = {
   'auth.emailVerification.resend': 'Изпрати отново имейл за потвърждение',
   'auth.emailVerification.continue': 'Продължи към приложението',
 
+  // Email verified success page
+  'auth.emailVerified.title': 'Имейлът е потвърден!',
+  'auth.emailVerified.description': 'Вашият имейл е успешно потвърден. Вече имате пълен достъп до всички функции.',
+  'auth.emailVerified.whatNext': 'Какво искате да направите сега?',
+  'auth.emailVerified.browseTasks': 'Намери работа',
+  'auth.emailVerified.createTask': 'Публикувай задача',
+  'auth.emailVerified.completeProfile': 'Попълни профила си',
+  'auth.emailVerified.goHome': 'Към началната страница',
+
   // Account Deletion
   'accountDeletion.title': 'Изтриване на акаунт',
   'accountDeletion.loginRequired': 'За да изтриете акаунта си, трябва да сте влезли в системата.',

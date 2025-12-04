@@ -101,6 +101,15 @@ export const auth = {
   'auth.emailVerification.resend': 'Resend Verification Email',
   'auth.emailVerification.continue': 'Continue to App',
 
+  // Email verified success page
+  'auth.emailVerified.title': 'Email Verified!',
+  'auth.emailVerified.description': 'Your email has been successfully verified. You now have full access to all features.',
+  'auth.emailVerified.whatNext': 'What would you like to do next?',
+  'auth.emailVerified.browseTasks': 'Find Work',
+  'auth.emailVerified.createTask': 'Post a Task',
+  'auth.emailVerified.completeProfile': 'Complete Your Profile',
+  'auth.emailVerified.goHome': 'Go to Homepage',
+
   // Account Deletion
   'accountDeletion.title': 'Delete Your Account',
   'accountDeletion.loginRequired': 'To delete your account, you need to be logged in.',
