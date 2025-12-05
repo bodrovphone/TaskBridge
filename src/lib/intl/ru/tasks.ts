@@ -43,7 +43,7 @@ export const tasks = {
   'browseTasks.search.typeToSearch': 'Введите для поиска задач...',
   'browseTasks.search.searchingFor': 'Поиск по',
   'browseTasks.search.searchInTasks': 'Поиск в содержимом задач',
-  'browseTasks.search.searchInTasksDesc': 'Найти задачи содержащие "{{query}}"',
+  'browseTasks.search.searchInTasksDesc': 'Найди задачи содержащие "{{query}}"',
   'browseTasks.search.filterByCategory': 'Фильтр по категории',
   'browseTasks.search.filterByCity': 'Фильтр по городу',
   'browseTasks.filters.title': 'Фильтрация и сортировка',
@@ -139,7 +139,8 @@ export const tasks = {
 
   // Create Task Form
   'createTask.title': 'Создать новую задачу',
-  'createTask.hero.subtitle': 'Опишите что вам нужно и позвольте профессионалам прийти к вам',
+  'createTask.hero.subtitle':
+    'Опишите что вам нужно и позвольте профессионалам прийти к вам',
   'createTask.hero.freeToPost': 'Бесплатная публикация',
   'createTask.hero.noPayment': 'Без оплаты до начала работы',
   'createTask.hero.avgResponse': 'Среднее время ответа: 2 часа',
@@ -149,46 +150,61 @@ export const tasks = {
   // Title Input Section (smart category matching)
   'createTask.title.label': 'Что вам нужно сделать?',
   'createTask.title.placeholder': 'напр. Починить протекающий кран в ванной',
-  'createTask.title.hint': 'Будьте конкретны - это поможет нам найти вам подходящих специалистов',
+  'createTask.title.hint':
+    'Будьте конкретны - это поможет нам найти вам подходящих специалистов',
 
   // Category Section
   'createTask.category.title': 'Какая услуга вам нужна?',
-  'createTask.category.subtitle': 'Выберите категорию, которая лучше всего описывает вашу задачу',
+  'createTask.category.subtitle':
+    'Выберите категорию, которая лучше всего описывает вашу задачу',
   'createTask.category.selectSubcategory': 'Выберите конкретную услугу',
   'createTask.category.backToMain': 'Назад к основным категориям',
   'createTask.category.selected': 'Выбранная услуга',
-  'createTask.category.categorySelected': 'Выбранная категория. Нажмите X, чтобы изменить.',
+  'createTask.category.categorySelected':
+    'Выбранная категория. Нажмите X, чтобы изменить.',
   'createTask.category.tryDifferent': 'Попробуйте другой поисковый запрос',
   'createTask.category.suggestion': 'Это похоже на:',
   'createTask.category.confirm': 'Да, верно',
   'createTask.category.different': 'Выбрать другую',
-  'createTask.category.helpUs': 'Помогите нам найти правильных специалистов - пожалуйста, выберите категорию:',
+  'createTask.category.helpUs':
+    'Помогите нам найти правильных специалистов - пожалуйста, выберите категорию:',
   'createTask.category.analyzing': 'Анализируем ваш запрос...',
   'createTask.category.change': 'Изменить',
 
   // Details Section
   'createTask.details.title': 'Опишите вашу задачу',
-  'createTask.details.subtitle': 'Чем больше деталей, тем лучше предложения вы получите',
+  'createTask.details.subtitle':
+    'Чем больше деталей, тем лучше предложения вы получите',
   'createTask.details.titleLabel': 'Название задачи',
-  'createTask.details.titlePlaceholder': 'напр. Нужен сантехник для устранения течи на кухне',
-  'createTask.details.titleHelp': 'Будьте конкретны и ясны (например, "Профессиональная уборка дома для квартиры с 2 спальнями")',
+  'createTask.details.titlePlaceholder':
+    'напр. Нужен сантехник для устранения течи на кухне',
+  'createTask.details.titleHelp':
+    'Будьте конкретны и ясны (например, "Профессиональная уборка дома для квартиры с 2 спальнями")',
   'createTask.details.titleTooltipTitle': 'Напишите четкое название',
-  'createTask.details.titleTooltipContent': 'Будьте конкретны в том, что вам нужно. Хорошие примеры: "Устранение течи на кухне", "Профессиональная уборка квартиры", "Редизайн главной страницы сайта"',
+  'createTask.details.titleTooltipContent':
+    'Будьте конкретны в том, что вам нужно. Хорошие примеры: "Устранение течи на кухне", "Профессиональная уборка квартиры", "Редизайн главной страницы сайта"',
   'createTask.details.descriptionLabel': 'Описание',
-  'createTask.details.descriptionPlaceholder': 'Опишите что нужно сделать, когда и какие особые требования у вас есть...',
-  'createTask.details.descriptionHelp': 'Включите все важные детали: что нужно сделать, особые требования, необходимые инструменты/материалы и т.д.',
+  'createTask.details.descriptionPlaceholder':
+    'Опишите что нужно сделать, когда и какие особые требования у вас есть...',
+  'createTask.details.descriptionHelp':
+    'Включите все важные детали: что нужно сделать, особые требования, необходимые инструменты/материалы и т.д.',
   'createTask.details.requirementsLabel': 'Особые требования (по желанию)',
-  'createTask.details.requirementsPlaceholder': '• Требование 1\n• Требование 2\n• Требование 3',
-  'createTask.details.requirementsHelp': 'Перечислите особые навыки, сертификаты или оборудование (по одному в строке)',
+  'createTask.details.requirementsPlaceholder':
+    '• Требование 1\n• Требование 2\n• Требование 3',
+  'createTask.details.requirementsHelp':
+    'Перечислите особые навыки, сертификаты или оборудование (по одному в строке)',
 
   // Location Section
   'createTask.location.title': 'Где находится задача?',
-  'createTask.location.subtitle': 'Это помогает найти профессионалов в вашем районе',
+  'createTask.location.subtitle':
+    'Это помогает найти профессионалов в вашем районе',
   'createTask.location.cityLabel': 'Город',
   'createTask.location.cityPlaceholder': 'Выберите город',
   'createTask.location.neighborhoodLabel': 'Район/Квартал',
-  'createTask.location.neighborhoodPlaceholder': 'напр. Центр, Люлин, Студенческий городок',
-  'createTask.location.neighborhoodHelp': 'Помогает специалистам определить, смогут ли они до вас добраться',
+  'createTask.location.neighborhoodPlaceholder':
+    'напр. Центр, Люлин, Студенческий городок',
+  'createTask.location.neighborhoodHelp':
+    'Помогает специалистам определить, смогут ли они до вас добраться',
 
   // Budget Section
   'createTask.budget.title': 'Какой ваш бюджет?',
@@ -212,13 +228,16 @@ export const tasks = {
   'createTask.timeline.flexibleTitle': 'Гибкий',
   'createTask.timeline.flexibleDesc': 'У меня гибкий график',
   'createTask.timeline.deadlineLabel': 'Конкретный срок (по желанию)',
-  'createTask.timeline.deadlineHelp': 'Оставьте пустым, если у вас нет конкретного срока',
-  'createTask.timeline.pastDateWarning': 'Этот срок в прошлом. Пожалуйста, выберите будущую дату или очистите поле.',
+  'createTask.timeline.deadlineHelp':
+    'Оставьте пустым, если у вас нет конкретного срока',
+  'createTask.timeline.pastDateWarning':
+    'Этот срок в прошлом. Пожалуйста, выберите будущую дату или очистите поле.',
   'createTask.timeline.selectDate': 'Выберите дату',
 
   // Photos Section
   'createTask.photos.title': 'Добавьте фотографию (по желанию)',
-  'createTask.photos.help': 'Фотография помогает профессионалам лучше понять вашу задачу',
+  'createTask.photos.help':
+    'Фотография помогает профессионалам лучше понять вашу задачу',
   'createTask.photos.dragDrop': 'Перетащите изображение сюда',
   'createTask.photos.tapToSelect': 'Нажмите, чтобы выбрать фото',
   'createTask.photos.orBrowse': 'или кликните для обзора',
@@ -226,16 +245,21 @@ export const tasks = {
   'createTask.photos.maxSize': 'Максимум 5MB',
   'createTask.photos.formats': 'JPG, PNG, WebP',
   'createTask.photos.uploading': 'Загрузка фотографии...',
-  'createTask.photos.fileTooLarge': 'Изображение все еще слишком большое после оптимизации (макс. 5MB). Это изображение не будет загружено. Вы можете изменить его сейчас или отредактировать задачу позже.',
-  'createTask.photos.invalidType': 'Файл не является поддерживаемым форматом изображения',
-  'createTask.photos.uploadError': 'Не удалось загрузить фотографии. Пожалуйста, попробуйте еще раз.',
-  'createTask.photos.optimizing': 'Оптимизация изображения для более быстрой загрузки...',
+  'createTask.photos.fileTooLarge':
+    'Изображение все еще слишком большое после оптимизации (макс. 5MB). Это изображение не будет загружено. Вы можете изменить его сейчас или отредактировать задачу позже.',
+  'createTask.photos.invalidType':
+    'Файл не является поддерживаемым форматом изображения',
+  'createTask.photos.uploadError':
+    'Не удалось загрузить фотографии. Пожалуйста, попробуйте еще раз.',
+  'createTask.photos.optimizing':
+    'Оптимизация изображения для более быстрой загрузки...',
   'createTask.photos.optimized': 'Изображение успешно оптимизировано',
   'createTask.photos.smaller': 'меньше',
 
   // Review Section
   'createTask.review.title': 'Проверьте вашу задачу',
-  'createTask.review.subtitle': 'Убедитесь, что всё выглядит правильно перед публикацией',
+  'createTask.review.subtitle':
+    'Убедитесь, что всё выглядит правильно перед публикацией',
   'createTask.review.submit': 'Опубликовать задачу',
   'createTask.review.location': 'Местоположение',
   'createTask.review.budget': 'Бюджет',
@@ -245,21 +269,28 @@ export const tasks = {
   'createTask.review.noTitle': 'Нет названия пока',
   'createTask.review.noDescription': 'Нет описания пока',
   'createTask.review.noCity': 'Город не выбран',
-  'createTask.review.fillRequired': 'Пожалуйста, заполните все обязательные поля для публикации',
+  'createTask.review.fillRequired':
+    'Пожалуйста, заполните все обязательные поля для публикации',
 
   // Errors
   'createTask.errors.categoryRequired': 'Пожалуйста, выберите категорию',
-  'createTask.errors.titleTooShort': 'Название должно быть не менее 10 символов',
+  'createTask.errors.titleTooShort':
+    'Название должно быть не менее 10 символов',
   'createTask.errors.titleTooLong': 'Название не может быть более 200 символов',
-  'createTask.errors.descriptionTooShort': 'Описание должно быть не менее 15 символов',
-  'createTask.errors.descriptionTooLong': 'Описание не может быть более 2000 символов',
+  'createTask.errors.descriptionTooShort':
+    'Описание должно быть не менее 15 символов',
+  'createTask.errors.descriptionTooLong':
+    'Описание не может быть более 2000 символов',
   'createTask.errors.cityRequired': 'Пожалуйста, выберите город',
-  'createTask.errors.budgetInvalid': 'Максимальный бюджет должен быть больше минимального',
+  'createTask.errors.budgetInvalid':
+    'Максимальный бюджет должен быть больше минимального',
   'createTask.errors.deadlineInPast': 'Срок должен быть сегодня или в будущем',
 
   // Validation Dialog
-  'createTask.validationDialog.title': 'Пожалуйста, исправьте следующие проблемы',
-  'createTask.validationDialog.subtitle': 'Некоторые поля требуют вашего внимания',
+  'createTask.validationDialog.title':
+    'Пожалуйста, исправьте следующие проблемы',
+  'createTask.validationDialog.subtitle':
+    'Некоторые поля требуют вашего внимания',
   'createTask.validationDialog.fixButton': 'Исправить эти проблемы',
   'createTask.validationDialog.fieldName.category': 'Категория',
   'createTask.validationDialog.fieldName.subcategory': 'Подкатегория',
@@ -277,18 +308,22 @@ export const tasks = {
 
   // Success messages
   'createTask.success': 'Задача успешно создана!',
-  'createTask.successMessage': 'Ваша задача опубликована и теперь видна профессионалам.',
-  'createTask.successWithoutImage': 'Ваша задача опубликована без изображения. Вы можете добавить или изменить изображение, отредактировав задачу.',
+  'createTask.successMessage':
+    'Ваша задача опубликована и теперь видна профессионалам.',
+  'createTask.successWithoutImage':
+    'Ваша задача опубликована без изображения. Вы можете добавить или изменить изображение, отредактировав задачу.',
   'createTask.error': 'Ошибка при создании задачи',
   'createTask.errorMessage': 'Пожалуйста, попробуйте позже.',
 
   // Reopen task flow
   'createTask.reopeningBanner.title': 'Повторное открытие задачи',
   'createTask.reopeningBanner.originalTask': 'Исходная задача:',
-  'createTask.reopeningBanner.description': 'Просмотрите и отредактируйте детали ниже перед публикацией. Это создаст новую задачу.',
+  'createTask.reopeningBanner.description':
+    'Просмотрите и отредактируйте детали ниже перед публикацией. Это создаст новую задачу.',
   'createTask.reopeningBanner.startFresh': 'Начать заново',
   'createTask.reopenSuccess': 'Задача успешно открыта заново!',
-  'createTask.reopenSuccessMessage': 'Ваша задача переопубликована и теперь открыта для новых заявок.',
+  'createTask.reopenSuccessMessage':
+    'Ваша задача переопубликована и теперь открыта для новых заявок.',
 
   'taskCard.apply': 'Откликнуться',
   'taskCard.seeDetails': 'Подробнее',

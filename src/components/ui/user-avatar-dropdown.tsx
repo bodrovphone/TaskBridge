@@ -18,11 +18,8 @@ import {
  Briefcase,
  HelpCircle,
  LogOut,
- Search,
- Send,
  Mail,
- CheckCircle,
- AlertCircle
+ Hammer,
 } from 'lucide-react'
 
 interface UserAvatarDropdownProps {
@@ -90,12 +87,6 @@ export default function UserAvatarDropdown({
     break
    case 'tasks-posted':
     router.push(`/${lang}/tasks/posted`)
-    break
-   case 'browse-tasks':
-    router.push(`/${lang}/browse-tasks`)
-    break
-   case 'tasks-applications':
-    router.push(`/${lang}/tasks/applications`)
     break
    case 'tasks-work':
     router.push(`/${lang}/tasks/work`)
@@ -196,8 +187,8 @@ export default function UserAvatarDropdown({
      </DropdownSection>
     ) : null}
 
-    {/* Profiles */}
-    <DropdownSection showDivider>
+    {/* For Client */}
+    <DropdownSection title={t('nav.forClient')} showDivider>
      <DropdownItem
       key="profile-customer"
       startContent={<User className="text-gray-500" size={18} />}
@@ -206,51 +197,33 @@ export default function UserAvatarDropdown({
       {t('nav.profileCustomer')}
      </DropdownItem>
      <DropdownItem
+      key="tasks-posted"
+      startContent={<FileText className="text-gray-500 ml-4" size={18} />}
+      className="text-gray-900 pl-4"
+     >
+      {t('nav.myPostedTasks')}
+     </DropdownItem>
+    </DropdownSection>
+
+    {/* For Professional */}
+    <DropdownSection title={t('nav.forProfessionals')} showDivider>
+     <DropdownItem
       key="profile-professional"
       startContent={<Briefcase className="text-gray-500" size={18} />}
       className="text-gray-900"
      >
       {t('nav.profileProfessional')}
      </DropdownItem>
-    </DropdownSection>
-
-    {/* For Customers */}
-    <DropdownSection title={t('nav.forCustomers')} showDivider>
-     <DropdownItem
-      key="tasks-posted"
-      startContent={<FileText className="text-gray-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('nav.myPostedTasks')}
-     </DropdownItem>
-    </DropdownSection>
-
-    {/* For Professionals */}
-    <DropdownSection title={t('nav.forProfessionals')} showDivider>
-     <DropdownItem
-      key="browse-tasks"
-      startContent={<Search className="text-gray-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('nav.browseTasks')}
-     </DropdownItem>
-     <DropdownItem
-      key="tasks-applications"
-      startContent={<Send className="text-gray-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('nav.myApplications')}
-     </DropdownItem>
      <DropdownItem
       key="tasks-work"
-      startContent={<Briefcase className="text-gray-500" size={18} />}
-      className="text-gray-900"
+      startContent={<Hammer className="text-gray-500 ml-4" size={18} />}
+      className="text-gray-900 pl-4"
      >
       {t('nav.myWork')}
      </DropdownItem>
     </DropdownSection>
 
-    {/* General */}
+    {/* Help */}
     <DropdownSection showDivider>
      <DropdownItem
       key="help"

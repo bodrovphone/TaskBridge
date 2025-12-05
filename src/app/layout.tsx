@@ -1,10 +1,15 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+// Primary font - Montserrat with Cyrillic support
+const montserrat = Montserrat({
+ subsets: ['latin', 'cyrillic'],
+ variable: '--font-montserrat',
+ weight: ['300', '400', '500', '600', '700'],
+})
 
 export const metadata: Metadata = {
  title: 'Trudify - Намерете проверени професионалисти',
@@ -38,7 +43,7 @@ function RootLayout({
 }) {
  return (
   <html lang="bg" className="overflow-x-hidden">
-   <body className={`${inter.className} overflow-x-hidden w-full`}>
+   <body className={`${montserrat.variable} font-sans overflow-x-hidden w-full`}>
     {children}
     <Analytics />
     <SpeedInsights />

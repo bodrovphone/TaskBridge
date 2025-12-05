@@ -18,7 +18,7 @@ import {
  Heart,
  Bell,
  CheckCircle,
- Plus,
+ SquarePen,
  Search
 } from "lucide-react";
 
@@ -41,7 +41,7 @@ export default function HeroSection() {
  } = useCreateTask();
 
  return (
-  <section className="relative overflow-hidden py-20 lg:py-32 z-10" style={{ contain: 'layout style' }}>
+  <section className="relative overflow-hidden py-12 lg:py-20 z-10" style={{ contain: 'layout style' }}>
    {/* Cardboard background with hero overlay */}
    <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 via-blue-50/70 to-indigo-100/80 "></div>
    {/* Background Pattern */}
@@ -120,16 +120,16 @@ export default function HeroSection() {
         className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
         onClick={handleCreateTask}
        >
-        <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+        <SquarePen className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
         {t('landing.hero.getStarted')}
        </Button>
-       <Button 
-        variant="outline" 
+       <Button
+        variant="outline"
         size="lg"
         className="group border-2 border-slate-300 text-slate-700 bg-white/70 hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
         asChild
        >
-        <LocaleLink href="/browse-tasks"> 
+        <LocaleLink href="/browse-tasks">
          <Search className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.hero.browseServices')}
         </LocaleLink>
@@ -221,7 +221,7 @@ export default function HeroSection() {
         className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
         onClick={handleCreateTask}
        >
-        <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+        <SquarePen className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
         {t('landing.hero.getStarted')}
        </Button>
        <Button

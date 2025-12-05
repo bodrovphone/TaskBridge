@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import { useRouter, useParams, usePathname } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
@@ -9,7 +9,7 @@ import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
 import { useTranslation } from 'react-i18next'
-import { Plus, FileText, Send, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Grid3x3, Users } from "lucide-react"
+import { Plus, FileText, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Users, Hammer, SquarePen } from "lucide-react"
 import Image from "next/image"
 import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
@@ -37,10 +37,34 @@ function Header() {
  const [isMenuOpen, setIsMenuOpen] = useState(false)
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
  const [authAction, setAuthAction] = useState<'apply' | 'question' | 'create-task' | 'join-professional' | null>(null)
+ const [isNavVisible, setIsNavVisible] = useState(true)
+ const lastScrollY = useRef(0)
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'
  const { toast } = useToast()
+
+ // Smart sticky navbar - hide on scroll down, show on scroll up
+ useEffect(() => {
+  const handleScroll = () => {
+   const currentScrollY = window.scrollY
+   const scrollingDown = currentScrollY > lastScrollY.current
+   const scrolledPastThreshold = currentScrollY > 80
+
+   // Show navbar when: scrolling up OR at the top of page
+   // Hide navbar when: scrolling down AND past threshold
+   if (scrollingDown && scrolledPastThreshold) {
+    setIsNavVisible(false)
+   } else {
+    setIsNavVisible(true)
+   }
+
+   lastScrollY.current = currentScrollY
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  return () => window.removeEventListener('scroll', handleScroll)
+ }, [])
 
  // @todo FEATURE: Review enforcement (commented out until reviews feature is built)
  // const [isEnforcementDialogOpen, setIsEnforcementDialogOpen] = useState(false)
@@ -59,8 +83,8 @@ function Header() {
 
  const navigation = [
   { name: t('nav.howItWorks'), href: "/#how-it-works", icon: Lightbulb },
-  { name: t('nav.categories'), href: "/categories", icon: Grid3x3 },
-  { name: t('nav.forProfessionals'), href: "/professionals", icon: Users },
+  { name: t('nav.createTask'), href: "/create-task", icon: SquarePen },
+  { name: t('nav.browseProfessionals'), href: "/professionals", icon: Users },
   { name: t('nav.browseTasks'), href: "/browse-tasks", icon: Search },
  ]
 
@@ -113,8 +137,10 @@ function Header() {
    <Navbar
     maxWidth="full"
     position="sticky"
-    className="bg-white shadow-sm border-b border-gray-100"
-    style={{ zIndex: Z_INDEX.NAVBAR }}
+    className={`bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100 transition-all duration-300 ${
+     isNavVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}
+    style={{ zIndex: Z_INDEX.NAVBAR, position: 'fixed', top: 0, left: 0, right: 0 }}
     height="5rem"
     isBordered
     isMenuOpen={isMenuOpen}
@@ -160,43 +186,56 @@ function Header() {
    </NavbarBrand>
 
    {/* Desktop Navigation */}
-   <NavbarContent className="hidden lg:flex gap-8" justify="center">
-    {navigation.map((item) => (
-     <NavbarItem key={item.name}>
-      <NextUILink
-       as={LocaleLink}
-       href={item.href}
-       className="text-gray-900 hover:text-primary font-medium transition-colors relative"
-       underline="hover"
-      >
-       {item.name}
-      </NextUILink>
-     </NavbarItem>
-    ))}
+   <NavbarContent className="hidden lg:flex gap-2" justify="center">
+    {navigation.map((item) => {
+     const isActive = pathname === `/${lang}${item.href}` ||
+      (item.href.startsWith('/#') && pathname === `/${lang}`)
+     const Icon = item.icon
+     return (
+      <NavbarItem key={item.name}>
+       <NextUILink
+        as={LocaleLink}
+        href={item.href}
+        className={`
+         group relative px-4 py-2 rounded-full font-medium text-sm
+         transition-all duration-300 ease-out
+         ${isActive
+          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
+         }
+        `}
+       >
+        <span className="flex items-center gap-2">
+         <Icon
+          size={16}
+          className={`transition-transform duration-300 group-hover:scale-110 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-blue-500'}`}
+         />
+         {item.name}
+        </span>
+        {/* Hover glow effect */}
+        {!isActive && (
+         <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600/0 to-indigo-600/0 group-hover:from-blue-600/5 group-hover:to-indigo-600/5 transition-all duration-300" />
+        )}
+       </NextUILink>
+      </NavbarItem>
+     )
+    })}
    </NavbarContent>
 
    {/* Desktop Actions Section */}
-   <NavbarContent justify="end" className="hidden lg:flex gap-3">
-    {isAuthenticated && (
-     <NavbarItem>
-      <NotificationBell />
-     </NavbarItem>
-    )}
-    <NavbarItem>
-     <Button
-      color="primary"
-      variant="solid"
-      startContent={<Plus size={16} />}
-      className="font-medium"
-      onClick={handleCreateTask}
-     >
-      {t('nav.createTask')}
-     </Button>
-    </NavbarItem>
+   <NavbarContent justify="end" className="hidden lg:flex gap-4">
     <NavbarItem>
      <LanguageSwitcher />
     </NavbarItem>
     <NavbarItem>
+     <NotificationBell
+      onAuthRequired={() => {
+       setAuthAction(null)
+       setIsAuthSlideOverOpen(true)
+      }}
+     />
+    </NavbarItem>
+    <NavbarItem className="ml-1">
      {isAuthenticated ? (
       <UserAvatarDropdown size="md" />
      ) : (
@@ -212,19 +251,21 @@ function Header() {
    </NavbarContent>
 
    {/* Mobile/Tablet Actions Section */}
-   <NavbarContent justify="end" className="lg:hidden gap-2">
-    {/* Language Switcher - Always visible on mobile */}
+   <NavbarContent justify="end" className="lg:hidden gap-5">
     <NavbarItem>
      <LanguageSwitcher />
     </NavbarItem>
-    {/* Hide notification bell and avatar when mobile menu is open to prevent conflicts */}
+    {/* Hide notification bell and avatar when mobile menu is open */}
     {!isMenuOpen && (
      <>
-      {isAuthenticated && (
-       <NavbarItem>
-        <NotificationBell />
-       </NavbarItem>
-      )}
+      <NavbarItem>
+       <NotificationBell
+        onAuthRequired={() => {
+         setAuthAction(null)
+         setIsAuthSlideOverOpen(true)
+        }}
+       />
+      </NavbarItem>
       <NavbarItem>
        {isAuthenticated ? (
         <UserAvatarDropdown size="sm" />
@@ -249,11 +290,11 @@ function Header() {
      {/* Portfolio menu items for authenticated users */}
      {isAuthenticated ? (
       <>
-       {/* Profile Section */}
+       {/* For Client Section */}
        <NavbarMenuItem>
         <div className="w-full">
          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-          {t('nav.profile', 'Profile')}
+          {t('nav.forClient')}
          </p>
         </div>
        </NavbarMenuItem>
@@ -273,6 +314,29 @@ function Header() {
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
+        href={`/${lang}/tasks/posted`}
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 pl-4 flex items-center gap-2"
+        size="lg"
+        onPress={() => {
+         setIsMenuOpen(false)
+         router.push(`/${lang}/tasks/posted`)
+        }}
+       >
+        <FileText size={18} className="text-gray-500" />
+        {t('nav.myPostedTasks')}
+       </NextUILink>
+      </NavbarMenuItem>
+
+      {/* For Professional Section */}
+      <NavbarMenuItem>
+       <div className="pt-4 border-t border-gray-200 w-full">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+         {t('nav.forProfessionals')}
+        </p>
+       </div>
+      </NavbarMenuItem>
+      <NavbarMenuItem>
+       <NextUILink
         href={`/${lang}/profile/professional`}
         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
         size="lg"
@@ -285,63 +349,17 @@ function Header() {
         {t('nav.profileProfessional')}
        </NextUILink>
       </NavbarMenuItem>
-
-      {/* For Customers Section */}
-      <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.forCustomers')}
-        </p>
-       </div>
-      </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        href={`/${lang}/tasks/posted`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         router.push(`/${lang}/tasks/posted`)
-        }}
-       >
-        <FileText size={18} className="text-gray-500" />
-        {t('nav.myPostedTasks')}
-       </NextUILink>
-      </NavbarMenuItem>
-
-      {/* For Professionals Section */}
-      <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.forProfessionals')}
-        </p>
-       </div>
-      </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        href={`/${lang}/tasks/applications`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         router.push(`/${lang}/tasks/applications`)
-        }}
-       >
-        <Send size={18} className="text-gray-500" />
-        {t('nav.myApplications')}
-       </NextUILink>
-      </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
         href={`/${lang}/tasks/work`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 pl-4 flex items-center gap-2"
         size="lg"
         onPress={() => {
          setIsMenuOpen(false)
          router.push(`/${lang}/tasks/work`)
         }}
        >
-        <Briefcase size={18} className="text-gray-500" />
+        <Hammer size={18} className="text-gray-500" />
         {t('nav.myWork')}
        </NextUILink>
       </NavbarMenuItem>

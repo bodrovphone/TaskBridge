@@ -18,6 +18,9 @@ export default {
       'xl': '1280px',
       '2xl': '1536px',
     },
+    fontFamily: {
+      sans: ['var(--font-montserrat)', 'system-ui', 'sans-serif'],
+    },
     extend: {
       borderRadius: {
         lg: "var(--radius)",

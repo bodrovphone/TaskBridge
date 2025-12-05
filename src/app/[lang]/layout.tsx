@@ -64,6 +64,8 @@ async function LocaleLayout({
    <ProgressBar />
    <div className="min-h-screen flex flex-col overflow-x-hidden w-full max-w-full">
     <Header />
+    {/* Spacer for fixed navbar */}
+    <div className="h-20" />
     <main className="flex-1 overflow-x-hidden w-full max-w-full">
      {children}
     </main>

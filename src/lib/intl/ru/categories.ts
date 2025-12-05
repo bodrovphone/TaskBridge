@@ -58,92 +58,126 @@ export const categories = {
 
   // Categories Page
   'categories.pageTitle': 'Обзор всех категорий',
-  'categories.pageSubtitle': 'Найдите идеального профессионала для любой задачи',
-  'categories.searchPlaceholder': 'Поиск услуг... (напр. сантехник, уборка, уроки)',
+  'categories.pageSubtitle':
+    'Найдите идеального профессионала для любой задачи',
+  'categories.searchPlaceholder':
+    'Поиск услуг... (напр. сантехник, уборка, уроки)',
   'categories.ctaTitle': 'Не нашли то, что ищете?',
-  'categories.ctaSubtitle': 'Опубликуйте вашу задачу и позвольте профессионалам найти вас',
+  'categories.ctaSubtitle':
+    'Опубликуйте вашу задачу и позвольте профессионалам найти вас',
 
   // Category Card Actions
   'categories.searchProfessionals': 'Найти специалистов',
-  'categories.searchTasks': 'Найти задачи',
+  'categories.searchTasks': 'Найди задачи',
   'categories.cantFindCategory': 'Не можете найти вашу категорию?',
   'categories.suggestCategoryTitle': 'Предложить новую категорию',
-  'categories.suggestCategoryMessage': 'Не можете найти точную категорию? Отправьте нам предложение, и мы добавим её в течение 24 часов.',
-  'categories.suggestCategoryPlaceholder': 'Опишите нужную категорию... (напр., "Дрессировка собак", "Установка солнечных панелей")',
+  'categories.suggestCategoryMessage':
+    'Не можете найти точную категорию? Отправьте нам предложение, и мы добавим её в течение 24 часов.',
+  'categories.suggestCategoryPlaceholder':
+    'Опишите нужную категорию... (напр., "Дрессировка собак", "Установка солнечных панелей")',
   'categories.submitSuggestion': 'Отправить предложение',
-  'categories.suggestionSuccess': 'Спасибо! Мы рассмотрим ваше предложение в течение 24 часов.',
-  'categories.suggestionError': 'Не удалось отправить предложение. Пожалуйста, попробуйте снова.',
-  'categories.suggestionAuthRequired': 'Пожалуйста, войдите в систему для отправки предложений категорий',
-  'categories.suggestionMinLength': 'Предложение должно содержать не менее 10 символов',
-  'categories.suggestionMaxLength': 'Предложение должно содержать не более 500 символов',
+  'categories.suggestionSuccess':
+    'Спасибо! Мы рассмотрим ваше предложение в течение 24 часов.',
+  'categories.suggestionError':
+    'Не удалось отправить предложение. Пожалуйста, попробуйте снова.',
+  'categories.suggestionAuthRequired':
+    'Пожалуйста, войдите в систему для отправки предложений категорий',
+  'categories.suggestionMinLength':
+    'Предложение должно содержать не менее 10 символов',
+  'categories.suggestionMaxLength':
+    'Предложение должно содержать не более 500 символов',
 
   // Main Categories (centralized categories feature)
   'categories.main.homeServices.title': 'Домашние услуги',
-  'categories.main.homeServices.description': 'Сантехника, электричество, мастер на все руки',
+  'categories.main.homeServices.description':
+    'Сантехника, электричество, мастер на все руки',
   'categories.main.renovation.title': 'Ремонт и строительство',
   'categories.main.renovation.description': 'Ремонты, покраска, облицовка',
   'categories.main.moving.title': 'Переезд и транспорт',
   'categories.main.moving.description': 'Переезд, грузоперевозки, грузчики',
   'categories.main.cleaning.title': 'Услуги по уборке',
-  'categories.main.cleaning.description': 'Уборка дома, генеральная уборка, уборка офиса',
+  'categories.main.cleaning.description':
+    'Уборка дома, генеральная уборка, уборка офиса',
   'categories.main.personal.title': 'Личные услуги',
-  'categories.main.personal.description': 'Няня, репетиторство, присмотр за животными',
+  'categories.main.personal.description':
+    'Няня, репетиторство, присмотр за животными',
   'categories.main.tech.title': 'Технологии и цифровые',
-  'categories.main.tech.description': 'Ремонт компьютеров, IT поддержка, веб-разработка',
+  'categories.main.tech.description':
+    'Ремонт компьютеров, IT поддержка, веб-разработка',
 
   // Main Categories - NEW (26 total)
   'categories.main.applianceRepair.title': 'Ремонт техники',
-  'categories.main.applianceRepair.description': 'Ремонт бытовой техники, компьютеров и электроники',
+  'categories.main.applianceRepair.description':
+    'Ремонт бытовой техники, компьютеров и электроники',
   'categories.main.courierServices.title': 'Курьерские услуги',
-  'categories.main.courierServices.description': 'Доставка еды, лекарств и посылок',
+  'categories.main.courierServices.description':
+    'Доставка еды, лекарств и посылок',
   'categories.main.onlineWork.title': 'Работа в интернете',
-  'categories.main.onlineWork.description': 'Ввод данных, исследования, транскрипция',
+  'categories.main.onlineWork.description':
+    'Ввод данных, исследования, транскрипция',
   'categories.main.handyman.title': 'Домашний мастер',
   'categories.main.handyman.description': 'Сантехник, электрик, замочник',
   'categories.main.finishingWork.title': 'Отделочные работы',
-  'categories.main.finishingWork.description': 'Ремонт квартир, плитка, штукатурка',
+  'categories.main.finishingWork.description':
+    'Ремонт квартир, плитка, штукатурка',
   'categories.main.constructionWork.title': 'Строительные работы',
-  'categories.main.constructionWork.description': 'Кладка, сварка, столярные работы',
+  'categories.main.constructionWork.description':
+    'Кладка, сварка, столярные работы',
   'categories.main.furnitureWork.title': 'Мебельные работы',
-  'categories.main.furnitureWork.description': 'Производство, ремонт и реставрация мебели',
+  'categories.main.furnitureWork.description':
+    'Производство, ремонт и реставрация мебели',
   'categories.main.cleaningServices.title': 'Клининговые услуги',
-  'categories.main.cleaningServices.description': 'Уборка дома, офиса и после ремонта',
+  'categories.main.cleaningServices.description':
+    'Уборка дома, офиса и после ремонта',
   'categories.main.logistics.title': 'Логистика',
   'categories.main.logistics.description': 'Грузоперевозки, переезд, грузчики',
   'categories.main.householdServices.title': 'Бытовые услуги',
-  'categories.main.householdServices.description': 'Няни, садовники, домработницы',
+  'categories.main.householdServices.description':
+    'Няни, садовники, домработницы',
   'categories.main.petServices.title': 'Услуги для животных',
-  'categories.main.petServices.description': 'Уход за собаками, кошками и другими питомцами',
+  'categories.main.petServices.description':
+    'Уход за собаками, кошками и другими питомцами',
   'categories.main.beautyHealth.title': 'Красота и здоровье',
-  'categories.main.beautyHealth.description': 'Массаж, маникюр, косметология, психология',
+  'categories.main.beautyHealth.description':
+    'Массаж, маникюр, косметология, психология',
   'categories.main.autoRepair.title': 'Ремонт авто',
-  'categories.main.autoRepair.description': 'Диагностика, обслуживание и ремонт автомобилей',
+  'categories.main.autoRepair.description':
+    'Диагностика, обслуживание и ремонт автомобилей',
   'categories.main.digitalMarketing.title': 'Цифровой маркетинг',
-  'categories.main.digitalMarketing.description': 'SEO, контекстная реклама, SMM',
+  'categories.main.digitalMarketing.description':
+    'SEO, контекстная реклама, SMM',
   'categories.main.aiServices.title': 'AI услуги',
-  'categories.main.aiServices.description': 'AI разработка, консультации и анализ данных',
+  'categories.main.aiServices.description':
+    'AI разработка, консультации и анализ данных',
   'categories.main.onlineAdvertising.title': 'Интернет-реклама',
-  'categories.main.onlineAdvertising.description': 'Размещение рекламы в интернете',
+  'categories.main.onlineAdvertising.description':
+    'Размещение рекламы в интернете',
   'categories.main.advertisingDistribution.title': 'Распространение рекламы',
-  'categories.main.advertisingDistribution.description': 'Раздача листовок, расклейка объявлений',
+  'categories.main.advertisingDistribution.description':
+    'Раздача листовок, расклейка объявлений',
   'categories.main.webDevelopment.title': 'Веб-разработка',
   'categories.main.webDevelopment.description': 'Создание сайтов и приложений',
   'categories.main.design.title': 'Дизайн',
-  'categories.main.design.description': 'Дизайн логотипов, интерьеров, печатной продукции',
+  'categories.main.design.description':
+    'Дизайн логотипов, интерьеров, печатной продукции',
   'categories.main.photoVideo.title': 'Фото и видео услуги',
   'categories.main.photoVideo.description': 'Фотография, видеосъемка, монтаж',
   'categories.main.tutoring.title': 'Услуги репетиторов',
   'categories.main.tutoring.description': 'Уроки по предметам, языкам и музыке',
   'categories.main.businessServices.title': 'Деловые услуги',
-  'categories.main.businessServices.description': 'Бухгалтерия, юридические услуги, недвижимость',
+  'categories.main.businessServices.description':
+    'Бухгалтерия, юридические услуги, недвижимость',
   'categories.main.translationServices.title': 'Бюро переводов',
-  'categories.main.translationServices.description': 'Письменный и устный перевод',
+  'categories.main.translationServices.description':
+    'Письменный и устный перевод',
   'categories.main.trainerServices.title': 'Услуги тренеров',
-  'categories.main.trainerServices.description': 'Йога, фитнес, спортивные тренировки',
+  'categories.main.trainerServices.description':
+    'Йога, фитнес, спортивные тренировки',
   'categories.main.eventPlanning.title': 'Организация праздников',
   'categories.main.eventPlanning.description': 'Ведущие, аниматоры, кейтеринг',
   'categories.main.volunteerHelp.title': 'Волонтерская помощь',
-  'categories.main.volunteerHelp.description': 'Помощь пожилым людям и транспорт',
+  'categories.main.volunteerHelp.description':
+    'Помощь пожилым людям и транспорт',
 
   // Subcategories - NEW (135 total)
   // Handyman

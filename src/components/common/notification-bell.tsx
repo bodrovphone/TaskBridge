@@ -9,12 +9,17 @@ import { useAuth } from '@/features/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { filterUnreadNotifications } from '@/lib/utils/notification-read-state';
 
-export default function NotificationBell() {
+interface NotificationBellProps {
+ onAuthRequired?: () => void;
+}
+
+export default function NotificationBell({ onAuthRequired }: NotificationBellProps) {
  const { authenticatedFetch, user, loading } = useAuth();
  const { toggleOpen, isOpen } = useNotificationStore();
+ const isAuthenticated = !!user && !loading;
 
  // Only fetch notifications if user is authenticated AND auth is not loading
- const { notifications } = useNotificationsQuery(authenticatedFetch, !!user && !loading);
+ const { notifications } = useNotificationsQuery(authenticatedFetch, isAuthenticated);
 
  // Filter out read notifications from localStorage
  // Re-compute when the panel opens/closes to catch newly marked-as-read items
@@ -25,19 +30,27 @@ export default function NotificationBell() {
  // Total unread notification count
  const notificationCount = unreadNotifications.length;
 
+ const handleClick = () => {
+  if (isAuthenticated) {
+   toggleOpen();
+  } else if (onAuthRequired) {
+   onAuthRequired();
+  }
+ };
+
  return (
   <Button
    variant="ghost"
    size="icon"
    className="relative"
-   onClick={toggleOpen}
+   onClick={handleClick}
    aria-label="Notifications"
   >
    <Bell className="h-5 w-5" />
 
-   {/* Notification Badge */}
+   {/* Notification Badge - only show for authenticated users */}
    <AnimatePresence>
-    {notificationCount > 0 && (
+    {isAuthenticated && notificationCount > 0 && (
      <motion.span
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
