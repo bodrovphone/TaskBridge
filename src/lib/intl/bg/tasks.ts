@@ -290,8 +290,8 @@ export const tasks = {
   'createTask.reopenSuccess': 'Задачата е отворена отново успешно!',
   'createTask.reopenSuccessMessage': 'Вашата задача е публикувана отново и вече е отворена за нови кандидатури.',
 
-  'taskCard.apply': 'Кандидатствай',
-  'taskCard.seeDetails': 'Виж детайли',
+  'taskCard.apply': 'Изпълни',
+  'taskCard.seeDetails': 'Детайли',
   'taskCard.anonymous': 'Анонимен',
   'taskCard.budget.from': 'от',
   'taskCard.budget.to': 'до',
