@@ -130,7 +130,10 @@ export const notifications = {
   'taskDetail.writeReply': 'Напишите ваш ответ...',
   'taskDetail.sendReply': 'Отправить ответ',
 
-  // Language Barrier Warning
+  // Language Info Banner (inline)
+  'taskDetail.languageInfo': 'Автор может предпочитать {{language}}',
+
+  // Language Barrier Warning (deprecated - kept for reference)
   'taskDetail.languageWarning.title': 'Языковая заметка',
   'taskDetail.languageWarning.message': 'Эта задача опубликована человеком, который может предпочитать общение на {{language}}. Пожалуйста, убедитесь, что вам комфортно с возможными языковыми различиями перед подачей заявки.',
   'taskDetail.languageWarning.confirm': 'Понятно, продолжить',

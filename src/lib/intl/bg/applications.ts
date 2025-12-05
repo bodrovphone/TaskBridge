@@ -45,6 +45,34 @@ export const applications = {
   'application.successSteps.getResponse': 'Получаване на отговор',
   'application.successSteps.startWork': 'Започнете работа',
 
+  // Wizard Steps
+  'application.wizard.step1Title': 'Вашата оферта',
+  'application.wizard.step1Subtitle': 'Задайте цена',
+  'application.wizard.step2Title': 'Наличност',
+  'application.wizard.step2Subtitle': 'Кога можете?',
+  'application.wizard.step3Title': 'Мотивационно писмо',
+  'application.wizard.step3Subtitle': 'Представете се',
+  'application.wizard.step4Title': 'Преглед',
+  'application.wizard.step4Subtitle': 'Потвърдете кандидатурата',
+  'application.wizard.budgetHint': 'Бюджет на клиента',
+  'application.wizard.priceHelp': 'Въведете вашата предложена цена за изпълнение на задачата. Бъдете конкурентни, но справедливи.',
+  'application.wizard.timelineHelp': 'Кога можете да завършите задачата? Изберете опцията, която най-добре отговаря на вашата наличност.',
+  'application.wizard.timelineDescToday': 'Мога да започна веднага',
+  'application.wizard.timelineDesc3days': 'В следващите няколко дни',
+  'application.wizard.timelineDescWeek': 'Някъде тази седмица',
+  'application.wizard.timelineDescFlexible': 'Можем да обсъдим времето',
+  'application.wizard.messageTitle': 'Защо да напишете съобщение?',
+  'application.wizard.reviewHelp': 'Моля, прегледайте кандидатурата си преди изпращане.',
+  'application.wizard.applyingTo': 'Кандидатстване за',
+  'application.wizard.noMessage': 'Няма добавено съобщение',
+  'application.wizard.readyToSubmit': 'Готово за изпращане!',
+  'application.wizard.submitNote': 'Щракнете Изпрати, за да изпратите кандидатурата. Клиентът ще бъде уведомен.',
+
+  // Wizard Navigation
+  'wizard.back': 'Назад',
+  'wizard.next': 'Напред',
+  'wizard.submit': 'Изпрати',
+
   // Applications Management
   'applications.title': 'Кандидатури',
   'applications.count': 'кандидатури',

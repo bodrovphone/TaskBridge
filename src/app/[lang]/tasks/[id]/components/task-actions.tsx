@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 import { Share2, Edit3, XCircle, Check, LogOut, CheckCircle, Globe } from "lucide-react";
-import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
+import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Chip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
@@ -52,10 +52,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [isCancelling, setIsCancelling] = useState(false);
  const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false);
  const [isMarkingCompleted, setIsMarkingCompleted] = useState(false);
- const [isLanguageWarningOpen, setIsLanguageWarningOpen] = useState(false);
-
- // localStorage key for language barrier warning dismissal
- const LANGUAGE_WARNING_DISMISSED_KEY = 'trudify_language_warning_dismissed';
 
  // Helper to get localized language name (translated to current UI locale)
  const getLanguageName = (langCode: string): string => {
@@ -65,30 +61,15 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   return translated.replace(/^[\p{Emoji}\s]+/u, '').trim();
  };
 
- // Check if language warning should be shown
- const shouldShowLanguageWarning = (): boolean => {
+ // Check if there's a language barrier (task author prefers different language)
+ const hasLanguageBarrier = useMemo(() => {
   const authorLanguage = task.customer?.preferred_language;
-
-  // Don't show warning if author's language is Bulgarian (default)
-  if (!authorLanguage || authorLanguage === 'bg') {
+  // No barrier if author's language is Bulgarian (default) or matches current locale
+  if (!authorLanguage || authorLanguage === 'bg' || authorLanguage === lang) {
    return false;
   }
-
-  // Don't show warning if current user's locale matches author's language
-  if (authorLanguage === lang) {
-   return false;
-  }
-
-  // Check if user has already dismissed the warning permanently
-  if (typeof window !== 'undefined') {
-   const dismissed = localStorage.getItem(LANGUAGE_WARNING_DISMISSED_KEY);
-   if (dismissed === 'true') {
-    return false;
-   }
-  }
-
   return true;
- };
+ }, [task.customer?.preferred_language, lang]);
 
  // @todo INTEGRATION: Fetch from user's professional profile/stats
  const withdrawalsThisMonth = 0; // Mock data
@@ -125,12 +106,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   if (isAuthenticated && action) {
    // User just logged in and has a pending action
    if (action === 'apply') {
-    // Check if language warning should be shown first
-    if (shouldShowLanguageWarning()) {
-     setIsLanguageWarningOpen(true);
-    } else {
-     setIsApplicationDialogOpen(true);
-    }
+    setIsApplicationDialogOpen(true);
    }
    // @todo FEATURE: Questions feature - commented out for future implementation
    // else if (action === 'question') {
@@ -157,22 +133,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
    return;
   }
 
-  // Check if language warning should be shown
-  if (shouldShowLanguageWarning()) {
-   setIsLanguageWarningOpen(true);
-   return;
-  }
-
-  setIsApplicationDialogOpen(true);
- };
-
- // Handle language warning confirmation
- const handleLanguageWarningConfirm = () => {
-  // Save dismissal to localStorage (permanent)
-  if (typeof window !== 'undefined') {
-   localStorage.setItem(LANGUAGE_WARNING_DISMISSED_KEY, 'true');
-  }
-  setIsLanguageWarningOpen(false);
   setIsApplicationDialogOpen(true);
  };
 
@@ -505,6 +465,18 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   <>
    <NextUICard className="bg-white/95 shadow-lg">
     <CardBody className="p-6 space-y-3">
+     {/* Language Barrier Info - Shown when task author prefers different language */}
+     {hasLanguageBarrier && (
+      <div className="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700">
+       <Globe className="w-5 h-5 flex-shrink-0" />
+       <span className="text-sm">
+        {t('taskDetail.languageInfo', {
+         language: getLanguageName(task.customer?.preferred_language || 'en')
+        })}
+       </span>
+      </div>
+     )}
+
      {/* Application Badge/Button */}
      {canApply ? (
       <TaskApplicationBadge
@@ -598,50 +570,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     onClose={() => setIsAuthSlideOverOpen(false)}
     action={authAction}
    />
-
-   {/* Language Barrier Warning Dialog */}
-   <Modal
-    isOpen={isLanguageWarningOpen}
-    onClose={() => setIsLanguageWarningOpen(false)}
-    placement="center"
-    size="md"
-    classNames={{
-     base: "mx-4 sm:mx-0",
-     footer: "flex-col sm:flex-row gap-2"
-    }}
-   >
-    <ModalContent>
-     <ModalHeader className="flex items-center gap-2 pb-2">
-      <div className="p-2 rounded-full bg-blue-100">
-       <Globe className="w-5 h-5 text-blue-600" />
-      </div>
-      <span className="text-lg font-semibold">{t('taskDetail.languageWarning.title')}</span>
-     </ModalHeader>
-     <ModalBody className="py-4">
-      <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-       {t('taskDetail.languageWarning.message', {
-        language: getLanguageName(task.customer?.preferred_language || 'en')
-       })}
-      </p>
-     </ModalBody>
-     <ModalFooter>
-      <NextUIButton
-       variant="light"
-       onPress={() => setIsLanguageWarningOpen(false)}
-       className="w-full sm:w-auto order-2 sm:order-1"
-      >
-       {t('taskDetail.languageWarning.cancel')}
-      </NextUIButton>
-      <NextUIButton
-       color="primary"
-       onPress={handleLanguageWarningConfirm}
-       className="w-full sm:w-auto order-1 sm:order-2"
-      >
-       {t('taskDetail.languageWarning.confirm')}
-      </NextUIButton>
-     </ModalFooter>
-    </ModalContent>
-   </Modal>
   </>
  );
 }

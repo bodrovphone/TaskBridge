@@ -128,7 +128,10 @@ export const notifications = {
   'taskDetail.writeReply': 'Напишіть відповідь...',
   'taskDetail.sendReply': 'Надіслати відповідь',
 
-  // Language Barrier Warning
+  // Language Info Banner (inline)
+  'taskDetail.languageInfo': 'Автор може надавати перевагу {{language}}',
+
+  // Language Barrier Warning (deprecated - kept for reference)
   'taskDetail.languageWarning.title': 'Мовна примітка',
   'taskDetail.languageWarning.message': 'Це завдання опубліковане людиною, яка може надавати перевагу спілкуванню {{language}}. Будь ласка, переконайтеся, що вам комфортно з можливими мовними відмінностями перед подачею заявки.',
   'taskDetail.languageWarning.confirm': 'Зрозуміло, продовжити',

@@ -45,6 +45,34 @@ export const applications = {
   'application.successSteps.getResponse': 'Get Response',
   'application.successSteps.startWork': 'Start Work',
 
+  // Wizard Steps
+  'application.wizard.step1Title': 'Your Offer',
+  'application.wizard.step1Subtitle': 'Set your price',
+  'application.wizard.step2Title': 'Availability',
+  'application.wizard.step2Subtitle': 'When can you do it?',
+  'application.wizard.step3Title': 'Cover Letter',
+  'application.wizard.step3Subtitle': 'Introduce yourself',
+  'application.wizard.step4Title': 'Review',
+  'application.wizard.step4Subtitle': 'Confirm your application',
+  'application.wizard.budgetHint': "Client's budget range",
+  'application.wizard.priceHelp': 'Enter your proposed price for completing this task. Be competitive but fair.',
+  'application.wizard.timelineHelp': 'When can you complete this task? Choose the option that best fits your availability.',
+  'application.wizard.timelineDescToday': 'I can start immediately',
+  'application.wizard.timelineDesc3days': 'Within the next few days',
+  'application.wizard.timelineDescWeek': 'Sometime this week',
+  'application.wizard.timelineDescFlexible': 'We can discuss timing',
+  'application.wizard.messageTitle': 'Why write a message?',
+  'application.wizard.reviewHelp': 'Please review your application before submitting.',
+  'application.wizard.applyingTo': 'Applying to',
+  'application.wizard.noMessage': 'No message added',
+  'application.wizard.readyToSubmit': 'Ready to submit!',
+  'application.wizard.submitNote': 'Click Submit to send your application. The client will be notified.',
+
+  // Wizard Navigation
+  'wizard.back': 'Back',
+  'wizard.next': 'Next',
+  'wizard.submit': 'Submit',
+
   // Applications Management
   'applications.title': 'Applications',
   'applications.count': 'applications',

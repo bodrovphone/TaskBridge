@@ -74,6 +74,11 @@ export function getModalClassNames(isMobile: boolean, isKeyboardOpen: boolean) {
 
 /**
  * Timeline to estimated hours mapping for API submission
+ *
+ * @todo REFACTORING: This mapping is semantically incorrect. The UI asks "When can you start?"
+ * (availability) but we store it as `estimated_duration_hours` (duration). These hour values
+ * are arbitrary and meaningless. Should be refactored to store the timeline string directly
+ * as `proposed_timeline` (TEXT). See: todo_tasks/refactor-timeline-to-proposed-timeline.md
  */
 export const TIMELINE_HOURS_MAP: Record<string, number> = {
   today: 8,

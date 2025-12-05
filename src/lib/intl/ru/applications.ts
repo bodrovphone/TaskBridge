@@ -45,6 +45,34 @@ export const applications = {
   'application.successSteps.getResponse': 'Получить ответ',
   'application.successSteps.startWork': 'Начать работу',
 
+  // Wizard Steps
+  'application.wizard.step1Title': 'Ваше предложение',
+  'application.wizard.step1Subtitle': 'Укажите цену',
+  'application.wizard.step2Title': 'Доступность',
+  'application.wizard.step2Subtitle': 'Когда сможете?',
+  'application.wizard.step3Title': 'Сопроводительное письмо',
+  'application.wizard.step3Subtitle': 'Представьтесь',
+  'application.wizard.step4Title': 'Просмотр',
+  'application.wizard.step4Subtitle': 'Подтвердите заявку',
+  'application.wizard.budgetHint': 'Бюджет клиента',
+  'application.wizard.priceHelp': 'Введите предложенную цену за выполнение задачи. Будьте конкурентоспособны, но справедливы.',
+  'application.wizard.timelineHelp': 'Когда вы сможете выполнить задачу? Выберите вариант, который лучше всего соответствует вашей доступности.',
+  'application.wizard.timelineDescToday': 'Могу начать сразу',
+  'application.wizard.timelineDesc3days': 'В ближайшие несколько дней',
+  'application.wizard.timelineDescWeek': 'На этой неделе',
+  'application.wizard.timelineDescFlexible': 'Можем обсудить сроки',
+  'application.wizard.messageTitle': 'Зачем писать сообщение?',
+  'application.wizard.reviewHelp': 'Пожалуйста, проверьте заявку перед отправкой.',
+  'application.wizard.applyingTo': 'Откликаетесь на',
+  'application.wizard.noMessage': 'Сообщение не добавлено',
+  'application.wizard.readyToSubmit': 'Готово к отправке!',
+  'application.wizard.submitNote': 'Нажмите Отправить, чтобы отправить заявку. Клиент будет уведомлен.',
+
+  // Wizard Navigation
+  'wizard.back': 'Назад',
+  'wizard.next': 'Далее',
+  'wizard.submit': 'Отправить',
+
   // Applications Management
   'applications.title': 'Заявки',
   'applications.count': 'заявок',

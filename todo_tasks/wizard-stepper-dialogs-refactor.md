@@ -3,15 +3,46 @@
 ## Task Description
 Refactor complex dialogs that don't fit well on mobile into wizard-style stepper dialogs. This improves mobile UX by breaking complex forms into digestible steps with clear progress indication.
 
+## Status
+**In Progress** - First dialog completed, awaiting mobile testing before continuing.
+
 ## Problem
 Several dialogs have too many fields/sections displayed at once, causing:
 - Poor mobile experience (scrolling required, keyboard covers inputs)
 - Cognitive overload for users
 - Form abandonment
 
-## Candidates for Refactoring
+## Completed
 
-### 1. AcceptApplicationDialog (434 lines) - **RECOMMENDED FOR POC**
+### ✅ ApplicationFormState (Apply on Task) - COMPLETED
+**Location:** `src/components/tasks/application-dialog/ApplicationFormState.tsx`
+**Reduced:** 543 lines → 270 lines
+
+**Implementation:**
+- Created reusable `WizardDialog` component (`src/components/ui/wizard-dialog.tsx`)
+- Split into 4 step components:
+  - `PriceStep.tsx` - Proposed price input with budget hint
+  - `TimelineStep.tsx` - Visual timeline card selection
+  - `MessageStep.tsx` - Cover letter with character counter
+  - `ReviewStep.tsx` - Summary with edit buttons
+- Full i18n support (EN/BG/RU)
+- Mobile-responsive (full-screen on mobile, modal on desktop)
+- Framer Motion animations between steps
+- Step indicator with progress tracking
+
+**Files created:**
+- `src/components/ui/wizard-dialog.tsx`
+- `src/components/tasks/application-dialog/steps/PriceStep.tsx`
+- `src/components/tasks/application-dialog/steps/TimelineStep.tsx`
+- `src/components/tasks/application-dialog/steps/MessageStep.tsx`
+- `src/components/tasks/application-dialog/steps/ReviewStep.tsx`
+- `src/components/tasks/application-dialog/steps/index.ts`
+
+---
+
+## Candidates for Next Phase (after mobile testing)
+
+### 1. AcceptApplicationDialog (434 lines) - **HIGH PRIORITY**
 **Location:** `src/components/tasks/accept-application-dialog.tsx`
 
 **Current state:** Single long form with:
@@ -27,7 +58,7 @@ Several dialogs have too many fields/sections displayed at once, causing:
 3. **Add Message** (optional) - Write a message to the professional
 4. **Confirm** - Summary + agreement checkbox + submit
 
-**Why this is best for POC:**
+**Why this should be next:**
 - Clear logical separation into steps
 - High-value user flow (accepting work)
 - Currently most problematic on mobile
@@ -35,20 +66,7 @@ Several dialogs have too many fields/sections displayed at once, causing:
 
 ---
 
-### 2. ApplicationFormState (543 lines)
-**Location:** `src/components/tasks/application-dialog/ApplicationFormState.tsx`
-
-**Current state:** Professional applies to task with price, timeline, message
-
-**Proposed wizard steps:**
-1. **Your Offer** - Proposed price input
-2. **Availability** - Timeline selection
-3. **Cover Letter** - Message/pitch to customer
-4. **Review & Submit** - Summary of application
-
----
-
-### 3. ReviewDialog (394 lines)
+### 2. ReviewDialog (394 lines)
 **Location:** `src/features/reviews/components/review-dialog.tsx`
 
 **Current state:** Rate + write review in single view
@@ -60,7 +78,7 @@ Several dialogs have too many fields/sections displayed at once, causing:
 
 ---
 
-### 4. ReportScamDialog (217 lines)
+### 3. ReportScamDialog (217 lines)
 **Location:** `src/components/safety/report-scam-dialog.tsx`
 
 **Current state:** Report form with category, description, evidence
@@ -108,15 +126,22 @@ interface WizardDialogProps {
 ### Component Location
 `src/components/ui/wizard-dialog.tsx`
 
-## Acceptance Criteria (POC - AcceptApplicationDialog)
-- [ ] Create reusable `WizardDialog` base component
-- [ ] Refactor AcceptApplicationDialog into 4 steps
-- [ ] Step indicator showing progress
-- [ ] Back/Next buttons with proper state
-- [ ] Mobile-responsive (full height on mobile)
-- [ ] Preserve form data when navigating between steps
-- [ ] Final step shows summary before submit
-- [ ] Translated step titles in EN/BG/RU
+## Acceptance Criteria
+
+### Phase 1 - POC (ApplicationFormState) ✅ COMPLETED
+- [x] Create reusable `WizardDialog` base component
+- [x] Refactor ApplicationFormState into 4 steps
+- [x] Step indicator showing progress
+- [x] Back/Next buttons with proper state
+- [x] Mobile-responsive (full height on mobile)
+- [x] Preserve form data when navigating between steps
+- [x] Final step shows summary before submit
+- [x] Translated step titles in EN/BG/RU
+
+### Phase 2 - AcceptApplicationDialog (pending mobile testing)
+- [ ] Refactor AcceptApplicationDialog into 4 steps using WizardDialog
+- [ ] Test on mobile devices
+- [ ] Verify contact sharing flow works correctly
 
 ## Priority
 Medium-Low (UX improvement, not blocking)

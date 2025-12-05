@@ -92,6 +92,8 @@ export default function ApplicationDialog({
       setIsSubmitting(true)
 
       try {
+        // @todo REFACTORING: Send timeline string directly instead of converting to hours.
+        // See: todo_tasks/refactor-timeline-to-proposed-timeline.md
         const response = await authenticatedFetch('/api/applications', {
           method: 'POST',
           credentials: 'include',
