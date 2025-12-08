@@ -79,6 +79,13 @@ export class User {
     public banReason: string | null,
     public bannedAt: Date | null,
     public lastActiveAt: Date | null,
+    // Badge fields
+    public isEarlyAdopter: boolean,
+    public earlyAdopterCategories: string[],
+    public isTopProfessional: boolean,
+    public topProfessionalUntil: Date | null,
+    public topProfessionalTasksCount: number,
+    public isFeatured: boolean,
     public readonly createdAt: Date,
     public updatedAt: Date
   ) {}
@@ -142,6 +149,12 @@ export class User {
       null, // banReason
       null, // bannedAt
       now, // lastActiveAt
+      false, // isEarlyAdopter
+      [], // earlyAdopterCategories
+      false, // isTopProfessional
+      null, // topProfessionalUntil
+      0, // topProfessionalTasksCount
+      false, // isFeatured
       now, // createdAt
       now // updatedAt
     )
@@ -204,6 +217,12 @@ export class User {
       profile.banReason,
       profile.bannedAt,
       profile.lastActiveAt,
+      profile.isEarlyAdopter,
+      profile.earlyAdopterCategories,
+      profile.isTopProfessional,
+      profile.topProfessionalUntil,
+      profile.topProfessionalTasksCount,
+      profile.isFeatured,
       profile.createdAt,
       profile.updatedAt
     )
@@ -266,6 +285,12 @@ export class User {
       banReason: this.banReason,
       bannedAt: this.bannedAt,
       lastActiveAt: this.lastActiveAt,
+      isEarlyAdopter: this.isEarlyAdopter,
+      earlyAdopterCategories: this.earlyAdopterCategories,
+      isTopProfessional: this.isTopProfessional,
+      topProfessionalUntil: this.topProfessionalUntil,
+      topProfessionalTasksCount: this.topProfessionalTasksCount,
+      isFeatured: this.isFeatured,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     }

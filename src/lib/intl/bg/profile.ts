@@ -370,4 +370,9 @@ export const profile = {
   'profile.services.descriptionLabel': 'Описание (по избор)',
   'profile.services.descriptionPlaceholder': 'Кратко описание на услугата',
   'profile.services.helperText': 'Добавете до {{max}} услуги. Промените се запазват автоматично.',
+
+  // Achievement Banner
+  'profile.achievement.title': 'Страхотна работа!',
+  'profile.achievement.subtitle': 'Благодарим ви, че сте отличен член на нашата общност. Вашата упорита работа и отдаденост правят истинска разлика!',
+  'profile.achievement.tasksCompleted': 'задачи',
 };

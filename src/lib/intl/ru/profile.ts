@@ -926,6 +926,11 @@ export const profile = {
   'profile.services.descriptionPlaceholder': 'Краткое описание услуги',
   'profile.services.helperText': 'Добавьте до {{max}} услуг. Изменения сохраняются автоматически.',
 
+  // Achievement Banner
+  'profile.achievement.title': 'У вас отлично получается!',
+  'profile.achievement.subtitle': 'Спасибо, что вы выдающийся член нашего сообщества. Ваш упорный труд и преданность делу действительно имеют значение!',
+  'profile.achievement.tasksCompleted': 'задач',
+
   // Locations
   'locations.sofiaCenter': 'София, Центр',
   'locations.sofiaLyulin': 'София, Люлин',

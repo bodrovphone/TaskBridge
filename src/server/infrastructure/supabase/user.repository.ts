@@ -256,6 +256,14 @@ export class UserRepository {
       bannedAt: raw.banned_at ? new Date(raw.banned_at) : null,
       lastActiveAt: raw.last_active_at ? new Date(raw.last_active_at) : null,
 
+      // Badge fields
+      isEarlyAdopter: raw.is_early_adopter || false,
+      earlyAdopterCategories: raw.early_adopter_categories || [],
+      isTopProfessional: raw.is_top_professional || false,
+      topProfessionalUntil: raw.top_professional_until ? new Date(raw.top_professional_until) : null,
+      topProfessionalTasksCount: raw.top_professional_tasks_count || 0,
+      isFeatured: raw.is_featured || false,
+
       // Timestamps
       createdAt: new Date(raw.created_at),
       updatedAt: new Date(raw.updated_at),

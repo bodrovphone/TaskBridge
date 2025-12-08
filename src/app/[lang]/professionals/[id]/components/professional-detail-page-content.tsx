@@ -94,7 +94,12 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       preferredHours: "9:00 - 18:00",
       contactMethods: ["message", "phone"]
     },
-    completedTasksList: professional.completedTasksList || professional.completedTasks || []
+    completedTasksList: professional.completedTasksList || professional.completedTasks || [],
+    // Badge fields
+    isTopProfessional: professional.isTopProfessional || professional.is_top_professional || false,
+    topProfessionalTasksCount: professional.topProfessionalTasksCount || professional.top_professional_tasks_count || 0,
+    isEarlyAdopter: professional.isEarlyAdopter || professional.is_early_adopter || false,
+    earlyAdopterCategories: professional.earlyAdopterCategories || professional.early_adopter_categories || []
   };
 
   const handleShareClick = async () => {

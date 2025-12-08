@@ -7,6 +7,7 @@ import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
 import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
 import { formatYearsExperience } from '@/lib/utils/pluralization';
 import { getCategoryLabelBySlug } from '@/features/categories';
+import { BadgeDisplay } from '../badges';
 
 interface Professional {
  id: string;
@@ -27,6 +28,11 @@ interface Professional {
  };
  safetyStatus: SafetyStatus;
  serviceCategories?: string[];
+ // Badge fields
+ isTopProfessional?: boolean;
+ topProfessionalTasksCount?: number;
+ isEarlyAdopter?: boolean;
+ earlyAdopterCategories?: string[];
 }
 
 interface ProfessionalHeaderProps {
@@ -90,6 +96,16 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
        <p className="text-base sm:text-lg text-gray-600 mb-3">
         {professional.title}
        </p>
+
+       {/* Professional Badges */}
+       <BadgeDisplay
+        isTopProfessional={professional.isTopProfessional}
+        topProfessionalTasksCount={professional.topProfessionalTasksCount}
+        isEarlyAdopter={professional.isEarlyAdopter}
+        earlyAdopterCategories={professional.earlyAdopterCategories}
+        size="md"
+        className="mb-4 justify-center lg:justify-start"
+       />
 
        {/* Service Categories / Skills */}
        {professional.serviceCategories && professional.serviceCategories.length > 0 && (

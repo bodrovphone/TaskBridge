@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 import { UpdateUserProfileDto } from '@/server/domain/user/user.types'
 import { authenticateRequest } from '@/lib/auth/api-auth'
+import { checkAndAssignEarlyAdopterStatus } from '@/server/badges/badge.service'
 
 /**
  * GET /api/profile
@@ -108,6 +109,9 @@ export async function PUT(request: NextRequest) {
     }
     if (updates.yearsExperience !== undefined) user.yearsExperience = updates.yearsExperience
     if (updates.hourlyRateBgn !== undefined) user.hourlyRateBgn = updates.hourlyRateBgn
+    // Track if service categories are being updated for early adopter check
+    const previousCategories = user.serviceCategories || []
+    const categoriesUpdated = updates.serviceCategories !== undefined
     if (updates.serviceCategories !== undefined) user.serviceCategories = updates.serviceCategories
     if (updates.availabilityStatus !== undefined) user.availabilityStatus = updates.availabilityStatus
     if (updates.responseTimeHours !== undefined) user.responseTimeHours = updates.responseTimeHours
@@ -143,7 +147,21 @@ export async function PUT(request: NextRequest) {
     // 5. Save to database
     const updatedUser = await userRepository.update(user)
 
-    // 6. Return updated profile
+    // 6. Check for early adopter status if categories were updated
+    if (categoriesUpdated && updates.serviceCategories) {
+      try {
+        await checkAndAssignEarlyAdopterStatus(
+          user.id,
+          updates.serviceCategories,
+          previousCategories
+        )
+      } catch (error) {
+        // Log but don't fail the request - early adopter is a nice-to-have
+        console.error('Early adopter check failed:', error)
+      }
+    }
+
+    // 7. Return updated profile
     return NextResponse.json({
       profile: updatedUser.toProfile(),
       message: 'Profile updated successfully',

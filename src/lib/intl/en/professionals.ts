@@ -212,6 +212,13 @@ export const professionals = {
   'professionals.filters.reset': 'Reset',
   'professionals.filters.filters': 'Filters',
 
+  // Professional Badges
+  'professionals.badge.topProfessional': 'Top Professional',
+  'professionals.badge.topProfessional.tooltip': 'Completed {{count}} tasks in the last 30 days',
+  'professionals.badge.earlyAdopter': 'Early Adopter',
+  'professionals.badge.earlyAdopter.tooltip': 'One of the first professionals in {{category}}',
+  'professionals.badge.earlyAdopter.tooltipGeneric': 'One of the first professionals on the platform',
+
   // Invite Modal
   'inviteModal.title': 'Invite Professional to Task',
   'inviteModal.subtitle': 'Select which task to invite {{name}} to',

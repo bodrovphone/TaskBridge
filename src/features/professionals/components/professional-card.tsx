@@ -15,6 +15,7 @@ import { getCityLabelBySlug } from '@/features/cities'
 import { LocaleLink } from '@/components/common/locale-link'
 import type { Professional } from '@/server/professionals/professional.types'
 import { SafetyIndicators } from './safety-indicators'
+import { BadgeDisplay } from './badges'
 
 interface ProfessionalCardProps {
  professional: Professional
@@ -114,6 +115,16 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
        </div>
       </div>
      </div>
+
+     {/* Professional Badges */}
+     <BadgeDisplay
+      isTopProfessional={professional.is_top_professional}
+      topProfessionalTasksCount={professional.top_professional_tasks_count}
+      isEarlyAdopter={professional.is_early_adopter}
+      earlyAdopterCategories={professional.early_adopter_categories}
+      size="sm"
+      className="mb-4"
+     />
 
      {/* Enhanced Categories */}
      <div className="flex flex-wrap gap-2 mb-4">

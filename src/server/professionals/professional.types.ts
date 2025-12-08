@@ -36,6 +36,14 @@ export interface Professional {
   // Featured status (calculated based on rating + activity)
   featured: boolean
 
+  // Badge fields
+  is_early_adopter: boolean
+  early_adopter_categories: string[]
+  is_top_professional: boolean
+  top_professional_until: string | null
+  top_professional_tasks_count: number
+  is_featured: boolean
+
   // Timestamps
   created_at: string
 }
@@ -79,6 +87,15 @@ export interface ProfessionalRaw {
   // Verification
   is_phone_verified: boolean
   is_email_verified: boolean
+
+  // Badge fields
+  is_early_adopter: boolean
+  early_adopter_categories: string[]
+  is_top_professional: boolean
+  top_professional_until: string | null
+  top_professional_tasks_count: number
+  is_featured: boolean
+  featured_until: string | null
 
   // Settings (should be filtered out)
   notification_preferences: any

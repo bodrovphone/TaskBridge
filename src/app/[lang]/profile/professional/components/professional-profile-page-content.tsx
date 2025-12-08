@@ -9,9 +9,11 @@ import { useAuth } from '@/features/auth'
 import { ProfessionalProfile } from '../../components/professional-profile'
 import { ProfileDataProvider } from '../../components/profile-data-provider'
 import { NotificationBannerManager } from '../../components/notification-banner-manager'
+import { AchievementBanner } from '../../components/achievement-banner'
 import { ProfileHeader } from '../../components/shared/profile-header'
 import { StatisticsSection } from '../../components/sections/statistics-section'
 import { AccountSettingsSection } from '../../components/sections/account-settings-section'
+import { BadgeDisplay } from '@/features/professionals/components/badges'
 
 interface ProfessionalProfilePageContentProps {
   lang: string
@@ -126,6 +128,28 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
           telegramConnected={!!profile.telegramId}
           onTelegramConnect={handleTelegramConnect}
         />
+
+        {/* Achievement Banner for professionals with badges */}
+        <AchievementBanner
+          isTopProfessional={profile.isTopProfessional || false}
+          topProfessionalTasksCount={profile.topProfessionalTasksCount || 0}
+          isEarlyAdopter={profile.isEarlyAdopter || false}
+          earlyAdopterCategories={profile.earlyAdopterCategories || []}
+        />
+
+        {/* Professional Badges Display */}
+        {(profile.isTopProfessional || profile.isEarlyAdopter) && (
+          <div className="mb-4">
+            <BadgeDisplay
+              isTopProfessional={profile.isTopProfessional}
+              topProfessionalTasksCount={profile.topProfessionalTasksCount}
+              isEarlyAdopter={profile.isEarlyAdopter}
+              earlyAdopterCategories={profile.earlyAdopterCategories}
+              size="lg"
+              className="justify-center"
+            />
+          </div>
+        )}
 
         {/* Professional Quick Actions */}
         <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">

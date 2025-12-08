@@ -214,6 +214,13 @@ export const professionals = {
   'professionals.filters.reset': 'Нулирай',
   'professionals.filters.filters': 'Филтри',
 
+  // Professional Badges
+  'professionals.badge.topProfessional': 'Топ Професионалист',
+  'professionals.badge.topProfessional.tooltip': 'Завърши {{count}} задачи през последните 30 дни',
+  'professionals.badge.earlyAdopter': 'Ранен Последовател',
+  'professionals.badge.earlyAdopter.tooltip': 'Един от първите професионалисти в {{category}}',
+  'professionals.badge.earlyAdopter.tooltipGeneric': 'Един от първите професионалисти в платформата',
+
   // Invite Modal
   'inviteModal.title': 'Поканете професионалист за задача',
   'inviteModal.subtitle': 'Изберете коя задача да поканите {{name}}',

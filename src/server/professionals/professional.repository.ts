@@ -26,30 +26,96 @@ import type { ProfessionalQueryParams } from './professional.query-types'
 import { QUERY_CONSTRAINTS } from './professional.query-types'
 
 /**
- * Fetch featured professionals with quality scoring and category diversity
+ * Get badge data from professional record
+ */
+function getBadgeData(prof: ProfessionalRaw) {
+  return {
+    is_early_adopter: prof.is_early_adopter || false,
+    early_adopter_categories: prof.early_adopter_categories || [],
+    is_top_professional: prof.is_top_professional || false,
+    top_professional_until: prof.top_professional_until || null,
+    top_professional_tasks_count: prof.top_professional_tasks_count || 0,
+    is_featured: prof.is_featured || false,
+  }
+}
+
+/**
+ * Fetch featured professionals with DB-first approach + quality scoring fallback
  *
- * Scoring criteria:
- * - Has profile photo (avatar_url): +3 points
- * - Long bio (>150 chars): +2 points
- * - Has reviews/ratings: +2 points
- * - VAT verified professional: +3 points
- * - High rating (>= 4.5): +2 points
+ * Priority order:
+ * 1. DB-flagged featured (is_featured, is_early_adopter, is_top_professional)
+ * 2. Fallback: Quality scoring algorithm for remaining slots
  *
- * Returns top 20 professionals with category diversity
- * Used when no filters applied or as fallback when no results found
+ * Returns up to `limit` professionals with category diversity
  */
 export async function getFeaturedProfessionals(limit: number = 20): Promise<Professional[]> {
-  // Fetch more than we need for diversity selection
-  const { data, error } = await supabaseAdmin
+  const now = new Date().toISOString()
+
+  // === Step 1: Fetch DB-flagged featured professionals ===
+  const { data: dbFeatured, error: dbError } = await supabaseAdmin
+    .from('users')
+    .select('*')
+    .not('professional_title', 'is', null)
+    .neq('is_banned', true)
+    .or(`is_featured.eq.true,is_early_adopter.eq.true,and(is_top_professional.eq.true,top_professional_until.gte.${now})`)
+    .limit(limit)
+
+  if (dbError) {
+    console.error('DB featured professionals query error:', dbError)
+  }
+
+  const dbFeaturedProfessionals = (dbFeatured as ProfessionalRaw[]) || []
+  const dbFeaturedWithStatus = dbFeaturedProfessionals.map((prof) => ({
+    ...prof,
+    featured: calculateFeaturedStatus(prof),
+    ...getBadgeData(prof),
+  })) as Professional[]
+
+  // If we have enough DB-flagged professionals, apply diversity and return
+  if (dbFeaturedWithStatus.length >= limit) {
+    return applyDiversityShuffle(dbFeaturedWithStatus, limit)
+  }
+
+  // === Step 2: Fallback - fetch more using quality scoring ===
+  const excludeIds = dbFeaturedWithStatus.map((p) => p.id)
+  const remainingSlots = limit - dbFeaturedWithStatus.length
+
+  const fallbackProfessionals = await getQualityScoredProfessionals(
+    remainingSlots,
+    excludeIds
+  )
+
+  // Combine DB-featured (first) + fallback (second)
+  const combined = [...dbFeaturedWithStatus, ...fallbackProfessionals]
+  return applyDiversityShuffle(combined, limit)
+}
+
+/**
+ * Get professionals using quality scoring algorithm
+ * Used as fallback when not enough DB-flagged featured professionals
+ */
+async function getQualityScoredProfessionals(
+  limit: number,
+  excludeIds: string[] = []
+): Promise<Professional[]> {
+  // Build query
+  let query = supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
     .neq('is_banned', true)
     .order('created_at', { ascending: false })
-    .limit(50) // Fetch 50 to ensure category diversity
+    .limit(50) // Fetch more for scoring
+
+  // Exclude already-selected professionals
+  if (excludeIds.length > 0) {
+    query = query.not('id', 'in', `(${excludeIds.join(',')})`)
+  }
+
+  const { data, error } = await query
 
   if (error) {
-    console.error('Featured professionals query error:', error)
+    console.error('Quality scored professionals query error:', error)
     return []
   }
 
@@ -92,21 +158,33 @@ export async function getFeaturedProfessionals(limit: number = 20): Promise<Prof
       professional: {
         ...prof,
         featured: calculateFeaturedStatus(prof),
-      } as any,
-      score
+        ...getBadgeData(prof),
+      } as Professional,
+      score,
     }
   })
 
   // Sort by score descending
   scoredProfessionals.sort((a, b) => b.score - a.score)
 
-  // Select top professionals with category diversity
-  // Ensure no more than 2 from the same primary category
+  // Return top `limit` professionals
+  return scoredProfessionals.slice(0, limit).map((s) => s.professional)
+}
+
+/**
+ * Apply category diversity to a list of professionals
+ * Ensures no more than 2 professionals from the same primary category
+ * Also shuffles within groups for fairness
+ */
+function applyDiversityShuffle(
+  professionals: Professional[],
+  limit: number
+): Professional[] {
   const selectedProfessionals: Professional[] = []
   const categoryCount = new Map<string, number>()
 
-  // First pass: add high-scoring professionals with category limits
-  for (const { professional, score } of scoredProfessionals) {
+  // First pass: add professionals with category limits
+  for (const professional of professionals) {
     if (selectedProfessionals.length >= limit) break
 
     // Get primary category (first in array)
@@ -122,11 +200,11 @@ export async function getFeaturedProfessionals(limit: number = 20): Promise<Prof
 
   // Second pass: fill remaining slots if needed (relaxed rules)
   if (selectedProfessionals.length < limit) {
-    for (const { professional } of scoredProfessionals) {
+    for (const professional of professionals) {
       if (selectedProfessionals.length >= limit) break
 
       // Skip if already added
-      if (!selectedProfessionals.find(p => p.id === professional.id)) {
+      if (!selectedProfessionals.find((p) => p.id === professional.id)) {
         selectedProfessionals.push(professional)
       }
     }
@@ -233,11 +311,12 @@ export async function getProfessionals(
     throw new Error(`Failed to fetch professionals: ${error.message}`)
   }
 
-  // === Calculate Featured Status ===
+  // === Calculate Featured Status + Badge Data ===
   const professionalsRaw = (data as ProfessionalRaw[]) || []
   const professionalsWithFeatured = professionalsRaw.map((prof) => ({
     ...prof,
     featured: calculateFeaturedStatus(prof),
+    ...getBadgeData(prof),
   }))
 
   // === Re-sort for Featured (if sortBy === 'featured') ===

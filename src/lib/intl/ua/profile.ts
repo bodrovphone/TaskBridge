@@ -333,4 +333,9 @@ export const profile = {
   'profile.form.validation.phoneRequired': 'Номер телефону обов\'язковий',
   'profile.form.validation.phoneInvalid': 'Введіть дійсний номер телефону',
   'profile.form.validation.locationRequired': 'Місце обов\'язкове (мінімум 3 символи)',
+
+  // Achievement Banner
+  'profile.achievement.title': 'Ви чудово працюєте!',
+  'profile.achievement.subtitle': 'Дякуємо, що ви видатний член нашої спільноти. Ваша наполеглива праця та відданість справі дійсно мають значення!',
+  'profile.achievement.tasksCompleted': 'завдань',
 };

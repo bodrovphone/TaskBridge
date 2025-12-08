@@ -216,6 +216,13 @@ export const professionals = {
   'professionals.filters.reset': 'Сбросить',
   'professionals.filters.filters': 'Фильтры',
 
+  // Professional Badges
+  'professionals.badge.topProfessional': 'Топ Специалист',
+  'professionals.badge.topProfessional.tooltip': 'Выполнил {{count}} задач за последние 30 дней',
+  'professionals.badge.earlyAdopter': 'Ранний Последователь',
+  'professionals.badge.earlyAdopter.tooltip': 'Один из первых специалистов в {{category}}',
+  'professionals.badge.earlyAdopter.tooltipGeneric': 'Один из первых специалистов на платформе',
+
   // Invite Modal
   'inviteModal.title': 'Пригласить специалиста на задачу',
   'inviteModal.subtitle': 'Выберите, на какую задачу пригласить {{name}}',

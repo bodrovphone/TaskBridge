@@ -27,6 +27,13 @@ const PUBLIC_FIELDS: readonly (keyof Professional)[] = [
   'is_email_verified',
   'is_vat_verified',
   'featured',
+  // Badge fields
+  'is_early_adopter',
+  'early_adopter_categories',
+  'is_top_professional',
+  'top_professional_until',
+  'top_professional_tasks_count',
+  'is_featured',
   'created_at',
 ] as const
 

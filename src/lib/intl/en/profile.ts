@@ -369,4 +369,9 @@ export const profile = {
   'profile.services.descriptionLabel': 'Description (optional)',
   'profile.services.descriptionPlaceholder': 'Brief description of this service',
   'profile.services.helperText': 'Add up to {{max}} services. Changes are saved automatically.',
+
+  // Achievement Banner
+  'profile.achievement.title': "You're doing amazing!",
+  'profile.achievement.subtitle': 'Thank you for being an outstanding member of our community. Your hard work and dedication make a real difference!',
+  'profile.achievement.tasksCompleted': 'tasks',
 };

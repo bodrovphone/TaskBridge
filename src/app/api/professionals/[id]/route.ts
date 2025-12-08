@@ -248,6 +248,14 @@ export async function GET(
       createdAt: professional.created_at,
       updatedAt: professional.updated_at,
 
+      // Badge data (cast to any to access fields added by migration)
+      is_top_professional: (professional as any).is_top_professional || false,
+      top_professional_tasks_count: (professional as any).top_professional_tasks_count || 0,
+      top_professional_until: (professional as any).top_professional_until || null,
+      is_early_adopter: (professional as any).is_early_adopter || false,
+      early_adopter_categories: (professional as any).early_adopter_categories || [],
+      is_featured: (professional as any).is_featured || false,
+
       // Real data from database
       completedTasksList: completedTasksList,
       gallery: professional.portfolio || [],

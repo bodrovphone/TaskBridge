@@ -182,6 +182,14 @@ export interface UserProfile {
   bannedAt: Date | null
   lastActiveAt: Date | null
 
+  // Badge fields
+  isEarlyAdopter: boolean
+  earlyAdopterCategories: string[]
+  isTopProfessional: boolean
+  topProfessionalUntil: Date | null
+  topProfessionalTasksCount: number
+  isFeatured: boolean
+
   // Timestamps
   createdAt: Date
   updatedAt: Date
