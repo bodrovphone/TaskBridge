@@ -250,10 +250,8 @@ export async function GET(
 
       // Real data from database
       completedTasksList: completedTasksList,
-
-      // Mock data until we have real tables
-      services: [],
-      portfolio: [],
+      gallery: professional.portfolio || [],
+      services: professional.services || [],
       reviews: transformedReviews,
       responseTime: professional.response_time_hours
         ? `${professional.response_time_hours} часа`

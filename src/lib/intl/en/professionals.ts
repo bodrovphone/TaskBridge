@@ -165,6 +165,12 @@ export const professionals = {
   'professionalDetail.portfolio.after': 'After',
   'professionalDetail.portfolio.viewMore': 'View all demos',
   'professionalDetail.portfolio.showcase': 'Professional work showcase',
+
+  // Gallery (Premium Feature)
+  'professionalDetail.gallery.title': 'Work Gallery',
+  'professionalDetail.gallery.subtitle': 'Examples of completed work',
+  'professionalDetail.gallery.imageView': 'Image View',
+
   'professionalDetail.completedTasks.title': 'Completed Tasks',
   'professionalDetail.completedTasks.noTasks': 'No completed tasks yet',
   'professionalDetail.completedTasks.hugePotential': 'This professional has huge potential!',

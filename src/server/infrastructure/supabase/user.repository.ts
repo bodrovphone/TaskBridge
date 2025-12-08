@@ -211,6 +211,8 @@ export class UserRepository {
       weekendHours: raw.weekend_hours || { start: '09:00', end: '14:00' },
       totalEarningsBgn: raw.total_earnings_bgn ? parseFloat(raw.total_earnings_bgn) : 0,
       profileViews: raw.profile_views || 0,
+      gallery: raw.portfolio || [],
+      services: raw.services || [],
 
       // Statistics
       tasksCompleted: raw.tasks_completed || 0,
@@ -300,6 +302,8 @@ export class UserRepository {
       weekend_hours: user.weekendHours,
       total_earnings_bgn: user.totalEarningsBgn,
       profile_views: user.profileViews,
+      portfolio: user.gallery,
+      services: user.services,
 
       // Statistics
       tasks_completed: user.tasksCompleted,

@@ -667,7 +667,7 @@ export const profile = {
 
   // Professional Profile
   'profile.professional.info': 'Профессиональная информация',
-  'profile.professional.identitySection': 'Профессиональная идентичность',
+  'profile.professional.identitySection': 'О себе',
   'profile.professional.title': 'Профессиональная должность',
   'profile.professional.bio': 'Биография',
   'profile.professional.yearsOfExperience': 'Лет опыта',
@@ -893,6 +893,38 @@ export const profile = {
   'profile.form.validation.phoneRequired': 'Номер телефона обязателен',
   'profile.form.validation.phoneInvalid': 'Пожалуйста, введите действительный номер телефона',
   'profile.form.validation.locationRequired': 'Местоположение обязательно (минимум 3 символа)',
+
+  // Gallery (Premium Feature)
+  'profile.gallery.title': 'Галерея работ',
+  'profile.gallery.description': 'Покажите лучшие работы (макс. 5 изображений)',
+  'profile.gallery.addImage': 'Добавить',
+  'profile.gallery.captionPlaceholder': 'Подпись (необязательно)',
+  'profile.gallery.helperText': 'Нажмите на пустые слоты для загрузки изображений. JPG, PNG или WEBP (макс. 5MB)',
+  'profile.gallery.invalidType': 'Неверный тип файла',
+  'profile.gallery.useJpgPngWebp': 'Используйте JPG, PNG или WEBP',
+  'profile.gallery.fileTooLarge': 'Файл слишком большой',
+  'profile.gallery.maxSize': 'Максимум 5MB разрешено',
+  'profile.gallery.uploadSuccess': 'Изображение загружено',
+  'profile.gallery.uploadError': 'Ошибка загрузки',
+  'profile.gallery.deleteSuccess': 'Изображение удалено',
+  'profile.gallery.deleteError': 'Ошибка удаления',
+  'profile.gallery.compressing': 'Оптимизация...',
+  'profile.gallery.uploading': 'Загрузка...',
+  'profile.gallery.smaller': 'меньше',
+
+  // Services & Pricing
+  'profile.services.title': 'Услуги и цены',
+  'profile.services.description': 'Добавьте ваши услуги с ценами',
+  'profile.services.empty': 'Услуги пока не добавлены',
+  'profile.services.emptyHint': 'Добавьте ваши услуги, чтобы клиенты знали, что вы предлагаете',
+  'profile.services.addService': 'Добавить услугу',
+  'profile.services.serviceName': 'Название услуги',
+  'profile.services.serviceNamePlaceholder': 'напр. Сантехнический ремонт',
+  'profile.services.price': 'Цена',
+  'profile.services.pricePlaceholder': 'напр. 50 лв/час',
+  'profile.services.descriptionLabel': 'Описание (необязательно)',
+  'profile.services.descriptionPlaceholder': 'Краткое описание услуги',
+  'profile.services.helperText': 'Добавьте до {{max}} услуг. Изменения сохраняются автоматически.',
 
   // Locations
   'locations.sofiaCenter': 'София, Центр',

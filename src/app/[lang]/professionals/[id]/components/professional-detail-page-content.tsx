@@ -6,8 +6,7 @@ import { useRouter } from 'next/navigation';
 import ProfessionalHeader from '@/features/professionals/components/sections/professional-header';
 import ActionButtonsRow from '@/features/professionals/components/sections/action-buttons-row';
 import ServicesSection from '@/features/professionals/components/sections/services-section';
-// @todo POST-MVP: Re-enable portfolio gallery when feature is ready
-// import PortfolioGallery from '@/features/professionals/components/sections/portfolio-gallery';
+import PortfolioGallery from '@/features/professionals/components/sections/portfolio-gallery';
 import CompletedTasksSection from '@/features/professionals/components/sections/completed-tasks-section';
 import ReviewsSection from '@/features/professionals/components/sections/reviews-section';
 import { SuspensionBanner } from '@/components/safety/suspension-banner';
@@ -87,7 +86,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     },
     bio: professional.bio || t('professionalDetail.defaultBio', 'Професионален специалист с опит в сферата.'),
     services: professional.services || [],
-    portfolio: professional.portfolio || [],
+    gallery: professional.gallery || [],
     reviews: professional.reviews || [],
     contactSettings: professional.contactSettings || {
       allowDirectContact: true,
@@ -328,8 +327,8 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
             <ReviewsSection reviews={transformedProfessional.reviews} />
           </div>
 
-          {/* @todo POST-MVP: Re-enable portfolio gallery when feature is ready */}
-          {/* <PortfolioGallery portfolio={transformedProfessional.portfolio} /> */}
+          {/* Work Gallery (Premium Feature) */}
+          <PortfolioGallery gallery={transformedProfessional.gallery} />
 
           {/* Completed Tasks - Always show */}
           <CompletedTasksSection completedTasks={transformedProfessional.completedTasksList} />

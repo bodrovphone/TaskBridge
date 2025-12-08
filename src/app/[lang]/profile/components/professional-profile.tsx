@@ -2,12 +2,16 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Card, CardHeader, CardBody } from '@nextui-org/react'
+import { Camera } from 'lucide-react'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
 import { ServiceCategoriesSection } from './sections/service-categories-section'
 import { AvailabilitySection } from './sections/availability-section'
 import { BusinessSettingsSection } from './sections/business-settings-section'
+import { ServicesPricingSection } from './sections/services-pricing-section'
 import { PersonalInfoSection } from './shared/personal-info-section'
-import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
+import { PortfolioGalleryManager } from './portfolio-gallery-manager'
+import { UserProfile, PreferredContact, PreferredLanguage, GalleryItem, ServiceItem } from '@/server/domain/user/user.types'
 
 interface ProfessionalProfileProps {
   profile: UserProfile
@@ -138,9 +142,24 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
     }
   }
 
-  const handlePortfolioChange = (items: any[]) => {
-    console.log('Portfolio changes not yet implemented:', items)
-    // TODO: Implement when portfolio feature is ready
+  const handleGalleryChange = async (items: GalleryItem[]) => {
+    setError(null)
+    try {
+      await onProfileUpdate({ gallery: items })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save gallery')
+      throw err
+    }
+  }
+
+  const handleServicesSave = async (services: ServiceItem[]) => {
+    setError(null)
+    try {
+      await onProfileUpdate({ services })
+    } catch (err: any) {
+      setError(err.message || 'Failed to save services')
+      throw err
+    }
   }
 
   return (
@@ -172,7 +191,14 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         onSave={handleCategoriesSave}
       />
 
-      {/* 3. Availability & Preferences */}
+      {/* 3. Services & Pricing */}
+      <ServicesPricingSection
+        services={profile.services || []}
+        onSave={handleServicesSave}
+        maxServices={10}
+      />
+
+      {/* 4. Availability & Preferences */}
       <AvailabilitySection
         availability={profile.availabilityStatus}
         responseTime={formatResponseTime(profile.responseTimeHours)}
@@ -183,7 +209,7 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         onLanguageChange={handleLanguageChange}
       />
 
-      {/* 4. Business Settings */}
+      {/* 5. Business Settings */}
       <BusinessSettingsSection
         paymentMethods={profile.paymentMethods || []}
         weekdayHours={profile.weekdayHours || { start: '08:00', end: '18:00' }}
@@ -191,27 +217,27 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         onSave={handleBusinessSettingsSave}
       />
 
-      {/* 5. Portfolio Gallery - Skipped for MVP */}
-      {/* <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
+      {/* 6. Work Gallery (Premium Feature) */}
+      <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
         <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-4 md:px-6">
           <div className="flex items-center gap-2 md:gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-pink-500/10 to-rose-100 flex-shrink-0">
-              <Award className="w-4 h-4 md:w-5 md:h-5 text-pink-600" />
+            <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/10 to-pink-100 flex-shrink-0">
+              <Camera className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.professional.portfolioGallery')}</h3>
-              <p className="text-xs text-gray-500 hidden sm:block">{t('profile.professional.portfolioDescription')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.gallery.title', 'Work Gallery')}</h3>
+              <p className="text-xs text-gray-500 hidden sm:block">{t('profile.gallery.description', 'Showcase your best work (max 5 images)')}</p>
             </div>
           </div>
         </CardHeader>
         <CardBody className="px-4 md:px-6">
           <PortfolioGalleryManager
-            items={[]}
-            onChange={handlePortfolioChange}
-            maxItems={6}
+            items={profile.gallery || []}
+            onChange={handleGalleryChange}
+            maxItems={5}
           />
         </CardBody>
-      </Card> */}
+      </Card>
     </div>
   )
 }

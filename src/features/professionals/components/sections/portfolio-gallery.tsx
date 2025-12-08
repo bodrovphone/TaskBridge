@@ -1,253 +1,233 @@
 'use client'
 
-import { Card, CardBody, Image, Button, Chip } from "@nextui-org/react";
-import { Camera, ArrowRight, Clock, Star, Trophy } from "lucide-react";
-import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
-
-interface PortfolioItem {
- id: string;
- title: string;
- beforeImage: string;
- afterImage: string;
- description?: string;
- duration?: string;
- difficulty?: 'Easy' | 'Medium' | 'Hard';
- clientFeedback?: string;
- rating?: number;
- tags?: string[];
-}
+import { useState } from 'react'
+import NextImage from 'next/image'
+import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from '@nextui-org/react'
+import { Camera, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { GalleryItem } from '@/server/domain/user/user.types'
 
 interface PortfolioGalleryProps {
- portfolio: PortfolioItem[];
+  gallery: GalleryItem[]
 }
 
-// Synchronized Before/After Galleries Component
-function SynchronizedGalleries({ portfolio }: { portfolio: PortfolioItem[] }) {
- const { t } = useTranslation();
- const [currentIndex, setCurrentIndex] = useState(0);
+export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
+  const { t } = useTranslation()
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
- // Auto-slide every 4 seconds
- useEffect(() => {
-  if (portfolio.length <= 1) return;
+  // Sort by order
+  const sortedGallery = [...gallery].sort((a, b) => a.order - b.order)
 
-  const interval = setInterval(() => {
-   setCurrentIndex((prev) => (prev + 1) % portfolio.length);
-  }, 4000);
-
-  return () => clearInterval(interval);
- }, [portfolio.length]);
-
- const nextSlide = () => {
-  setCurrentIndex((prev) => (prev + 1) % portfolio.length);
- };
-
- const prevSlide = () => {
-  setCurrentIndex((prev) => (prev - 1 + portfolio.length) % portfolio.length);
- };
-
- const goToSlide = (index: number) => {
-  setCurrentIndex(index);
- };
-
- if (!portfolio || portfolio.length === 0) return null;
-
- return (
-  <div className="space-y-6">
-   {/* Gallery Headers */}
-   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div className="text-center">
-     <h4 className="text-lg font-semibold text-gray-700 uppercase tracking-wide">
-      {t('professionalDetail.portfolio.before')}
-     </h4>
-    </div>
-    <div className="text-center md:block hidden">
-     <h4 className="text-lg font-semibold text-gray-700 uppercase tracking-wide">
-      {t('professionalDetail.portfolio.after')}
-     </h4>
-    </div>
-   </div>
-
-   {/* Synchronized Galleries */}
-   <div className="relative">
-    {/* Desktop: Side by side */}
-    <div className="hidden md:flex justify-center items-start gap-8">
-     {/* Before Gallery */}
-     <div className="relative">
-      <div className="relative w-80 h-60 rounded-xl overflow-hidden shadow-lg bg-gray-100">
-       <Image
-        src={portfolio[currentIndex].beforeImage}
-        alt={`${portfolio[currentIndex].title} - Before`}
-        className="w-full h-full object-cover transition-all duration-500"
-        classNames={{
-         img: "rounded-xl"
-        }}
-        loading="lazy"
-       />
-      </div>
-     </div>
-
-     {/* After Gallery */}
-     <div className="relative">
-      <div className="relative w-80 h-60 rounded-xl overflow-hidden shadow-lg bg-gray-100">
-       <Image
-        src={portfolio[currentIndex].afterImage}
-        alt={`${portfolio[currentIndex].title} - After`}
-        classNames={{
-         img: "rounded-xl"
-        }}
-        className="w-full h-full object-cover transition-all duration-500"
-        loading="lazy"
-       />
-      </div>
-     </div>
-    </div>
-
-    {/* Mobile: Stacked */}
-    <div className="md:hidden space-y-4">
-     {/* Before Gallery */}
-     <div className="relative">
-      <div className="relative w-full h-60 rounded-xl overflow-hidden shadow-lg bg-gray-100">
-       <Image
-        src={portfolio[currentIndex].beforeImage}
-        alt={`${portfolio[currentIndex].title} - Before`}
-        className="w-full h-full object-cover transition-all duration-500"
-        classNames={{
-         img: "rounded-xl"
-        }}
-        loading="lazy"
-       />
-      </div>
-     </div>
-
-     {/* After Header & Gallery */}
-     <div className="text-center mb-2">
-      <h4 className="text-lg font-semibold text-gray-700 uppercase tracking-wide">
-       {t('professionalDetail.portfolio.after')}
-      </h4>
-     </div>
-     <div className="relative">
-      <div className="relative w-full h-60 rounded-xl overflow-hidden shadow-lg bg-gray-100">
-       <Image
-        src={portfolio[currentIndex].afterImage}
-        alt={`${portfolio[currentIndex].title} - After`}
-        classNames={{
-         img: "rounded-xl"
-        }}
-        className="w-full h-full object-cover transition-all duration-500"
-        loading="lazy"
-       />
-      </div>
-     </div>
-    </div>
-
-    {/* Vertical Separator Line - Desktop Only */}
-    <div className="hidden md:block absolute left-1/2 top-0 bottom-0 transform -translate-x-1/2">
-     <div className="w-px h-full bg-gradient-to-b from-purple-300 via-purple-400 to-purple-300"></div>
-    </div>
-   </div>
-
-
-   {/* Current Project Description */}
-   <div className="text-center space-y-4">
-    <div className="text-xl font-bold text-gray-900 max-w-2xl mx-auto h-12 flex items-center">
-     <h3 className="line-clamp-2 overflow-hidden text-center w-full">
-      {portfolio[currentIndex].title}
-     </h3>
-    </div>
-
-    {/* Description */}
-    <div className="text-gray-600 text-sm leading-relaxed max-w-2xl mx-auto h-10 flex items-center">
-     <p className="line-clamp-2 overflow-hidden">
-      {portfolio[currentIndex].description || "Professional demonstration of cleaning techniques and attention to detail for exceptional results."}
-     </p>
-    </div>
-   </div>
-
-   {/* Slide Indicators */}
-   {portfolio.length > 1 && (
-    <div className="flex justify-center space-x-2">
-     {portfolio.map((_, index) => (
-      <button
-       key={index}
-       onClick={() => goToSlide(index)}
-       className={`w-3 h-3 rounded-full transition-colors ${
-        index === currentIndex
-         ? 'bg-purple-600'
-         : 'bg-gray-300 hover:bg-gray-400'
-       }`}
-      />
-     ))}
-    </div>
-   )}
-  </div>
- );
-}
-
-export default function PortfolioGallery({ portfolio }: PortfolioGalleryProps) {
- const { t } = useTranslation();
-
- const getDifficultyColor = (difficulty?: string) => {
-  switch (difficulty) {
-   case 'Easy': return 'success';
-   case 'Medium': return 'warning';
-   case 'Hard': return 'danger';
-   default: return 'default';
+  if (!gallery || gallery.length === 0) {
+    return null // Don't show section if no gallery items
   }
- };
 
- const renderStars = (rating: number) => {
+  const currentItem = sortedGallery[currentImageIndex]
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % sortedGallery.length)
+  }
+
+  const previousImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + sortedGallery.length) % sortedGallery.length)
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
   return (
-   <div className="flex gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-     <Star
-      key={star}
-      className={`w-4 h-4 ${
-       star <= rating
-        ? 'fill-yellow-400 text-yellow-400'
-        : 'text-gray-300'
-      }`}
-     />
-    ))}
-   </div>
-  );
- };
+    <>
+      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 md:p-8 shadow-lg border border-purple-100">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
+            <Camera className="text-purple-600" size={28} />
+            {t('professionalDetail.gallery.title', 'Work Gallery')}
+          </h3>
+          <p className="text-gray-600">
+            {t('professionalDetail.gallery.subtitle', 'Examples of completed work')}
+          </p>
+        </div>
 
- if (!portfolio || portfolio.length === 0) {
-  return (
-   <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-purple-100">
-    <h3 className="text-3xl font-bold text-gray-900 mb-6 flex items-center justify-center gap-3">
-     <Camera className="text-purple-600" size={28} />
-     {t('professionalDetail.portfolio.title')}
-    </h3>
-    <div className="text-center py-12">
-     <div className="bg-white/70 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-      <Camera className="text-purple-400" size={48} />
-     </div>
-     <p className="text-gray-700 text-lg mb-2">
-      {t('professionalDetail.portfolio.emptyState')}
-     </p>
-     <p className="text-sm text-gray-500">
-      {t('professionalDetail.portfolio.emptyStateCTA')}
-     </p>
-    </div>
-   </div>
-  );
- }
+        {/* Main Gallery Card */}
+        <NextUICard className="bg-white/95 shadow-lg">
+          <CardBody className="p-0">
+            <div
+              className="relative h-64 md:h-80 lg:h-96 overflow-hidden rounded-t-lg group cursor-pointer"
+              onClick={openModal}
+            >
+              <NextImage
+                src={currentItem.imageUrl}
+                alt={currentItem.caption || `Gallery image ${currentImageIndex + 1}`}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+              />
 
- return (
-  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-purple-100">
-   <div className="text-center mb-8">
-    <h3 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
-     <Camera className="text-purple-600" size={28} />
-     {t('professionalDetail.portfolio.title')}
-    </h3>
-    <p className="text-gray-600">{t('professionalDetail.portfolio.showcase')}</p>
-   </div>
+              {/* Expand icon overlay */}
+              <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <Maximize2 size={20} />
+              </div>
 
-   {/* Synchronized Galleries */}
-   <SynchronizedGalleries portfolio={portfolio} />
+              {/* Navigation arrows */}
+              {sortedGallery.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      previousImage()
+                    }}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-10"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      nextImage()
+                    }}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-10"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
 
-  </div>
- );
+                  {/* Image indicators */}
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                    {sortedGallery.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setCurrentImageIndex(index)
+                        }}
+                        className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                          index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                        }`}
+                        aria-label={`Go to image ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Caption below main image */}
+            {currentItem.caption && (
+              <div className="p-4 border-t border-gray-100">
+                <p className="text-gray-700 text-center">{currentItem.caption}</p>
+              </div>
+            )}
+          </CardBody>
+        </NextUICard>
+
+        {/* Thumbnail strip (only show if more than 1 image) */}
+        {sortedGallery.length > 1 && (
+          <div className="mt-4 flex gap-2 justify-center overflow-x-auto pb-2">
+            {sortedGallery.map((item, index) => (
+              <button
+                key={item.id}
+                onClick={() => setCurrentImageIndex(index)}
+                className={`relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all ${
+                  index === currentImageIndex
+                    ? 'ring-2 ring-purple-500 ring-offset-2'
+                    : 'opacity-70 hover:opacity-100'
+                }`}
+              >
+                <NextImage
+                  src={item.imageUrl}
+                  alt={item.caption || `Thumbnail ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Full-size Image Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        size="full"
+        hideCloseButton={true}
+        className="bg-black/95"
+        classNames={{
+          backdrop: 'bg-black/80',
+          wrapper: 'items-center justify-center',
+        }}
+      >
+        <ModalContent>
+          {() => (
+            <>
+              {/* Close button */}
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <X size={32} />
+              </button>
+
+              <ModalBody className="p-0 flex items-center justify-center">
+                <div className="relative w-full h-full flex flex-col items-center justify-center">
+                  {/* Full-size image */}
+                  <div className="relative w-full h-full max-w-7xl max-h-[80vh] p-4">
+                    <NextImage
+                      src={currentItem.imageUrl}
+                      alt={currentItem.caption || `Gallery image ${currentImageIndex + 1}`}
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+
+                  {/* Caption in modal */}
+                  {currentItem.caption && (
+                    <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-6 py-3 rounded-lg max-w-lg text-center">
+                      <p>{currentItem.caption}</p>
+                    </div>
+                  )}
+
+                  {/* Navigation in modal */}
+                  {sortedGallery.length > 1 && (
+                    <>
+                      <button
+                        onClick={previousImage}
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors z-10"
+                        aria-label="Previous image"
+                      >
+                        <ChevronLeft size={32} />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors z-10"
+                        aria-label="Next image"
+                      >
+                        <ChevronRight size={32} />
+                      </button>
+
+                      {/* Image counter */}
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+                        {currentImageIndex + 1} / {sortedGallery.length}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  )
 }

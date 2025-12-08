@@ -172,6 +172,58 @@ import { formatDate } from '@/lib/utils'
 import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
 ```
 
+## Premium Features
+
+### Professional Gallery (Premium)
+
+**Status**: Implemented - UI ready, backend integrated
+
+**Description**: Premium professionals can showcase their work with a gallery of up to 5 images, each with an optional caption.
+
+**Access Control**:
+- **Premium Feature**: Only available to the top 5 professionals per category
+- **Ranking Criteria**: Based on completed tasks, rating, and reviews
+- **@todo**: Implement ranking system and premium access validation
+
+**Implementation:**
+- **Profile Edit**: `/src/app/[lang]/profile/components/portfolio-gallery-manager.tsx`
+- **Display**: `/src/features/professionals/components/sections/portfolio-gallery.tsx`
+- **Data Model**: `GalleryItem` type in `/src/server/domain/user/user.types.ts`
+- **Database**: Stored in `portfolio` JSONB column in users table
+
+**Data Structure:**
+```typescript
+interface GalleryItem {
+  id: string           // Unique ID
+  imageUrl: string     // Supabase Storage URL
+  caption: string      // Short description (max 200 chars)
+  order: number        // Display order (0-4)
+  createdAt: string    // ISO date string
+}
+```
+
+**Usage:**
+```typescript
+// In professional profile edit form
+import { PortfolioGalleryManager } from './portfolio-gallery-manager'
+
+<PortfolioGalleryManager
+  items={profile.gallery || []}
+  onChange={handleGalleryChange}
+  maxItems={5}
+/>
+
+// In professional detail page (display only)
+import PortfolioGallery from '@/features/professionals/components/sections/portfolio-gallery'
+
+<PortfolioGallery gallery={professional.gallery} />
+```
+
+**Future Enhancements (Post-MVP):**
+- Social media links for premium professionals
+- Direct file upload to Supabase Storage (currently URL-based)
+- Video support
+
 ## Development Notes
 
 ### Task Management Workflow

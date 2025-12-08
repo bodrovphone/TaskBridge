@@ -16,9 +16,31 @@ export interface WorkingHours {
   end: string   // Format: "HH:MM" (24-hour)
 }
 
-// @todo FEATURE: Portfolio system - Implement portfolio gallery for professionals
-// Options: JSONB field vs separate professional_portfolio table
-// See: /docs/profile-crud-audit-and-plan.md
+/**
+ * Gallery Item for Professional Portfolio
+ * Simple image + caption structure (Premium feature - top 5 professionals per category)
+ * Max 5 items per professional
+ */
+export interface GalleryItem {
+  id: string           // Unique ID for the item
+  imageUrl: string     // Supabase Storage URL
+  caption: string      // Short caption/description
+  order: number        // Display order (0-4)
+  createdAt: string    // ISO date string
+}
+
+/**
+ * Service Item for Professional Price List
+ * Professionals can list their services with pricing
+ * Max 10 services per professional
+ */
+export interface ServiceItem {
+  id: string           // Unique ID for the service
+  name: string         // Service name (e.g., "Plumbing repair")
+  price: string        // Price display (e.g., "50 лв/час", "от 30 лв")
+  description: string  // Brief description
+  order: number        // Display order
+}
 
 export interface NotificationPreferences {
   email: boolean
@@ -74,6 +96,8 @@ export interface UpdateUserProfileDto {
   languages?: string[]
   weekdayHours?: WorkingHours
   weekendHours?: WorkingHours
+  gallery?: GalleryItem[]
+  services?: ServiceItem[]
 
   // Settings
   notificationPreferences?: NotificationPreferences
@@ -126,6 +150,8 @@ export interface UserProfile {
   weekendHours: WorkingHours
   totalEarningsBgn: number
   profileViews: number
+  gallery: GalleryItem[]
+  services: ServiceItem[]
 
   // Statistics
   tasksCompleted: number

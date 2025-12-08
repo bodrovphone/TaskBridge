@@ -13,7 +13,9 @@ import {
   AvailabilityStatus,
   WorkingHours,
   NotificationPreferences,
-  PrivacySettings
+  PrivacySettings,
+  GalleryItem,
+  ServiceItem
 } from './user.types'
 import { BusinessRuleError } from '@/server/shared/errors/base.error'
 
@@ -50,6 +52,8 @@ export class User {
     public weekendHours: WorkingHours,
     public totalEarningsBgn: number,
     public profileViews: number,
+    public gallery: GalleryItem[],
+    public services: ServiceItem[],
     // Statistics
     public tasksCompleted: number,
     public averageRating: number | null,
@@ -115,6 +119,8 @@ export class User {
       { start: '09:00', end: '14:00' }, // weekendHours
       0, // totalEarningsBgn
       0, // profileViews
+      [], // gallery
+      [], // services
       0, // tasksCompleted
       null, // averageRating
       0, // totalReviews
@@ -175,6 +181,8 @@ export class User {
       profile.weekendHours,
       profile.totalEarningsBgn,
       profile.profileViews,
+      profile.gallery,
+      profile.services,
       profile.tasksCompleted,
       profile.averageRating,
       profile.totalReviews,
@@ -235,6 +243,8 @@ export class User {
       weekendHours: this.weekendHours,
       totalEarningsBgn: this.totalEarningsBgn,
       profileViews: this.profileViews,
+      gallery: this.gallery,
+      services: this.services,
       tasksCompleted: this.tasksCompleted,
       averageRating: this.averageRating,
       totalReviews: this.totalReviews,

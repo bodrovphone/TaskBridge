@@ -626,7 +626,9 @@ export type Database = {
           payment_methods: string[] | null
           phone: string | null
           phone_verified_at: string | null
+          portfolio: Json | null
           preferred_contact: string | null
+          services: Json | null
           preferred_language: string | null
           preferred_notification_channel: string | null
           privacy_settings: Json | null
@@ -680,7 +682,9 @@ export type Database = {
           payment_methods?: string[] | null
           phone?: string | null
           phone_verified_at?: string | null
+          portfolio?: Json | null
           preferred_contact?: string | null
+          services?: Json | null
           preferred_language?: string | null
           preferred_notification_channel?: string | null
           privacy_settings?: Json | null
@@ -734,7 +738,9 @@ export type Database = {
           payment_methods?: string[] | null
           phone?: string | null
           phone_verified_at?: string | null
+          portfolio?: Json | null
           preferred_contact?: string | null
+          services?: Json | null
           preferred_language?: string | null
           preferred_notification_channel?: string | null
           privacy_settings?: Json | null

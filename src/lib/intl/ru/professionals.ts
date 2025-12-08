@@ -166,6 +166,12 @@ export const professionals = {
   'professionalDetail.portfolio.after': 'После',
   'professionalDetail.portfolio.viewMore': 'Посмотреть все примеры',
   'professionalDetail.portfolio.showcase': 'Профессиональные примеры работ',
+
+  // Gallery (Premium Feature)
+  'professionalDetail.gallery.title': 'Галерея работ',
+  'professionalDetail.gallery.subtitle': 'Примеры выполненных работ',
+  'professionalDetail.gallery.imageView': 'Просмотр изображения',
+
   'professionalDetail.completedTasks.title': 'Выполненные задачи',
   'professionalDetail.completedTasks.noTasks': 'Пока нет выполненных задач',
   'professionalDetail.completedTasks.hugePotential':

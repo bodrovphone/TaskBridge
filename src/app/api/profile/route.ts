@@ -116,6 +116,8 @@ export async function PUT(request: NextRequest) {
     if (updates.languages !== undefined) user.languages = updates.languages
     if (updates.weekdayHours !== undefined) user.weekdayHours = updates.weekdayHours
     if (updates.weekendHours !== undefined) user.weekendHours = updates.weekendHours
+    if (updates.gallery !== undefined) user.gallery = updates.gallery
+    if (updates.services !== undefined) user.services = updates.services
 
     // Settings updates
     if (updates.notificationPreferences !== undefined) {

@@ -18,6 +18,11 @@ interface ServicesSectionProps {
 export default function ServicesSection({ services }: ServicesSectionProps) {
  const { t } = useTranslation();
 
+ // Don't render section if no services
+ if (!services || services.length === 0) {
+  return null;
+ }
+
  return (
   <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
    <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">

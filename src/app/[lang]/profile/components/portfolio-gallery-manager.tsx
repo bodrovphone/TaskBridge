@@ -1,347 +1,455 @@
 'use client'
 
-import { useState } from 'react'
-import { Card, CardBody, Button, Input, Textarea, Chip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
-import { Plus, Edit, Trash2, X, Save, Clock, Image as ImageIcon } from 'lucide-react'
-import { getCategoryLabelBySlug } from '@/features/categories'
+import { useState, useRef, useCallback, useEffect } from 'react'
+import { Button, Input, Progress, Card, CardBody, Spinner } from '@nextui-org/react'
+import { Plus, Trash2, Upload, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import Image from 'next/image'
+import { GalleryItem } from '@/server/domain/user/user.types'
+import { useAuth } from '@/features/auth'
+import { toast } from '@/hooks/use-toast'
+import { compressImageAdvanced, formatBytes } from '@/lib/utils/advanced-image-compression'
 
-interface PortfolioItem {
- id: string
- title: string
- beforeImage: string
- afterImage: string
- description: string
- duration: string
- tags: string[] // Category slugs
+// Debounce hook for caption saving
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
+
+  return debouncedValue
 }
 
-interface PortfolioGalleryManagerProps {
- items: PortfolioItem[]
- onChange: (value: PortfolioItem[]) => void
- maxItems?: number
+interface GalleryManagerProps {
+  items: GalleryItem[]
+  onChange: (items: GalleryItem[]) => Promise<void>
+  maxItems?: number
+}
+
+interface SlotState {
+  isCompressing: boolean
+  isUploading: boolean
+  compressionProgress: number
+  previewUrl: string | null
+  compressionStats: {
+    originalSize: number
+    compressedSize: number
+    savingsPercent: number
+  } | null
+  error: string | null
 }
 
 export function PortfolioGalleryManager({
- items,
- onChange,
- maxItems = 6
-}: PortfolioGalleryManagerProps) {
- const { t } = useTranslation()
- const [isAddModalOpen, setIsAddModalOpen] = useState(false)
- const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null)
- const [formData, setFormData] = useState<Partial<PortfolioItem>>({
-  title: '',
-  beforeImage: '',
-  afterImage: '',
-  description: '',
-  duration: '',
-  tags: []
- })
+  items,
+  onChange,
+  maxItems = 5
+}: GalleryManagerProps) {
+  const { t } = useTranslation()
+  const { authenticatedFetch } = useAuth()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [activeSlot, setActiveSlot] = useState<number | null>(null)
+  const [slotStates, setSlotStates] = useState<Record<number, SlotState>>({})
 
- const openAddModal = () => {
-  setFormData({
-   title: '',
-   beforeImage: '',
-   afterImage: '',
-   description: '',
-   duration: '',
-   tags: []
-  })
-  setEditingItem(null)
-  setIsAddModalOpen(true)
- }
+  // Local caption state for immediate UI updates
+  const [localCaptions, setLocalCaptions] = useState<Record<string, string>>({})
 
- const openEditModal = (item: PortfolioItem) => {
-  setFormData(item)
-  setEditingItem(item)
-  setIsAddModalOpen(true)
- }
+  // Sort by order
+  const sortedItems = [...items].sort((a, b) => a.order - b.order)
 
- const handleSave = () => {
-  if (!formData.title || !formData.beforeImage || !formData.afterImage) {
-   alert('Please fill in title and both images')
-   return
+  // Initialize local captions from items
+  useEffect(() => {
+    const captions: Record<string, string> = {}
+    items.forEach(item => {
+      captions[item.id] = item.caption
+    })
+    setLocalCaptions(captions)
+  }, [items])
+
+  // Debounced captions for saving
+  const debouncedCaptions = useDebounce(localCaptions, 800)
+
+  // Save captions when debounced value changes
+  const lastSavedCaptionsRef = useRef<string>('')
+  useEffect(() => {
+    const captionsJson = JSON.stringify(debouncedCaptions)
+    // Only save if captions actually changed and we have items
+    if (captionsJson !== lastSavedCaptionsRef.current && items.length > 0) {
+      lastSavedCaptionsRef.current = captionsJson
+
+      // Check if any caption actually differs from the server state
+      const hasChanges = items.some(item =>
+        debouncedCaptions[item.id] !== undefined &&
+        debouncedCaptions[item.id] !== item.caption
+      )
+
+      if (hasChanges) {
+        const updated = items.map(item => ({
+          ...item,
+          caption: debouncedCaptions[item.id] ?? item.caption
+        }))
+        onChange(updated).catch(error => {
+          console.error('Failed to save captions:', error)
+        })
+      }
+    }
+  }, [debouncedCaptions, items, onChange])
+
+  const updateSlotState = (slotIndex: number, updates: Partial<SlotState>) => {
+    setSlotStates(prev => ({
+      ...prev,
+      [slotIndex]: { ...prev[slotIndex], ...updates }
+    }))
   }
 
-  if (editingItem) {
-   // Update existing item
-   onChange(items.map(item =>
-    item.id === editingItem.id
-     ? { ...item, ...formData } as PortfolioItem
-     : item
-   ))
-  } else {
-   // Add new item
-   const newItem: PortfolioItem = {
-    id: Date.now().toString(),
-    title: formData.title,
-    beforeImage: formData.beforeImage || '',
-    afterImage: formData.afterImage || '',
-    description: formData.description || '',
-    duration: formData.duration || '',
-    tags: formData.tags || []
-   }
-   onChange([...items, newItem])
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    const slotIndex = activeSlot
+    if (!file || slotIndex === null) return
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp']
+    if (!validTypes.includes(file.type)) {
+      updateSlotState(slotIndex, {
+        error: t('profile.gallery.useJpgPngWebp', 'Please use JPG, PNG, or WEBP')
+      })
+      return
+    }
+
+    // Initialize slot state
+    updateSlotState(slotIndex, {
+      isCompressing: true,
+      isUploading: false,
+      compressionProgress: 0,
+      previewUrl: null,
+      compressionStats: null,
+      error: null
+    })
+
+    try {
+      // Step 1: Compress image client-side (light compression - preserve quality)
+      const result = await compressImageAdvanced(
+        file,
+        { maxSizeMB: 4, maxWidthOrHeight: 2560, initialQuality: 0.95 },
+        (progress) => {
+          updateSlotState(slotIndex, { compressionProgress: progress })
+        }
+      )
+
+      // Validate compressed size
+      const MAX_SIZE = 5 * 1024 * 1024
+      if (result.compressedSize > MAX_SIZE) {
+        updateSlotState(slotIndex, {
+          isCompressing: false,
+          error: t('profile.gallery.maxSize', 'Maximum 5MB allowed')
+        })
+        return
+      }
+
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(result.blob)
+
+      updateSlotState(slotIndex, {
+        isCompressing: false,
+        isUploading: true,
+        previewUrl,
+        compressionStats: {
+          originalSize: result.originalSize,
+          compressedSize: result.compressedSize,
+          savingsPercent: result.savingsPercent
+        }
+      })
+
+      // Step 2: Upload to server
+      const formData = new FormData()
+      formData.append('image', result.blob, file.name)
+      formData.append('index', slotIndex.toString())
+
+      const response = await authenticatedFetch('/api/profile/gallery', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Upload failed')
+      }
+
+      const data = await response.json()
+
+      // Step 3: Update gallery items
+      const newItem: GalleryItem = {
+        id: Date.now().toString(),
+        imageUrl: data.imageUrl,
+        caption: '',
+        order: slotIndex,
+        createdAt: new Date().toISOString()
+      }
+
+      // Replace if exists at this slot, otherwise add
+      const existingIndex = sortedItems.findIndex(item => item.order === slotIndex)
+      if (existingIndex >= 0) {
+        const updated = [...sortedItems]
+        updated[existingIndex] = { ...updated[existingIndex], imageUrl: data.imageUrl }
+        await onChange(updated)
+      } else {
+        await onChange([...sortedItems, newItem])
+      }
+
+      // Only clear preview after the save completes successfully
+      updateSlotState(slotIndex, {
+        isUploading: false,
+        previewUrl: null, // Clear preview, actual image will show from items prop
+        compressionStats: null // Clear stats after successful save
+      })
+
+      toast({
+        title: t('profile.gallery.uploadSuccess', 'Image uploaded'),
+      })
+    } catch (error: any) {
+      console.error('Gallery upload error:', error)
+      updateSlotState(slotIndex, {
+        isCompressing: false,
+        isUploading: false,
+        previewUrl: null,
+        error: error.message
+      })
+      toast({
+        title: t('profile.gallery.uploadError', 'Upload failed'),
+        description: error.message,
+        variant: 'destructive'
+      })
+    }
+
+    setActiveSlot(null)
   }
 
-  setIsAddModalOpen(false)
-  setFormData({})
-  setEditingItem(null)
- }
+  const handleDelete = async (item: GalleryItem) => {
+    try {
+      const response = await authenticatedFetch('/api/profile/gallery', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageUrl: item.imageUrl })
+      })
 
- const handleDelete = (id: string) => {
-  if (confirm('Are you sure you want to delete this portfolio item?')) {
-   onChange(items.filter(item => item.id !== id))
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Delete failed')
+      }
+
+      // Remove from local state and reorder
+      const updated = sortedItems
+        .filter(i => i.id !== item.id)
+        .map((i, idx) => ({ ...i, order: idx }))
+
+      await onChange(updated)
+
+      // Clear slot state
+      setSlotStates(prev => {
+        const newState = { ...prev }
+        delete newState[item.order]
+        return newState
+      })
+
+      toast({
+        title: t('profile.gallery.deleteSuccess', 'Image deleted'),
+      })
+    } catch (error: any) {
+      console.error('Gallery delete error:', error)
+      toast({
+        title: t('profile.gallery.deleteError', 'Delete failed'),
+        description: error.message,
+        variant: 'destructive'
+      })
+    }
   }
- }
 
- return (
-  <div className="space-y-4">
-   {/* Portfolio Items Grid */}
-   {items.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-     {items.map(item => (
-      <Card key={item.id} className="shadow-md hover:shadow-lg transition-shadow">
-       <CardBody className="p-4 space-y-3">
-        {/* Before/After Images */}
-        <div className="grid grid-cols-2 gap-2">
-         <div className="space-y-1">
-          <p className="text-xs text-gray-500 uppercase font-medium">Before</p>
-          <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-           {item.beforeImage ? (
-            <Image
-             src={item.beforeImage}
-             alt="Before"
-             className="object-cover w-full h-full"
-            />
-           ) : (
-            <div className="flex items-center justify-center h-full">
-             <ImageIcon className="w-8 h-8 text-gray-300" />
+  // Update local caption state (debounced save happens automatically)
+  const handleCaptionChange = (itemId: string, caption: string) => {
+    setLocalCaptions(prev => ({
+      ...prev,
+      [itemId]: caption
+    }))
+  }
+
+  const openFilePicker = (slotIndex: number) => {
+    setActiveSlot(slotIndex)
+    fileInputRef.current?.click()
+  }
+
+  // Create array of slots (filled + empty)
+  const slots: (GalleryItem | null)[] = []
+  for (let i = 0; i < maxItems; i++) {
+    const item = sortedItems.find(item => item.order === i)
+    slots.push(item || null)
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={handleFileSelect}
+      />
+
+      {/* Gallery Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {slots.map((item, index) => {
+          const slotState = slotStates[index] || {}
+          const isProcessing = slotState.isCompressing || slotState.isUploading
+
+          return (
+            <div key={item?.id || `slot-${index}`} className="space-y-2">
+              {/* Image Slot */}
+              <div className="relative aspect-square rounded-xl overflow-hidden border-2 border-dashed border-gray-200 bg-gray-50 hover:border-primary-300 hover:bg-primary-50/50 transition-all group">
+                {/* Show preview during upload or actual image */}
+                {(slotState.previewUrl || item?.imageUrl) ? (
+                  <>
+                    <Image
+                      src={slotState.previewUrl || item?.imageUrl || ''}
+                      alt={item?.caption || `Gallery image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    />
+                    {/* Processing overlay */}
+                    {isProcessing && (
+                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 p-2">
+                        <Spinner size="sm" color="white" />
+                        <p className="text-xs text-white text-center">
+                          {slotState.isCompressing
+                            ? t('profile.gallery.compressing', 'Optimizing...')
+                            : t('profile.gallery.uploading', 'Uploading...')}
+                        </p>
+                        {slotState.isCompressing && (
+                          <Progress
+                            value={slotState.compressionProgress}
+                            size="sm"
+                            color="primary"
+                            className="max-w-[80%]"
+                          />
+                        )}
+                      </div>
+                    )}
+                    {/* Hover overlay with actions */}
+                    {!isProcessing && item && (
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                        <Button
+                          size="sm"
+                          color="danger"
+                          variant="solid"
+                          isIconOnly
+                          onPress={() => handleDelete(item)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          color="primary"
+                          variant="solid"
+                          isIconOnly
+                          onPress={() => openFilePicker(index)}
+                        >
+                          <Upload className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Empty slot - upload button
+                  <button
+                    onClick={() => openFilePicker(index)}
+                    disabled={isProcessing}
+                    className="w-full h-full flex flex-col items-center justify-center text-gray-400 hover:text-primary-500 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Spinner size="sm" />
+                        <span className="text-xs mt-2">
+                          {slotState.isCompressing ? `${slotState.compressionProgress}%` : '...'}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-8 h-8 mb-1" />
+                        <span className="text-xs font-medium">
+                          {t('profile.gallery.addImage', 'Add')}
+                        </span>
+                      </>
+                    )}
+                  </button>
+                )}
+
+                {/* Error indicator */}
+                {slotState.error && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-danger-500 text-white text-xs p-1 text-center">
+                    <AlertCircle className="w-3 h-3 inline mr-1" />
+                    {slotState.error}
+                  </div>
+                )}
+              </div>
+
+              {/* Compression Stats (shown during/after compression) */}
+              {slotState.compressionStats && !item && (
+                <Card className="border border-success-200 bg-success-50">
+                  <CardBody className="p-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-success-600 flex-shrink-0" />
+                      <div className="text-xs">
+                        <span className="text-success-700 font-medium">
+                          {slotState.compressionStats.savingsPercent}%
+                        </span>
+                        <span className="text-success-600 ml-1">
+                          {t('profile.gallery.smaller', 'smaller')}
+                        </span>
+                        <p className="text-success-500">
+                          {formatBytes(slotState.compressionStats.originalSize)} → {formatBytes(slotState.compressionStats.compressedSize)}
+                        </p>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              )}
+
+              {/* Caption Input (only for filled slots with actual images) */}
+              {item && !isProcessing && (
+                <div className="rounded-lg border-2 border-purple-200 bg-purple-50/50 p-1.5 shadow-sm">
+                  <Input
+                    size="sm"
+                    placeholder={t('profile.gallery.captionPlaceholder', 'Caption (optional)')}
+                    value={localCaptions[item.id] ?? item.caption}
+                    onValueChange={(value) => handleCaptionChange(item.id, value)}
+                    maxLength={30}
+                    classNames={{
+                      input: 'text-xs',
+                      inputWrapper: 'h-auto min-h-8 bg-white border-purple-100'
+                    }}
+                  />
+                </div>
+              )}
             </div>
-           )}
-          </div>
-         </div>
-         <div className="space-y-1">
-          <p className="text-xs text-gray-500 uppercase font-medium">After</p>
-          <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-           {item.afterImage ? (
-            <Image
-             src={item.afterImage}
-             alt="After"
-             className="object-cover w-full h-full"
-            />
-           ) : (
-            <div className="flex items-center justify-center h-full">
-             <ImageIcon className="w-8 h-8 text-gray-300" />
-            </div>
-           )}
-          </div>
-         </div>
-        </div>
-
-        {/* Title & Description */}
-        <div>
-         <h4 className="font-semibold text-gray-900">{item.title}</h4>
-         {item.description && (
-          <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
-         )}
-        </div>
-
-        {/* Duration & Tags */}
-        <div className="flex items-center justify-between gap-3">
-         {item.duration && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-500 flex-shrink-0">
-           <Clock className="w-3.5 h-3.5" />
-           <span className="whitespace-nowrap font-medium">{item.duration}</span>
-          </div>
-         )}
-         <div className="flex flex-wrap gap-1 justify-end">
-          {item.tags.slice(0, 2).map(tag => (
-           <Chip key={tag} size="sm" variant="flat" color="primary" className="text-xs">
-            {getCategoryLabelBySlug(tag, t)}
-           </Chip>
-          ))}
-          {item.tags.length > 2 && (
-           <Chip size="sm" variant="flat" className="text-xs">
-            +{item.tags.length - 2}
-           </Chip>
-          )}
-         </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2 pt-2 border-t border-gray-100">
-         <Button
-          size="sm"
-          variant="flat"
-          color="primary"
-          startContent={<Edit className="w-3 h-3" />}
-          onPress={() => openEditModal(item)}
-          className="flex-1"
-         >
-          Edit
-         </Button>
-         <Button
-          size="sm"
-          variant="flat"
-          color="danger"
-          startContent={<Trash2 className="w-3 h-3" />}
-          onPress={() => handleDelete(item.id)}
-          className="flex-1"
-         >
-          Delete
-         </Button>
-        </div>
-       </CardBody>
-      </Card>
-     ))}
-    </div>
-   ) : (
-    <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-     <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-     <p className="text-gray-500 mb-4">No portfolio items yet</p>
-     <Button
-      color="primary"
-      variant="flat"
-      startContent={<Plus className="w-4 h-4" />}
-      onPress={openAddModal}
-     >
-      Add Your First Portfolio Item
-     </Button>
-    </div>
-   )}
-
-   {/* Add Button (when items exist) */}
-   {items.length > 0 && items.length < maxItems && (
-    <Button
-     color="primary"
-     variant="bordered"
-     startContent={<Plus className="w-4 h-4" />}
-     onPress={openAddModal}
-     className="w-full"
-    >
-     Add Portfolio Item ({items.length}/{maxItems})
-    </Button>
-   )}
-
-   {/* Add/Edit Modal */}
-   <Modal
-    isOpen={isAddModalOpen}
-    onClose={() => setIsAddModalOpen(false)}
-    size="2xl"
-    scrollBehavior="inside"
-   >
-    <ModalContent>
-     <ModalHeader>
-      {editingItem ? 'Edit Portfolio Item' : 'Add Portfolio Item'}
-     </ModalHeader>
-     <ModalBody>
-      <div className="space-y-4">
-       {/* Title */}
-       <Input
-        label="Project Title"
-        placeholder="e.g., Deep cleaning of apartment"
-        value={formData.title || ''}
-        onValueChange={(value) => setFormData(prev => ({ ...prev, title: value }))}
-        isRequired
-       />
-
-       {/* Images */}
-       <div className="grid grid-cols-2 gap-4">
-        <Input
-         label="Before Image URL"
-         placeholder="https://..."
-         value={formData.beforeImage || ''}
-         onValueChange={(value) => setFormData(prev => ({ ...prev, beforeImage: value }))}
-         isRequired
-         description="URL to before image"
-        />
-        <Input
-         label="After Image URL"
-         placeholder="https://..."
-         value={formData.afterImage || ''}
-         onValueChange={(value) => setFormData(prev => ({ ...prev, afterImage: value }))}
-         isRequired
-         description="URL to after image"
-        />
-       </div>
-
-       {/* Image Preview */}
-       {(formData.beforeImage || formData.afterImage) && (
-        <div className="grid grid-cols-2 gap-4">
-         <div>
-          <p className="text-xs text-gray-500 mb-1">Before Preview</p>
-          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-           {formData.beforeImage && (
-            <Image
-             src={formData.beforeImage}
-             alt="Before preview"
-             className="object-cover w-full h-full"
-            />
-           )}
-          </div>
-         </div>
-         <div>
-          <p className="text-xs text-gray-500 mb-1">After Preview</p>
-          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-           {formData.afterImage && (
-            <Image
-             src={formData.afterImage}
-             alt="After preview"
-             className="object-cover w-full h-full"
-            />
-           )}
-          </div>
-         </div>
-        </div>
-       )}
-
-       {/* Description */}
-       <Textarea
-        label="Description"
-        placeholder="Describe the work done, techniques used, challenges overcome..."
-        value={formData.description || ''}
-        onValueChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
-        minRows={3}
-        maxRows={5}
-       />
-
-       {/* Duration */}
-       <Input
-        label="Duration (Optional)"
-        placeholder="e.g., 4 hours, 2 days"
-        value={formData.duration || ''}
-        onValueChange={(value) => setFormData(prev => ({ ...prev, duration: value }))}
-        startContent={<Clock className="w-4 h-4 text-gray-400" />}
-       />
-
-       {/* Tags Note */}
-       <div className="p-3 bg-blue-50 rounded-lg">
-        <p className="text-sm text-blue-900">
-         💡 Tags will be automatically added based on your selected service categories
-        </p>
-       </div>
+          )
+        })}
       </div>
-     </ModalBody>
-     <ModalFooter>
-      <Button
-       variant="bordered"
-       onPress={() => setIsAddModalOpen(false)}
-       startContent={<X className="w-4 h-4" />}
-      >
-       Cancel
-      </Button>
-      <Button
-       color="primary"
-       onPress={handleSave}
-       startContent={<Save className="w-4 h-4" />}
-      >
-       {editingItem ? 'Update' : 'Add'} Portfolio Item
-      </Button>
-     </ModalFooter>
-    </ModalContent>
-   </Modal>
-  </div>
- )
+
+      {/* Helper text */}
+      <p className="text-xs text-gray-500 text-center">
+        {t('profile.gallery.helperText', 'Click on empty slots to upload images. JPG, PNG, or WEBP (max 5MB each)')}
+      </p>
+    </div>
+  )
 }
