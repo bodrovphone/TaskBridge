@@ -86,6 +86,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     },
     bio: professional.bio || t('professionalDetail.defaultBio', 'Професионален специалист с опит в сферата.'),
     services: professional.services || [],
+    serviceCategories: professional.serviceCategories || [],
     gallery: professional.gallery || [],
     reviews: professional.reviews || [],
     contactSettings: professional.contactSettings || {

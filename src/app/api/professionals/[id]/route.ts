@@ -252,6 +252,7 @@ export async function GET(
       completedTasksList: completedTasksList,
       gallery: professional.portfolio || [],
       services: professional.services || [],
+      serviceCategories: professional.service_categories || [],
       reviews: transformedReviews,
       responseTime: professional.response_time_hours
         ? `${professional.response_time_hours} часа`

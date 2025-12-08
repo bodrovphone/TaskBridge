@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
 import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
 import { formatYearsExperience } from '@/lib/utils/pluralization';
+import { getCategoryLabelBySlug } from '@/features/categories';
 
 interface Professional {
  id: string;
@@ -25,6 +26,7 @@ interface Professional {
   address: boolean;
  };
  safetyStatus: SafetyStatus;
+ serviceCategories?: string[];
 }
 
 interface ProfessionalHeaderProps {
@@ -85,9 +87,39 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
         {professional.name}
        </h1>
 
-       <p className="text-base sm:text-lg text-gray-600 mb-4">
+       <p className="text-base sm:text-lg text-gray-600 mb-3">
         {professional.title}
        </p>
+
+       {/* Service Categories / Skills */}
+       {professional.serviceCategories && professional.serviceCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4 justify-center lg:justify-start">
+         {professional.serviceCategories.map((category, index) => {
+          const colors = [
+           'bg-blue-100 text-blue-700',
+           'bg-green-100 text-green-700',
+           'bg-purple-100 text-purple-700',
+           'bg-orange-100 text-orange-700',
+           'bg-pink-100 text-pink-700',
+           'bg-teal-100 text-teal-700',
+           'bg-indigo-100 text-indigo-700',
+           'bg-amber-100 text-amber-700',
+          ];
+          // Use category string to deterministically pick color (same category = same color)
+          const colorIndex = category.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+          return (
+           <Chip
+            key={category}
+            size="sm"
+            variant="flat"
+            className={colors[colorIndex]}
+           >
+            {getCategoryLabelBySlug(category, t)}
+           </Chip>
+          );
+         })}
+        </div>
+       )}
 
        {/* Safety & Verification Indicators */}
        <SafetyIndicators
