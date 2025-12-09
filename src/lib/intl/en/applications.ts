@@ -142,6 +142,39 @@ export const applications = {
   'acceptApplication.warning': 'Once you accept this application, you\'ll be committed to working with {{name}}. All other applications will be rejected automatically.',
   'acceptApplication.confirm': 'Accept Application',
   'acceptApplication.cancel': 'Cancel',
+  'acceptApplication.accepting': 'Accepting...',
+
+  // Accept Application Wizard Steps
+  'acceptApplication.wizard.reviewTitle': 'Review Offer',
+  'acceptApplication.wizard.reviewSubtitle': "Professional's proposal",
+  'acceptApplication.wizard.reviewHelp': "Review the professional's offer before proceeding.",
+  'acceptApplication.wizard.professional': 'Professional',
+  'acceptApplication.wizard.proposedPrice': 'Proposed Price',
+  'acceptApplication.wizard.timeline': 'Timeline',
+  'acceptApplication.wizard.professionalMessage': "Professional's Message",
+
+  'acceptApplication.wizard.contactTitle': 'Share Contact',
+  'acceptApplication.wizard.contactSubtitle': 'How to reach you',
+  'acceptApplication.wizard.contactHelp': 'Choose how the professional can contact you.',
+
+  'acceptApplication.wizard.messageTitle': 'Add Message',
+  'acceptApplication.wizard.messageSubtitle': 'Optional note',
+  'acceptApplication.wizard.messageHelp': 'Add a personal message for {{name}} (optional).',
+  'acceptApplication.wizard.messageTipTitle': 'Quick tips',
+  'acceptApplication.wizard.messageTip1': "• Mention when you're available",
+  'acceptApplication.wizard.messageTip2': '• Ask any last questions',
+  'acceptApplication.wizard.messageTip3': '• Share relevant details about the task',
+
+  'acceptApplication.wizard.confirmTitle': 'Confirm',
+  'acceptApplication.wizard.confirmSubtitle': 'Final review',
+  'acceptApplication.wizard.confirmHelp': 'Review your acceptance details before confirming.',
+  'acceptApplication.wizard.sharingContact': 'Sharing with professional',
+  'acceptApplication.wizard.yourMessage': 'Your message',
+  'acceptApplication.wizard.noMessage': 'No message added',
+  'acceptApplication.wizard.readyToAccept': 'Ready to accept!',
+  'acceptApplication.wizard.acceptNote': 'Click Accept to confirm. {{name}} will be notified.',
+  'acceptApplication.wizard.agreementRequired': 'Agreement required',
+  'acceptApplication.wizard.pleaseAgree': 'Please check the box above to proceed.',
 
   // Reject Application Dialog
   'rejectApplication.title': 'Reject Application',

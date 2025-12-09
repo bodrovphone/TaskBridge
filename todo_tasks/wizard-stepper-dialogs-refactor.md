@@ -4,7 +4,7 @@
 Refactor complex dialogs that don't fit well on mobile into wizard-style stepper dialogs. This improves mobile UX by breaking complex forms into digestible steps with clear progress indication.
 
 ## Status
-**In Progress** - First dialog completed, awaiting mobile testing before continuing.
+**In Progress** - Two dialogs completed, awaiting mobile testing before continuing with ReviewDialog.
 
 ## Problem
 Several dialogs have too many fields/sections displayed at once, causing:
@@ -40,33 +40,34 @@ Several dialogs have too many fields/sections displayed at once, causing:
 
 ---
 
-## Candidates for Next Phase (after mobile testing)
-
-### 1. AcceptApplicationDialog (434 lines) - **HIGH PRIORITY**
+### ✅ AcceptApplicationDialog (Accept Application) - COMPLETED
 **Location:** `src/components/tasks/accept-application-dialog.tsx`
+**Reduced:** 434 lines → 251 lines (main file) + 4 step components
 
-**Current state:** Single long form with:
-- Application summary (price, timeline, message preview)
-- Contact method selection (phone/email/custom)
-- Custom contact input
-- Optional message to professional
-- Contact sharing agreement checkbox
+**Implementation:**
+- Reused `WizardDialog` component
+- Split into 4 step components:
+  - `ReviewApplicationStep.tsx` - Professional's offer details (price, timeline, message)
+  - `ShareContactStep.tsx` - Contact method selection (phone/email/custom)
+  - `AddMessageStep.tsx` - Optional message to professional with tips
+  - `ConfirmStep.tsx` - Summary with edit buttons + agreement checkbox
+- Full i18n support (EN/BG/RU)
+- Mobile-responsive (full-screen on mobile, modal on desktop)
+- Framer Motion animations between steps
+- Green gradient header matching acceptance theme
 
-**Proposed wizard steps:**
-1. **Review Application** - Show professional's offer details (price, timeline, message)
-2. **Share Contact** - Choose how to share your contact info
-3. **Add Message** (optional) - Write a message to the professional
-4. **Confirm** - Summary + agreement checkbox + submit
-
-**Why this should be next:**
-- Clear logical separation into steps
-- High-value user flow (accepting work)
-- Currently most problematic on mobile
-- ~434 lines can be split into ~4 focused components
+**Files created:**
+- `src/components/tasks/accept-application-dialog/steps/ReviewApplicationStep.tsx`
+- `src/components/tasks/accept-application-dialog/steps/ShareContactStep.tsx`
+- `src/components/tasks/accept-application-dialog/steps/AddMessageStep.tsx`
+- `src/components/tasks/accept-application-dialog/steps/ConfirmStep.tsx`
+- `src/components/tasks/accept-application-dialog/steps/index.ts`
 
 ---
 
-### 2. ReviewDialog (394 lines)
+## Candidates for Next Phase (after mobile testing)
+
+### 1. ReviewDialog (394 lines)
 **Location:** `src/features/reviews/components/review-dialog.tsx`
 
 **Current state:** Rate + write review in single view
@@ -138,8 +139,8 @@ interface WizardDialogProps {
 - [x] Final step shows summary before submit
 - [x] Translated step titles in EN/BG/RU
 
-### Phase 2 - AcceptApplicationDialog (pending mobile testing)
-- [ ] Refactor AcceptApplicationDialog into 4 steps using WizardDialog
+### Phase 2 - AcceptApplicationDialog ✅ COMPLETED
+- [x] Refactor AcceptApplicationDialog into 4 steps using WizardDialog
 - [ ] Test on mobile devices
 - [ ] Verify contact sharing flow works correctly
 

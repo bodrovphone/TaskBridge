@@ -142,6 +142,39 @@ export const applications = {
   'acceptApplication.warning': 'После принятия этой заявки вы обязуетесь работать с {{name}}. Все остальные заявки будут отклонены автоматически.',
   'acceptApplication.confirm': 'Принять заявку',
   'acceptApplication.cancel': 'Отмена',
+  'acceptApplication.accepting': 'Принятие...',
+
+  // Accept Application Wizard Steps
+  'acceptApplication.wizard.reviewTitle': 'Обзор предложения',
+  'acceptApplication.wizard.reviewSubtitle': 'Предложение специалиста',
+  'acceptApplication.wizard.reviewHelp': 'Ознакомьтесь с предложением специалиста перед продолжением.',
+  'acceptApplication.wizard.professional': 'Специалист',
+  'acceptApplication.wizard.proposedPrice': 'Предложенная цена',
+  'acceptApplication.wizard.timeline': 'Сроки',
+  'acceptApplication.wizard.professionalMessage': 'Сообщение от специалиста',
+
+  'acceptApplication.wizard.contactTitle': 'Поделиться контактом',
+  'acceptApplication.wizard.contactSubtitle': 'Как связаться с вами',
+  'acceptApplication.wizard.contactHelp': 'Выберите, как специалист может связаться с вами.',
+
+  'acceptApplication.wizard.messageTitle': 'Добавить сообщение',
+  'acceptApplication.wizard.messageSubtitle': 'По желанию',
+  'acceptApplication.wizard.messageHelp': 'Добавьте личное сообщение для {{name}} (необязательно).',
+  'acceptApplication.wizard.messageTipTitle': 'Быстрые советы',
+  'acceptApplication.wizard.messageTip1': '• Укажите, когда вы свободны',
+  'acceptApplication.wizard.messageTip2': '• Задайте последние вопросы',
+  'acceptApplication.wizard.messageTip3': '• Поделитесь важными деталями о задаче',
+
+  'acceptApplication.wizard.confirmTitle': 'Подтверждение',
+  'acceptApplication.wizard.confirmSubtitle': 'Финальный обзор',
+  'acceptApplication.wizard.confirmHelp': 'Проверьте детали принятия перед подтверждением.',
+  'acceptApplication.wizard.sharingContact': 'Передача специалисту',
+  'acceptApplication.wizard.yourMessage': 'Ваше сообщение',
+  'acceptApplication.wizard.noMessage': 'Сообщение не добавлено',
+  'acceptApplication.wizard.readyToAccept': 'Готово к принятию!',
+  'acceptApplication.wizard.acceptNote': 'Нажмите Принять для подтверждения. {{name}} будет уведомлен.',
+  'acceptApplication.wizard.agreementRequired': 'Требуется согласие',
+  'acceptApplication.wizard.pleaseAgree': 'Пожалуйста, поставьте галочку выше для продолжения.',
 
   // Reject Application Dialog
   'rejectApplication.title': 'Отклонить заявку',

@@ -142,6 +142,39 @@ export const applications = {
   'acceptApplication.warning': 'След като приемете тази кандидатура, ще се ангажирате да работите с {{name}}. Всички други кандидатури ще бъдат отхвърлени автоматично.',
   'acceptApplication.confirm': 'Приеми кандидатурата',
   'acceptApplication.cancel': 'Отказ',
+  'acceptApplication.accepting': 'Приемане...',
+
+  // Accept Application Wizard Steps
+  'acceptApplication.wizard.reviewTitle': 'Преглед на офертата',
+  'acceptApplication.wizard.reviewSubtitle': 'Предложение на специалиста',
+  'acceptApplication.wizard.reviewHelp': 'Прегледайте офертата на специалиста преди да продължите.',
+  'acceptApplication.wizard.professional': 'Специалист',
+  'acceptApplication.wizard.proposedPrice': 'Предложена цена',
+  'acceptApplication.wizard.timeline': 'Срокове',
+  'acceptApplication.wizard.professionalMessage': 'Съобщение от специалиста',
+
+  'acceptApplication.wizard.contactTitle': 'Споделяне на контакт',
+  'acceptApplication.wizard.contactSubtitle': 'Как да се свържат с вас',
+  'acceptApplication.wizard.contactHelp': 'Изберете как специалистът може да се свърже с вас.',
+
+  'acceptApplication.wizard.messageTitle': 'Добавяне на съобщение',
+  'acceptApplication.wizard.messageSubtitle': 'По избор',
+  'acceptApplication.wizard.messageHelp': 'Добавете лично съобщение за {{name}} (по избор).',
+  'acceptApplication.wizard.messageTipTitle': 'Бързи съвети',
+  'acceptApplication.wizard.messageTip1': '• Споменете кога сте свободни',
+  'acceptApplication.wizard.messageTip2': '• Задайте последни въпроси',
+  'acceptApplication.wizard.messageTip3': '• Споделете важни детайли за задачата',
+
+  'acceptApplication.wizard.confirmTitle': 'Потвърждение',
+  'acceptApplication.wizard.confirmSubtitle': 'Финален преглед',
+  'acceptApplication.wizard.confirmHelp': 'Прегледайте детайлите за приемане преди да потвърдите.',
+  'acceptApplication.wizard.sharingContact': 'Споделяне със специалиста',
+  'acceptApplication.wizard.yourMessage': 'Вашето съобщение',
+  'acceptApplication.wizard.noMessage': 'Няма добавено съобщение',
+  'acceptApplication.wizard.readyToAccept': 'Готово за приемане!',
+  'acceptApplication.wizard.acceptNote': 'Натиснете Приеми за потвърждение. {{name}} ще бъде уведомен.',
+  'acceptApplication.wizard.agreementRequired': 'Изисква се съгласие',
+  'acceptApplication.wizard.pleaseAgree': 'Моля, поставете отметка по-горе за да продължите.',
 
   // Reject Application Dialog
   'rejectApplication.title': 'Отхвърляне на кандидатурата',
