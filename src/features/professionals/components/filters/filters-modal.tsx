@@ -13,7 +13,7 @@ import {
   Chip,
   Divider,
 } from '@nextui-org/react'
-import { SlidersHorizontal, Grid3X3, MapPin, Star, Briefcase, ArrowUpDown, Sparkles, X } from 'lucide-react'
+import { SlidersHorizontal, Grid3X3, MapPin, Star, Briefcase, ArrowUpDown, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { CategoryFilter } from '@/app/[lang]/browse-tasks/components/category-filter'
 import { CityFilter } from '@/app/[lang]/browse-tasks/components/city-filter'
@@ -221,26 +221,6 @@ export function FiltersModal() {
                       )}
                     </motion.div>
                   ))}
-
-                  {/* Tips Section */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-100"
-                  >
-                    <div className="flex items-start gap-3">
-                      <Sparkles className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <div className="space-y-1">
-                        <p className="text-sm font-semibold text-gray-900">
-                          {t('professionals.filters.proTip', 'Pro Tip')}
-                        </p>
-                        <p className="text-xs text-gray-600">
-                          {t('professionals.filters.proTipText', 'Use multiple filters to find the perfect professional. You can always reset them!')}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
                 </div>
               </ModalBody>
 

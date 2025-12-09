@@ -91,9 +91,6 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Выберите минимальный рейтинг',
   'professionals.filters.showingVerifiedFirst':
     'Показать проверенных топ профессионалов первыми',
-  'professionals.filters.proTip': 'Совет',
-  'professionals.filters.proTipMessage':
-    'Попробуйте "{{sortOption}}" для качественных профессионалов с подтвержденными квалификациями',
   'professionals.filters.sortingBy': 'Сортировка по {{option}}',
   'professionals.filters.sortingDescFeatured':
     'Показать проверенных топ профессионалов первыми',
@@ -211,7 +208,6 @@ export const professionals = {
   'professionalDetail.copyError': 'Не удалось скопировать ссылку',
   'professionals.filters.filtersButton': 'Фильтры',
   'professionals.filters.active': 'активных',
-  'professionals.filters.proTipText': 'Используйте несколько фильтров, чтобы найти идеального специалиста. Вы всегда можете их сбросить!',
   'professionals.filters.showResults': 'Показать результаты',
   'professionals.filters.reset': 'Сбросить',
   'professionals.filters.filters': 'Фильтры',

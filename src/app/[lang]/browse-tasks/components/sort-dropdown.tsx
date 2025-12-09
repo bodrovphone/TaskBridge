@@ -23,8 +23,8 @@ export function SortDropdown({ value, onChange }: SortDropdownProps) {
 
   return (
     <Select
-      label={t('browseTasks.sortBy', 'Sort by')}
-      placeholder={t('browseTasks.sortBy', 'Sort by')}
+      label={t('browseTasks.filters.sortBy')}
+      placeholder={t('browseTasks.filters.sortBy')}
       selectedKeys={[value]}
       onSelectionChange={(keys) => {
         const selected = Array.from(keys)[0] as TaskSortOption

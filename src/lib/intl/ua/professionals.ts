@@ -92,9 +92,6 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Оберіть мінімальний рейтинг',
   'professionals.filters.showingVerifiedFirst':
     'Спочатку показуємо перевірених найкращих фахівців',
-  'professionals.filters.proTip': 'Порада',
-  'professionals.filters.proTipMessage':
-    'Спробуйте "{{sortOption}}" для перевірених фахівців з підтвердженими сертифікатами',
   'professionals.filters.sortingBy': 'Сортування за {{option}}',
   'professionals.filters.sortingDescFeatured':
     'Спочатку показуємо перевірених найкращих фахівців',
@@ -214,8 +211,6 @@ export const professionals = {
   'professionalDetail.copyError': 'Не вдалося скопіювати посилання',
   'professionals.filters.filtersButton': 'Фільтри',
   'professionals.filters.active': 'активних',
-  'professionals.filters.proTipText':
-    'Використовуйте кілька фільтрів, щоб знайти ідеального фахівця. Ви завжди можете їх скинути!',
   'professionals.filters.showResults': 'Показати результати',
   'professionals.filters.reset': 'Скинути',
   'professionals.filters.filters': 'Фільтри',

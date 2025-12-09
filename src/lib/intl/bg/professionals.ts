@@ -92,9 +92,6 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Изберете минимален рейтинг',
   'professionals.filters.showingVerifiedFirst':
     'Показване на проверени топ професионалисти първо',
-  'professionals.filters.proTip': 'Съвет',
-  'professionals.filters.proTipMessage':
-    'Опитайте "{{sortOption}}" за качествени професионалисти с проверени квалификации',
   'professionals.filters.sortingBy': 'Сортиране по {{option}}',
   'professionals.filters.sortingDescFeatured':
     'Показване на проверени топ професионалисти първо',
@@ -209,7 +206,6 @@ export const professionals = {
   'professionalDetail.copyError': 'Неуспешно копиране на връзката',
   'professionals.filters.filtersButton': 'Филтри',
   'professionals.filters.active': 'активни',
-  'professionals.filters.proTipText': 'Използвайте множество филтри, за да намерите перфектния професионалист. Винаги можете да ги нулирате!',
   'professionals.filters.showResults': 'Покажи резултати',
   'professionals.filters.reset': 'Нулирай',
   'professionals.filters.filters': 'Филтри',

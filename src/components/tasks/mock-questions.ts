@@ -221,38 +221,61 @@ export function updateQuestionAnswer(
 
 /**
  * Format relative time for display
+ * Supports: en, bg, ru, ua
  */
 export function getRelativeTime(date: Date, locale: string = 'bg'): string {
   const now = new Date()
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
+  // Just now
   if (diffInSeconds < 60) {
-    return locale === 'bg' ? 'преди момент' : 'just now'
+    switch (locale) {
+      case 'bg': return 'преди момент'
+      case 'ru': return 'только что'
+      case 'ua': return 'щойно'
+      default: return 'just now'
+    }
   }
 
+  // Minutes ago
   const diffInMinutes = Math.floor(diffInSeconds / 60)
   if (diffInMinutes < 60) {
-    return locale === 'bg'
-      ? `преди ${diffInMinutes} мин`
-      : `${diffInMinutes} min ago`
+    switch (locale) {
+      case 'bg': return `преди ${diffInMinutes} мин`
+      case 'ru': return `${diffInMinutes} мин назад`
+      case 'ua': return `${diffInMinutes} хв тому`
+      default: return `${diffInMinutes} min ago`
+    }
   }
 
+  // Hours ago
   const diffInHours = Math.floor(diffInMinutes / 60)
   if (diffInHours < 24) {
-    return locale === 'bg'
-      ? `преди ${diffInHours} ${diffInHours === 1 ? 'час' : 'часа'}`
-      : `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`
+    switch (locale) {
+      case 'bg': return `преди ${diffInHours} ${diffInHours === 1 ? 'час' : 'часа'}`
+      case 'ru': return `${diffInHours} ${diffInHours === 1 ? 'час' : 'часов'} назад`
+      case 'ua': return `${diffInHours} ${diffInHours === 1 ? 'годину' : 'годин'} тому`
+      default: return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`
+    }
   }
 
+  // Days ago
   const diffInDays = Math.floor(diffInHours / 24)
   if (diffInDays < 7) {
-    return locale === 'bg'
-      ? `преди ${diffInDays} ${diffInDays === 1 ? 'ден' : 'дни'}`
-      : `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`
+    switch (locale) {
+      case 'bg': return `преди ${diffInDays} ${diffInDays === 1 ? 'ден' : 'дни'}`
+      case 'ru': return `${diffInDays} ${diffInDays === 1 ? 'день' : 'дней'} назад`
+      case 'ua': return `${diffInDays} ${diffInDays === 1 ? 'день' : 'днів'} тому`
+      default: return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`
+    }
   }
 
+  // Weeks ago
   const diffInWeeks = Math.floor(diffInDays / 7)
-  return locale === 'bg'
-    ? `преди ${diffInWeeks} ${diffInWeeks === 1 ? 'седмица' : 'седмици'}`
-    : `${diffInWeeks} ${diffInWeeks === 1 ? 'week' : 'weeks'} ago`
+  switch (locale) {
+    case 'bg': return `преди ${diffInWeeks} ${diffInWeeks === 1 ? 'седмица' : 'седмици'}`
+    case 'ru': return `${diffInWeeks} ${diffInWeeks === 1 ? 'неделю' : 'недель'} назад`
+    case 'ua': return `${diffInWeeks} ${diffInWeeks === 1 ? 'тиждень' : 'тижнів'} тому`
+    default: return `${diffInWeeks} ${diffInWeeks === 1 ? 'week' : 'weeks'} ago`
+  }
 }

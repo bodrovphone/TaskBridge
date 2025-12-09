@@ -91,9 +91,6 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Select Minimum Rating',
   'professionals.filters.showingVerifiedFirst':
     'Showing verified top performers first',
-  'professionals.filters.proTip': 'Pro Tip',
-  'professionals.filters.proTipMessage':
-    'Try "{{sortOption}}" for quality-assured professionals with verified credentials',
   'professionals.filters.sortingBy': 'Sorting by {{option}}',
   'professionals.filters.sortingDescFeatured':
     'Showing verified top performers first',
@@ -207,7 +204,6 @@ export const professionals = {
   'professionalDetail.copyError': 'Failed to copy link',
   'professionals.filters.filtersButton': 'Filters',
   'professionals.filters.active': 'active',
-  'professionals.filters.proTipText': 'Use multiple filters to find the perfect professional. You can always reset them!',
   'professionals.filters.showResults': 'Show Results',
   'professionals.filters.reset': 'Reset',
   'professionals.filters.filters': 'Filters',
