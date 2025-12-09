@@ -31,6 +31,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { getCityLabelBySlug } from '@/features/cities'
+import { getTimelineLabel } from '@/lib/utils/timeline'
 
 interface ApplicationDetailViewProps {
   application: MyApplication | null
@@ -222,11 +223,11 @@ export default function ApplicationDetailView({
                   </div>
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-center gap-2 text-blue-700 mb-1">
-                      <Calendar className="w-4 h-4" />
-                      <span className="text-sm font-medium">{t('myApplications.timeline')}</span>
+                      <Clock className="w-4 h-4" />
+                      <span className="text-sm font-medium">{t('applications.readyToStart')}</span>
                     </div>
                     <div className="text-2xl font-bold text-blue-900">
-                      {myProposal.timeline}
+                      {getTimelineLabel(myProposal.timeline, t)}
                     </div>
                   </div>
                 </div>

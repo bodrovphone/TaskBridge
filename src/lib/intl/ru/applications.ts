@@ -90,6 +90,7 @@ export const applications = {
   'applications.emptyState.message': 'Ваша задача опубликована! Специалисты скоро начнут откликаться.',
   'applications.proposedPrice': 'Предложенная цена',
   'applications.timeline': 'Сроки',
+  'applications.readyToStart': 'Готов начать',
   'applications.message': 'Сообщение',
   'applications.portfolio': 'Портфолио',
   'applications.portfolioImages': 'примеров из портфолио',
@@ -178,16 +179,16 @@ export const applications = {
 
   // Reject Application Dialog
   'rejectApplication.title': 'Отклонить заявку',
-  'rejectApplication.description': 'Вы собираетесь отклонить заявку от {{name}}. Это действие уведомит специалиста, что вы не будете продолжать с его заявкой.',
-  'rejectApplication.reasonTitle': 'Причина отклонения (по желанию)',
+  'rejectApplication.description': 'Отклонить заявку от {{name}}?',
+  'rejectApplication.reasonTitle': 'Причина (по желанию)',
   'rejectApplication.reasonHelp': 'Указание причины помогает специалистам улучшить будущие заявки.',
-  'rejectApplication.reasons.betterFit': 'Нашел более подходящего кандидата для этой задачи',
-  'rejectApplication.reasons.priceHigh': 'Цена слишком высокая',
-  'rejectApplication.reasons.timelineIssue': 'График мне не подходит',
-  'rejectApplication.reasons.changedMind': 'Передумал насчет задачи',
+  'rejectApplication.reasons.betterFit': 'Выбрал другого кандидата',
+  'rejectApplication.reasons.priceHigh': 'Цена высокая',
+  'rejectApplication.reasons.timelineIssue': 'Сроки не подходят',
+  'rejectApplication.reasons.changedMind': 'Передумал',
   'rejectApplication.reasons.other': 'Другая причина',
-  'rejectApplication.note': '{{name}} будет уведомлен, что его заявка не выбрана. Вы все еще можете просматривать другие заявки и принять другого специалиста.',
-  'rejectApplication.confirm': 'Отклонить заявку',
+  'rejectApplication.note': 'Можете принять другую заявку.',
+  'rejectApplication.confirm': 'Отклонить',
   'rejectApplication.cancel': 'Отмена',
 
   // Professional Applications Dashboard

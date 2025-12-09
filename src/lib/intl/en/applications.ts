@@ -90,6 +90,7 @@ export const applications = {
   'applications.emptyState.message': 'Your task is live! Professionals will start applying soon.',
   'applications.proposedPrice': 'Proposed Price',
   'applications.timeline': 'Timeline',
+  'applications.readyToStart': 'Ready to start',
   'applications.message': 'Message',
   'applications.portfolio': 'Portfolio',
   'applications.portfolioImages': 'portfolio images',
@@ -178,16 +179,16 @@ export const applications = {
 
   // Reject Application Dialog
   'rejectApplication.title': 'Reject Application',
-  'rejectApplication.description': 'You are about to reject the application from {{name}}. This action will notify the professional that you won\'t be moving forward with their application.',
-  'rejectApplication.reasonTitle': 'Reason for rejection (optional)',
+  'rejectApplication.description': 'Reject {{name}}\'s application?',
+  'rejectApplication.reasonTitle': 'Reason (optional)',
   'rejectApplication.reasonHelp': 'Providing a reason helps professionals improve their future applications.',
-  'rejectApplication.reasons.betterFit': 'Found a better fit for this task',
-  'rejectApplication.reasons.priceHigh': 'Price is too high',
-  'rejectApplication.reasons.timelineIssue': 'Timeline doesn\'t work for me',
-  'rejectApplication.reasons.changedMind': 'Changed my mind about the task',
+  'rejectApplication.reasons.betterFit': 'Found a better candidate',
+  'rejectApplication.reasons.priceHigh': 'Price too high',
+  'rejectApplication.reasons.timelineIssue': 'Timeline doesn\'t work',
+  'rejectApplication.reasons.changedMind': 'Changed my mind',
   'rejectApplication.reasons.other': 'Other reason',
-  'rejectApplication.note': '{{name}} will be notified that their application was not selected. You can still browse other applications and accept a different professional.',
-  'rejectApplication.confirm': 'Reject Application',
+  'rejectApplication.note': 'You can still accept other applications.',
+  'rejectApplication.confirm': 'Reject',
   'rejectApplication.cancel': 'Cancel',
 
   // Professional Applications Dashboard

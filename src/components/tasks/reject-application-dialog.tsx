@@ -11,7 +11,7 @@ import {
   RadioGroup,
   Radio
 } from '@nextui-org/react'
-import { XCircle, AlertCircle } from 'lucide-react'
+import { XCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 

@@ -12,10 +12,11 @@ import {
   Chip,
   Divider
 } from '@nextui-org/react'
-import { Star, CheckCircle, XCircle, MapPin, Calendar, Wallet, Award, BadgeCheck } from 'lucide-react'
+import { Star, CheckCircle, XCircle, Calendar, Wallet, Award, BadgeCheck, Clock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import Image from 'next/image'
 import { useState } from 'react'
+import { getTimelineLabel } from '@/lib/utils/timeline'
 
 interface ApplicationDetailProps {
   application: Application | null
@@ -134,10 +135,10 @@ export default function ApplicationDetail({
                 </div>
                 <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
                   <div className="flex items-center gap-2 text-blue-700 mb-1">
-                    <Calendar className="w-5 h-5" />
-                    <span className="text-sm font-medium">{t('applications.timeline')}</span>
+                    <Clock className="w-5 h-5" />
+                    <span className="text-sm font-medium">{t('applications.readyToStart')}</span>
                   </div>
-                  <div className="text-2xl font-bold text-blue-900">{timeline}</div>
+                  <div className="text-2xl font-bold text-blue-900">{getTimelineLabel(timeline, t)}</div>
                 </div>
               </div>
 

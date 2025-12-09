@@ -90,6 +90,7 @@ export const applications = {
   'applications.emptyState.message': 'Вашата задача е публикувана! Специалистите скоро ще започнат да кандидатстват.',
   'applications.proposedPrice': 'Предложена цена',
   'applications.timeline': 'Срокове',
+  'applications.readyToStart': 'Готов да започне',
   'applications.message': 'Съобщение',
   'applications.portfolio': 'Портфолио',
   'applications.portfolioImages': 'примера от портфолио',
@@ -177,17 +178,17 @@ export const applications = {
   'acceptApplication.wizard.pleaseAgree': 'Моля, поставете отметка по-горе за да продължите.',
 
   // Reject Application Dialog
-  'rejectApplication.title': 'Отхвърляне на кандидатурата',
-  'rejectApplication.description': 'На път сте да отхвърлите кандидатурата от {{name}}. Това действие ще уведоми специалиста, че няма да продължите с неговата кандидатура.',
-  'rejectApplication.reasonTitle': 'Причина за отхвърляне (по избор)',
+  'rejectApplication.title': 'Отхвърляне на заявка',
+  'rejectApplication.description': 'Отхвърляте заявката от {{name}}?',
+  'rejectApplication.reasonTitle': 'Причина (по избор)',
   'rejectApplication.reasonHelp': 'Посочването на причина помага на специалистите да подобрят бъдещите си кандидатури.',
-  'rejectApplication.reasons.betterFit': 'Намерих по-подходящ кандидат за тази задача',
-  'rejectApplication.reasons.priceHigh': 'Цената е твърде висока',
+  'rejectApplication.reasons.betterFit': 'Избрах друг кандидат',
+  'rejectApplication.reasons.priceHigh': 'Цената е висока',
   'rejectApplication.reasons.timelineIssue': 'Графикът не ми подхожда',
-  'rejectApplication.reasons.changedMind': 'Промених решението си относно задачата',
+  'rejectApplication.reasons.changedMind': 'Промених решението си',
   'rejectApplication.reasons.other': 'Друга причина',
-  'rejectApplication.note': '{{name}} ще бъде уведомен, че неговата кандидатура не е избрана. Все още можете да разглеждате други кандидатури и да приемете друг специалист.',
-  'rejectApplication.confirm': 'Отхвърли кандидатурата',
+  'rejectApplication.note': 'Можете да приемете друга заявка.',
+  'rejectApplication.confirm': 'Отхвърли',
   'rejectApplication.cancel': 'Отказ',
 
   // Professional Applications Dashboard
