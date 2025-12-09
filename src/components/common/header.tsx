@@ -261,189 +261,131 @@ function Header() {
     <NavbarItem>
      <LanguageSwitcher />
     </NavbarItem>
-    {/* Hide notification bell and avatar when mobile menu is open */}
-    {!isMenuOpen && (
-     <>
-      <NavbarItem>
-       <NotificationBell
-        onAuthRequired={() => {
-         setAuthAction(null)
-         setIsAuthSlideOverOpen(true)
-        }}
-       />
-      </NavbarItem>
-      <NavbarItem id="mobile-nav-user-menu">
-       {isAuthenticated ? (
-        <UserAvatarDropdown size="sm" />
-       ) : (
-        <UserAvatarDropdown
-         size="sm"
-         onLoginClick={() => {
-          setAuthAction(null)
-          setIsAuthSlideOverOpen(true)
-         }}
-        />
-       )}
-      </NavbarItem>
-     </>
-    )}
+    <NavbarItem>
+     <NotificationBell
+      onAuthRequired={() => {
+       setAuthAction(null)
+       setIsAuthSlideOverOpen(true)
+      }}
+     />
+    </NavbarItem>
+    <NavbarItem id="mobile-nav-user-menu">
+     {isAuthenticated ? (
+      <UserAvatarDropdown size="sm" />
+     ) : (
+      <UserAvatarDropdown
+       size="sm"
+       onLoginClick={() => {
+        setAuthAction(null)
+        setIsAuthSlideOverOpen(true)
+       }}
+      />
+     )}
+    </NavbarItem>
     <NavbarMenuToggle id="mobile-menu-toggle" />
    </NavbarContent>
 
    {/* Mobile Menu - z-index must be above tour overlay (9998) */}
    <NavbarMenu className="flex flex-col overflow-y-auto !bg-white" style={{ zIndex: Z_INDEX.MOBILE_MENU_TOUR }}>
     <div className="flex-1 overflow-y-auto pb-2">
-     {/* Portfolio menu items for authenticated users */}
+     {/* Menu items for authenticated users */}
      {isAuthenticated ? (
       <>
-       {/* For Client Section */}
+       {/* How it works - triggers tour */}
        <NavbarMenuItem>
-        <div className="w-full">
-         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-          {t('nav.forClient')}
-         </p>
-        </div>
-       </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        href={`/${lang}/profile/customer`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         router.push(`/${lang}/profile/customer`)
-        }}
-       >
-        <User size={18} className="text-blue-500" />
-        {t('nav.profileCustomer')}
-       </NextUILink>
-      </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        href={`/${lang}/tasks/posted`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 pl-4 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         router.push(`/${lang}/tasks/posted`)
-        }}
-       >
-        <FileText size={18} className="text-blue-400" />
-        {t('nav.myPostedTasks')}
-       </NextUILink>
-      </NavbarMenuItem>
-
-      {/* For Professional Section */}
-      <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.forProfessionals')}
-        </p>
-       </div>
-      </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        href={`/${lang}/profile/professional`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         router.push(`/${lang}/profile/professional`)
-        }}
-       >
-        <Briefcase size={18} className="text-emerald-500" />
-        {t('nav.profileProfessional')}
-       </NextUILink>
-      </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        href={`/${lang}/tasks/work`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 pl-4 flex items-center gap-2"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         router.push(`/${lang}/tasks/work`)
-        }}
-       >
-        <Hammer size={18} className="text-emerald-400" />
-        {t('nav.myWork')}
-       </NextUILink>
-      </NavbarMenuItem>
-
-      {/* Main Navigation Section */}
-      <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.discover', 'Discover')}
-        </p>
-       </div>
-      </NavbarMenuItem>
-      {navigation.map((item) => {
-       const Icon = item.icon
-       // Assign colors based on nav item
-       const iconColor = item.href === '/create-task' ? 'text-indigo-500'
-        : item.href === '/professionals' ? 'text-amber-500'
-        : item.href === '/browse-tasks' ? 'text-teal-500'
-        : 'text-yellow-500'
-       // Mobile nav IDs for onboarding tour
-       const mobileNavId = item.href === '/create-task' ? 'mobile-nav-create-task'
-        : item.href === '/browse-tasks' ? 'mobile-nav-browse-tasks'
-        : undefined
-       return (
-        <NavbarMenuItem key={item.name} id={mobileNavId}>
-         <NextUILink
-          href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
-          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-          size="lg"
-          onPress={() => {
+        <NextUILink
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
+         size="lg"
+         onPress={() => {
           setIsMenuOpen(false)
-          if (item.href.startsWith('#') || item.href.startsWith('/#')) {
-           // Handle anchor links - check if we're on index page
-           const anchorId = item.href.replace(/^\/#?/, '')
-           const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
-
-           if (isOnIndexPage) {
-            // Already on index page - smooth scroll to anchor
-            const element = document.getElementById(anchorId)
-            if (element) {
-             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }
-           } else {
-            // Navigate to index page first, then scroll
-            router.push(`/${lang}#${anchorId}`)
-           }
-          } else {
-           // Handle regular routes
-           router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
-          }
+          setTimeout(() => restartTour(), 200)
          }}
         >
-         <Icon size={18} className={iconColor} />
-         {item.name}
+         <Lightbulb size={18} className="text-yellow-500" />
+         {t('nav.howItWorks')}
         </NextUILink>
-        </NavbarMenuItem>
-       )
-      })}
+       </NavbarMenuItem>
 
-      {/* Help Section */}
-      <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full" />
-      </NavbarMenuItem>
-      <NavbarMenuItem>
-       <NextUILink
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
-        size="lg"
-        onPress={() => {
-         setIsMenuOpen(false)
-         setTimeout(() => restartTour(), 200)
-        }}
-       >
-        <HelpCircle size={18} className="text-purple-500" />
-        {t('nav.help')}
-       </NextUILink>
-      </NavbarMenuItem>
+       {/* Divider */}
+       <NavbarMenuItem>
+        <div className="py-2 border-t border-gray-200 w-full" />
+       </NavbarMenuItem>
 
-      {/* Logout */}
+       {/* Tasks I Posted */}
+       <NavbarMenuItem>
+        <NextUILink
+         href={`/${lang}/tasks/posted`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          router.push(`/${lang}/tasks/posted`)
+         }}
+        >
+         <FileText size={18} className="text-blue-500" />
+         {t('nav.tasksIPosted')}
+        </NextUILink>
+       </NavbarMenuItem>
+
+       {/* Tasks I Am Doing */}
+       <NavbarMenuItem>
+        <NextUILink
+         href={`/${lang}/tasks/work`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          router.push(`/${lang}/tasks/work`)
+         }}
+        >
+         <Hammer size={18} className="text-emerald-500" />
+         {t('nav.tasksIAmDoing')}
+        </NextUILink>
+       </NavbarMenuItem>
+
+       {/* Divider */}
+       <NavbarMenuItem>
+        <div className="py-2 border-t border-gray-200 w-full" />
+       </NavbarMenuItem>
+
+       {/* Find a Professional */}
+       <NavbarMenuItem id="mobile-nav-create-task">
+        <NextUILink
+         href={`/${lang}/create-task`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          router.push(`/${lang}/create-task`)
+         }}
+        >
+         <Search size={18} className="text-indigo-500" />
+         {t('nav.findProfessional')}
+        </NextUILink>
+       </NavbarMenuItem>
+
+       {/* Find Another Task */}
+       <NavbarMenuItem id="mobile-nav-browse-tasks">
+        <NextUILink
+         href={`/${lang}/browse-tasks`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          router.push(`/${lang}/browse-tasks`)
+         }}
+        >
+         <Briefcase size={18} className="text-teal-500" />
+         {t('nav.findAnotherTask')}
+        </NextUILink>
+       </NavbarMenuItem>
+
+       {/* Divider */}
+       <NavbarMenuItem>
+        <div className="py-2 border-t border-gray-200 w-full" />
+       </NavbarMenuItem>
+
+       {/* Logout */}
        <NavbarMenuItem>
         <NextUILink
          className="w-full text-red-600 hover:text-red-700 font-medium py-2 flex items-center gap-2"
@@ -459,59 +401,9 @@ function Header() {
        </NavbarMenuItem>
       </>
      ) : (
-      // Non-authenticated users see navigation at the top
+      // Non-authenticated users see simplified navigation
       <>
-       {navigation.map((item) => {
-        const Icon = item.icon
-        // Assign colors based on nav item
-        const iconColor = item.href === '/create-task' ? 'text-indigo-500'
-         : item.href === '/professionals' ? 'text-amber-500'
-         : item.href === '/browse-tasks' ? 'text-teal-500'
-         : 'text-yellow-500'
-        // Mobile nav IDs for onboarding tour
-        const mobileNavId = item.href === '/create-task' ? 'mobile-nav-create-task'
-         : item.href === '/browse-tasks' ? 'mobile-nav-browse-tasks'
-         : undefined
-        return (
-         <NavbarMenuItem key={item.name} id={mobileNavId}>
-          <NextUILink
-           href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
-           className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-           size="lg"
-           onPress={() => {
-           setIsMenuOpen(false)
-           if (item.href.startsWith('#') || item.href.startsWith('/#')) {
-            // Handle anchor links - check if we're on index page
-            const anchorId = item.href.replace(/^\/#?/, '')
-            const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
-
-            if (isOnIndexPage) {
-             // Already on index page - smooth scroll to anchor
-             const element = document.getElementById(anchorId)
-             if (element) {
-              element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-             }
-            } else {
-             // Navigate to index page first, then scroll
-             router.push(`/${lang}#${anchorId}`)
-            }
-           } else {
-            // Handle regular routes
-            router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
-           }
-          }}
-         >
-          <Icon size={18} className={iconColor} />
-          {item.name}
-         </NextUILink>
-         </NavbarMenuItem>
-        )
-       })}
-
-       {/* Help Section for non-authenticated users */}
-       <NavbarMenuItem>
-        <div className="pt-4 border-t border-gray-200 w-full" />
-       </NavbarMenuItem>
+       {/* How it works - triggers tour */}
        <NavbarMenuItem>
         <NextUILink
          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
@@ -521,8 +413,45 @@ function Header() {
           setTimeout(() => restartTour(), 200)
          }}
         >
-         <HelpCircle size={18} className="text-purple-500" />
-         {t('nav.help')}
+         <Lightbulb size={18} className="text-yellow-500" />
+         {t('nav.howItWorks')}
+        </NextUILink>
+       </NavbarMenuItem>
+
+       {/* Divider */}
+       <NavbarMenuItem>
+        <div className="py-2 border-t border-gray-200 w-full" />
+       </NavbarMenuItem>
+
+       {/* Find a Professional */}
+       <NavbarMenuItem id="mobile-nav-create-task">
+        <NextUILink
+         href={`/${lang}/create-task`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          router.push(`/${lang}/create-task`)
+         }}
+        >
+         <Search size={18} className="text-indigo-500" />
+         {t('nav.findProfessional')}
+        </NextUILink>
+       </NavbarMenuItem>
+
+       {/* Find Another Task */}
+       <NavbarMenuItem id="mobile-nav-browse-tasks">
+        <NextUILink
+         href={`/${lang}/browse-tasks`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          router.push(`/${lang}/browse-tasks`)
+         }}
+        >
+         <Briefcase size={18} className="text-teal-500" />
+         {t('nav.findAnotherTask')}
         </NextUILink>
        </NavbarMenuItem>
       </>

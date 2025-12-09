@@ -22,6 +22,7 @@ import {
  HelpCircle,
 } from 'lucide-react'
 import { useOnboardingContext } from '@/components/onboarding'
+import { useIsMobile } from '@/hooks/use-is-mobile'
 
 interface UserAvatarDropdownProps {
  size?: 'sm' | 'md' | 'lg'
@@ -40,6 +41,7 @@ export default function UserAvatarDropdown({
  const params = useParams()
  const lang = params?.lang as string || 'bg'
  const { restartTour } = useOnboardingContext()
+ const isMobile = useIsMobile('lg')
  const [isResending, setIsResending] = useState(false)
  const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -189,41 +191,63 @@ export default function UserAvatarDropdown({
      </DropdownSection>
     ) : null}
 
-    {/* For Client */}
-    <DropdownSection title={t('nav.forClient')} showDivider>
-     <DropdownItem
-      key="profile-customer"
-      startContent={<User className="text-blue-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('nav.profileCustomer')}
-     </DropdownItem>
-     <DropdownItem
-      key="tasks-posted"
-      startContent={<FileText className="text-blue-400 ml-4" size={18} />}
-      className="text-gray-900 pl-4"
-     >
-      {t('nav.myPostedTasks')}
-     </DropdownItem>
-    </DropdownSection>
+    {/* Profile sections - simplified on mobile */}
+    {isMobile ? (
+     // Mobile: Just two profile links, no sections or sub-items
+     <DropdownSection showDivider>
+      <DropdownItem
+       key="profile-customer"
+       startContent={<User className="text-blue-500" size={18} />}
+       className="text-gray-900"
+      >
+       {t('nav.profileCustomer')}
+      </DropdownItem>
+      <DropdownItem
+       key="profile-professional"
+       startContent={<Briefcase className="text-emerald-500" size={18} />}
+       className="text-gray-900"
+      >
+       {t('nav.profileProfessional')}
+      </DropdownItem>
+     </DropdownSection>
+    ) : (
+     // Desktop: Full sections with sub-items
+     <>
+      <DropdownSection title={t('nav.forClient')} showDivider>
+       <DropdownItem
+        key="profile-customer"
+        startContent={<User className="text-blue-500" size={18} />}
+        className="text-gray-900"
+       >
+        {t('nav.profileCustomer')}
+       </DropdownItem>
+       <DropdownItem
+        key="tasks-posted"
+        startContent={<FileText className="text-blue-400 ml-4" size={18} />}
+        className="text-gray-900 pl-4"
+       >
+        {t('nav.myPostedTasks')}
+       </DropdownItem>
+      </DropdownSection>
 
-    {/* For Professional */}
-    <DropdownSection title={t('nav.forProfessionals')} showDivider>
-     <DropdownItem
-      key="profile-professional"
-      startContent={<Briefcase className="text-emerald-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('nav.profileProfessional')}
-     </DropdownItem>
-     <DropdownItem
-      key="tasks-work"
-      startContent={<Hammer className="text-emerald-400 ml-4" size={18} />}
-      className="text-gray-900 pl-4"
-     >
-      {t('nav.myWork')}
-     </DropdownItem>
-    </DropdownSection>
+      <DropdownSection title={t('nav.forProfessionals')} showDivider>
+       <DropdownItem
+        key="profile-professional"
+        startContent={<Briefcase className="text-emerald-500" size={18} />}
+        className="text-gray-900"
+       >
+        {t('nav.profileProfessional')}
+       </DropdownItem>
+       <DropdownItem
+        key="tasks-work"
+        startContent={<Hammer className="text-emerald-400 ml-4" size={18} />}
+        className="text-gray-900 pl-4"
+       >
+        {t('nav.myWork')}
+       </DropdownItem>
+      </DropdownSection>
+     </>
+    )}
 
     {/* Help */}
     <DropdownSection showDivider>
