@@ -7,6 +7,7 @@
 import type {
   PaginatedProfessionalsResponse,
   Professional,
+  ProfessionalDetail,
 } from './professional.types'
 import type { ProfessionalQueryParams } from './professional.query-types'
 import { getProfessionals as getProfessionalsFromRepo } from './professional.repository'
@@ -161,6 +162,50 @@ export class ProfessionalService {
       }
     } catch (error) {
       console.error('❌ Get professional by ID error:', error)
+
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error : new Error('Unknown error occurred'),
+      }
+    }
+  }
+
+  /**
+   * Get professional detail by ID with completed tasks and reviews
+   * Optimized for detail page - fetches all related data in parallel
+   *
+   * @param id - Professional user ID
+   * @param lang - Language for date formatting (bg, en, ru)
+   * @returns Full professional detail (already filtered by repository)
+   */
+  async getProfessionalDetail(
+    id: string,
+    lang: string = 'bg'
+  ): Promise<ServiceResult<ProfessionalDetail | null>> {
+    try {
+      const { getProfessionalDetailById } = await import(
+        './professional.repository'
+      )
+
+      const detail = await getProfessionalDetailById(id, lang)
+
+      if (!detail) {
+        return {
+          success: true,
+          data: null,
+        }
+      }
+
+      // Note: ProfessionalDetail doesn't include sensitive fields by design
+      // The repository only returns public-safe data
+
+      return {
+        success: true,
+        data: detail,
+      }
+    } catch (error) {
+      console.error('❌ Get professional detail error:', error)
 
       return {
         success: false,

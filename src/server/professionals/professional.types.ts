@@ -143,6 +143,74 @@ export const DEFAULT_FEATURED_CRITERIA: FeaturedCriteria = {
 }
 
 /**
+ * Completed task item for professional detail page
+ */
+export interface CompletedTaskItem {
+  id: string
+  title: string
+  categorySlug: string
+  citySlug: string | null
+  neighborhood: string | null
+  completedDate: string | null
+  clientRating: number
+  budget: number
+  durationHours: number
+  clientName: string
+  clientAvatar: string | null
+  testimonial?: string
+  isVerified: boolean
+  complexity: 'Simple' | 'Standard' | 'Complex'
+}
+
+/**
+ * Review item for professional detail page
+ */
+export interface ReviewItem {
+  id: string
+  clientName: string
+  clientAvatar: string | null
+  rating: number
+  comment: string
+  date: string
+  verified: boolean
+  anonymous: boolean
+  communicationRating?: number
+  qualityRating?: number
+  professionalismRating?: number
+  timelinessRating?: number
+}
+
+/**
+ * Professional detail response (extended data for detail page)
+ */
+export interface ProfessionalDetail extends Professional {
+  // Extended profile data
+  neighborhood: string | null
+  services: string[]
+  portfolio: any[]
+  responseTime: string
+
+  // Safety & verification
+  safetyStatus: {
+    phoneVerified: boolean
+    profileComplete: boolean
+    policeCertificate: boolean
+    backgroundCheckPassed: boolean
+  }
+
+  // Contact settings
+  contactSettings: {
+    allowDirectContact: boolean
+    preferredHours: string
+    contactMethods: string[]
+  }
+
+  // Related data
+  completedTasksList: CompletedTaskItem[]
+  reviews: ReviewItem[]
+}
+
+/**
  * Helper to determine if professional should be featured
  */
 export function calculateFeaturedStatus(

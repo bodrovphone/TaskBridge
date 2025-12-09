@@ -20,8 +20,13 @@ import type {
   Professional,
   ProfessionalRaw,
   PaginatedProfessionalsResponse,
+  ProfessionalDetail,
+  CompletedTaskItem,
+  ReviewItem,
 } from './professional.types'
 import { calculateFeaturedStatus } from './professional.types'
+import { formatDistanceToNow } from 'date-fns'
+import { bg, enUS, ru } from 'date-fns/locale'
 import type { ProfessionalQueryParams } from './professional.query-types'
 import { QUERY_CONSTRAINTS } from './professional.query-types'
 
@@ -386,4 +391,281 @@ export async function getProfessionalById(
   }
 
   return data as ProfessionalRaw
+}
+
+/**
+ * Helper function to get date-fns locale
+ */
+function getDateLocale(lang?: string) {
+  switch (lang) {
+    case 'bg':
+      return bg
+    case 'ru':
+      return ru
+    case 'en':
+      return enUS
+    default:
+      return bg // Default to Bulgarian
+  }
+}
+
+/**
+ * Helper function to determine task complexity
+ */
+function determineComplexity(
+  budget: number,
+  duration: number
+): 'Simple' | 'Standard' | 'Complex' {
+  // Complex: High budget OR long duration
+  if (budget > 150 || duration > 6) return 'Complex'
+
+  // Simple: Low budget AND short duration
+  if (budget < 60 && duration < 2) return 'Simple'
+
+  // Everything else is standard
+  return 'Standard'
+}
+
+/**
+ * Get professional detail by ID with completed tasks and reviews
+ * Optimized for detail page - fetches all related data in parallel
+ *
+ * @param id - Professional user ID
+ * @param lang - Language for date formatting (bg, en, ru)
+ * @returns Full professional detail or null if not found
+ */
+export async function getProfessionalDetailById(
+  id: string,
+  lang: string = 'bg'
+): Promise<ProfessionalDetail | null> {
+  // Validate UUID format to prevent errors
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(id)) {
+    return null
+  }
+
+  // Fetch professional data, completed tasks, and reviews in parallel
+  const [professionalResult, completedTasksResult, reviewsResult] =
+    await Promise.all([
+      // 1. Professional basic info
+      supabaseAdmin
+        .from('users')
+        .select('*')
+        .eq('id', id)
+        .single(),
+
+      // 2. Completed tasks with customer info and review
+      supabaseAdmin
+        .from('tasks')
+        .select(
+          `
+        id,
+        title,
+        category,
+        subcategory,
+        budget_max_bgn,
+        budget_min_bgn,
+        city,
+        neighborhood,
+        completed_at,
+        estimated_duration_hours,
+        customer:customer_id(
+          full_name,
+          avatar_url,
+          is_phone_verified,
+          is_email_verified
+        ),
+        task_review:reviews!reviews_task_id_fkey(
+          rating,
+          comment
+        )
+      `
+        )
+        .eq('selected_professional_id', id)
+        .eq('status', 'completed')
+        .not('completed_at', 'is', null)
+        .order('completed_at', { ascending: false })
+        .limit(20),
+
+      // 3. Reviews from customers
+      supabaseAdmin
+        .from('reviews')
+        .select(
+          `
+        id,
+        rating,
+        comment,
+        created_at,
+        communication_rating,
+        quality_rating,
+        professionalism_rating,
+        timeliness_rating,
+        is_anonymous,
+        reviewer:reviewer_id(
+          full_name,
+          avatar_url
+        ),
+        task:task_id(
+          title,
+          category,
+          subcategory
+        )
+      `
+        )
+        .eq('reviewee_id', id)
+        .eq('review_type', 'customer_to_professional')
+        .eq('is_hidden', false)
+        .lte('published_at', new Date().toISOString())
+        .order('created_at', { ascending: false })
+        .limit(50),
+    ])
+
+  // Check professional exists
+  if (professionalResult.error || !professionalResult.data) {
+    if (professionalResult.error?.code !== 'PGRST116') {
+      console.error(
+        'Get professional detail error:',
+        professionalResult.error
+      )
+    }
+    return null
+  }
+
+  const professional = professionalResult.data as ProfessionalRaw & {
+    portfolio?: any[]
+    services?: string[]
+    response_time_hours?: number
+  }
+
+  // Log errors but don't fail the whole request
+  if (completedTasksResult.error) {
+    console.error(
+      '⚠️ Error fetching completed tasks:',
+      completedTasksResult.error
+    )
+  }
+  if (reviewsResult.error) {
+    console.error('⚠️ Error fetching reviews:', reviewsResult.error)
+  }
+
+  // Transform completed tasks
+  const completedTasksList: CompletedTaskItem[] = (
+    completedTasksResult.data || []
+  ).map((task: any) => {
+    const customer = task.customer
+    const budget = task.budget_max_bgn || task.budget_min_bgn || 0
+    const duration = task.estimated_duration_hours || 0
+
+    // Get review data for this task
+    const taskReview = Array.isArray(task.task_review)
+      ? task.task_review.find((r: any) => r.rating !== null)
+      : task.task_review
+
+    return {
+      id: task.id,
+      title: task.title,
+      categorySlug: task.subcategory || task.category,
+      citySlug: task.city,
+      neighborhood: task.neighborhood,
+      completedDate: task.completed_at,
+      clientRating: taskReview?.rating || 0,
+      budget: budget,
+      durationHours: duration,
+      clientName: customer?.full_name || 'Anonymous Customer',
+      clientAvatar: customer?.avatar_url || null,
+      testimonial: taskReview?.comment || undefined,
+      isVerified:
+        customer?.is_phone_verified || customer?.is_email_verified || false,
+      complexity: determineComplexity(budget, duration),
+    }
+  })
+
+  // Transform reviews
+  const reviews: ReviewItem[] = (reviewsResult.data || []).map(
+    (review: any) => ({
+      id: review.id,
+      clientName: review.is_anonymous
+        ? 'Anonymous Customer'
+        : review.reviewer?.full_name || 'Unknown',
+      clientAvatar: review.is_anonymous ? null : review.reviewer?.avatar_url,
+      rating: review.rating,
+      comment: review.comment || '',
+      date: formatDistanceToNow(new Date(review.created_at), {
+        addSuffix: true,
+        locale: getDateLocale(lang),
+      }),
+      verified: true, // All reviews from completed tasks are verified
+      anonymous: review.is_anonymous || false,
+      communicationRating: review.communication_rating,
+      qualityRating: review.quality_rating,
+      professionalismRating: review.professionalism_rating,
+      timelinessRating: review.timeliness_rating,
+    })
+  )
+
+  // Build full professional detail
+  const detail: ProfessionalDetail = {
+    // Base Professional fields
+    id: professional.id,
+    full_name: professional.full_name,
+    professional_title: professional.professional_title || 'Professional',
+    avatar_url: professional.avatar_url,
+    bio: professional.bio,
+    service_categories: professional.service_categories || [],
+    years_experience: professional.years_experience,
+    hourly_rate_bgn: professional.hourly_rate_bgn,
+    company_name: professional.company_name,
+    city: professional.city,
+    tasks_completed: completedTasksList.length, // Use actual count
+    average_rating: professional.average_rating,
+    total_reviews: professional.total_reviews,
+    is_phone_verified: professional.is_phone_verified,
+    is_email_verified: professional.is_email_verified,
+    is_vat_verified: professional.is_vat_verified,
+    featured: calculateFeaturedStatus(professional),
+    created_at: professional.created_at,
+
+    // Badge fields
+    is_early_adopter: professional.is_early_adopter || false,
+    early_adopter_categories: professional.early_adopter_categories || [],
+    is_top_professional: professional.is_top_professional || false,
+    top_professional_until: professional.top_professional_until || null,
+    top_professional_tasks_count:
+      professional.top_professional_tasks_count || 0,
+    is_featured: professional.is_featured || false,
+
+    // Extended detail fields
+    neighborhood: professional.neighborhood,
+    services: professional.services || [],
+    portfolio: professional.portfolio || [],
+    responseTime: professional.response_time_hours
+      ? `${professional.response_time_hours} hours`
+      : '2 hours',
+
+    // Safety status
+    safetyStatus: {
+      phoneVerified: professional.is_phone_verified || false,
+      profileComplete: !!(
+        professional.full_name &&
+        professional.bio &&
+        professional.city
+      ),
+      policeCertificate: false, // Not yet in schema
+      backgroundCheckPassed: false, // Not yet in schema
+    },
+
+    // Contact settings
+    contactSettings: {
+      allowDirectContact: true,
+      preferredHours: '9:00 - 18:00',
+      contactMethods: ['message', 'phone'],
+    },
+
+    // Related data
+    completedTasksList,
+    reviews,
+  }
+
+  return detail
 }
