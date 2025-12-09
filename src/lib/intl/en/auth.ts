@@ -42,6 +42,12 @@ export const auth = {
   'auth.nameHint': 'Only needed when creating a new account',
   'auth.unexpectedError': 'An unexpected error occurred. Please try again.',
 
+  // WebView detection (Telegram, Facebook, etc. in-app browsers)
+  'auth.webViewWarningTitle': 'Google login unavailable',
+  'auth.webViewWarningMessage': "Google login doesn't work in this app's browser. Use email/password above, or open in Safari/Chrome.",
+  'auth.openInBrowser': 'Open in Browser',
+  'auth.popupBlocked': 'Please allow popups for this site to sign in',
+
   // Email verification
   'auth.email.subject': 'Trudify - Confirm Your Email Address',
   'auth.email.heading': 'Welcome to Trudify!',

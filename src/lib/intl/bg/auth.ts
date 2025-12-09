@@ -42,6 +42,12 @@ export const auth = {
   'auth.nameHint': 'Само при създаване на нов акаунт',
   'auth.unexpectedError': 'Възникна неочаквана грешка. Моля, опитайте отново.',
 
+  // WebView detection (Telegram, Facebook, etc. in-app browsers)
+  'auth.webViewWarningTitle': 'Google вход не е наличен',
+  'auth.webViewWarningMessage': 'Google входът не работи в браузъра на това приложение. Използвайте имейл/парола по-горе, или отворете в Safari/Chrome.',
+  'auth.openInBrowser': 'Отвори в браузър',
+  'auth.popupBlocked': 'Моля, разрешете изскачащи прозорци за този сайт',
+
   // Email verification
   'auth.email.subject': 'Trudify - Потвърдете имейл адреса си',
   'auth.email.heading': 'Добре дошли в Trudify!',
