@@ -16,11 +16,12 @@ import {
  User,
  FileText,
  Briefcase,
- HelpCircle,
  LogOut,
  Mail,
  Hammer,
+ HelpCircle,
 } from 'lucide-react'
+import { useOnboardingContext } from '@/components/onboarding'
 
 interface UserAvatarDropdownProps {
  size?: 'sm' | 'md' | 'lg'
@@ -38,6 +39,7 @@ export default function UserAvatarDropdown({
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'
+ const { restartTour } = useOnboardingContext()
  const [isResending, setIsResending] = useState(false)
  const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -92,7 +94,7 @@ export default function UserAvatarDropdown({
     router.push(`/${lang}/tasks/work`)
     break
    case 'help':
-    router.push(`/${lang}/help`)
+    restartTour()
     break
    case 'logout':
     signOut()
@@ -191,14 +193,14 @@ export default function UserAvatarDropdown({
     <DropdownSection title={t('nav.forClient')} showDivider>
      <DropdownItem
       key="profile-customer"
-      startContent={<User className="text-gray-500" size={18} />}
+      startContent={<User className="text-blue-500" size={18} />}
       className="text-gray-900"
      >
       {t('nav.profileCustomer')}
      </DropdownItem>
      <DropdownItem
       key="tasks-posted"
-      startContent={<FileText className="text-gray-500 ml-4" size={18} />}
+      startContent={<FileText className="text-blue-400 ml-4" size={18} />}
       className="text-gray-900 pl-4"
      >
       {t('nav.myPostedTasks')}
@@ -209,14 +211,14 @@ export default function UserAvatarDropdown({
     <DropdownSection title={t('nav.forProfessionals')} showDivider>
      <DropdownItem
       key="profile-professional"
-      startContent={<Briefcase className="text-gray-500" size={18} />}
+      startContent={<Briefcase className="text-emerald-500" size={18} />}
       className="text-gray-900"
      >
       {t('nav.profileProfessional')}
      </DropdownItem>
      <DropdownItem
       key="tasks-work"
-      startContent={<Hammer className="text-gray-500 ml-4" size={18} />}
+      startContent={<Hammer className="text-emerald-400 ml-4" size={18} />}
       className="text-gray-900 pl-4"
      >
       {t('nav.myWork')}
@@ -227,7 +229,7 @@ export default function UserAvatarDropdown({
     <DropdownSection showDivider>
      <DropdownItem
       key="help"
-      startContent={<HelpCircle className="text-gray-500" size={18} />}
+      startContent={<HelpCircle className="text-purple-500" size={18} />}
       className="text-gray-900"
      >
       {t('nav.help')}

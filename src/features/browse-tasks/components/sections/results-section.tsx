@@ -200,6 +200,7 @@ export default function ResultsSection({
       {recommendedTasks.map((task: any, index: number) => (
        <motion.div
         key={task.id}
+        id={index === 0 ? 'task-card-example' : undefined}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
@@ -220,6 +221,7 @@ export default function ResultsSection({
       {tasks.map((task: any, index: number) => (
        <motion.div
         key={task.id}
+        id={index === 0 ? 'task-card-example' : undefined}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: Math.min(index * 0.05, 1) }} // Cap delay for smoother loads

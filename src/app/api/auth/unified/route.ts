@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { generateEmailVerificationToken } from '@/lib/auth/email-verification'
-import { getEmailVerificationContent, getLocaleFromRequest } from '@/lib/email/verification-templates'
+import { getEmailVerificationContent, getLocaleFromRequest, type SupportedLocale } from '@/lib/email/verification-templates'
 import { AuthService } from '@/server/application/auth/auth.service'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -49,10 +49,15 @@ async function handleSuccessfulRegistration(
   signUpData: { user: any; session: any },
   email: string,
   fullName: string,
-  request: Request
+  request: Request,
+  explicitLocale?: string
 ) {
-  const locale = getLocaleFromRequest(request)
-  console.log('[Auth/Unified] Creating/syncing profile with name:', fullName, 'locale:', locale)
+  // Priority: explicit locale from client > detected from request > default
+  const detectedLocale = getLocaleFromRequest(request)
+  const locale: SupportedLocale = (explicitLocale && ['en', 'bg', 'ru'].includes(explicitLocale))
+    ? (explicitLocale as SupportedLocale)
+    : detectedLocale
+  console.log('[Auth/Unified] Creating/syncing profile with name:', fullName, 'locale:', locale, '(explicit:', explicitLocale, ', detected:', detectedLocale, ')')
 
   // =========================================================================
   // STEP 1: Create or sync user profile with the provided name
@@ -239,13 +244,14 @@ async function handleSuccessfulRegistration(
  */
 export async function POST(request: Request) {
   try {
-    const { email, password, fullName } = await request.json()
+    const { email, password, fullName, locale: explicitLocale } = await request.json()
 
     console.log('[Auth/Unified] Request received:', {
       email,
       hasPassword: !!password,
       hasFullName: !!fullName,
-      fullNameLength: fullName?.length
+      fullNameLength: fullName?.length,
+      explicitLocale,
     })
 
     // =========================================================================
@@ -310,7 +316,7 @@ export async function POST(request: Request) {
         })
 
         // Continue to post-registration setup (locale, email verification)
-        return await handleSuccessfulRegistration(supabase, signUpData, email, fullName, request)
+        return await handleSuccessfulRegistration(supabase, signUpData, email, fullName, request, explicitLocale)
       }
 
       // SIGNUP FAILED: Check if it's because user already exists

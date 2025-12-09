@@ -101,8 +101,25 @@ export const Z_INDEX = {
   /** Mobile hamburger menu (should be above modals) */
   MOBILE_MENU: 9999,
 
+  // ============================================
+  // ONBOARDING TOUR (9998-10002)
+  // Tour overlay, spotlight, and mobile menu during tour
+  // ============================================
+
+  /** Tour overlay (dimming background) */
+  TOUR_OVERLAY: 9998,
+
+  /** Tour spotlight border around target element */
+  TOUR_SPOTLIGHT: 9999,
+
+  /** Tour card with instructions */
+  TOUR_CARD: 10000,
+
+  /** Mobile menu when tour is active (must be above tour overlay) */
+  MOBILE_MENU_TOUR: 10002,
+
   /** Toast notifications (should be above everything) */
-  TOAST_NOTIFICATIONS: 10000,
+  TOAST_NOTIFICATIONS: 10003,
 } as const
 
 /**

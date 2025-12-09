@@ -226,7 +226,7 @@ export default function SearchFiltersSection({
    className="mb-12 -mt-8 relative"
    style={{ zIndex: Z_INDEX.SEARCH_CARD }}
   >
-   <NextUICard className="bg-white/95 shadow-2xl border-0 max-w-4xl mx-auto overflow-visible">
+   <NextUICard id="task-filters" className="bg-white/95 shadow-2xl border-0 max-w-4xl mx-auto overflow-visible">
     <div className="p-8 overflow-visible">
      <motion.div
       initial={{ opacity: 0, y: 20 }}

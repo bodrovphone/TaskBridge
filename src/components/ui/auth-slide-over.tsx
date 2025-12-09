@@ -130,10 +130,13 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   setNameRequired(false);  // Reset name highlight on new submission
 
   try {
+   // Include current locale so API can set correct user preference
+   const currentLocale = i18n.language || 'en';
+
    const response = await fetch('/api/auth/unified', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, fullName: fullName.trim() }),
+    body: JSON.stringify({ email, password, fullName: fullName.trim(), locale: currentLocale }),
    });
 
    const result = await response.json();

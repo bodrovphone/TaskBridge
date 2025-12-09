@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
 import { useCreateTask } from "@/hooks/use-create-task"
 import { ReviewEnforcementDialog } from "@/features/reviews"
+import { useOnboardingContext } from "@/components/onboarding"
 import {
  Navbar,
  NavbarBrand,
@@ -43,6 +44,7 @@ function Header() {
  const params = useParams()
  const lang = params?.lang as string || 'bg'
  const { toast } = useToast()
+ const { restartTour } = useOnboardingContext()
 
  // Smart sticky navbar - hide on scroll down, show on scroll up
  useEffect(() => {
@@ -146,7 +148,6 @@ function Header() {
     isMenuOpen={isMenuOpen}
     onMenuOpenChange={handleMenuOpenChange}
     classNames={{
-     menu: 'bg-white z-[9999]',
      menuItem: 'relative',
     }}
     motionProps={{
@@ -171,7 +172,7 @@ function Header() {
     }}
    >
    {/* Logo/Brand */}
-   <NavbarBrand>
+   <NavbarBrand id="onboarding-welcome">
     <LocaleLink href="/" className="flex items-center">
      <Image
       src="/images/logo/trudify-logo-64.svg"
@@ -191,8 +192,13 @@ function Header() {
      const isActive = pathname === `/${lang}${item.href}` ||
       (item.href.startsWith('/#') && pathname === `/${lang}`)
      const Icon = item.icon
+     // Generate ID for onboarding tour targeting
+     const navId = item.href === '/create-task' ? 'nav-create-task'
+      : item.href === '/professionals' ? 'nav-professionals'
+      : item.href === '/browse-tasks' ? 'nav-browse-tasks'
+      : undefined
      return (
-      <NavbarItem key={item.name}>
+      <NavbarItem key={item.name} id={navId}>
        <NextUILink
         as={LocaleLink}
         href={item.href}
@@ -227,7 +233,7 @@ function Header() {
     <NavbarItem>
      <LanguageSwitcher />
     </NavbarItem>
-    <NavbarItem>
+    <NavbarItem id="nav-notifications">
      <NotificationBell
       onAuthRequired={() => {
        setAuthAction(null)
@@ -235,7 +241,7 @@ function Header() {
       }}
      />
     </NavbarItem>
-    <NavbarItem className="ml-1">
+    <NavbarItem id="nav-user-menu" className="ml-1">
      {isAuthenticated ? (
       <UserAvatarDropdown size="md" />
      ) : (
@@ -266,7 +272,7 @@ function Header() {
         }}
        />
       </NavbarItem>
-      <NavbarItem>
+      <NavbarItem id="mobile-nav-user-menu">
        {isAuthenticated ? (
         <UserAvatarDropdown size="sm" />
        ) : (
@@ -281,11 +287,11 @@ function Header() {
       </NavbarItem>
      </>
     )}
-    <NavbarMenuToggle />
+    <NavbarMenuToggle id="mobile-menu-toggle" />
    </NavbarContent>
 
-   {/* Mobile Menu */}
-   <NavbarMenu className="flex flex-col overflow-y-auto">
+   {/* Mobile Menu - z-index must be above tour overlay (9998) */}
+   <NavbarMenu className="flex flex-col overflow-y-auto !bg-white" style={{ zIndex: Z_INDEX.MOBILE_MENU_TOUR }}>
     <div className="flex-1 overflow-y-auto pb-2">
      {/* Portfolio menu items for authenticated users */}
      {isAuthenticated ? (
@@ -308,7 +314,7 @@ function Header() {
          router.push(`/${lang}/profile/customer`)
         }}
        >
-        <User size={18} className="text-gray-500" />
+        <User size={18} className="text-blue-500" />
         {t('nav.profileCustomer')}
        </NextUILink>
       </NavbarMenuItem>
@@ -322,7 +328,7 @@ function Header() {
          router.push(`/${lang}/tasks/posted`)
         }}
        >
-        <FileText size={18} className="text-gray-500" />
+        <FileText size={18} className="text-blue-400" />
         {t('nav.myPostedTasks')}
        </NextUILink>
       </NavbarMenuItem>
@@ -345,7 +351,7 @@ function Header() {
          router.push(`/${lang}/profile/professional`)
         }}
        >
-        <Briefcase size={18} className="text-gray-500" />
+        <Briefcase size={18} className="text-emerald-500" />
         {t('nav.profileProfessional')}
        </NextUILink>
       </NavbarMenuItem>
@@ -359,7 +365,7 @@ function Header() {
          router.push(`/${lang}/tasks/work`)
         }}
        >
-        <Hammer size={18} className="text-gray-500" />
+        <Hammer size={18} className="text-emerald-400" />
         {t('nav.myWork')}
        </NextUILink>
       </NavbarMenuItem>
@@ -374,8 +380,17 @@ function Header() {
       </NavbarMenuItem>
       {navigation.map((item) => {
        const Icon = item.icon
+       // Assign colors based on nav item
+       const iconColor = item.href === '/create-task' ? 'text-indigo-500'
+        : item.href === '/professionals' ? 'text-amber-500'
+        : item.href === '/browse-tasks' ? 'text-teal-500'
+        : 'text-yellow-500'
+       // Mobile nav IDs for onboarding tour
+       const mobileNavId = item.href === '/create-task' ? 'mobile-nav-create-task'
+        : item.href === '/browse-tasks' ? 'mobile-nav-browse-tasks'
+        : undefined
        return (
-        <NavbarMenuItem key={item.name}>
+        <NavbarMenuItem key={item.name} id={mobileNavId}>
          <NextUILink
           href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
           className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
@@ -403,32 +418,27 @@ function Header() {
           }
          }}
         >
-         <Icon size={18} className="text-gray-500" />
+         <Icon size={18} className={iconColor} />
          {item.name}
         </NextUILink>
         </NavbarMenuItem>
        )
       })}
 
-      {/* General Section */}
+      {/* Help Section */}
       <NavbarMenuItem>
-       <div className="pt-4 border-t border-gray-200 w-full">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-         {t('nav.general')}
-        </p>
-       </div>
+       <div className="pt-4 border-t border-gray-200 w-full" />
       </NavbarMenuItem>
       <NavbarMenuItem>
        <NextUILink
-        href={`/${lang}/help`}
-        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+        className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
         size="lg"
         onPress={() => {
          setIsMenuOpen(false)
-         router.push(`/${lang}/help`)
+         setTimeout(() => restartTour(), 200)
         }}
        >
-        <HelpCircle size={18} className="text-gray-500" />
+        <HelpCircle size={18} className="text-purple-500" />
         {t('nav.help')}
        </NextUILink>
       </NavbarMenuItem>
@@ -450,43 +460,72 @@ function Header() {
       </>
      ) : (
       // Non-authenticated users see navigation at the top
-      navigation.map((item) => {
-       const Icon = item.icon
-       return (
-        <NavbarMenuItem key={item.name}>
-         <NextUILink
-          href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
-          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
-          size="lg"
-          onPress={() => {
-          setIsMenuOpen(false)
-          if (item.href.startsWith('#') || item.href.startsWith('/#')) {
-           // Handle anchor links - check if we're on index page
-           const anchorId = item.href.replace(/^\/#?/, '')
-           const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
+      <>
+       {navigation.map((item) => {
+        const Icon = item.icon
+        // Assign colors based on nav item
+        const iconColor = item.href === '/create-task' ? 'text-indigo-500'
+         : item.href === '/professionals' ? 'text-amber-500'
+         : item.href === '/browse-tasks' ? 'text-teal-500'
+         : 'text-yellow-500'
+        // Mobile nav IDs for onboarding tour
+        const mobileNavId = item.href === '/create-task' ? 'mobile-nav-create-task'
+         : item.href === '/browse-tasks' ? 'mobile-nav-browse-tasks'
+         : undefined
+        return (
+         <NavbarMenuItem key={item.name} id={mobileNavId}>
+          <NextUILink
+           href={item.href.startsWith('/') ? `/${lang}${item.href}` : item.href}
+           className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
+           size="lg"
+           onPress={() => {
+           setIsMenuOpen(false)
+           if (item.href.startsWith('#') || item.href.startsWith('/#')) {
+            // Handle anchor links - check if we're on index page
+            const anchorId = item.href.replace(/^\/#?/, '')
+            const isOnIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
 
-           if (isOnIndexPage) {
-            // Already on index page - smooth scroll to anchor
-            const element = document.getElementById(anchorId)
-            if (element) {
-             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            if (isOnIndexPage) {
+             // Already on index page - smooth scroll to anchor
+             const element = document.getElementById(anchorId)
+             if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+             }
+            } else {
+             // Navigate to index page first, then scroll
+             router.push(`/${lang}#${anchorId}`)
             }
            } else {
-            // Navigate to index page first, then scroll
-            router.push(`/${lang}#${anchorId}`)
+            // Handle regular routes
+            router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
            }
-          } else {
-           // Handle regular routes
-           router.push(item.href.startsWith('/') ? `/${lang}${item.href}` : item.href)
-          }
+          }}
+         >
+          <Icon size={18} className={iconColor} />
+          {item.name}
+         </NextUILink>
+         </NavbarMenuItem>
+        )
+       })}
+
+       {/* Help Section for non-authenticated users */}
+       <NavbarMenuItem>
+        <div className="pt-4 border-t border-gray-200 w-full" />
+       </NavbarMenuItem>
+       <NavbarMenuItem>
+        <NextUILink
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
+         size="lg"
+         onPress={() => {
+          setIsMenuOpen(false)
+          setTimeout(() => restartTour(), 200)
          }}
         >
-         <Icon size={18} className="text-gray-500" />
-         {item.name}
+         <HelpCircle size={18} className="text-purple-500" />
+         {t('nav.help')}
         </NextUILink>
-        </NavbarMenuItem>
-       )
-      })
+       </NavbarMenuItem>
+      </>
      )}
     </div>
 

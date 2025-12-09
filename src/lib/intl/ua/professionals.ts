@@ -7,7 +7,8 @@ export const professionals = {
   'professionals.hero.stats.verified.value': 'Перевірені фахівці',
   'professionals.hero.stats.verified.label': 'Щодня стає більше',
   'professionals.hero.stats.ratings.value': 'Надійна якість',
-  'professionals.hero.stats.ratings.label': 'На основі реальних оцінок та відгуків',
+  'professionals.hero.stats.ratings.label':
+    'На основі реальних оцінок та відгуків',
   'professionals.hero.stats.jobs.value': 'Активна мережа',
   'professionals.hero.stats.jobs.label': 'Щодня виконується багато завдань',
   'professionals.searchPlaceholder':
@@ -23,7 +24,7 @@ export const professionals = {
   'professionals.completedJobs': 'Виконаних завдань',
   'professionals.card.completedJobs': 'виконаних завдань',
   'professionals.card.completedJobsShort': 'завдань',
-  'professionals.card.lookingForFirstTask': 'Готовий до першого завдання',
+  'professionals.card.lookingForFirstTask': 'Готовий до завдання',
   'professionals.card.waitingForReviews': 'Чекає на перші відгуки',
   'professionals.startingFrom': 'Від',
   'professionals.noResults': 'Категорій за вашим запитом не знайдено',
@@ -40,7 +41,8 @@ export const professionals = {
   'professionals.refineSearch': 'Уточніть результати пошуку',
   'professionals.professionalsAvailable': 'доступних фахівців',
   'professionals.noProfessionalsFound': 'Фахівців не знайдено',
-  'professionals.tryAdjustingFilters': 'Спробуйте змінити фільтри або пошуковий запит.',
+  'professionals.tryAdjustingFilters':
+    'Спробуйте змінити фільтри або пошуковий запит.',
   'professionals.noMatchingResults':
     'Немає фахівців за вашими критеріями. Спробуйте розширити пошук.',
   'professionals.mostActive': 'Найактивніші',
@@ -86,8 +88,7 @@ export const professionals = {
   'professionals.sorting.mostExperienceDesc': 'Найбільше замовлень',
   'professionals.filters.sortResultsBy': 'Сортувати результати за',
   'professionals.filters.sortResultsTitle': 'Сортувати результати',
-  'professionals.filters.sortResultsDescription':
-    'Виберіть порядок фахівців',
+  'professionals.filters.sortResultsDescription': 'Виберіть порядок фахівців',
   'professionals.filters.selectMinimumRating': 'Оберіть мінімальний рейтинг',
   'professionals.filters.showingVerifiedFirst':
     'Спочатку показуємо перевірених найкращих фахівців',
@@ -117,7 +118,8 @@ export const professionals = {
     'Спробуйте змінити фільтри або шукати в іншому районі',
   'professionals.results.noResults.clearFilters': 'Очистити фільтри',
   'professionals.results.error.title': 'Ой! Щось пішло не так',
-  'professionals.results.error.description': 'Наші сервери потребують перерви на каву',
+  'professionals.results.error.description':
+    'Наші сервери потребують перерви на каву',
   'professionals.results.error.subtext': 'Не хвилюйтесь, ми працюємо над цим!',
   'professionals.results.error.retry': 'Спробувати знову',
   'professionals.results.mockTitle': 'Тестові фахівці (довідка)',
@@ -147,7 +149,8 @@ export const professionals = {
   'professionalDetail.stats.yearsExperienceLabel': 'років',
   'professionalDetail.stats.experience': 'Досвід',
   'professionalDetail.stats.responseTime': 'Відповідь',
-  'professionalDetail.defaultBio': 'Професійний спеціаліст з досвідом у галузі.',
+  'professionalDetail.defaultBio':
+    'Професійний спеціаліст з досвідом у галузі.',
   'professionalDetail.actions.suggestMyTask': 'Запропонувати завдання',
   'professionalDetail.actions.inviteToApply': 'Запросити подати заявку',
   'professionalDetail.actions.contact': 'Контакт',
@@ -159,19 +162,26 @@ export const professionals = {
     'Остаточні ціни узгоджуються індивідуально залежно від складності та вимог завдання.',
   'professionalDetail.portfolio.title': 'Мої роботи',
   'professionalDetail.portfolio.noWork': 'Робіт ще немає',
-  'professionalDetail.portfolio.emptyState': 'Цей фахівець ще не оновив свої роботи. Ми постійно просимо їх додати - можливо, пощастить завтра!',
-  'professionalDetail.portfolio.emptyStateCTA': 'Перевірте пізніше, щоб побачити їхні чудові роботи',
+  'professionalDetail.portfolio.emptyState':
+    'Цей фахівець ще не оновив свої роботи. Ми постійно просимо їх додати - можливо, пощастить завтра!',
+  'professionalDetail.portfolio.emptyStateCTA':
+    'Перевірте пізніше, щоб побачити їхні чудові роботи',
   'professionalDetail.portfolio.before': 'До',
   'professionalDetail.portfolio.after': 'Після',
   'professionalDetail.portfolio.viewMore': 'Усі роботи',
   'professionalDetail.portfolio.showcase': 'Демонстрація професійних робіт',
   'professionalDetail.completedTasks.title': 'Виконані завдання',
   'professionalDetail.completedTasks.noTasks': 'Виконаних завдань ще немає',
-  'professionalDetail.completedTasks.hugePotential': 'Цей фахівець має величезний потенціал!',
-  'professionalDetail.completedTasks.comingSoon': 'Чудові роботи скоро з\'являться...',
-  'professionalDetail.completedTasks.watchThisSpace': 'Слідкуйте за оновленнями!',
-  'professionalDetail.completedTasks.emptyState': 'Цей фахівець виконав багато завдань, але поки не на нашій платформі. Допоможіть нам збагатити цю сторінку своїм завданням!',
-  'professionalDetail.completedTasks.emptyStateCTA': 'Запропонуйте завдання та станьте їхнім першим клієнтом на платформі',
+  'professionalDetail.completedTasks.hugePotential':
+    'Цей фахівець має величезний потенціал!',
+  'professionalDetail.completedTasks.comingSoon':
+    "Чудові роботи скоро з'являться...",
+  'professionalDetail.completedTasks.watchThisSpace':
+    'Слідкуйте за оновленнями!',
+  'professionalDetail.completedTasks.emptyState':
+    'Цей фахівець виконав багато завдань, але поки не на нашій платформі. Допоможіть нам збагатити цю сторінку своїм завданням!',
+  'professionalDetail.completedTasks.emptyStateCTA':
+    'Запропонуйте завдання та станьте їхнім першим клієнтом на платформі',
   'professionalDetail.completedTasks.viewTask': 'Переглянути завдання',
   'professionalDetail.completedTasks.completedOn': 'Завершено',
   'professionalDetail.reviews.title': 'Відгуки та рейтинг',
@@ -179,10 +189,11 @@ export const professionals = {
   'professionalDetail.reviews.recentRating': 'Останній рейтинг',
   'professionalDetail.reviews.excellent': 'Відмінно',
   'professionalDetail.reviews.noReviews': 'Відгуків ще немає',
-  'professionalDetail.reviews.beFirst':
-    'Станьте першим, хто залишить відгук',
-  'professionalDetail.reviews.emptyState': 'Відгуки про цього фахівця скоро з\'являться. Запропонуйте завдання, щоб також оцінити!',
-  'professionalDetail.reviews.emptyStateCTA': 'Станьте першим, хто попрацює з цим фахівцем та залишить відгук',
+  'professionalDetail.reviews.beFirst': 'Станьте першим, хто залишить відгук',
+  'professionalDetail.reviews.emptyState':
+    "Відгуки про цього фахівця скоро з'являться. Запропонуйте завдання, щоб також оцінити!",
+  'professionalDetail.reviews.emptyStateCTA':
+    'Станьте першим, хто попрацює з цим фахівцем та залишить відгук',
   'professionalDetail.reviews.showMore': 'Показати всі відгуки',
   'professionalDetail.reviews.allReviews': 'Усі відгуки',
   'professionalDetail.reviews.avgRating': 'Середній рейтинг',
@@ -191,9 +202,11 @@ export const professionals = {
   'professionalDetail.completedTasks.stats.avgRating': 'Середній рейтинг',
   'professionalDetail.completedTasks.stats.fiveStarTasks': '5-зіркових завдань',
   'professionalDetail.completedTasks.pendingReview': 'Очікує відгуку',
-  'professionalDetail.completedTasks.viewAll': 'Переглянути всі {{count}} завдань',
+  'professionalDetail.completedTasks.viewAll':
+    'Переглянути всі {{count}} завдань',
   'professionalDetail.completedTasks.totalTasks': 'Усього завдань',
-  'professionalDetail.completedTasks.averageRatingStars': 'Середній рейтинг: {{rating}} зірок',
+  'professionalDetail.completedTasks.averageRatingStars':
+    'Середній рейтинг: {{rating}} зірок',
   'professionalDetail.verified': 'Перевірено',
   'professionalDetail.shareText': 'Перегляньте цього фахівця на Trudify',
   'professionalDetail.shareSuccess': 'Успішно поділились!',
@@ -201,17 +214,21 @@ export const professionals = {
   'professionalDetail.copyError': 'Не вдалося скопіювати посилання',
   'professionals.filters.filtersButton': 'Фільтри',
   'professionals.filters.active': 'активних',
-  'professionals.filters.proTipText': 'Використовуйте кілька фільтрів, щоб знайти ідеального фахівця. Ви завжди можете їх скинути!',
+  'professionals.filters.proTipText':
+    'Використовуйте кілька фільтрів, щоб знайти ідеального фахівця. Ви завжди можете їх скинути!',
   'professionals.filters.showResults': 'Показати результати',
   'professionals.filters.reset': 'Скинути',
   'professionals.filters.filters': 'Фільтри',
 
   // Professional Badges
   'professionals.badge.topProfessional': 'Топ Фахівець',
-  'professionals.badge.topProfessional.tooltip': 'Виконав {{count}} завдань за останні 30 днів',
+  'professionals.badge.topProfessional.tooltip':
+    'Виконав {{count}} завдань за останні 30 днів',
   'professionals.badge.earlyAdopter': 'Ранній Послідовник',
-  'professionals.badge.earlyAdopter.tooltip': 'Один з перших фахівців у {{category}}',
-  'professionals.badge.earlyAdopter.tooltipGeneric': 'Один з перших фахівців на платформі',
+  'professionals.badge.earlyAdopter.tooltip':
+    'Один з перших фахівців у {{category}}',
+  'professionals.badge.earlyAdopter.tooltipGeneric':
+    'Один з перших фахівців на платформі',
 
   // Invite Modal
   'inviteModal.title': 'Запросити фахівця на завдання',
@@ -219,16 +236,20 @@ export const professionals = {
   'inviteModal.selectLabel': 'Оберіть завдання',
   'inviteModal.selectPlaceholder': 'Оберіть ваше завдання',
   'inviteModal.noTasks': 'У вас ще немає відкритих завдань.',
-  'inviteModal.createTaskHint': 'Спочатку створіть завдання, щоб запросити цього фахівця.',
+  'inviteModal.createTaskHint':
+    'Спочатку створіть завдання, щоб запросити цього фахівця.',
   'inviteModal.confirmText': 'отримає сповіщення про це запрошення.',
   'inviteModal.sendInvitation': 'Надіслати запрошення',
   'inviteModal.success': 'Запрошення надіслано!',
-  'inviteModal.successDescription': '{{name}} отримає сповіщення про ваше завдання.',
+  'inviteModal.successDescription':
+    '{{name}} отримає сповіщення про ваше завдання.',
   'inviteModal.error': 'Не вдалося надіслати запрошення',
   'inviteModal.alreadyInvited': 'Вже запрошено',
-  'inviteModal.alreadyInvitedDescription': 'Ви вже запросили {{name}} на це завдання.',
+  'inviteModal.alreadyInvitedDescription':
+    'Ви вже запросили {{name}} на це завдання.',
   'inviteModal.alreadyInvitedProfessional': 'Вже запрошено',
-  'inviteModal.alreadyInvitedProfessionalDescription': 'Ви вже запросили {{name}} на ваше завдання. Вони можуть подати заявку протягом 24 годин.',
+  'inviteModal.alreadyInvitedProfessionalDescription':
+    'Ви вже запросили {{name}} на ваше завдання. Вони можуть подати заявку протягом 24 годин.',
   'inviteModal.createNewTask': 'Створити нове завдання',
   'inviteModal.loadingTasks': 'Завантаження ваших завдань...',
   'inviteModal.continue': 'Продовжити',

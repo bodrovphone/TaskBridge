@@ -51,6 +51,9 @@ export function getEmailVerificationContent(locale: SupportedLocale): EmailVerif
 /**
  * Extract locale from request URL for initial signup
  * This is only used during signup to capture user's language preference
+ *
+ * NOTE: Prefer using explicit locale from client request body when available.
+ * This function is a fallback for when explicit locale is not provided.
  */
 export function getLocaleFromRequest(request: Request): SupportedLocale {
   try {
@@ -64,10 +67,14 @@ export function getLocaleFromRequest(request: Request): SupportedLocale {
     // Check Referer header for locale (user came from a localized page)
     const referer = request.headers.get('referer')
     if (referer) {
-      const refererUrl = new URL(referer)
-      const refererParts = refererUrl.pathname.split('/')
-      if (refererParts.length > 1 && ['en', 'bg', 'ru'].includes(refererParts[1])) {
-        return refererParts[1] as SupportedLocale
+      try {
+        const refererUrl = new URL(referer)
+        const refererParts = refererUrl.pathname.split('/')
+        if (refererParts.length > 1 && ['en', 'bg', 'ru'].includes(refererParts[1])) {
+          return refererParts[1] as SupportedLocale
+        }
+      } catch {
+        // Invalid referer URL, continue to next check
       }
     }
 
@@ -78,11 +85,16 @@ export function getLocaleFromRequest(request: Request): SupportedLocale {
       if (primaryLang === 'bg' || primaryLang === 'ru') {
         return primaryLang as SupportedLocale
       }
+      // For English or any other language, use 'en'
+      if (primaryLang === 'en') {
+        return 'en'
+      }
     }
   } catch (error) {
     console.error('[Email] Failed to extract locale:', error)
   }
 
-  // Fallback to Bulgarian (Trudify is a Bulgarian platform)
-  return 'bg'
+  // Fallback to English as the neutral default (not Bulgarian)
+  // The explicit locale from client should be used when available
+  return 'en'
 }
