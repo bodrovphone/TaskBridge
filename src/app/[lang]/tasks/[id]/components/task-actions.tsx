@@ -2,21 +2,20 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
-import { Share2, Edit3, XCircle, Check, LogOut, CheckCircle, Globe } from "lucide-react";
+import { Share2, Edit3, Check, LogOut, CheckCircle, Globe } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Chip } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
 import { ProfessionalWithdrawDialog } from "@/components/tasks/professional-withdraw-dialog";
-import { CancelTaskConfirmDialog } from "@/components/tasks/cancel-task-confirm-dialog";
 import { MarkCompletedDialog } from "@/components/tasks/mark-completed-dialog";
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { MessageCircle } from "lucide-react";
 // import AskQuestionDialog from "@/components/tasks/ask-question-dialog";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import TaskApplicationBadge from "@/components/tasks/task-application-badge";
-import { canEditTask, canApplyToTask, canCancelTask, getDisabledReason, type TaskStatus } from "@/lib/utils/task-permissions";
+import { canEditTask, canApplyToTask, getDisabledReason, type TaskStatus } from "@/lib/utils/task-permissions";
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { canAskQuestions } from "@/lib/utils/task-permissions";
 import type { ApplicationStatus } from "@/components/tasks/types";
@@ -48,8 +47,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [isShareCopied, setIsShareCopied] = useState(false);
  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
  const [isWithdrawing, setIsWithdrawing] = useState(false);
- const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
- const [isCancelling, setIsCancelling] = useState(false);
  const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false);
  const [isMarkingCompleted, setIsMarkingCompleted] = useState(false);
 
@@ -153,40 +150,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
 
  const handleEditClick = () => {
   router.push(`/${lang}/tasks/${task.id}/edit`);
- };
-
- const handleCancelClick = () => {
-  setIsCancelDialogOpen(true);
- };
-
- const handleCancelConfirm = async () => {
-  setIsCancelling(true);
-  try {
-   const response = await authenticatedFetch(`/api/tasks/${task.id}/cancel`, {
-    method: 'DELETE',
-    credentials: 'include'
-   });
-
-   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to cancel task');
-   }
-
-   toast({ title: t('taskDetail.cancelSuccess') });
-   setIsCancelDialogOpen(false);
-
-   // Redirect to posted tasks page
-   router.push(`/${lang}/tasks/posted`);
-  } catch (error: any) {
-   console.error('Error cancelling task:', error);
-   toast({
-    title: t('taskDetail.cancelError'),
-    description: error.message,
-    variant: 'destructive',
-   });
-  } finally {
-   setIsCancelling(false);
-  }
  };
 
  const handleShareClick = async () => {
@@ -313,7 +276,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const canApply = canApplyToTask(taskStatus);
  // @todo FEATURE: Questions feature - commented out for future implementation
  // const canAsk = canAskQuestions(taskStatus);
- const canCancel = canCancelTask(taskStatus);
 
  // Check if current user is the assigned professional
  // Note: API returns snake_case field names from database
@@ -325,8 +287,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  if (isAssignedProfessional && taskStatus === 'in_progress') {
   return (
    <>
-    <NextUICard className="bg-white/95 shadow-lg">
-     <CardBody className="p-6 space-y-3">
+    <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+     <CardBody className="p-4 sm:p-6 space-y-3">
       <NextUIButton
        color="success"
        variant="solid"
@@ -390,12 +352,27 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   );
  }
 
- // If owner, show Edit and Cancel buttons instead of Apply/Question
+ // If owner, show Edit button and Mark Complete (when in progress)
  if (isOwner) {
   return (
    <>
-    <NextUICard className="bg-white/95 shadow-lg">
-     <CardBody className="p-6 space-y-3">
+    <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+     <CardBody className="p-4 sm:p-6 space-y-3">
+      {/* Mark as Complete - only when task is in progress */}
+      {taskStatus === 'in_progress' && (
+       <NextUIButton
+        color="success"
+        variant="solid"
+        size="lg"
+        className="w-full"
+        startContent={<CheckCircle size={20} />}
+        onPress={handleMarkCompletedClick}
+        isLoading={isMarkingCompleted}
+       >
+        {t('taskDetail.professional.markCompleted')}
+       </NextUIButton>
+      )}
+
       <Tooltip
        content={!canEdit ? getDisabledReason('edit', taskStatus) : ''}
        isDisabled={canEdit}
@@ -415,25 +392,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
        </div>
       </Tooltip>
 
-      <Tooltip
-       content={!canCancel ? getDisabledReason('cancel', taskStatus) : ''}
-       isDisabled={canCancel}
-      >
-       <div>
-        <NextUIButton
-         color="danger"
-         variant="bordered"
-         size="lg"
-         className="w-full"
-         startContent={<XCircle size={20} />}
-         onPress={handleCancelClick}
-         isDisabled={!canCancel}
-        >
-         {t('taskDetail.cancelTask')}
-        </NextUIButton>
-       </div>
-      </Tooltip>
-
       <NextUIButton
        color="warning"
        variant="flat"
@@ -447,14 +405,15 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      </CardBody>
     </NextUICard>
 
-    {/* Cancel Task Confirmation Dialog */}
-    <CancelTaskConfirmDialog
-     isOpen={isCancelDialogOpen}
-     onClose={() => setIsCancelDialogOpen(false)}
-     onConfirm={handleCancelConfirm}
+    {/* Mark Completed Dialog */}
+    <MarkCompletedDialog
+     isOpen={isMarkCompletedDialogOpen}
+     onClose={() => setIsMarkCompletedDialogOpen(false)}
+     onConfirm={handleMarkCompletedConfirm}
      taskTitle={task.title}
-     applicationsCount={task.applicationsCount || 0}
-     isLoading={isCancelling}
+     customerName={task.customer?.name || task.customerName || 'Customer'}
+     payment={`${task.budgetMax || task.budget || 0} лв.`}
+     isLoading={isMarkingCompleted}
     />
    </>
   );
@@ -463,8 +422,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  // Non-owner view: Apply and Ask Question buttons
  return (
   <>
-   <NextUICard className="bg-white/95 shadow-lg">
-    <CardBody className="p-6 space-y-3">
+   <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+    <CardBody className="p-4 sm:p-6 space-y-3">
      {/* Language Barrier Info - Shown when task author prefers different language */}
      {hasLanguageBarrier && (
       <div className="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700">

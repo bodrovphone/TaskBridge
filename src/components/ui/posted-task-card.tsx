@@ -516,19 +516,9 @@ function PostedTaskCard({
         <div className={`flex flex-col md:flex-row md:flex-wrap gap-2 md:mt-auto ${status === 'open' ? 'md:justify-start' : ''}`}>
           {status === 'in_progress' ? (
             <>
-              {/* In Progress - Mark Complete + Remove + Report */}
+              {/* In Progress - Cancel/Remove at top, View task, Mark Complete at bottom */}
               {acceptedApplication && (
                 <>
-                  <Button
-                    size="sm"
-                    color="success"
-                    variant="bordered"
-                    startContent={<CheckCircle className="w-5 h-5" />}
-                    onPress={() => setShowConfirmDialog(true)}
-                    className="w-full md:flex-1 font-semibold py-6"
-                  >
-                    {t('postedTasks.markComplete')}
-                  </Button>
                   <Button
                     size="sm"
                     variant="bordered"
@@ -541,13 +531,22 @@ function PostedTaskCard({
                   </Button>
                   <Button
                     size="sm"
-                    variant="flat"
-                    color="danger"
-                    startContent={<ShieldAlert className="w-5 h-5" />}
-                    onPress={() => setShowReportDialog(true)}
-                    className="w-full md:flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-6"
+                    variant="bordered"
+                    startContent={<Eye className="w-5 h-5" />}
+                    onPress={() => router.push(`/${lang}/tasks/${id}`)}
+                    className="w-full md:flex-1 py-6"
                   >
-                    {t('postedTasks.reportIssue')}
+                    {t('postedTasks.viewDetails')}
+                  </Button>
+                  <Button
+                    size="sm"
+                    color="success"
+                    variant="bordered"
+                    startContent={<CheckCircle className="w-5 h-5" />}
+                    onPress={() => setShowConfirmDialog(true)}
+                    className="w-full md:flex-1 font-semibold py-6"
+                  >
+                    {t('postedTasks.markComplete')}
                   </Button>
                 </>
               )}

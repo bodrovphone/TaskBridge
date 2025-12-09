@@ -39,8 +39,8 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
  // Show default image if no images
  if (imageArray.length === 0) {
   return (
-   <NextUICard className="bg-white/95 shadow-lg">
-    <CardBody className="p-0">
+   <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+    <CardBody className="p-0 overflow-hidden">
      <DefaultTaskImage
       category={subcategory || category || 'other'}
       className="h-64 md:h-80 rounded-lg"
@@ -52,8 +52,8 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
 
  return (
   <>
-   <NextUICard className="bg-white/95 shadow-lg">
-    <CardBody className="p-0">
+   <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+    <CardBody className="p-0 overflow-hidden">
      <div className="relative h-64 md:h-80 overflow-hidden rounded-lg group cursor-pointer" onClick={openModal}>
       {imageArray.length > 0 && (
        <>

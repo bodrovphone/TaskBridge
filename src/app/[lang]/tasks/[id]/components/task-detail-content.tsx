@@ -213,8 +213,8 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
  const showTranslationIndicator = shouldShowTranslationIndicator(task, viewerLocale);
 
  return (
-  <div 
-   className="min-h-screen relative"
+  <div
+   className="min-h-screen relative overflow-x-hidden"
    style={{
     backgroundImage: 'url(/images/cardboard.png)',
     backgroundRepeat: 'repeat',
@@ -222,9 +222,9 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
    }}
   >
    {/* Background overlay */}
-   <div className="absolute inset-0 bg-white/30 "></div>
+   <div className="absolute inset-0 bg-white/30"></div>
    
-   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+   <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10 overflow-x-hidden">
     {/* Back Navigation */}
     <div className="mb-6">
      <Link
@@ -255,9 +255,9 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
      </div>
     )}
 
-    <div className="grid lg:grid-cols-3 gap-8">
+    <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
      {/* Main Content */}
-     <div className="lg:col-span-2 space-y-6">
+     <div className="lg:col-span-2 space-y-4 sm:space-y-6">
       {/* Photo Gallery - Client Component */}
       <TaskGallery
        images={task.images}
@@ -267,15 +267,15 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       />
 
       {/* Task Details - Server Rendered */}
-      <NextUICard className="bg-white/95 shadow-lg">
-       <CardBody className="p-6">
+      <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+       <CardBody className="p-4 sm:p-6 overflow-hidden">
         <div className="space-y-4">
-         <div className="flex flex-wrap items-center gap-3">
+         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Chip
            color="secondary"
            variant="solid"
-           size="md"
-           className="font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600"
+           size="sm"
+           className="font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600 text-xs sm:text-sm"
           >
            {getCategoryName(t, task.category, task.subcategory)}
           </Chip>
@@ -283,13 +283,14 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
            color={getUrgencyColor(task.urgency || (task.is_urgent ? 'same_day' : task.deadline ? 'within_week' : 'flexible')) as any}
            variant="flat"
            size="sm"
+           className="text-xs sm:text-sm"
           >
            {getUrgencyText(task, t)}
           </Chip>
-          <span className="text-sm text-gray-500 ml-auto">{publishedTime}</span>
+          <span className="text-xs sm:text-sm text-gray-500 w-full sm:w-auto sm:ml-auto mt-1 sm:mt-0">{publishedTime}</span>
          </div>
 
-         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
           {localizedContent.title}
          </h1>
 
@@ -323,9 +324,9 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       </NextUICard>
 
       {/* Key Information - Server Rendered */}
-      <NextUICard className="bg-white/95 shadow-lg">
-       <CardBody className="p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
+      <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+       <CardBody className="p-4 sm:p-6 overflow-hidden">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
          {t('taskDetail.keyInformation')}
         </h2>
         
@@ -415,10 +416,10 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
      </div>
 
      {/* Sidebar */}
-     <div className="space-y-6">
+     <div className="space-y-4 sm:space-y-6">
       {/* Customer Profile - Server Rendered with Client Privacy Toggle */}
-      <NextUICard className="bg-white/95 shadow-lg">
-       <CardBody className="p-6">
+      <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+       <CardBody className="p-4 sm:p-6 overflow-hidden">
         <PrivacyToggle customer={task.customer} isOwner={isOwner}>
          <></>
         </PrivacyToggle>
@@ -430,8 +431,8 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
 
       {/* Similar Tasks - Server Rendered (only show if tasks exist) */}
       {similarTasks && similarTasks.length > 0 && (
-        <NextUICard className="bg-white/95 shadow-lg">
-         <CardBody className="p-6">
+        <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
+         <CardBody className="p-4 sm:p-6 overflow-hidden">
           <h3 className="text-lg font-bold text-gray-900 mb-4">
            {t('taskDetail.similarTasks')}
           </h3>
