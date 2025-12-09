@@ -17,6 +17,7 @@ import { Z_INDEX } from "@/lib/constants/z-index"
 import { useCreateTask } from "@/hooks/use-create-task"
 import { ReviewEnforcementDialog } from "@/features/reviews"
 import { useOnboardingContext } from "@/components/onboarding"
+import { useNotificationStore } from "@/stores/notification-store"
 import {
  Navbar,
  NavbarBrand,
@@ -45,6 +46,7 @@ function Header() {
  const lang = params?.lang as string || 'bg'
  const { toast } = useToast()
  const { restartTour } = useOnboardingContext()
+ const { setOpen: setNotificationOpen } = useNotificationStore()
 
  // Smart sticky navbar - hide on scroll down, show on scroll up
  useEffect(() => {
@@ -78,10 +80,13 @@ function Header() {
  // Check if we're on the index/landing page
  const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
 
- // Explicit handler for menu state
+ // Explicit handler for menu state - close notification center when menu opens
  const handleMenuOpenChange = useCallback((open: boolean) => {
+  if (open) {
+   setNotificationOpen(false)
+  }
   setIsMenuOpen(open)
- }, [])
+ }, [setNotificationOpen])
 
  const navigation = [
   { name: t('nav.howItWorks'), href: "/#how-it-works", icon: Lightbulb },
@@ -239,6 +244,7 @@ function Header() {
        setAuthAction(null)
        setIsAuthSlideOverOpen(true)
       }}
+      onOpen={() => setIsMenuOpen(false)}
      />
     </NavbarItem>
     <NavbarItem id="nav-user-menu" className="ml-1">
@@ -267,6 +273,7 @@ function Header() {
        setAuthAction(null)
        setIsAuthSlideOverOpen(true)
       }}
+      onOpen={() => setIsMenuOpen(false)}
      />
     </NavbarItem>
     <NavbarItem id="mobile-nav-user-menu">

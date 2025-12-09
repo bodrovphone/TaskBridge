@@ -114,6 +114,7 @@ export function useNotificationsQuery(
   return {
     notifications: notificationsQuery.data || [],
     isLoading: notificationsQuery.isLoading,
+    isFetching: notificationsQuery.isFetching,
     error: notificationsQuery.error,
     refetch: notificationsQuery.refetch,
     deleteAll: deleteAllMutation.mutate,

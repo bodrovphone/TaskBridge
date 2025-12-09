@@ -2,6 +2,7 @@
 export const notifications = {
   // Notifications
   'notifications.title': 'Известия',
+  'notifications.refresh': 'Обнови',
   'notifications.cleanup': 'Изчисти',
   'notifications.markAsRead': 'Прочетено',
   'notifications.cleanupConfirm.title': 'Изтриване на всички известия?',

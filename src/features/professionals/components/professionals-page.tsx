@@ -127,12 +127,12 @@ export default function ProfessionalsPage() {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 text-center text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24 text-center text-white">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -140,8 +140,8 @@ export default function ProfessionalsPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="inline-block"
             >
-              <div className="bg-white/10 rounded-full px-6 py-2 border border-white/20 mb-6">
-                <span className="text-blue-200 font-medium tracking-wide">✨ {t('professionals.hero.badge', 'Professional Network')}</span>
+              <div className="bg-white/10 rounded-full px-4 sm:px-6 py-2 border border-white/20 mb-4 sm:mb-6">
+                <span className="text-sm sm:text-base text-blue-200 font-medium tracking-wide">✨ {t('professionals.hero.badge', 'Professional Network')}</span>
               </div>
             </motion.div>
 
@@ -149,7 +149,7 @@ export default function ProfessionalsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-5xl lg:text-7xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
+              className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
             >
               {t('professionals.hero.title')}
             </motion.h1>
@@ -158,7 +158,7 @@ export default function ProfessionalsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed font-light"
+              className="text-base sm:text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed font-light"
             >
               {t('professionals.hero.subtitle')}
             </motion.p>

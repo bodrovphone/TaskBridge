@@ -162,27 +162,27 @@ export function ReviewDialog({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-col gap-0.5 sm:gap-1">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-gray-900">
+                  <h3 className="text-lg sm:text-2xl font-semibold sm:font-bold text-gray-900">
                     {t('review.dialog.title')}
                   </h3>
                   {/* Custom close button */}
                   <button
                     onClick={handleClose}
                     disabled={isSubmitting}
-                    className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed -mr-1"
                     aria-label="Close"
                   >
                     <X className="w-5 h-5 text-gray-600" />
                   </button>
                 </div>
                 {totalCount !== undefined && currentIndex !== undefined && totalCount > 1 && (
-                  <div className="text-sm font-medium text-gray-600">
+                  <div className="text-xs sm:text-sm font-medium text-gray-600">
                     {t('reviews.progress.reviewing', { current: currentIndex + 1, total: totalCount })}
                   </div>
                 )}
-                <p className="text-sm text-gray-600 font-normal">
+                <p className="text-xs sm:text-sm text-gray-600 font-normal">
                   {t('review.dialog.subtitle', { professionalName: task.professionalName })}
                 </p>
               </ModalHeader>

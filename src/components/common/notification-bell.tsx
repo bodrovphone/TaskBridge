@@ -11,9 +11,10 @@ import { filterUnreadNotifications } from '@/lib/utils/notification-read-state';
 
 interface NotificationBellProps {
  onAuthRequired?: () => void;
+ onOpen?: () => void;
 }
 
-export default function NotificationBell({ onAuthRequired }: NotificationBellProps) {
+export default function NotificationBell({ onAuthRequired, onOpen }: NotificationBellProps) {
  const { authenticatedFetch, user, loading } = useAuth();
  const { toggleOpen, isOpen } = useNotificationStore();
  const isAuthenticated = !!user && !loading;
@@ -32,6 +33,10 @@ export default function NotificationBell({ onAuthRequired }: NotificationBellPro
 
  const handleClick = () => {
   if (isAuthenticated) {
+   // Close other panels (like hamburger menu) before opening notifications
+   if (!isOpen && onOpen) {
+    onOpen();
+   }
    toggleOpen();
   } else if (onAuthRequired) {
    onAuthRequired();

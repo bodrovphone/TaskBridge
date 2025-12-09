@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, Trash2, Loader2, AlertCircle } from 'lucide-react';
+import { Bell, Trash2, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
 import { useAuth } from '@/features/auth';
@@ -40,15 +40,11 @@ export default function NotificationCenter() {
 
  // Data from TanStack Query (10-minute stale time, optimized fetching)
  // Only fetch notifications if user is authenticated AND auth is not loading
- const { notifications, isLoading, error, deleteAll, refetch } = useNotificationsQuery(authenticatedFetch, !!user && !loading);
+ const { notifications, isLoading, isFetching, error, deleteAll, refetch } = useNotificationsQuery(authenticatedFetch, !!user && !loading);
 
- // Handle drawer open/close - refetch notifications when opening
+ // Handle drawer open/close
  const handleOpenChange = (open: boolean) => {
   setOpen(open);
-  // Refetch notifications when drawer opens to ensure fresh data
-  if (open && !loading && user) {
-   refetch();
-  }
  };
 
  // Handle query errors gracefully
@@ -84,7 +80,17 @@ export default function NotificationCenter() {
   <>
    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
     <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white h-full !overflow-x-hidden">
-     <SheetHeader className="border-b pl-6 pr-12 py-4 flex-shrink-0 bg-white">
+     {/* Refresh button - positioned absolutely next to close icon */}
+     <button
+      onClick={() => refetch()}
+      disabled={isFetching}
+      className="absolute right-14 top-4 z-10 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+      aria-label={t('notifications.refresh', 'Refresh')}
+     >
+      <RefreshCw className={`h-5 w-5 ${isFetching ? 'animate-spin' : ''}`} />
+     </button>
+
+     <SheetHeader className="border-b pl-6 pr-20 py-4 flex-shrink-0 bg-white">
       <SheetTitle className="text-xl font-bold">
        {t('notifications.title')}
       </SheetTitle>

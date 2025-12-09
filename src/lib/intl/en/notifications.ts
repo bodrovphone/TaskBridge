@@ -2,6 +2,7 @@
 export const notifications = {
   // Notifications
   'notifications.title': 'Notifications',
+  'notifications.refresh': 'Refresh',
   'notifications.cleanup': 'Clean up',
   'notifications.markAsRead': 'Mark Read',
   'notifications.cleanupConfirm.title': 'Delete all notifications?',
