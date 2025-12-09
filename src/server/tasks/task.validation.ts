@@ -121,6 +121,16 @@ export const validateCreateTaskInput = (
       return acc
     }, {} as Record<string, string>)
 
+    // Debug: log validation errors
+    console.log('[Task Validation] Failed validation:', JSON.stringify({
+      errors,
+      zodErrors: result.error.errors.map(e => ({
+        path: e.path,
+        message: e.message,
+        code: e.code
+      }))
+    }, null, 2))
+
     return err(
       new ValidationError('Validation failed', {
         errors

@@ -71,7 +71,7 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
   'apartment-cleaning': {
     en: ['apartment cleaning', 'flat cleaning', 'home cleaning', 'house cleaner', 'maid', 'clean apartment', 'clean house', 'clean', 'cleaning', 'tidy up', 'regular cleaning', 'need cleaner'],
     bg: ['почистване апартамент', 'почистване жилище', 'чистачка', 'домашно почистване', 'редовно почистване', 'почистване', 'чисто', 'нужна чистачка'],
-    ru: ['уборка квартиры', 'уборка дома', 'клининг', 'домработница', 'регулярная уборка', 'убрать квартиру', 'уборка', 'убраться', 'нужна уборщица'],
+    ru: ['уборка квартиры', 'уборка дома', 'клининг', 'домработница', 'регулярная уборка', 'убрать квартиру', 'уборка', 'убраться', 'нужна уборщица', 'помыть', 'унитаз', 'помыть унитаз', 'ванна', 'ванную', 'туалет', 'мыть'],
   },
   'deep-cleaning': {
     en: ['deep cleaning', 'thorough cleaning', 'spring cleaning', 'intensive cleaning', 'detailed cleaning', 'clean', 'cleaning'],
@@ -106,9 +106,9 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
     ru: ['плитка', 'кафель', 'керамика', 'укладка плитки', 'облицовка', 'затирка', 'керамогранит'],
   },
   'plastering': {
-    en: ['plastering', 'plaster', 'drywall', 'gypsum', 'stucco', 'wall plaster', 'ceiling plaster', 'skim coat'],
-    bg: ['мазилка', 'шпакловка', 'гипсокартон', 'гипс', 'измазване', 'шпакловане', 'латекс'],
-    ru: ['штукатурка', 'шпаклевка', 'гипсокартон', 'выравнивание стен', 'побелка', 'штукатурные работы'],
+    en: ['plastering', 'plaster', 'drywall', 'gypsum', 'stucco', 'wall plaster', 'ceiling plaster', 'skim coat', 'putty', 'spackle', 'wall repair'],
+    bg: ['мазилка', 'шпакловка', 'гипсокартон', 'гипс', 'измазване', 'шпакловане', 'латекс', 'зашпакловам', 'стена', 'стени'],
+    ru: ['штукатурка', 'шпаклевка', 'гипсокартон', 'выравнивание стен', 'побелка', 'штукатурные работы', 'шпаклевать', 'зашпаклевать', 'шпаклевание', 'стена', 'стены', 'стену', 'зашпаклевка', 'шпатлевка', 'шпатлевать'],
   },
   'insulation': {
     en: ['insulation', 'thermal insulation', 'soundproofing', 'foam', 'mineral wool', 'styrofoam', 'waterproofing'],
@@ -557,9 +557,9 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
 
   // ===== EVENT PLANNING =====
   'event-host': {
-    en: ['event host', 'mc', 'master of ceremonies', 'host', 'presenter', 'emcee'],
-    bg: ['водещ', 'церемониймайстор', 'презентатор', 'водещ събитие'],
-    ru: ['ведущий', 'тамада', 'конферансье', 'ведущий мероприятий'],
+    en: ['event host', 'mc', 'master of ceremonies', 'host', 'presenter', 'emcee', 'wedding host', 'wedding mc', 'event organizer', 'wedding organizer', 'wedding planner', 'event planning', 'organize event', 'organize wedding'],
+    bg: ['водещ', 'церемониймайстор', 'презентатор', 'водещ събитие', 'сватба', 'сватбен водещ', 'организация събитие', 'организатор', 'сватбен организатор'],
+    ru: ['ведущий', 'тамада', 'конферансье', 'ведущий мероприятий', 'свадьба', 'свадебный', 'организация свадьбы', 'организация', 'организовать свадьбу', 'свадебный ведущий', 'организатор свадьбы', 'организатор мероприятий', 'организация мероприятий', 'планирование свадьбы'],
   },
   'music-entertainment': {
     en: ['dj', 'musician', 'band', 'live music', 'singer', 'karaoke', 'entertainment'],

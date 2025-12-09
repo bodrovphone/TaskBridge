@@ -153,6 +153,9 @@ export function TaskForm({
             imageOversized: undefined,
           }
 
+          // Debug: log what we're sending
+          console.log('[TaskForm] Submitting task data:', JSON.stringify(taskData, null, 2))
+
           const response = await authenticatedFetch('/api/tasks', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -161,7 +164,25 @@ export function TaskForm({
           })
 
           const result = await response.json()
-          if (!response.ok) throw new Error(result.error || 'Failed to create task')
+
+          // Debug: log the response
+          console.log('[TaskForm] API response:', response.status, result)
+
+          if (!response.ok) {
+            // Handle server-side validation errors with details
+            if (result.details?.errors) {
+              const serverErrors = Object.entries(result.details.errors).map(([field, message]) => ({
+                field,
+                message: message as string
+              }))
+              console.log('[TaskForm] Server validation errors:', serverErrors)
+              setValidationErrors(serverErrors)
+              setShowValidationDialog(true)
+              setIsSubmitting(false)
+              return
+            }
+            throw new Error(result.error || 'Failed to create task')
+          }
 
           const createdTaskId = result.task?.id || result.id
           if (inviteProfessionalId && createdTaskId) {

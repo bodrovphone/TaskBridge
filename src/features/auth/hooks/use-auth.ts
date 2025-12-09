@@ -94,7 +94,18 @@ export function useAuth(): UseAuthReturn {
       if (data.notificationToken && data.user) {
         setNotificationToken(data.notificationToken)
         setProfile(data.user)
+        // Create user object to match normal auth flow
+        const userObj: SupabaseUser = {
+          id: data.user.id,
+          email: data.user.email,
+          app_metadata: {},
+          user_metadata: {},
+          aud: 'authenticated',
+          created_at: data.user.created_at || new Date().toISOString(),
+        }
+        setUser(userObj)
         setLoading(false)
+        console.log('✅ Notification session authenticated:', data.user.email)
       } else {
         console.error('❌ No user data or token in response')
         setError('Invalid response from server')

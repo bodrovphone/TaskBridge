@@ -49,6 +49,8 @@ export async function POST(request: NextRequest) {
     let input: CreateTaskInput
     try {
       input = await request.json()
+      // Debug: log received input
+      console.log('[Tasks API] POST: Received input:', JSON.stringify(input, null, 2))
     } catch (e) {
       return NextResponse.json(
         { error: 'Invalid JSON in request body' },

@@ -349,17 +349,17 @@ function Header() {
        </NavbarMenuItem>
 
        {/* Find a Professional */}
-       <NavbarMenuItem id="mobile-nav-create-task">
+       <NavbarMenuItem id="mobile-nav-professionals">
         <NextUILink
-         href={`/${lang}/create-task`}
+         href={`/${lang}/professionals`}
          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
          size="lg"
          onPress={() => {
           setIsMenuOpen(false)
-          router.push(`/${lang}/create-task`)
+          router.push(`/${lang}/professionals`)
          }}
         >
-         <Search size={18} className="text-indigo-500" />
+         <Users size={18} className="text-indigo-500" />
          {t('nav.findProfessional')}
         </NextUILink>
        </NavbarMenuItem>
@@ -424,17 +424,17 @@ function Header() {
        </NavbarMenuItem>
 
        {/* Find a Professional */}
-       <NavbarMenuItem id="mobile-nav-create-task">
+       <NavbarMenuItem id="mobile-nav-professionals">
         <NextUILink
-         href={`/${lang}/create-task`}
+         href={`/${lang}/professionals`}
          className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
          size="lg"
          onPress={() => {
           setIsMenuOpen(false)
-          router.push(`/${lang}/create-task`)
+          router.push(`/${lang}/professionals`)
          }}
         >
-         <Search size={18} className="text-indigo-500" />
+         <Users size={18} className="text-indigo-500" />
          {t('nav.findProfessional')}
         </NextUILink>
        </NavbarMenuItem>
