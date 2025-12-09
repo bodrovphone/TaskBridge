@@ -55,7 +55,7 @@ function transformForClient(professional: ProfessionalDetail) {
     phoneVerified: professional.is_phone_verified,
     idVerified: professional.is_vat_verified,
     addressVerified: false, // Not in schema yet
-    responseTime: professional.responseTime,
+    responseTime: professional.responseTimeHours,
     services: professional.services,
     serviceCategories: professional.service_categories,
     gallery: professional.portfolio,
