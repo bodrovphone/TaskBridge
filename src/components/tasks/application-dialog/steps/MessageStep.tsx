@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { AlertCircle } from 'lucide-react'
@@ -27,6 +28,7 @@ export function MessageStep({
   onFocus,
 }: MessageStepProps) {
   const { t } = useTranslation()
+  const [isFocused, setIsFocused] = useState(false)
 
   const messageLength = value?.length || 0
   const messageProgress = (messageLength / MESSAGE_MAX_LENGTH) * 100
@@ -49,7 +51,11 @@ export function MessageStep({
           placeholder={t('application.messagePlaceholder')}
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={onFocus}
+          onFocus={(e) => {
+            setIsFocused(true)
+            onFocus?.(e)
+          }}
+          onBlur={() => setIsFocused(false)}
           rows={5}
           className={cn(
             'text-base rounded-xl resize-none',
@@ -96,18 +102,20 @@ export function MessageStep({
         </div>
       )}
 
-      {/* Info box */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-        <div>
-          <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
-            {t('application.wizard.messageTitle', 'Why write a message?')}
-          </p>
-          <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
-            {t('application.messageInfo')}
-          </p>
+      {/* Info box - hidden when keyboard is likely open (input focused) */}
+      {!isFocused && (
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+              {t('application.wizard.messageTitle', 'Why write a message?')}
+            </p>
+            <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+              {t('application.messageInfo')}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
