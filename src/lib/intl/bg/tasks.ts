@@ -132,8 +132,8 @@ export const tasks = {
   'task.location': 'Местоположение',
   'task.category': 'Категория',
   'task.applications': 'Заявления',
-  'task.viewDetails': 'Вижте детайли',
-  'task.apply': 'Кандидатствайте сега',
+  'task.viewDetails': 'Детайли',
+  'task.apply': 'Кандидатствай',
   'task.created': 'Създадена',
   'task.deadline': 'Краен срок',
 

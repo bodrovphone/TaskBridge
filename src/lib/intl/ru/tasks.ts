@@ -132,8 +132,8 @@ export const tasks = {
   'task.location': 'Местоположение',
   'task.category': 'Категория',
   'task.applications': 'Заявки',
-  'task.viewDetails': 'Посмотреть детали',
-  'task.apply': 'Подать заявку',
+  'task.viewDetails': 'Детали',
+  'task.apply': 'Выполнить',
   'task.created': 'Создана',
   'task.deadline': 'Срок',
 

@@ -211,7 +211,7 @@ export const professionals = {
   'professionals.filters.filters': 'Филтри',
 
   // Professional Badges
-  'professionals.badge.topProfessional': 'Топ Професионалист',
+  'professionals.badge.topProfessional': 'Топ Про',
   'professionals.badge.topProfessional.tooltip': 'Завърши {{count}} задачи през последните 30 дни',
   'professionals.badge.earlyAdopter': 'Ранен Последовател',
   'professionals.badge.earlyAdopter.tooltip': 'Един от първите професионалисти в {{category}}',
