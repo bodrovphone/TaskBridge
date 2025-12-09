@@ -62,6 +62,19 @@ const notificationColors = {
  welcome_message: 'text-purple-600 bg-purple-100',
 };
 
+// Helper to detect if a string looks like a phone number
+const isPhoneNumber = (text: string): boolean => {
+ // Clean the text and check if it looks like a phone number
+ const cleaned = text.replace(/[\s\-\(\)\.]/g, '');
+ // Match patterns: starts with + or 0, 8-15 digits total
+ return /^[\+]?[0-9]{8,15}$/.test(cleaned);
+};
+
+// Clean phone number for tel: href
+const cleanPhoneForHref = (phone: string): string => {
+ return phone.replace(/[\s\-\(\)\.]/g, '');
+};
+
 export default function NotificationCard({ notification, onMarkAsRead }: NotificationCardProps) {
  const { t, i18n } = useTranslation();
  const { setOpen } = useNotificationStore();
@@ -161,8 +174,19 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
        )}
        {notification.metadata.contactInfo.method === 'custom' && notification.metadata.contactInfo.customContact && (
         <>
-         <Send className="w-4 h-4 mt-0.5 flex-shrink-0" />
-         <span className="break-words overflow-wrap-anywhere min-w-0">{notification.metadata.contactInfo.customContact}</span>
+         {isPhoneNumber(notification.metadata.contactInfo.customContact) ? (
+          <>
+           <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
+           <a href={`tel:${cleanPhoneForHref(notification.metadata.contactInfo.customContact)}`} className="font-mono hover:underline break-all overflow-wrap-anywhere min-w-0">
+            {notification.metadata.contactInfo.customContact}
+           </a>
+          </>
+         ) : (
+          <>
+           <Send className="w-4 h-4 mt-0.5 flex-shrink-0" />
+           <span className="break-words overflow-wrap-anywhere min-w-0">{notification.metadata.contactInfo.customContact}</span>
+          </>
+         )}
         </>
        )}
       </div>

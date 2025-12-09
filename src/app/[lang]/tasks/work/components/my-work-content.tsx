@@ -14,6 +14,19 @@ interface MyWorkContentProps {
   lang: string
 }
 
+// Helper to detect if a string looks like a phone number
+const isPhoneNumber = (text: string): boolean => {
+  // Clean the text and check if it looks like a phone number
+  const cleaned = text.replace(/[\s\-\(\)\.]/g, '')
+  // Match patterns: starts with + or 0, 8-15 digits total
+  return /^[\+]?[0-9]{8,15}$/.test(cleaned)
+}
+
+// Clean phone number for tel: href
+const cleanPhoneForHref = (phone: string): string => {
+  return phone.replace(/[\s\-\(\)\.]/g, '')
+}
+
 type WorkFilter = 'in_progress' | 'completed'
 
 export function MyWorkContent({ lang }: MyWorkContentProps) {
@@ -395,8 +408,19 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                           )}
                           {task.sharedContactInfo.method === 'custom' && task.sharedContactInfo.customContact && (
                             <div className="flex items-start gap-2 text-sm text-blue-800">
-                              <Send className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                              <span className="break-words">{task.sharedContactInfo.customContact}</span>
+                              {isPhoneNumber(task.sharedContactInfo.customContact) ? (
+                                <>
+                                  <Phone className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                                  <a href={`tel:${cleanPhoneForHref(task.sharedContactInfo.customContact)}`} className="font-mono hover:underline break-words">
+                                    {task.sharedContactInfo.customContact}
+                                  </a>
+                                </>
+                              ) : (
+                                <>
+                                  <Send className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                                  <span className="break-words">{task.sharedContactInfo.customContact}</span>
+                                </>
+                              )}
                             </div>
                           )}
                         </>

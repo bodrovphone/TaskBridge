@@ -59,41 +59,40 @@ export default function RejectApplicationDialog({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      size="2xl"
+      size="md"
+      scrollBehavior="inside"
       classNames={{
-        base: 'max-h-[90vh]',
-        body: 'py-6'
+        base: 'max-h-[85vh] mx-4',
+        body: 'py-4',
+        footer: 'border-t border-gray-100'
       }}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className="flex flex-col gap-1 pb-2">
               <div className="flex items-center gap-2">
-                <XCircle className="w-6 h-6 text-red-500" />
-                <h2 className="text-2xl font-bold">{t('rejectApplication.title')}</h2>
+                <XCircle className="w-5 h-5 text-red-500" />
+                <h2 className="text-lg font-bold">{t('rejectApplication.title')}</h2>
               </div>
             </ModalHeader>
 
-            <ModalBody>
-              <p className="text-gray-700 mb-4">
+            <ModalBody className="gap-4">
+              <p className="text-sm text-gray-600">
                 {t('rejectApplication.description', { name: professional.name })}
               </p>
 
               {/* Optional Reason Selection */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-base mb-3">
+              <div>
+                <h4 className="font-medium text-sm mb-2 text-gray-700">
                   {t('rejectApplication.reasonTitle')}
                 </h4>
-                <p className="text-sm text-gray-600 mb-4">
-                  {t('rejectApplication.reasonHelp')}
-                </p>
 
                 <RadioGroup
                   value={selectedReason}
                   onValueChange={setSelectedReason}
                   classNames={{
-                    wrapper: 'gap-3'
+                    wrapper: 'gap-2'
                   }}
                 >
                   {rejectionReasons.map((reason) => (
@@ -112,27 +111,22 @@ export default function RejectApplicationDialog({
                 </RadioGroup>
               </div>
 
-              {/* Info Notice */}
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm text-blue-800">
-                      {t('rejectApplication.note', { name: professional.name })}
-                    </p>
-                  </div>
-                </div>
+              {/* Compact Info Notice */}
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <p className="text-xs text-blue-700">
+                  {t('rejectApplication.note', { name: professional.name })}
+                </p>
               </div>
             </ModalBody>
 
-            <ModalFooter>
-              <Button variant="bordered" onPress={handleClose}>
+            <ModalFooter className="pt-3">
+              <Button variant="bordered" size="sm" onPress={handleClose}>
                 {t('rejectApplication.cancel')}
               </Button>
               <Button
                 color="danger"
+                size="sm"
                 onPress={handleConfirm}
-                startContent={<XCircle className="w-4 h-4" />}
               >
                 {t('rejectApplication.confirm')}
               </Button>
