@@ -12,6 +12,7 @@ export const onboarding = {
   'onboarding.roleChoice.customer.description': 'Публикувайте задачи и намерете професионалисти',
   'onboarding.roleChoice.professional.title': 'Търся работа',
   'onboarding.roleChoice.professional.description': 'Разгледайте задачи и предложете услугите си',
+  'onboarding.roleChoice.skipButton': 'Пропусни обиколката',
 
   // Tour Navigation
   'onboarding.back': 'Назад',

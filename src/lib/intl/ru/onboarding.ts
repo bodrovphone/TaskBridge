@@ -12,6 +12,7 @@ export const onboarding = {
   'onboarding.roleChoice.customer.description': 'Размещайте задачи и находите профессионалов',
   'onboarding.roleChoice.professional.title': 'Я ищу работу',
   'onboarding.roleChoice.professional.description': 'Просматривайте задачи и предлагайте свои услуги',
+  'onboarding.roleChoice.skipButton': 'Пропустить тур',
 
   // Tour Navigation
   'onboarding.back': 'Назад',

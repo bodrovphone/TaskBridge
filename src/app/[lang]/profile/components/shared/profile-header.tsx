@@ -74,7 +74,23 @@ export function ProfileHeader({
     requirements: professionalRequirements,
     isListed,
     isComplete: allProfessionalRequirementsMet,
+    firstIncompleteSectionId,
   } = useProfessionalListingStatus(profileType === 'professional' ? profile : null)
+
+  // Scroll to first incomplete section with smooth animation
+  const scrollToIncompleteSection = () => {
+    if (firstIncompleteSectionId) {
+      const element = document.getElementById(firstIncompleteSectionId)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Add a brief highlight animation
+        element.classList.add('ring-2', 'ring-amber-400', 'ring-offset-2')
+        setTimeout(() => {
+          element.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2')
+        }, 2000)
+      }
+    }
+  }
 
   // Check if professional profile is incomplete (not listed)
   const isProfessionalIncomplete = profileType === 'professional' && !isListed
@@ -162,24 +178,36 @@ export function ProfileHeader({
                   </div>
                 </div>
 
-                {/* Professional Listing Requirements Checklist */}
+                {/* Professional Listing Requirements Checklist - Clickable Banner */}
                 {profileType === 'professional' && !allProfessionalRequirementsMet && (
-                  <div className={`mb-4 p-4 rounded-xl border-2 ${
-                    isProfessionalIncomplete
-                      ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300'
-                      : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
-                  }`}>
+                  <button
+                    onClick={scrollToIncompleteSection}
+                    className={`w-full text-left mb-4 p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md cursor-pointer group ${
+                      isProfessionalIncomplete
+                        ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300 hover:border-amber-400 hover:from-amber-100 hover:to-orange-100'
+                        : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:border-blue-300 hover:from-blue-100 hover:to-indigo-100'
+                    }`}
+                  >
                     <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${isProfessionalIncomplete ? 'bg-amber-100' : 'bg-blue-100'}`}>
+                      <div className={`p-2 rounded-lg transition-transform group-hover:scale-110 ${isProfessionalIncomplete ? 'bg-amber-100' : 'bg-blue-100'}`}>
                         <AlertCircle className={`w-5 h-5 ${isProfessionalIncomplete ? 'text-amber-600' : 'text-blue-600'}`} />
                       </div>
                       <div className="flex-1">
-                        <h4 className={`font-bold mb-1 ${isProfessionalIncomplete ? 'text-amber-900' : 'text-blue-900'}`}>
-                          {isProfessionalIncomplete
-                            ? t('profile.listing.notListed', 'Your profile is not listed yet')
-                            : t('profile.listing.incomplete', 'Complete your profile')
-                          }
-                        </h4>
+                        <div className="flex items-center justify-between">
+                          <h4 className={`font-bold mb-1 ${isProfessionalIncomplete ? 'text-amber-900' : 'text-blue-900'}`}>
+                            {isProfessionalIncomplete
+                              ? t('profile.listing.notListed', 'Your profile is not listed yet')
+                              : t('profile.listing.incomplete', 'Complete your profile')
+                            }
+                          </h4>
+                          <span className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${
+                            isProfessionalIncomplete
+                              ? 'bg-amber-200 text-amber-800 group-hover:bg-amber-300'
+                              : 'bg-blue-200 text-blue-800 group-hover:bg-blue-300'
+                          }`}>
+                            {t('profile.listing.clickToFix', 'Click to fix')} →
+                          </span>
+                        </div>
                         <p className={`text-sm mb-3 ${isProfessionalIncomplete ? 'text-amber-800' : 'text-blue-800'}`}>
                           {isProfessionalIncomplete
                             ? t('profile.listing.notListedMessage', 'Add a professional title to appear in our search and receive job opportunities from customers.')
@@ -211,7 +239,7 @@ export function ProfileHeader({
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 )}
 
               </div>

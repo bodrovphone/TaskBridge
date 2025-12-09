@@ -12,6 +12,7 @@ import { ServicesPricingSection } from './sections/services-pricing-section'
 import { PersonalInfoSection } from './shared/personal-info-section'
 import { PortfolioGalleryManager } from './portfolio-gallery-manager'
 import { UserProfile, PreferredContact, PreferredLanguage, GalleryItem, ServiceItem } from '@/server/domain/user/user.types'
+import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
 
 interface ProfessionalProfileProps {
   profile: UserProfile
@@ -21,6 +22,9 @@ interface ProfessionalProfileProps {
 export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalProfileProps) {
   const { t } = useTranslation()
   const [error, setError] = useState<string | null>(null)
+
+  // Get incomplete section IDs for highlighting
+  const { incompleteSectionIds, isComplete } = useProfessionalListingStatus(profile)
 
   // Handler for personal information
   const handlePersonalInfoSave = async (data: {
@@ -183,12 +187,16 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         bio={profile.bio || ''}
         yearsExperience={formatYearsExperience(profile.yearsExperience)}
         onSave={handleIdentitySave}
+        sectionId="professional-identity-section"
+        isHighlighted={!isComplete && incompleteSectionIds.has('professional-identity-section')}
       />
 
       {/* 2. Service Categories */}
       <ServiceCategoriesSection
         serviceCategories={profile.serviceCategories || []}
         onSave={handleCategoriesSave}
+        sectionId="service-categories-section"
+        isHighlighted={!isComplete && incompleteSectionIds.has('service-categories-section')}
       />
 
       {/* 3. Services & Pricing */}

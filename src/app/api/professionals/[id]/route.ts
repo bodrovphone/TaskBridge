@@ -262,9 +262,7 @@ export async function GET(
       services: professional.services || [],
       serviceCategories: professional.service_categories || [],
       reviews: transformedReviews,
-      responseTime: professional.response_time_hours
-        ? `${professional.response_time_hours} часа`
-        : "2 часа",
+      responseTimeHours: professional.response_time_hours || null,
       safetyStatus: {
         phoneVerified: professional.is_phone_verified || false,
         profileComplete: !!(professional.full_name && professional.bio && professional.city),

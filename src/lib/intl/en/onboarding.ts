@@ -12,6 +12,7 @@ export const onboarding = {
   'onboarding.roleChoice.customer.description': 'Post tasks and find professionals to help you',
   'onboarding.roleChoice.professional.title': "I'm looking for work",
   'onboarding.roleChoice.professional.description': 'Browse tasks and offer your services',
+  'onboarding.roleChoice.skipButton': 'Skip tour',
 
   // Tour Navigation
   'onboarding.back': 'Back',

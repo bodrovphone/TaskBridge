@@ -131,6 +131,10 @@ export function OnboardingProviderWrapper({
     startTourFromHook(choice)
   }, [startTourFromHook])
 
+  const handleRoleSkip = useCallback(() => {
+    setShowRoleChoice(false)
+  }, [])
+
   const handleNextStep = useCallback(() => {
     // Check if this is the last applicable step
     const nextStepConfig = getCurrentTourStep(
@@ -231,6 +235,7 @@ export function OnboardingProviderWrapper({
       <RoleChoiceModal
         isOpen={showRoleChoice}
         onSelect={handleRoleSelect}
+        onSkip={handleRoleSkip}
       />
 
       {/* Tour Overlay */}

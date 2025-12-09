@@ -21,9 +21,18 @@ import { cn } from '@/lib/utils'
 interface ServiceCategoriesSectionProps {
   serviceCategories: string[]
   onSave: (data: string[]) => void
+  /** Section ID for scroll targeting */
+  sectionId?: string
+  /** Whether this section should be highlighted as incomplete */
+  isHighlighted?: boolean
 }
 
-export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceCategoriesSectionProps) {
+export function ServiceCategoriesSection({
+  serviceCategories,
+  onSave,
+  sectionId,
+  isHighlighted = false
+}: ServiceCategoriesSectionProps) {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -46,8 +55,19 @@ export function ServiceCategoriesSection({ serviceCategories, onSave }: ServiceC
 
   return (
     <>
-      <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
-        <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-4 md:px-6">
+      <Card
+        id={sectionId}
+        className={`shadow-lg border bg-white/90 hover:shadow-xl transition-all duration-300 ${
+          isHighlighted
+            ? 'border-amber-300 ring-2 ring-amber-200 ring-offset-2'
+            : 'border-gray-100/50'
+        }`}
+      >
+        <CardHeader className={`border-b bg-gradient-to-r px-4 md:px-6 ${
+          isHighlighted
+            ? 'border-amber-200 from-amber-50/50 to-orange-50/30'
+            : 'border-gray-100 from-gray-50/50 to-white'
+        }`}>
           <div className="flex items-center justify-between w-full gap-2">
             <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
               <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500/10 to-green-100 flex-shrink-0">

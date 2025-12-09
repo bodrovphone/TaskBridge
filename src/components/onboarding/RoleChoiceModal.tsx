@@ -8,9 +8,10 @@ import { Logo } from '@/components/common/logo'
 interface RoleChoiceModalProps {
   isOpen: boolean
   onSelect: (choice: 'customer' | 'professional') => void
+  onSkip: () => void
 }
 
-export function RoleChoiceModal({ isOpen, onSelect }: RoleChoiceModalProps) {
+export function RoleChoiceModal({ isOpen, onSelect, onSkip }: RoleChoiceModalProps) {
   const { t } = useTranslation()
 
   return (
@@ -88,6 +89,14 @@ export function RoleChoiceModal({ isOpen, onSelect }: RoleChoiceModalProps) {
                 </CardBody>
               </Card>
             </div>
+
+            {/* Skip button */}
+            <button
+              onClick={onSkip}
+              className="w-full mt-4 text-sm text-gray-400 hover:text-blue-600 transition-colors py-2"
+            >
+              {t('onboarding.roleChoice.skipButton')}
+            </button>
           </div>
         </ModalBody>
       </ModalContent>

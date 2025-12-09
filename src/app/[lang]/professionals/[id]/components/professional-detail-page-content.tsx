@@ -11,6 +11,7 @@ import CompletedTasksSection from '@/features/professionals/components/sections/
 import ReviewsSection from '@/features/professionals/components/sections/reviews-section';
 import { SuspensionBanner } from '@/components/safety/suspension-banner';
 import { getCityLabelBySlug } from '@/features/cities';
+import { formatResponseTime } from '@/lib/utils/pluralization';
 import { toast } from '@/hooks/use-toast';
 import { TaskSelectionModal } from '@/components/modals/task-selection-modal';
 import AuthSlideOver from '@/components/ui/auth-slide-over';
@@ -24,7 +25,7 @@ interface ProfessionalDetailPageContentProps {
 }
 
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const { user, authenticatedFetch } = useAuth();
   const [isShareCopied, setIsShareCopied] = useState(false);
@@ -67,7 +68,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     reviewCount: professional.reviewsCount || professional.reviewCount || 0,
     completedTasks: professional.completedJobs || professional.completedTasks || 0,
     yearsExperience: professional.yearsExperience || 0,
-    responseTime: professional.responseTime || "2 часа",
+    responseTime: formatResponseTime(professional.responseTimeHours, i18n.language, t),
     // Show city if available, otherwise show "Bulgaria 🇧🇬" like on professional cards
     location: professional.city
       ? `${getCityLabelBySlug(professional.city, t)}${professional.neighborhood ? `, ${professional.neighborhood}` : ''}`

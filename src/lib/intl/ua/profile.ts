@@ -189,6 +189,7 @@ export const profile = {
   'profile.listing.requirement.bio': 'Опис/Про себе',
   'profile.listing.requirement.rate': 'Погодинна ставка',
   'profile.listing.requirement.skills': 'Категорії послуг',
+  'profile.listing.clickToFix': 'Натисніть для виправлення',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Натисніть для підключення',

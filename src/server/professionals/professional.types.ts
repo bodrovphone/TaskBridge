@@ -188,7 +188,7 @@ export interface ProfessionalDetail extends Professional {
   neighborhood: string | null
   services: string[]
   portfolio: any[]
-  responseTime: string
+  responseTimeHours: number | null
 
   // Safety & verification
   safetyStatus: {

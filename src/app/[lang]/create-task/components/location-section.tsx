@@ -13,8 +13,8 @@ export function LocationSection({ form }: LocationSectionProps) {
  const { t } = useTranslation()
 
  return (
-  <Card className="shadow-md border border-gray-100">
-   <CardBody className="p-6 md:p-8 space-y-6">
+  <Card className="shadow-md border border-gray-100 overflow-visible">
+   <CardBody className="p-6 md:p-8 space-y-6 overflow-visible">
     {/* Section Header */}
     <div className="flex items-start gap-3 pb-4 border-b border-gray-200">
      <div className="p-2 bg-green-100 rounded-lg">

@@ -7,6 +7,8 @@ export interface ProfessionalRequirement {
   label: string
   met: boolean
   required: boolean
+  /** Section ID for scroll targeting */
+  sectionId: string
 }
 
 export interface ProfessionalListingStatus {
@@ -24,6 +26,10 @@ export interface ProfessionalListingStatus {
   metCount: number
   /** Total requirements count */
   totalCount: number
+  /** Section ID of first incomplete requirement (for scroll targeting) */
+  firstIncompleteSectionId: string | null
+  /** Set of section IDs that have incomplete requirements (for highlighting) */
+  incompleteSectionIds: Set<string>
 }
 
 /**
@@ -56,23 +62,27 @@ export function useProfessionalListingStatus(
         label: t('profile.listing.requirement.title', 'Professional title'),
         met: false,
         required: true,
+        sectionId: 'professional-identity-section',
       },
       {
         key: 'bio',
         label: t('profile.listing.requirement.bio', 'Description/Bio'),
         met: false,
         required: false,
+        sectionId: 'professional-identity-section',
       },
       {
         key: 'skills',
         label: t('profile.listing.requirement.skills', 'Service categories'),
         met: false,
         required: false,
+        sectionId: 'service-categories-section',
       },
     ]
 
     // Early return for non-authenticated users - all requirements missing
     if (!profile) {
+      const allSectionIds = new Set(defaultRequirements.map(r => r.sectionId))
       return {
         requirements: defaultRequirements,
         isListed: false,
@@ -81,6 +91,8 @@ export function useProfessionalListingStatus(
         missingRecommended: defaultRequirements.filter(r => !r.required),
         metCount: 0,
         totalCount: defaultRequirements.length,
+        firstIncompleteSectionId: defaultRequirements[0]?.sectionId || null,
+        incompleteSectionIds: allSectionIds,
       }
     }
 
@@ -90,18 +102,21 @@ export function useProfessionalListingStatus(
         label: t('profile.listing.requirement.title', 'Professional title'),
         met: !!(profile.professionalTitle && profile.professionalTitle.length >= 3),
         required: true,
+        sectionId: 'professional-identity-section',
       },
       {
         key: 'bio',
         label: t('profile.listing.requirement.bio', 'Description/Bio'),
         met: !!(profile.bio && profile.bio.length >= 20),
         required: false,
+        sectionId: 'professional-identity-section',
       },
       {
         key: 'skills',
         label: t('profile.listing.requirement.skills', 'Service categories'),
         met: !!(profile.serviceCategories && profile.serviceCategories.length > 0),
         required: false,
+        sectionId: 'service-categories-section',
       },
     ]
 
@@ -111,6 +126,15 @@ export function useProfessionalListingStatus(
     const missingRecommended = requirements.filter(r => !r.required && !r.met)
     const metCount = requirements.filter(r => r.met).length
 
+    // Get first incomplete section (prioritize required fields)
+    const firstIncomplete = missingRequired[0] || missingRecommended[0]
+    const firstIncompleteSectionId = firstIncomplete?.sectionId || null
+
+    // Get all section IDs with incomplete requirements
+    const incompleteSectionIds = new Set(
+      requirements.filter(r => !r.met).map(r => r.sectionId)
+    )
+
     return {
       requirements,
       isListed,
@@ -119,6 +143,8 @@ export function useProfessionalListingStatus(
       missingRecommended,
       metCount,
       totalCount: requirements.length,
+      firstIncompleteSectionId,
+      incompleteSectionIds,
     }
   }, [profile, t])
 }

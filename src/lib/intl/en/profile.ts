@@ -189,6 +189,7 @@ export const profile = {
   'profile.listing.requirement.bio': 'Description/Bio',
   'profile.listing.requirement.rate': 'Hourly rate',
   'profile.listing.requirement.skills': 'Service categories',
+  'profile.listing.clickToFix': 'Click to fix',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Click to connect',

@@ -158,6 +158,11 @@ export function getCurrentTourStep(
 
 /**
  * Get total number of applicable steps for progress indicator
+ *
+ * Only counts steps that are actually reachable:
+ * - No page requirement (always reachable)
+ * - User is already on the required page
+ * - Step has navigateTo to take user to the required page
  */
 export function getTotalApplicableSteps(
   tourId: TourId,
@@ -170,9 +175,20 @@ export function getTotalApplicableSteps(
   if (!config) return 0
 
   return config.steps.filter((step) => {
+    // Check professional profile requirement
     if (step.requiresProfessionalProfile === true && !context.hasProfessionalProfile) return false
     if (step.requiresProfessionalProfile === false && context.hasProfessionalProfile) return false
-    // Don't filter by page for total count - we want to show progress across pages
+
+    // Check if step is reachable:
+    // - No page requirement = always reachable
+    // - Has navigateTo = can navigate there
+    // - User already on required page
+    if (step.requiresPage) {
+      const isOnRequiredPage = context.pathname.includes(step.requiresPage)
+      const canNavigate = !!step.navigateTo
+      if (!isOnRequiredPage && !canNavigate) return false
+    }
+
     return true
   }).length
 }

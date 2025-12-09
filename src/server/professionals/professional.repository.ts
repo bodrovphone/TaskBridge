@@ -639,9 +639,7 @@ export async function getProfessionalDetailById(
     neighborhood: professional.neighborhood,
     services: professional.services || [],
     portfolio: professional.portfolio || [],
-    responseTime: professional.response_time_hours
-      ? `${professional.response_time_hours} hours`
-      : '2 hours',
+    responseTimeHours: professional.response_time_hours || null,
 
     // Safety status
     safetyStatus: {
