@@ -11,7 +11,6 @@ import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
-import { onboarding } from './onboarding';
 
 export const ru = {
   ...common,
@@ -27,7 +26,6 @@ export const ru = {
   ...notifications,
   ...reviews,
   ...legal,
-  ...onboarding,
 };
 
 export default ru;

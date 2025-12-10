@@ -16,7 +16,6 @@ import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
 import { useCreateTask } from "@/hooks/use-create-task"
 import { ReviewEnforcementDialog } from "@/features/reviews"
-import { useOnboardingContext } from "@/components/onboarding"
 import { useNotificationStore } from "@/stores/notification-store"
 import {
  Navbar,
@@ -45,7 +44,6 @@ function Header() {
  const params = useParams()
  const lang = params?.lang as string || 'bg'
  const { toast } = useToast()
- const { restartTour } = useOnboardingContext()
  const { setOpen: setNotificationOpen } = useNotificationStore()
 
  // Smart sticky navbar - hide on scroll down, show on scroll up
@@ -177,7 +175,7 @@ function Header() {
     }}
    >
    {/* Logo/Brand */}
-   <NavbarBrand id="onboarding-welcome">
+   <NavbarBrand>
     <LocaleLink href="/" className="flex items-center">
      <Image
       src="/images/logo/trudify-logo-64.svg"
@@ -197,13 +195,8 @@ function Header() {
      const isActive = pathname === `/${lang}${item.href}` ||
       (item.href.startsWith('/#') && pathname === `/${lang}`)
      const Icon = item.icon
-     // Generate ID for onboarding tour targeting
-     const navId = item.href === '/create-task' ? 'nav-create-task'
-      : item.href === '/professionals' ? 'nav-professionals'
-      : item.href === '/browse-tasks' ? 'nav-browse-tasks'
-      : undefined
      return (
-      <NavbarItem key={item.name} id={navId}>
+      <NavbarItem key={item.name}>
        <NextUILink
         as={LocaleLink}
         href={item.href}
@@ -292,20 +285,21 @@ function Header() {
     <NavbarMenuToggle id="mobile-menu-toggle" />
    </NavbarContent>
 
-   {/* Mobile Menu - z-index must be above tour overlay (9998) */}
-   <NavbarMenu className="flex flex-col overflow-y-auto !bg-white" style={{ zIndex: Z_INDEX.MOBILE_MENU_TOUR }}>
+   {/* Mobile Menu */}
+   <NavbarMenu className="flex flex-col overflow-y-auto !bg-white" style={{ zIndex: Z_INDEX.MOBILE_MENU }}>
     <div className="flex-1 overflow-y-auto pb-2">
      {/* Menu items for authenticated users */}
      {isAuthenticated ? (
       <>
-       {/* How it works - triggers tour */}
+       {/* How it works - link to section */}
        <NavbarMenuItem>
         <NextUILink
-         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
+         href={`/${lang}/#how-it-works`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
          size="lg"
          onPress={() => {
           setIsMenuOpen(false)
-          setTimeout(() => restartTour(), 200)
+          router.push(`/${lang}/#how-it-works`)
          }}
         >
          <Lightbulb size={18} className="text-yellow-500" />
@@ -410,14 +404,15 @@ function Header() {
      ) : (
       // Non-authenticated users see simplified navigation
       <>
-       {/* How it works - triggers tour */}
+       {/* How it works - link to section */}
        <NavbarMenuItem>
         <NextUILink
-         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2 cursor-pointer"
+         href={`/${lang}/#how-it-works`}
+         className="w-full text-gray-900 hover:text-primary font-medium py-2 flex items-center gap-2"
          size="lg"
          onPress={() => {
           setIsMenuOpen(false)
-          setTimeout(() => restartTour(), 200)
+          router.push(`/${lang}/#how-it-works`)
          }}
         >
          <Lightbulb size={18} className="text-yellow-500" />

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth';
-import { useOnboardingContext } from '@/components/onboarding';
 
 const TELEGRAM_TOAST_DISMISSED_KEY = 'telegram-toast-dismissed';
 const TOAST_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -15,16 +14,12 @@ export function TelegramConnectionToast() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const { user, profile } = useAuth();
-  const { isOnboarding } = useOnboardingContext();
   const [hasShownToast, setHasShownToast] = useState(false);
 
   useEffect(() => {
     const checkAndShowToast = () => {
       // Only show once per session
       if (hasShownToast) return;
-
-      // Don't show during onboarding tour - let user focus on the tour
-      if (isOnboarding) return;
 
       // Check if toast was recently dismissed
       const dismissedTimestamp = localStorage.getItem(TELEGRAM_TOAST_DISMISSED_KEY);
@@ -106,7 +101,7 @@ export function TelegramConnectionToast() {
     }, 5000);
 
     return () => clearTimeout(timeoutId);
-  }, [hasShownToast, isOnboarding, user, profile, t, i18n.language, router]);
+  }, [hasShownToast, user, profile, t, i18n.language, router]);
 
   return null; // This component doesn't render anything
 }

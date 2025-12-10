@@ -20,7 +20,6 @@ export const navigation = {
   'nav.tasksIAmDoing': 'tasks I am doing',
   'nav.findProfessional': 'find a professional',
   'nav.findAnotherTask': 'find another task',
-  'nav.help': 'Help',
   'nav.language': 'Language',
   'nav.general': 'General',
   'nav.discover': 'Discover',

@@ -19,9 +19,7 @@ import {
  LogOut,
  Mail,
  Hammer,
- HelpCircle,
 } from 'lucide-react'
-import { useOnboardingContext } from '@/components/onboarding'
 import { useIsMobile } from '@/hooks/use-is-mobile'
 
 interface UserAvatarDropdownProps {
@@ -40,7 +38,6 @@ export default function UserAvatarDropdown({
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'
- const { restartTour } = useOnboardingContext()
  const isMobile = useIsMobile('lg')
  const [isResending, setIsResending] = useState(false)
  const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -94,9 +91,6 @@ export default function UserAvatarDropdown({
     break
    case 'tasks-work':
     router.push(`/${lang}/tasks/work`)
-    break
-   case 'help':
-    restartTour()
     break
    case 'logout':
     signOut()
@@ -248,17 +242,6 @@ export default function UserAvatarDropdown({
       </DropdownSection>
      </>
     )}
-
-    {/* Help */}
-    <DropdownSection showDivider>
-     <DropdownItem
-      key="help"
-      startContent={<HelpCircle className="text-purple-500" size={18} />}
-      className="text-gray-900"
-     >
-      {t('nav.help')}
-     </DropdownItem>
-    </DropdownSection>
 
     {/* Logout */}
     <DropdownSection>

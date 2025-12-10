@@ -9,7 +9,6 @@ import { NextUIProvider } from '@nextui-org/react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { type SupportedLocale } from '@/lib/constants/locales'
 import { AuthProvider } from '@/features/auth'
-import { OnboardingProviderWrapper } from '@/components/onboarding'
 
 interface LocaleProvidersProps {
  children: React.ReactNode
@@ -124,9 +123,7 @@ function LocaleProviders({ children, locale }: LocaleProvidersProps) {
     <QueryClientProvider client={queryClient}>
      <I18nextProvider i18n={i18n}>
       <AuthProvider>
-        <OnboardingProviderWrapper>
-          {children}
-        </OnboardingProviderWrapper>
+        {children}
         <Toaster />
       </AuthProvider>
      </I18nextProvider>

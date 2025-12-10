@@ -12,7 +12,6 @@ import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
-import { onboarding } from './onboarding';
 
 // Combine all chunks into single translation object
 export const bg = {
@@ -29,7 +28,6 @@ export const bg = {
   ...notifications,
   ...reviews,
   ...legal,
-  ...onboarding,
 };
 
 export default bg;

@@ -20,7 +20,6 @@ export const navigation = {
   'nav.tasksIAmDoing': 'завдання, які я виконую',
   'nav.findProfessional': 'знайти фахівця',
   'nav.findAnotherTask': 'знайти інше завдання',
-  'nav.help': 'Допомога',
   'nav.language': 'Мова',
   'nav.general': 'Загальне',
   'nav.discover': 'Відкрити',
