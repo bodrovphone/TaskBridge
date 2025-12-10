@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import { createNotification } from '@/lib/services/notification-service';
 import { authenticateRequest } from '@/lib/auth/api-auth';
 
@@ -23,7 +23,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS since we've already authenticated the user
+    // This is necessary for notification token auth (magic links) where there's
+    // no Supabase session, so auth.uid() in RLS policies would return NULL
+    const supabase = createAdminClient();
 
     const body = await request.json();
     const {
