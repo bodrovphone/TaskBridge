@@ -43,9 +43,9 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
 
  return (
   <div
-   className={`group hover:-translate-y-2 hover:scale-[1.02] transition-transform duration-300 ease-out will-change-transform ${compact ? 'h-full' : ''}`}
+   className={`group transition-shadow duration-300 ease-out ${compact ? 'h-full' : ''}`}
   >
-   <NextUICard className={`professional-card bg-white shadow-lg hover:shadow-2xl transition-all duration-500 relative border border-gray-100 group-hover:border-blue-200 overflow-hidden ${compact ? 'h-full' : ''}`}>
+   <NextUICard className={`professional-card bg-white shadow-lg hover:shadow-2xl transition-all duration-300 relative border border-gray-100 group-hover:border-blue-300 overflow-hidden ${compact ? 'h-full' : ''}`}>
     {/* Mock badge - shows for reference data */}
     {isMock && (
      <div className="absolute top-0 left-0 z-20">

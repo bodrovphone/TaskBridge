@@ -82,46 +82,33 @@ export default function ProfessionalsPage() {
 
   return (
     <>
-      {/* Pinterest-style Masonry CSS */}
+      {/* Grid Layout CSS - Consistent across browsers */}
       <style jsx global>{`
         .masonry-grid {
-          column-count: 1;
-          column-gap: 1.5rem;
-          column-fill: balance;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
           padding: 0;
         }
 
         @media (min-width: 640px) {
           .masonry-grid {
-            column-count: 2;
+            grid-template-columns: repeat(2, 1fr);
           }
         }
 
         @media (min-width: 1024px) {
           .masonry-grid {
-            column-count: 3;
-          }
-        }
-
-        @media (min-width: 1280px) {
-          .masonry-grid {
-            column-count: 3;
+            grid-template-columns: repeat(3, 1fr);
           }
         }
 
         .masonry-item {
-          display: inline-block;
           width: 100%;
-          margin-bottom: 1.5rem;
-          break-inside: avoid;
-          page-break-inside: avoid;
-          -webkit-column-break-inside: avoid;
-          vertical-align: top;
         }
 
         .masonry-item .professional-card {
-          height: auto !important;
-          min-height: unset !important;
+          height: 100%;
         }
       `}</style>
 
