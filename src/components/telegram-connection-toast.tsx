@@ -2,17 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth';
 
 const TELEGRAM_TOAST_DISMISSED_KEY = 'telegram-toast-dismissed';
-const TOAST_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+const TOAST_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
 
 export function TelegramConnectionToast() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, profile } = useAuth();
   const [hasShownToast, setHasShownToast] = useState(false);
 
@@ -21,12 +22,15 @@ export function TelegramConnectionToast() {
       // Only show once per session
       if (hasShownToast) return;
 
+      // Don't show on magic link sessions (user just clicked notification link)
+      if (searchParams.get('notificationSession')) return;
+
       // Check if toast was recently dismissed
       const dismissedTimestamp = localStorage.getItem(TELEGRAM_TOAST_DISMISSED_KEY);
       if (dismissedTimestamp) {
         const timeSinceDismissed = Date.now() - parseInt(dismissedTimestamp, 10);
         if (timeSinceDismissed < TOAST_COOLDOWN_MS) {
-          return; // Don't show if dismissed within last 24 hours
+          return; // Don't show if dismissed within last 3 days
         }
       }
 
@@ -101,7 +105,7 @@ export function TelegramConnectionToast() {
     }, 5000);
 
     return () => clearTimeout(timeoutId);
-  }, [hasShownToast, user, profile, t, i18n.language, router]);
+  }, [hasShownToast, user, profile, t, i18n.language, router, searchParams]);
 
   return null; // This component doesn't render anything
 }
