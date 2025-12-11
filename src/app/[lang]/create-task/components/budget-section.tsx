@@ -1,8 +1,10 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Input, RadioGroup, Radio, Card, CardBody } from '@nextui-org/react'
+import { Input, Card, CardBody } from '@nextui-org/react'
 import { Wallet, Info } from 'lucide-react'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label'
 
 interface BudgetSectionProps {
  form: any
@@ -13,6 +15,27 @@ interface BudgetSectionProps {
 
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
  const { t } = useTranslation()
+
+ const budgetOptions = [
+  {
+   value: 'fixed' as const,
+   title: t('createTask.budget.typeFixed', 'Fixed Price'),
+   description: t('createTask.budget.fixedDesc', 'I know exactly what I want to pay'),
+   radioColor: 'text-blue-500 border-blue-500',
+  },
+  {
+   value: 'range' as const,
+   title: t('createTask.budget.typeRange', 'Price Range'),
+   description: t('createTask.budget.rangeDesc', 'I have a minimum and maximum budget'),
+   radioColor: 'text-purple-500 border-purple-500',
+  },
+  {
+   value: 'unclear' as const,
+   title: t('createTask.budget.typeUnclear', "I'm not sure about the budget"),
+   description: t('createTask.budget.unclearDesc', 'Let professionals suggest a price'),
+   radioColor: 'text-gray-500 border-gray-500',
+  },
+ ]
 
  const handleBudgetTypeChange = (newType: 'fixed' | 'range' | 'unclear') => {
   // Clear budget field values and errors when switching types
@@ -54,52 +77,31 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
    {/* Budget Type Selection */}
    <form.Field name="budgetType">
     {(field: any) => (
-     <div className="grid grid-cols-1 gap-3">
-      <RadioGroup
-       value={field.state.value || 'unclear'}
-       onValueChange={(value: any) => {
-        field.handleChange(value as 'fixed' | 'range' | 'unclear')
-        handleBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
-       }}
-       classNames={{
-        wrapper: 'flex flex-col gap-3'
-       }}
-      >
-       <Radio
-        value="fixed"
-        classNames={{
-         base: 'flex m-0 bg-white hover:bg-gray-50 items-center flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-         label: 'text-gray-900 font-medium w-full',
-         wrapper: 'group-data-[selected=true]:border-orange-600',
-         control: 'bg-orange-600 flex-shrink-0'
-        }}
+     <RadioGroup
+      value={field.state.value || 'unclear'}
+      onValueChange={(value: string) => {
+       field.handleChange(value as 'fixed' | 'range' | 'unclear')
+       handleBudgetTypeChange(value as 'fixed' | 'range' | 'unclear')
+      }}
+      className="flex flex-col gap-3"
+     >
+      {budgetOptions.map((option) => (
+       <div
+        key={option.value}
+        className="flex items-start gap-3 py-2 px-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
        >
-        {t('createTask.budget.typeFixed', 'Fixed Price')}
-       </Radio>
-       <Radio
-        value="range"
-        classNames={{
-         base: 'flex m-0 bg-white hover:bg-gray-50 items-center flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-         label: 'text-gray-900 font-medium w-full',
-         wrapper: 'group-data-[selected=true]:border-orange-600',
-         control: 'bg-orange-600 flex-shrink-0'
-        }}
-       >
-        {t('createTask.budget.typeRange', 'Price Range')}
-       </Radio>
-       <Radio
-        value="unclear"
-        classNames={{
-         base: 'flex m-0 bg-white hover:bg-gray-50 items-center flex-row-reverse w-full max-w-full cursor-pointer rounded-lg gap-4 p-4 border-2 border-gray-200 data-[selected=true]:border-orange-600',
-         label: 'text-gray-900 font-medium w-full',
-         wrapper: 'group-data-[selected=true]:border-orange-600',
-         control: 'bg-orange-600 flex-shrink-0'
-        }}
-       >
-        {t('createTask.budget.typeUnclear', "I'm not sure about the budget")}
-       </Radio>
-      </RadioGroup>
-     </div>
+        <RadioGroupItem
+         value={option.value}
+         id={`budget-${option.value}-radio`}
+         className={`mt-1 ${option.radioColor}`}
+        />
+        <Label htmlFor={`budget-${option.value}-radio`} className="cursor-pointer">
+         <div className="font-medium text-gray-900">{option.title}</div>
+         <div className="text-sm text-gray-500">{option.description}</div>
+        </Label>
+       </div>
+      ))}
+     </RadioGroup>
     )}
    </form.Field>
 

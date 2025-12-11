@@ -56,10 +56,16 @@ export const profile = {
   'profile.avatar.selectImage': 'Избери изображение',
   'profile.avatar.remove': 'Премахни',
   'profile.avatar.supportedFormats': 'Поддържани формати: JPG, PNG, WebP (макс 2MB)',
+  'profile.avatar.supportedFormatsExtended': 'Поддържани формати: JPG, PNG, WebP (авто-оптимизация)',
   'profile.avatar.invalidFileType': 'Невалиден тип файл. Моля изберете JPG, PNG или WebP изображение.',
   'profile.avatar.fileTooLarge': 'Файлът е твърде голям. Моля изберете изображение под 2MB.',
+  'profile.avatar.fileTooLargeForCompression': 'Файлът е твърде голям. Максимум 20MB.',
   'profile.avatar.uploadError': 'Неуспешно качване на изображението. Моля опитайте отново.',
   'profile.avatar.deleteError': 'Неуспешно изтриване на аватара. Моля опитайте отново.',
+  'profile.avatar.compressing': 'Оптимизиране...',
+  'profile.avatar.optimizing': 'Оптимизиране на изображението',
+  'profile.avatar.compressionError': 'Неуспешна оптимизация. Моля опитайте отново.',
+  'profile.avatar.saved': 'спестени',
 
   // Statistics Modal
   'profile.statistics.title': 'Статистики на акаунта',

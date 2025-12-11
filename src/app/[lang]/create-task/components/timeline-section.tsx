@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker'
 import { enGB, bg, ru } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'
 import './timeline-section.css'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label'
 
 interface TimelineSectionProps {
  form: any
@@ -24,21 +26,21 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
  const urgencyOptions = [
   {
    value: 'same_day' as const,
-   icon: '🔴',
    title: t('createTask.timeline.urgentTitle', 'Urgent - Same Day'),
    description: t('createTask.timeline.urgentDesc', 'I need this done today'),
+   radioColor: 'text-red-500 border-red-500',
   },
   {
    value: 'within_week' as const,
-   icon: '🟡',
    title: t('createTask.timeline.soonTitle', 'Soon - Within a Week'),
    description: t('createTask.timeline.soonDesc', 'I need this done in the next 7 days'),
+   radioColor: 'text-yellow-500 border-yellow-500',
   },
   {
    value: 'flexible' as const,
-   icon: '🟢',
    title: t('createTask.timeline.flexibleTitle', 'Flexible'),
    description: t('createTask.timeline.flexibleDesc', "I'm flexible with timing"),
+   radioColor: 'text-green-500 border-green-500',
   },
  ]
 
@@ -63,36 +65,31 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
    {/* Urgency Selection */}
    <form.Field name="urgency">
     {(field: any) => (
-     <div className="grid md:grid-cols-3 gap-4">
-      {urgencyOptions.map((option) => {
-       const isSelected = field.state.value === option.value
-
-       return (
-        <Card
-         key={option.value}
-         isPressable
-         isHoverable
-         onPress={() => {
-          field.handleChange(option.value)
-          onUrgencyChange(option.value)
-         }}
-         className={`transition-all ${
-          isSelected
-           ? 'border-2 border-primary bg-primary-50'
-           : 'border-2 border-transparent hover:border-gray-300'
-         }`}
-        >
-         <CardBody className="p-4">
-          <div className="text-3xl mb-2">{option.icon}</div>
-          <h3 className={`font-semibold mb-1 ${isSelected ? 'text-primary' : 'text-gray-900'}`}>
-           {option.title}
-          </h3>
-          <p className="text-sm text-gray-600">{option.description}</p>
-         </CardBody>
-        </Card>
-       )
-      })}
-     </div>
+     <RadioGroup
+      value={field.state.value || ''}
+      onValueChange={(value: string) => {
+       field.handleChange(value as 'same_day' | 'within_week' | 'flexible')
+       onUrgencyChange(value as 'same_day' | 'within_week' | 'flexible')
+      }}
+      className="flex flex-col gap-3"
+     >
+      {urgencyOptions.map((option) => (
+       <div
+        key={option.value}
+        className="flex items-start gap-3 py-2 px-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+       >
+        <RadioGroupItem
+         value={option.value}
+         id={`urgency-${option.value}`}
+         className={`mt-1 ${option.radioColor}`}
+        />
+        <Label htmlFor={`urgency-${option.value}`} className="cursor-pointer">
+         <div className="font-medium text-gray-900">{option.title}</div>
+         <div className="text-sm text-gray-500">{option.description}</div>
+        </Label>
+       </div>
+      ))}
+     </RadioGroup>
     )}
    </form.Field>
 

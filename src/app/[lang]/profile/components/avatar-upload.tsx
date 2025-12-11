@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Progress } from '@nextui-org/react'
 import { useTranslation } from 'react-i18next'
 import { Camera, Upload, X, Check, CircleUser } from 'lucide-react'
 import { uploadAvatar, deleteAvatar } from '@/lib/utils/avatar-upload'
 import { useAuth } from '@/features/auth'
+import { compressImageAdvanced, formatBytes } from '@/lib/utils/advanced-image-compression'
 
 interface AvatarUploadProps {
  currentAvatar?: string | null
@@ -28,6 +29,9 @@ export function AvatarUpload({
  const [previewImage, setPreviewImage] = useState<string | null>(null)
  const [selectedFile, setSelectedFile] = useState<File | null>(null)
  const [isLoading, setIsLoading] = useState(false)
+ const [isCompressing, setIsCompressing] = useState(false)
+ const [compressionProgress, setCompressionProgress] = useState(0)
+ const [compressionInfo, setCompressionInfo] = useState<string | null>(null)
  const [error, setError] = useState<string | null>(null)
  const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -44,7 +48,7 @@ export function AvatarUpload({
   fileInputRef.current?.click()
  }
 
- const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+ const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0]
   console.log('[AvatarUpload] File selected:', file?.name, file?.type, file?.size)
 
@@ -61,32 +65,76 @@ export function AvatarUpload({
    return
   }
 
-  // Validate file size (max 2MB for avatars)
-  const maxSize = 2 * 1024 * 1024
-  if (file.size > maxSize) {
-   console.error('[AvatarUpload] File too large:', file.size, 'bytes')
-   setError(t('profile.avatar.fileTooLarge'))
+  // Max original file size: 20MB (we'll compress it)
+  const maxOriginalSize = 20 * 1024 * 1024
+  if (file.size > maxOriginalSize) {
+   console.error('[AvatarUpload] File too large even for compression:', file.size, 'bytes')
+   setError(t('profile.avatar.fileTooLargeForCompression'))
    return
   }
 
-  console.log('[AvatarUpload] File validation passed, creating preview')
+  console.log('[AvatarUpload] File validation passed, starting compression')
 
-  // Store the file for upload
-  setSelectedFile(file)
+  // Compress large images automatically
+  setIsCompressing(true)
+  setCompressionProgress(0)
+  setCompressionInfo(null)
+  setError(null)
 
-  // Create preview
-  const reader = new FileReader()
-  reader.onload = (e) => {
-   const result = e.target?.result as string
-   console.log('[AvatarUpload] Preview created, length:', result?.length)
-   setPreviewImage(result)
-   setError(null)
+  try {
+   // Compress image using advanced compression
+   // Avatar preset: 400x400px max, 0.5MB target, high quality
+   const result = await compressImageAdvanced(
+    file,
+    {
+     maxSizeMB: 0.5, // 500KB max for avatars
+     maxWidthOrHeight: 800, // Larger than 400px to allow cropping
+     initialQuality: 0.9,
+    },
+    (progress) => setCompressionProgress(progress)
+   )
+
+   console.log('[AvatarUpload] Compression complete:', {
+    original: formatBytes(result.originalSize),
+    compressed: formatBytes(result.compressedSize),
+    savings: result.savingsPercent + '%'
+   })
+
+   // Show compression info if significant savings
+   if (result.savingsPercent > 10) {
+    setCompressionInfo(
+     `${formatBytes(result.originalSize)} → ${formatBytes(result.compressedSize)} (${result.savingsPercent}% ${t('profile.avatar.saved')})`
+    )
+   }
+
+   // Create a File object from the compressed blob
+   const compressedFile = new File([result.blob], file.name, {
+    type: result.format,
+   })
+
+   // Store the compressed file for upload
+   setSelectedFile(compressedFile)
+
+   // Create preview from compressed image
+   const reader = new FileReader()
+   reader.onload = (e) => {
+    const dataUrl = e.target?.result as string
+    console.log('[AvatarUpload] Preview created, length:', dataUrl?.length)
+    setPreviewImage(dataUrl)
+   }
+   reader.onerror = (e) => {
+    console.error('[AvatarUpload] FileReader error:', e)
+    setError('Failed to read file')
+   }
+   reader.readAsDataURL(result.blob)
+
+  } catch (err) {
+   console.error('[AvatarUpload] Compression error:', err)
+   setError(t('profile.avatar.compressionError'))
+  } finally {
+   setIsCompressing(false)
+   setCompressionProgress(0)
   }
-  reader.onerror = (e) => {
-   console.error('[AvatarUpload] FileReader error:', e)
-   setError('Failed to read file')
-  }
-  reader.readAsDataURL(file)
  }
 
  const handleSave = async () => {
@@ -124,6 +172,7 @@ export function AvatarUpload({
   setPreviewImage(null)
   setSelectedFile(null)
   setError(null)
+  setCompressionInfo(null)
  }
 
  const handleRemoveAvatar = async () => {
@@ -240,15 +289,39 @@ export function AvatarUpload({
        <div className="flex flex-col items-center">
         <Button
          variant="bordered"
-         startContent={<Upload className="w-4 h-4" />}
+         startContent={!isCompressing && <Upload className="w-4 h-4" />}
          onPress={handleFileSelect}
          className="mb-2"
+         isLoading={isCompressing}
+         isDisabled={isCompressing}
         >
-         {t('profile.avatar.selectImage')}
+         {isCompressing ? t('profile.avatar.compressing') : t('profile.avatar.selectImage')}
         </Button>
 
+        {/* Compression Progress */}
+        {isCompressing && (
+         <div className="w-full max-w-xs mb-2">
+          <Progress
+           size="sm"
+           value={compressionProgress}
+           color="primary"
+           className="mb-1"
+          />
+          <p className="text-xs text-gray-500 text-center">
+           {t('profile.avatar.optimizing')} {compressionProgress}%
+          </p>
+         </div>
+        )}
+
+        {/* Compression Info */}
+        {compressionInfo && !isCompressing && (
+         <p className="text-xs text-success-600 text-center mb-2">
+          ✓ {compressionInfo}
+         </p>
+        )}
+
         <p className="text-sm text-gray-500 text-center">
-         {t('profile.avatar.supportedFormats')}
+         {t('profile.avatar.supportedFormatsExtended')}
         </p>
        </div>
 

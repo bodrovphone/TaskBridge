@@ -146,12 +146,14 @@ export const tasks = {
   'createTask.category.selected': 'Обрана послуга',
   'createTask.category.categorySelected': 'Категорію обрано. Натисніть X, щоб змінити.',
   'createTask.category.tryDifferent': 'Спробуйте інший пошуковий запит',
+  'createTask.category.change': 'Змінити',
 
   // Details Section
   'createTask.details.title': 'Розкажіть про завдання',
   'createTask.details.subtitle': 'Надайте чітку інформацію для залучення потрібних фахівців',
   'createTask.details.titleLabel': 'Назва завдання',
   'createTask.details.titlePlaceholder': 'Що потрібно зробити?',
+  'createTask.title.label': 'Що вам потрібно?',
   'createTask.details.titleHelp': 'Будьте конкретними (напр., "Професійне прибирання 2-кімнатної квартири")',
   'createTask.details.titleTooltipTitle': 'Напишіть чітку назву',
   'createTask.details.titleTooltipContent': 'Будьте конкретними. Добрі приклади: "Полагодити кран на кухні", "Професійне прибирання квартири", "Редизайн головної сторінки"',

@@ -56,10 +56,16 @@ export const profile = {
   'profile.avatar.selectImage': 'Select Image',
   'profile.avatar.remove': 'Remove',
   'profile.avatar.supportedFormats': 'Supported formats: JPG, PNG, WebP (max 2MB)',
+  'profile.avatar.supportedFormatsExtended': 'Supported formats: JPG, PNG, WebP (auto-optimized)',
   'profile.avatar.invalidFileType': 'Invalid file type. Please select JPG, PNG, or WebP image.',
   'profile.avatar.fileTooLarge': 'File too large. Please select image smaller than 2MB.',
+  'profile.avatar.fileTooLargeForCompression': 'File too large. Maximum 20MB allowed.',
   'profile.avatar.uploadError': 'Failed to upload image. Please try again.',
   'profile.avatar.deleteError': 'Failed to delete avatar. Please try again.',
+  'profile.avatar.compressing': 'Optimizing...',
+  'profile.avatar.optimizing': 'Optimizing image',
+  'profile.avatar.compressionError': 'Failed to optimize image. Please try again.',
+  'profile.avatar.saved': 'saved',
 
   // Statistics Modal
   'profile.statistics.title': 'Account Statistics',

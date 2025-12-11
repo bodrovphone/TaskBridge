@@ -53,6 +53,7 @@ type AuthenticatedFetch = (url: string, options?: RequestInit) => Promise<Respon
  * Returns avatar URL or null if failed
  *
  * Note: This calls our API route which handles authentication and upload
+ * The file should already be compressed by the UI component
  */
 export async function uploadAvatar(
   file: File,
@@ -65,18 +66,32 @@ export async function uploadAvatar(
       return { url: null, error: 'Invalid file type. Use JPG, PNG, or WEBP.' }
     }
 
-    // Validate file size (2MB max for avatars)
+    // File should already be compressed by UI component
+    // Just do a sanity check for 2MB max (compressed files should be ~500KB)
     const MAX_SIZE = 2 * 1024 * 1024 // 2MB
     if (file.size > MAX_SIZE) {
-      return { url: null, error: 'File too large. Maximum 2MB allowed.' }
+      // If somehow still too large, apply additional compression
+      const compressedBlob = await compressAvatar(file)
+      const formData = new FormData()
+      formData.append('avatar', compressedBlob, file.name)
+
+      const response = await authenticatedFetch('/api/profile/avatar', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        return { url: null, error: error.message || 'Upload failed' }
+      }
+
+      const data = await response.json()
+      return { url: data.avatarUrl, error: null }
     }
 
-    // Compress avatar
-    const compressedBlob = await compressAvatar(file)
-
-    // Create form data
+    // File is already compressed, upload directly
     const formData = new FormData()
-    formData.append('avatar', compressedBlob, file.name)
+    formData.append('avatar', file, file.name)
 
     // Upload via API route
     const response = await authenticatedFetch('/api/profile/avatar', {
