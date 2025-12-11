@@ -114,10 +114,9 @@ export function TaskSelectionModal({
                         return (
                           <div key={item.key} className="flex flex-col">
                             <span className="font-medium text-sm">{task.title}</span>
-                            <span className="text-xs text-gray-500">
-                              {task.category}
-                              {task.budget && ` • ${task.budget} BGN`}
-                            </span>
+                            {task.budget && (
+                              <span className="text-xs text-gray-500">{task.budget} BGN</span>
+                            )}
                           </div>
                         )
                       })
@@ -141,10 +140,9 @@ export function TaskSelectionModal({
                         <SelectItem key={task.id} value={task.id} textValue={task.title}>
                           <div className="flex flex-col py-1">
                             <span className="font-medium">{task.title}</span>
-                            <span className="text-xs text-gray-500">
-                              {task.category}
-                              {task.budget && ` • ${task.budget} BGN`}
-                            </span>
+                            {task.budget && (
+                              <span className="text-xs text-gray-500">{task.budget} BGN</span>
+                            )}
                           </div>
                         </SelectItem>
                       ))
