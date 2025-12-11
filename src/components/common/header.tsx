@@ -152,6 +152,7 @@ function Header() {
     onMenuOpenChange={handleMenuOpenChange}
     classNames={{
      menuItem: 'relative',
+     wrapper: 'pt-safe', // Add safe area padding for notched devices
     }}
     motionProps={{
      variants: {
@@ -285,8 +286,11 @@ function Header() {
     <NavbarMenuToggle id="mobile-menu-toggle" />
    </NavbarContent>
 
-   {/* Mobile Menu */}
-   <NavbarMenu className="flex flex-col overflow-y-auto !bg-white" style={{ zIndex: Z_INDEX.MOBILE_MENU }}>
+   {/* Mobile Menu - Using dvh for proper Chrome mobile viewport handling */}
+   <NavbarMenu
+    className="flex flex-col overflow-y-auto !bg-white !top-[5rem] !h-[calc(100dvh-5rem)]"
+    style={{ zIndex: Z_INDEX.MOBILE_MENU }}
+   >
     <div className="flex-1 overflow-y-auto pb-2">
      {/* Menu items for authenticated users */}
      {isAuthenticated ? (
@@ -461,7 +465,7 @@ function Header() {
     </div>
 
     {/* Sticky Bottom Section - Always visible */}
-    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-3 safe-area-pb">
+    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 pt-3 pb-[env(safe-area-inset-bottom,16px)]">
      {/* Create Task Button - Sticky */}
      <div className="px-4 pb-2 w-full">
       <Button
@@ -483,7 +487,7 @@ function Header() {
      </div>
 
      {/* Close Menu Button */}
-     <div className="px-4 pb-16 w-full">
+     <div className="px-4 pb-4 w-full">
       <Button
        variant="flat"
        size="lg"

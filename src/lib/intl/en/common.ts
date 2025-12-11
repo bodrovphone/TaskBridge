@@ -15,6 +15,7 @@ export const common = {
   important: 'Important',
   save: 'Save',
   submit: 'Submit',
+  submitting: 'Submitting...',
   loading: 'Loading...',
   error: 'Error',
   success: 'Success',

@@ -15,6 +15,7 @@ export const common = {
   important: 'Важливо',
   save: 'Зберегти',
   submit: 'Надіслати',
+  submitting: 'Надсилання...',
   loading: 'Завантаження...',
   error: 'Помилка',
   success: 'Успіх',

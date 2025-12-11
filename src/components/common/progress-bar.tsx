@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import NProgress from 'nprogress'
 // Don't import default nprogress.css - we use our custom styles
 
@@ -16,9 +16,19 @@ NProgress.configure({
 
 export default function ProgressBar() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
+  // Only track pathname changes, not searchParams
+  // This prevents the progress bar from showing on filter/search changes
+  // which are handled via router.replace with scroll: false
+  const prevPathname = useRef(pathname)
 
   useEffect(() => {
+    // Only show progress bar when actual page (pathname) changes
+    // Skip for search param changes (filters, pagination, etc.)
+    if (pathname === prevPathname.current) {
+      return
+    }
+    prevPathname.current = pathname
+
     // Start progress bar on route change
     NProgress.start()
 
@@ -31,7 +41,7 @@ export default function ProgressBar() {
       clearTimeout(timer)
       NProgress.done()
     }
-  }, [pathname, searchParams])
+  }, [pathname])
 
   return null
 }

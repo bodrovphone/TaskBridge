@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback } from 'react'
 import { Button } from '@nextui-org/react'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +15,29 @@ export function FilterBar() {
   const { t } = useTranslation()
   const { filters, updateFilter, resetFilters, activeFilterCount } = useProfessionalFilters()
 
+  // Smooth scroll to results after filter selection
+  const scrollToResults = useCallback(() => {
+    setTimeout(() => {
+      const resultsElement = document.getElementById('professionals-results')
+      if (resultsElement) {
+        const headerOffset = 100
+        const elementPosition = resultsElement.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }, 100)
+  }, [])
+
+  // Handle filter change with scroll
+  const handleFilterChange = useCallback((key: string, value: any) => {
+    updateFilter(key as any, value)
+    scrollToResults()
+  }, [updateFilter, scrollToResults])
+
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm py-4 px-6">
       {/* Filters Row */}
@@ -21,32 +45,32 @@ export function FilterBar() {
         {/* Category Filter - Reused from browse-tasks */}
         <CategoryFilter
           value={filters.category}
-          onChange={(value) => updateFilter('category', value)}
+          onChange={(value) => handleFilterChange('category', value)}
         />
 
         {/* City Filter - Reused from browse-tasks */}
         <CityFilter
           value={filters.city}
-          onChange={(value) => updateFilter('city', value)}
+          onChange={(value) => handleFilterChange('city', value)}
         />
 
         {/* Rating Filter - Professional specific */}
         <RatingFilter
           value={filters.minRating}
-          onChange={(value) => updateFilter('minRating', value)}
+          onChange={(value) => handleFilterChange('minRating', value)}
         />
 
         {/* Completed Jobs Filter - Professional specific */}
         <CompletedJobsFilter
           value={filters.minJobs}
-          onChange={(value) => updateFilter('minJobs', value)}
+          onChange={(value) => handleFilterChange('minJobs', value)}
         />
 
         {/* Sort Dropdown - Aligned to the right on desktop */}
         <div className="ml-auto">
           <SortDropdown
             value={filters.sortBy as any || 'featured'}
-            onChange={(value) => updateFilter('sortBy', value as any)}
+            onChange={(value) => handleFilterChange('sortBy', value as any)}
           />
         </div>
 

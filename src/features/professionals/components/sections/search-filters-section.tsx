@@ -46,9 +46,6 @@ export default function SearchFiltersSection({
       'electrician',              // Handyman
       'apartment-renovation',     // Finishing Work
       'computer-help',            // Appliance Repair
-      'furniture-assembly',       // Moving & Assembly
-      'large-appliance-repair',   // Appliance Repair
-      'language-tutoring'         // Lessons & Training
     ];
 
     return allSubcategories
@@ -97,11 +94,30 @@ export default function SearchFiltersSection({
     setShowSuggestions(searchQuery.trim().length > 0 && hasSuggestions);
   }, [searchQuery, hasSuggestions]);
 
+  // Smooth scroll to results after filter selection
+  const scrollToResults = useCallback(() => {
+    // Small delay to let the filter update and results start loading
+    setTimeout(() => {
+      const resultsElement = document.getElementById('professionals-results');
+      if (resultsElement) {
+        const headerOffset = 100; // Account for fixed header
+        const elementPosition = resultsElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  }, []);
+
   // Handle category selection
   const handleCategorySelect = (categorySlug: string) => {
     updateFilter('category', categorySlug);
     setSearchQuery(''); // Clear search input
     setShowSuggestions(false);
+    scrollToResults();
   };
 
   // Handle city selection
@@ -113,6 +129,7 @@ export default function SearchFiltersSection({
     if (cityLabel) {
       saveLocation(citySlug, cityLabel);
     }
+    scrollToResults();
   };
 
   // Animated typing effect

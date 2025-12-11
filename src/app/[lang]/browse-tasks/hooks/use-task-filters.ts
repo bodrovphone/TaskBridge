@@ -79,8 +79,8 @@ export function useTaskFilters() {
       }
     })
 
-    // Update URL
-    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    // Update URL - use replace to avoid scroll issues
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [filters, pathname, router])
 
   /**
@@ -98,8 +98,8 @@ export function useTaskFilters() {
       }
     })
 
-    // Update URL
-    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    // Update URL - use replace to avoid scroll issues
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [filters, pathname, router])
 
   /**
@@ -111,7 +111,7 @@ export function useTaskFilters() {
       page: 1,
     }
     setFilters(defaultFilters)
-    router.push(pathname, { scroll: false })
+    router.replace(pathname, { scroll: false })
   }, [pathname, router])
 
   /**

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
   Modal,
@@ -50,10 +50,28 @@ export function FiltersModal() {
     setLocalFilters(prev => ({ ...prev, [key]: value }))
   }
 
+  // Smooth scroll to results after filter selection
+  const scrollToResults = useCallback(() => {
+    setTimeout(() => {
+      const resultsElement = document.getElementById('professionals-results')
+      if (resultsElement) {
+        const headerOffset = 100
+        const elementPosition = resultsElement.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }, 150) // Slightly longer delay for modal close animation
+  }, [])
+
   // Apply filters and close modal
   const handleApplyFilters = () => {
     updateFilters(localFilters)
     onClose()
+    scrollToResults()
   }
 
   // Reset local filters

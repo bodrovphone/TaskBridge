@@ -150,12 +150,34 @@ export default function ProfessionalsPage() {
               {t('professionals.hero.subtitle')}
             </motion.p>
 
-            {/* Trust indicators - Beta Version */}
+            {/* Mobile: Compact inline trust indicators */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 max-w-2xl mx-auto px-4"
+              className="sm:hidden flex flex-wrap justify-center gap-3 mt-6"
+            >
+              {[
+                { icon: '✅', valueKey: 'professionals.hero.stats.verified.value' },
+                { icon: '⭐', valueKey: 'professionals.hero.stats.ratings.value' },
+                { icon: '🚀', valueKey: 'professionals.hero.stats.jobs.value' }
+              ].map((item, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1.5 text-sm text-white/90 border border-white/20"
+                >
+                  <span>{item.icon}</span>
+                  <span className="font-medium">{t(item.valueKey)}</span>
+                </span>
+              ))}
+            </motion.div>
+
+            {/* Desktop: Full trust indicator cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="hidden sm:grid sm:grid-cols-3 gap-4 mt-12 max-w-2xl mx-auto px-4"
             >
               {[
                 { icon: '✅', labelKey: 'professionals.hero.stats.verified.label', valueKey: 'professionals.hero.stats.verified.value' },

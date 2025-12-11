@@ -94,8 +94,8 @@ export function useProfessionalFilters() {
         }
       })
 
-      // Update URL
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      // Update URL - use replace to avoid scroll issues
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     },
     [filters, pathname, router]
   )
@@ -120,8 +120,8 @@ export function useProfessionalFilters() {
         }
       })
 
-      // Update URL
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      // Update URL - use replace to avoid scroll issues
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     },
     [filters, pathname, router]
   )
@@ -135,7 +135,7 @@ export function useProfessionalFilters() {
       page: 1,
     }
     setFilters(defaultFilters)
-    router.push(pathname, { scroll: false })
+    router.replace(pathname, { scroll: false })
   }, [pathname, router])
 
   /**
