@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils'
 // Timeline display translation keys
 const TIMELINE_DISPLAY = {
   today: 'application.timelineToday',
-  'within-3-days': 'application.timeline3days',
   'within-week': 'application.timelineWeek',
   flexible: 'application.timelineFlexible',
 } as const

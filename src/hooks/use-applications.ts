@@ -56,7 +56,6 @@ function formatTimeline(hours: number | null | undefined, t: (key: string) => st
   if (!hours) return t('application.timelineFlexible')
 
   if (hours <= 24) return t('application.timelineToday')
-  if (hours <= 72) return t('application.timeline3days')
   if (hours <= 168) return t('application.timelineWeek')
 
   // For custom durations, show hours with unit

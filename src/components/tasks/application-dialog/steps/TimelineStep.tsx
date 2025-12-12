@@ -2,21 +2,19 @@
 
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Zap, Clock, Calendar, Sparkles, Check } from 'lucide-react'
+import { Zap, Calendar, Sparkles, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { TIMELINE_OPTIONS } from '../../types'
 
 // Timeline display translation keys
 const TIMELINE_DISPLAY = {
   today: 'application.timelineToday',
-  'within-3-days': 'application.timeline3days',
   'within-week': 'application.timelineWeek',
   flexible: 'application.timelineFlexible',
 } as const
 
 const TIMELINE_DESCRIPTIONS = {
   today: 'application.wizard.timelineDescToday',
-  'within-3-days': 'application.wizard.timelineDesc3days',
   'within-week': 'application.wizard.timelineDescWeek',
   flexible: 'application.wizard.timelineDescFlexible',
 } as const
@@ -33,8 +31,6 @@ function TimelineIcon({ option, isSelected }: { option: string; isSelected: bool
   switch (option) {
     case 'today':
       return <Zap className={cn(iconClass, !isSelected && 'text-orange-500')} />
-    case 'within-3-days':
-      return <Clock className={cn(iconClass, !isSelected && 'text-blue-500')} />
     case 'within-week':
       return <Calendar className={cn(iconClass, !isSelected && 'text-green-500')} />
     default:
@@ -46,8 +42,6 @@ function getTimelineColor(option: string): string {
   switch (option) {
     case 'today':
       return 'bg-orange-500'
-    case 'within-3-days':
-      return 'bg-blue-500'
     case 'within-week':
       return 'bg-green-500'
     default:

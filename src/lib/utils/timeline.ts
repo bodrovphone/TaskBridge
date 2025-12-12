@@ -19,8 +19,6 @@ export function getTimelineLabel(timeline: string, t: (key: string) => string): 
 
   if (hours <= 24) {
     return t('application.timelineToday');
-  } else if (hours <= 72) {
-    return t('application.timeline3days');
   } else if (hours <= 168) {
     return t('application.timelineWeek');
   } else {

@@ -82,7 +82,6 @@ export function getModalClassNames(isMobile: boolean, isKeyboardOpen: boolean) {
  */
 export const TIMELINE_HOURS_MAP: Record<string, number> = {
   today: 8,
-  'within-3-days': 24,
   'within-week': 40,
   flexible: 80,
 }

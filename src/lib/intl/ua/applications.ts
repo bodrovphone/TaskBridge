@@ -12,7 +12,6 @@ export const applications = {
   'application.pricePlaceholder': 'Введіть ціну в BGN',
   'application.timeline': 'Коли можете почати?',
   'application.timelineToday': 'Сьогодні',
-  'application.timeline3days': 'Протягом 3 днів',
   'application.timelineWeek': 'Протягом тижня',
   'application.timelineFlexible': 'Гнучко',
   'application.hoursShort': 'год',

@@ -47,7 +47,6 @@ export const applicationFormSchema = z.object({
  */
 export const TIMELINE_OPTIONS = [
   'today',
-  'within-3-days',
   'within-week',
   'flexible',
 ] as const

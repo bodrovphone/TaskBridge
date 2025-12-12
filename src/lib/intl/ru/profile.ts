@@ -554,7 +554,6 @@ export const profile = {
   'application.pricePlaceholder': 'Введите вашу цену в левах',
   'application.timeline': 'Когда можете начать?',
   'application.timelineToday': 'Сегодня',
-  'application.timeline3days': 'В течение 3 дней',
   'application.timelineWeek': 'В течение недели',
   'application.timelineFlexible': 'Гибкий',
   'application.message': 'Почему вы лучше всего подходите?',
