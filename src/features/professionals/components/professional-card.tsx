@@ -127,18 +127,18 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
      />
 
      {/* Enhanced Categories */}
-     <div className="flex flex-wrap gap-2 mb-4">
+     <div className="flex flex-wrap gap-2 mb-4 overflow-hidden">
       {categories.slice(0, 2).map((category, index) => (
        <div
         key={`${professional.id}-category-${index}`}
-        className="animate-in fade-in zoom-in duration-300"
+        className="animate-in fade-in zoom-in duration-300 max-w-full"
         style={{ animationDelay: `${0.1 + (index * 0.1)}s`, animationFillMode: 'backwards' }}
        >
         <Chip
          size="sm"
          variant="flat"
          color="primary"
-         className="font-medium bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-colors"
+         className="font-medium bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-colors max-w-full truncate"
         >
          {getCategoryLabelBySlug(category, t)}
         </Chip>
