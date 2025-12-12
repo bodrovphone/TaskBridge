@@ -1,8 +1,10 @@
 'use client'
 
-import { Tooltip, Chip } from '@nextui-org/react'
-import { Sparkles } from 'lucide-react'
+import { useState } from 'react'
+import { Chip } from '@nextui-org/react'
+import { Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Tip } from '@/components/ui/tip'
 
 interface EarlyAdopterBadgeProps {
   categories?: string[]
@@ -11,15 +13,15 @@ interface EarlyAdopterBadgeProps {
 }
 
 /**
- * Early Adopter Badge
+ * Featured Professional Badge
  * Displayed for professionals who were among the first 10 in their category
  */
 export function EarlyAdopterBadge({
-  categories = [],
   size = 'md',
   showTooltip = true,
 }: EarlyAdopterBadgeProps) {
   const { t } = useTranslation()
+  const [isOpen, setIsOpen] = useState(false)
 
   const sizeClasses = {
     sm: 'h-5 text-xs',
@@ -38,8 +40,8 @@ export function EarlyAdopterBadge({
       variant="flat"
       color="secondary"
       size={size}
-      className={`${sizeClasses[size]} bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium`}
-      startContent={<Sparkles size={iconSizes[size]} className="text-white" />}
+      className={`${sizeClasses[size]} bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium cursor-pointer`}
+      startContent={<Star size={iconSizes[size]} className="text-white fill-white" />}
     >
       {t('professionals.badge.earlyAdopter', 'Early Adopter')}
     </Chip>
@@ -49,25 +51,18 @@ export function EarlyAdopterBadge({
     return badge
   }
 
-  // Get first category for tooltip (if available)
-  const firstCategory = categories[0]
-  const categoryLabel = firstCategory
-    ? t(`categories.sub.${firstCategory}`, firstCategory)
-    : ''
-
   return (
-    <Tooltip
-      content={
-        categoryLabel
-          ? t('professionals.badge.earlyAdopter.tooltip', {
-              defaultValue: 'One of the first professionals in {{category}}',
-              category: categoryLabel,
-            })
-          : t('professionals.badge.earlyAdopter.tooltipGeneric', 'One of the first professionals on the platform')
-      }
-      placement="top"
+    <Tip
+      title={t('professionals.badge.earlyAdopter', 'Early Adopter')}
+      description={t('professionals.badge.earlyAdopter.tooltip')}
+      variant="warning"
+      side="bottom"
+      align="center"
+      dismissText={t('common.gotIt', 'Got it')}
+      open={isOpen}
+      onOpenChange={setIsOpen}
     >
       {badge}
-    </Tooltip>
+    </Tip>
   )
 }

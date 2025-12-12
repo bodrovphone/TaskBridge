@@ -219,11 +219,12 @@ export const professionals = {
   'professionals.badge.topProfessional': 'Топ Про',
   'professionals.badge.topProfessional.tooltip':
     'Виконав {{count}} завдань за останні 30 днів',
-  'professionals.badge.earlyAdopter': 'Ранній Послідовник',
+  'professionals.badge.earlyAdopter': 'Ранній послідовник',
   'professionals.badge.earlyAdopter.tooltip':
-    'Один з перших фахівців у {{category}}',
-  'professionals.badge.earlyAdopter.tooltipGeneric':
-    'Один з перших фахівців на платформі',
+    'Один з перших фахівців на нашій платформі. Дякуємо, що повірили в нас з самого початку!',
+  'professionals.badge.featuredProfessional': 'Обраний фахівець',
+  'professionals.badge.featuredProfessional.tooltip':
+    'Особисто відібраний нашою командою за виняткову якість та надійність. Цей фахівець пройшов перевірку та рекомендований нами.',
 
   // Invite Modal
   'inviteModal.title': 'Запросити фахівця на завдання',

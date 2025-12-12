@@ -212,8 +212,9 @@ export const professionals = {
   'professionals.badge.topProfessional': 'Top Pro',
   'professionals.badge.topProfessional.tooltip': 'Completed {{count}} tasks in the last 30 days',
   'professionals.badge.earlyAdopter': 'Early Adopter',
-  'professionals.badge.earlyAdopter.tooltip': 'One of the first professionals in {{category}}',
-  'professionals.badge.earlyAdopter.tooltipGeneric': 'One of the first professionals on the platform',
+  'professionals.badge.earlyAdopter.tooltip': 'One of the first professionals to join our platform. Thank you for believing in us from the start!',
+  'professionals.badge.featuredProfessional': 'Featured Professional',
+  'professionals.badge.featuredProfessional.tooltip': 'Hand-picked by our team for exceptional quality and reliability. This professional has been personally vetted and recommended.',
 
   // Invite Modal
   'inviteModal.title': 'Invite Professional to Task',

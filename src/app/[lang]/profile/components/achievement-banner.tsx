@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Card, CardBody, Button } from '@nextui-org/react'
-import { Trophy, Sparkles, X, PartyPopper } from 'lucide-react'
+import { Trophy, Star, X, PartyPopper } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 interface AchievementBannerProps {
@@ -89,8 +89,8 @@ export function AchievementBanner({
                   </div>
                 )}
                 {isEarlyAdopter && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-medium shadow-md">
-                    <Sparkles size={14} />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-medium shadow-md">
+                    <Star size={14} className="fill-white" />
                     <span>{t('professionals.badge.earlyAdopter', 'Early Adopter')}</span>
                   </div>
                 )}

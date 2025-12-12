@@ -108,6 +108,7 @@ export class TaskRepository {
     try {
       const supabase = await createClient()
 
+      // Count only pending applications (not rejected/withdrawn)
       const { data: tasks, error } = await supabase
         .from('tasks')
         .select(`
@@ -115,6 +116,7 @@ export class TaskRepository {
           applications!applications_task_id_fkey(count)
         `)
         .eq('customer_id', customerId)
+        .eq('applications.status', 'pending')
         .order('created_at', { ascending: false })
 
       if (error) {
@@ -349,7 +351,7 @@ export class TaskRepository {
       // Privacy filtering is applied at service layer via applyPrivacyFilter()
       const supabase = createAdminClient()
 
-      // Start query builder with count, all applications (not just pending), and professional details
+      // Start query builder with count of PENDING applications only, and professional details
       let query = supabase
         .from('tasks')
         .select(`
@@ -357,6 +359,7 @@ export class TaskRepository {
           applications!applications_task_id_fkey(count),
           professional:users!selected_professional_id(id, full_name, avatar_url)
         `, { count: 'exact' })
+        .eq('applications.status', 'pending')
 
       // Apply filters
       if (options.filters.customerId) {

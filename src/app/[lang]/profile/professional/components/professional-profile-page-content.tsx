@@ -13,7 +13,6 @@ import { AchievementBanner } from '../../components/achievement-banner'
 import { ProfileHeader } from '../../components/shared/profile-header'
 import { StatisticsSection } from '../../components/sections/statistics-section'
 import { AccountSettingsSection } from '../../components/sections/account-settings-section'
-import { BadgeDisplay } from '@/features/professionals/components/badges'
 
 interface ProfessionalProfilePageContentProps {
   lang: string
@@ -136,20 +135,6 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
           isEarlyAdopter={profile.isEarlyAdopter || false}
           earlyAdopterCategories={profile.earlyAdopterCategories || []}
         />
-
-        {/* Professional Badges Display */}
-        {(profile.isTopProfessional || profile.isEarlyAdopter) && (
-          <div className="mb-4">
-            <BadgeDisplay
-              isTopProfessional={profile.isTopProfessional}
-              topProfessionalTasksCount={profile.topProfessionalTasksCount}
-              isEarlyAdopter={profile.isEarlyAdopter}
-              earlyAdopterCategories={profile.earlyAdopterCategories}
-              size="lg"
-              className="justify-center"
-            />
-          </div>
-        )}
 
         {/* Professional Quick Actions */}
         <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">

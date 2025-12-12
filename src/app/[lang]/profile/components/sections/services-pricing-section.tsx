@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardHeader, CardBody, Button, Input, Divider, Chip } from '@nextui-org/react'
-import { Banknote, Plus, Trash2, GripVertical, Edit } from 'lucide-react'
+import { Banknote, Plus, Trash2, Edit } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ServiceItem } from '@/server/domain/user/user.types'
 import { FormActionButtons } from '../shared/form-action-buttons'
@@ -12,6 +12,15 @@ interface ServicesPricingSectionProps {
   onSave: (services: ServiceItem[]) => Promise<void>
   maxServices?: number
 }
+
+// Create an empty service template
+const createEmptyService = (order: number): ServiceItem => ({
+  id: Date.now().toString() + '-' + order,
+  name: '',
+  price: '',
+  description: '',
+  order
+})
 
 export function ServicesPricingSection({
   services,
@@ -29,6 +38,14 @@ export function ServicesPricingSection({
       setLocalServices(services)
     }
   }, [services, isEditing])
+
+  // When entering edit mode with no services, add one empty service
+  const handleStartEditing = useCallback(() => {
+    if (services.length === 0) {
+      setLocalServices([createEmptyService(0)])
+    }
+    setIsEditing(true)
+  }, [services.length])
 
   const handleSave = useCallback(async () => {
     setIsSaving(true)
@@ -51,15 +68,7 @@ export function ServicesPricingSection({
 
   const addService = () => {
     if (localServices.length >= maxServices) return
-
-    const newService: ServiceItem = {
-      id: Date.now().toString(),
-      name: '',
-      price: '',
-      description: '',
-      order: localServices.length
-    }
-    setLocalServices([...localServices, newService])
+    setLocalServices([...localServices, createEmptyService(localServices.length)])
   }
 
   const removeService = (id: string) => {
@@ -132,98 +141,100 @@ export function ServicesPricingSection({
             )}
           </>
         ) : (
-          // Edit Mode
+          // Edit Mode - Cleaner, higher contrast design
           <>
             {/* Services List */}
-            {localServices.length > 0 && (
-              <div className="space-y-4">
-                {localServices.map((service) => (
-                  <div
-                    key={service.id}
-                    className="rounded-xl border-2 border-gray-100 bg-gray-50/50 p-4 space-y-3"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="text-gray-300 mt-2">
-                        <GripVertical className="w-4 h-4" />
-                      </div>
-                      <div className="flex-1 space-y-3">
-                        {/* Service Name & Price Row */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <Input
-                            size="sm"
-                            label={t('profile.services.serviceName', 'Service name')}
-                            placeholder={t('profile.services.serviceNamePlaceholder', 'e.g., Plumbing repair')}
-                            value={service.name}
-                            onValueChange={(value) => updateService(service.id, 'name', value)}
-                            maxLength={50}
-                            classNames={{
-                              inputWrapper: 'bg-white'
-                            }}
-                          />
-                          <Input
-                            size="sm"
-                            label={t('profile.services.price', 'Price')}
-                            placeholder={t('profile.services.pricePlaceholder', 'e.g., 50 лв/час')}
-                            value={service.price}
-                            onValueChange={(value) => updateService(service.id, 'price', value)}
-                            maxLength={30}
-                            classNames={{
-                              inputWrapper: 'bg-white'
-                            }}
-                          />
-                        </div>
-                        {/* Description */}
-                        <Input
-                          size="sm"
-                          label={t('profile.services.descriptionLabel', 'Description (optional)')}
-                          placeholder={t('profile.services.descriptionPlaceholder', 'Brief description of this service')}
-                          value={service.description}
-                          onValueChange={(value) => updateService(service.id, 'description', value)}
-                          maxLength={100}
-                          classNames={{
-                            inputWrapper: 'bg-white'
-                          }}
-                        />
-                      </div>
-                      {/* Delete Button */}
-                      <Button
-                        size="sm"
-                        color="danger"
-                        variant="light"
-                        isIconOnly
-                        onPress={() => removeService(service.id)}
-                        className="mt-2"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+            <div className="space-y-6">
+              {localServices.map((service, index) => (
+                <div key={service.id} className="relative">
+                  {/* Service number badge */}
+                  <div className="absolute -left-2 -top-2 w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center z-10">
+                    {index + 1}
                   </div>
-                ))}
-              </div>
-            )}
 
-            {/* Add Service Button - Always visible in edit mode */}
-            {localServices.length < maxServices && (
-              <div className={localServices.length === 0 ? "py-4" : ""}>
-                {localServices.length === 0 && (
-                  <div className="text-center mb-4">
-                    <Banknote className="w-10 h-10 mx-auto mb-2 text-gray-300" />
-                    <p className="text-sm text-gray-500">
-                      {t('profile.services.empty', 'No services added yet')}
-                    </p>
+                  {/* Delete button - top right */}
+                  <Button
+                    size="sm"
+                    color="danger"
+                    variant="flat"
+                    isIconOnly
+                    onPress={() => removeService(service.id)}
+                    className="absolute -right-2 -top-2 z-10 min-w-6 w-6 h-6"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </Button>
+
+                  {/* Service fields - clean layout without extra borders */}
+                  <div className="pt-2 space-y-3">
+                    {/* Service Name & Price Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <Input
+                        size="md"
+                        variant="bordered"
+                        label={t('profile.services.serviceName', 'Service name')}
+                        placeholder={t('profile.services.serviceNamePlaceholder', 'e.g., Plumbing repair')}
+                        value={service.name}
+                        onValueChange={(value) => updateService(service.id, 'name', value)}
+                        maxLength={50}
+                        classNames={{
+                          inputWrapper: 'border-2 border-gray-300 hover:border-gray-400 focus-within:border-blue-500 bg-white',
+                          label: 'text-gray-700 font-medium',
+                          input: 'text-gray-900'
+                        }}
+                        className="sm:col-span-2"
+                      />
+                      <Input
+                        size="md"
+                        variant="bordered"
+                        label={t('profile.services.price', 'Price')}
+                        placeholder={t('profile.services.pricePlaceholder', 'e.g., 50 лв/час')}
+                        value={service.price}
+                        onValueChange={(value) => updateService(service.id, 'price', value)}
+                        maxLength={30}
+                        classNames={{
+                          inputWrapper: 'border-2 border-gray-300 hover:border-gray-400 focus-within:border-blue-500 bg-white',
+                          label: 'text-gray-700 font-medium',
+                          input: 'text-gray-900'
+                        }}
+                      />
+                    </div>
+                    {/* Description */}
+                    <Input
+                      size="md"
+                      variant="bordered"
+                      label={t('profile.services.descriptionLabel', 'Description (optional)')}
+                      placeholder={t('profile.services.descriptionPlaceholder', 'Brief description of this service')}
+                      value={service.description}
+                      onValueChange={(value) => updateService(service.id, 'description', value)}
+                      maxLength={100}
+                      classNames={{
+                        inputWrapper: 'border-2 border-gray-300 hover:border-gray-400 focus-within:border-blue-500 bg-white',
+                        label: 'text-gray-700 font-medium',
+                        input: 'text-gray-900'
+                      }}
+                    />
                   </div>
-                )}
-                <Button
-                  color="primary"
-                  variant="solid"
-                  startContent={<Plus className="w-4 h-4" />}
-                  onPress={addService}
-                  className="w-full"
-                  size="lg"
-                >
-                  {t('profile.services.addService', 'Add Service')}
-                </Button>
-              </div>
+
+                  {/* Divider between services */}
+                  {index < localServices.length - 1 && (
+                    <Divider className="mt-6" />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Add Service Button */}
+            {localServices.length < maxServices && (
+              <Button
+                color="default"
+                variant="bordered"
+                startContent={<Plus className="w-4 h-4" />}
+                onPress={addService}
+                className="w-full border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+                size="lg"
+              >
+                {t('profile.services.addService', 'Add Service')}
+              </Button>
             )}
 
             {/* Helper text */}
@@ -240,7 +251,7 @@ export function ServicesPricingSection({
             <Button
               size="sm"
               startContent={<Edit className="w-4 h-4 text-white" />}
-              onPress={() => setIsEditing(true)}
+              onPress={handleStartEditing}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
               {t('common.edit', 'Edit')}

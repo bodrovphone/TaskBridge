@@ -242,6 +242,7 @@ export const tasks = {
   'createTask.errors.cityRequired': 'Місто є обов\'язковим',
   'createTask.errors.budgetInvalid': 'Максимум має бути більшим за мінімум',
   'createTask.errors.deadlineInPast': 'Дедлайн має бути сьогодні або в майбутньому',
+  'createTask.errors.maxPhotos': 'Максимум 5 фотографій',
 
   // Validation Dialog
   'createTask.validationDialog.title': 'Виправте наступні проблеми',
@@ -283,7 +284,7 @@ export const tasks = {
   'taskCard.budget.from': 'від',
   'taskCard.budget.to': 'до',
   'taskCard.budget.negotiable': 'Договірна',
-  'taskCard.budget.unclear': 'Бюджет не вказано',
+  'taskCard.budget.unclear': 'За домовленістю',
   'taskCard.deadline.flexible': 'Гнучко',
   'taskCard.deadline.today': 'Сьогодні',
   'taskCard.deadline.tomorrow': 'Завтра',

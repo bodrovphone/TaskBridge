@@ -32,6 +32,7 @@ export const common = {
   'common.optional': 'Необов\'язково',
   'common.close': 'Закрити',
   'common.ok': 'ОК',
+  'common.gotIt': 'Зрозуміло',
   'common.days': 'днів',
   'common.cancel': 'Скасувати',
   'common.edit': 'Редагувати',

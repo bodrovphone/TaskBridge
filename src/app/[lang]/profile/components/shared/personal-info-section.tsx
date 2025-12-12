@@ -438,17 +438,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               </personalForm.Field>
 
               {/* Phone Field */}
-              <personalForm.Field
-                name="phone"
-                validators={{
-                  onChange: ({ value }) => {
-                    // Only validate format if value is provided
-                    if (value && !/^[\+]?[1-9][\d]{0,15}$/.test(value.replace(/[\s\-\(\)]/g, ''))) {
-                      return t('profile.form.validation.phoneInvalid')
-                    }
-                  }
-                }}
-              >
+              <personalForm.Field name="phone">
                 {(field) => (
                   <Input
                     type="tel"

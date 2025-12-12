@@ -9,6 +9,7 @@ import { useAuth } from '@/features/auth'
 import { CustomerProfile } from '../../components/customer-profile'
 import { ProfileDataProvider } from '../../components/profile-data-provider'
 import { NotificationBannerManager } from '../../components/notification-banner-manager'
+import { AchievementBanner } from '../../components/achievement-banner'
 import { ProfileHeader } from '../../components/shared/profile-header'
 import { StatisticsSection } from '../../components/sections/statistics-section'
 import { AccountSettingsSection } from '../../components/sections/account-settings-section'
@@ -136,6 +137,14 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           emailVerified={profile.isEmailVerified || false}
           telegramConnected={!!profile.telegramId}
           onTelegramConnect={handleTelegramConnect}
+        />
+
+        {/* Achievement Banner for users with badges */}
+        <AchievementBanner
+          isTopProfessional={profile.isTopProfessional || false}
+          topProfessionalTasksCount={profile.topProfessionalTasksCount || 0}
+          isEarlyAdopter={profile.isEarlyAdopter || false}
+          earlyAdopterCategories={profile.earlyAdopterCategories || []}
         />
 
         {/* Customer Quick Actions */}

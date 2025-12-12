@@ -256,6 +256,7 @@ export const tasks = {
   'createTask.errors.cityRequired': 'Градът е задължителен',
   'createTask.errors.budgetInvalid': 'Максимумът трябва да бъде по-голям от минимума',
   'createTask.errors.deadlineInPast': 'Крайният срок трябва да бъде днес или в бъдеще',
+  'createTask.errors.maxPhotos': 'Максимум 5 снимки',
 
   // Validation Dialog
   'createTask.validationDialog.title': 'Моля, поправете следните проблеми',
@@ -296,7 +297,7 @@ export const tasks = {
   'taskCard.budget.from': 'от',
   'taskCard.budget.to': 'до',
   'taskCard.budget.negotiable': 'За договаряне',
-  'taskCard.budget.unclear': 'Неясен бюджет',
+  'taskCard.budget.unclear': 'По договаряне',
   'taskCard.deadline.flexible': 'Гъвкав',
   'taskCard.deadline.today': 'Днес',
   'taskCard.deadline.tomorrow': 'Утре',

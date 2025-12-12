@@ -19,12 +19,11 @@ export class UserBusinessRules {
   }
 
   /**
-   * Validate phone number format (basic validation)
+   * Validate phone number format (accepts any format for now)
    */
   static isValidPhoneNumber(phone: string): boolean {
-    // Basic validation: 10-15 digits, optional + prefix
-    const phoneRegex = /^\+?[1-9]\d{9,14}$/
-    return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''))
+    // Accept any non-empty phone number format for now
+    return phone.trim().length > 0
   }
 
   /**

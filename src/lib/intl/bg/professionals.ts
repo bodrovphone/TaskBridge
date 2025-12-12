@@ -213,9 +213,10 @@ export const professionals = {
   // Professional Badges
   'professionals.badge.topProfessional': 'Топ Про',
   'professionals.badge.topProfessional.tooltip': 'Завърши {{count}} задачи през последните 30 дни',
-  'professionals.badge.earlyAdopter': 'Ранен Последовател',
-  'professionals.badge.earlyAdopter.tooltip': 'Един от първите професионалисти в {{category}}',
-  'professionals.badge.earlyAdopter.tooltipGeneric': 'Един от първите професионалисти в платформата',
+  'professionals.badge.earlyAdopter': 'Ранен последовател',
+  'professionals.badge.earlyAdopter.tooltip': 'Един от първите професионалисти в нашата платформа. Благодарим ви, че повярвахте в нас от самото начало!',
+  'professionals.badge.featuredProfessional': 'Избран професионалист',
+  'professionals.badge.featuredProfessional.tooltip': 'Лично подбран от нашия екип за изключително качество и надеждност. Този професионалист е проверен и препоръчан от нас.',
 
   // Invite Modal
   'inviteModal.title': 'Поканете професионалист за задача',

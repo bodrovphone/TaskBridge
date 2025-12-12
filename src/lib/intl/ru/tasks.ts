@@ -285,6 +285,7 @@ export const tasks = {
   'createTask.errors.budgetInvalid':
     'Максимальный бюджет должен быть больше минимального',
   'createTask.errors.deadlineInPast': 'Срок должен быть сегодня или в будущем',
+  'createTask.errors.maxPhotos': 'Максимум 5 фотографий',
 
   // Validation Dialog
   'createTask.validationDialog.title':
@@ -331,7 +332,7 @@ export const tasks = {
   'taskCard.budget.from': 'от',
   'taskCard.budget.to': 'до',
   'taskCard.budget.negotiable': 'Договорная',
-  'taskCard.budget.unclear': 'Бюджет не ясен',
+  'taskCard.budget.unclear': 'По договорённости',
   'taskCard.deadline.flexible': 'Гибкий',
   'taskCard.deadline.today': 'Сегодня',
   'taskCard.deadline.tomorrow': 'Завтра',

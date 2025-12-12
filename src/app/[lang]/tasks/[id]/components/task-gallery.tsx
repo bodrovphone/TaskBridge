@@ -131,7 +131,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
    <ModalContent>
     {() => (
      <>
-      {/* Close button - bigger for mobile UX */}
+      {/* Close button */}
       <button
        onClick={closeModal}
        className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors"
@@ -142,13 +142,21 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
 
       <ModalBody className="p-0 flex items-center justify-center">
        <div className="relative w-full h-full flex items-center justify-center">
-        {/* Full-size image */}
-        <div className="relative w-full h-full max-w-7xl max-h-screen p-4">
+        {/* Full-size image - tap to close on mobile */}
+        <div
+         className="relative w-full h-full max-w-7xl max-h-screen p-4 md:cursor-default cursor-pointer"
+         onClick={(e) => {
+          // Only close on tap for mobile (no navigation buttons clicked)
+          if (window.innerWidth < 768) {
+           closeModal();
+          }
+         }}
+        >
          <Image
           src={imageArray[currentImageIndex]}
           alt={`${title} - image ${currentImageIndex + 1}`}
           fill
-          className="object-contain"
+          className="object-contain pointer-events-none"
           priority
          />
         </div>
@@ -157,22 +165,28 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
         {imageArray.length > 1 && (
          <>
           <button
-           onClick={previousImage}
+           onClick={(e) => {
+            e.stopPropagation();
+            previousImage();
+           }}
            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors z-10"
            aria-label="Previous image"
           >
            <ChevronLeft size={32} />
           </button>
           <button
-           onClick={nextImage}
+           onClick={(e) => {
+            e.stopPropagation();
+            nextImage();
+           }}
            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-colors z-10"
            aria-label="Next image"
           >
            <ChevronRight size={32} />
           </button>
 
-          {/* Image counter */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+          {/* Image counter - adjusted position on mobile to not overlap close button */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm max-md:bottom-8">
            {currentImageIndex + 1} / {imageArray.length}
           </div>
          </>

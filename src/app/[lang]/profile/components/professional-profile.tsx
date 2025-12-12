@@ -103,13 +103,11 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
   }
 
   const handleAvailabilitySave = async (data: {
-    availability: string
     responseTime: string
   }) => {
     setError(null)
     try {
       await onProfileUpdate({
-        availabilityStatus: data.availability as 'available' | 'busy' | 'unavailable',
         responseTimeHours: parseFloat(data.responseTime) || null,
       })
     } catch (err: any) {
@@ -208,7 +206,6 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
 
       {/* 4. Availability & Preferences */}
       <AvailabilitySection
-        availability={profile.availabilityStatus}
         responseTime={formatResponseTime(profile.responseTimeHours)}
         city={profile.city}
         country={profile.country}

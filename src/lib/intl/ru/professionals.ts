@@ -215,9 +215,10 @@ export const professionals = {
   // Professional Badges
   'professionals.badge.topProfessional': 'Топ Про',
   'professionals.badge.topProfessional.tooltip': 'Выполнил {{count}} задач за последние 30 дней',
-  'professionals.badge.earlyAdopter': 'Ранний Последователь',
-  'professionals.badge.earlyAdopter.tooltip': 'Один из первых специалистов в {{category}}',
-  'professionals.badge.earlyAdopter.tooltipGeneric': 'Один из первых специалистов на платформе',
+  'professionals.badge.earlyAdopter': 'Ранний последователь',
+  'professionals.badge.earlyAdopter.tooltip': 'Один из первых специалистов на нашей платформе. Спасибо, что поверили в нас с самого начала!',
+  'professionals.badge.featuredProfessional': 'Избранный специалист',
+  'professionals.badge.featuredProfessional.tooltip': 'Лично отобран нашей командой за исключительное качество и надёжность. Этот специалист прошёл проверку и рекомендован нами.',
 
   // Invite Modal
   'inviteModal.title': 'Пригласить специалиста на задачу',

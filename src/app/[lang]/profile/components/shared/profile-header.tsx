@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { AvatarUpload } from '../avatar-upload'
 import type { UserProfile } from '@/server/domain/user/user.types'
 import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
+import { BadgeDisplay } from '@/features/professionals/components/badges'
 
 interface ProfileHeaderProps {
   profile: UserProfile
@@ -125,7 +126,7 @@ export function ProfileHeader({
               />
 
               <div className="flex-1 w-full sm:w-auto">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3 mb-2 flex-wrap">
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
                     {profile.fullName || profile.email}
                   </h1>
@@ -141,6 +142,19 @@ export function ProfileHeader({
                     </Chip>
                   )}
                 </div>
+
+                {/* Achievement Badges */}
+                {(profile.isTopProfessional || profile.isEarlyAdopter) && (
+                  <div className="mb-3">
+                    <BadgeDisplay
+                      isTopProfessional={profile.isTopProfessional}
+                      topProfessionalTasksCount={profile.topProfessionalTasksCount}
+                      isEarlyAdopter={profile.isEarlyAdopter}
+                      earlyAdopterCategories={profile.earlyAdopterCategories}
+                      size="md"
+                    />
+                  </div>
+                )}
 
                 {/* Current notification preference */}
                 <p className="text-gray-600 mb-4 flex items-center gap-2">

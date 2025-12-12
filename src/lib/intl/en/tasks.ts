@@ -255,6 +255,7 @@ export const tasks = {
   'createTask.errors.cityRequired': 'City is required',
   'createTask.errors.budgetInvalid': 'Maximum must be greater than minimum',
   'createTask.errors.deadlineInPast': 'Deadline must be today or in the future',
+  'createTask.errors.maxPhotos': 'Maximum 5 photos allowed',
 
   // Validation Dialog
   'createTask.validationDialog.title': 'Please fix the following issues',
@@ -295,7 +296,7 @@ export const tasks = {
   'taskCard.budget.from': 'from',
   'taskCard.budget.to': 'up to',
   'taskCard.budget.negotiable': 'Negotiable',
-  'taskCard.budget.unclear': 'Budget unclear',
+  'taskCard.budget.unclear': 'By agreement',
   'taskCard.deadline.flexible': 'Flexible',
   'taskCard.deadline.today': 'Today',
   'taskCard.deadline.tomorrow': 'Tomorrow',

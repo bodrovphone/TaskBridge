@@ -50,6 +50,29 @@ interface TaskFormProps {
   inviteProfessionalId?: string
 }
 
+/**
+ * Map server-side Zod validation error messages to i18n translation keys
+ * The server returns raw English strings from Zod; we convert them to translation keys
+ */
+const mapServerErrorToTranslationKey = (message: string): string => {
+  const errorMappings: Record<string, string> = {
+    // Title validation
+    'Title must be at least 10 characters': 'createTask.errors.titleTooShort',
+    'Title must be less than 200 characters': 'createTask.errors.titleTooLong',
+    // Description validation
+    'Description must be at least 15 characters': 'createTask.errors.descriptionTooShort',
+    'Description must be less than 2000 characters': 'createTask.errors.descriptionTooLong',
+    // Required fields
+    'Category is required': 'createTask.errors.categoryRequired',
+    'City is required': 'createTask.errors.cityRequired',
+    // Budget validation
+    'Maximum budget must be greater than minimum budget': 'createTask.errors.budgetInvalid',
+    // Photos validation
+    'Maximum 5 photos allowed': 'createTask.errors.maxPhotos',
+  }
+  return errorMappings[message] || message
+}
+
 export function TaskForm({
   mode,
   initialData,
@@ -173,7 +196,7 @@ export function TaskForm({
             if (result.details?.errors) {
               const serverErrors = Object.entries(result.details.errors).map(([field, message]) => ({
                 field,
-                message: message as string
+                message: mapServerErrorToTranslationKey(message as string)
               }))
               console.log('[TaskForm] Server validation errors:', serverErrors)
               setValidationErrors(serverErrors)

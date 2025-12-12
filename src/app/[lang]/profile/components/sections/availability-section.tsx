@@ -2,19 +2,18 @@
 
 import { useState, useMemo } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, RadioGroup, Radio, Chip } from '@nextui-org/react'
-import { Clock, CheckCircle, MapPinned, Languages, Edit } from 'lucide-react'
+import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, Chip } from '@nextui-org/react'
+import { Clock, MapPinned, Languages, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslation } from 'react-i18next'
 import { getCityLabelBySlug } from '@/features/cities'
 
 interface AvailabilitySectionProps {
-  availability: 'available' | 'busy' | 'unavailable'
   responseTime: string
   city: string | null
   country: string
   languages: string[]
-  onSave: (data: { availability: string; responseTime: string }) => Promise<void>
+  onSave: (data: { responseTime: string }) => Promise<void>
   onLanguageChange: (data: string[]) => void
 }
 
@@ -23,7 +22,6 @@ const responseTimeKeys = ['1h', '2h', '4h', '24h']
 const languageCodes = ['bg', 'ru', 'en', 'ua']
 
 export function AvailabilitySection({
-  availability,
   responseTime,
   city,
   country,
@@ -43,7 +41,7 @@ export function AvailabilitySection({
   }, [city, t])
 
   const form = useForm({
-    defaultValues: { availability, responseTime },
+    defaultValues: { responseTime },
     onSubmit: async ({ value }) => {
       setIsLoading(true)
       await onSave(value)
@@ -76,18 +74,6 @@ export function AvailabilitySection({
           // View Mode
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/50">
-              <div className="p-2 rounded-lg bg-green-100">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.status')}</p>
-                <p className="font-semibold text-gray-900 capitalize">
-                  {t(`profile.professional.form.availabilityOptions.${availability}`)}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/50">
               <div className="p-2 rounded-lg bg-blue-100">
                 <Clock className="w-5 h-5 text-blue-600" />
               </div>
@@ -99,7 +85,7 @@ export function AvailabilitySection({
               </div>
             </div>
 
-            <div className="md:col-span-2 flex items-center gap-3 p-3 rounded-xl bg-gray-50/50">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/50">
               <div className="p-2 rounded-lg bg-orange-100">
                 <MapPinned className="w-5 h-5 text-orange-600" />
               </div>
@@ -138,29 +124,6 @@ export function AvailabilitySection({
           // Edit Mode
           <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
             <div className="space-y-4">
-              <form.Field name="availability">
-                {(field) => (
-                  <div>
-                    <label className="block text-sm font-medium mb-2">{t('profile.professional.status')}</label>
-                    <RadioGroup
-                      value={field.state.value}
-                      onValueChange={(value) => field.handleChange(value as any)}
-                      orientation="horizontal"
-                    >
-                      <Radio value="available">
-                        {t('profile.professional.form.availabilityOptions.available')}
-                      </Radio>
-                      <Radio value="busy">
-                        {t('profile.professional.form.availabilityOptions.busy')}
-                      </Radio>
-                      <Radio value="unavailable">
-                        {t('profile.professional.form.availabilityOptions.unavailable')}
-                      </Radio>
-                    </RadioGroup>
-                  </div>
-                )}
-              </form.Field>
-
               <form.Field name="responseTime">
                 {(field) => (
                   <Select
