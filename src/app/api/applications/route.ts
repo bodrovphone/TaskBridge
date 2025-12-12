@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
         professionalName: professional?.full_name,
         proposedPrice: proposedPrice,
       },
-      actionUrl: `/tasks/${task.id}#application`,
+      actionUrl: `/tasks/${task.id}?application=${application.id}`,
       deliveryChannel: 'both', // Telegram + in-app (customer gets notified immediately)
     });
 

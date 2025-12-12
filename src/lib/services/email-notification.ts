@@ -220,7 +220,15 @@ async function translateEmailVariables(
 
   // Type-specific variable mapping
   switch (notificationType) {
-    case 'applicationReceived':
+    case 'applicationReceived': {
+      // Generate magic link for auto-login
+      const taskPageUrl = await generateNotificationAutoLoginUrl(
+        userId,
+        'email',
+        `/${locale}/tasks/${data.taskId}?application=${data.applicationId}`,
+        baseUrl
+      );
+
       return {
         ...common,
         subject: t('notifications.email.applicationReceived.subject', {
@@ -231,7 +239,7 @@ async function translateEmailVariables(
           professional_name: data.professionalName,
           task_title: data.taskTitle,
         }),
-        primary_link: `${baseUrl}/${locale}/tasks/${data.taskId}/applications/${data.applicationId}`,
+        primary_link: taskPageUrl,
         primary_button_text: t('notifications.email.applicationReceived.buttonText'),
         secondary_link: data.professionalProfileLink || `${baseUrl}/${locale}/professionals/${data.professionalId}`,
         secondary_button_text: t('notifications.email.applicationReceived.secondaryButtonText'),
@@ -239,6 +247,7 @@ async function translateEmailVariables(
         info_items: data.infoItems || [], // e.g., ["Offered Price: 50 BGN", "Rating: 4.8 ⭐"]
         footer_text: t('notifications.email.applicationReceived.footerText'),
       };
+    }
 
     case 'applicationAccepted': {
       // Build info items: contact info first, then customer message if provided

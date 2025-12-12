@@ -27,9 +27,10 @@ import { useAuth } from '@/features/auth';
 
 interface TaskActivityProps {
   taskId: string;
+  initialApplicationId?: string | null;
 }
 
-export default function TaskActivity({ taskId }: TaskActivityProps) {
+export default function TaskActivity({ taskId, initialApplicationId }: TaskActivityProps) {
  const { t, i18n } = useTranslation();
  const { toast } = useToast();
  const { authenticatedFetch } = useAuth();
@@ -159,6 +160,19 @@ export default function TaskActivity({ taskId }: TaskActivityProps) {
    applicationsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
  }, []);
+
+ // Auto-open application detail when initialApplicationId is provided and applications are loaded
+ useEffect(() => {
+  if (initialApplicationId && applications.length > 0 && !isLoadingApplications) {
+   const app = applications.find(a => a.id === initialApplicationId);
+   if (app) {
+    setSelectedApplication(app);
+    setIsDetailOpen(true);
+    // Also scroll to the applications section
+    applicationsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   }
+  }
+ }, [initialApplicationId, applications, isLoadingApplications]);
 
  // State for modals
  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
