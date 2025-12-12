@@ -240,6 +240,7 @@ export const professionals = {
   'inviteModal.successDescription':
     '{{name}} отримає сповіщення про ваше завдання.',
   'inviteModal.error': 'Не вдалося надіслати запрошення',
+  'inviteModal.errorFetchingTasks': 'Не вдалося завантажити ваші завдання',
   'inviteModal.alreadyInvited': 'Вже запрошено',
   'inviteModal.alreadyInvitedDescription':
     'Ви вже запросили {{name}} на це завдання.',

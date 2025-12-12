@@ -137,6 +137,7 @@ export const tasks = {
   'task.deadline': 'Deadline',
 
   // Create Task Form
+  'createTask.checkingEligibility': 'Please wait while we check your eligibility.',
   'createTask.title': 'Post a New Task',
   'createTask.hero.subtitle': 'Describe what you need and let professionals come to you',
   'createTask.hero.freeToPost': 'Free to post',

@@ -201,7 +201,12 @@ export function useCreateTask() {
     }
 
     // Check eligibility (review enforcement)
+    // If eligibility is still loading, show a toast and return
     if (!eligibility) {
+      toast({
+        title: t('common.loading', 'Loading...'),
+        description: t('createTask.checkingEligibility', 'Please wait while we check your eligibility.'),
+      })
       return
     }
 

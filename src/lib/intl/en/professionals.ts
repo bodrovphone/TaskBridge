@@ -228,6 +228,7 @@ export const professionals = {
   'inviteModal.success': 'Invitation sent!',
   'inviteModal.successDescription': '{{name}} will be notified about your task.',
   'inviteModal.error': 'Failed to send invitation',
+  'inviteModal.errorFetchingTasks': 'Could not load your tasks',
   'inviteModal.alreadyInvited': 'Already invited',
   'inviteModal.alreadyInvitedDescription': 'You have already invited {{name}} to this task.',
   'inviteModal.alreadyInvitedProfessional': 'Already invited',

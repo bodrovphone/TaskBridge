@@ -130,6 +130,7 @@ export const tasks = {
   'task.deadline': 'Дедлайн',
 
   // Create Task Form
+  'createTask.checkingEligibility': 'Будь ласка, зачекайте, поки ми перевіряємо вашу можливість.',
   'createTask.title': 'Опублікувати нове завдання',
   'createTask.hero.subtitle': 'Опишіть, що потрібно, і фахівці прийдуть до вас',
   'createTask.hero.freeToPost': 'Безкоштовно',

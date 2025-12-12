@@ -232,6 +232,7 @@ export const professionals = {
   'inviteModal.success': 'Приглашение отправлено!',
   'inviteModal.successDescription': '{{name}} будет уведомлен о вашей задаче.',
   'inviteModal.error': 'Не удалось отправить приглашение',
+  'inviteModal.errorFetchingTasks': 'Не удалось загрузить ваши задачи',
   'inviteModal.alreadyInvited': 'Уже приглашён',
   'inviteModal.alreadyInvitedDescription': 'Вы уже пригласили {{name}} на эту задачу.',
   'inviteModal.alreadyInvitedProfessional': 'Уже приглашён',
