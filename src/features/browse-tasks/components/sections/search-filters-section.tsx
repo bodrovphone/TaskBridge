@@ -60,6 +60,23 @@ export default function SearchFiltersSection({
   }
  }, [filters.q]);
 
+ // Smooth scroll to results after filter selection
+ const scrollToResults = useCallback(() => {
+  setTimeout(() => {
+   const resultsElement = document.getElementById('browse-tasks-results');
+   if (resultsElement) {
+    const headerOffset = 100;
+    const elementPosition = resultsElement.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+     top: offsetPosition,
+     behavior: 'smooth'
+    });
+   }
+  }, 100);
+ }, []);
+
  // Handle full-text search submission
  const handleTextSearch = useCallback(() => {
   const trimmedQuery = searchQuery.trim();
@@ -70,8 +87,9 @@ export default function SearchFiltersSection({
    }
    updateFilter('q', trimmedQuery);
    setShowSuggestions(false);
+   scrollToResults();
   }
- }, [searchQuery, filters.category, updateFilter]);
+ }, [searchQuery, filters.category, updateFilter, scrollToResults]);
 
  // Clear text search
  const handleClearSearch = useCallback(() => {
@@ -160,6 +178,7 @@ export default function SearchFiltersSection({
   updateFilter('category', categorySlug);
   setSearchQuery(''); // Clear search input
   setShowSuggestions(false);
+  scrollToResults();
  };
 
  // Handle city selection
@@ -167,6 +186,7 @@ export default function SearchFiltersSection({
   updateFilter('city', citySlug);
   setSearchQuery(''); // Clear search input
   setShowSuggestions(false);
+  scrollToResults();
  };
 
  // Animated typing effect
@@ -227,7 +247,7 @@ export default function SearchFiltersSection({
    style={{ zIndex: Z_INDEX.SEARCH_CARD }}
   >
    <NextUICard id="task-filters" className="bg-white/95 shadow-2xl border-0 max-w-4xl mx-auto overflow-visible">
-    <div className="p-8 overflow-visible">
+    <div className="p-4 sm:p-8 overflow-visible">
      <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -235,7 +255,7 @@ export default function SearchFiltersSection({
       className="overflow-visible"
      >
       {/* Enhanced Search Input */}
-      <div className="relative mb-8 overflow-visible">
+      <div className="relative mb-4 sm:mb-8 overflow-visible">
        {/* Active Search Query Display */}
        {filters.q && (
         <div className="mb-3 flex items-center gap-2">
@@ -253,12 +273,12 @@ export default function SearchFiltersSection({
          </Chip>
         </div>
        )}
-       <div className="relative flex flex-col sm:flex-row gap-3 sm:gap-2">
-        <div className="relative w-full sm:flex-1">
+       <div className="relative flex flex-row gap-2">
+        <div className="relative flex-1">
          <Search
-           className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
+           className="absolute left-3 sm:left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
            style={{ zIndex: Z_INDEX.STICKY_ELEMENTS }}
-           size={24}
+           size={18}
          />
          <Input
           size="lg"
@@ -271,8 +291,8 @@ export default function SearchFiltersSection({
            setTimeout(() => setShowSuggestions(false), 200);
           }}
           classNames={{
-           input: "pl-16 pr-4 text-xl font-light h-16",
-           inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl h-16"
+           input: "!pl-8 sm:!pl-14 pr-2 sm:pr-4 text-base sm:text-xl font-light h-12 sm:h-16",
+           inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl sm:rounded-2xl h-12 sm:h-16"
           }}
           placeholder={
            searchQuery
@@ -370,11 +390,11 @@ export default function SearchFiltersSection({
           )}
          </AnimatePresence>
         </div>
-        {/* Search Button */}
+        {/* Search Button - hidden on mobile, visible on desktop */}
         <Button
          size="lg"
          color="primary"
-         className="h-16 w-full sm:w-auto sm:px-8 font-semibold text-lg rounded-2xl"
+         className="hidden sm:flex h-16 px-8 font-semibold text-lg rounded-2xl"
          isDisabled={searchQuery.trim().length < 2}
          onPress={handleTextSearch}
         >
@@ -383,12 +403,12 @@ export default function SearchFiltersSection({
         </Button>
        </div>
 
-       {/* Popular Categories & Cities */}
-       <div className="mt-6">
-        <p className="text-sm text-gray-600 mb-3 font-medium">{t('browseTasks.search.popular')}:</p>
-        <div className="flex flex-wrap gap-3">
-         {/* Category Chips */}
-         {popularCategories.map((category) => {
+       {/* Popular Categories & Cities - show 3 on mobile, all on desktop */}
+       <div className="mt-4 sm:mt-6">
+        <p className="text-sm text-gray-600 mb-2 sm:mb-3 font-medium">{t('browseTasks.search.popular')}:</p>
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+         {/* Category Chips - show first 3 on mobile, all on desktop */}
+         {popularCategories.map((category, index) => {
           const Icon = category.icon;
           const colorClasses = {
            blue: 'from-blue-50 to-blue-100 border-blue-200 text-blue-700 hover:from-blue-100 hover:to-blue-200',
@@ -403,7 +423,7 @@ export default function SearchFiltersSection({
            <Chip
             key={category.slug}
             onClick={() => handleCategorySelect(category.slug)}
-            className={`cursor-pointer bg-gradient-to-r ${colorClasses} border font-medium transition-all duration-200 hover:scale-105 hover:shadow-md`}
+            className={`cursor-pointer bg-gradient-to-r ${colorClasses} border font-medium transition-all duration-200 hover:scale-105 hover:shadow-md ${index >= 3 ? 'hidden sm:inline-flex' : ''}`}
             startContent={Icon ? <Icon className="w-4 h-4" /> : undefined}
             variant="flat"
            >
@@ -412,13 +432,15 @@ export default function SearchFiltersSection({
           );
          })}
 
-         {/* City Chips */}
-         {popularCities.map((city) => {
+         {/* City Chips - show Sofia and Burgas on mobile, all on desktop */}
+         {popularCities.map((city, index) => {
+          // On mobile: show index 0 (Sofia) and index 3 (Burgas)
+          const showOnMobile = index === 0 || index === 3;
           return (
            <Chip
             key={city.slug}
             onClick={() => handleCitySelect(city.slug)}
-            className="cursor-pointer bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 text-emerald-700 hover:from-emerald-100 hover:to-emerald-200 font-medium transition-all duration-200 hover:scale-105 hover:shadow-md"
+            className={`cursor-pointer bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 text-emerald-700 hover:from-emerald-100 hover:to-emerald-200 font-medium transition-all duration-200 hover:scale-105 hover:shadow-md ${!showOnMobile ? 'hidden sm:inline-flex' : ''}`}
             startContent={
              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

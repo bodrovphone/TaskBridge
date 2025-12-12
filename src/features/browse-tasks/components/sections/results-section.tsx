@@ -64,6 +64,7 @@ export default function ResultsSection({
 
  return (
   <motion.div
+   id="browse-tasks-results"
    initial={{ opacity: 0 }}
    animate={{ opacity: 1 }}
    transition={{ delay: 1.2 }}
