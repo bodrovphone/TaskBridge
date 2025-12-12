@@ -11,9 +11,23 @@ const montserrat = Montserrat({
  weight: ['300', '400', '500', '600', '700'],
 })
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
+
 export const metadata: Metadata = {
- title: 'Trudify - Намерете проверени професионалисти',
+ metadataBase: new URL(baseUrl),
+ title: {
+  default: 'Trudify - Намерете проверени професионалисти',
+  template: '%s | Trudify',
+ },
  description: 'Свържете се с проверени местни професионалисти за всякакви задачи - от домашни ремонти до доставки и лична помощ. Сигурна платформа с проверени специалисти.',
+ keywords: ['професионалисти', 'услуги', 'майстори', 'България', 'freelance', 'handyman'],
+ authors: [{ name: 'Trudify' }],
+ creator: 'Trudify',
+ publisher: 'Trudify',
+ robots: {
+  index: process.env.ALLOW_INDEXING === 'true',
+  follow: process.env.ALLOW_INDEXING === 'true',
+ },
  icons: {
   icon: [
    { url: '/images/logo/trudify-logo-32.png', sizes: '32x32', type: 'image/png' },
@@ -27,6 +41,26 @@ export const metadata: Metadata = {
   ],
  },
  manifest: '/manifest.json',
+ openGraph: {
+  type: 'website',
+  locale: 'bg_BG',
+  alternateLocale: ['en_US', 'ru_RU'],
+  url: baseUrl,
+  siteName: 'Trudify',
+  title: 'Trudify - Намерете проверени професионалисти',
+  description: 'Свържете се с проверени местни професионалисти за всякакви задачи.',
+  // Image auto-generated from /app/opengraph-image.tsx
+ },
+ twitter: {
+  card: 'summary_large_image',
+  title: 'Trudify - Намерете проверени професионалисти',
+  description: 'Свържете се с проверени местни професионалисти за всякакви задачи.',
+  // Image auto-generated from /app/opengraph-image.tsx
+ },
+ // Google Search Console verification - set via environment variable
+ verification: {
+  google: process.env.GOOGLE_SITE_VERIFICATION,
+ },
 }
 
 export const viewport: Viewport = {

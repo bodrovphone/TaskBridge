@@ -1,0 +1,19 @@
+import { Metadata } from 'next'
+import { generatePageMetadata } from '@/lib/utils/metadata'
+import { validateLocale } from '@/lib/utils/locale-detection'
+import { SupportedLocale } from '@/lib/constants/locales'
+import ForProfessionalsContent from './for-professionals-content'
+
+interface ForProfessionalsPageProps {
+  params: Promise<{ lang: string }>
+}
+
+export async function generateMetadata({ params }: ForProfessionalsPageProps): Promise<Metadata> {
+  const { lang } = await params
+  const locale = validateLocale(lang) as SupportedLocale
+  return generatePageMetadata('for-professionals', locale, '/for-professionals')
+}
+
+export default function ForProfessionalsPage() {
+  return <ForProfessionalsContent />
+}

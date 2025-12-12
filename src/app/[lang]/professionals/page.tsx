@@ -1,11 +1,23 @@
-'use client'
-
+import { Metadata } from 'next'
 import { ProfessionalsPage } from '@/features/professionals'
+import { generatePageMetadata } from '@/lib/utils/metadata'
+import { validateLocale } from '@/lib/utils/locale-detection'
+import { SupportedLocale } from '@/lib/constants/locales'
 
-function ProfessionalsPageRoute() {
- return <ProfessionalsPage />
+interface ProfessionalsPageProps {
+  params: Promise<{ lang: string }>
 }
 
-ProfessionalsPageRoute.displayName = 'ProfessionalsPage';
+export async function generateMetadata({ params }: ProfessionalsPageProps): Promise<Metadata> {
+  const { lang } = await params
+  const locale = validateLocale(lang) as SupportedLocale
+  return generatePageMetadata('professionals', locale, '/professionals')
+}
 
-export default ProfessionalsPageRoute;
+function ProfessionalsPageRoute() {
+  return <ProfessionalsPage />
+}
+
+ProfessionalsPageRoute.displayName = 'ProfessionalsPage'
+
+export default ProfessionalsPageRoute

@@ -1,11 +1,23 @@
-'use client'
-
+import { Metadata } from 'next'
 import { BrowseTasksPage as BrowseTasksComponent } from '@/features/browse-tasks'
+import { generatePageMetadata } from '@/lib/utils/metadata'
+import { validateLocale } from '@/lib/utils/locale-detection'
+import { SupportedLocale } from '@/lib/constants/locales'
 
-function BrowseTasksPage() {
- return <BrowseTasksComponent />
+interface BrowseTasksPageProps {
+  params: Promise<{ lang: string }>
 }
 
-BrowseTasksPage.displayName = 'BrowseTasksPage';
+export async function generateMetadata({ params }: BrowseTasksPageProps): Promise<Metadata> {
+  const { lang } = await params
+  const locale = validateLocale(lang) as SupportedLocale
+  return generatePageMetadata('browse-tasks', locale, '/browse-tasks')
+}
 
-export default BrowseTasksPage;
+function BrowseTasksPage() {
+  return <BrowseTasksComponent />
+}
+
+BrowseTasksPage.displayName = 'BrowseTasksPage'
+
+export default BrowseTasksPage

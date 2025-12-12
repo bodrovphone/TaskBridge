@@ -2,18 +2,18 @@ import { Metadata } from 'next'
 import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale } from '@/lib/constants/locales'
-import CreateTaskContent from './create-task-content'
+import TestimonialsContent from './testimonials-content'
 
-interface CreateTaskPageProps {
+interface TestimonialsPageProps {
   params: Promise<{ lang: string }>
 }
 
-export async function generateMetadata({ params }: CreateTaskPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: TestimonialsPageProps): Promise<Metadata> {
   const { lang } = await params
   const locale = validateLocale(lang) as SupportedLocale
-  return generatePageMetadata('create-task', locale, '/create-task')
+  return generatePageMetadata('testimonials', locale, '/testimonials')
 }
 
-export default function CreateTaskPage() {
-  return <CreateTaskContent />
+export default function TestimonialsPage() {
+  return <TestimonialsContent />
 }

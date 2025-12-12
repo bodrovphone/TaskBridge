@@ -14,6 +14,7 @@ import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
+import { contentPages } from './content-pages';
 
 export const uk = {
   ...common,
@@ -29,6 +30,7 @@ export const uk = {
   ...notifications,
   ...reviews,
   ...legal,
+  ...contentPages,
 };
 
 export default uk;

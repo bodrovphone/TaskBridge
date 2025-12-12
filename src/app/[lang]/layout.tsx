@@ -9,6 +9,7 @@ import { validateLocale } from '@/lib/utils/locale-detection'
 import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/seo'
 import { Toaster } from '@/components/ui/toaster'
 import { TelegramConnectionToast } from '@/components/telegram-connection-toast'
+import { OrganizationJsonLd, WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/seo/json-ld'
 import '../nprogress.css'
 
 interface LocaleLayoutProps {
@@ -61,6 +62,11 @@ async function LocaleLayout({
 
  return (
   <LocaleProviders locale={validatedLocale}>
+   {/* JSON-LD Structured Data for SEO */}
+   <OrganizationJsonLd />
+   <WebSiteJsonLd />
+   <LocalBusinessJsonLd />
+
    <ProgressBar />
    <div className="min-h-screen flex flex-col overflow-x-hidden w-full max-w-full">
     <Header />

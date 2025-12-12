@@ -12,6 +12,7 @@ import { taskCompletion } from './task-completion';
 import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
+import { contentPages } from './content-pages';
 
 // Combine all chunks into single translation object
 export const en = {
@@ -28,6 +29,7 @@ export const en = {
   ...notifications,
   ...reviews,
   ...legal,
+  ...contentPages,
 };
 
 export default en;
