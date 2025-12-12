@@ -225,4 +225,8 @@ export const common = {
   'cityAutocomplete.popular': 'Популярни',
   'cityAutocomplete.searching': 'Търсене...',
   'cityAutocomplete.noResults': 'Не са намерени градове',
+
+  // Language Preference Prompt
+  'languagePrompt.title': 'Превключи на {{language}}?',
+  'languagePrompt.switch': 'Да, превключи',
 };

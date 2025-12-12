@@ -16,6 +16,7 @@ import i18next from 'i18next';
 import { en } from '@/lib/intl/en';
 import { bg } from '@/lib/intl/bg';
 import { ru } from '@/lib/intl/ru';
+import { uk } from '@/lib/intl/ua';
 import { generateNotificationAutoLoginUrl } from '@/lib/auth/notification-auto-login';
 
 // Initialize i18next for server-side translations
@@ -27,6 +28,7 @@ i18nInstance.init({
     en: { translation: en },
     bg: { translation: bg },
     ru: { translation: ru },
+    ua: { translation: uk },
   },
   interpolation: {
     escapeValue: false, // Don't escape - SendGrid templates handle HTML encoding

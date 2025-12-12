@@ -17,6 +17,7 @@ import { Z_INDEX } from "@/lib/constants/z-index"
 import { useCreateTask } from "@/hooks/use-create-task"
 import { ReviewEnforcementDialog } from "@/features/reviews"
 import { useNotificationStore } from "@/stores/notification-store"
+import { LanguagePreferencePrompt } from "./language-preference-prompt"
 import {
  Navbar,
  NavbarBrand,
@@ -230,7 +231,9 @@ function Header() {
    {/* Desktop Actions Section */}
    <NavbarContent justify="end" className="hidden lg:flex gap-4">
     <NavbarItem>
-     <LanguageSwitcher />
+     <LanguagePreferencePrompt>
+      <LanguageSwitcher />
+     </LanguagePreferencePrompt>
     </NavbarItem>
     <NavbarItem id="nav-notifications">
      <NotificationBell
@@ -259,7 +262,9 @@ function Header() {
    {/* Mobile/Tablet Actions Section */}
    <NavbarContent justify="end" className="lg:hidden gap-5">
     <NavbarItem>
-     <LanguageSwitcher />
+     <LanguagePreferencePrompt>
+      <LanguageSwitcher />
+     </LanguagePreferencePrompt>
     </NavbarItem>
     <NavbarItem>
      <NotificationBell

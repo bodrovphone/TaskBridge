@@ -218,4 +218,8 @@ export const common = {
   'cityAutocomplete.popular': 'Популярні',
   'cityAutocomplete.searching': 'Пошук...',
   'cityAutocomplete.noResults': 'Міста не знайдено',
+
+  // Language Preference Prompt
+  'languagePrompt.title': 'Переключити на {{language}}?',
+  'languagePrompt.switch': 'Так, переключити',
 };

@@ -225,4 +225,8 @@ export const common = {
   'cityAutocomplete.popular': 'Popular',
   'cityAutocomplete.searching': 'Searching...',
   'cityAutocomplete.noResults': 'No cities found',
+
+  // Language Preference Prompt
+  'languagePrompt.title': 'Switch to {{language}}?',
+  'languagePrompt.switch': 'Yes, switch',
 };

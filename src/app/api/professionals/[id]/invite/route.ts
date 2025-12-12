@@ -8,6 +8,7 @@ import i18next from 'i18next'
 import { en } from '@/lib/intl/en'
 import { bg } from '@/lib/intl/bg'
 import { ru } from '@/lib/intl/ru'
+import { uk } from '@/lib/intl/ua'
 
 // Initialize i18next for server-side category translation
 const i18nInstance = i18next.createInstance()
@@ -18,6 +19,7 @@ i18nInstance.init({
     en: { translation: en },
     bg: { translation: bg },
     ru: { translation: ru },
+    ua: { translation: uk },
   },
 })
 

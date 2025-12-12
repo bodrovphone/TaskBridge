@@ -16,6 +16,10 @@ export interface TipProps {
   dismissText?: string
   /** Callback when tip is dismissed */
   onDismiss?: () => void
+  /** Custom action for the button (if provided, button calls this instead of dismiss) */
+  onAction?: () => void
+  /** Hide the X close button */
+  hideCloseButton?: boolean
   /** Color variant */
   variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'info'
   /** Popover side */
@@ -78,6 +82,8 @@ export function Tip({
   description,
   dismissText = 'Got it',
   onDismiss,
+  onAction,
+  hideCloseButton = false,
   variant = 'info',
   side = 'bottom',
   align = 'start',
@@ -94,6 +100,14 @@ export function Tip({
     onDismiss?.()
   }
 
+  const handleButtonClick = () => {
+    if (onAction) {
+      onAction()
+    } else {
+      handleDismiss()
+    }
+  }
+
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
       <PopoverPrimitive.Trigger asChild>{children}</PopoverPrimitive.Trigger>
@@ -103,7 +117,7 @@ export function Tip({
           align={align}
           sideOffset={sideOffset}
           className={cn(
-            'z-50 w-64 rounded-xl shadow-lg outline-none',
+            'z-50 w-64 rounded-xl shadow-lg outline-none overflow-visible',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -114,28 +128,32 @@ export function Tip({
             className
           )}
         >
-          {/* Close button */}
-          <button
-            onClick={handleDismiss}
-            className={cn(
-              'absolute top-2 right-2 p-1 rounded-full transition-colors',
-              styles.closeHover
-            )}
-            aria-label="Close tip"
-          >
-            <X className="w-4 h-4" />
-          </button>
-
-          {/* Content */}
-          <div className="p-4 pr-8">
-            <h4 className="font-semibold text-sm mb-1">{title}</h4>
-            <p className="text-sm opacity-90 leading-relaxed">{description}</p>
-          </div>
-
-          {/* Dismiss button */}
-          <div className="px-4 pb-4">
+          {/* Close button - can be hidden */}
+          {!hideCloseButton && (
             <button
               onClick={handleDismiss}
+              className={cn(
+                'absolute top-2 right-2 p-1 rounded-full transition-colors',
+                styles.closeHover
+              )}
+              aria-label="Close tip"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* Content */}
+          <div className={cn('p-4', !hideCloseButton && 'pr-8')}>
+            <h4 className={cn('font-semibold text-sm', description && 'mb-1')}>{title}</h4>
+            {description && (
+              <p className="text-sm opacity-90 leading-relaxed">{description}</p>
+            )}
+          </div>
+
+          {/* Action/Dismiss button */}
+          <div className="px-4 pb-4">
+            <button
+              onClick={handleButtonClick}
               className={cn(
                 'w-full py-2 px-4 rounded-full text-sm font-medium transition-colors',
                 styles.button
@@ -147,8 +165,9 @@ export function Tip({
 
           {/* Arrow pointing to trigger */}
           <PopoverPrimitive.Arrow
-            width={16}
-            height={8}
+            width={20}
+            height={10}
+            className="drop-shadow-sm"
             style={{ fill: styles.arrowFill }}
           />
         </PopoverPrimitive.Content>
@@ -202,8 +221,10 @@ export function TipCard({
 
       {/* Content */}
       <div className="p-4 pr-8">
-        <h4 className="font-semibold text-sm mb-1">{title}</h4>
-        <p className="text-sm opacity-90 leading-relaxed">{description}</p>
+        <h4 className={cn('font-semibold text-sm', description && 'mb-1')}>{title}</h4>
+        {description && (
+          <p className="text-sm opacity-90 leading-relaxed">{description}</p>
+        )}
       </div>
 
       {/* Dismiss button */}

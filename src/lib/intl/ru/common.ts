@@ -226,4 +226,8 @@ export const common = {
   'cityAutocomplete.popular': 'Популярные',
   'cityAutocomplete.searching': 'Поиск...',
   'cityAutocomplete.noResults': 'Города не найдены',
+
+  // Language Preference Prompt
+  'languagePrompt.title': 'Переключить на {{language}}?',
+  'languagePrompt.switch': 'Да, переключить',
 };
