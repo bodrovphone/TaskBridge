@@ -152,6 +152,7 @@ export const tasks = {
   'createTask.title.placeholder': 'напр. Починить протекающий кран в ванной',
   'createTask.title.hint':
     'Будьте конкретны - это поможет нам найти вам подходящих специалистов',
+  'createTask.title.minChars': 'символов минимум',
 
   // Category Section
   'createTask.category.title': 'Какая услуга вам нужна?',
@@ -210,8 +211,11 @@ export const tasks = {
   'createTask.budget.title': 'Какой ваш бюджет?',
   'createTask.budget.help': 'Честные бюджеты получают в 3 раза больше откликов',
   'createTask.budget.typeFixed': 'Фиксированная цена',
+  'createTask.budget.fixedDesc': 'Я точно знаю, сколько хочу заплатить',
   'createTask.budget.typeRange': 'Диапазон цен',
+  'createTask.budget.rangeDesc': 'У меня есть минимальный и максимальный бюджет',
   'createTask.budget.typeUnclear': 'Не уверен в бюджете',
+  'createTask.budget.unclearDesc': 'Пусть специалисты предложат цену',
   'createTask.budget.fixedLabel': 'Ваш бюджет',
   'createTask.budget.minLabel': 'Минимум',
   'createTask.budget.maxLabel': 'Максимум',
@@ -271,6 +275,12 @@ export const tasks = {
   'createTask.review.noCity': 'Город не выбран',
   'createTask.review.fillRequired':
     'Пожалуйста, заполните все обязательные поля для публикации',
+  'createTask.review.tipTitle': 'Требуется название',
+  'createTask.review.tipTitleDesc': 'Добавьте понятное название (минимум 10 символов), чтобы специалисты поняли вашу задачу.',
+  'createTask.review.tipDescription': 'Требуется описание',
+  'createTask.review.tipDescriptionDesc': 'Добавьте детали о вашей задаче (минимум 15 символов), чтобы помочь специалистам понять, что вам нужно.',
+  'createTask.review.tipCity': 'Требуется город',
+  'createTask.review.tipCityDesc': 'Выберите ваш город, чтобы специалисты знали, где вас найти.',
 
   // Errors
   'createTask.errors.categoryRequired': 'Пожалуйста, выберите категорию',

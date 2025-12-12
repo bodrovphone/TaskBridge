@@ -182,11 +182,11 @@ function MainCategoryCard({
        `}>
         <Icon size={24} className={`${config.icon} transition-all duration-300`} />
        </div>
-       <div className="flex-1">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors">
+       <div className="flex-1 min-w-0">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors line-clamp-2 break-words">
          {title}
         </h3>
-        <p className="text-slate-600 text-sm leading-relaxed">
+        <p className="text-slate-600 text-sm leading-relaxed line-clamp-2">
          {description}
         </p>
        </div>

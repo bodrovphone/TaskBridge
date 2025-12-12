@@ -97,7 +97,7 @@ export function TaskForm({
 
   const categoryRef = useRef<HTMLDivElement>(null)
   const detailsRef = useRef<HTMLDivElement>(null)
-  const detailsSectionRef = useRef<{ focusTitleInput: () => void }>(null)
+  const detailsSectionRef = useRef<{ focusTitleInput: () => void; focusDescriptionInput: () => void }>(null)
   const locationRef = useRef<HTMLDivElement>(null)
   const budgetRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
@@ -299,6 +299,27 @@ export function TaskForm({
     }
   }
 
+  const handleScrollToField = (field: 'title' | 'description' | 'city') => {
+    // In create mode, title is in TitleCategorySection (categoryRef), otherwise in detailsRef
+    const fieldToRefMap: Record<string, React.RefObject<HTMLDivElement>> = {
+      title: mode === 'create' ? categoryRef : detailsRef,
+      description: detailsRef,
+      city: locationRef,
+    }
+    const targetRef = fieldToRefMap[field]
+    if (targetRef?.current) {
+      targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      setTimeout(() => {
+        // Find the appropriate input/textarea in the section
+        let selector = 'input, textarea'
+        if (field === 'description') selector = 'textarea'
+        if (field === 'city') selector = 'button[aria-haspopup="listbox"], select'
+        const input = targetRef.current?.querySelector(selector) as HTMLElement
+        input?.focus()
+      }, 500)
+    }
+  }
+
   const collectValidationErrors = () => {
     const errors: Array<{ field: string; message: string }> = []
     const fieldsToCheck = [
@@ -399,7 +420,7 @@ export function TaskForm({
                   <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
                 </div>
                 <PhotosSection form={form} initialImages={(mode === 'edit' || isReopening) ? initialData?.images : undefined} />
-                <ReviewSection form={form} />
+                <ReviewSection form={form} onScrollToField={handleScrollToField} />
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8 pb-4">
                   {mode === 'edit' && (
                     <Button type="button" size="lg" variant="bordered" onPress={() => router.push(`/${locale}/tasks/posted`)} className="min-w-[200px] h-14 font-semibold text-lg">

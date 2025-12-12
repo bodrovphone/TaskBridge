@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Input, Button, Card, CardBody, Chip } from '@nextui-org/react'
+import { Input, Button, Card, CardBody } from '@nextui-org/react'
 import { Check, X, ChevronDown, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -39,11 +39,11 @@ export function TitleCategorySection({
   const [flowState, setFlowState] = useState<FlowState>(
     initialSubcategory ? 'confirmed' : 'entering_title'
   )
-  const [suggestedCategory, setSuggestedCategory] = useState<{
+  const [suggestedCategories, setSuggestedCategories] = useState<Array<{
     slug: string
     label: string
     mainCategoryId: string
-  } | null>(null)
+  }>>([])
   const [confirmedSubcategory, setConfirmedSubcategory] = useState(initialSubcategory)
   const [isSearching, setIsSearching] = useState(false)
   const [manualSelectionTriggered, setManualSelectionTriggered] = useState(false)
@@ -51,6 +51,11 @@ export function TitleCategorySection({
 
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const titleForFeedbackRef = useRef<string>('')
+  const [titleTouched, setTitleTouched] = useState(false)
+
+  // Title validation
+  const isTitleTooShort = title.length > 0 && title.length < 10
+  const showTitleError = titleTouched && isTitleTooShort
 
   // Preload keywords on mount
   useEffect(() => {
@@ -75,14 +80,19 @@ export function TitleCategorySection({
     try {
       const results = await searchCategoriesAsync(query, t, i18n.language)
 
-      const topMatch = results[0]
-      if (topMatch && topMatch.mainCategoryId) {
-        // Found a match with high confidence
-        setSuggestedCategory({
-          slug: topMatch.value,
-          label: topMatch.label,
-          mainCategoryId: topMatch.mainCategoryId,
-        })
+      // Get top 3 matches that have mainCategoryId
+      const topMatches = results
+        .filter(r => r.mainCategoryId)
+        .slice(0, 3)
+        .map(r => ({
+          slug: r.value,
+          label: r.label,
+          mainCategoryId: r.mainCategoryId!,
+        }))
+
+      if (topMatches.length > 0) {
+        // Found matches
+        setSuggestedCategories(topMatches)
         setFlowState('suggesting')
       } else {
         // No good match found
@@ -105,7 +115,7 @@ export function TitleCategorySection({
     // If we're in 'suggesting' state and user hasn't selected yet, reset to allow re-search
     if (flowState === 'suggesting' && !hasSelectedCategory) {
       setFlowState('entering_title')
-      setSuggestedCategory(null)
+      setSuggestedCategories([])
     }
 
     // Clear previous timeout
@@ -123,20 +133,21 @@ export function TitleCategorySection({
   }, [flowState, hasSelectedCategory, searchForCategory])
 
   // User confirms suggested category
-  const handleConfirmSuggestion = useCallback(() => {
-    if (suggestedCategory) {
-      setConfirmedSubcategory(suggestedCategory.slug)
+  const handleConfirmSuggestion = useCallback((index: number) => {
+    const category = suggestedCategories[index]
+    if (category) {
+      setConfirmedSubcategory(category.slug)
       setFlowState('confirmed')
       setHasSelectedCategory(true)
-      onCategoryConfirmed(suggestedCategory.mainCategoryId, suggestedCategory.slug)
+      onCategoryConfirmed(category.mainCategoryId, category.slug)
     }
-  }, [suggestedCategory, onCategoryConfirmed])
+  }, [suggestedCategories, onCategoryConfirmed])
 
   // User rejects suggestion, show manual picker
   const handleRejectSuggestion = useCallback(() => {
     setFlowState('manual_selection')
     setManualSelectionTriggered(true)
-    setSuggestedCategory(null)
+    setSuggestedCategories([])
   }, [])
 
   // User manually selects category from picker
@@ -180,20 +191,32 @@ export function TitleCategorySection({
           size="lg"
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
+          onBlur={() => setTitleTouched(true)}
           placeholder={t('createTask.title.placeholder', 'e.g., Fix a leaking faucet in the bathroom')}
+          isInvalid={showTitleError}
+          errorMessage={showTitleError ? t('createTask.errors.titleTooShort', 'Title must be at least 10 characters') : undefined}
           classNames={{
             input: "text-lg",
-            inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500"
+            inputWrapper: showTitleError
+              ? "bg-white border-2 border-orange-400 hover:border-orange-500 focus-within:border-orange-500"
+              : "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500"
           }}
         />
-        <p className="mt-1 text-sm text-gray-500">
-          {t('createTask.title.hint', 'Be specific - this helps us match you with the right professionals')}
-        </p>
+        {!showTitleError && (
+          <p className="mt-1 text-sm text-gray-500">
+            {t('createTask.title.hint', 'Be specific - this helps us match you with the right professionals')}
+          </p>
+        )}
+        {title.length > 0 && title.length < 10 && !titleTouched && (
+          <p className="mt-1 text-sm text-orange-500">
+            {title.length}/10 {t('createTask.title.minChars', 'characters minimum')}
+          </p>
+        )}
       </div>
 
-      {/* Category Suggestion */}
+      {/* Category Suggestions */}
       <AnimatePresence mode="wait">
-        {flowState === 'suggesting' && suggestedCategory && (
+        {flowState === 'suggesting' && suggestedCategories.length > 0 && (
           <motion.div
             key="suggestion"
             initial={{ opacity: 0, y: -10 }}
@@ -209,22 +232,43 @@ export function TitleCategorySection({
                     {t('createTask.category.suggestion', 'This looks like:')}
                   </p>
                 </div>
-                <Chip
-                  size="lg"
-                  variant="flat"
-                  className="bg-blue-100 text-blue-800 font-semibold mb-4"
-                >
-                  {suggestedCategory.label}
-                </Chip>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {suggestedCategories.map((category, index) => {
+                    // Assign colors based on index (excluding blue which is background)
+                    const chipColors = [
+                      'bg-emerald-100 text-emerald-700 border-emerald-300 hover:bg-emerald-200',
+                      'bg-purple-100 text-purple-700 border-purple-300 hover:bg-purple-200',
+                      'bg-orange-100 text-orange-700 border-orange-300 hover:bg-orange-200',
+                    ]
+                    const colorClass = chipColors[index % chipColors.length]
+
+                    return (
+                      <button
+                        key={category.slug}
+                        type="button"
+                        className={`px-4 py-2 rounded-full cursor-pointer font-semibold transition-all border-2 text-base active:scale-95 ${colorClass}`}
+                        onTouchEnd={(e) => {
+                          e.preventDefault()
+                          handleConfirmSuggestion(index)
+                        }}
+                        onClick={() => handleConfirmSuggestion(index)}
+                      >
+                        {category.label}
+                      </button>
+                    )
+                  })}
+                </div>
                 <div className="flex flex-col sm:flex-row gap-2">
-                  <Button
-                    color="primary"
-                    startContent={<Check className="w-4 h-4" />}
-                    onPress={handleConfirmSuggestion}
-                    className="w-full sm:w-auto"
-                  >
-                    {t('createTask.category.confirm', 'Yes, correct')}
-                  </Button>
+                  {suggestedCategories.length === 1 && (
+                    <Button
+                      color="primary"
+                      startContent={<Check className="w-4 h-4" />}
+                      onPress={() => handleConfirmSuggestion(0)}
+                      className="w-full sm:w-auto"
+                    >
+                      {t('createTask.category.confirm', 'Yes, correct')}
+                    </Button>
+                  )}
                   <Button
                     variant="flat"
                     startContent={<X className="w-4 h-4" />}

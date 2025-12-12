@@ -149,6 +149,7 @@ export const tasks = {
   'createTask.title.label': 'What do you need done?',
   'createTask.title.placeholder': 'e.g., Fix a leaking faucet in the bathroom',
   'createTask.title.hint': 'Be specific - this helps us match you with the right professionals',
+  'createTask.title.minChars': 'characters minimum',
 
   // Category Section
   'createTask.category.title': 'What type of service do you need?',
@@ -193,8 +194,11 @@ export const tasks = {
   'createTask.budget.title': 'What is your budget?',
   'createTask.budget.help': 'Fair budgets get 3x more applications',
   'createTask.budget.typeFixed': 'Fixed Price',
+  'createTask.budget.fixedDesc': 'I know exactly what I want to pay',
   'createTask.budget.typeRange': 'Price Range',
+  'createTask.budget.rangeDesc': 'I have a minimum and maximum budget',
   'createTask.budget.typeUnclear': "I'm not sure about the budget",
+  'createTask.budget.unclearDesc': 'Let professionals suggest a price',
   'createTask.budget.fixedLabel': 'Your Budget',
   'createTask.budget.minLabel': 'Minimum',
   'createTask.budget.maxLabel': 'Maximum',
@@ -245,6 +249,12 @@ export const tasks = {
   'createTask.review.noDescription': 'No description yet',
   'createTask.review.noCity': 'No city selected',
   'createTask.review.fillRequired': 'Please fill in all required fields to submit',
+  'createTask.review.tipTitle': 'Title required',
+  'createTask.review.tipTitleDesc': 'Add a clear title (at least 10 characters) so professionals understand your task.',
+  'createTask.review.tipDescription': 'Description required',
+  'createTask.review.tipDescriptionDesc': 'Add details about your task (at least 15 characters) to help professionals understand what you need.',
+  'createTask.review.tipCity': 'City required',
+  'createTask.review.tipCityDesc': 'Select your city so professionals know where to find you.',
 
   // Errors
   'createTask.errors.categoryRequired': 'Please select a category',

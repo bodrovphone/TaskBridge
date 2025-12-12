@@ -11,19 +11,24 @@ interface TaskDetailsSectionProps {
  hideTitle?: boolean
 }
 
-export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void }, TaskDetailsSectionProps>(
+export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focusDescriptionInput: () => void }, TaskDetailsSectionProps>(
  function TaskDetailsSection({ form, hideTitle }, ref) {
   const { t, i18n } = useTranslation()
   const titleInputRef = useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [showTitleTooltip, setShowTitleTooltip] = useState(false)
 
-  // Expose focusTitleInput method to parent
+  // Expose focus methods to parent
   useImperativeHandle(ref, () => ({
    focusTitleInput: () => {
     setShowTitleTooltip(true)
     setTimeout(() => {
      titleInputRef.current?.focus()
+    }, 100)
+   },
+   focusDescriptionInput: () => {
+    setTimeout(() => {
+     descriptionTextareaRef.current?.focus()
     }, 100)
    }
   }))

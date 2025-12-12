@@ -150,6 +150,7 @@ export const tasks = {
   'createTask.title.label': 'От какво се нуждаете?',
   'createTask.title.placeholder': 'напр. Поправка на течаща чешма в банята',
   'createTask.title.hint': 'Бъдете конкретни - това ни помага да ви намерим правилните специалисти',
+  'createTask.title.minChars': 'символа минимум',
 
   // Category Section
   'createTask.category.title': 'Каква услуга ви трябва?',
@@ -194,8 +195,11 @@ export const tasks = {
   'createTask.budget.title': 'Какъв е вашият бюджет?',
   'createTask.budget.help': 'Честните бюджети получават 3 пъти повече кандидатури',
   'createTask.budget.typeFixed': 'Фиксирана цена',
+  'createTask.budget.fixedDesc': 'Знам точно колко искам да платя',
   'createTask.budget.typeRange': 'Ценови диапазон',
+  'createTask.budget.rangeDesc': 'Имам минимален и максимален бюджет',
   'createTask.budget.typeUnclear': 'Не съм сигурен за бюджета',
+  'createTask.budget.unclearDesc': 'Нека професионалистите предложат цена',
   'createTask.budget.fixedLabel': 'Вашият бюджет',
   'createTask.budget.minLabel': 'Минимум',
   'createTask.budget.maxLabel': 'Максимум',
@@ -246,6 +250,12 @@ export const tasks = {
   'createTask.review.noDescription': 'Все още няма описание',
   'createTask.review.noCity': 'Няма избран град',
   'createTask.review.fillRequired': 'Моля, попълнете всички задължителни полета за да публикувате',
+  'createTask.review.tipTitle': 'Изисква се заглавие',
+  'createTask.review.tipTitleDesc': 'Добавете ясно заглавие (минимум 10 символа), за да разберат професионалистите вашата задача.',
+  'createTask.review.tipDescription': 'Изисква се описание',
+  'createTask.review.tipDescriptionDesc': 'Добавете детайли за вашата задача (минимум 15 символа), за да помогнете на професионалистите да разберат какво ви трябва.',
+  'createTask.review.tipCity': 'Изисква се град',
+  'createTask.review.tipCityDesc': 'Изберете вашия град, за да знаят професионалистите къде да ви намерят.',
 
   // Errors
   'createTask.errors.categoryRequired': 'Моля, изберете категория',

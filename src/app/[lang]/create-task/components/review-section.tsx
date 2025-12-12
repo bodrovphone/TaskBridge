@@ -3,17 +3,20 @@
 import React, { useDeferredValue, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card, CardBody, Chip, Divider } from '@nextui-org/react'
-import { MapPin, Wallet, Clock, FileText } from 'lucide-react'
+import { MapPin, Wallet, Clock, FileText, AlertCircle } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
 import Image from 'next/image'
 import { getCityLabelBySlug } from '@/features/cities'
+import { Tip } from '@/components/ui/tip'
 
 interface ReviewSectionProps {
  form: any
+ onScrollToField?: (field: 'title' | 'description' | 'city') => void
 }
 
-export function ReviewSection({ form }: ReviewSectionProps) {
+export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
  const { t } = useTranslation()
+ const [tipDismissed, setTipDismissed] = useState(false)
 
  // Subscribe to all form field values using TanStack Form
  const [formData, setFormData] = useState<any>({})
@@ -33,6 +36,21 @@ export function ReviewSection({ form }: ReviewSectionProps) {
 
  // Get category info
  const categoryInfo = TASK_CATEGORIES.find(cat => cat.value === deferredFormData.category)
+
+ // Check which required fields are missing
+ const isTitleMissing = !deferredFormData.title || deferredFormData.title.length < 10
+ const isDescriptionMissing = !deferredFormData.description || deferredFormData.description.length < 15
+ const isCityMissing = !deferredFormData.city
+
+ // Determine first missing field for tip
+ const firstMissingField = isTitleMissing ? 'title' : isDescriptionMissing ? 'description' : isCityMissing ? 'city' : null
+
+ // Reset tip dismissed state when first missing field changes
+ useEffect(() => {
+  if (firstMissingField) {
+   setTipDismissed(false)
+  }
+ }, [firstMissingField])
 
  // Format budget display
  const getBudgetDisplay = () => {
@@ -81,12 +99,88 @@ export function ReviewSection({ form }: ReviewSectionProps) {
         </Chip>
        )}
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-2">
-       {deferredFormData.title || t('createTask.review.noTitle', 'No title yet')}
-      </h3>
-      <p className="text-gray-600 whitespace-pre-wrap">
-       {deferredFormData.description || t('createTask.review.noDescription', 'No description yet')}
-      </p>
+      {isTitleMissing ? (
+       firstMissingField === 'title' && !tipDismissed ? (
+        <Tip
+         title={t('createTask.review.tipTitle', 'Title required')}
+         description={t('createTask.review.tipTitleDesc', 'Add a clear title (at least 10 characters) so professionals understand your task.')}
+         dismissText={t('common.gotIt', 'Got it')}
+         variant="warning"
+         side="top"
+         align="start"
+         open={true}
+         onOpenChange={() => setTipDismissed(true)}
+         onDismiss={() => setTipDismissed(true)}
+        >
+         <button
+          type="button"
+          onClick={() => onScrollToField?.('title')}
+          className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg cursor-pointer hover:bg-orange-100 transition-colors w-full text-left"
+         >
+          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+          <span className="text-orange-700 font-medium">
+           {t('createTask.review.noTitle', 'No title yet')}
+          </span>
+         </button>
+        </Tip>
+       ) : (
+        <button
+         type="button"
+         onClick={() => onScrollToField?.('title')}
+         className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg cursor-pointer hover:bg-orange-100 transition-colors w-full text-left"
+        >
+         <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+         <span className="text-orange-700 font-medium">
+          {t('createTask.review.noTitle', 'No title yet')}
+         </span>
+        </button>
+       )
+      ) : (
+       <h3 className="text-xl font-bold text-gray-900 mb-2">
+        {deferredFormData.title}
+       </h3>
+      )}
+      {isDescriptionMissing ? (
+       firstMissingField === 'description' && !tipDismissed ? (
+        <Tip
+         title={t('createTask.review.tipDescription', 'Description required')}
+         description={t('createTask.review.tipDescriptionDesc', 'Add details about your task (at least 15 characters) to help professionals understand what you need.')}
+         dismissText={t('common.gotIt', 'Got it')}
+         variant="warning"
+         side="top"
+         align="start"
+         open={true}
+         onOpenChange={() => setTipDismissed(true)}
+         onDismiss={() => setTipDismissed(true)}
+        >
+         <button
+          type="button"
+          onClick={() => onScrollToField?.('description')}
+          className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg mt-2 cursor-pointer hover:bg-orange-100 transition-colors w-full text-left"
+         >
+          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+          <span className="text-orange-700">
+           {t('createTask.review.noDescription', 'No description yet')}
+          </span>
+         </button>
+        </Tip>
+       ) : (
+        <button
+         type="button"
+         onClick={() => onScrollToField?.('description')}
+         className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg mt-2 cursor-pointer hover:bg-orange-100 transition-colors w-full text-left"
+        >
+         <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+         <span className="text-orange-700">
+          {t('createTask.review.noDescription', 'No description yet')}
+         </span>
+        </button>
+       )
+      ) : (
+       <p className="text-gray-600 whitespace-pre-wrap mt-2">
+        {deferredFormData.description}
+       </p>
+      )}
      </div>
 
      <Divider />
@@ -94,15 +188,53 @@ export function ReviewSection({ form }: ReviewSectionProps) {
      {/* Location */}
      <div>
       <div className="flex items-center gap-2 mb-2">
-       <MapPin className="w-5 h-5 text-gray-400" />
-       <h4 className="font-semibold text-gray-900">
+       <MapPin className={`w-5 h-5 ${isCityMissing ? 'text-orange-500' : 'text-gray-400'}`} />
+       <h4 className={`font-semibold ${isCityMissing ? 'text-orange-700' : 'text-gray-900'}`}>
         {t('createTask.review.location', 'Location')}
        </h4>
       </div>
-      <p className="text-gray-600 ml-7">
-       {deferredFormData.city ? getCityLabelBySlug(deferredFormData.city, t) : t('createTask.review.noCity', 'No city selected')}
-       {deferredFormData.neighborhood && `, ${deferredFormData.neighborhood}`}
-      </p>
+      {isCityMissing ? (
+       firstMissingField === 'city' && !tipDismissed ? (
+        <Tip
+         title={t('createTask.review.tipCity', 'City required')}
+         description={t('createTask.review.tipCityDesc', 'Select your city so professionals know where to find you.')}
+         dismissText={t('common.gotIt', 'Got it')}
+         variant="warning"
+         side="top"
+         align="start"
+         open={true}
+         onOpenChange={() => setTipDismissed(true)}
+         onDismiss={() => setTipDismissed(true)}
+        >
+         <button
+          type="button"
+          onClick={() => onScrollToField?.('city')}
+          className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg ml-7 cursor-pointer hover:bg-orange-100 transition-colors text-left"
+         >
+          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+          <span className="text-orange-700">
+           {t('createTask.review.noCity', 'No city selected')}
+          </span>
+         </button>
+        </Tip>
+       ) : (
+        <button
+         type="button"
+         onClick={() => onScrollToField?.('city')}
+         className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg ml-7 cursor-pointer hover:bg-orange-100 transition-colors text-left"
+        >
+         <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
+         <span className="text-orange-700">
+          {t('createTask.review.noCity', 'No city selected')}
+         </span>
+        </button>
+       )
+      ) : (
+       <p className="text-gray-600 ml-7">
+        {getCityLabelBySlug(deferredFormData.city, t)}
+        {deferredFormData.neighborhood && `, ${deferredFormData.neighborhood}`}
+       </p>
+      )}
      </div>
 
      <Divider />
