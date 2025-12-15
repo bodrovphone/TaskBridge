@@ -1,15 +1,11 @@
 'use client'
 
-import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
 import { useTranslation } from 'react-i18next';
-import { usePathname, useRouter } from 'next/navigation';
-import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
-import { useAuth } from '@/features/auth';
 import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
 import {
@@ -24,15 +20,11 @@ import {
 
 export default function HeroSection() {
  const { t } = useTranslation();
- const pathname = usePathname();
- const router = useRouter();
- const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
- const { user, profile } = useAuth();
- const isAuthenticated = !!user && !!profile;
- const [isAuthOpen, setIsAuthOpen] = useState(false);
 
  const {
   handleCreateTask,
+  showAuthPrompt,
+  setShowAuthPrompt,
   showEnforcementDialog,
   setShowEnforcementDialog,
   blockType,
@@ -273,8 +265,8 @@ export default function HeroSection() {
 
    {/* Auth Slide-over */}
    <AuthSlideOver
-    isOpen={isAuthOpen}
-    onClose={() => setIsAuthOpen(false)}
+    isOpen={showAuthPrompt}
+    onClose={() => setShowAuthPrompt(false)}
     action="create-task"
    />
 

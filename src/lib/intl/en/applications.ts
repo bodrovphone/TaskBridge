@@ -5,6 +5,7 @@ export const applications = {
   'applicationStatus.accepted': 'Accepted',
   'applicationStatus.rejected': 'Rejected',
   'applicationStatus.withdrawn': 'Withdrawn',
+  'applicationStatus.removedByCustomer': 'Removed',
 
   // Application Dialog
   'application.title': 'Apply for this Task',
@@ -281,6 +282,7 @@ export const applications = {
   // My Work Page (Professional View - Accepted Applications Only)
   'myWork.title': 'My Work',
   'myWork.subtitle': 'Manage your active tasks and completed work',
+  'myWork.loading': 'Loading your work...',
   'myWork.filter.inProgress': 'In Progress',
   'myWork.filter.pendingCompletion': 'Pending Completion',
   'myWork.filter.completed': 'Completed',

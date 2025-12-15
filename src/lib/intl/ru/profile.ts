@@ -897,7 +897,8 @@ export const profile = {
   'profile.form.validation.emailRequired': 'Email обязателен',
   'profile.form.validation.emailInvalid': 'Пожалуйста, введите действительный email адрес',
   'profile.form.validation.phoneRequired': 'Номер телефона обязателен',
-  'profile.form.validation.phoneInvalid': 'Пожалуйста, введите действительный номер телефона',
+  'profile.form.validation.phoneInvalid': 'Введите 8-9 цифр (напр. 88 123 4567)',
+  'profile.form.phoneBulgarianOnly': 'Только болгарские номера телефонов',
   'profile.form.validation.locationRequired': 'Местоположение обязательно (минимум 3 символа)',
 
   // Gallery (Premium Feature)

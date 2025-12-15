@@ -342,7 +342,8 @@ export const profile = {
   'profile.form.validation.emailRequired': 'Email is required',
   'profile.form.validation.emailInvalid': 'Please enter a valid email address',
   'profile.form.validation.phoneRequired': 'Phone number is required',
-  'profile.form.validation.phoneInvalid': 'Please enter a valid phone number',
+  'profile.form.validation.phoneInvalid': 'Enter 8-9 digits (e.g. 88 123 4567)',
+  'profile.form.phoneBulgarianOnly': 'Bulgarian phone numbers only',
   'profile.form.validation.locationRequired': 'Location is required (minimum 3 characters)',
 
   // Gallery (Premium Feature)

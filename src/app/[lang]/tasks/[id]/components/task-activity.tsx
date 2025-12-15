@@ -61,10 +61,11 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
     const response = await authenticatedFetch('/api/profile');
     if (response.ok) {
      const data = await response.json();
+     const profile = data.profile;
      setUserProfile({
-      phone: data.phone,
-      email: data.email,
-      telegram_username: data.telegram_username
+      phone: profile?.phoneNumber || null,
+      email: profile?.email || null,
+      telegram_username: profile?.telegramUsername || null
      });
     }
    } catch (error) {

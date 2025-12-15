@@ -15,12 +15,12 @@ import {
  Wallet,
  PartyPopper,
  LogOut,
- Phone,
  Mail,
  Send,
  UserPlus,
  Check,
 } from 'lucide-react';
+import { PhoneContactActions } from '@/components/ui/phone-contact-actions';
 import type { Notification } from '@/types/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
 import { Button } from '@/components/ui/button';
@@ -70,9 +70,15 @@ const isPhoneNumber = (text: string): boolean => {
  return /^[\+]?[0-9]{8,15}$/.test(cleaned);
 };
 
-// Clean phone number for tel: href
-const cleanPhoneForHref = (phone: string): string => {
- return phone.replace(/[\s\-\(\)\.]/g, '');
+// Helper to detect if a string is a Telegram username
+const isTelegramUsername = (text: string): boolean => {
+ // Telegram usernames start with @ and are 5-32 characters (letters, numbers, underscores)
+ return /^@[a-zA-Z0-9_]{4,31}$/.test(text.trim());
+};
+
+// Get Telegram username without @ for URL
+const getTelegramUsername = (text: string): string => {
+ return text.trim().replace(/^@/, '');
 };
 
 export default function NotificationCard({ notification, onMarkAsRead }: NotificationCardProps) {
@@ -157,12 +163,10 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
       <h5 className="text-xs font-semibold text-green-900 mb-2">{t('notifications.customerContact')}</h5>
       <div className="flex items-start gap-2 text-sm text-green-800 w-full min-w-0">
        {notification.metadata.contactInfo.method === 'phone' && notification.metadata.contactInfo.phone && (
-        <>
-         <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-         <a href={`tel:${notification.metadata.contactInfo.phone}`} className="font-mono hover:underline break-all overflow-wrap-anywhere min-w-0">
-          {notification.metadata.contactInfo.phone}
-         </a>
-        </>
+        <PhoneContactActions
+         phoneNumber={notification.metadata.contactInfo.phone}
+         iconSize={16}
+        />
        )}
        {notification.metadata.contactInfo.method === 'email' && notification.metadata.contactInfo.email && (
         <>
@@ -175,12 +179,24 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
        {notification.metadata.contactInfo.method === 'custom' && notification.metadata.contactInfo.customContact && (
         <>
          {isPhoneNumber(notification.metadata.contactInfo.customContact) ? (
-          <>
-           <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-           <a href={`tel:${cleanPhoneForHref(notification.metadata.contactInfo.customContact)}`} className="font-mono hover:underline break-all overflow-wrap-anywhere min-w-0">
-            {notification.metadata.contactInfo.customContact}
-           </a>
-          </>
+          <PhoneContactActions
+           phoneNumber={notification.metadata.contactInfo.customContact}
+           iconSize={16}
+          />
+         ) : isTelegramUsername(notification.metadata.contactInfo.customContact) ? (
+          <a
+           href={`https://t.me/${getTelegramUsername(notification.metadata.contactInfo.customContact)}`}
+           target="_blank"
+           rel="noopener noreferrer"
+           className="flex items-center gap-2 hover:underline"
+          >
+           <img
+            src="/icons/telegram-logo.svg"
+            alt="Telegram"
+            className="w-4 h-4 flex-shrink-0"
+           />
+           <span className="break-words overflow-wrap-anywhere min-w-0">{notification.metadata.contactInfo.customContact}</span>
+          </a>
          ) : (
           <>
            <Send className="w-4 h-4 mt-0.5 flex-shrink-0" />

@@ -67,12 +67,28 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
     }
   }, [])
 
+  // Helper to strip +359 prefix for display
+  const stripBulgarianPrefix = (phone: string | null | undefined): string => {
+    if (!phone) return ''
+    // Remove +359 prefix if present (with or without spaces)
+    return phone.replace(/^\+359\s*/, '')
+  }
+
+  // Helper to add +359 prefix for storage
+  const addBulgarianPrefix = (phone: string): string => {
+    if (!phone) return ''
+    // Clean the number (remove any existing prefix, spaces, dashes)
+    const cleaned = phone.replace(/^\+359\s*/, '').replace(/[\s-]/g, '')
+    if (!cleaned) return ''
+    return `+359${cleaned}`
+  }
+
   // Form for personal information editing
   const personalForm = useForm({
     defaultValues: {
       name: profile.fullName || '',
       email: profile.email,
-      phone: profile.phoneNumber || null,
+      phone: stripBulgarianPrefix(profile.phoneNumber),
       location: profile.city || null,
       preferredLanguage: profile.preferredLanguage,
       preferredContact: profile.preferredContact,
@@ -84,7 +100,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
       try {
         await onSave({
           name: value.name,
-          phone: value.phone || '',
+          phone: addBulgarianPrefix(value.phone || ''),
           location: value.location || '',
           preferredLanguage: value.preferredLanguage,
           preferredContact: value.preferredContact,
@@ -437,18 +453,37 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                 )}
               </personalForm.Field>
 
-              {/* Phone Field */}
-              <personalForm.Field name="phone">
+              {/* Phone Field - Bulgarian numbers only */}
+              <personalForm.Field
+                name="phone"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (value && !/^[0-9]{8,9}$/.test(value.replace(/[\s-]/g, ''))) {
+                      return t('profile.form.validation.phoneInvalid', 'Enter 8-9 digits (e.g. 88 123 4567)')
+                    }
+                  }
+                }}
+              >
                 {(field) => (
                   <Input
                     type="tel"
                     label={t('profile.phone')}
                     value={field.state.value || ''}
-                    onValueChange={(value) => field.handleChange(value || null)}
+                    onValueChange={(value) => {
+                      // Only allow digits, spaces, and dashes
+                      const cleaned = value.replace(/[^\d\s-]/g, '')
+                      field.handleChange(cleaned)
+                    }}
                     isInvalid={!!field.state.meta.errors.length}
                     errorMessage={field.state.meta.errors[0]}
-                    startContent={<Phone className="w-4 h-4 text-gray-500" />}
-                    placeholder="+359 88 123 4567"
+                    startContent={
+                      <div className="flex items-center gap-1">
+                        <Phone className="w-4 h-4 text-gray-500" />
+                        <span className="text-gray-600 font-medium text-sm">+359</span>
+                      </div>
+                    }
+                    placeholder="88 123 4567"
+                    description={t('profile.form.phoneBulgarianOnly', 'Bulgarian phone numbers only')}
                     classNames={{
                       input: 'text-base', // 16px font size prevents iOS zoom
                     }}

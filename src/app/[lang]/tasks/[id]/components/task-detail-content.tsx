@@ -134,8 +134,15 @@ function getPublishedTime(createdAt: string | Date, t: any): string {
 }
 
 function getTaskStatus(taskId: string, taskStatus?: string) {
- // Check if user has applied
- const userApplication = getUserApplication(taskId, 'mock-user-id');
+ // Check if user has applied (wrap in try-catch for SSR safety)
+ let userApplication = null;
+ try {
+  if (typeof window !== 'undefined') {
+   userApplication = getUserApplication(taskId, 'mock-user-id');
+  }
+ } catch {
+  // localStorage not available
+ }
 
  // If task is in progress
  if (taskStatus === 'in_progress') {
@@ -167,6 +174,15 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
    iconColor: 'text-gray-600'
   };
  }
+ if (taskStatus === 'cancelled') {
+  return {
+   key: 'cancelled',
+   icon: Archive,
+   color: 'danger',
+   bgColor: 'bg-red-100',
+   iconColor: 'text-red-600'
+  };
+ }
 
  // If user has applied
  if (userApplication?.status) {
@@ -180,7 +196,7 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
   };
  }
 
- // Default: vacant/pending
+ // Default: vacant/pending (includes 'open' status)
  return {
   key: 'vacant',
   icon: Sparkles,

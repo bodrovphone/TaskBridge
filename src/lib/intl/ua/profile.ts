@@ -338,7 +338,8 @@ export const profile = {
   'profile.form.validation.emailRequired': 'Email обов\'язковий',
   'profile.form.validation.emailInvalid': 'Введіть дійсну email адресу',
   'profile.form.validation.phoneRequired': 'Номер телефону обов\'язковий',
-  'profile.form.validation.phoneInvalid': 'Введіть дійсний номер телефону',
+  'profile.form.validation.phoneInvalid': 'Введіть 8-9 цифр (напр. 88 123 4567)',
+  'profile.form.phoneBulgarianOnly': 'Тільки болгарські номери телефонів',
   'profile.form.validation.locationRequired': 'Місце обов\'язкове (мінімум 3 символи)',
 
   // Achievement Banner

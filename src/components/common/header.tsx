@@ -197,6 +197,39 @@ function Header() {
      const isActive = pathname === `/${lang}${item.href}` ||
       (item.href.startsWith('/#') && pathname === `/${lang}`)
      const Icon = item.icon
+     const isCreateTask = item.href === '/create-task'
+
+     // Special handling for Create Task - use onClick with auth check
+     if (isCreateTask) {
+      return (
+       <NavbarItem key={item.name}>
+        <button
+         onClick={handleCreateTask}
+         className={`
+          group relative px-4 py-2 rounded-full font-medium text-sm
+          transition-all duration-300 ease-out cursor-pointer
+          ${isActive
+           ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
+          }
+         `}
+        >
+         <span className="flex items-center gap-2">
+          <Icon
+           size={16}
+           className={`transition-transform duration-300 group-hover:scale-110 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-blue-500'}`}
+          />
+          {item.name}
+         </span>
+         {/* Hover glow effect */}
+         {!isActive && (
+          <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600/0 to-indigo-600/0 group-hover:from-blue-600/5 group-hover:to-indigo-600/5 transition-all duration-300" />
+         )}
+        </button>
+       </NavbarItem>
+      )
+     }
+
      return (
       <NavbarItem key={item.name}>
        <NextUILink

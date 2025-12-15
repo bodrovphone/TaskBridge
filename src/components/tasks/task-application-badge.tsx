@@ -63,9 +63,30 @@ export default function TaskApplicationBadge({
    label: t('applicationStatus.withdrawn'),
    variant: 'flat' as const,
   },
+  removed_by_customer: {
+   color: 'danger' as const,
+   icon: <X size={16} />,
+   label: t('applicationStatus.removedByCustomer'),
+   variant: 'flat' as const,
+  },
  }
 
- const config = statusConfig[status]
+ const config = statusConfig[status as keyof typeof statusConfig]
+
+ // If status is not in our config, show a default badge
+ if (!config) {
+  return (
+   <Chip
+    color="default"
+    variant="flat"
+    size="lg"
+    startContent={<Clock size={16} />}
+    className={`px-4 py-2 font-semibold ${className}`}
+   >
+    {status}
+   </Chip>
+  )
+ }
 
  return (
   <Chip

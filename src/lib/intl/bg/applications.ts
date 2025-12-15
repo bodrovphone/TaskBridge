@@ -5,6 +5,7 @@ export const applications = {
   'applicationStatus.accepted': 'Приета',
   'applicationStatus.rejected': 'Отхвърлена',
   'applicationStatus.withdrawn': 'Оттеглена',
+  'applicationStatus.removedByCustomer': 'Премахната',
 
   // Application Dialog
   'application.title': 'Кандидатствайте за тази задача',
@@ -281,6 +282,7 @@ export const applications = {
   // My Work Page (Professional View - Accepted Applications Only)
   'myWork.title': 'Моята работа',
   'myWork.subtitle': 'Управлявайте активните и завършени задачи',
+  'myWork.loading': 'Зареждане на вашата работа...',
   'myWork.filter.inProgress': 'В процес',
   'myWork.filter.pendingCompletion': 'Чака завършване',
   'myWork.filter.completed': 'Завършени',

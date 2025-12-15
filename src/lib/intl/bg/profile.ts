@@ -343,7 +343,8 @@ export const profile = {
   'profile.form.validation.emailRequired': 'Имейлът е задължителен',
   'profile.form.validation.emailInvalid': 'Моля, въведете валиден имейл адрес',
   'profile.form.validation.phoneRequired': 'Телефонният номер е задължителен',
-  'profile.form.validation.phoneInvalid': 'Моля, въведете валиден телефонен номер',
+  'profile.form.validation.phoneInvalid': 'Въведете 8-9 цифри (напр. 88 123 4567)',
+  'profile.form.phoneBulgarianOnly': 'Само български телефонни номера',
   'profile.form.validation.locationRequired': 'Местоположението е задължително (минимум 3 символа)',
 
   // Gallery (Premium Feature)

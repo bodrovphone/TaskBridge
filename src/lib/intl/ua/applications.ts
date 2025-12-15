@@ -5,6 +5,7 @@ export const applications = {
   'applicationStatus.accepted': 'Прийнята',
   'applicationStatus.rejected': 'Відхилена',
   'applicationStatus.withdrawn': 'Відкликана',
+  'applicationStatus.removedByCustomer': 'Видалена',
 
   // Application Dialog
   'application.title': 'Подати заявку на завдання',
@@ -220,6 +221,7 @@ export const applications = {
   // My Work Page (Professional View - Accepted Applications Only)
   'myWork.title': 'Моя робота',
   'myWork.subtitle': 'Керуйте активними завданнями та виконаними роботами',
+  'myWork.loading': 'Завантаження вашої роботи...',
   'myWork.filter.inProgress': 'У роботі',
   'myWork.filter.pendingCompletion': 'Очікують завершення',
   'myWork.filter.completed': 'Завершені',

@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
-import { Briefcase, Calendar, Phone, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle } from 'lucide-react'
+import { Briefcase, Calendar, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
+import { PhoneContactActions } from '@/components/ui/phone-contact-actions'
 import { ProfessionalWithdrawDialog } from '@/components/tasks/professional-withdraw-dialog'
 import { getCityLabelBySlug } from '@/features/cities'
 import { useWorkTasks, type WorkTask } from '../hooks/use-work-tasks'
@@ -20,6 +21,17 @@ const isPhoneNumber = (text: string): boolean => {
   const cleaned = text.replace(/[\s\-\(\)\.]/g, '')
   // Match patterns: starts with + or 0, 8-15 digits total
   return /^[\+]?[0-9]{8,15}$/.test(cleaned)
+}
+
+// Helper to detect if a string is a Telegram username
+const isTelegramUsername = (text: string): boolean => {
+  // Telegram usernames start with @ and are 5-32 characters (letters, numbers, underscores)
+  return /^@[a-zA-Z0-9_]{4,31}$/.test(text.trim())
+}
+
+// Get Telegram username without @ for URL
+const getTelegramUsername = (text: string): string => {
+  return text.trim().replace(/^@/, '')
 }
 
 // Clean phone number for tel: href
@@ -391,12 +403,10 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                       {task.sharedContactInfo ? (
                         <>
                           {task.sharedContactInfo.method === 'phone' && task.sharedContactInfo.phone && (
-                            <div className="flex items-center gap-2 text-sm text-blue-800">
-                              <Phone className="w-4 h-4 text-blue-600" />
-                              <a href={`tel:${task.sharedContactInfo.phone}`} className="font-mono hover:underline">
-                                {task.sharedContactInfo.phone}
-                              </a>
-                            </div>
+                            <PhoneContactActions
+                              phoneNumber={task.sharedContactInfo.phone}
+                              iconSize={18}
+                            />
                           )}
                           {task.sharedContactInfo.method === 'email' && task.sharedContactInfo.email && (
                             <div className="flex items-center gap-2 text-sm text-blue-800">
@@ -409,12 +419,24 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                           {task.sharedContactInfo.method === 'custom' && task.sharedContactInfo.customContact && (
                             <div className="flex items-start gap-2 text-sm text-blue-800">
                               {isPhoneNumber(task.sharedContactInfo.customContact) ? (
-                                <>
-                                  <Phone className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                                  <a href={`tel:${cleanPhoneForHref(task.sharedContactInfo.customContact)}`} className="font-mono hover:underline break-words">
-                                    {task.sharedContactInfo.customContact}
-                                  </a>
-                                </>
+                                <PhoneContactActions
+                                  phoneNumber={task.sharedContactInfo.customContact}
+                                  iconSize={18}
+                                />
+                              ) : isTelegramUsername(task.sharedContactInfo.customContact) ? (
+                                <a
+                                  href={`https://t.me/${getTelegramUsername(task.sharedContactInfo.customContact)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 hover:underline"
+                                >
+                                  <img
+                                    src="/icons/telegram-logo.svg"
+                                    alt="Telegram"
+                                    className="w-4 h-4 flex-shrink-0"
+                                  />
+                                  <span>{task.sharedContactInfo.customContact}</span>
+                                </a>
                               ) : (
                                 <>
                                   <Send className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -428,12 +450,10 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                         // Fallback to customer's default contact info (for old applications before this feature)
                         <>
                           {task.customer.phone && (
-                            <div className="flex items-center gap-2 text-sm text-blue-800">
-                              <Phone className="w-4 h-4 text-blue-600" />
-                              <a href={`tel:${task.customer.phone}`} className="hover:underline">
-                                {task.customer.phone}
-                              </a>
-                            </div>
+                            <PhoneContactActions
+                              phoneNumber={task.customer.phone}
+                              iconSize={18}
+                            />
                           )}
                           {task.customer.email && (
                             <div className="flex items-center gap-2 text-sm text-blue-800">

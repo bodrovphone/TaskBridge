@@ -16,6 +16,8 @@ import { HeroSection, FeaturedTasksSection, FeaturedProfessionalsSection } from 
 import type { Professional } from '@/server/professionals/professional.types';
 import CategoryCard from '@/components/ui/category-card';
 import { MAIN_CATEGORIES } from '@/features/categories';
+import { useCreateTask } from '@/hooks/use-create-task';
+import { ReviewEnforcementDialog } from '@/features/reviews';
 
 interface Task {
   id: string
@@ -73,6 +75,18 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
  const isDesktop = useIsDesktop();
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
+
+ // Use create task hook for auth checking and review enforcement
+ const {
+  handleCreateTask,
+  showAuthPrompt,
+  setShowAuthPrompt,
+  showEnforcementDialog,
+  setShowEnforcementDialog,
+  blockType,
+  blockingTasks,
+  handleReviewTask
+ } = useCreateTask();
 
  // Handle smooth scrolling to hash anchor on page load
  useEffect(() => {
@@ -346,12 +360,10 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
         <Button
          size="lg"
          className="group w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-xl font-bold rounded-2xl border border-blue-400"
-         asChild
+         onClick={handleCreateTask}
         >
-         <LocaleLink href="/create-task" className="flex items-center gap-2 sm:gap-3">
-          <Plus className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
-          {t('landing.cta.postTask', 'Post Your Task')}
-         </LocaleLink>
+         <Plus className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
+         {t('landing.cta.postTask', 'Post Your Task')}
         </Button>
         <Button
          size="lg"
@@ -626,11 +638,27 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
     </div>
    </section>
 
-   {/* Auth Slide-over */}
+   {/* Auth Slide-over for "Join as Professional" */}
    <AuthSlideOver
     isOpen={isAuthSlideOverOpen}
     onClose={() => setIsAuthSlideOverOpen(false)}
     action="join-professional"
+   />
+
+   {/* Auth Slide-over for "Create Task" (non-authenticated users) */}
+   <AuthSlideOver
+    isOpen={showAuthPrompt}
+    onClose={() => setShowAuthPrompt(false)}
+    action="create-task"
+   />
+
+   {/* Review Enforcement Dialog */}
+   <ReviewEnforcementDialog
+    isOpen={showEnforcementDialog}
+    onClose={() => setShowEnforcementDialog(false)}
+    blockType={blockType}
+    pendingTasks={blockingTasks}
+    onReviewTask={handleReviewTask}
    />
   </div>
  );
