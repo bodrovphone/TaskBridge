@@ -105,13 +105,6 @@ export default function CreateTaskContent() {
   }
  }, [user, loading, router, lang])
 
- // Handle "Start Fresh" - clear reopen state and remove query params
- const handleStartFresh = () => {
-  setIsReopening(false)
-  setOriginalTask(null)
-  router.push(`/${lang}/create-task`)
- }
-
  // Handle cancel invitation
  const handleCancelInvitation = () => {
   setIsInviting(false)
@@ -190,10 +183,7 @@ export default function CreateTaskContent() {
 
     {/* Reopen Banner */}
     {isReopening && originalTask && originalTask.title && (
-      <ReopenBanner
-        originalTaskTitle={originalTask.title}
-        onStartFresh={handleStartFresh}
-      />
+      <ReopenBanner originalTaskTitle={originalTask.title} />
     )}
 
     {/* Invitation Banner */}

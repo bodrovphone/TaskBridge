@@ -333,7 +333,6 @@ export const tasks = {
   'createTask.reopeningBanner.originalTask': 'Исходная задача:',
   'createTask.reopeningBanner.description':
     'Просмотрите и отредактируйте детали ниже перед публикацией. Это создаст новую задачу.',
-  'createTask.reopeningBanner.startFresh': 'Начать заново',
   'createTask.reopenSuccess': 'Задача успешно открыта заново!',
   'createTask.reopenSuccessMessage':
     'Ваша задача переопубликована и теперь открыта для новых заявок.',

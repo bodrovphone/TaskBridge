@@ -276,7 +276,6 @@ export const tasks = {
   'createTask.reopeningBanner.title': 'Повторне відкриття завдання',
   'createTask.reopeningBanner.originalTask': 'Оригінальне завдання:',
   'createTask.reopeningBanner.description': 'Перегляньте та відредагуйте деталі перед публікацією. Це створить нове завдання.',
-  'createTask.reopeningBanner.startFresh': 'Почати заново',
   'createTask.reopenSuccess': 'Завдання успішно відкрито повторно!',
   'createTask.reopenSuccessMessage': 'Ваше завдання повторно опубліковано і відкрите для нових заявок.',
 

@@ -298,7 +298,6 @@ export const tasks = {
   'createTask.reopeningBanner.title': 'Reopening Task',
   'createTask.reopeningBanner.originalTask': 'Original task:',
   'createTask.reopeningBanner.description': 'Review and edit the details below before posting. This will create a new task.',
-  'createTask.reopeningBanner.startFresh': 'Start Fresh',
   'createTask.reopenSuccess': 'Task reopened successfully!',
   'createTask.reopenSuccessMessage': 'Your task has been reposted and is now open for new applications.',
 
