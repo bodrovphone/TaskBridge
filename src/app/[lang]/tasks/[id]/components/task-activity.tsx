@@ -205,7 +205,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
   }
  };
 
- const handleAcceptConfirm = async (id: string, contactInfo: { method: 'phone' | 'email' | 'custom'; customContact?: string }) => {
+ const handleAcceptConfirm = async (id: string, contactInfo: { method: 'phone' | 'email' | 'custom'; customContact?: string; message?: string }) => {
   try {
    // Build contact info payload
    const contactPayload: any = { method: contactInfo.method };
@@ -216,6 +216,11 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
     contactPayload.email = userProfile.email;
    } else if (contactInfo.method === 'custom') {
     contactPayload.customContact = contactInfo.customContact;
+   }
+
+   // Include the personal message from customer (shown in notifications and /work page)
+   if (contactInfo.message) {
+    contactPayload.message = contactInfo.message;
    }
 
    // Call API to accept application (use authenticatedFetch for notification token support)
