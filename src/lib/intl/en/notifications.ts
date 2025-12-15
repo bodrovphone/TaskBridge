@@ -302,7 +302,7 @@ export const notifications = {
   'notifications.email.applicationAccepted.contactLabel': 'Contact',
 
   // 3. Application Rejected
-  'notifications.email.applicationRejected.subject': 'Application Update for "{{task_title}}"',
+  'notifications.email.applicationRejected.subject': 'Application Update for «{{task_title}}»',
   'notifications.email.applicationRejected.heading': 'Application Not Accepted',
   'notifications.email.applicationRejected.message': 'Your application for "{{task_title}}" was not accepted this time. Don\'t worry! Keep applying to other opportunities.',
   'notifications.email.applicationRejected.buttonText': 'Browse Other Tasks',
@@ -319,7 +319,7 @@ export const notifications = {
   'notifications.email.messageReceived.footerText': "You're receiving this because you're involved in a task on Trudify.",
 
   // 5. Task Completed
-  'notifications.email.taskCompleted.subject': 'Task completed: "{{task_title}}"',
+  'notifications.email.taskCompleted.subject': 'Task completed: «{{task_title}}»',
   'notifications.email.taskCompleted.heading': 'Task Completed Successfully!',
   'notifications.email.taskCompleted.message': 'The task "{{task_title}}" has been marked as complete. Please rate your experience and help build trust in the community.',
   'notifications.email.taskCompleted.buttonText': 'Leave a Review',
@@ -336,7 +336,7 @@ export const notifications = {
   'notifications.email.welcome.footerText': "You're receiving this because you created an account on Trudify.",
 
   // 8. Removed from Task
-  'notifications.email.removedFromTask.subject': 'Task update: "{{task_title}}"',
+  'notifications.email.removedFromTask.subject': 'Task update: «{{task_title}}»',
   'notifications.email.removedFromTask.heading': "You've Been Removed from a Task",
   'notifications.email.removedFromTask.message': 'You have been removed from the task "{{task_title}}" by the customer.{{customerFeedback}} The task is now open for other professionals to apply.',
   'notifications.email.removedFromTask.buttonText': 'Browse Other Tasks',

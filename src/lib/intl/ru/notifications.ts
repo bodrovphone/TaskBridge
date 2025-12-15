@@ -303,7 +303,7 @@ export const notifications = {
   'notifications.email.applicationAccepted.contactLabel': 'Контакт',
 
   // 3. Заявка отклонена
-  'notifications.email.applicationRejected.subject': 'Обновление заявки на "{{task_title}}"',
+  'notifications.email.applicationRejected.subject': 'Обновление заявки на «{{task_title}}»',
   'notifications.email.applicationRejected.heading': 'Заявка не принята',
   'notifications.email.applicationRejected.message': 'Ваша заявка на "{{task_title}}" не была принята в этот раз. Не расстраивайтесь! Продолжайте откликаться на другие возможности.',
   'notifications.email.applicationRejected.buttonText': 'Посмотреть другие задачи',
@@ -320,7 +320,7 @@ export const notifications = {
   'notifications.email.messageReceived.footerText': 'Вы получили это письмо, потому что участвуете в задаче в Trudify.',
 
   // 5. Задача завершена
-  'notifications.email.taskCompleted.subject': 'Задача завершена: "{{task_title}}"',
+  'notifications.email.taskCompleted.subject': 'Задача завершена: «{{task_title}}»',
   'notifications.email.taskCompleted.heading': 'Задача успешно завершена!',
   'notifications.email.taskCompleted.message': 'Задача "{{task_title}}" была отмечена как завершённая. Пожалуйста, оцените свой опыт и помогите построить доверие в сообществе.',
   'notifications.email.taskCompleted.buttonText': 'Оставить отзыв',
@@ -337,7 +337,7 @@ export const notifications = {
   'notifications.email.welcome.footerText': 'Вы получили это письмо, потому что создали аккаунт в Trudify.',
 
   // 8. Удалён из задачи
-  'notifications.email.removedFromTask.subject': 'Обновление задачи: "{{task_title}}"',
+  'notifications.email.removedFromTask.subject': 'Обновление задачи: «{{task_title}}»',
   'notifications.email.removedFromTask.heading': 'Вас удалили из задачи',
   'notifications.email.removedFromTask.message': 'Вас удалили из задачи "{{task_title}}" заказчиком.{{customerFeedback}} Задача теперь открыта для других специалистов.',
   'notifications.email.removedFromTask.buttonText': 'Посмотреть другие задачи',

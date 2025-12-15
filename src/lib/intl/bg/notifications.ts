@@ -303,7 +303,7 @@ export const notifications = {
   'notifications.email.applicationAccepted.contactLabel': 'Контакт',
 
   // 3. Отхвърлена кандидатура
-  'notifications.email.applicationRejected.subject': 'Актуализация на кандидатурата за "{{task_title}}"',
+  'notifications.email.applicationRejected.subject': 'Актуализация на кандидатурата за «{{task_title}}»',
   'notifications.email.applicationRejected.heading': 'Кандидатурата не беше приета',
   'notifications.email.applicationRejected.message': 'Вашата кандидатура за "{{task_title}}" не беше приета този път. Не се притеснявайте! Продължете да кандидатствате за други възможности.',
   'notifications.email.applicationRejected.buttonText': 'Разгледай други задачи',
@@ -320,7 +320,7 @@ export const notifications = {
   'notifications.email.messageReceived.footerText': 'Получавате този имейл, защото участвате в задача в Trudify.',
 
   // 5. Завършена задача
-  'notifications.email.taskCompleted.subject': 'Завършена задача: "{{task_title}}"',
+  'notifications.email.taskCompleted.subject': 'Завършена задача: «{{task_title}}»',
   'notifications.email.taskCompleted.heading': 'Задачата е завършена успешно!',
   'notifications.email.taskCompleted.message': 'Задачата "{{task_title}}" беше маркирана като завършена. Моля, оценете опита си и помогнете за изграждането на доверие в общността.',
   'notifications.email.taskCompleted.buttonText': 'Оставете отзив',
@@ -337,7 +337,7 @@ export const notifications = {
   'notifications.email.welcome.footerText': 'Получавате този имейл, защото създадохте акаунт в Trudify.',
 
   // 8. Премахнат от задача
-  'notifications.email.removedFromTask.subject': 'Актуализация на задачата: "{{task_title}}"',
+  'notifications.email.removedFromTask.subject': 'Актуализация на задачата: «{{task_title}}»',
   'notifications.email.removedFromTask.heading': 'Бяхте премахнат от задача',
   'notifications.email.removedFromTask.message': 'Бяхте премахнат от задачата "{{task_title}}" от клиента.{{customerFeedback}} Задачата сега е отворена за други специалисти да кандидатстват.',
   'notifications.email.removedFromTask.buttonText': 'Разгледай други задачи',

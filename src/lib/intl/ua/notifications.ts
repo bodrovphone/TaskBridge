@@ -298,7 +298,7 @@ export const notifications = {
   'notifications.email.applicationAccepted.customerMessageLabel': 'Повідомлення',
   'notifications.email.applicationAccepted.contactLabel': 'Контакт',
 
-  'notifications.email.applicationRejected.subject': 'Оновлення заявки на "{{task_title}}"',
+  'notifications.email.applicationRejected.subject': 'Оновлення заявки на «{{task_title}}»',
   'notifications.email.applicationRejected.heading': 'Заявку не прийнято',
   'notifications.email.applicationRejected.message': 'Вашу заявку на "{{task_title}}" цього разу не прийнято. Не засмучуйтеся! Продовжуйте подавати заявки на інші можливості.',
   'notifications.email.applicationRejected.buttonText': 'Переглянути інші завдання',
@@ -313,7 +313,7 @@ export const notifications = {
   'notifications.email.messageReceived.secondaryMessage': 'Відповідайте швидко для підтримки доброї комунікації та довіри.',
   'notifications.email.messageReceived.footerText': 'Ви отримали цей лист, тому що берете участь у завданні на Trudify.',
 
-  'notifications.email.taskCompleted.subject': 'Завдання виконано: "{{task_title}}"',
+  'notifications.email.taskCompleted.subject': 'Завдання виконано: «{{task_title}}»',
   'notifications.email.taskCompleted.heading': 'Завдання успішно виконано!',
   'notifications.email.taskCompleted.message': 'Завдання "{{task_title}}" позначено як виконане. Будь ласка, оцініть свій досвід та допоможіть створити довіру у спільноті.',
   'notifications.email.taskCompleted.buttonText': 'Залишити відгук',
@@ -328,7 +328,7 @@ export const notifications = {
   'notifications.email.welcome.secondaryMessage': 'Потрібна допомога? Перегляньте наші посібники або зверніться до підтримки.',
   'notifications.email.welcome.footerText': 'Ви отримали цей лист, тому що створили обліковий запис на Trudify.',
 
-  'notifications.email.removedFromTask.subject': 'Оновлення завдання: "{{task_title}}"',
+  'notifications.email.removedFromTask.subject': 'Оновлення завдання: «{{task_title}}»',
   'notifications.email.removedFromTask.heading': 'Вас видалено із завдання',
   'notifications.email.removedFromTask.message': 'Вас видалено із завдання "{{task_title}}" замовником.{{customerFeedback}} Завдання тепер відкрите для інших фахівців.',
   'notifications.email.removedFromTask.buttonText': 'Переглянути інші завдання',
