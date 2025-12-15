@@ -199,8 +199,8 @@ export const NotificationTemplates = {
   /**
    * Notification when customer removes professional from task
    */
-  removedByCustomer: (taskTitle: string) => ({
-    message: `⚠️ <b>Removed from Task</b>\n\nYou have been removed from the task "${taskTitle}" by the customer.\n\nThe task is now open for other professionals to apply.\n\nThis does not negatively affect your rating unless there are quality or safety concerns.\n\nIf you have questions, please contact support.`,
+  removedByCustomer: (taskTitle: string, customerFeedback?: string) => ({
+    message: `⚠️ <b>Removed from Task</b>\n\nYou have been removed from the task "${taskTitle}" by the customer.${customerFeedback ? `\n\n<b>Customer feedback:</b>\n"${customerFeedback}"` : ''}\n\nThe task is now open for other professionals to apply.\n\nThis does not negatively affect your rating unless there are quality or safety concerns.\n\nIf you have questions, please contact support.`,
     parseMode: 'HTML' as const,
   }),
 

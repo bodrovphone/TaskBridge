@@ -4,8 +4,7 @@ import { createNotification } from '@/lib/services/notification-service'
 import { authenticateRequest } from '@/lib/auth/api-auth'
 
 interface RemoveProfessionalRequest {
-  reason: string
-  description?: string
+  feedback?: string
 }
 
 export async function POST(
@@ -27,14 +26,7 @@ export async function POST(
 
     // Parse request body
     const body: RemoveProfessionalRequest = await request.json()
-    const { reason, description } = body
-
-    if (!reason) {
-      return NextResponse.json(
-        { error: 'Removal reason is required' },
-        { status: 400 }
-      )
-    }
+    const { feedback } = body
 
     // Get task and verify ownership
     const { data: task, error: taskError } = await supabase
@@ -103,7 +95,7 @@ export async function POST(
       .eq('customer_id', user.id)
       .eq('month_year', currentMonth)
 
-    const maxRemovalsPerMonth = 1
+    const maxRemovalsPerMonth = 2
     if ((removalsThisMonth ?? 0) >= maxRemovalsPerMonth) {
       return NextResponse.json(
         {
@@ -143,8 +135,8 @@ export async function POST(
       .update({
         status: 'removed_by_customer',
         removed_by_customer_at: new Date().toISOString(),
-        removal_reason: reason,
-        removal_description: description || null,
+        removal_reason: 'customer_removed',
+        removal_description: feedback || null,
         days_worked_before_removal: daysWorked,
         updated_at: new Date().toISOString(),
       })
@@ -163,8 +155,8 @@ export async function POST(
         professional_id: application.professional_id,
         task_id: taskId,
         application_id: application.id,
-        reason,
-        description: description || null,
+        reason: 'customer_removed',
+        description: feedback || null,
         days_worked: daysWorked,
         month_year: currentMonth,
       })
@@ -174,44 +166,6 @@ export async function POST(
       // Non-fatal error, continue
     }
 
-    // Set re-hiring restrictions based on reason
-    if (['quality_concerns', 'safety_issues'].includes(reason)) {
-      // Permanent restriction for quality/safety issues
-      const { error: restrictionError } = await supabase
-        .from('customer_professional_restrictions')
-        .insert({
-          customer_id: user.id,
-          professional_id: application.professional_id,
-          task_id: taskId,
-          can_rehire_at: null, // null = never for this task
-          reason: `${reason} (permanent restriction)`,
-        })
-
-      if (restrictionError) {
-        console.error('Error creating restriction:', restrictionError)
-        // Non-fatal, continue
-      }
-    } else if (reason !== 'mutual_agreement') {
-      // 7-day cooldown for other reasons (except mutual agreement)
-      const cooldownDate = new Date()
-      cooldownDate.setDate(cooldownDate.getDate() + 7)
-
-      const { error: restrictionError } = await supabase
-        .from('customer_professional_restrictions')
-        .insert({
-          customer_id: user.id,
-          professional_id: application.professional_id,
-          task_id: taskId,
-          can_rehire_at: cooldownDate.toISOString(),
-          reason: `${reason} (7-day cooldown)`,
-        })
-
-      if (restrictionError) {
-        console.error('Error creating cooldown:', restrictionError)
-        // Non-fatal, continue
-      }
-    }
-
     // Send notification to professional using notification service
     try {
       await createNotification({
@@ -219,6 +173,7 @@ export async function POST(
         type: 'removed_by_customer',
         templateData: {
           taskTitle: task.title,
+          customerFeedback: feedback || '', // Raw feedback - each channel formats it
         },
         actionUrl: `/browse-tasks`,
         deliveryChannel: 'both', // Critical: both in-app and Telegram

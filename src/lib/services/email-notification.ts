@@ -260,7 +260,7 @@ async function translateEmailVariables(
 
       // Add customer message if provided
       if (data.customerMessage) {
-        infoItems.push(`💬 ${t('notifications.email.applicationAccepted.customerMessageLabel', { defaultValue: 'Message' })}: "${data.customerMessage}"`);
+        infoItems.push(`${t('notifications.email.applicationAccepted.customerMessageLabel', { defaultValue: 'Message' })}: "${data.customerMessage}"`);
       }
 
       // Generate magic link to /tasks/work page
@@ -392,7 +392,13 @@ async function translateEmailVariables(
         footer_text: t('notifications.email.welcome.footerText'),
       };
 
-    case 'removedFromTask':
+    case 'removedFromTask': {
+      // Format customer feedback for email display (empty string if not provided)
+      const feedbackLabel = t('notifications.email.removedFromTask.feedbackLabel', { defaultValue: 'Feedback' });
+      const customerFeedback = data.customerFeedback
+        ? `\n\n${feedbackLabel}: "${data.customerFeedback}"`
+        : '';
+
       return {
         ...common,
         subject: t('notifications.email.removedFromTask.subject', {
@@ -401,12 +407,14 @@ async function translateEmailVariables(
         heading: t('notifications.email.removedFromTask.heading'),
         message: t('notifications.email.removedFromTask.message', {
           task_title: data.taskTitle,
+          customerFeedback,
         }),
         primary_link: `${baseUrl}/${locale}/browse-tasks`,
         primary_button_text: t('notifications.email.removedFromTask.buttonText'),
         secondary_message: t('notifications.email.removedFromTask.secondaryMessage'),
         footer_text: t('notifications.email.removedFromTask.footerText'),
       };
+    }
 
     case 'taskInvitation':
       return {

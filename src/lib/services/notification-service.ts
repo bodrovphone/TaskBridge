@@ -153,6 +153,15 @@ export async function createNotification(
     let title = params.title
     let message = params.message
 
+    // Format customerFeedback for removed_by_customer notifications (in-app and Telegram)
+    // Email service handles its own formatting
+    let templateData = { ...params.templateData }
+    if (params.type === 'removed_by_customer' && templateData?.customerFeedback) {
+      templateData.customerFeedback = `\n\nFeedback from customer:\n"${templateData.customerFeedback}"`
+    } else if (params.type === 'removed_by_customer') {
+      templateData.customerFeedback = ''
+    }
+
     // Use localized content for supported types
     const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'task_cancelled', 'removed_by_customer']
     if (localizedTypes.includes(params.type) && (!title || !message)) {
@@ -170,7 +179,7 @@ export async function createNotification(
         const localizedType = typeMap[params.type as keyof typeof typeMap]
 
         if (localizedType) {
-          const content = getNotificationContent(userLocale, localizedType, params.templateData)
+          const content = getNotificationContent(userLocale, localizedType, templateData)
           title = title || content.title || 'Notification'
           message = message || content.message || 'You have a new notification'
         }
@@ -309,19 +318,19 @@ export async function createNotification(
 
               // Build customer message section for application accepted notifications
               let customerMessageSection = ''
-              if (params.templateData?.customerMessage) {
-                customerMessageSection = `\n\n<b>💬 Message from ${params.templateData?.customerName || 'customer'}:</b>\n"${params.templateData.customerMessage}"`
+              if (templateData?.customerMessage) {
+                customerMessageSection = `\n\n<b>Message from ${templateData?.customerName || 'customer'}:</b>\n"${templateData.customerMessage}"`
               }
 
               // Prepare template data with localized link
-              const templateData = {
-                ...params.templateData,
+              const telegramTemplateData = {
+                ...templateData,
                 userName: user.full_name || 'there',
                 link,
                 customerMessageSection,
               }
 
-              telegramMessage = getTelegramMessage(userLocale, localizedType, templateData)
+              telegramMessage = getTelegramMessage(userLocale, localizedType, telegramTemplateData)
             } else {
               // Fallback for unsupported types
               telegramMessage = `<b>${title}</b>\n\n${message}`

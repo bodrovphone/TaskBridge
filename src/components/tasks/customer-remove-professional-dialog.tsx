@@ -10,8 +10,6 @@ import {
   ModalFooter,
   Button,
   Textarea,
-  RadioGroup,
-  Radio,
   Avatar,
 } from '@nextui-org/react'
 import { UserX, AlertTriangle, Info } from 'lucide-react'
@@ -21,7 +19,7 @@ import { enUS, bg as bgLocale, ru as ruLocale } from 'date-fns/locale'
 interface CustomerRemoveProfessionalDialogProps {
   isOpen: boolean
   onClose: () => void
-  onConfirm: (reason: string, description?: string) => void
+  onConfirm: (feedback?: string) => void
   taskTitle: string
   professionalName: string
   professionalAvatar?: string
@@ -30,18 +28,6 @@ interface CustomerRemoveProfessionalDialogProps {
   acceptedDate: Date
   isLoading?: boolean
 }
-
-const REMOVAL_REASONS = [
-  'professional_unresponsive',
-  'professional_no_show',
-  'quality_concerns',
-  'safety_issues',
-  'timeline_issue',
-  'scope_disagreement',
-  'my_circumstances_changed',
-  'mutual_agreement',
-  'other',
-] as const
 
 export function CustomerRemoveProfessionalDialog({
   isOpen,
@@ -56,8 +42,7 @@ export function CustomerRemoveProfessionalDialog({
   isLoading = false,
 }: CustomerRemoveProfessionalDialogProps) {
   const { t, i18n } = useTranslation()
-  const [selectedReason, setSelectedReason] = useState<string>('')
-  const [description, setDescription] = useState('')
+  const [feedback, setFeedback] = useState('')
 
   const remainingRemovals = maxRemovalsPerMonth - removalsThisMonth
   const hasExceededLimit = remainingRemovals <= 0
@@ -79,15 +64,13 @@ export function CustomerRemoveProfessionalDialog({
   }
 
   const handleConfirm = () => {
-    if (!selectedReason || hasExceededLimit) return
-    onConfirm(selectedReason, description || undefined)
-    setSelectedReason('')
-    setDescription('')
+    if (hasExceededLimit) return
+    onConfirm(feedback.trim() || undefined)
+    setFeedback('')
   }
 
   const handleClose = () => {
-    setSelectedReason('')
-    setDescription('')
+    setFeedback('')
     onClose()
   }
 
@@ -191,56 +174,26 @@ export function CustomerRemoveProfessionalDialog({
             </p>
           </div>
 
-          {/* Removal Reasons */}
+          {/* Optional Feedback */}
           {!hasExceededLimit && (
-            <>
-              <div>
-                <p className="text-sm font-medium text-gray-900 mb-2">
-                  {t('customerRemove.reasonLabel')}
-                </p>
-                <RadioGroup
-                  value={selectedReason}
-                  onValueChange={setSelectedReason}
-                  classNames={{
-                    wrapper: 'gap-2',
-                  }}
-                >
-                  {REMOVAL_REASONS.map((reason) => (
-                    <Radio
-                      key={reason}
-                      value={reason}
-                      classNames={{
-                        base: 'hover:bg-gray-50 rounded-lg p-2 m-0 max-w-full',
-                        label: 'text-sm',
-                        control: 'bg-red-500 border-red-500',
-                      }}
-                    >
-                      {t(`customerRemove.reasons.${reason}`)}
-                    </Radio>
-                  ))}
-                </RadioGroup>
-              </div>
-
-              {/* Optional Description */}
-              <div>
-                <p className="text-sm font-medium text-gray-900 mb-2">
-                  {t('customerRemove.descriptionLabel')}
-                </p>
-                <Textarea
-                  value={description}
-                  onValueChange={setDescription}
-                  placeholder={t('customerRemove.descriptionPlaceholder')}
-                  minRows={3}
-                  maxRows={5}
-                  classNames={{
-                    input: 'text-sm',
-                  }}
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {t('customerRemove.descriptionHint')}
-                </p>
-              </div>
-            </>
+            <div>
+              <p className="text-sm font-medium text-gray-900 mb-2">
+                {t('customerRemove.feedbackLabel', 'Feedback for the professional (optional)')}
+              </p>
+              <Textarea
+                value={feedback}
+                onValueChange={setFeedback}
+                placeholder={t('customerRemove.feedbackPlaceholder', 'Let them know why you\'re removing them from this task...')}
+                minRows={3}
+                maxRows={5}
+                classNames={{
+                  input: 'text-sm',
+                }}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                {t('customerRemove.feedbackHint', 'This message will be included in the notification sent to the professional.')}
+              </p>
+            </div>
           )}
         </ModalBody>
 
@@ -256,7 +209,7 @@ export function CustomerRemoveProfessionalDialog({
             <Button
               color="warning"
               onPress={handleConfirm}
-              isDisabled={!selectedReason || isLoading}
+              isDisabled={isLoading}
               isLoading={isLoading}
               startContent={!isLoading && <UserX className="w-4 h-4" />}
             >

@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { Card, CardBody, Button, Chip, Avatar } from '@nextui-org/react'
 import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit, UserX } from 'lucide-react'
-import { ConfirmCompletionDialog, type ConfirmationData } from '@/components/tasks/confirm-completion-dialog'
+import { ConfirmCompletionDialog } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
 import { CancelTaskConfirmDialog } from '@/components/tasks/cancel-task-confirm-dialog'
 import { CustomerRemoveProfessionalDialog } from '@/components/tasks/customer-remove-professional-dialog'
@@ -88,7 +88,7 @@ function PostedTaskCard({
 
   // @todo INTEGRATION: Fetch from user's profile/stats
   const removalsThisMonth = 0 // Mock data
-  const maxRemovalsPerMonth = 1 // As per PRD (stricter than professional withdrawal)
+  const maxRemovalsPerMonth = 2 // Increased to allow rejection via completion dialog
 
   // Task hints hook
   const taskHintsData = useTaskHints({
@@ -156,16 +156,15 @@ function PostedTaskCard({
     }
   }
 
-  const handleConfirmComplete = async (data?: ConfirmationData) => {
+  const [completionSuccess, setCompletionSuccess] = useState(false)
+
+  const handleConfirmComplete = async (): Promise<boolean> => {
     setIsConfirmingCompletion(true)
     try {
       const response = await authenticatedFetch(`/api/tasks/${id}/mark-complete`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          // ConfirmationData doesn't have notes/photos, only review data
-          // Those fields are optional in the API anyway
-        })
+        body: JSON.stringify({})
       })
 
       const result = await response.json()
@@ -183,16 +182,10 @@ function PostedTaskCard({
         throw new Error(errorMessage)
       }
 
-      toast({
-        title: t('postedTasks.markCompleteSuccess'),
-        description: t('postedTasks.markCompleteSuccessDescription'),
-        variant: 'success'
-      })
+      // Mark success - will invalidate queries when dialog closes
+      setCompletionSuccess(true)
 
-      setShowConfirmDialog(false)
-
-      // Invalidate query to refetch tasks
-      queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
+      return true // Success - dialog will show success state
     } catch (error) {
       console.error('Failed to mark task complete:', error)
       toast({
@@ -200,46 +193,18 @@ function PostedTaskCard({
         description: error instanceof Error ? error.message : t('common.errorGeneric'),
         variant: 'destructive'
       })
+      return false
     } finally {
       setIsConfirmingCompletion(false)
     }
   }
 
-  const handleRejectComplete = async (reason: string, description?: string) => {
-    setIsConfirmingCompletion(true)
-    try {
-      const response = await authenticatedFetch(`/api/tasks/${id}/confirm-completion`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'reject',
-          rejectionData: { reason, description }
-        })
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to reject task completion')
-      }
-
-      toast({
-        title: t('taskCompletion.rejectSuccess'),
-        description: t('taskCompletion.rejectSuccessDescription'),
-        variant: 'default'
-      })
-
-      setShowConfirmDialog(false)
-      router.refresh()
-    } catch (error) {
-      console.error('Failed to reject completion:', error)
-      toast({
-        title: t('taskCompletion.rejectError'),
-        description: error instanceof Error ? error.message : t('common.errorGeneric'),
-        variant: 'destructive'
-      })
-    } finally {
-      setIsConfirmingCompletion(false)
+  const handleCompletionDialogClose = () => {
+    setShowConfirmDialog(false)
+    // Invalidate queries after dialog closes to avoid unmounting during success state
+    if (completionSuccess) {
+      queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
+      setCompletionSuccess(false)
     }
   }
 
@@ -321,13 +286,13 @@ function PostedTaskCard({
     }
   }
 
-  const handleRemoveProfessional = async (reason: string, description?: string) => {
+  const handleRemoveProfessional = async (feedback?: string) => {
     setIsRemovingProfessional(true)
     try {
       const response = await authenticatedFetch(`/api/tasks/${id}/remove-professional`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason, description })
+        body: JSON.stringify({ feedback })
       })
 
       const result = await response.json()
@@ -642,13 +607,8 @@ function PostedTaskCard({
       {/* Confirmation Dialog */}
       <ConfirmCompletionDialog
         isOpen={showConfirmDialog}
-        onClose={() => setShowConfirmDialog(false)}
+        onClose={handleCompletionDialogClose}
         onConfirm={handleConfirmComplete}
-        onReject={handleRejectComplete}
-        onReportProfessional={() => {
-          setShowConfirmDialog(false)
-          setShowReportDialog(true)
-        }}
         professionalName={acceptedApplication?.professionalName || ''}
         taskTitle={title}
         isLoading={isConfirmingCompletion}
