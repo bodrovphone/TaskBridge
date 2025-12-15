@@ -57,9 +57,9 @@ export const reviews = {
 
   // Enforcement Dialog - Hard Block
   'reviews.enforcement.hardBlock.title': 'Изисква се действие',
-  'reviews.enforcement.hardBlock.message': 'Специалистът е отбелязал вашата задача като завършена и чака вашето потвърждение. Моля, потвърдете или отхвърлете завършването преди да създадете нова задача.',
-  'reviews.enforcement.hardBlock.confirmButton': 'Прегледай и потвърди',
-  'reviews.enforcement.hardBlock.viewButton': 'Виж детайли',
+  'reviews.enforcement.hardBlock.message': 'Имате чакащи отзиви за завършени задачи. Моля, оставете отзивите си, за да помогнете на други клиенти да намерят страхотни специалисти.',
+  'reviews.enforcement.hardBlock.confirmButton': 'Остави отзиви',
+  'reviews.enforcement.hardBlock.viewButton': 'Виж чакащи отзиви',
 
   // Enforcement Dialog - Soft Block
   'reviews.enforcement.softBlock.title': 'Необходими са отзиви',

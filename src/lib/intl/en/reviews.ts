@@ -57,9 +57,9 @@ export const reviews = {
 
   // Enforcement Dialog - Hard Block
   'reviews.enforcement.hardBlock.title': 'Action Required',
-  'reviews.enforcement.hardBlock.message': 'A professional has marked your task as complete and is waiting for your confirmation. Please confirm or reject the completion before creating a new task.',
-  'reviews.enforcement.hardBlock.confirmButton': 'Review & Confirm',
-  'reviews.enforcement.hardBlock.viewButton': 'View Details',
+  'reviews.enforcement.hardBlock.message': 'You have pending reviews for completed tasks. Please leave your reviews to help other customers find great professionals.',
+  'reviews.enforcement.hardBlock.confirmButton': 'Leave Reviews',
+  'reviews.enforcement.hardBlock.viewButton': 'View Pending Reviews',
 
   // Enforcement Dialog - Soft Block
   'reviews.enforcement.softBlock.title': 'Reviews Required',

@@ -219,6 +219,7 @@ export const tasks = {
   'createTask.photos.optimizing': 'Оптимізація для швидшого завантаження...',
   'createTask.photos.optimized': 'Зображення успішно оптимізовано',
   'createTask.photos.smaller': 'менше',
+  'createTask.photos.maxImagesError': 'Ви можете завантажити максимум {{count}} зображень',
 
   // Review Section
   'createTask.review.title': 'Перегляньте завдання',

@@ -57,9 +57,9 @@ export const reviews = {
 
   // Enforcement Dialog - Hard Block
   'reviews.enforcement.hardBlock.title': 'Потрібна дія',
-  'reviews.enforcement.hardBlock.message': 'Фахівець позначив завдання як завершене і чекає підтвердження. Підтвердіть або відхиліть завершення перед створенням нового завдання.',
-  'reviews.enforcement.hardBlock.confirmButton': 'Переглянути та підтвердити',
-  'reviews.enforcement.hardBlock.viewButton': 'Переглянути деталі',
+  'reviews.enforcement.hardBlock.message': 'У вас є очікувані відгуки за завершені завдання. Будь ласка, залиште відгуки, щоб допомогти іншим клієнтам знайти чудових фахівців.',
+  'reviews.enforcement.hardBlock.confirmButton': 'Залишити відгуки',
+  'reviews.enforcement.hardBlock.viewButton': 'Переглянути очікувані відгуки',
 
   // Enforcement Dialog - Soft Block
   'reviews.enforcement.softBlock.title': 'Потрібні відгуки',

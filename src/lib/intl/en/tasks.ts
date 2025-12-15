@@ -236,6 +236,7 @@ export const tasks = {
   'createTask.photos.optimizing': 'Optimizing image for faster upload...',
   'createTask.photos.optimized': 'Image optimized successfully',
   'createTask.photos.smaller': 'smaller',
+  'createTask.photos.maxImagesError': 'You can upload a maximum of {{count}} images',
 
   // Review Section
   'createTask.review.title': 'Review your task',

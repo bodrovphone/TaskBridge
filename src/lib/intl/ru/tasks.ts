@@ -260,6 +260,7 @@ export const tasks = {
     'Оптимизация изображения для более быстрой загрузки...',
   'createTask.photos.optimized': 'Изображение успешно оптимизировано',
   'createTask.photos.smaller': 'меньше',
+  'createTask.photos.maxImagesError': 'Вы можете загрузить максимум {{count}} изображений',
 
   // Review Section
   'createTask.review.title': 'Проверьте вашу задачу',

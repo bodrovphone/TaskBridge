@@ -39,7 +39,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
     if (!files) return
 
     if (photos.length + files.length > MAX_IMAGES) {
-      setImageErrors([t('createTask.photos.maxImagesError', `You can upload a maximum of ${MAX_IMAGES} images.`)])
+      setImageErrors([t('createTask.photos.maxImagesError', { count: MAX_IMAGES })])
       return
     }
 
