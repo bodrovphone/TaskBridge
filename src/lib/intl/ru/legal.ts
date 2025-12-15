@@ -335,7 +335,7 @@ export const legal = {
   'privacy.section2.content': `
     <p><strong>2.1. Данные при регистрации:</strong></p>
     <ul>
-      <li>Имя и фамилия</li>
+      <li>Имя</li>
       <li>Адрес электронной почты</li>
       <li>Номер телефона</li>
       <li>Фото профиля (по желанию)</li>

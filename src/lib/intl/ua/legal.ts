@@ -335,7 +335,7 @@ export const legal = {
   'privacy.section2.content': `
     <p><strong>2.1. Реєстраційні дані:</strong></p>
     <ul>
-      <li>Ім'я та прізвище</li>
+      <li>Ім'я</li>
       <li>Електронна адреса</li>
       <li>Номер телефону</li>
       <li>Фото профілю (необов'язково)</li>

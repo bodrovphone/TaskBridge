@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Card, CardBody } from '@nextui-org/react'
 import { Wallet, Info } from 'lucide-react'
@@ -15,6 +16,16 @@ interface BudgetSectionProps {
 
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
  const { t } = useTranslation()
+
+ // Local state for input values - allows free editing without form state restrictions
+ const [localBudgetMin, setLocalBudgetMin] = useState(() => {
+  const formMin = form.getFieldValue('budgetMin')
+  return formMin !== undefined && formMin !== null ? String(formMin) : ''
+ })
+ const [localBudgetMax, setLocalBudgetMax] = useState(() => {
+  const formMax = form.getFieldValue('budgetMax')
+  return formMax !== undefined && formMax !== null ? String(formMax) : ''
+ })
 
  const budgetOptions = [
   {
@@ -43,9 +54,12 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
    // Clear all budget values when "not sure" is selected
    form.setFieldValue('budgetMin', undefined)
    form.setFieldValue('budgetMax', undefined)
+   setLocalBudgetMin('')
+   setLocalBudgetMax('')
   } else if (newType === 'fixed') {
    // Clear min when switching to fixed
    form.setFieldValue('budgetMin', undefined)
+   setLocalBudgetMin('')
   } else if (newType === 'range') {
    // Ensure both min and max are ready for input
    // Don't clear anything, just switch
@@ -53,6 +67,18 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
 
   // Call the parent handler
   onBudgetTypeChange(newType)
+ }
+
+ // Helper to sync local input to form state
+ const syncToForm = (field: 'budgetMin' | 'budgetMax', value: string) => {
+  if (value === '') {
+   form.setFieldValue(field, undefined)
+  } else {
+   const numValue = Number(value)
+   if (!isNaN(numValue)) {
+    form.setFieldValue(field, numValue)
+   }
+  }
  }
 
  return (
@@ -110,13 +136,6 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
     <form.Field
      name="budgetMax"
      validators={{
-      onChange: ({ value }: any) => {
-       // Only validate if user has entered a value
-       if (value !== undefined && value !== null && value !== '' && value <= 0) {
-        return t('createTask.budget.mustBePositive', 'Budget must be positive')
-       }
-       return undefined
-      },
       onBlur: ({ value }: any) => {
        // Only validate if user has entered a value
        if (value !== undefined && value !== null && value !== '' && value <= 0) {
@@ -133,14 +152,22 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        </label>
        <Input
         id="budget-fixed"
-        type="number"
+        type="text"
+        inputMode="numeric"
         placeholder="100"
-        value={field.state.value?.toString() || ''}
-        onValueChange={(val: string) => field.handleChange(val === '' ? undefined : Number(val))}
+        value={localBudgetMax}
+        onValueChange={(val: string) => {
+         // Allow empty string and valid numbers only
+         if (val === '' || /^\d*$/.test(val)) {
+          setLocalBudgetMax(val)
+          syncToForm('budgetMax', val)
+         }
+        }}
+        onBlur={() => field.handleBlur()}
         startContent={<Wallet className="w-4 h-4 text-gray-400" />}
         endContent={<span className="text-gray-400">лв</span>}
-        isInvalid={field.state.meta.errors.length > 0}
-        errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+        isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+        errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
         classNames={{
          input: 'text-base',
         }}
@@ -153,13 +180,6 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMin"
       validators={{
-       onChange: ({ value }: any) => {
-        // Only validate if user has entered a value
-        if (value !== undefined && value !== null && value !== '' && value <= 0) {
-         return t('createTask.budget.mustBePositive', 'Budget must be positive')
-        }
-        return undefined
-       },
        onBlur: ({ value }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
@@ -176,14 +196,22 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
         </label>
         <Input
          id="budget-min"
-         type="number"
+         type="text"
+         inputMode="numeric"
          placeholder="50"
-         value={field.state.value?.toString() || ''}
-         onValueChange={(val: string) => field.handleChange(val === '' ? undefined : Number(val))}
+         value={localBudgetMin}
+         onValueChange={(val: string) => {
+          // Allow empty string and valid numbers only
+          if (val === '' || /^\d*$/.test(val)) {
+           setLocalBudgetMin(val)
+           syncToForm('budgetMin', val)
+          }
+         }}
+         onBlur={() => field.handleBlur()}
          startContent={<Wallet className="w-4 h-4 text-gray-400" />}
          endContent={<span className="text-gray-400">лв</span>}
-         isInvalid={field.state.meta.errors.length > 0}
-         errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+         isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+         errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
          classNames={{
           input: 'text-base',
          }}
@@ -194,18 +222,6 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      <form.Field
       name="budgetMax"
       validators={{
-       onChange: ({ value, fieldApi }: any) => {
-        // Only validate if user has entered a value
-        if (value !== undefined && value !== null && value !== '' && value <= 0) {
-         return t('createTask.budget.mustBePositive', 'Budget must be positive')
-        }
-        // Check if max is greater than min when both are provided
-        const minValue = fieldApi.form.getFieldValue('budgetMin')
-        if (value && minValue && value <= minValue) {
-         return 'createTask.errors.budgetInvalid'
-        }
-        return undefined
-       },
        onBlur: ({ value, fieldApi }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
@@ -227,14 +243,22 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
         </label>
         <Input
          id="budget-max"
-         type="number"
+         type="text"
+         inputMode="numeric"
          placeholder="100"
-         value={field.state.value?.toString() || ''}
-         onValueChange={(val: string) => field.handleChange(val === '' ? undefined : Number(val))}
+         value={localBudgetMax}
+         onValueChange={(val: string) => {
+          // Allow empty string and valid numbers only
+          if (val === '' || /^\d*$/.test(val)) {
+           setLocalBudgetMax(val)
+           syncToForm('budgetMax', val)
+          }
+         }}
+         onBlur={() => field.handleBlur()}
          startContent={<Wallet className="w-4 h-4 text-gray-400" />}
          endContent={<span className="text-gray-400">лв</span>}
-         isInvalid={field.state.meta.errors.length > 0}
-         errorMessage={field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
+         isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+         errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
          classNames={{
           input: 'text-base',
          }}

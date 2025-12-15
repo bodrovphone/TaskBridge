@@ -332,7 +332,7 @@ export const legal = {
   'privacy.section2.content': `
     <p><strong>2.1. Данни при регистрация:</strong></p>
     <ul>
-      <li>Име и фамилия</li>
+      <li>Име</li>
       <li>Имейл адрес</li>
       <li>Телефонен номер</li>
       <li>Профилна снимка (по избор)</li>

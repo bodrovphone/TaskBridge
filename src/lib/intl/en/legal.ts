@@ -335,7 +335,7 @@ export const legal = {
   'privacy.section2.content': `
     <p><strong>2.1. Registration Data:</strong></p>
     <ul>
-      <li>First and last name</li>
+      <li>Name</li>
       <li>Email address</li>
       <li>Phone number</li>
       <li>Profile photo (optional)</li>

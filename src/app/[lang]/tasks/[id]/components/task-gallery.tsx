@@ -18,7 +18,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
  const [isModalOpen, setIsModalOpen] = useState(false);
 
  // Handle undefined/null images
- const imageArray = images || [];
+ const imageArray = Array.isArray(images) ? images : [];
 
  const nextImage = () => {
   setCurrentImageIndex((prev) => (prev + 1) % imageArray.length);

@@ -80,9 +80,10 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   // Fetch task detail from API
   // Using environment variable for base URL (set in Vercel)
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  // Note: Using no-store to avoid caching issues with images
+  // ISR caching can cause stale data when images are updated
   const response = await fetch(`${baseUrl}/api/tasks/${id}`, {
-   next: { revalidate: 3600 }, // Cache for 1 hour
-   cache: 'force-cache', // Use ISR caching
+   cache: 'no-store', // Disable caching to always get fresh data
   });
 
   // Handle any error as not found (404, 500, etc.)
