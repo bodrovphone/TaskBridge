@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Spinner } from '@nextui-org/react'
-import { FileText, Plus, Filter, Star, ArrowRight, Clock, Briefcase, CheckCircle, XCircle, List } from 'lucide-react'
+import { Card, CardBody, Button, Spinner, Select, SelectItem } from '@nextui-org/react'
+import { FileText, Plus, Filter, Star, ArrowRight, Clock, Briefcase, CheckCircle, XCircle, List, ChevronDown } from 'lucide-react'
 import PostedTaskCard from '@/components/ui/posted-task-card'
 import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'
 import { useCreateTask } from '@/hooks/use-create-task'
@@ -82,11 +82,10 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               <p className="text-gray-600 mt-1">{t('postedTasks.subtitle')}</p>
             </div>
             <Button
-              color="primary"
               size="lg"
               startContent={<Plus className="w-5 h-5" />}
               onPress={handleCreateTask}
-              className="shadow-lg w-full md:w-auto"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-200 w-full md:w-auto"
             >
               {t('postedTasks.createTask')}
             </Button>
@@ -128,122 +127,193 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
 
         {/* Filter Tabs - only show when authenticated */}
         {isAuthenticated && (
-        <div className="mb-6 flex flex-wrap gap-2 sm:gap-3">
-          <button
-            onClick={() => setSelectedStatus('open')}
-            className={`
-              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
-              ${selectedStatus === 'open'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+        <>
+          {/* Mobile: Dropdown */}
+          <div className="mb-6 md:hidden">
+            <Select
+              selectedKeys={[selectedStatus]}
+              onSelectionChange={(keys) => {
+                const selected = Array.from(keys)[0] as TaskStatus
+                if (selected) setSelectedStatus(selected)
+              }}
+              classNames={{
+                trigger: 'bg-white border-gray-200 shadow-sm h-12',
+                value: 'text-gray-900 font-semibold',
+              }}
+              startContent={
+                selectedStatus === 'open' ? <Clock className="w-4 h-4 text-blue-600" /> :
+                selectedStatus === 'in_progress' ? <Briefcase className="w-4 h-4 text-amber-500" /> :
+                selectedStatus === 'completed' ? <CheckCircle className="w-4 h-4 text-green-600" /> :
+                selectedStatus === 'cancelled' ? <XCircle className="w-4 h-4 text-red-500" /> :
+                <List className="w-4 h-4 text-gray-600" />
               }
-            `}
-          >
-            <Clock className="w-4 h-4 flex-shrink-0" />
-            <span>{t('postedTasks.filter.open')}</span>
-            <span className={`
-              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
-              ${selectedStatus === 'open'
-                ? 'bg-white/20 text-white'
-                : 'bg-blue-100 text-blue-600'
-              }
-            `}>
-              {getTaskCountByStatus('open')}
-            </span>
-          </button>
+              renderValue={() => {
+                const label = selectedStatus === 'open' ? t('postedTasks.filter.open') :
+                  selectedStatus === 'in_progress' ? t('postedTasks.filter.inProgress') :
+                  selectedStatus === 'completed' ? t('postedTasks.filter.completed') :
+                  selectedStatus === 'cancelled' ? t('postedTasks.filter.cancelled') :
+                  t('postedTasks.filter.all')
+                const count = getTaskCountByStatus(selectedStatus)
+                return <span>{label} ({count})</span>
+              }}
+              aria-label={t('postedTasks.filter.label', 'Filter by status')}
+            >
+              <SelectItem
+                key="open"
+                startContent={<Clock className="w-4 h-4 text-blue-600" />}
+                endContent={<span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-600">{getTaskCountByStatus('open')}</span>}
+              >
+                {t('postedTasks.filter.open')}
+              </SelectItem>
+              <SelectItem
+                key="in_progress"
+                startContent={<Briefcase className="w-4 h-4 text-amber-500" />}
+                endContent={<span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-600">{getTaskCountByStatus('in_progress')}</span>}
+              >
+                {t('postedTasks.filter.inProgress')}
+              </SelectItem>
+              <SelectItem
+                key="completed"
+                startContent={<CheckCircle className="w-4 h-4 text-green-600" />}
+                endContent={<span className="px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-600">{getTaskCountByStatus('completed')}</span>}
+              >
+                {t('postedTasks.filter.completed')}
+              </SelectItem>
+              <SelectItem
+                key="cancelled"
+                startContent={<XCircle className="w-4 h-4 text-red-500" />}
+                endContent={<span className="px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600">{getTaskCountByStatus('cancelled')}</span>}
+              >
+                {t('postedTasks.filter.cancelled')}
+              </SelectItem>
+              <SelectItem
+                key="all"
+                startContent={<List className="w-4 h-4 text-gray-600" />}
+                endContent={<span className="px-2 py-0.5 rounded-full text-xs font-bold bg-gray-200 text-gray-600">{getTaskCountByStatus('all')}</span>}
+              >
+                {t('postedTasks.filter.all')}
+              </SelectItem>
+            </Select>
+          </div>
 
-          <button
-            onClick={() => setSelectedStatus('in_progress')}
-            className={`
-              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
-              ${selectedStatus === 'in_progress'
-                ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
-              }
-            `}
-          >
-            <Briefcase className="w-4 h-4 flex-shrink-0" />
-            <span>{t('postedTasks.filter.inProgress')}</span>
-            <span className={`
-              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
-              ${selectedStatus === 'in_progress'
-                ? 'bg-white/20 text-white'
-                : 'bg-amber-100 text-amber-600'
-              }
-            `}>
-              {getTaskCountByStatus('in_progress')}
-            </span>
-          </button>
+          {/* Desktop: Button tabs */}
+          <div className="mb-6 hidden md:flex flex-wrap gap-3">
+            <button
+              onClick={() => setSelectedStatus('open')}
+              className={`
+                flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-semibold text-sm transition-all duration-200
+                ${selectedStatus === 'open'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                }
+              `}
+            >
+              <Clock className="w-4 h-4 flex-shrink-0" />
+              <span>{t('postedTasks.filter.open')}</span>
+              <span className={`
+                px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+                ${selectedStatus === 'open'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-blue-100 text-blue-600'
+                }
+              `}>
+                {getTaskCountByStatus('open')}
+              </span>
+            </button>
 
-          <button
-            onClick={() => setSelectedStatus('completed')}
-            className={`
-              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
-              ${selectedStatus === 'completed'
-                ? 'bg-green-600 text-white shadow-lg shadow-green-600/30'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
-              }
-            `}
-          >
-            <CheckCircle className="w-4 h-4 flex-shrink-0" />
-            <span>{t('postedTasks.filter.completed')}</span>
-            <span className={`
-              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
-              ${selectedStatus === 'completed'
-                ? 'bg-white/20 text-white'
-                : 'bg-green-100 text-green-600'
-              }
-            `}>
-              {getTaskCountByStatus('completed')}
-            </span>
-          </button>
+            <button
+              onClick={() => setSelectedStatus('in_progress')}
+              className={`
+                flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-semibold text-sm transition-all duration-200
+                ${selectedStatus === 'in_progress'
+                  ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                }
+              `}
+            >
+              <Briefcase className="w-4 h-4 flex-shrink-0" />
+              <span>{t('postedTasks.filter.inProgress')}</span>
+              <span className={`
+                px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+                ${selectedStatus === 'in_progress'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-amber-100 text-amber-600'
+                }
+              `}>
+                {getTaskCountByStatus('in_progress')}
+              </span>
+            </button>
 
-          <button
-            onClick={() => setSelectedStatus('cancelled')}
-            className={`
-              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
-              ${selectedStatus === 'cancelled'
-                ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
-              }
-            `}
-          >
-            <XCircle className="w-4 h-4 flex-shrink-0" />
-            <span>{t('postedTasks.filter.cancelled')}</span>
-            <span className={`
-              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
-              ${selectedStatus === 'cancelled'
-                ? 'bg-white/20 text-white'
-                : 'bg-red-100 text-red-600'
-              }
-            `}>
-              {getTaskCountByStatus('cancelled')}
-            </span>
-          </button>
+            <button
+              onClick={() => setSelectedStatus('completed')}
+              className={`
+                flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-semibold text-sm transition-all duration-200
+                ${selectedStatus === 'completed'
+                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/30'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                }
+              `}
+            >
+              <CheckCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{t('postedTasks.filter.completed')}</span>
+              <span className={`
+                px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+                ${selectedStatus === 'completed'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-green-100 text-green-600'
+                }
+              `}>
+                {getTaskCountByStatus('completed')}
+              </span>
+            </button>
 
-          <button
-            onClick={() => setSelectedStatus('all')}
-            className={`
-              flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl font-semibold text-sm transition-all duration-200
-              ${selectedStatus === 'all'
-                ? 'bg-gray-700 text-white shadow-lg shadow-gray-700/30'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
-              }
-            `}
-          >
-            <List className="w-4 h-4 flex-shrink-0" />
-            <span>{t('postedTasks.filter.all')}</span>
-            <span className={`
-              px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
-              ${selectedStatus === 'all'
-                ? 'bg-white/20 text-white'
-                : 'bg-gray-200 text-gray-600'
-              }
-            `}>
-              {getTaskCountByStatus('all')}
-            </span>
-          </button>
-        </div>
+            <button
+              onClick={() => setSelectedStatus('cancelled')}
+              className={`
+                flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-semibold text-sm transition-all duration-200
+                ${selectedStatus === 'cancelled'
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                }
+              `}
+            >
+              <XCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{t('postedTasks.filter.cancelled')}</span>
+              <span className={`
+                px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+                ${selectedStatus === 'cancelled'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-red-100 text-red-600'
+                }
+              `}>
+                {getTaskCountByStatus('cancelled')}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedStatus('all')}
+              className={`
+                flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-semibold text-sm transition-all duration-200
+                ${selectedStatus === 'all'
+                  ? 'bg-gray-700 text-white shadow-lg shadow-gray-700/30'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                }
+              `}
+            >
+              <List className="w-4 h-4 flex-shrink-0" />
+              <span>{t('postedTasks.filter.all')}</span>
+              <span className={`
+                px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0
+                ${selectedStatus === 'all'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-gray-200 text-gray-600'
+                }
+              `}>
+                {getTaskCountByStatus('all')}
+              </span>
+            </button>
+          </div>
+        </>
         )}
 
         {/* Tasks List */}
