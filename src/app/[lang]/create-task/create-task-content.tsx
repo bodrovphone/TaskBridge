@@ -153,7 +153,7 @@ export default function CreateTaskContent() {
    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
     {/* Hero Section */}
     <div className="text-center mb-12">
-     <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+     <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 pb-1">
       {t('createTask.title')}
      </h1>
      <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">

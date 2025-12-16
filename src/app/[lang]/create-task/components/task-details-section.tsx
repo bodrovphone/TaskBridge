@@ -189,10 +189,10 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
        onBlur={field.handleBlur}
        isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
        errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
-       minRows={6}
-       disableAutosize
+       minRows={4}
+       maxRows={12}
        classNames={{
-        input: 'text-base resize-none',
+        input: 'text-base',
        }}
       />
      </div>
@@ -227,11 +227,11 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
          field.handleChange(currentValue + '\n• ')
         }
        }}
-       minRows={4}
-       disableAutosize
+       minRows={3}
+       maxRows={8}
        classNames={{
         base: 'w-full',
-        input: 'text-base resize-none',
+        input: 'text-base',
        }}
       />
      </div>

@@ -3,13 +3,28 @@
 ## Task Description
 Enable Facebook Login for all users by switching the Facebook app from Development Mode to Live Mode.
 
-## Current State
+## Current State (Dec 16, 2024)
 - Facebook App ID: `4351312728438333`
 - Mode: **Development** (only admins/testers can log in)
+- Status: **⏳ Waiting for Business Verification**
 - Error for regular users: "Приложение неактивно" (App inactive)
 
-## Why Blocked
-Facebook requires a **Privacy Policy URL** on a live, publicly accessible domain before switching to Live Mode.
+## Progress
+
+| Step | Status |
+|------|--------|
+| App Configuration (platform, privacy, data handling) | ✅ Done |
+| Business Verification | ⏳ Submitted (Dec 16, 2024) - waiting 1-3 days |
+| App Review | ⏸️ Blocked by Business Verification |
+| Go Live | ⏸️ Blocked by App Review |
+
+## After Business Verification Approved
+1. Complete App Review (add testing instructions)
+2. Submit for Facebook review
+3. Switch app to Live Mode
+4. Uncomment Facebook button in code (`auth-slide-over.tsx`)
+
+**MVP Decision:** Launch with Google + Email. Enable Facebook when verification completes.
 
 ## Requirements
 

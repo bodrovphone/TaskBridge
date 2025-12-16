@@ -29,13 +29,15 @@ This hybrid approach allows launching to production immediately while OAuth prov
   git push origin main
   ```
 - [ ] Deploy current code to production (Vercel will auto-deploy)
-- [ ] Enable Google OAuth in production
-  - Works immediately but shows "unverified app" warning
+- [x] Enable Google OAuth in production
+  - ✅ Published app (Dec 15, 2024)
+  - ✅ Submitted for verification (Dec 15, 2024) - review takes 1-6 weeks
+  - Works immediately but shows "unverified app" warning until verified
   - Users can click "Show Advanced" → "Continue to Trudify" to proceed
-  - Lower conversion but functional
 - [x] Configure Facebook OAuth strategy:
-  - **✅ Working in Development Mode** - tested locally
-  - **Recommended:** Add beta testers manually in Facebook App Dashboard
+  - **⏳ Business Verification submitted** (Dec 16, 2024) - waiting 1-3 days
+  - App configuration complete (platform, privacy, data handling)
+  - Facebook Login button remains commented out until verification + review complete
   - Configure "Allow users without an email" toggle in Supabase (✅ Done)
 - [ ] Set email/password as primary authentication method
 - [ ] Add user-facing note: "More login options coming soon!" (optional)
@@ -46,6 +48,7 @@ Google OAuth:
 ✅ Works for all users
 ⚠️ Shows "unverified app" warning
 ⚠️ Requires extra click to proceed
+⚠️ Shows Supabase URL in consent screen (see note below)
 ✅ Successful login after warning
 
 Facebook OAuth:
@@ -56,6 +59,15 @@ OR
 Email/Password:
 ✅ Works perfectly (primary method)
 ```
+
+**Note: Supabase Auth URL in Consent Screen**
+During Google OAuth, users see "Continue to your-project.supabase.co" instead of "trudify.com".
+This is expected Supabase behavior - the OAuth callback routes through Supabase's infrastructure.
+
+- **Impact:** Branding only, not functional
+- **User behavior:** Most users don't notice or care
+- **Fix (Post-MVP):** Supabase Pro ($25/mo) allows custom auth domains (e.g., `auth.trudify.com`)
+- **Recommendation:** Accept for MVP launch, revisit after traction
 
 **Success Criteria:**
 - [ ] Production deployment successful
@@ -112,48 +124,50 @@ https://trudify.com/ru/terms
 
 #### Google Verification Submission
 
-**Timeline:** 1-2 weeks for approval
+**Timeline:** 1-6 weeks for approval
+
+**Status:** ✅ SUBMITTED (Dec 15, 2024)
 
 **Steps:**
-- [ ] Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials/consent)
-- [ ] Click "SUBMIT FOR VERIFICATION"
-- [ ] Provide required information:
-  - [ ] App name: Trudify
-  - [ ] App logo: Upload 120x120px logo
-  - [ ] Privacy Policy URL: `https://trudify.com/en/privacy`
-  - [ ] Terms of Service URL: `https://trudify.com/en/terms`
-  - [ ] Application home page: `https://trudify.com`
-  - [ ] Authorized domains: `trudify.com`, `vercel.app`, `supabase.co`
-  - [ ] Developer contact email
-- [ ] Explain why you need user data:
-  ```
-  We need access to user email and profile information to:
-  1. Create user accounts on our freelance platform
-  2. Send task notifications and updates
-  3. Enable communication between customers and professionals
-  4. Verify user identity for trust and safety
-  ```
-- [ ] Create demo video showing OAuth flow (2-3 minutes):
-  - Show user clicking "Continue with Google"
-  - Show consent screen
-  - Show successful login
-  - Show how email is used in the app
-- [ ] Submit application
-- [ ] Wait for Google review (1-2 weeks)
+- [x] Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials/consent)
+- [x] Click "SUBMIT FOR VERIFICATION"
+- [x] Provide required information:
+  - [x] App name: Trudify
+  - [x] App logo: Upload 120x120px logo
+  - [x] Privacy Policy URL
+  - [x] Terms of Service URL
+  - [x] Application home page
+  - [x] Authorized domains
+  - [x] Developer contact email
+- [x] Explain why you need user data (data usage justification provided)
+- [ ] Create demo video showing OAuth flow (if requested by Google)
+- [x] Submit application
+- [ ] Wait for Google review (1-6 weeks) - ⏳ In Progress
 - [ ] Respond to any questions from Google reviewers
 
 **Success Criteria:**
-- [ ] Verification request submitted
-- [ ] All required documents provided
-- [ ] Demo video uploaded
-- [ ] Google sends confirmation email
+- [x] Verification request submitted
+- [x] All required documents provided
+- [ ] Demo video uploaded (if requested)
+- [x] Google sends confirmation email
 
 #### Facebook App Review Submission
 
-**Timeline:** 3-7 days for approval
+**Timeline:** 3-7 days for approval (after Business Verification)
 
-**Steps:**
+**Status:** ⏳ Waiting for Business Verification (submitted Dec 16, 2024)
+
+**Completed Configuration:**
+- [x] App platform added (Website)
+- [x] Privacy Policy URL configured
+- [x] Terms of Service URL configured
+- [x] Data handling questions answered
+- [x] Data processors declared (Supabase)
+- [x] Business Verification submitted
+
+**Steps (after Business Verification approved):**
 - [ ] Go to [Facebook App Review](https://developers.facebook.com/apps/4351312728438333/app-review/)
+- [ ] Add testing instructions for reviewers
 - [ ] Request "email" permission (Standard Access)
 - [ ] Fill in review submission:
   - [ ] Privacy Policy URL: `https://trudify.com/en/privacy`
