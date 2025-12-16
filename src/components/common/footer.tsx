@@ -26,9 +26,12 @@ function Footer() {
  const quickLinks = [
   { name: t('footer.quickLinks.howItWorks'), href: "/#how-it-works" },
   { name: t('footer.quickLinks.categories'), href: categoriesHref },
-  { name: t('footer.quickLinks.forProfessionals'), href: "/#for-professionals" },
+  { name: t('footer.quickLinks.forProfessionals'), href: "/for-professionals" },
   { name: t('footer.quickLinks.browseTasks'), href: "/browse-tasks" },
   { name: t('footer.quickLinks.createTask'), href: "/create-task" },
+  { name: t('footer.quickLinks.about'), href: "/about" },
+  { name: t('footer.quickLinks.faq'), href: "/faq" },
+  { name: t('footer.quickLinks.testimonials'), href: "/testimonials" },
  ];
 
  const legalLinks = [

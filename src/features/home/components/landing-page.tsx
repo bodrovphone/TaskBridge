@@ -495,7 +495,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
        <div className="bg-white/95 rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
         <div className="flex items-center mb-4">
          <Image 
-          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&auto=format&q=80"
           alt="Happy customer"
           width={48}
           height={48}
@@ -517,7 +517,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
        <div className="bg-white/95 rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
         <div className="flex items-center mb-4">
          <Image 
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&auto=format&q=80" 
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format&q=80"
           alt="Happy customer"
           width={48}
           height={48}
