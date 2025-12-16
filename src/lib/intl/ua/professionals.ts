@@ -157,6 +157,9 @@ export const professionals = {
   'professionalDetail.services.pricingNote.title': 'Інформація про ціни',
   'professionalDetail.services.pricingNote.description':
     'Остаточні ціни узгоджуються індивідуально залежно від складності та вимог завдання.',
+  'professionalDetail.gallery.title': 'Галерея робіт',
+  'professionalDetail.gallery.subtitle': 'Приклади виконаних робіт',
+  'professionalDetail.gallery.imageView': 'Перегляд зображення',
   'professionalDetail.portfolio.title': 'Мої роботи',
   'professionalDetail.portfolio.noWork': 'Робіт ще немає',
   'professionalDetail.portfolio.emptyState':

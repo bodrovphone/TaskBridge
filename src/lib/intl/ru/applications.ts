@@ -56,7 +56,7 @@ export const applications = {
   'application.wizard.step4Subtitle': 'Подтвердите заявку',
   'application.wizard.budgetHint': 'Бюджет клиента',
   'application.wizard.priceHelp': 'Введите предложенную цену за выполнение задачи. Будьте конкурентоспособны, но справедливы.',
-  'application.wizard.timelineHelp': 'Когда вы сможете выполнить задачу? Выберите вариант, который лучше всего соответствует вашей доступности.',
+  'application.wizard.timelineHelp': 'Когда вы сможете начать работу? Выберите вариант, который лучше всего соответствует вашей доступности.',
   'application.wizard.timelineDescToday': 'Могу начать сразу',
   'application.wizard.timelineDescWeek': 'На этой неделе',
   'application.wizard.timelineDescFlexible': 'Можем обсудить сроки',

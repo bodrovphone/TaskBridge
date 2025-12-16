@@ -56,7 +56,7 @@ export const applications = {
   'application.wizard.step4Subtitle': 'Confirm your application',
   'application.wizard.budgetHint': "Client's budget range",
   'application.wizard.priceHelp': 'Enter your proposed price for completing this task. Be competitive but fair.',
-  'application.wizard.timelineHelp': 'When can you complete this task? Choose the option that best fits your availability.',
+  'application.wizard.timelineHelp': 'When can you start this task? Choose the option that best fits your availability.',
   'application.wizard.timelineDescToday': 'I can start immediately',
   'application.wizard.timelineDescWeek': 'Sometime this week',
   'application.wizard.timelineDescFlexible': 'We can discuss timing',

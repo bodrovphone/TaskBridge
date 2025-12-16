@@ -37,10 +37,10 @@ export async function POST(request: NextRequest) {
       availabilityDate
     } = body;
 
-    // Validate required fields
-    if (!taskId || typeof proposedPrice !== 'number' || !message) {
+    // Validate required fields (message is optional)
+    if (!taskId || typeof proposedPrice !== 'number') {
       return NextResponse.json(
-        { error: 'Missing required fields: taskId, proposedPrice, message' },
+        { error: 'Missing required fields: taskId, proposedPrice' },
         { status: 400 }
       );
     }
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
         professional_id: user.id,
         proposed_price_bgn: proposedPrice,
         estimated_duration_hours: estimatedDurationHours || null,
-        message: message,
+        message: message || null, // Optional field - normalize empty string to null
         availability_date: availabilityDate || null,
         status: 'pending'
       })

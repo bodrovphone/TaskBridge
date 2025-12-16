@@ -23,6 +23,7 @@ export const notifications = {
   'notifications.viewTask': 'Переглянути завдання',
   'notifications.getStarted': 'Почати',
   'notifications.customerContact': 'Контактна інформація замовника',
+  'notifications.customerMessage': 'Повідомлення від замовника',
 
   // Notification Content
   'notifications.content.welcome.title': 'Ласкаво просимо до Trudify!',

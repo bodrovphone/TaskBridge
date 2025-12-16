@@ -34,6 +34,17 @@ export const auth = {
   'auth.benefit4': '• Отримувати сповіщення про нові завдання',
   'auth.continueWith': 'Продовжити з',
   'auth.telegramHint': 'Відкриє Telegram додаток або десктопний клієнт',
+  'auth.fullName': 'Ваше ім\'я',
+  'auth.nameRequired': 'Будь ласка, вкажіть ім\'я для створення акаунта',
+  'auth.nameRequiredHint': 'Ім\'я потрібне для створення акаунта',
+  'auth.nameHint': 'Потрібно лише при створенні нового акаунта',
+  'auth.unexpectedError': 'Сталася неочікувана помилка. Спробуйте ще раз.',
+
+  // WebView and popup warnings
+  'auth.webViewWarningTitle': 'Вхід через Google недоступний',
+  'auth.webViewWarningMessage': 'Вхід через Google не працює в браузері цього додатку. Використовуйте email/пароль або відкрийте в Safari/Chrome.',
+  'auth.openInBrowser': 'Відкрити в браузері',
+  'auth.popupBlocked': 'Будь ласка, дозвольте спливаючі вікна для входу',
 
   // Email verification
   'auth.email.subject': 'Trudify - Підтвердіть свою електронну адресу',
@@ -45,6 +56,7 @@ export const auth = {
   'auth.email.linkInstruction': 'Або скопіюйте це посилання у браузер:',
   'auth.email.footerText': 'Якщо ви не створювали акаунт, можете ігнорувати цей лист.',
   'auth.email.footerRights': 'Усі права захищено.',
+  'auth.email.expiresIn': '24 години',
 
   // Forgot password
   'auth.forgotPassword.title': 'Забули пароль',
@@ -92,6 +104,15 @@ export const auth = {
   'auth.emailVerification.instructions': 'Натисніть посилання в листі для підтвердження акаунта.',
   'auth.emailVerification.resend': 'Надіслати повторно',
   'auth.emailVerification.continue': 'Продовжити',
+
+  // Email verified success page
+  'auth.emailVerified.title': 'Email підтверджено!',
+  'auth.emailVerified.description': 'Вашу електронну адресу успішно підтверджено. Тепер ви маєте повний доступ до всіх функцій.',
+  'auth.emailVerified.whatNext': 'Що б ви хотіли зробити далі?',
+  'auth.emailVerified.browseTasks': 'Знайти роботу',
+  'auth.emailVerified.createTask': 'Створити завдання',
+  'auth.emailVerified.completeProfile': 'Заповнити профіль',
+  'auth.emailVerified.goHome': 'На головну',
 
   // Account Deletion
   'accountDeletion.title': 'Видалення акаунта',

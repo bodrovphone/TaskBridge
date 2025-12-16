@@ -45,6 +45,33 @@ export const applications = {
   'application.successSteps.getResponse': 'Отримати відповідь',
   'application.successSteps.startWork': 'Почати роботу',
 
+  // Wizard Steps
+  'application.wizard.step1Title': 'Ваша пропозиція',
+  'application.wizard.step1Subtitle': 'Встановіть ціну',
+  'application.wizard.step2Title': 'Доступність',
+  'application.wizard.step2Subtitle': 'Коли можете?',
+  'application.wizard.step3Title': 'Супровідний лист',
+  'application.wizard.step3Subtitle': 'Представтесь',
+  'application.wizard.step4Title': 'Перегляд',
+  'application.wizard.step4Subtitle': 'Підтвердіть заявку',
+  'application.wizard.budgetHint': 'Бюджет клієнта',
+  'application.wizard.priceHelp': 'Введіть вашу пропоновану ціну за виконання завдання. Будьте конкурентними, але справедливими.',
+  'application.wizard.timelineHelp': 'Коли можете почати роботу? Оберіть варіант, що найкраще відповідає вашій доступності.',
+  'application.wizard.timelineDescToday': 'Можу почати негайно',
+  'application.wizard.timelineDescWeek': 'Десь цього тижня',
+  'application.wizard.timelineDescFlexible': 'Можемо обговорити час',
+  'application.wizard.messageTitle': 'Навіщо писати повідомлення?',
+  'application.wizard.reviewHelp': 'Будь ласка, перегляньте заявку перед надсиланням.',
+  'application.wizard.applyingTo': 'Подаєте заявку на',
+  'application.wizard.noMessage': 'Повідомлення не додано',
+  'application.wizard.readyToSubmit': 'Готово до надсилання!',
+  'application.wizard.submitNote': 'Натисніть Надіслати, щоб відправити заявку. Клієнта буде повідомлено.',
+
+  // Wizard Navigation
+  'wizard.back': 'Назад',
+  'wizard.next': 'Далі',
+  'wizard.submit': 'Надіслати',
+
   // Applications Management
   'applications.title': 'Заявки',
   'applications.count': 'заявок',
@@ -62,6 +89,7 @@ export const applications = {
   'applications.emptyState.message': 'Ваше завдання активне! Фахівці незабаром почнуть подавати заявки.',
   'applications.proposedPrice': 'Запропонована ціна',
   'applications.timeline': 'Терміни',
+  'applications.readyToStart': 'Готовий почати',
   'applications.message': 'Повідомлення',
   'applications.portfolio': 'Портфоліо',
   'applications.portfolioImages': 'зображень портфоліо',
@@ -114,6 +142,39 @@ export const applications = {
   'acceptApplication.warning': 'Після прийняття ви зобов\'язуєтесь працювати з {{name}}. Усі інші заявки будуть автоматично відхилені.',
   'acceptApplication.confirm': 'Прийняти заявку',
   'acceptApplication.cancel': 'Скасувати',
+  'acceptApplication.accepting': 'Приймаємо...',
+
+  // Accept Application Wizard Steps
+  'acceptApplication.wizard.reviewTitle': 'Перегляд пропозиції',
+  'acceptApplication.wizard.reviewSubtitle': 'Пропозиція фахівця',
+  'acceptApplication.wizard.reviewHelp': 'Перегляньте пропозицію фахівця перед продовженням.',
+  'acceptApplication.wizard.professional': 'Фахівець',
+  'acceptApplication.wizard.proposedPrice': 'Запропонована ціна',
+  'acceptApplication.wizard.timeline': 'Терміни',
+  'acceptApplication.wizard.professionalMessage': 'Повідомлення фахівця',
+
+  'acceptApplication.wizard.contactTitle': 'Контактні дані',
+  'acceptApplication.wizard.contactSubtitle': 'Як з вами зв\'язатись',
+  'acceptApplication.wizard.contactHelp': 'Оберіть, як фахівець може з вами зв\'язатись.',
+
+  'acceptApplication.wizard.messageTitle': 'Додати повідомлення',
+  'acceptApplication.wizard.messageSubtitle': 'Необов\'язкове',
+  'acceptApplication.wizard.messageHelp': 'Додайте особисте повідомлення для {{name}} (необов\'язково).',
+  'acceptApplication.wizard.messageTipTitle': 'Швидкі поради',
+  'acceptApplication.wizard.messageTip1': '• Вкажіть, коли ви доступні',
+  'acceptApplication.wizard.messageTip2': '• Задайте останні питання',
+  'acceptApplication.wizard.messageTip3': '• Поділіться важливими деталями завдання',
+
+  'acceptApplication.wizard.confirmTitle': 'Підтвердження',
+  'acceptApplication.wizard.confirmSubtitle': 'Фінальний перегляд',
+  'acceptApplication.wizard.confirmHelp': 'Перегляньте деталі перед підтвердженням.',
+  'acceptApplication.wizard.sharingContact': 'Ділимось з фахівцем',
+  'acceptApplication.wizard.yourMessage': 'Ваше повідомлення',
+  'acceptApplication.wizard.noMessage': 'Повідомлення не додано',
+  'acceptApplication.wizard.readyToAccept': 'Готово до прийняття!',
+  'acceptApplication.wizard.acceptNote': 'Натисніть Прийняти для підтвердження. {{name}} буде повідомлено.',
+  'acceptApplication.wizard.agreementRequired': 'Потрібна згода',
+  'acceptApplication.wizard.pleaseAgree': 'Будь ласка, поставте позначку вище, щоб продовжити.',
 
   // Reject Application Dialog
   'rejectApplication.title': 'Відхилити заявку',
@@ -287,6 +348,7 @@ export const applications = {
 
   // Task Detail Page - Professional View
   'taskDetail.professional.withdraw': 'Відмовитись від завдання',
+  'taskDetail.professional.markCompleted': 'Позначити як завершене',
 
   // Accept Application Success Toast
   'acceptApplication.successTitle': '🎉 Заявку прийнято!',
