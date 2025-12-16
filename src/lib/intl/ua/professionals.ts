@@ -250,4 +250,7 @@ export const professionals = {
   'inviteModal.createNewTask': 'Створити нове завдання',
   'inviteModal.loadingTasks': 'Завантаження ваших завдань...',
   'inviteModal.continue': 'Продовжити',
+  'inviteModal.selfInviteTitle': '🤔 Гарна спроба!',
+  'inviteModal.selfInviteDescription':
+    'Ви не можете запропонувати завдання самому собі. Але ми цінуємо креативність!',
 };

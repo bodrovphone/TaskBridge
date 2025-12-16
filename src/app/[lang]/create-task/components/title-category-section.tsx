@@ -53,6 +53,7 @@ export function TitleCategorySection({
   const titleForFeedbackRef = useRef<string>('')
   const [titleTouched, setTitleTouched] = useState(false)
   const lastSearchedRef = useRef<string>('') // Track last searched value to avoid duplicates
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null) // Debounce timer for category search
 
   // Title validation
   const isTitleTooShort = title.length > 0 && title.length < 10
@@ -69,7 +70,7 @@ export function TitleCategorySection({
     form.setFieldValue('title', title)
   }, [title, form])
 
-  // Category search triggered by deferred title value
+  // Category search triggered by deferred title value with debouncing
   // useDeferredValue ensures typing stays responsive while search is deferred
   useEffect(() => {
     const trimmedQuery = deferredTitle.trim()
@@ -91,47 +92,62 @@ export function TitleCategorySection({
       return
     }
 
-    // Mark as searched to avoid duplicate searches
-    lastSearchedRef.current = trimmedQuery
-    titleForFeedbackRef.current = trimmedQuery
-
-    // Reset state if we were suggesting before
-    if (flowState === 'suggesting') {
-      setFlowState('entering_title')
-      setSuggestedCategories([])
+    // Clear any existing debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
     }
 
-    setIsSearching(true)
+    // Debounce the search by 1 second to let user finish typing
+    debounceTimerRef.current = setTimeout(() => {
+      // Mark as searched to avoid duplicate searches
+      lastSearchedRef.current = trimmedQuery
+      titleForFeedbackRef.current = trimmedQuery
 
-    // Run the search
-    searchCategoriesAsync(deferredTitle, t, i18n.language)
-      .then((results) => {
-        // Get top 3 matches that have mainCategoryId
-        const topMatches = results
-          .filter(r => r.mainCategoryId)
-          .slice(0, 3)
-          .map(r => ({
-            slug: r.value,
-            label: r.label,
-            mainCategoryId: r.mainCategoryId!,
-          }))
+      // Reset state if we were suggesting before
+      if (flowState === 'suggesting') {
+        setFlowState('entering_title')
+        setSuggestedCategories([])
+      }
 
-        if (topMatches.length > 0) {
-          setSuggestedCategories(topMatches)
-          setFlowState('suggesting')
-        } else {
+      setIsSearching(true)
+
+      // Run the search
+      searchCategoriesAsync(trimmedQuery, t, i18n.language)
+        .then((results) => {
+          // Get top 3 matches that have mainCategoryId
+          const topMatches = results
+            .filter(r => r.mainCategoryId)
+            .slice(0, 3)
+            .map(r => ({
+              slug: r.value,
+              label: r.label,
+              mainCategoryId: r.mainCategoryId!,
+            }))
+
+          if (topMatches.length > 0) {
+            setSuggestedCategories(topMatches)
+            setFlowState('suggesting')
+          } else {
+            setFlowState('manual_selection')
+            setManualSelectionTriggered(true)
+          }
+        })
+        .catch((error) => {
+          console.error('Category search error:', error)
           setFlowState('manual_selection')
           setManualSelectionTriggered(true)
-        }
-      })
-      .catch((error) => {
-        console.error('Category search error:', error)
-        setFlowState('manual_selection')
-        setManualSelectionTriggered(true)
-      })
-      .finally(() => {
-        setIsSearching(false)
-      })
+        })
+        .finally(() => {
+          setIsSearching(false)
+        })
+    }, 1000) // 1 second debounce
+
+    // Cleanup timer on unmount or when dependencies change
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
   }, [deferredTitle, hasSelectedCategory, flowState, t, i18n.language])
 
   // Handle title input changes - just update state, search is handled by useEffect above

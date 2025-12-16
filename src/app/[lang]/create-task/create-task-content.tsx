@@ -2,10 +2,9 @@
 
 import { useTranslation } from 'react-i18next'
 import { Chip } from '@nextui-org/react'
-import { CheckCircle, Clock, Shield, Users } from 'lucide-react'
+import { CheckCircle, Users } from 'lucide-react'
 import { CreateTaskForm } from './components/create-task-form'
 import { ReopenBanner } from './components/reopen-banner'
-import { InvitationBanner } from './components/invitation-banner'
 import { useAuth } from '@/features/auth'
 import { useEffect, useState } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
@@ -105,13 +104,6 @@ export default function CreateTaskContent() {
   }
  }, [user, loading, router, lang])
 
- // Handle cancel invitation
- const handleCancelInvitation = () => {
-  setIsInviting(false)
-  setInvitedProfessional(null)
-  router.push(`/${lang}/create-task`)
- }
-
  // Show loading while checking auth
  if (loading) {
   return (
@@ -135,41 +127,30 @@ export default function CreateTaskContent() {
    text: t('createTask.hero.freeToPost', 'Free to post'),
   },
   {
-   icon: <Shield className="w-5 h-5" />,
-   text: t('createTask.hero.noPayment', 'No payment until work starts'),
-  },
-  {
-   icon: <Clock className="w-5 h-5" />,
-   text: t('createTask.hero.avgResponse', 'Average response time: 2 hours'),
-  },
-  {
    icon: <Users className="w-5 h-5" />,
-   text: t('createTask.hero.verifiedPros', '1,500+ verified professionals'),
+   text: t('createTask.hero.verifiedPros', 'Verified professionals'),
   },
  ]
 
  return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 overflow-x-hidden">
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-6 sm:py-10 overflow-x-hidden">
    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
     {/* Hero Section */}
-    <div className="text-center mb-12">
-     <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 pb-1">
+    <div className="text-center mb-4 sm:mb-8">
+     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-4 pb-1">
       {t('createTask.title')}
      </h1>
-     <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-      {t('createTask.hero.subtitle', 'Describe what you need and let professionals come to you')}
-     </p>
 
      {/* Trust Indicators */}
-     <div className="flex flex-wrap justify-center gap-3 max-w-full overflow-x-hidden px-4">
+     <div className="flex flex-wrap justify-center gap-2 max-w-full overflow-x-hidden px-2">
       {trustIndicators.map((indicator, index) => (
        <Chip
         key={index}
         startContent={indicator.icon}
         variant="flat"
         color="success"
-        size="lg"
-        className="shadow-sm flex-shrink-0 max-w-full"
+        size="md"
+        className="shadow-sm flex-shrink-0 max-w-full text-sm"
         classNames={{
          base: "max-w-full",
          content: "truncate"
@@ -184,14 +165,6 @@ export default function CreateTaskContent() {
     {/* Reopen Banner */}
     {isReopening && originalTask && originalTask.title && (
       <ReopenBanner originalTaskTitle={originalTask.title} />
-    )}
-
-    {/* Invitation Banner */}
-    {isInviting && invitedProfessional && (
-      <InvitationBanner
-        professionalName={invitedProfessional.name}
-        onCancel={handleCancelInvitation}
-      />
     )}
 
     {/* Form - No outer card, each section has its own card */}
