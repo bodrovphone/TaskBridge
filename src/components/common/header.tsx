@@ -143,7 +143,7 @@ function Header() {
    <Navbar
     maxWidth="full"
     position="sticky"
-    className={`bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100 transition-all duration-300 ${
+    className={`bg-white shadow-sm border-b border-gray-100 transition-all duration-300 ${
      isNavVisible ? 'translate-y-0' : '-translate-y-full'
     }`}
     style={{ zIndex: Z_INDEX.NAVBAR, position: 'fixed', top: 0, left: 0, right: 0 }}

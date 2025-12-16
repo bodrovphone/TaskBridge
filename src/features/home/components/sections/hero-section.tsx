@@ -15,7 +15,8 @@ import {
  Bell,
  CheckCircle,
  SquarePen,
- Search
+ Search,
+ Gift
 } from "lucide-react";
 
 export default function HeroSection() {
@@ -93,9 +94,18 @@ export default function HeroSection() {
      {/* Text Content - Order 1 on mobile, Order 1 on desktop */}
      <div className="space-y-10 order-1">
       <div className="space-y-6">
-       <div className="inline-flex items-center px-4 py-2 bg-white/70 border border-blue-200 rounded-full text-blue-700 text-sm font-medium shadow-lg">
-        <Shield className="mr-2 h-4 w-4" />
-        {t('landing.hero.badge')}
+       <div className="flex flex-wrap gap-2">
+        <div className="inline-flex items-center px-4 py-2 bg-white/70 border border-blue-200 rounded-full text-blue-700 text-sm font-medium shadow-lg">
+         <Shield className="mr-2 h-4 w-4" />
+         {t('landing.hero.badge')}
+        </div>
+        <LocaleLink
+         href="/giveaway"
+         className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-full text-amber-700 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
+        >
+         <Gift className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
+         {t('landing.hero.giveawayBadge')}
+        </LocaleLink>
        </div>
        <h1 className="font-bold text-slate-900 leading-[1.1] tracking-tight text-[2.5rem]">
         {t('landing.hero.title')}

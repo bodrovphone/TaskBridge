@@ -6,6 +6,7 @@ export const landing = {
     "Whether you need a handyman, a cleaner, a tutor, or any other help — post your task and receive offers from verified professionals. You pick the best one.\n\nOr if you're looking to earn — browse tasks that match your skills, apply with your offer, and work on your own terms. No middlemen, no complicated fees.",
   'landing.hero.getStarted': 'create a task',
   'landing.hero.browseServices': 'Find Work',
+  'landing.hero.giveawayBadge': 'Win Prizes!',
 
   'landing.trustIndicators.verified': 'Verified Profiles',
   'landing.trustIndicators.verifiedDescription':

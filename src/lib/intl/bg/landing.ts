@@ -6,6 +6,7 @@ export const landing = {
     'Трябва ти водопроводчик, чистач, учител или друга помощ? Публикувай задачата си и получи оферти от проверени специалисти. Ти избираш най-добрата.\n\nИли ако търсиш да изкараш пари — разгледай наличните задачи, кандидатствай с офертата си и работи по свой график. Без посредници, без сложни такси.',
   'landing.hero.getStarted': 'създай задача',
   'landing.hero.browseServices': 'Търся работа',
+  'landing.hero.giveawayBadge': 'Спечели награди!',
 
   'landing.trustIndicators.verified': 'Верифицирани профили',
   'landing.trustIndicators.verifiedDescription':

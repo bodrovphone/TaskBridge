@@ -225,6 +225,24 @@ const pageMetadata: Record<string, Record<SupportedLocale, { title: string; desc
       description: 'Ознайомтесь з умовами використання Trudify. Дізнайтеся правила та рекомендації щодо використання нашої платформи.',
     },
   },
+  giveaway: {
+    en: {
+      title: 'Earn Money & Win Prizes - Find Work Fast in Bulgaria',
+      description: 'Find work fast and earn money on Trudify. Win gift cards every 2 months. Professionals: get paid for your skills. Customers: get help quick. Join the growing community in Sofia, Plovdiv, Varna, Burgas.',
+    },
+    bg: {
+      title: 'Печелете пари и награди - Намерете работа бързо в България',
+      description: 'Намерете работа бързо и печелете пари в Trudify. Спечелете подаръчни карти на всеки 2 месеца. Професионалисти: получете заплащане за уменията си. Клиенти: получете помощ бързо. София, Пловдив, Варна, Бургас.',
+    },
+    ru: {
+      title: 'Зарабатывайте и выигрывайте - Найдите работу быстро в Болгарии',
+      description: 'Находите работу быстро и зарабатывайте на Trudify. Выигрывайте подарочные карты каждые 2 месяца. Специалисты: получайте оплату за навыки. Клиенты: получайте помощь быстро. София, Пловдив, Варна, Бургас.',
+    },
+    ua: {
+      title: 'Заробляйте та вигравайте - Знайдіть роботу швидко в Болгарії',
+      description: 'Знаходьте роботу швидко та заробляйте на Trudify. Вигравайте подарункові картки кожні 2 місяці. Фахівці: отримуйте оплату за навички. Клієнти: отримуйте допомогу швидко.',
+    },
+  },
 }
 
 /**
