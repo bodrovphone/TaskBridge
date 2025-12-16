@@ -18,17 +18,20 @@ import { ActiveFilters } from './filters/active-filters';
 import type { PaginatedProfessionalsResponse } from '@/server/professionals/professional.types';
 
 export default function ProfessionalsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
+
+  // Get current locale for API requests (for translations)
+  const currentLang = i18n.language || 'bg';
 
   // Check if any filters are active
   const hasActiveFilters = activeFilterCount > 0;
 
   // Always fetch featured professionals (used as fallback when filters return no results)
   const { data: featuredData } = useQuery<PaginatedProfessionalsResponse>({
-    queryKey: ['featured-professionals'],
+    queryKey: ['featured-professionals', currentLang],
     queryFn: async () => {
-      const response = await fetch('/api/professionals?featured=true');
+      const response = await fetch(`/api/professionals?featured=true&lang=${currentLang}`);
       if (!response.ok) throw new Error('Failed to fetch featured professionals');
       return response.json();
     },
@@ -47,11 +50,12 @@ export default function ProfessionalsPage() {
     isFetchingNextPage,
     refetch
   } = useInfiniteQuery<PaginatedProfessionalsResponse>({
-    queryKey: ['browse-professionals', buildApiQuery()],
+    queryKey: ['browse-professionals', buildApiQuery(), currentLang],
     queryFn: async ({ pageParam = 1 }) => {
-      // Build query with current page
+      // Build query with current page and language
       const params = new URLSearchParams(buildApiQuery());
       params.set('page', String(pageParam));
+      params.set('lang', currentLang);
 
       const response = await fetch(`/api/professionals?${params.toString()}`);
       if (!response.ok) throw new Error('Failed to fetch professionals');

@@ -31,10 +31,12 @@ export class ProfessionalService {
    * Get professionals with filters, sorting, and pagination
    *
    * @param rawParams - Raw query parameters from URL
+   * @param lang - Viewer's language for translations (default: 'bg')
    * @returns Paginated list of professionals (privacy-filtered)
    */
   async getProfessionals(
-    rawParams: Record<string, string | undefined>
+    rawParams: Record<string, string | undefined>,
+    lang: string = 'bg'
   ): Promise<ServiceResult<PaginatedProfessionalsResponse>> {
     try {
       // 1. Parse and validate query parameters
@@ -48,8 +50,8 @@ export class ProfessionalService {
         }
       }
 
-      // 2. Fetch professionals from repository
-      const result = await getProfessionalsFromRepo(params)
+      // 2. Fetch professionals from repository (with translations for viewer's lang)
+      const result = await getProfessionalsFromRepo(params, lang)
 
       // 3. Filter sensitive fields for privacy (both main results and featured)
       const filteredProfessionals = filterSensitiveFieldsBatch(
@@ -89,17 +91,18 @@ export class ProfessionalService {
    * Get featured professionals (high-quality, diverse selection)
    * Ignores all filters and returns top 20 professionals based on quality scoring
    *
+   * @param lang - Viewer's language for translations (default: 'bg')
    * @returns List of featured professionals (privacy-filtered)
    */
-  async getFeaturedProfessionals(): Promise<ServiceResult<Professional[]>> {
+  async getFeaturedProfessionals(lang: string = 'bg'): Promise<ServiceResult<Professional[]>> {
     try {
       // Import repository function
       const { getFeaturedProfessionals: getFeaturedFromRepo } = await import(
         './professional.repository'
       )
 
-      // Get featured professionals
-      const featuredProfessionals = await getFeaturedFromRepo(20)
+      // Get featured professionals (with translations for viewer's lang)
+      const featuredProfessionals = await getFeaturedFromRepo(20, lang)
 
       // Filter sensitive fields
       const { filterSensitiveFieldsBatch } = await import('./professional.privacy')

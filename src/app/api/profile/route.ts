@@ -8,6 +8,8 @@ import { UserRepository } from '@/server/infrastructure/supabase/user.repository
 import { UpdateUserProfileDto } from '@/server/domain/user/user.types'
 import { authenticateRequest } from '@/lib/auth/api-auth'
 import { checkAndAssignEarlyAdopterStatus } from '@/server/badges/badge.service'
+import { translateProfessionalProfileToBulgarian } from '@/lib/services/translation'
+import { createAdminClient } from '@/lib/supabase/server'
 
 /**
  * GET /api/profile
@@ -161,7 +163,51 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    // 7. Return updated profile
+    // 7. Translate professional profile fields to Bulgarian (non-blocking)
+    // Triggered when relevant fields are updated from a non-BG locale
+    // Get the request locale from Accept-Language header or query param
+    const acceptLanguage = request.headers.get('Accept-Language') || ''
+    const requestLocale = request.nextUrl.searchParams.get('locale') ||
+                          acceptLanguage.split(',')[0]?.split('-')[0] || 'bg'
+
+    const translationFieldsUpdated = updates.professionalTitle !== undefined ||
+                                     updates.bio !== undefined ||
+                                     updates.services !== undefined
+
+    // Translate if content was entered in a non-BG locale
+    if (translationFieldsUpdated && requestLocale !== 'bg') {
+      // Fire-and-forget translation (don't block the response)
+      translateProfessionalProfileToBulgarian({
+        professionalTitle: user.professionalTitle,
+        bio: user.bio,
+        services: user.services,
+        sourceLocale: requestLocale,
+      }).then(async (translations) => {
+        // Only save if we got actual translations
+        if (translations.professional_title_bg || translations.bio_bg || translations.services_bg) {
+          try {
+            const supabase = createAdminClient()
+            await supabase
+              .from('users')
+              .update({
+                professional_title_bg: translations.professional_title_bg,
+                bio_bg: translations.bio_bg,
+                services_bg: translations.services_bg,
+                content_source_language: translations.content_source_language,
+              })
+              .eq('id', user.id)
+
+            console.log('[Profile] Bulgarian translations saved for user:', user.id)
+          } catch (translationSaveError) {
+            console.error('[Profile] Failed to save translations:', translationSaveError)
+          }
+        }
+      }).catch((translationError) => {
+        console.error('[Profile] Translation failed:', translationError)
+      })
+    }
+
+    // 8. Return updated profile
     return NextResponse.json({
       profile: updatedUser.toProfile(),
       message: 'Profile updated successfully',

@@ -40,6 +40,9 @@ export async function GET(request: NextRequest) {
     // 1. Parse URL search params
     const { searchParams } = new URL(request.url)
 
+    // Get viewer's language (defaults to 'bg')
+    const lang = searchParams.get('lang') || 'bg'
+
     // Check if this is a featured professionals request
     const isFeaturedRequest = searchParams.get('featured') === 'true'
 
@@ -48,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     if (isFeaturedRequest) {
       // Handle featured professionals request (ignores all filters)
-      const result = await professionalService.getFeaturedProfessionals()
+      const result = await professionalService.getFeaturedProfessionals(lang)
 
       if (!result.success) {
         return NextResponse.json(
@@ -90,7 +93,7 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get('limit') || undefined,
     }
 
-    const result = await professionalService.getProfessionals(params)
+    const result = await professionalService.getProfessionals(params, lang)
 
     // 3. Handle errors
     if (!result.success) {

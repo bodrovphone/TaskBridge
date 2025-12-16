@@ -223,13 +223,34 @@ export async function GET(
       };
     }) || [];
 
+    // Access translation fields (cast to any for fields added by migration)
+    const profAny = professional as any;
+    const contentSourceLang = profAny.content_source_language || 'bg';
+
+    // Determine if we should use Bulgarian translations
+    // Use BG translations when: viewer is BG AND original content is NOT BG AND translations exist
+    const useBgTranslations = lang === 'bg' && contentSourceLang !== 'bg';
+
+    // Get the appropriate content (translated or original)
+    const displayBio = useBgTranslations && profAny.bio_bg
+      ? profAny.bio_bg
+      : professional.bio;
+
+    const displayTitle = useBgTranslations && profAny.professional_title_bg
+      ? profAny.professional_title_bg
+      : professional.professional_title;
+
+    const displayServices = useBgTranslations && profAny.services_bg && Array.isArray(profAny.services_bg)
+      ? profAny.services_bg
+      : professional.services || [];
+
     // Transform to match frontend expectations using actual database column names
     const transformedProfessional = {
       id: professional.id,
       fullName: professional.full_name,
       email: professional.email,
       avatarUrl: professional.avatar_url,
-      bio: professional.bio || 'Професионален специалист',
+      bio: displayBio,
       phone: professional.phone,
       phoneVerified: professional.is_phone_verified || false,
       idVerified: professional.is_vat_verified || false, // Using VAT verification as ID verification
@@ -237,7 +258,7 @@ export async function GET(
       location: professional.city,
       city: professional.city,
       neighborhood: professional.neighborhood,
-      specialization: professional.professional_title || 'Услуги',
+      specialization: displayTitle,
       yearsExperience: professional.years_experience || 0,
       hourlyRate: professional.hourly_rate_bgn || 0,
       isOnline: professional.availability_status === 'online',
@@ -249,17 +270,17 @@ export async function GET(
       updatedAt: professional.updated_at,
 
       // Badge data (cast to any to access fields added by migration)
-      is_top_professional: (professional as any).is_top_professional || false,
-      top_professional_tasks_count: (professional as any).top_professional_tasks_count || 0,
-      top_professional_until: (professional as any).top_professional_until || null,
-      is_early_adopter: (professional as any).is_early_adopter || false,
-      early_adopter_categories: (professional as any).early_adopter_categories || [],
-      is_featured: (professional as any).is_featured || false,
+      is_top_professional: profAny.is_top_professional || false,
+      top_professional_tasks_count: profAny.top_professional_tasks_count || 0,
+      top_professional_until: profAny.top_professional_until || null,
+      is_early_adopter: profAny.is_early_adopter || false,
+      early_adopter_categories: profAny.early_adopter_categories || [],
+      is_featured: profAny.is_featured || false,
 
       // Real data from database
       completedTasksList: completedTasksList,
       gallery: professional.portfolio || [],
-      services: professional.services || [],
+      services: displayServices,
       serviceCategories: professional.service_categories || [],
       reviews: transformedReviews,
       responseTimeHours: professional.response_time_hours || null,
@@ -273,7 +294,16 @@ export async function GET(
         allowDirectContact: true,
         preferredHours: "9:00 - 18:00",
         contactMethods: ["message", "phone"]
-      }
+      },
+      // Translation metadata (useful for debugging)
+      _translationInfo: useBgTranslations ? {
+        translatedFrom: contentSourceLang,
+        fieldsTranslated: ['bio', 'specialization', 'services'].filter(f =>
+          (f === 'bio' && profAny.bio_bg) ||
+          (f === 'specialization' && profAny.professional_title_bg) ||
+          (f === 'services' && profAny.services_bg)
+        )
+      } : null
     };
 
     return NextResponse.json({ professional: transformedProfessional });

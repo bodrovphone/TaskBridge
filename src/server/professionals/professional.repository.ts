@@ -45,6 +45,43 @@ function getBadgeData(prof: ProfessionalRaw) {
 }
 
 /**
+ * Check if a professional meets minimum listing requirements
+ * Requirements:
+ * - professional_title: not null and >= 3 chars
+ * - bio: not null and >= 20 chars
+ * - service_categories: not null and has at least 1 category
+ */
+function meetsListingRequirements(prof: ProfessionalRaw): boolean {
+  const hasTitle = prof.professional_title && prof.professional_title.length >= 3
+  const hasBio = prof.bio && prof.bio.length >= 20
+  const hasCategories = prof.service_categories && prof.service_categories.length > 0
+
+  return !!(hasTitle && hasBio && hasCategories)
+}
+
+/**
+ * Apply Bulgarian translations to professional fields if available
+ * Used when viewer is BG and content was written in another language
+ */
+function applyBgTranslations(prof: any, viewerLang: string): any {
+  // Only apply translations when viewer is BG and content source is NOT BG
+  const contentSourceLang = prof.content_source_language || 'bg'
+  const shouldTranslate = viewerLang === 'bg' && contentSourceLang !== 'bg'
+
+  if (!shouldTranslate) {
+    return prof
+  }
+
+  return {
+    ...prof,
+    // Use translated fields if available, fallback to original
+    professional_title: prof.professional_title_bg || prof.professional_title,
+    bio: prof.bio_bg || prof.bio,
+    services: prof.services_bg || prof.services,
+  }
+}
+
+/**
  * Fetch featured professionals with DB-first approach + quality scoring fallback
  *
  * Priority order:
@@ -52,15 +89,20 @@ function getBadgeData(prof: ProfessionalRaw) {
  * 2. Fallback: Quality scoring algorithm for remaining slots
  *
  * Returns up to `limit` professionals with category diversity
+ * @param limit - Max number of professionals to return
+ * @param lang - Viewer's language for applying translations (default: 'bg')
  */
-export async function getFeaturedProfessionals(limit: number = 20): Promise<Professional[]> {
+export async function getFeaturedProfessionals(limit: number = 20, lang: string = 'bg'): Promise<Professional[]> {
   const now = new Date().toISOString()
 
   // === Step 1: Fetch DB-flagged featured professionals ===
+  // Requirements: professional_title, bio, service_categories (filtered in JS for length checks)
   const { data: dbFeatured, error: dbError } = await supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
+    .not('bio', 'is', null)
+    .not('service_categories', 'is', null)
     .neq('is_banned', true)
     .or(`is_featured.eq.true,is_early_adopter.eq.true,and(is_top_professional.eq.true,top_professional_until.gte.${now})`)
     .limit(limit)
@@ -69,12 +111,18 @@ export async function getFeaturedProfessionals(limit: number = 20): Promise<Prof
     console.error('DB featured professionals query error:', dbError)
   }
 
-  const dbFeaturedProfessionals = (dbFeatured as ProfessionalRaw[]) || []
-  const dbFeaturedWithStatus = dbFeaturedProfessionals.map((prof) => ({
-    ...prof,
-    featured: calculateFeaturedStatus(prof),
-    ...getBadgeData(prof),
-  })) as Professional[]
+  // Filter by listing requirements (bio >= 20 chars, categories >= 1)
+  const dbFeaturedProfessionals = ((dbFeatured as ProfessionalRaw[]) || [])
+    .filter(meetsListingRequirements)
+
+  const dbFeaturedWithStatus = dbFeaturedProfessionals.map((prof) => {
+    const translatedProf = applyBgTranslations(prof, lang)
+    return {
+      ...translatedProf,
+      featured: calculateFeaturedStatus(prof),
+      ...getBadgeData(prof),
+    }
+  }) as Professional[]
 
   // If we have enough DB-flagged professionals, apply diversity and return
   if (dbFeaturedWithStatus.length >= limit) {
@@ -87,7 +135,8 @@ export async function getFeaturedProfessionals(limit: number = 20): Promise<Prof
 
   const fallbackProfessionals = await getQualityScoredProfessionals(
     remainingSlots,
-    excludeIds
+    excludeIds,
+    lang
   )
 
   // Combine DB-featured (first) + fallback (second)
@@ -101,16 +150,19 @@ export async function getFeaturedProfessionals(limit: number = 20): Promise<Prof
  */
 async function getQualityScoredProfessionals(
   limit: number,
-  excludeIds: string[] = []
+  excludeIds: string[] = [],
+  lang: string = 'bg'
 ): Promise<Professional[]> {
-  // Build query
+  // Build query - require all listing fields
   let query = supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
+    .not('bio', 'is', null)
+    .not('service_categories', 'is', null)
     .neq('is_banned', true)
     .order('created_at', { ascending: false })
-    .limit(50) // Fetch more for scoring
+    .limit(100) // Fetch more for scoring and filtering
 
   // Exclude already-selected professionals
   if (excludeIds.length > 0) {
@@ -124,7 +176,9 @@ async function getQualityScoredProfessionals(
     return []
   }
 
-  const professionalsRaw = (data as ProfessionalRaw[]) || []
+  // Filter by listing requirements (bio >= 20 chars, categories >= 1)
+  const professionalsRaw = ((data as ProfessionalRaw[]) || [])
+    .filter(meetsListingRequirements)
 
   if (professionalsRaw.length === 0) {
     return []
@@ -159,9 +213,12 @@ async function getQualityScoredProfessionals(
       score += 2
     }
 
+    // Apply translations
+    const translatedProf = applyBgTranslations(prof, lang)
+
     return {
       professional: {
-        ...prof,
+        ...translatedProf,
         featured: calculateFeaturedStatus(prof),
         ...getBadgeData(prof),
       } as Professional,
@@ -220,16 +277,24 @@ function applyDiversityShuffle(
 
 /**
  * Fetch professionals from database with filters, sorting, and pagination
+ * @param params - Query parameters for filtering/sorting
+ * @param lang - Viewer's language for applying translations (default: 'bg')
  */
 export async function getProfessionals(
-  params: ProfessionalQueryParams
+  params: ProfessionalQueryParams,
+  lang: string = 'bg'
 ): Promise<PaginatedProfessionalsResponse> {
-  // Build base query - only users with professional_title
+  // Build base query - require all listing fields:
+  // - professional_title (not null)
+  // - bio (not null, length checked in JS)
+  // - service_categories (not null, not empty)
   // Note: Using service role to bypass RLS - professional listings are public
   let query = supabaseAdmin
     .from('users')
     .select('*', { count: 'exact' })
     .not('professional_title', 'is', null)
+    .not('bio', 'is', null)
+    .not('service_categories', 'is', null)
 
   // === Apply Filters ===
 
@@ -316,13 +381,17 @@ export async function getProfessionals(
     throw new Error(`Failed to fetch professionals: ${error.message}`)
   }
 
-  // === Calculate Featured Status + Badge Data ===
+  // === Calculate Featured Status + Badge Data + Apply Translations ===
   const professionalsRaw = (data as ProfessionalRaw[]) || []
-  const professionalsWithFeatured = professionalsRaw.map((prof) => ({
-    ...prof,
-    featured: calculateFeaturedStatus(prof),
-    ...getBadgeData(prof),
-  }))
+  const professionalsWithFeatured = professionalsRaw.map((prof) => {
+    // Apply BG translations if viewer is BG and content is in another language
+    const translatedProf = applyBgTranslations(prof, lang)
+    return {
+      ...translatedProf,
+      featured: calculateFeaturedStatus(prof),
+      ...getBadgeData(prof),
+    }
+  })
 
   // === Re-sort for Featured (if sortBy === 'featured') ===
   let sortedProfessionals = professionalsWithFeatured
@@ -369,6 +438,8 @@ export async function getProfessionals(
 /**
  * Get a single professional by ID
  * For future use (professional detail page)
+ * Note: This returns ANY user with professional_title, even if incomplete
+ * (so users can view their own incomplete profile)
  */
 export async function getProfessionalById(
   id: string
@@ -532,11 +603,19 @@ export async function getProfessionalDetailById(
     return null
   }
 
-  const professional = professionalResult.data as ProfessionalRaw & {
+  const rawProfessional = professionalResult.data as ProfessionalRaw & {
     portfolio?: any[]
     services?: string[]
     response_time_hours?: number
+    // Translation fields
+    professional_title_bg?: string | null
+    bio_bg?: string | null
+    services_bg?: any[] | null
+    content_source_language?: string | null
   }
+
+  // Apply Bulgarian translations if viewer is BG and content was written in another language
+  const professional = applyBgTranslations(rawProfessional, lang)
 
   // Log errors but don't fail the whole request
   if (completedTasksResult.error) {

@@ -35,18 +35,16 @@ export interface ProfessionalListingStatus {
 /**
  * Hook to check professional profile listing status and requirements
  *
- * Requirements:
- * - Professional title (REQUIRED - blocks listing if missing)
- * - Description/Bio (recommended)
- * - Service categories (recommended)
+ * Requirements (ALL REQUIRED for listing in search):
+ * - Professional title (>= 3 chars)
+ * - Description/Bio (>= 20 chars)
+ * - Service categories (at least 1)
  *
  * @example
  * const { isListed, isComplete, requirements } = useProfessionalListingStatus(profile)
  *
  * if (!isListed) {
- *   // Show "Add professional title to be listed" message
- * } else if (!isComplete) {
- *   // Show "Complete your profile" suggestions
+ *   // Show "Complete required fields to be listed" message
  * }
  */
 export function useProfessionalListingStatus(
@@ -56,6 +54,7 @@ export function useProfessionalListingStatus(
 
   return useMemo(() => {
     // Default requirements structure (used for both auth and non-auth users)
+    // All fields are REQUIRED to appear in professional search results
     const defaultRequirements: ProfessionalRequirement[] = [
       {
         key: 'title',
@@ -68,14 +67,14 @@ export function useProfessionalListingStatus(
         key: 'bio',
         label: t('profile.listing.requirement.bio', 'Description/Bio'),
         met: false,
-        required: false,
+        required: true,
         sectionId: 'professional-identity-section',
       },
       {
         key: 'skills',
         label: t('profile.listing.requirement.skills', 'Service categories'),
         met: false,
-        required: false,
+        required: true,
         sectionId: 'service-categories-section',
       },
     ]
@@ -96,6 +95,7 @@ export function useProfessionalListingStatus(
       }
     }
 
+    // All fields are REQUIRED to appear in professional search results
     const requirements: ProfessionalRequirement[] = [
       {
         key: 'title',
@@ -108,19 +108,20 @@ export function useProfessionalListingStatus(
         key: 'bio',
         label: t('profile.listing.requirement.bio', 'Description/Bio'),
         met: !!(profile.bio && profile.bio.length >= 20),
-        required: false,
+        required: true,
         sectionId: 'professional-identity-section',
       },
       {
         key: 'skills',
         label: t('profile.listing.requirement.skills', 'Service categories'),
         met: !!(profile.serviceCategories && profile.serviceCategories.length > 0),
-        required: false,
+        required: true,
         sectionId: 'service-categories-section',
       },
     ]
 
-    const isListed = requirements.find(r => r.key === 'title')?.met ?? false
+    // Profile is listed only when ALL required fields are complete
+    const isListed = requirements.filter(r => r.required).every(r => r.met)
     const isComplete = requirements.every(r => r.met)
     const missingRequired = requirements.filter(r => r.required && !r.met)
     const missingRecommended = requirements.filter(r => !r.required && !r.met)

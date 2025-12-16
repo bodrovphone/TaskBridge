@@ -31,6 +31,32 @@ export interface TranslateTaskOutput {
   requirements_bg: string | null
 }
 
+export interface TranslateProfessionalProfileInput {
+  professionalTitle?: string | null
+  bio?: string | null
+  services?: Array<{
+    id: string
+    name: string
+    price: string
+    description: string
+    order: number
+  }> | null
+  sourceLocale: string
+}
+
+export interface TranslateProfessionalProfileOutput {
+  professional_title_bg: string | null
+  bio_bg: string | null
+  services_bg: Array<{
+    id: string
+    name: string
+    price: string
+    description: string
+    order: number
+  }> | null
+  content_source_language: string
+}
+
 interface DeepLTranslation {
   detected_source_language: string
   text: string
@@ -360,4 +386,114 @@ export async function translateTaskToBulgarian(
  */
 export function isTranslationConfigured(): boolean {
   return Boolean(process.env.DEEPL_API_KEY)
+}
+
+// ============================================================================
+// Professional Profile Translation
+// ============================================================================
+
+/**
+ * Translate professional profile content to Bulgarian
+ *
+ * Translates: professionalTitle, bio, services (name, description)
+ * Note: services.price is NOT translated (contains currency/numbers)
+ *
+ * Flow:
+ * 1. Check if quota exceeded - if yes, skip
+ * 2. Translate all text fields in parallel
+ * 3. Return translations (or nulls for graceful degradation)
+ */
+export async function translateProfessionalProfileToBulgarian(
+  input: TranslateProfessionalProfileInput
+): Promise<TranslateProfessionalProfileOutput> {
+  const { professionalTitle, bio, services, sourceLocale } = input
+
+  // No translation needed for Bulgarian source
+  if (sourceLocale === 'bg') {
+    return {
+      professional_title_bg: null,
+      bio_bg: null,
+      services_bg: null,
+      content_source_language: 'bg',
+    }
+  }
+
+  // Check if quota is exceeded (skip if true)
+  const quotaExceeded = await isQuotaExceeded()
+  if (quotaExceeded) {
+    console.log('[Translation] Skipping profile translation - quota exceeded')
+    return {
+      professional_title_bg: null,
+      bio_bg: null,
+      services_bg: null,
+      content_source_language: sourceLocale,
+    }
+  }
+
+  // Calculate total characters for logging
+  const servicesTextLength = services?.reduce((sum, s) =>
+    sum + (s.name?.length || 0) + (s.description?.length || 0), 0) || 0
+  const totalChars =
+    (professionalTitle?.length || 0) +
+    (bio?.length || 0) +
+    servicesTextLength
+
+  console.log('[Translation] Starting professional profile translation:', {
+    sourceLocale,
+    totalChars,
+    fields: {
+      professionalTitle: professionalTitle?.length || 0,
+      bio: bio?.length || 0,
+      servicesCount: services?.length || 0,
+      servicesTextLength,
+    },
+  })
+
+  // Translate main text fields in parallel
+  const [professional_title_bg, bio_bg] = await Promise.all([
+    professionalTitle ? translateToBulgarian(professionalTitle, sourceLocale) : Promise.resolve(null),
+    bio ? translateToBulgarian(bio, sourceLocale) : Promise.resolve(null),
+  ])
+
+  // Translate services if present
+  let services_bg: TranslateProfessionalProfileOutput['services_bg'] = null
+
+  if (services && services.length > 0) {
+    // Translate all service names and descriptions in parallel
+    const serviceTranslations = await Promise.all(
+      services.map(async (service) => {
+        const [translatedName, translatedDescription] = await Promise.all([
+          service.name ? translateToBulgarian(service.name, sourceLocale) : Promise.resolve(null),
+          service.description ? translateToBulgarian(service.description, sourceLocale) : Promise.resolve(null),
+        ])
+
+        return {
+          id: service.id,
+          name: translatedName || service.name, // Fallback to original if translation fails
+          price: service.price, // Don't translate prices
+          description: translatedDescription || service.description,
+          order: service.order,
+        }
+      })
+    )
+
+    services_bg = serviceTranslations
+  }
+
+  // Log results for cost tracking
+  const successCount = [professional_title_bg, bio_bg, services_bg].filter(Boolean).length
+  console.log('[Translation] Professional profile completed:', {
+    sourceLocale,
+    charsTranslated: totalChars,
+    fieldsTranslated: successCount,
+    servicesTranslated: services_bg?.length || 0,
+    success: successCount > 0,
+  })
+
+  return {
+    professional_title_bg,
+    bio_bg,
+    services_bg,
+    content_source_language: sourceLocale,
+  }
 }
