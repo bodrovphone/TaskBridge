@@ -346,4 +346,18 @@ export const profile = {
   'profile.achievement.title': 'Ви чудово працюєте!',
   'profile.achievement.subtitle': 'Дякуємо, що ви видатний член нашої спільноти. Ваша наполеглива праця та відданість справі дійсно мають значення!',
   'profile.achievement.tasksCompleted': 'завдань',
+
+  // Services & Pricing
+  'profile.services.title': 'Послуги та ціни',
+  'profile.services.description': 'Додайте ваші послуги з цінами',
+  'profile.services.empty': 'Послуги ще не додано',
+  'profile.services.emptyHint': 'Додайте ваші послуги, щоб клієнти знали, що ви пропонуєте',
+  'profile.services.addService': 'Додати послугу',
+  'profile.services.serviceName': 'Назва послуги',
+  'profile.services.serviceNamePlaceholder': 'напр. Сантехнічний ремонт',
+  'profile.services.price': 'Ціна',
+  'profile.services.pricePlaceholder': 'напр. 25 €/год',
+  'profile.services.descriptionLabel': 'Опис (необов\'язково)',
+  'profile.services.descriptionPlaceholder': 'Короткий опис послуги',
+  'profile.services.helperText': 'Додайте до {{max}} послуг. Зміни зберігаються автоматично.',
 };

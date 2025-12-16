@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
-import { Briefcase, Calendar, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle } from 'lucide-react'
+import { Briefcase, Calendar, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle, ClipboardList, Search } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
 import { PhoneContactActions } from '@/components/ui/phone-contact-actions'
 import { ProfessionalWithdrawDialog } from '@/components/tasks/professional-withdraw-dialog'
@@ -204,23 +204,22 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
             </div>
             <div className="flex gap-2 flex-wrap">
               <Button
-                color="default"
                 size="lg"
-                variant="bordered"
-                startContent={<Send className="w-5 h-5" />}
-                onPress={() => router.push(`/${lang}/tasks/applications`)}
-                className="shadow-lg flex-1 sm:flex-none"
+                variant="flat"
+                onPress={() => router.push(`/${lang}/browse-tasks`)}
+                startContent={<Search className="w-5 h-5" />}
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] flex-1 sm:flex-none"
               >
-                {t('myApplications.title')}
+                {t('nav.browseTasks')}
               </Button>
               <Button
-                color="primary"
                 size="lg"
-                startContent={<Briefcase className="w-5 h-5" />}
-                onPress={() => router.push(`/${lang}/browse-tasks`)}
-                className="shadow-lg flex-1 sm:flex-none"
+                variant="flat"
+                onPress={() => router.push(`/${lang}/tasks/applications`)}
+                startContent={<ClipboardList className="w-5 h-5" />}
+                className="bg-gradient-to-r from-slate-100 to-gray-100 hover:from-slate-200 hover:to-gray-200 text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-200 border border-slate-200 flex-1 sm:flex-none"
               >
-                {t('myWork.empty.inProgress.browseButton')}
+                {t('nav.myApplications')}
               </Button>
             </div>
           </div>
@@ -312,12 +311,13 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
               <p className="text-gray-500 mb-6">{t(`myWork.empty.${getEmptyStateKey(selectedFilter)}.message`)}</p>
               {selectedFilter === 'in_progress' && (
                 <Button
-                  color="primary"
                   size="lg"
-                  startContent={<Briefcase className="w-5 h-5" />}
+                  variant="flat"
                   onPress={() => router.push(`/${lang}/browse-tasks`)}
+                  startContent={<Search className="w-5 h-5" />}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
                 >
-                  {t('myWork.empty.inProgress.browseButton')}
+                  {t('nav.browseTasks')}
                 </Button>
               )}
             </CardBody>

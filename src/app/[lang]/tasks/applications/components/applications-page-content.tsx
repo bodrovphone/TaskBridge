@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem } from '@nextui-org/react'
-import { Send, Calendar, Banknote, MapPin, User, X, AlertCircle } from 'lucide-react'
+import { Send, Calendar, Banknote, MapPin, User, X, AlertCircle, Briefcase, Search } from 'lucide-react'
 import { useApplications, type MyApplication } from '@/hooks/use-applications'
 import ApplicationDetailView from '@/features/applications/components/application-detail-view'
 import type { MyApplication as MyApplicationType } from '@/features/applications/lib/types'
@@ -171,22 +171,33 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
       <div className="container mx-auto px-4 py-8 max-w-6xl relative z-10">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
                 {t('myApplications.title')}
               </h1>
               <p className="text-gray-600 mt-1">{t('myApplications.subtitle')}</p>
             </div>
-            <Button
-              color="primary"
-              size="lg"
-              startContent={<Send className="w-5 h-5" />}
-              onPress={() => router.push(`/${lang}/browse-tasks`)}
-              className="shadow-lg"
-            >
-              {t('myApplications.browseButton')}
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                size="lg"
+                variant="flat"
+                onPress={() => router.push(`/${lang}/browse-tasks`)}
+                startContent={<Search className="w-5 h-5" />}
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] flex-1 sm:flex-none"
+              >
+                {t('nav.browseTasks')}
+              </Button>
+              <Button
+                size="lg"
+                variant="flat"
+                onPress={() => router.push(`/${lang}/tasks/work`)}
+                startContent={<Briefcase className="w-5 h-5" />}
+                className="bg-gradient-to-r from-slate-100 to-gray-100 hover:from-slate-200 hover:to-gray-200 text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-200 border border-slate-200 flex-1 sm:flex-none"
+              >
+                {t('nav.myWork')}
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -263,12 +274,13 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
               </h3>
               <p className="text-gray-500 mb-6">{t('myApplications.empty.message')}</p>
               <Button
-                color="primary"
                 size="lg"
-                startContent={<Send className="w-5 h-5" />}
+                variant="flat"
                 onPress={() => router.push(`/${lang}/browse-tasks`)}
+                startContent={<Search className="w-5 h-5" />}
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
               >
-                {t('myApplications.empty.browseButton')}
+                {t('nav.browseTasks')}
               </Button>
             </CardBody>
           </Card>
