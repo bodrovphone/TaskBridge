@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle2, XCircle, ClipboardPaste } from 'lucide-react';
@@ -30,8 +30,32 @@ export function TelegramConnection({
   const [telegramId, setTelegramId] = useState('');
   const [showInstructions, setShowInstructions] = useState(false);
 
+  // Auto-refresh profile when user returns to tab after opening bot
+  useEffect(() => {
+    if (!showInstructions || telegramConnected) return;
+
+    const handleFocus = () => {
+      console.log('[Telegram] Tab focused, checking connection status...');
+      onConnectionChange?.();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [showInstructions, telegramConnected, onConnectionChange]);
+
+  // Hide instructions when connected
+  useEffect(() => {
+    if (telegramConnected) {
+      setShowInstructions(false);
+    }
+  }, [telegramConnected]);
+
   const handleOpenBot = async () => {
     const locale = i18n.language || 'bg';
+
+    // iOS Safari blocks window.open() after async operations
+    // So we open the window FIRST, then update the URL after token is fetched
+    const botWindow = window.open('about:blank', '_blank');
 
     try {
       // Generate a secure connection token
@@ -45,7 +69,13 @@ export function TelegramConnection({
         const { token } = await response.json();
         // Deep link with token for auto-connect: ?start={locale}_{token}
         const botLink = `https://t.me/Trudify_bot?start=${locale}_${token}`;
-        window.open(botLink, '_blank');
+
+        if (botWindow) {
+          botWindow.location.href = botLink;
+        } else {
+          // Fallback if popup was blocked
+          window.location.href = botLink;
+        }
 
         // Show simplified instructions (auto-connect should work)
         setShowInstructions(true);
@@ -54,7 +84,12 @@ export function TelegramConnection({
         // Fallback to old flow without token
         console.error('[Telegram] Failed to generate token, using fallback');
         const botLink = `https://t.me/Trudify_bot?start=${locale}`;
-        window.open(botLink, '_blank');
+
+        if (botWindow) {
+          botWindow.location.href = botLink;
+        } else {
+          window.location.href = botLink;
+        }
         setShowInstructions(true);
         setError(null);
       }
@@ -62,7 +97,12 @@ export function TelegramConnection({
       // Fallback to old flow without token
       console.error('[Telegram] Error generating token:', err);
       const botLink = `https://t.me/Trudify_bot?start=${locale}`;
-      window.open(botLink, '_blank');
+
+      if (botWindow) {
+        botWindow.location.href = botLink;
+      } else {
+        window.location.href = botLink;
+      }
       setShowInstructions(true);
       setError(null);
     }
