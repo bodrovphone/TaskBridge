@@ -61,6 +61,13 @@ export default function SearchFiltersSection({
   }
  }, [filters.q]);
 
+ // Clear filter when input is emptied (backspace, select all + delete, etc.)
+ useEffect(() => {
+  if (searchQuery === '' && filters.q) {
+   updateFilter('q', undefined);
+  }
+ }, [searchQuery, filters.q, updateFilter]);
+
  // Smooth scroll to results after filter selection
  // Uses requestAnimationFrame to ensure scroll happens after React re-render
  const scrollToResults = useCallback(() => {
@@ -340,7 +347,13 @@ export default function SearchFiltersSection({
           endContent={
            searchQuery && (
             <button
-             onClick={() => setSearchQuery('')}
+             onClick={() => {
+              setSearchQuery('');
+              // Also clear the URL filter
+              if (filters.q) {
+               updateFilter('q', undefined);
+              }
+             }}
              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
              type="button"
             >
