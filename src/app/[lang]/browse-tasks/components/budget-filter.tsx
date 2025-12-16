@@ -10,16 +10,16 @@ interface BudgetFilterProps {
   onChange: (value: { min?: number; max?: number }) => void
 }
 
-const BUDGET_PRESETS = [
-  { label: 'Under 25 €', min: undefined, max: 25 },
-  { label: '25-75 €', min: 25, max: 75 },
-  { label: '75-150 €', min: 75, max: 150 },
-  { label: '150-250 €', min: 150, max: 250 },
-  { label: '250+ €', min: 250, max: undefined },
-]
-
 export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
   const { t } = useTranslation()
+
+  const BUDGET_PRESETS = [
+    { label: t('browseTasks.filters.budgetUnder', 'Under {{amount}} €', { amount: 25 }), min: undefined, max: 25 },
+    { label: '25-75 €', min: 25, max: 75 },
+    { label: '75-150 €', min: 75, max: 150 },
+    { label: '150-250 €', min: 150, max: 250 },
+    { label: t('browseTasks.filters.budgetOver', '{{amount}}+ €', { amount: 250 }), min: 250, max: undefined },
+  ]
   const [isOpen, setIsOpen] = useState(false)
   const [minInput, setMinInput] = useState(value?.min?.toString() || '')
   const [maxInput, setMaxInput] = useState(value?.max?.toString() || '')

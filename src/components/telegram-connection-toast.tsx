@@ -59,17 +59,18 @@ export function TelegramConnectionToast() {
             <div className="flex gap-2">
               <Button
                 size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm flex-1"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm flex-1 pointer-events-auto cursor-pointer"
                 onClick={() => {
                   // Mark as dismissed
                   localStorage.setItem(TELEGRAM_TOAST_DISMISSED_KEY, Date.now().toString());
-                  // Dismiss the toast immediately
-                  toastInstance.dismiss();
                   // Navigate to appropriate profile based on user type
                   const profileType = profile?.userType === 'professional' || profile?.userType === 'both'
                     ? 'professional'
                     : 'customer';
-                  router.push(`/${currentLocale}/profile/${profileType}?openSettings=telegram`);
+                  const targetUrl = `/${currentLocale}/profile/${profileType}?openSettings=telegram`;
+                  // Dismiss the toast and navigate
+                  toastInstance.dismiss();
+                  router.push(targetUrl);
                 }}
               >
                 {t('profile.telegram.toast.action')}
@@ -77,7 +78,7 @@ export function TelegramConnectionToast() {
               <Button
                 size="sm"
                 variant="outline"
-                className="border-gray-300 hover:bg-gray-100 text-gray-700 font-medium"
+                className="border-gray-300 hover:bg-gray-100 text-gray-700 font-medium pointer-events-auto cursor-pointer"
                 onClick={() => {
                   // Mark as dismissed
                   localStorage.setItem(TELEGRAM_TOAST_DISMISSED_KEY, Date.now().toString());

@@ -36,15 +36,6 @@ SET hourly_rate_bgn = ROUND(hourly_rate_bgn / 2.0)
 WHERE hourly_rate_bgn IS NOT NULL AND hourly_rate_bgn > 0;
 
 -- ============================================================================
--- REVIEWS TABLE: Convert actual_price_paid values (if exists)
--- ============================================================================
-
--- Convert actual_price_paid (divide by 2 and round to nearest integer)
-UPDATE reviews
-SET actual_price_paid = ROUND(actual_price_paid / 2.0)
-WHERE actual_price_paid IS NOT NULL AND actual_price_paid > 0;
-
--- ============================================================================
 -- Notes:
 -- - All BGN values are approximately halved to convert to EUR
 -- - Values are rounded to nearest integer for cleaner display
