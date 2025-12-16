@@ -30,15 +30,42 @@ export function TelegramConnection({
   const [telegramId, setTelegramId] = useState('');
   const [showInstructions, setShowInstructions] = useState(false);
 
-  const handleOpenBot = () => {
-    // Get current app locale and pass it to the bot via start parameter
+  const handleOpenBot = async () => {
     const locale = i18n.language || 'bg';
-    const botLink = `https://t.me/Trudify_bot?start=${locale}`;
-    window.open(botLink, '_blank');
 
-    // Show the input field and instructions
-    setShowInstructions(true);
-    setError(null);
+    try {
+      // Generate a secure connection token
+      const response = await authenticatedFetch('/api/telegram/generate-connection-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, locale })
+      });
+
+      if (response.ok) {
+        const { token } = await response.json();
+        // Deep link with token for auto-connect: ?start={locale}_{token}
+        const botLink = `https://t.me/Trudify_bot?start=${locale}_${token}`;
+        window.open(botLink, '_blank');
+
+        // Show simplified instructions (auto-connect should work)
+        setShowInstructions(true);
+        setError(null);
+      } else {
+        // Fallback to old flow without token
+        console.error('[Telegram] Failed to generate token, using fallback');
+        const botLink = `https://t.me/Trudify_bot?start=${locale}`;
+        window.open(botLink, '_blank');
+        setShowInstructions(true);
+        setError(null);
+      }
+    } catch (err) {
+      // Fallback to old flow without token
+      console.error('[Telegram] Error generating token:', err);
+      const botLink = `https://t.me/Trudify_bot?start=${locale}`;
+      window.open(botLink, '_blank');
+      setShowInstructions(true);
+      setError(null);
+    }
   };
 
   // Core connect function that can be called with any ID

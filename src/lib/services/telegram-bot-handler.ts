@@ -1,9 +1,12 @@
 /**
  * Telegram Bot Command Handler
  *
- * Handles /start command and sends user their telegram_id
- * Simple flow: Bot sends ID → User pastes into website
+ * Handles /start command with two flows:
+ * 1. Auto-connect flow: /start {locale}_{token} → validates token and auto-links account
+ * 2. Manual flow: /start {locale} → sends telegram_id for user to paste into website
  */
+
+import { createAdminClient } from '@/lib/supabase/server';
 
 export interface TelegramUpdate {
   update_id: number;
@@ -39,38 +42,186 @@ export async function handleTelegramBotUpdate(update: TelegramUpdate) {
     const text = message.text;
     const chatId = message.chat.id;
     const telegramUserId = message.from.id;
+    const telegramUser = message.from;
 
     // Check if it's a /start command
     if (!message.text.startsWith('/start')) {
       return;
     }
 
-    // Extract locale from /start parameter (e.g., "/start ru" -> "ru")
-    // This locale comes from the app URL the user was on when they clicked "Open Bot"
-    const startParam = text.split(' ')[1] || 'bg'; // Default to 'bg' if no parameter
+    // Extract start parameter (e.g., "/start ua_abc123" or "/start ua")
+    const startParam = text.split(' ')[1] || 'bg';
 
-    // Simple flow: Send telegram_id with greeting in app's language
-    // Note: We await this to prevent Vercel from killing the function before message sends
-    await handleStartCommand(telegramUserId, message.from, chatId, startParam);
+    // Check if this is a token-based auto-connect request
+    // Format: {locale}_{token} where token is 24 hex chars
+    if (startParam.includes('_') && startParam.length > 10) {
+      const [locale, token] = startParam.split('_');
+
+      if (token && token.length >= 20) {
+        // Try auto-connect flow
+        const connected = await handleAutoConnect(telegramUserId, telegramUser, chatId, locale, token);
+        if (connected) {
+          return; // Success - don't fall through to manual flow
+        }
+        // If auto-connect failed, fall through to manual flow
+      }
+    }
+
+    // Manual flow: Send telegram_id with greeting in app's language
+    await handleManualFlow(telegramUserId, chatId, startParam);
   } catch (error) {
     console.error('[Telegram Handler] ❌ FATAL EXCEPTION:', error);
     console.error('[Telegram Handler] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
   }
 }
 
-async function handleStartCommand(
+/**
+ * Auto-connect flow: Validate token and link Telegram account automatically
+ * Returns true if successful, false if should fall back to manual flow
+ */
+async function handleAutoConnect(
   telegramId: number,
   telegramUser: NonNullable<TelegramUpdate['message']>['from'],
+  chatId: number,
+  locale: string,
+  token: string
+): Promise<boolean> {
+  const startTime = Date.now();
+  console.log('[Telegram] 🔐 Auto-connect attempt with token:', token.substring(0, 8) + '...');
+
+  try {
+    const supabase = createAdminClient();
+
+    // Validate token
+    const { data: tokenData, error: tokenError } = await supabase
+      .from('telegram_connection_tokens')
+      .select('user_id, locale, used, expires_at')
+      .eq('token', token)
+      .single();
+
+    if (tokenError || !tokenData) {
+      console.log('[Telegram] ❌ Token not found or invalid');
+      return false;
+    }
+
+    // Check if token is expired
+    if (new Date(tokenData.expires_at) < new Date()) {
+      console.log('[Telegram] ❌ Token expired');
+      return false;
+    }
+
+    // Check if token already used
+    if (tokenData.used) {
+      console.log('[Telegram] ❌ Token already used');
+      return false;
+    }
+
+    // Check if this telegram_id is already connected to another user
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('telegram_id', telegramId)
+      .neq('id', tokenData.user_id)
+      .single();
+
+    if (existingUser) {
+      console.log('[Telegram] ❌ Telegram already connected to another account');
+      // Send error message
+      const lang = normalizeLocale(tokenData.locale || locale);
+      await sendTelegramMessage(chatId, getAlreadyConnectedMessage(lang), 'HTML');
+      return true; // Don't fall back, we've handled it
+    }
+
+    // Connect the account
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        telegram_id: telegramId,
+        telegram_username: telegramUser.username || null,
+        telegram_first_name: telegramUser.first_name || null,
+        telegram_last_name: telegramUser.last_name || null,
+        preferred_notification_channel: 'telegram',
+        preferred_contact: 'telegram',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', tokenData.user_id);
+
+    if (updateError) {
+      console.error('[Telegram] ❌ Failed to update user:', updateError);
+      return false;
+    }
+
+    // Mark token as used
+    await supabase
+      .from('telegram_connection_tokens')
+      .update({ used: true })
+      .eq('token', token);
+
+    // Send success message
+    const lang = normalizeLocale(tokenData.locale || locale);
+    await sendTelegramMessage(chatId, getAutoConnectSuccessMessage(lang), 'HTML');
+
+    console.log('[Telegram] ✅ Auto-connect successful in:', Date.now() - startTime, 'ms');
+    return true;
+
+  } catch (error) {
+    console.error('[Telegram] ❌ Auto-connect error:', error);
+    return false;
+  }
+}
+
+/**
+ * Normalize locale to supported languages
+ */
+function normalizeLocale(locale: string): string {
+  const SUPPORTED_LOCALES = ['en', 'bg', 'ru', 'ua'];
+  const langCode = locale?.slice(0, 2) || 'en';
+  return SUPPORTED_LOCALES.includes(langCode) ? langCode : 'en';
+}
+
+/**
+ * Get success message for auto-connect
+ */
+function getAutoConnectSuccessMessage(lang: string): string {
+  const messages: Record<string, string> = {
+    en: `✅ <b>Successfully Connected!</b>\n\nYour Telegram account is now linked to Trudify.\n\n<b>You'll receive instant notifications for:</b>\n• New applications on your tasks\n• Application status updates\n• Messages from clients/professionals\n• Task completions\n\n🎉 You're all set!`,
+
+    bg: `✅ <b>Успешно свързване!</b>\n\nВашият Telegram акаунт е свързан с Trudify.\n\n<b>Ще получавате мигновени известия за:</b>\n• Нови кандидатури за задачите ви\n• Актуализации на статуса\n• Съобщения от клиенти/специалисти\n• Завършени задачи\n\n🎉 Готови сте!`,
+
+    ru: `✅ <b>Успешно подключено!</b>\n\nВаш Telegram аккаунт связан с Trudify.\n\n<b>Вы будете получать уведомления о:</b>\n• Новых заявках на ваши задачи\n• Обновлениях статуса\n• Сообщениях от клиентов/специалистов\n• Завершении задач\n\n🎉 Всё готово!`,
+
+    ua: `✅ <b>Успішно підключено!</b>\n\nВаш Telegram акаунт пов'язано з Trudify.\n\n<b>Ви отримуватимете сповіщення про:</b>\n• Нові заявки на ваші завдання\n• Оновлення статусу\n• Повідомлення від клієнтів/фахівців\n• Завершення завдань\n\n🎉 Все готово!`
+  };
+  return messages[lang] || messages.en;
+}
+
+/**
+ * Get error message when Telegram already connected to another account
+ */
+function getAlreadyConnectedMessage(lang: string): string {
+  const messages: Record<string, string> = {
+    en: `⚠️ <b>Already Connected</b>\n\nThis Telegram account is already linked to another Trudify account.\n\nIf you want to connect it to a different account, first disconnect it from the current one in your profile settings.`,
+
+    bg: `⚠️ <b>Вече е свързан</b>\n\nТози Telegram акаунт вече е свързан с друг Trudify акаунт.\n\nАко искате да го свържете с друг акаунт, първо го разкачете от текущия в настройките на профила.`,
+
+    ru: `⚠️ <b>Уже подключен</b>\n\nЭтот Telegram аккаунт уже связан с другим аккаунтом Trudify.\n\nЕсли хотите подключить его к другому аккаунту, сначала отключите его в настройках профиля.`,
+
+    ua: `⚠️ <b>Вже підключено</b>\n\nЦей Telegram акаунт вже пов'язаний з іншим акаунтом Trudify.\n\nЯкщо хочете підключити його до іншого акаунту, спочатку від'єднайте його в налаштуваннях профілю.`
+  };
+  return messages[lang] || messages.en;
+}
+
+/**
+ * Manual flow: Send telegram_id for user to copy/paste
+ */
+async function handleManualFlow(
+  telegramId: number,
   chatId: number,
   localeParam: string = 'en'
 ) {
   const startTime = Date.now();
   try {
-    // Use app locale from start parameter, normalize to supported languages
-    const lang = localeParam.startsWith('bg') ? 'bg'
-      : localeParam.startsWith('ru') ? 'ru'
-      : localeParam.startsWith('ua') ? 'ua'
-      : 'en';
+    const lang = normalizeLocale(localeParam);
 
     // Greeting messages in different languages (without telegram_id)
     const greetings: Record<string, string> = {
@@ -109,9 +260,9 @@ async function handleStartCommand(
       'HTML'
     );
 
-    console.log('[Telegram] ⏱️ handleStartCommand completed in:', Date.now() - startTime, 'ms');
+    console.log('[Telegram] ⏱️ Manual flow completed in:', Date.now() - startTime, 'ms');
   } catch (error) {
-    console.error('[Telegram] ❌ Exception in start command:', error);
+    console.error('[Telegram] ❌ Exception in manual flow:', error);
     console.error('[Telegram] ⏱️ Failed after:', Date.now() - startTime, 'ms');
   }
 }

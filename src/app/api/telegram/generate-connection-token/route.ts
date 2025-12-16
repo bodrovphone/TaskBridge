@@ -3,6 +3,9 @@
  *
  * Creates a secure temporary token for connecting Telegram account to user profile.
  * Token expires in 15 minutes and can only be used once.
+ *
+ * Token format: 24 hex chars (12 bytes) - fits in Telegram's 64-char start param limit
+ * when combined with locale: "{locale}_{token}" = max 27 chars
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,9 +14,9 @@ import crypto from 'crypto';
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await request.json();
+    const { userId, locale = 'bg' } = await request.json();
 
-    console.log('[Telegram Token] Request for userId:', userId);
+    console.log('[Telegram Token] Request for userId:', userId, 'locale:', locale);
 
     if (!userId) {
       console.error('[Telegram Token] No userId provided');
@@ -42,19 +45,21 @@ export async function POST(request: NextRequest) {
 
     console.log('[Telegram Token] User verified:', user.id);
 
-    // Generate secure random token
-    const token = crypto.randomBytes(32).toString('hex');
+    // Generate secure random token (12 bytes = 24 hex chars)
+    // This gives 2^96 possible tokens - still very secure for 15-min expiry
+    const token = crypto.randomBytes(12).toString('hex');
 
     // Token expires in 15 minutes
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + 15);
 
-    // Store token in database
+    // Store token in database (with locale for localized messages)
     const { error: insertError } = await supabase
       .from('telegram_connection_tokens')
       .insert({
         user_id: userId,
         token,
+        locale: locale.slice(0, 2), // Normalize to 2 chars
         expires_at: expiresAt.toISOString(),
         used: false
       });
