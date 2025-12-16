@@ -95,21 +95,27 @@ export default function SearchFiltersSection({
   }, [searchQuery, hasSuggestions]);
 
   // Smooth scroll to results after filter selection
+  // Uses requestAnimationFrame to ensure scroll happens after React re-render
   const scrollToResults = useCallback(() => {
-    // Small delay to let the filter update and results start loading
-    setTimeout(() => {
-      const resultsElement = document.getElementById('professionals-results');
-      if (resultsElement) {
-        const headerOffset = 100; // Account for fixed header
-        const elementPosition = resultsElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    // Use double RAF to ensure DOM is fully updated after state change
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const resultsElement = document.getElementById('professionals-results');
+        if (resultsElement) {
+          const headerOffset = 100; // Account for fixed header
+          const elementPosition = resultsElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
+          // Only scroll if results are below the current viewport
+          if (elementPosition > window.innerHeight * 0.3) {
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }
+      });
+    });
   }, []);
 
   // Handle category selection
@@ -137,7 +143,14 @@ export default function SearchFiltersSection({
     // Don't show typing animation when user is actively typing
     if (searchQuery) return;
 
-    const currentWord = currentExamples[currentTypingIndex];
+    // Guard: Don't animate if no examples available
+    if (currentExamples.length === 0) return;
+
+    const currentWord = currentExamples[currentTypingIndex % currentExamples.length];
+
+    // Guard: Skip if word is undefined (shouldn't happen with modulo, but extra safety)
+    if (!currentWord) return;
+
     const typingSpeed = isDeleting ? 50 : 100;
     const pauseDuration = 2000;
 

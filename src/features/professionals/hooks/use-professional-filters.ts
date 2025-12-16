@@ -6,7 +6,7 @@
 
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import type { ProfessionalSortOption } from '@/server/professionals/professional.query-types'
 
@@ -30,6 +30,7 @@ export function useProfessionalFilters() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const isUpdatingRef = useRef(false)
 
   // Initialize filters from URL
   const [filters, setFilters] = useState<ProfessionalFilters>(() => {
@@ -94,8 +95,15 @@ export function useProfessionalFilters() {
         }
       })
 
-      // Update URL - use replace to avoid scroll issues
+      // Save scroll position, update URL, then restore scroll
+      const scrollY = window.scrollY
+      isUpdatingRef.current = true
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      // Restore scroll position after a micro-task
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY)
+        isUpdatingRef.current = false
+      })
     },
     [filters, pathname, router]
   )
@@ -120,8 +128,14 @@ export function useProfessionalFilters() {
         }
       })
 
-      // Update URL - use replace to avoid scroll issues
+      // Save scroll position, update URL, then restore scroll
+      const scrollY = window.scrollY
+      isUpdatingRef.current = true
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY)
+        isUpdatingRef.current = false
+      })
     },
     [filters, pathname, router]
   )
@@ -135,7 +149,14 @@ export function useProfessionalFilters() {
       page: 1,
     }
     setFilters(defaultFilters)
+    // Save scroll position, update URL, then restore scroll
+    const scrollY = window.scrollY
+    isUpdatingRef.current = true
     router.replace(pathname, { scroll: false })
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+      isUpdatingRef.current = false
+    })
   }, [pathname, router])
 
   /**

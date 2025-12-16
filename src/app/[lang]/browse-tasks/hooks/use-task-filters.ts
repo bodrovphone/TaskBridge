@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import type { TaskSortOption } from '@/server/tasks/task.query-types'
 
@@ -25,6 +25,7 @@ export function useTaskFilters() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const isUpdatingRef = useRef(false)
 
   // Initialize filters from URL
   const [filters, setFilters] = useState<TaskFilters>(() => {
@@ -79,8 +80,15 @@ export function useTaskFilters() {
       }
     })
 
-    // Update URL - use replace to avoid scroll issues
+    // Save scroll position, update URL, then restore scroll
+    const scrollY = window.scrollY
+    isUpdatingRef.current = true
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    // Restore scroll position after a micro-task
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+      isUpdatingRef.current = false
+    })
   }, [filters, pathname, router])
 
   /**
@@ -98,8 +106,14 @@ export function useTaskFilters() {
       }
     })
 
-    // Update URL - use replace to avoid scroll issues
+    // Save scroll position, update URL, then restore scroll
+    const scrollY = window.scrollY
+    isUpdatingRef.current = true
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+      isUpdatingRef.current = false
+    })
   }, [filters, pathname, router])
 
   /**
@@ -111,7 +125,14 @@ export function useTaskFilters() {
       page: 1,
     }
     setFilters(defaultFilters)
+    // Save scroll position, update URL, then restore scroll
+    const scrollY = window.scrollY
+    isUpdatingRef.current = true
     router.replace(pathname, { scroll: false })
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+      isUpdatingRef.current = false
+    })
   }, [pathname, router])
 
   /**

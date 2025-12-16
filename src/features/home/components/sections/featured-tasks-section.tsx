@@ -127,10 +127,10 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
   createdAt: task.created_at,
   // Ensure images is always an array (handle null/undefined from database)
   images: Array.isArray(task.images) ? task.images : [],
-  // Truncate description to 50 characters for featured cards
-  description: task.description.length > 50
-    ? task.description.substring(0, 50) + '...'
-    : task.description,
+  // Truncate description to 50 characters for featured cards (handle undefined)
+  description: task.description
+    ? (task.description.length > 50 ? task.description.substring(0, 50) + '...' : task.description)
+    : '',
  }));
 
  const handleApply = (taskId: string) => {
