@@ -95,7 +95,6 @@ export async function PUT(request: NextRequest) {
     if (updates.city !== undefined) {
       user.city = updates.city && updates.city.trim() !== '' ? updates.city : null
     }
-    if (updates.neighborhood !== undefined) user.neighborhood = updates.neighborhood
     if (updates.country !== undefined) user.country = updates.country
     if (updates.bio !== undefined) user.bio = updates.bio
     if (updates.preferredLanguage !== undefined) user.preferredLanguage = updates.preferredLanguage

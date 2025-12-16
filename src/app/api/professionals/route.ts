@@ -6,7 +6,6 @@
  * - featured: 'true' - Get high-quality featured professionals (20 with diversity)
  * - category: Service category slug (e.g., 'plumbing', 'house-cleaning')
  * - city: City filter
- * - neighborhood: Neighborhood filter (optional)
  * - minRating: Minimum rating (1-5)
  * - verified: Show only verified professionals (phone OR email)
  * - mostActive: Show only very active professionals (50+ completed jobs)
@@ -83,7 +82,6 @@ export async function GET(request: NextRequest) {
     const params: Record<string, string | undefined> = {
       category: searchParams.get('category') || undefined,
       city: searchParams.get('city') || undefined,
-      neighborhood: searchParams.get('neighborhood') || undefined,
       minRating: searchParams.get('minRating') || undefined,
       minJobs: searchParams.get('minJobs') || undefined,
       verified: searchParams.get('verified') || undefined,

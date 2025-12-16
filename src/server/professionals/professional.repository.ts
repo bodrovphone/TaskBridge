@@ -308,11 +308,6 @@ export async function getProfessionals(
     query = query.eq('city', params.city)
   }
 
-  // Neighborhood filter (optional, more specific than city)
-  if (params.neighborhood) {
-    query = query.eq('neighborhood', params.neighborhood)
-  }
-
   // Min rating filter
   if (params.minRating !== undefined) {
     query = query.gte('average_rating', params.minRating)
@@ -715,7 +710,6 @@ export async function getProfessionalDetailById(
     is_featured: professional.is_featured || false,
 
     // Extended detail fields
-    neighborhood: professional.neighborhood,
     services: professional.services || [],
     portfolio: professional.portfolio || [],
     responseTimeHours: professional.response_time_hours || null,

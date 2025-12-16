@@ -44,7 +44,6 @@ const PUBLIC_FIELDS: readonly (keyof Professional)[] = [
 const PRIVATE_FIELDS = [
   'email',             // Actual email address
   'phone',             // Actual phone number
-  'neighborhood',      // Too specific for public listing
   'vat_number',        // Business ID number
   'notification_preferences',
   'privacy_settings',

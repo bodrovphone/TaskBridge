@@ -25,7 +25,6 @@ export class User {
     public fullName: string | null,
     public phoneNumber: string | null,
     public city: string | null,
-    public neighborhood: string | null,
     public country: string,
     public isPhoneVerified: boolean,
     public isEmailVerified: boolean,
@@ -100,7 +99,6 @@ export class User {
       dto.fullName || null,
       dto.phoneNumber || null,
       dto.city || null,
-      null, // neighborhood
       dto.country || 'Bulgaria',
       false, // isPhoneVerified
       false, // isEmailVerified
@@ -167,7 +165,6 @@ export class User {
       profile.fullName,
       profile.phoneNumber,
       profile.city,
-      profile.neighborhood,
       profile.country,
       profile.isPhoneVerified,
       profile.isEmailVerified,
@@ -234,7 +231,6 @@ export class User {
       fullName: this.fullName,
       phoneNumber: this.phoneNumber,
       city: this.city,
-      neighborhood: this.neighborhood,
       country: this.country,
       isPhoneVerified: this.isPhoneVerified,
       isEmailVerified: this.isEmailVerified,

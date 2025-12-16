@@ -16,7 +16,6 @@ import type { ProfessionalSortOption } from '@/server/professionals/professional
 export interface ProfessionalFilters {
   category?: string               // Service category slug
   city?: string                  // City filter
-  neighborhood?: string          // Neighborhood filter
   minRating?: number            // Minimum rating (1-5)
   minJobs?: number              // Minimum completed jobs
   sortBy?: ProfessionalSortOption
@@ -37,7 +36,6 @@ export function useProfessionalFilters() {
     return {
       category: searchParams.get('category') || undefined,
       city: searchParams.get('city') || undefined,
-      neighborhood: searchParams.get('neighborhood') || undefined,
       minRating: searchParams.get('minRating')
         ? Number(searchParams.get('minRating'))
         : undefined,
@@ -55,7 +53,6 @@ export function useProfessionalFilters() {
     const newFilters: ProfessionalFilters = {
       category: searchParams.get('category') || undefined,
       city: searchParams.get('city') || undefined,
-      neighborhood: searchParams.get('neighborhood') || undefined,
       minRating: searchParams.get('minRating')
         ? Number(searchParams.get('minRating'))
         : undefined,

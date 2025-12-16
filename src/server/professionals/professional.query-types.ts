@@ -20,7 +20,6 @@ export interface ProfessionalQueryParams {
   // Search & Filter
   category?: string          // Service category slug (e.g., 'plumbing', 'house-cleaning')
   city?: string             // City filter
-  neighborhood?: string     // Neighborhood filter (optional)
   minRating?: number        // Minimum rating (1-5)
   minJobs?: number          // Minimum completed jobs
 

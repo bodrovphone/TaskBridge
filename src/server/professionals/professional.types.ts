@@ -65,7 +65,6 @@ export interface ProfessionalRaw {
 
   // Profile
   city: string | null
-  neighborhood: string | null
   bio: string | null
 
   // Professional fields
@@ -184,7 +183,6 @@ export interface ReviewItem {
  */
 export interface ProfessionalDetail extends Professional {
   // Extended profile data
-  neighborhood: string | null
   services: string[]
   portfolio: any[]
   responseTimeHours: number | null

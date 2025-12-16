@@ -71,7 +71,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     responseTime: formatResponseTime(professional.responseTimeHours, i18n.language, t),
     // Show city if available, otherwise show "Bulgaria 🇧🇬" like on professional cards
     location: professional.city
-      ? `${getCityLabelBySlug(professional.city, t)}${professional.neighborhood ? `, ${professional.neighborhood}` : ''}`
+      ? getCityLabelBySlug(professional.city, t)
       : `${t('common.country.bulgaria', 'Bulgaria')} 🇧🇬`,
     isOnline: professional.isOnline || false,
     isVerified: {

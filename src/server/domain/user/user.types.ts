@@ -72,7 +72,6 @@ export interface UpdateUserProfileDto {
   fullName?: string
   phoneNumber?: string
   city?: string
-  neighborhood?: string
   country?: string
   bio?: string
   preferredLanguage?: PreferredLanguage
@@ -117,7 +116,6 @@ export interface UserProfile {
 
   // Location
   city: string | null
-  neighborhood: string | null
   country: string
 
   // Verification

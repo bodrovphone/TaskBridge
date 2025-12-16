@@ -32,11 +32,6 @@ export function parseQueryParams(
     parsed.city = params.city.trim()
   }
 
-  // === Neighborhood Filter ===
-  if (params.neighborhood && params.neighborhood.trim()) {
-    parsed.neighborhood = params.neighborhood.trim()
-  }
-
   // === Min Rating Filter ===
   if (params.minRating) {
     const rating = parseFloat(params.minRating)
@@ -119,11 +114,6 @@ export function validateQueryParams(
     errors.push('City name is too long (max 100 characters)')
   }
 
-  // Validate neighborhood (if provided)
-  if (params.neighborhood && params.neighborhood.length > 100) {
-    errors.push('Neighborhood name is too long (max 100 characters)')
-  }
-
   // Validate minRating
   if (
     params.minRating !== undefined &&
@@ -168,7 +158,6 @@ export function stringifyQueryParams(params: ProfessionalQueryParams): string {
 
   if (params.category) parts.push(`category=${params.category}`)
   if (params.city) parts.push(`city=${params.city}`)
-  if (params.neighborhood) parts.push(`neighborhood=${params.neighborhood}`)
   if (params.minRating) parts.push(`minRating=${params.minRating}`)
   if (params.verified) parts.push(`verified=${params.verified}`)
   if (params.mostActive) parts.push(`mostActive=${params.mostActive}`)

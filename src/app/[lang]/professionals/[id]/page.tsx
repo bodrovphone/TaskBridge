@@ -50,7 +50,6 @@ function transformForClient(professional: ProfessionalDetail) {
     completedJobs: professional.tasks_completed,
     yearsExperience: professional.years_experience || 0,
     city: professional.city,
-    neighborhood: professional.neighborhood,
     isOnline: false, // Not tracked in current schema
     phoneVerified: professional.is_phone_verified,
     idVerified: professional.is_vat_verified,

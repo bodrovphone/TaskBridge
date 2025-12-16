@@ -257,7 +257,6 @@ export async function GET(
       addressVerified: false, // Column doesn't exist yet in schema
       location: professional.city,
       city: professional.city,
-      neighborhood: professional.neighborhood,
       specialization: displayTitle,
       yearsExperience: professional.years_experience || 0,
       hourlyRate: professional.hourly_rate_bgn || 0,
