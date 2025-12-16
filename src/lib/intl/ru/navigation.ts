@@ -44,4 +44,8 @@ export const navigation = {
   'footer.contact.subtitle': 'Свяжитесь с нами',
   'footer.language.label': 'Язык',
   'footer.copyright': '© 2025 Obod Soft LTD. Все права защищены.',
+
+  // Social
+  'footer.social.followUs': 'Подписывайтесь на нас',
+  'footer.social.title': 'Мы в соцсетях',
 };

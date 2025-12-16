@@ -44,4 +44,8 @@ export const navigation = {
   'footer.contact.subtitle': 'Get in touch',
   'footer.language.label': 'Language',
   'footer.copyright': '© 2025 Obod Soft LTD. All rights reserved.',
+
+  // Social
+  'footer.social.followUs': 'Follow us',
+  'footer.social.title': 'We are Social',
 };

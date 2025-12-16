@@ -11,6 +11,7 @@ import { extractLocaleFromPathname, replaceLocaleInPathname } from "@/lib/utils/
 import { saveUserLocalePreference } from "@/lib/utils/client-locale";
 import { updateUserLanguagePreference } from "@/lib/utils/update-user-language";
 import { useAuth } from "@/features/auth";
+import { SocialLinks } from "@/components/ui/social-icons";
 
 function Footer() {
  const { t, i18n } = useTranslation();
@@ -82,7 +83,7 @@ function Footer() {
       </div>
 
       {/* Contact Info */}
-      <div className="flex items-center gap-3 text-slate-300">
+      <div className="flex items-center gap-3 text-slate-300 mb-6">
        <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl">
         <Mail className="h-5 w-5 text-white" />
        </div>
@@ -95,6 +96,12 @@ function Footer() {
          support@trudify.com
         </a>
        </div>
+      </div>
+
+      {/* Social Links */}
+      <div>
+       <p className="text-sm text-slate-400 mb-3">{t('footer.social.followUs')}</p>
+       <SocialLinks variant="footer" iconSize={18} />
       </div>
      </div>
 
