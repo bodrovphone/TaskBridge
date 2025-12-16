@@ -89,7 +89,7 @@ export default function AcceptApplicationDialog({
   // Extract application data with defaults for when application is null
   const professional = application?.professional ?? { name: '', avatar: null }
   const proposedPrice = application?.proposedPrice ?? 0
-  const currency = application?.currency ?? 'BGN'
+  const currency = application?.currency ?? 'EUR'
   const timeline = application?.timeline ?? ''
   const applicationMessage = application?.message ?? null
   const applicationId = application?.id ?? ''

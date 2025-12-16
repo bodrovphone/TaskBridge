@@ -11,11 +11,11 @@ interface BudgetFilterProps {
 }
 
 const BUDGET_PRESETS = [
-  { label: 'Under 50 лв', min: undefined, max: 50 },
-  { label: '50-150 лв', min: 50, max: 150 },
-  { label: '150-300 лв', min: 150, max: 300 },
-  { label: '300-500 лв', min: 300, max: 500 },
-  { label: '500+ лв', min: 500, max: undefined },
+  { label: 'Under 25 €', min: undefined, max: 25 },
+  { label: '25-75 €', min: 25, max: 75 },
+  { label: '75-150 €', min: 75, max: 150 },
+  { label: '150-250 €', min: 150, max: 250 },
+  { label: '250+ €', min: 250, max: undefined },
 ]
 
 export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
@@ -56,11 +56,11 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
     if (!hasValue) return t('browseTasks.filters.budget', 'Budget')
 
     if (value?.min !== undefined && value?.max !== undefined) {
-      return `${value.min}-${value.max} лв`
+      return `${value.min}-${value.max} €`
     } else if (value?.min !== undefined) {
-      return `${value.min}+ лв`
+      return `${value.min}+ €`
     } else if (value?.max !== undefined) {
-      return `< ${value.max} лв`
+      return `< ${value.max} €`
     }
     return t('browseTasks.filters.budget', 'Budget')
   }
@@ -120,7 +120,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
                 placeholder="0"
                 value={minInput}
                 onValueChange={setMinInput}
-                endContent={<span className="text-gray-400 text-sm">лв</span>}
+                endContent={<span className="text-gray-400 text-sm">€</span>}
                 size="sm"
               />
               <Input
@@ -129,7 +129,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
                 placeholder="∞"
                 value={maxInput}
                 onValueChange={setMaxInput}
-                endContent={<span className="text-gray-400 text-sm">лв</span>}
+                endContent={<span className="text-gray-400 text-sm">€</span>}
                 size="sm"
               />
             </div>

@@ -38,11 +38,11 @@ export function ActiveFilters() {
   if (filters.budgetMin !== undefined || filters.budgetMax !== undefined) {
     let budgetLabel = ''
     if (filters.budgetMin !== undefined && filters.budgetMax !== undefined) {
-      budgetLabel = `${filters.budgetMin}-${filters.budgetMax} лв`
+      budgetLabel = `${filters.budgetMin}-${filters.budgetMax} €`
     } else if (filters.budgetMin !== undefined) {
-      budgetLabel = `${filters.budgetMin}+ лв`
+      budgetLabel = `${filters.budgetMin}+ €`
     } else if (filters.budgetMax !== undefined) {
-      budgetLabel = `< ${filters.budgetMax} лв`
+      budgetLabel = `< ${filters.budgetMax} €`
     }
 
     activeChips.push({

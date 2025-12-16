@@ -139,7 +139,7 @@ export default function CompletedTasksDialog({
           </div>
           <div className="text-right flex-shrink-0">
            <div className="text-xl font-bold text-green-600 mb-2">
-            {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
+            {task.budget > 0 ? `${task.budget} €` : t('common.negotiable', 'Договорена')}
            </div>
            <div className="flex flex-col items-end gap-1">
             {task.clientRating > 0 ? (

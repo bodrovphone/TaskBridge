@@ -68,7 +68,7 @@ export function ReviewStep({
                   {t('application.proposedPrice')}
                 </p>
                 <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                  {proposedPrice ?? 0} <span className="text-sm font-medium">BGN</span>
+                  {proposedPrice ?? 0} <span className="text-sm font-medium">€</span>
                 </p>
               </div>
             </div>

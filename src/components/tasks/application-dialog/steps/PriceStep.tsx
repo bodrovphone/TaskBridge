@@ -51,7 +51,7 @@ export function PriceStep({
             style={{ fontSize: '18px' }}
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-base font-semibold">
-            BGN
+            €
           </span>
         </div>
         {error && (
@@ -67,7 +67,7 @@ export function PriceStep({
               {t('application.wizard.budgetHint', "Client's budget range")}
             </p>
             <p className="text-lg font-bold text-blue-700 dark:text-blue-300 mt-1">
-              {taskBudget?.min ?? 0} - {taskBudget?.max ?? 0} BGN
+              {taskBudget?.min ?? 0} - {taskBudget?.max ?? 0} €
             </p>
           </div>
         </div>

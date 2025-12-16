@@ -39,7 +39,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 150,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '2-3 days',
       message: 'I have 5 years of experience in residential plumbing and can fix this issue quickly. I use high-quality parts and provide a 1-year warranty on all repairs.'
     },
@@ -83,7 +83,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 200,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '3 days',
       message: 'I specialize in apartment deep cleaning with eco-friendly products. My team and I have cleaned over 200 apartments with excellent results.'
     },
@@ -122,7 +122,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 300,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '2 days',
       message: 'Professional painter with 10 years experience. I use premium paints and guarantee smooth, even coverage.'
     },
@@ -163,7 +163,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 120,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '1 day',
       message: 'Licensed electrician with all necessary certifications. Can complete the installation in one day with minimal disruption.'
     },
@@ -206,7 +206,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 250,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '2 weeks',
       message: 'I love dogs and have experience with large breeds. I walk in the nearby park and always ensure dogs get plenty of exercise and play time.'
     },
@@ -245,7 +245,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 80,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: 'Same day',
       message: 'I have a van and tools for furniture assembly. Can complete delivery and assembly in one trip.'
     },
@@ -286,7 +286,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 40,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '2 months, 2x/week',
       message: 'Mathematics teacher with 8 years experience. I have helped many students improve their grades and pass exams successfully.'
     },
@@ -324,7 +324,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 200,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '1 day',
       message: 'Professional moving service with truck and equipment. We handle everything carefully.'
     },
@@ -364,7 +364,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 250,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: '5-7 days',
       message: 'Graphic designer with 6 years experience. I will provide 3 initial concepts and unlimited revisions until you are satisfied.'
     },
@@ -402,7 +402,7 @@ export const mockMyApplications: MyApplication[] = [
     },
     myProposal: {
       price: 350,
-      currency: 'BGN',
+      currency: 'EUR',
       timeline: 'Monthly',
       message: 'Professional gardener with own equipment. I can maintain your garden year-round with seasonal adjustments.'
     },

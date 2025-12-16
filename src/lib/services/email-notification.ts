@@ -244,7 +244,7 @@ async function translateEmailVariables(
         secondary_link: data.professionalProfileLink || `${baseUrl}/${locale}/professionals/${data.professionalId}`,
         secondary_button_text: t('notifications.email.applicationReceived.secondaryButtonText'),
         info_title: t('notifications.email.applicationReceived.infoTitle'),
-        info_items: data.infoItems || [], // e.g., ["Offered Price: 50 BGN", "Rating: 4.8 ⭐"]
+        info_items: data.infoItems || [], // e.g., ["Offered Price: 50 €", "Rating: 4.8 ⭐"]
         footer_text: t('notifications.email.applicationReceived.footerText'),
       };
     }
@@ -363,7 +363,7 @@ async function translateEmailVariables(
         primary_button_text: t('notifications.email.paymentReceived.buttonText'),
         info_title: t('notifications.email.paymentReceived.infoTitle'),
         info_items: data.paymentDetails || [
-          `Amount: ${data.amount} BGN`,
+          `Amount: ${data.amount} €`,
           `Task: ${data.taskTitle}`,
           `Date: ${new Date().toLocaleDateString(locale)}`,
         ],

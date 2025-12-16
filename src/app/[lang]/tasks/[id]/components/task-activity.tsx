@@ -117,7 +117,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
        city: app.professional?.city || null,
       },
       proposedPrice: app.proposed_price_bgn,
-      currency: 'BGN',  // Bulgarian Lev
+      currency: 'EUR',
       timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : t('common.flexible', 'Flexible'),
       message: app.message,
       status: app.status,

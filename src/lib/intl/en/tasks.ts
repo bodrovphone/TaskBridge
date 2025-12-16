@@ -62,7 +62,7 @@ export const tasks = {
   'browseTasks.filters.budget': 'Budget',
   'browseTasks.filters.budgetMin': 'Min',
   'browseTasks.filters.budgetMax': 'Max',
-  'browseTasks.filters.budgetUpTo': 'Up to 500 BGN',
+  'browseTasks.filters.budgetUpTo': 'Up to 250 €',
   'browseTasks.filters.sortBy': 'Sort by',
   'browseTasks.filters.sort.newest': 'Newest',
   'browseTasks.filters.sort.oldest': 'Oldest',

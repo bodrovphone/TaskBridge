@@ -123,10 +123,10 @@ export class UserBusinessRules {
 
     // Hourly rate validation
     if (dto.hourlyRateBgn !== undefined) {
-      if (dto.hourlyRateBgn < 0 || dto.hourlyRateBgn > 10000) {
+      if (dto.hourlyRateBgn < 0 || dto.hourlyRateBgn > 5000) {
         return Result.error(
           new ValidationError(
-            'Hourly rate must be between 0 and 10000 BGN',
+            'Hourly rate must be between 0 and 5000 EUR',
             'hourlyRateBgn'
           )
         )

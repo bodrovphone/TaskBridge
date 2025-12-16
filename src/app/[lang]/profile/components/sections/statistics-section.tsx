@@ -45,7 +45,7 @@ export function StatisticsSection({ userRole, profile }: StatisticsSectionProps)
       .finally(() => setIsLoading(false))
   }, [])
 
-  const formatCurrency = (amount: number) => `${amount.toLocaleString()} лв.`
+  const formatCurrency = (amount: number) => `${amount.toLocaleString()} €`
 
   if (userRole === 'customer') {
     return (

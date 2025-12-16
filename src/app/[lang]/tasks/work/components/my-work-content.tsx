@@ -369,7 +369,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                         <div className="flex flex-wrap gap-4 mb-3">
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <Banknote className="w-4 h-4 text-green-600" />
-                            <span className="font-semibold">{task.agreedPrice} лв</span>
+                            <span className="font-semibold">{task.agreedPrice} €</span>
                           </div>
                           {task.startDate && selectedFilter === 'in_progress' && (
                             <div className="flex items-center gap-2 text-sm text-blue-600">
@@ -540,7 +540,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
           onConfirm={handleMarkCompletedConfirm}
           taskTitle={selectedTaskForCompletion.taskTitle}
           customerName={selectedTaskForCompletion.customer.name}
-          payment={`${selectedTaskForCompletion.agreedPrice} лв`}
+          payment={`${selectedTaskForCompletion.agreedPrice} €`}
           isLoading={isMarkingComplete}
         />
       )}

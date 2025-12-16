@@ -116,7 +116,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
       },
       myProposal: {
         price: app.proposedPrice,
-        currency: 'BGN',
+        currency: 'EUR',
         timeline: app.timeline,
         message: app.message
       },
@@ -323,7 +323,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                       <div className="flex items-center gap-2 text-sm">
                         <Banknote className="w-4 h-4 text-blue-600 flex-shrink-0" />
                         <span className="font-semibold text-blue-900">
-                          {application.proposedPrice} лв
+                          {application.proposedPrice} €
                         </span>
                       </div>
                       <div className="flex items-start gap-2 text-sm text-blue-800">
@@ -338,7 +338,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <span className="font-medium">{t('myApplications.taskBudget')}:</span>
-                      <span className="font-semibold">{application.task.budget} BGN</span>
+                      <span className="font-semibold">{application.task.budget} €</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <MapPin className="w-4 h-4 text-gray-400" />

@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
           message += `${category} (${categoryTasks.length} tasks)\n`
           const topTasks = categoryTasks.slice(0, 2)
           topTasks.forEach(task => {
-            message += `• ${task.title} - ${task.city} - ${task.budget} BGN\n`
+            message += `• ${task.title} - ${task.city} - ${task.budget} €\n`
           })
           if (categoryTasks.length > 2) {
             message += `• +${categoryTasks.length - 2} more\n`

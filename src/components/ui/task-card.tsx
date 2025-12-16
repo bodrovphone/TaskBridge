@@ -103,13 +103,13 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   if (budgetType === "unclear") {
    return t('taskCard.budget.unclear');
   } else if (budgetType === "fixed" && budgetMax) {
-   return `${budgetMax} лв`;
+   return `${budgetMax} €`;
   } else if (budgetMin && budgetMax) {
-   return `${budgetMin}-${budgetMax} лв`;
+   return `${budgetMin}-${budgetMax} €`;
   } else if (budgetMin) {
-   return `${t('taskCard.budget.from')} ${budgetMin} лв`;
+   return `${t('taskCard.budget.from')} ${budgetMin} €`;
   } else if (budgetMax) {
-   return `${t('taskCard.budget.to')} ${budgetMax} лв`;
+   return `${t('taskCard.budget.to')} ${budgetMax} €`;
   }
   return t('taskCard.budget.negotiable');
  };

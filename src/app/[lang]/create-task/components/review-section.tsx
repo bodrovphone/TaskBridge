@@ -55,13 +55,13 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
  // Format budget display
  const getBudgetDisplay = () => {
   if (deferredFormData.budgetType === 'fixed' && deferredFormData.budgetMax) {
-   return `${deferredFormData.budgetMax} лв`
+   return `${deferredFormData.budgetMax} €`
   } else if (deferredFormData.budgetMin && deferredFormData.budgetMax) {
-   return `${deferredFormData.budgetMin}-${deferredFormData.budgetMax} лв`
+   return `${deferredFormData.budgetMin}-${deferredFormData.budgetMax} €`
   } else if (deferredFormData.budgetMin) {
-   return `${t('taskCard.budget.from')} ${deferredFormData.budgetMin} лв`
+   return `${t('taskCard.budget.from')} ${deferredFormData.budgetMin} €`
   } else if (deferredFormData.budgetMax) {
-   return `${t('taskCard.budget.to')} ${deferredFormData.budgetMax} лв`
+   return `${t('taskCard.budget.to')} ${deferredFormData.budgetMax} €`
   }
   return t('taskCard.budget.negotiable')
  }

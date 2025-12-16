@@ -180,7 +180,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
 
              <div className="text-right">
               <div className="text-xl font-bold text-green-600">
-               {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
+               {task.budget > 0 ? `${task.budget} €` : t('common.negotiable', 'Договорена')}
               </div>
               {task.durationHours > 0 && (
                <div className="text-xs text-gray-500 flex items-center gap-1">
@@ -283,7 +283,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
          </div>
          <div className="text-right flex-shrink-0 ml-2">
           <div className="text-lg font-bold text-green-600 whitespace-nowrap">
-           {task.budget > 0 ? `${task.budget} ${t('common.currency.bgn', 'лв')}` : t('common.negotiable', 'Договорена')}
+           {task.budget > 0 ? `${task.budget} €` : t('common.negotiable', 'Договорена')}
           </div>
          </div>
         </div>

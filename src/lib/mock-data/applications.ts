@@ -113,7 +113,7 @@ export const mockApplications: Application[] = [
     taskId: '1',
     professional: mockProfessionals[0],
     proposedPrice: 18,
-    currency: 'BGN',
+    currency: 'EUR',
     timeline: '7 days',
     message: 'I have extensive experience walking large dogs and live nearby in Lozenets. I can walk your dog twice daily at the requested times and send photos during each walk. Available to start immediately.',
     portfolioImages: [
@@ -130,7 +130,7 @@ export const mockApplications: Application[] = [
     taskId: '1',
     professional: mockProfessionals[1],
     proposedPrice: 22,
-    currency: 'BGN',
+    currency: 'EUR',
     timeline: '7 days',
     message: 'Hello! I\'m a professional dog trainer and walker with 8 years of experience. I specialize in large breeds and can provide exercise and basic training during walks. I live in the area and am very flexible with timing.',
     portfolioImages: [
@@ -147,7 +147,7 @@ export const mockApplications: Application[] = [
     taskId: '1',
     professional: mockProfessionals[2],
     proposedPrice: 15,
-    currency: 'BGN',
+    currency: 'EUR',
     timeline: '7 days',
     message: 'I love dogs and have experience walking them. I can definitely help with your large dog. My schedule is very flexible and I can accommodate the morning and evening walks. Let me know if you have any questions.',
     portfolioImages: [
@@ -163,7 +163,7 @@ export const mockApplications: Application[] = [
     taskId: '3',
     professional: mockProfessionals[3],
     proposedPrice: 70,
-    currency: 'BGN',
+    currency: 'EUR',
     timeline: '1 day',
     message: 'Professional cleaning service with 6 years experience. I have all necessary equipment including window cleaning tools. I can clean your 75 sq.m apartment thoroughly including the terrace. Available on weekdays.',
     portfolioImages: [
@@ -180,7 +180,7 @@ export const mockApplications: Application[] = [
     taskId: '3',
     professional: mockProfessionals[4],
     proposedPrice: 65,
-    currency: 'BGN',
+    currency: 'EUR',
     timeline: '1 day',
     message: 'Experienced cleaning professional with attention to detail. I specialize in thorough apartment cleaning including windows and outdoor areas. Can provide eco-friendly cleaning products if preferred. Fair pricing and quality guaranteed.',
     portfolioImages: [

@@ -332,7 +332,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      onConfirm={handleMarkCompletedConfirm}
      taskTitle={task.title}
      customerName={task.customer?.name || task.customerName || 'Customer'}
-     payment={`${task.budgetMax || task.budget || 0} лв.`}
+     payment={`${task.budgetMax || task.budget || 0} €`}
      isLoading={isMarkingCompleted}
     />
 
@@ -412,7 +412,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      onConfirm={handleMarkCompletedConfirm}
      taskTitle={task.title}
      customerName={task.customer?.name || task.customerName || 'Customer'}
-     payment={`${task.budgetMax || task.budget || 0} лв.`}
+     payment={`${task.budgetMax || task.budget || 0} €`}
      isLoading={isMarkingCompleted}
     />
    </>

@@ -141,7 +141,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
    title: t('landing.trustIndicators.freeToUse'),
    description: t('landing.trustIndicators.freeToUseDescription'),
    color: "bg-pink-100 text-pink-600",
-   stat: "$0",
+   stat: "€0",
    statLabel: t('landing.trustStats.noFees')
   },
   {

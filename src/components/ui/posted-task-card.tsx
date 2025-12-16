@@ -422,7 +422,7 @@ function PostedTaskCard({
           <div className="flex items-center gap-2 text-sm">
             <Banknote className="w-4 h-4 text-gray-400 flex-shrink-0" />
             <span className="font-semibold text-gray-700">
-              {budgetType === 'unclear' ? t('taskCard.budget.unclear') : `${budget} лв`}
+              {budgetType === 'unclear' ? t('taskCard.budget.unclear') : `${budget} €`}
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-600">

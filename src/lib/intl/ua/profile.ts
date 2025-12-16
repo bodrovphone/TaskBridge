@@ -17,7 +17,7 @@ export const profile = {
   'profile.form.bio': 'Про себе',
   'profile.form.skills': 'Навички',
   'profile.form.experience': 'Років досвіду',
-  'profile.form.hourlyRate': 'Погодинна ставка (BGN)',
+  'profile.form.hourlyRate': 'Погодинна ставка (€)',
   'profile.form.vatNumber': 'ІПН',
   'profile.form.businessName': 'Назва компанії',
   'profile.form.website': 'Веб-сайт',

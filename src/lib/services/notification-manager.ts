@@ -143,7 +143,7 @@ function formatTelegramMessage(
       return `✅ <b>Task Completed!</b>\n\nThe task "${data.taskTitle}" has been marked as complete.\n\nPlease review and rate ${data.otherPartyRole === 'professional' ? 'the professional' : 'the customer'}.`;
 
     case 'paymentReceived':
-      return `💰 <b>Payment Received!</b>\n\nYou received ${data.amount} BGN for completing "${data.taskTitle}"\n\nCheck your balance in your profile.`;
+      return `💰 <b>Payment Received!</b>\n\nYou received ${data.amount} € for completing "${data.taskTitle}"\n\nCheck your balance in your profile.`;
 
     case 'welcome':
       return `👋 <b>Welcome to Trudify!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You'll receive instant notifications for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!`;

@@ -37,7 +37,7 @@ export interface GalleryItem {
 export interface ServiceItem {
   id: string           // Unique ID for the service
   name: string         // Service name (e.g., "Plumbing repair")
-  price: string        // Price display (e.g., "50 лв/час", "от 30 лв")
+  price: string        // Price display (e.g., "25 €/час", "от 15 €")
   description: string  // Brief description
   order: number        // Display order
 }

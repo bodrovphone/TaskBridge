@@ -171,7 +171,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-xl border border-green-200 group-hover:from-green-100 group-hover:to-emerald-100 transition-all duration-300">
          <div className="flex items-center justify-between">
           <span className="text-xs text-green-600 uppercase tracking-wide font-semibold">Hourly Rate</span>
-          <span className="font-bold text-green-700 text-lg">{professional.hourly_rate_bgn} лв/час</span>
+          <span className="font-bold text-green-700 text-lg">{professional.hourly_rate_bgn} €/час</span>
          </div>
         </div>
       )}

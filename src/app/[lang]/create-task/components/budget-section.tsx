@@ -165,7 +165,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
         }}
         onBlur={() => field.handleBlur()}
         startContent={<Wallet className="w-4 h-4 text-gray-400" />}
-        endContent={<span className="text-gray-400">лв</span>}
+        endContent={<span className="text-gray-400">€</span>}
         isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
         errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
         classNames={{
@@ -209,7 +209,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
          }}
          onBlur={() => field.handleBlur()}
          startContent={<Wallet className="w-4 h-4 text-gray-400" />}
-         endContent={<span className="text-gray-400">лв</span>}
+         endContent={<span className="text-gray-400">€</span>}
          isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
          errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
          classNames={{
@@ -256,7 +256,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
          }}
          onBlur={() => field.handleBlur()}
          startContent={<Wallet className="w-4 h-4 text-gray-400" />}
-         endContent={<span className="text-gray-400">лв</span>}
+         endContent={<span className="text-gray-400">€</span>}
          isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
          errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 && t(field.state.meta.errors[0] as string)}
          classNames={{

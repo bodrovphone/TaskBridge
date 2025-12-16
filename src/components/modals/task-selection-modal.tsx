@@ -115,7 +115,7 @@ export function TaskSelectionModal({
                           <div key={item.key} className="flex flex-col">
                             <span className="font-medium text-sm">{task.title}</span>
                             {task.budget && (
-                              <span className="text-xs text-gray-500">{task.budget} BGN</span>
+                              <span className="text-xs text-gray-500">{task.budget} €</span>
                             )}
                           </div>
                         )
@@ -141,7 +141,7 @@ export function TaskSelectionModal({
                           <div className="flex flex-col py-1">
                             <span className="font-medium">{task.title}</span>
                             {task.budget && (
-                              <span className="text-xs text-gray-500">{task.budget} BGN</span>
+                              <span className="text-xs text-gray-500">{task.budget} €</span>
                             )}
                           </div>
                         </SelectItem>
