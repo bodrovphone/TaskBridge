@@ -64,7 +64,6 @@ export interface ProfessionalRaw {
   avatar_url: string | null
 
   // Profile
-  user_type: 'customer' | 'professional' | 'both'
   city: string | null
   neighborhood: string | null
   bio: string | null

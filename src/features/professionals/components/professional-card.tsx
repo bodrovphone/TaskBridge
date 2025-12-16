@@ -96,7 +96,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
        <div className="flex items-center gap-3 mb-3">
         <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
          <Star className="text-yellow-500 fill-current" size={16} />
-         <span className="font-bold text-gray-900">{rating}</span>
+         <span className="font-bold text-gray-900">{rating.toFixed(1)}</span>
          {reviewsCount > 0 && (
            <span className="text-gray-600 text-sm">({reviewsCount})</span>
          )}

@@ -69,7 +69,6 @@ export class AuthService {
         email,
         fullName: metadata?.fullName,
         phoneNumber: metadata?.phoneNumber,
-        userType: 'customer', // Default to customer
         preferredLanguage: metadata?.locale || 'bg', // Use route locale or default to Bulgarian
       }
 

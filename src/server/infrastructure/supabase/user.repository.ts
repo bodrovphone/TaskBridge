@@ -113,25 +113,8 @@ export class UserRepository {
   }
 
   /**
-   * Find users by user type
-   */
-  async findByUserType(userType: 'customer' | 'professional' | 'both'): Promise<User[]> {
-    const supabase = await createClient()
-
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('user_type', userType)
-
-    if (error) {
-      throw new Error(`Failed to find users by type: ${error.message}`)
-    }
-
-    return (data || []).map(record => this.toDomain(record))
-  }
-
-  /**
    * Search professionals by city and service categories
+   * Professionals are identified by having professional_title, bio, and service_categories
    */
   async searchProfessionals(filters: {
     city?: string
@@ -140,10 +123,13 @@ export class UserRepository {
   }): Promise<User[]> {
     const supabase = await createClient()
 
+    // Professionals must have: title, bio, service_categories
     let query = supabase
       .from('users')
       .select('*')
-      .in('user_type', ['professional', 'both'])
+      .not('professional_title', 'is', null)
+      .not('bio', 'is', null)
+      .not('service_categories', 'is', null)
       .eq('is_email_verified', true)
       .eq('is_phone_verified', true)
       .eq('is_banned', false)
@@ -182,7 +168,6 @@ export class UserRepository {
       email: raw.email,
       fullName: raw.full_name,
       phoneNumber: raw.phone,
-      userType: raw.user_type,
       city: raw.city,
       neighborhood: raw.neighborhood,
       country: raw.country || 'Bulgaria',
@@ -281,7 +266,6 @@ export class UserRepository {
       email: user.email,
       full_name: user.fullName,
       phone: user.phoneNumber,
-      user_type: user.userType,
       city: user.city,
       neighborhood: user.neighborhood,
       country: user.country,

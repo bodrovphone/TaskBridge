@@ -9,6 +9,7 @@ import { Application } from '@/types/applications'
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { WizardDialog, type WizardStep } from '@/components/ui/wizard-dialog'
 import { useIsMobile } from '@/hooks/use-is-mobile'
@@ -242,6 +243,9 @@ export default function AcceptApplicationDialog({
           if (isSubmitting) e.preventDefault()
         }}
       >
+        <DialogTitle className="sr-only">
+          {t('acceptApplication.title')}
+        </DialogTitle>
         <AnimatePresence mode="wait">
           <WizardDialog
             key="accept-wizard"

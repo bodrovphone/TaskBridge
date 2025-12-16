@@ -4,18 +4,21 @@
  * Framework-agnostic - can be used anywhere
  */
 
-import { Result } from '@/server/shared/types/result'
-import { ValidationError, BusinessRuleError } from '@/server/shared/errors/base.error'
-import { CreateUserProfileDto, UpdateUserProfileDto } from './user.types'
-import { User } from './user.entity'
+import { Result } from '@/server/shared/types/result';
+import {
+  ValidationError,
+  BusinessRuleError,
+} from '@/server/shared/errors/base.error';
+import { CreateUserProfileDto, UpdateUserProfileDto } from './user.types';
+import { User } from './user.entity';
 
 export class UserBusinessRules {
   /**
    * Validate email format
    */
   static isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   /**
@@ -23,7 +26,7 @@ export class UserBusinessRules {
    */
   static isValidPhoneNumber(phone: string): boolean {
     // Accept any non-empty phone number format for now
-    return phone.trim().length > 0
+    return phone.trim().length > 0;
   }
 
   /**
@@ -31,26 +34,26 @@ export class UserBusinessRules {
    */
   static isValidBulgarianVAT(vat: string): boolean {
     // Bulgarian VAT: 9 or 10 digits
-    const vatRegex = /^\d{9,10}$/
-    return vatRegex.test(vat)
+    const vatRegex = /^\d{9,10}$/;
+    return vatRegex.test(vat);
   }
 
   /**
    * Validate full name
    */
   static isValidFullName(name: string): boolean {
-    return name.trim().length >= 2 && name.trim().length <= 100
+    return name.trim().length >= 2 && name.trim().length <= 100;
   }
 
   /**
    * Validate profile creation
    */
-  static validateProfileCreation(dto: CreateUserProfileDto): Result<void, Error> {
+  static validateProfileCreation(
+    dto: CreateUserProfileDto
+  ): Result<void, Error> {
     // Email validation
     if (!dto.email || !this.isValidEmail(dto.email)) {
-      return Result.error(
-        new ValidationError('Invalid email format', 'email')
-      )
+      return Result.error(new ValidationError('Invalid email format', 'email'));
     }
 
     // Full name validation (if provided)
@@ -60,25 +63,17 @@ export class UserBusinessRules {
           'Full name must be between 2 and 100 characters',
           'fullName'
         )
-      )
+      );
     }
 
     // Phone number validation (if provided)
     if (dto.phoneNumber && !this.isValidPhoneNumber(dto.phoneNumber)) {
       return Result.error(
         new ValidationError('Invalid phone number format', 'phoneNumber')
-      )
+      );
     }
 
-    // User type validation
-    const validUserTypes = ['customer', 'professional', 'both']
-    if (dto.userType && !validUserTypes.includes(dto.userType)) {
-      return Result.error(
-        new ValidationError('Invalid user type', 'userType')
-      )
-    }
-
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 
   /**
@@ -92,21 +87,27 @@ export class UserBusinessRules {
           'Full name must be between 2 and 100 characters',
           'fullName'
         )
-      )
+      );
     }
 
     // Phone number validation
-    if (dto.phoneNumber !== undefined && !this.isValidPhoneNumber(dto.phoneNumber)) {
+    if (
+      dto.phoneNumber !== undefined &&
+      !this.isValidPhoneNumber(dto.phoneNumber)
+    ) {
       return Result.error(
         new ValidationError('Invalid phone number format', 'phoneNumber')
-      )
+      );
     }
 
     // VAT number validation
-    if (dto.vatNumber !== undefined && !this.isValidBulgarianVAT(dto.vatNumber)) {
+    if (
+      dto.vatNumber !== undefined &&
+      !this.isValidBulgarianVAT(dto.vatNumber)
+    ) {
       return Result.error(
         new ValidationError('Invalid Bulgarian VAT number format', 'vatNumber')
-      )
+      );
     }
 
     // Years of experience validation
@@ -117,7 +118,7 @@ export class UserBusinessRules {
             'Years of experience must be between 0 and 70',
             'yearsExperience'
           )
-        )
+        );
       }
     }
 
@@ -129,98 +130,76 @@ export class UserBusinessRules {
             'Hourly rate must be between 0 and 5000 EUR',
             'hourlyRateBgn'
           )
-        )
+        );
       }
     }
 
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 
   /**
-   * Check if user can upgrade to professional
+   * Check if user can become a professional (complete their professional profile)
    */
-  static canUpgradeToProfessional(user: User): Result<void, Error> {
+  static canBecomeProfessional(user: User): Result<void, Error> {
     if (user.isBanned) {
       return Result.error(
-        new BusinessRuleError('Banned users cannot upgrade to professional')
-      )
+        new BusinessRuleError('Banned users cannot become professionals')
+      );
     }
 
     if (!user.isEmailVerified) {
       return Result.error(
-        new BusinessRuleError('Email must be verified before upgrading to professional')
-      )
+        new BusinessRuleError('Email must be verified to become a professional')
+      );
     }
 
-    if (!user.isPhoneVerified) {
+    if (user.hasProfessionalProfile()) {
       return Result.error(
-        new BusinessRuleError('Phone must be verified before upgrading to professional')
-      )
+        new BusinessRuleError('User already has a professional profile')
+      );
     }
 
-    if (user.userType === 'professional' || user.userType === 'both') {
-      return Result.error(
-        new BusinessRuleError('User is already a professional')
-      )
-    }
-
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 
   /**
-   * Check if user can create a task
+   * Check if user can create a task (any verified user can create tasks)
    */
   static canCreateTask(user: User): Result<void, Error> {
     if (user.isBanned) {
       return Result.error(
         new BusinessRuleError('Banned users cannot create tasks')
-      )
+      );
     }
 
     if (!user.isEmailVerified) {
       return Result.error(
         new BusinessRuleError('Email must be verified to create tasks')
-      )
+      );
     }
 
-    if (user.userType === 'professional') {
-      return Result.error(
-        new BusinessRuleError('Professional-only accounts cannot create tasks')
-      )
-    }
-
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 
   /**
-   * Check if user can apply to tasks
+   * Check if user can apply to tasks (must have professional profile)
    */
   static canApplyToTask(user: User): Result<void, Error> {
     if (user.isBanned) {
       return Result.error(
         new BusinessRuleError('Banned users cannot apply to tasks')
-      )
+      );
     }
 
-    if (!user.isEmailVerified) {
+    if (!user.hasProfessionalProfile()) {
       return Result.error(
-        new BusinessRuleError('Email must be verified to apply to tasks')
-      )
+        new BusinessRuleError(
+          'You need a complete professional profile to apply to tasks'
+        )
+      );
     }
 
-    if (!user.isPhoneVerified) {
-      return Result.error(
-        new BusinessRuleError('Phone must be verified to apply to tasks')
-      )
-    }
-
-    if (user.userType === 'customer') {
-      return Result.error(
-        new BusinessRuleError('Customer-only accounts cannot apply to tasks')
-      )
-    }
-
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 
   /**
@@ -230,16 +209,16 @@ export class UserBusinessRules {
     if (user.isBanned) {
       return Result.error(
         new BusinessRuleError('Banned users cannot leave reviews')
-      )
+      );
     }
 
     if (!user.isEmailVerified) {
       return Result.error(
         new BusinessRuleError('Email must be verified to leave reviews')
-      )
+      );
     }
 
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 
   /**
@@ -252,7 +231,7 @@ export class UserBusinessRules {
           'At least one service category must be selected',
           'serviceCategories'
         )
-      )
+      );
     }
 
     if (categories.length > 10) {
@@ -261,20 +240,20 @@ export class UserBusinessRules {
           'Maximum 10 service categories allowed',
           'serviceCategories'
         )
-      )
+      );
     }
 
     // Check for duplicates
-    const uniqueCategories = new Set(categories)
+    const uniqueCategories = new Set(categories);
     if (uniqueCategories.size !== categories.length) {
       return Result.error(
         new ValidationError(
           'Duplicate service categories not allowed',
           'serviceCategories'
         )
-      )
+      );
     }
 
-    return Result.ok(undefined)
+    return Result.ok(undefined);
   }
 }

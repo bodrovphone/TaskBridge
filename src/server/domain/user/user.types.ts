@@ -3,8 +3,6 @@
  * Pure TypeScript types with no framework dependencies
  */
 
-export type UserType = 'customer' | 'professional' | 'both'
-
 export type PreferredLanguage = 'en' | 'bg' | 'ru' | 'ua'
 
 export type PreferredContact = 'email' | 'phone' | 'sms' | 'telegram'
@@ -64,7 +62,6 @@ export interface CreateUserProfileDto {
   email: string
   fullName?: string
   phoneNumber?: string
-  userType?: UserType
   preferredLanguage?: PreferredLanguage
   city?: string
   country?: string
@@ -117,7 +114,6 @@ export interface UserProfile {
   email: string
   fullName: string | null
   phoneNumber: string | null
-  userType: UserType
 
   // Location
   city: string | null

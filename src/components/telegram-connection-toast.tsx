@@ -63,10 +63,12 @@ export function TelegramConnectionToast() {
                 onClick={() => {
                   // Mark as dismissed
                   localStorage.setItem(TELEGRAM_TOAST_DISMISSED_KEY, Date.now().toString());
-                  // Navigate to appropriate profile based on user type
-                  const profileType = profile?.userType === 'professional' || profile?.userType === 'both'
-                    ? 'professional'
-                    : 'customer';
+                  // Navigate to appropriate profile based on whether user has professional profile
+                  const hasProfessionalProfile = profile?.professionalTitle &&
+                    profile?.bio &&
+                    profile?.serviceCategories &&
+                    profile.serviceCategories.length > 0;
+                  const profileType = hasProfessionalProfile ? 'professional' : 'customer';
                   const targetUrl = `/${currentLocale}/profile/${profileType}?openSettings=telegram`;
                   // Dismiss the toast and navigate
                   toastInstance.dismiss();

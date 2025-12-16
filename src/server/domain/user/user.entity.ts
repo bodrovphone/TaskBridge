@@ -5,7 +5,6 @@
  */
 
 import {
-  UserType,
   UserProfile,
   CreateUserProfileDto,
   PreferredLanguage,
@@ -25,7 +24,6 @@ export class User {
     public email: string,
     public fullName: string | null,
     public phoneNumber: string | null,
-    public userType: UserType,
     public city: string | null,
     public neighborhood: string | null,
     public country: string,
@@ -101,7 +99,6 @@ export class User {
       dto.email,
       dto.fullName || null,
       dto.phoneNumber || null,
-      dto.userType || 'customer',
       dto.city || null,
       null, // neighborhood
       dto.country || 'Bulgaria',
@@ -169,7 +166,6 @@ export class User {
       profile.email,
       profile.fullName,
       profile.phoneNumber,
-      profile.userType,
       profile.city,
       profile.neighborhood,
       profile.country,
@@ -237,7 +233,6 @@ export class User {
       email: this.email,
       fullName: this.fullName,
       phoneNumber: this.phoneNumber,
-      userType: this.userType,
       city: this.city,
       neighborhood: this.neighborhood,
       country: this.country,
@@ -301,21 +296,20 @@ export class User {
   // ============================================
 
   /**
-   * Check if user can create a task
+   * Check if user can create a task (any verified user can create tasks)
    */
   canCreateTask(): boolean {
     if (this.isBanned) return false
-    if (this.userType === 'professional') return false
     return this.isEmailVerified
   }
 
   /**
-   * Check if user can apply to tasks
+   * Check if user can apply to tasks (must have professional profile)
+   * Professional profile requires: title, bio, service categories
    */
   canApplyToTask(): boolean {
     if (this.isBanned) return false
-    if (this.userType === 'customer') return false
-    return this.isEmailVerified && this.isPhoneVerified
+    return this.hasProfessionalProfile()
   }
 
   /**
@@ -327,42 +321,32 @@ export class User {
   }
 
   /**
+   * Check if user has a complete professional profile
+   * Requires: professional_title, bio (>= 20 chars), service_categories (>= 1)
+   */
+  hasProfessionalProfile(): boolean {
+    const hasTitle = this.professionalTitle && this.professionalTitle.length >= 3
+    const hasBio = this.bio && this.bio.length >= 20
+    const hasCategories = this.serviceCategories && this.serviceCategories.length > 0
+    return !!(hasTitle && hasBio && hasCategories)
+  }
+
+  /**
    * Check if user is verified professional
    */
   isVerifiedProfessional(): boolean {
     return (
-      (this.userType === 'professional' || this.userType === 'both') &&
+      this.hasProfessionalProfile() &&
       this.isEmailVerified &&
       this.isPhoneVerified
     )
   }
 
   /**
-   * Check if user is verified customer
+   * Check if user is verified customer (any verified user)
    */
   isVerifiedCustomer(): boolean {
-    return (
-      (this.userType === 'customer' || this.userType === 'both') &&
-      this.isEmailVerified
-    )
-  }
-
-  /**
-   * Upgrade customer to professional
-   */
-  upgradeToProfessional(): void {
-    if (!this.isEmailVerified) {
-      throw new BusinessRuleError('Email must be verified before upgrading to professional')
-    }
-
-    if (!this.isPhoneVerified) {
-      throw new BusinessRuleError('Phone must be verified before upgrading to professional')
-    }
-
-    if (this.userType === 'customer') {
-      this.userType = 'both'
-      this.updatedAt = new Date()
-    }
+    return this.isEmailVerified
   }
 
   /**

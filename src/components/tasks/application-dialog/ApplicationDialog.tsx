@@ -8,6 +8,7 @@ import { AnimatePresence } from 'framer-motion'
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { useAuth } from '@/features/auth'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
@@ -155,6 +156,9 @@ export default function ApplicationDialog({
           if (isSubmitting) e.preventDefault()
         }}
       >
+        <DialogTitle className="sr-only">
+          {t('applications.apply.title')}
+        </DialogTitle>
         <AnimatePresence mode="wait">
           {!isSuccess ? (
             <ApplicationFormState
