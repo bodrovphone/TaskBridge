@@ -1,8 +1,8 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Button, Popover, PopoverTrigger, PopoverContent, Input } from '@nextui-org/react'
-import { Grid3X3, ChevronDown, Search } from 'lucide-react'
+import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
+import { Grid3X3, ChevronDown } from 'lucide-react'
 import { useState, useMemo } from 'react'
 import { getAllSubcategoriesWithLabels, getMainCategoryById, getCategoryLabelBySlug } from '@/features/categories'
 
@@ -14,7 +14,6 @@ interface CategoryFilterProps {
 export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
 
   // Get all subcategories (not main categories) since both tasks and professionals use subcategories
   const allCategories = useMemo(() => {
@@ -33,24 +32,12 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
     });
   }, [t])
 
-  // Filter categories based on search
-  const filteredCategories = useMemo(() => {
-    if (!searchQuery.trim()) return allCategories
-
-    const lowerQuery = searchQuery.toLowerCase()
-    return allCategories.filter(cat =>
-      cat.title.toLowerCase().includes(lowerQuery) ||
-      cat.slug.toLowerCase().includes(lowerQuery)
-    )
-  }, [allCategories, searchQuery])
-
   const handleSelect = (categorySlug: string) => {
     if (value === categorySlug) {
       onChange(undefined) // Deselect if clicking same category
     } else {
       onChange(categorySlug)
     }
-    setSearchQuery('') // Reset search on selection
     setIsOpen(false)
   }
 
@@ -90,21 +77,9 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
       </PopoverTrigger>
       <PopoverContent className="w-96 p-3">
         <div className="space-y-2">
-          {/* Search Input */}
-          <Input
-            placeholder={t('browseTasks.filters.searchCategory', 'Search categories...')}
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-            startContent={<Search className="w-4 h-4 text-gray-400" />}
-            size="sm"
-            classNames={{
-              base: 'mb-2',
-            }}
-          />
-
           {/* Categories List */}
           <div className="max-h-96 overflow-y-auto space-y-1">
-            {filteredCategories.map((category) => {
+            {allCategories.map((category) => {
               const Icon = category.icon
               const isSelected = value === category.slug
 
@@ -132,12 +107,6 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
                 </Button>
               )
             })}
-
-            {filteredCategories.length === 0 && (
-              <div className="text-center text-sm text-gray-500 py-4">
-                {t('browseTasks.filters.noCategoriesFound', 'No categories found')}
-              </div>
-            )}
           </div>
 
           {value && (
@@ -148,7 +117,6 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
                 className="w-full justify-start text-red-600 hover:bg-red-50"
                 onPress={() => {
                   onChange(undefined)
-                  setSearchQuery('')
                   setIsOpen(false)
                 }}
               >

@@ -7,7 +7,7 @@ import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-e
 import { Logo } from "@/components/common/logo";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useTranslation } from 'react-i18next';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
@@ -72,6 +72,7 @@ const POPULAR_CATEGORY_SLUGS = [
 function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  const { t, ready } = useTranslation();
  const pathname = usePathname();
+ const router = useRouter();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
  const isDesktop = useIsDesktop();
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
@@ -199,7 +200,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  ];
 
  const handleCategoryClick = (category: string) => {
-  window.location.href = `/${currentLocale}/browse-tasks?category=${category}`;
+  router.push(`/${currentLocale}/browse-tasks?category=${category}`);
  };
 
  // Show skeleton while translations are loading

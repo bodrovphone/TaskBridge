@@ -71,9 +71,10 @@ export function useProfessionalFilters() {
 
   /**
    * Update a single filter and sync with URL
+   * @param skipScrollRestore - Set to true when scrollToResults will be called after (avoids race condition)
    */
   const updateFilter = useCallback(
-    (key: keyof ProfessionalFilters, value: any) => {
+    (key: keyof ProfessionalFilters, value: any, skipScrollRestore = false) => {
       const newFilters = { ...filters, [key]: value }
 
       // Reset to page 1 when filters change (except when changing page)
@@ -95,15 +96,18 @@ export function useProfessionalFilters() {
         }
       })
 
-      // Save scroll position, update URL, then restore scroll
-      const scrollY = window.scrollY
-      isUpdatingRef.current = true
+      // Update URL without scroll reset
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-      // Restore scroll position after a micro-task
-      requestAnimationFrame(() => {
-        window.scrollTo(0, scrollY)
-        isUpdatingRef.current = false
-      })
+
+      // Only restore scroll position if not about to scroll to results
+      if (!skipScrollRestore) {
+        const scrollY = window.scrollY
+        isUpdatingRef.current = true
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollY)
+          isUpdatingRef.current = false
+        })
+      }
     },
     [filters, pathname, router]
   )

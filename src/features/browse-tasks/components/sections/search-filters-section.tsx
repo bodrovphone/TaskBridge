@@ -112,12 +112,18 @@ export default function SearchFiltersSection({
   updateFilter('q', undefined);
  }, [updateFilter]);
 
- // Handle Enter key for text search
+ // Handle Enter key for text search (desktop keyboards)
  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
   if (e.key === 'Enter') {
    e.preventDefault();
    handleTextSearch();
   }
+ }, [handleTextSearch]);
+
+ // Handle form submit (mobile keyboards - more reliable than keyDown on Android)
+ const handleFormSubmit = useCallback((e: React.FormEvent) => {
+  e.preventDefault();
+  handleTextSearch();
  }, [handleTextSearch]);
 
  // Get popular subcategories (not main categories) since tasks store subcategories
@@ -130,10 +136,6 @@ export default function SearchFiltersSection({
    'plumber',                  // Handyman
    'electrician',              // Handyman
    'apartment-renovation',     // Finishing Work
-   'computer-help',            // Appliance Repair
-   'furniture-assembly',       // Moving & Assembly
-   'large-appliance-repair',   // Appliance Repair
-   'language-tutoring'         // Lessons & Training
   ];
 
   return allSubcategories
@@ -149,7 +151,7 @@ export default function SearchFiltersSection({
 
  const popularCities = useMemo(() =>
   getCitiesWithLabels(t)
-   .slice(0, 4) // Top 4 cities: Sofia, Plovdiv, Varna, Burgas
+   .slice(0, 2) // Top 2 cities: Sofia, Plovdiv
    .filter(city => city.slug !== filters.city), // Hide if selected
   [t, filters.city]
  );
@@ -213,7 +215,8 @@ export default function SearchFiltersSection({
 
  // Handle category selection
  const handleCategorySelect = (categorySlug: string) => {
-  updateFilter('category', categorySlug);
+  // Pass skipScrollRestore=true to avoid race condition with scrollToResults
+  updateFilter('category', categorySlug, false, true);
   setSearchQuery(''); // Clear search input
   setShowSuggestions(false);
   scrollToResults();
@@ -221,7 +224,8 @@ export default function SearchFiltersSection({
 
  // Handle city selection
  const handleCitySelect = (citySlug: string) => {
-  updateFilter('city', citySlug);
+  // Pass skipScrollRestore=true to avoid race condition with scrollToResults
+  updateFilter('city', citySlug, false, true);
   setSearchQuery(''); // Clear search input
   setShowSuggestions(false);
   scrollToResults();
@@ -318,7 +322,7 @@ export default function SearchFiltersSection({
          </Chip>
         </div>
        )}
-       <div className="relative flex flex-row gap-2">
+       <form onSubmit={handleFormSubmit} className="relative flex flex-row gap-2">
         <div className="relative flex-1">
          <Search
            className="absolute left-3 sm:left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -326,6 +330,8 @@ export default function SearchFiltersSection({
            size={18}
          />
          <Input
+          type="search"
+          enterKeyHint="search"
           size="lg"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -443,18 +449,18 @@ export default function SearchFiltersSection({
         </div>
         {/* Search Button - hidden on mobile, visible on desktop */}
         <Button
+         type="submit"
          size="lg"
          color="primary"
          className="hidden sm:flex h-16 px-8 font-semibold text-lg rounded-2xl"
          isDisabled={searchQuery.trim().length < 2}
-         onPress={handleTextSearch}
         >
          <Search size={20} className="mr-2" />
          {t('browseTasks.search.searchButton', 'Search')}
         </Button>
-       </div>
+       </form>
 
-       {/* Popular Categories & Cities - show 3 on mobile, all on desktop */}
+       {/* Popular Categories & Cities */}
        <div className="mt-4 sm:mt-6">
         <p className="text-sm text-gray-600 mb-2 sm:mb-3 font-medium">{t('browseTasks.search.popular')}:</p>
         <div className="flex flex-wrap gap-2 sm:gap-3">

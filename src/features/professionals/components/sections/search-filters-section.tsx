@@ -45,7 +45,6 @@ export default function SearchFiltersSection({
       'plumber',                  // Handyman
       'electrician',              // Handyman
       'apartment-renovation',     // Finishing Work
-      'computer-help',            // Appliance Repair
     ];
 
     return allSubcategories
@@ -61,7 +60,7 @@ export default function SearchFiltersSection({
 
   const popularCities = useMemo(() =>
     getCitiesWithLabels(t)
-      .slice(0, 4) // Top 4 cities: Sofia, Plovdiv, Varna, Burgas
+      .slice(0, 2) // Top 2 cities: Sofia, Plovdiv
       .filter(city => city.slug !== filters.city), // Hide if selected
     [t, filters.city]
   );
@@ -126,7 +125,8 @@ export default function SearchFiltersSection({
 
   // Handle category selection
   const handleCategorySelect = (categorySlug: string) => {
-    updateFilter('category', categorySlug);
+    // Pass skipScrollRestore=true to avoid race condition with scrollToResults
+    updateFilter('category', categorySlug, true);
     setSearchQuery(''); // Clear search input
     setShowSuggestions(false);
     scrollToResults();
@@ -134,7 +134,8 @@ export default function SearchFiltersSection({
 
   // Handle city selection
   const handleCitySelect = (citySlug: string, cityLabel?: string) => {
-    updateFilter('city', citySlug);
+    // Pass skipScrollRestore=true to avoid race condition with scrollToResults
+    updateFilter('city', citySlug, true);
     setSearchQuery(''); // Clear search input
     setShowSuggestions(false);
     // Save to localStorage if we have the label
