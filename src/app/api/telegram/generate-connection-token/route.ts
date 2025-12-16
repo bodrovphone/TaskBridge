@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import crypto from 'crypto';
 
 export async function POST(request: NextRequest) {
@@ -26,7 +26,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for token generation
+    const supabase = createAdminClient();
 
     // Verify user exists
     const { data: user, error: userError } = await supabase
