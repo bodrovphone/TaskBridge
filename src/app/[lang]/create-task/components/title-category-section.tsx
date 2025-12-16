@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Button, Card, CardBody } from '@nextui-org/react'
 import { Check, X, ChevronDown, Sparkles } from 'lucide-react'
@@ -36,6 +36,7 @@ export function TitleCategorySection({
 }: TitleCategorySectionProps) {
   const { t, i18n } = useTranslation()
   const [title, setTitle] = useState(initialTitle)
+  const deferredTitle = useDeferredValue(title) // Deferred value for expensive search
   const [flowState, setFlowState] = useState<FlowState>(
     initialSubcategory ? 'confirmed' : 'entering_title'
   )
@@ -49,9 +50,9 @@ export function TitleCategorySection({
   const [manualSelectionTriggered, setManualSelectionTriggered] = useState(false)
   const [hasSelectedCategory, setHasSelectedCategory] = useState(!!initialSubcategory)
 
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const titleForFeedbackRef = useRef<string>('')
   const [titleTouched, setTitleTouched] = useState(false)
+  const lastSearchedRef = useRef<string>('') // Track last searched value to avoid duplicates
 
   // Title validation
   const isTitleTooShort = title.length > 0 && title.length < 10
@@ -68,69 +69,81 @@ export function TitleCategorySection({
     form.setFieldValue('title', title)
   }, [title, form])
 
-  // Search for categories after user stops typing
-  const searchForCategory = useCallback(async (query: string) => {
-    if (query.trim().length < 3) {
+  // Category search triggered by deferred title value
+  // useDeferredValue ensures typing stays responsive while search is deferred
+  useEffect(() => {
+    const trimmedQuery = deferredTitle.trim()
+
+    // Skip if user already selected a category
+    if (hasSelectedCategory) return
+
+    // Skip if we already searched this exact value
+    if (lastSearchedRef.current === trimmedQuery) return
+
+    // Safety checks
+    if (trimmedQuery.length < 3 || trimmedQuery.length > 200) {
       return
     }
 
-    setIsSearching(true)
-    titleForFeedbackRef.current = query.trim()
-
-    try {
-      const results = await searchCategoriesAsync(query, t, i18n.language)
-
-      // Get top 3 matches that have mainCategoryId
-      const topMatches = results
-        .filter(r => r.mainCategoryId)
-        .slice(0, 3)
-        .map(r => ({
-          slug: r.value,
-          label: r.label,
-          mainCategoryId: r.mainCategoryId!,
-        }))
-
-      if (topMatches.length > 0) {
-        // Found matches
-        setSuggestedCategories(topMatches)
-        setFlowState('suggesting')
-      } else {
-        // No good match found
-        setFlowState('manual_selection')
-        setManualSelectionTriggered(true)
-      }
-    } catch (error) {
-      console.error('Category search error:', error)
-      setFlowState('manual_selection')
-      setManualSelectionTriggered(true)
-    } finally {
-      setIsSearching(false)
+    // Skip search if query has no letters (gibberish like "1111111")
+    const hasLetters = /[a-zA-Zа-яА-ЯёЁ]/u.test(trimmedQuery)
+    if (!hasLetters) {
+      return
     }
-  }, [t, i18n.language])
 
-  // Debounced search trigger
-  const handleTitleChange = useCallback((value: string) => {
-    setTitle(value)
+    // Mark as searched to avoid duplicate searches
+    lastSearchedRef.current = trimmedQuery
+    titleForFeedbackRef.current = trimmedQuery
 
-    // If we're in 'suggesting' state and user hasn't selected yet, reset to allow re-search
-    if (flowState === 'suggesting' && !hasSelectedCategory) {
+    // Reset state if we were suggesting before
+    if (flowState === 'suggesting') {
       setFlowState('entering_title')
       setSuggestedCategories([])
     }
 
-    // Clear previous timeout
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current)
-    }
+    setIsSearching(true)
 
-    // Only run auto-suggestion if user hasn't selected a category yet
-    // Once selected, user can change category manually via "Change" button
-    if (!hasSelectedCategory && value.trim().length >= 3) {
-      searchTimeoutRef.current = setTimeout(() => {
-        searchForCategory(value)
-      }, 800)
+    // Run the search
+    searchCategoriesAsync(deferredTitle, t, i18n.language)
+      .then((results) => {
+        // Get top 3 matches that have mainCategoryId
+        const topMatches = results
+          .filter(r => r.mainCategoryId)
+          .slice(0, 3)
+          .map(r => ({
+            slug: r.value,
+            label: r.label,
+            mainCategoryId: r.mainCategoryId!,
+          }))
+
+        if (topMatches.length > 0) {
+          setSuggestedCategories(topMatches)
+          setFlowState('suggesting')
+        } else {
+          setFlowState('manual_selection')
+          setManualSelectionTriggered(true)
+        }
+      })
+      .catch((error) => {
+        console.error('Category search error:', error)
+        setFlowState('manual_selection')
+        setManualSelectionTriggered(true)
+      })
+      .finally(() => {
+        setIsSearching(false)
+      })
+  }, [deferredTitle, hasSelectedCategory, flowState, t, i18n.language])
+
+  // Handle title input changes - just update state, search is handled by useEffect above
+  const handleTitleChange = useCallback((value: string) => {
+    setTitle(value)
+
+    // If we're in 'suggesting' state and user is typing more, reset to allow re-search
+    if (flowState === 'suggesting' && !hasSelectedCategory) {
+      setFlowState('entering_title')
+      setSuggestedCategories([])
     }
-  }, [flowState, hasSelectedCategory, searchForCategory])
+  }, [flowState, hasSelectedCategory])
 
   // User confirms suggested category
   const handleConfirmSuggestion = useCallback((index: number) => {

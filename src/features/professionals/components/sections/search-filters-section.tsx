@@ -77,13 +77,19 @@ export default function SearchFiltersSection({
 
   // Search categories and cities based on input
   const categorySuggestions = useMemo(() => {
-    if (!searchQuery.trim()) return [];
+    const trimmed = searchQuery.trim();
+    if (!trimmed || trimmed.length > 200) return [];
+    // Skip if no letters (gibberish like "1111111")
+    if (!/[a-zA-Zа-яА-ЯёЁ]/u.test(trimmed)) return [];
     return searchCategories(searchQuery, t).slice(0, 6); // Limit to 6 categories
   }, [searchQuery, t]);
 
   // Search cities locally (instant, no API)
   const citySuggestions = useMemo(() => {
-    if (!searchQuery.trim() || searchQuery.length < 1) return [];
+    const trimmed = searchQuery.trim();
+    if (!trimmed || trimmed.length < 1 || trimmed.length > 200) return [];
+    // Skip if no letters
+    if (!/[a-zA-Zа-яА-ЯёЁ]/u.test(trimmed)) return [];
     return searchCities(searchQuery, t).slice(0, 6); // Limit to 6 cities
   }, [searchQuery, t]);
 

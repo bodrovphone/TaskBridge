@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
 import { Search, X } from "lucide-react";
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue } from "react";
 import { searchCategoriesAsync, preloadCategoryKeywords, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
 import { searchCities, getCitiesWithLabels } from '@/features/cities';
 import { useTaskFilters } from '@/app/[lang]/browse-tasks/hooks/use-task-filters';
@@ -23,6 +23,7 @@ export default function SearchFiltersSection({
  const { filters, updateFilter } = useTaskFilters();
  // Initialize searchQuery from URL filter if present
  const [searchQuery, setSearchQuery] = useState(filters.q || '');
+ const deferredSearchQuery = useDeferredValue(searchQuery); // Deferred for expensive search
  const [currentTypingIndex, setCurrentTypingIndex] = useState(0);
  const [displayText, setDisplayText] = useState('');
  const [isDeleting, setIsDeleting] = useState(false);
@@ -156,19 +157,42 @@ export default function SearchFiltersSection({
  const currentExamples = typingExamples;
 
  // Search categories async (with lazy-loaded keywords)
+ // Uses deferredSearchQuery to keep typing responsive
  useEffect(() => {
-  if (!searchQuery.trim()) {
+  const trimmedQuery = deferredSearchQuery.trim();
+
+  if (!trimmedQuery) {
    setCategorySuggestions([]);
    return;
   }
+
+  // Safety: skip if too short or too long
+  if (trimmedQuery.length < 2 || trimmedQuery.length > 200) {
+   setCategorySuggestions([]);
+   return;
+  }
+
+  // Safety: skip if no letters (gibberish like "1111111")
+  const hasLetters = /[a-zA-Zа-яА-ЯёЁ]/u.test(trimmedQuery);
+  if (!hasLetters) {
+   setCategorySuggestions([]);
+   return;
+  }
+
   let cancelled = false;
-  searchCategoriesAsync(searchQuery, t, i18n.language).then(results => {
-   if (!cancelled) {
-    setCategorySuggestions(results.slice(0, 6));
-   }
-  });
+  searchCategoriesAsync(deferredSearchQuery, t, i18n.language)
+   .then(results => {
+    if (!cancelled) {
+     setCategorySuggestions(results.slice(0, 6));
+    }
+   })
+   .catch(() => {
+    if (!cancelled) {
+     setCategorySuggestions([]);
+    }
+   });
   return () => { cancelled = true; };
- }, [searchQuery, t, i18n.language]);
+ }, [deferredSearchQuery, t, i18n.language]);
 
  // Search cities (sync - no heavy data)
  const citySuggestions = searchQuery.trim() ? searchCities(searchQuery, t) : [];
