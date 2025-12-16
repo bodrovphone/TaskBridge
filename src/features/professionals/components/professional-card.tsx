@@ -88,8 +88,8 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
       </LocaleLink>
 
       <div className="flex-1 min-w-0">
-       <LocaleLink href={`/professionals/${professional.id}`}>
-        <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-blue-700 hover:text-blue-600 transition-colors truncate cursor-pointer">
+       <LocaleLink href={`/professionals/${professional.id}`} className="block">
+        <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-blue-700 hover:text-blue-600 transition-colors cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap w-full max-w-[180px] sm:max-w-[220px]">
          {name}
         </h3>
        </LocaleLink>
@@ -131,16 +131,18 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
       {categories.slice(0, 2).map((category, index) => (
        <div
         key={`${professional.id}-category-${index}`}
-        className="animate-in fade-in zoom-in duration-300 max-w-full"
+        className="animate-in fade-in zoom-in duration-300 max-w-[calc(50%-4px)]"
         style={{ animationDelay: `${0.1 + (index * 0.1)}s`, animationFillMode: 'backwards' }}
        >
         <Chip
          size="sm"
          variant="flat"
          color="primary"
-         className="font-medium bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-colors max-w-full truncate"
+         className="font-medium bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-colors max-w-full"
         >
-         {getCategoryLabelBySlug(category, t)}
+         <span className="truncate block max-w-[120px]">
+          {getCategoryLabelBySlug(category, t)}
+         </span>
         </Chip>
        </div>
       ))}
