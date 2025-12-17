@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/react'
 import { CheckCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface TaskCompletionButtonProps {
   taskStatus: 'open' | 'in_progress' | 'pending_professional_confirmation' | 'pending_customer_confirmation' | 'completed' | 'cancelled'
@@ -21,7 +21,7 @@ export function TaskCompletionButton({
   isLoading = false,
   className = ''
 }: TaskCompletionButtonProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   // Only show button for in_progress tasks or pending confirmation states
   if (taskStatus === 'completed' || taskStatus === 'cancelled' || taskStatus === 'open') {

@@ -2,7 +2,7 @@
 
 import { Card, CardBody } from '@nextui-org/react'
 import { AlertTriangle, ShieldAlert } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 export type WarningType = 'negative_reviews' | 'multiple_reports'
 
@@ -12,7 +12,7 @@ interface SafetyWarningBannerProps {
 }
 
 export function SafetyWarningBanner({ type, className = '' }: SafetyWarningBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const config = {
     negative_reviews: {

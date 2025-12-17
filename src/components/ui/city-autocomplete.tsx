@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Input, Chip } from '@nextui-org/react'
 import { MapPin, Search, Clock, Home, X } from 'lucide-react'
 import { useSearchLocationPreference } from '@/hooks/use-search-location-preference'
@@ -39,7 +39,7 @@ export function CityAutocomplete({
   isInvalid,
   errorMessage,
 }: CityAutocompleteProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { profile } = useAuth()
   const { lastSearched, saveLocation } = useSearchLocationPreference()
 
@@ -194,7 +194,7 @@ export function CityAutocomplete({
       <Input
         ref={inputRef}
         type="text"
-        placeholder={placeholder || t('cityAutocomplete.placeholder', 'Search for a city...')}
+        placeholder={placeholder || t('cityAutocomplete.placeholder')}
         value={value ? displayValue : inputValue}
         onValueChange={(newValue) => {
           // If user is typing over a selected value, clear selection
@@ -255,7 +255,7 @@ export function CityAutocomplete({
                 >
                   <Clock className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-600">
-                    {t('cityAutocomplete.lastSearched', 'Last searched:')}
+                    {t('cityAutocomplete.lastSearched')}
                   </span>
                   <span className="font-medium text-gray-900">{lastSearchedCity.label}</span>
                 </button>
@@ -270,7 +270,7 @@ export function CityAutocomplete({
                 >
                   <Home className="w-4 h-4 text-blue-500" />
                   <span className="text-sm text-gray-600">
-                    {t('cityAutocomplete.yourCity', 'Your city:')}
+                    {t('cityAutocomplete.yourCity')}
                   </span>
                   <span className="font-medium text-gray-900">{profileCity.label}</span>
                 </button>
@@ -280,7 +280,7 @@ export function CityAutocomplete({
               {showPopularCities && (
                 <div className="space-y-2">
                   <span className="text-xs text-gray-500 uppercase tracking-wide">
-                    {t('cityAutocomplete.popular', 'Popular')}
+                    {t('cityAutocomplete.popular')}
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {popularCities.map((city) => (
@@ -325,7 +325,7 @@ export function CityAutocomplete({
                 })
               ) : (
                 <div className="text-center py-6 text-gray-500">
-                  {t('cityAutocomplete.noResults', 'No cities found')}
+                  {t('cityAutocomplete.noResults')}
                 </div>
               )}
             </div>

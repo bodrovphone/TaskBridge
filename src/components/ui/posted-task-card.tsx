@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -65,7 +65,7 @@ function PostedTaskCard({
   lang,
   images
 }: PostedTaskCardProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const queryClient = useQueryClient()
   const { toast } = useToast()
@@ -222,7 +222,7 @@ function PostedTaskCard({
       }
 
       toast({
-        title: t('taskDetail.cancelSuccess', 'Task cancelled successfully'),
+        title: t('taskDetail.cancelSuccess'),
         variant: 'success'
       })
 
@@ -233,7 +233,7 @@ function PostedTaskCard({
     } catch (error) {
       console.error('Failed to cancel task:', error)
       toast({
-        title: t('taskDetail.cancelError', 'Failed to cancel task'),
+        title: t('taskDetail.cancelError'),
         description: error instanceof Error ? error.message : t('common.errorGeneric'),
         variant: 'destructive'
       })
@@ -314,8 +314,8 @@ function PostedTaskCard({
     } catch (error) {
       console.error('Failed to remove professional:', error)
       toast({
-        title: t('common.error', 'Error'),
-        description: error instanceof Error ? error.message : t('common.errorGeneric', 'Something went wrong'),
+        title: t('common.error'),
+        description: error instanceof Error ? error.message : t('common.errorGeneric'),
         variant: 'destructive'
       })
     } finally {
@@ -384,17 +384,17 @@ function PostedTaskCard({
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-semibold text-green-900">
-                    {t('postedTasks.firstApplication.title', 'Great news! You have your first application')}
+                    {t('postedTasks.firstApplication.title')}
                   </p>
                   <p className="text-xs text-green-700 mt-0.5">
-                    {t('postedTasks.firstApplication.message', 'Check the application details and respond to the professional')}
+                    {t('postedTasks.firstApplication.message')}
                   </p>
                 </div>
               </div>
               <button
                 onClick={handleDismissFirstApplication}
                 className="text-green-600 hover:text-green-800 p-1 rounded hover:bg-green-100 transition-colors flex-shrink-0"
-                aria-label={t('taskHints.dismiss', 'Dismiss')}
+                aria-label={t('taskHints.dismiss')}
               >
                 <XCircle className="w-4 h-4" />
               </button>
@@ -468,7 +468,7 @@ function PostedTaskCard({
                     {acceptedApplication.professionalName}
                   </p>
                   <p className="text-xs text-blue-700">
-                    {t('postedTasks.completedBy', 'Completed by professional')}
+                    {t('postedTasks.completedBy')}
                   </p>
                 </div>
               </div>
@@ -597,7 +597,7 @@ function PostedTaskCard({
                 onPress={() => setShowCancelDialog(true)}
                 className="w-full md:flex-1 h-12"
               >
-                {t('postedTasks.cancelTask', 'Cancel Task')}
+                {t('postedTasks.cancelTask')}
               </Button>
             </>
           )}

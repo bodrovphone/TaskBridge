@@ -14,7 +14,7 @@ import {
   Divider
 } from '@nextui-org/react'
 import { CheckCircle, User, Banknote } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface MarkCompletedDialogProps {
   isOpen: boolean
@@ -39,7 +39,7 @@ export function MarkCompletedDialog({
   payment,
   isLoading = false
 }: MarkCompletedDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [requirementsCompleted, setRequirementsCompleted] = useState(false)
 
   const canSubmit = requirementsCompleted

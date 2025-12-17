@@ -6,12 +6,11 @@ import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import { Logo } from "@/components/common/logo";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
-import LandingSkeleton from "@/components/ui/landing-skeleton";
 import { HeroSection, FeaturedTasksSection, FeaturedProfessionalsSection } from "./sections";
 import type { Professional } from '@/server/professionals/professional.types';
 import CategoryCard from '@/components/ui/category-card';
@@ -70,7 +69,7 @@ const POPULAR_CATEGORY_SLUGS = [
 ];
 
 function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
- const { t, ready } = useTranslation();
+ const t = useTranslations();
  const pathname = usePathname();
  const router = useRouter();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
@@ -203,10 +202,6 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
   router.push(`/${currentLocale}/browse-tasks?category=${category}`);
  };
 
- // Show skeleton while translations are loading
- if (!ready) {
-  return <LandingSkeleton />
- }
 
  return (
   <div 
@@ -279,9 +274,9 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
       <div className="flex justify-center mb-6">
        <Logo size="xl" variant="gradient" className="hover:scale-110 transition-transform duration-300" />
       </div>
-      <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent tracking-tight">{t('landing.trustSection.title', 'Built on Trust')}</h2>
+      <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent tracking-tight">{t('landing.trustSection.title')}</h2>
       <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-light">
-       {t('landing.trustSection.subtitle', 'Your security and satisfaction are our top priorities')}
+       {t('landing.trustSection.subtitle')}
       </p>
      </div>
 
@@ -331,10 +326,10 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
        </div>
        
        <h3 className="text-4xl lg:text-7xl font-bold mb-8 leading-[1.1] bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent tracking-tight">
-        {t('landing.cta.title', 'Ready to Get Started?')}
+        {t('landing.cta.title')}
        </h3>
        <p className="text-xl lg:text-3xl text-blue-100 mb-12 max-w-5xl mx-auto leading-relaxed font-light">
-        {t('landing.cta.subtitle', 'Join thousands of satisfied customers and professionals on TaskBridge')}
+        {t('landing.cta.subtitle')}
        </p>
        
        {/* Enhanced Stats Row */}
@@ -364,7 +359,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
          onClick={handleCreateTask}
         >
          <Plus className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
-         {t('landing.cta.postTask', 'Post Your Task')}
+         {t('landing.cta.postTask')}
         </Button>
         <Button
          size="lg"
@@ -373,13 +368,13 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
          onClick={() => setIsAuthSlideOverOpen(true)}
         >
          <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 group-hover:scale-110 transition-transform duration-300" />
-         {t('landing.cta.joinProfessionals', 'Join as Professional')}
+         {t('landing.cta.joinProfessionals')}
         </Button>
        </div>
        
        <p className="text-blue-200/80 text-lg font-medium">
         <Lock className="inline h-5 w-5 mr-2" />
-        {t('landing.cta.freeToJoin', 'Free to join, no setup fees')}
+        {t('landing.cta.freeToJoin')}
        </p>
       </div>
      </div>
@@ -483,15 +478,15 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
     <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/50 "></div>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
      <div className="text-center space-y-4 mb-16">
-      <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">{t('landing.testimonials.title', 'What Our Users Say')}</h2>
+      <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">{t('landing.testimonials.title')}</h2>
       <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-       {t('landing.testimonials.subtitle', 'Real experiences from our community of customers and professionals')}
+       {t('landing.testimonials.subtitle')}
       </p>
      </div>
 
      {/* Customer Testimonials */}
      <div className="mb-16">
-      <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.customers.title', 'Happy Customers')}</h3>
+      <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.customers.title')}</h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
        <div className="bg-white/95 rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
         <div className="flex items-center mb-4">
@@ -503,11 +498,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
           className="w-12 h-12 rounded-full object-cover mr-4"
          />
          <div>
-          <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer1.name', 'Ivan Petrov')}</div>
-          <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer1.location', 'Sofia, Bulgaria')}</div>
+          <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer1.name')}</div>
+          <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer1.location')}</div>
          </div>
         </div>
-        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer1.quote', 'Found the perfect handyman for my apartment renovation. Great service and fair prices!')}"</p>
+        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer1.quote')}"</p>
         <div className="flex text-yellow-400 mt-auto">
          {[...Array(5)].map((_, i) => (
           <Star key={i} size={16} fill="currentColor" />
@@ -525,11 +520,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
           className="w-12 h-12 rounded-full object-cover mr-4"
          />
          <div>
-          <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer2.name', 'Maria Dimitrova')}</div>
-          <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer2.location', 'Plovdiv, Bulgaria')}</div>
+          <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer2.name')}</div>
+          <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer2.location')}</div>
          </div>
         </div>
-        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer2.quote', 'The platform made it so easy to find reliable professionals. Highly recommend!')}"</p>
+        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer2.quote')}"</p>
         <div className="flex text-yellow-400 mt-auto">
          {[...Array(4)].map((_, i) => (
           <Star key={i} size={16} fill="currentColor" />
@@ -548,11 +543,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
           className="w-12 h-12 rounded-full object-cover mr-4"
          />
          <div>
-          <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer3.name', 'Stefan Georgiev')}</div>
-          <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer3.location', 'Varna, Bulgaria')}</div>
+          <div className="font-semibold text-gray-900">{t('landing.testimonials.customers.customer3.name')}</div>
+          <div className="text-sm text-gray-500">{t('landing.testimonials.customers.customer3.location')}</div>
          </div>
         </div>
-        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer3.quote', 'Quick response times and quality work. This platform saves me so much time!')}"</p>
+        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.customers.customer3.quote')}"</p>
         <div className="flex text-yellow-400 mt-auto">
          {[...Array(4)].map((_, i) => (
           <Star key={i} size={16} fill="currentColor" />
@@ -565,7 +560,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
 
      {/* Professional Testimonials */}
      <div className="mb-16">
-      <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.professionals.title', 'Trusted Professionals')}</h3>
+      <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('landing.testimonials.professionals.title')}</h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
        <div className="bg-white/95 rounded-2xl p-6 shadow-lg border border-white/20 flex flex-col h-full">
         <div className="flex items-center mb-4">
@@ -577,11 +572,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
           className="w-12 h-12 rounded-full object-cover mr-4"
          />
          <div>
-          <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro1.name', 'Dimitar Ivanov')}</div>
-          <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro1.profession', 'Handyman')}</div>
+          <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro1.name')}</div>
+          <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro1.profession')}</div>
          </div>
         </div>
-        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro1.quote', 'Great platform to find new clients. The verification process builds trust.')}"</p>
+        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro1.quote')}"</p>
         <div className="flex text-yellow-400 mt-auto">
          {[...Array(4)].map((_, i) => (
           <Star key={i} size={16} fill="currentColor" />
@@ -600,11 +595,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
           className="w-12 h-12 rounded-full object-cover mr-4"
          />
          <div>
-          <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro2.name', 'Elena Petrova')}</div>
-          <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro2.profession', 'House Cleaner')}</div>
+          <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro2.name')}</div>
+          <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro2.profession')}</div>
          </div>
         </div>
-        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro2.quote', 'I love the flexibility and steady stream of work. Payments are always on time.')}"</p>
+        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro2.quote')}"</p>
         <div className="flex text-yellow-400 mt-auto">
          {[...Array(5)].map((_, i) => (
           <Star key={i} size={16} fill="currentColor" />
@@ -622,11 +617,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
           className="w-12 h-12 rounded-full object-cover mr-4"
          />
          <div>
-          <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro3.name', 'Georgi Todorov')}</div>
-          <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro3.profession', 'Delivery Driver')}</div>
+          <div className="font-semibold text-gray-900">{t('landing.testimonials.professionals.pro3.name')}</div>
+          <div className="text-sm text-gray-500">{t('landing.testimonials.professionals.pro3.profession')}</div>
          </div>
         </div>
-        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro3.quote', 'TaskBridge helped me grow my delivery business. Great support team!')}"</p>
+        <p className="text-gray-600 italic mb-4 flex-grow">"{t('landing.testimonials.professionals.pro3.quote')}"</p>
         <div className="flex text-yellow-400 mt-auto">
          {[...Array(4)].map((_, i) => (
           <Star key={i} size={16} fill="currentColor" />

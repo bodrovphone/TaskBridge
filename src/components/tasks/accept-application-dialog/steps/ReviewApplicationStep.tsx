@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Wallet, Calendar, MessageSquare, User } from 'lucide-react'
 import { Avatar } from '@nextui-org/react'
@@ -24,13 +24,13 @@ export function ReviewApplicationStep({
   timeline,
   message,
 }: ReviewApplicationStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const readableTimeline = getTimelineLabel(timeline, t)
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        {t('acceptApplication.wizard.reviewHelp', 'Review the professional\'s offer before proceeding.')}
+        {t('acceptApplication.wizard.reviewHelp')}
       </p>
 
       {/* Professional info */}
@@ -51,7 +51,7 @@ export function ReviewApplicationStep({
         />
         <div>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {t('acceptApplication.wizard.professional', 'Professional')}
+            {t('acceptApplication.wizard.professional')}
           </p>
           <p className="font-semibold text-gray-900 dark:text-gray-100">
             {professional.name}
@@ -70,7 +70,7 @@ export function ReviewApplicationStep({
           <div className="flex items-center gap-2 text-green-600 dark:text-green-400 mb-2">
             <Wallet className="w-4 h-4" />
             <span className="text-xs font-medium">
-              {t('acceptApplication.wizard.proposedPrice', 'Proposed Price')}
+              {t('acceptApplication.wizard.proposedPrice')}
             </span>
           </div>
           <div className="text-xl font-bold text-green-700 dark:text-green-300">
@@ -87,7 +87,7 @@ export function ReviewApplicationStep({
           <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-2">
             <Calendar className="w-4 h-4" />
             <span className="text-xs font-medium">
-              {t('acceptApplication.wizard.timeline', 'Timeline')}
+              {t('acceptApplication.wizard.timeline')}
             </span>
           </div>
           <div className="text-xl font-bold text-blue-700 dark:text-blue-300">
@@ -107,7 +107,7 @@ export function ReviewApplicationStep({
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-2">
             <MessageSquare className="w-4 h-4" />
             <span className="text-xs font-medium">
-              {t('acceptApplication.wizard.professionalMessage', 'Professional\'s Message')}
+              {t('acceptApplication.wizard.professionalMessage')}
             </span>
           </div>
           <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">

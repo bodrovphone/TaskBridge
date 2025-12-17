@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Chip } from "@nextui-org/react";
 import { Banknote, Clock } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface Service {
  id: string;
@@ -16,7 +16,7 @@ interface ServicesSectionProps {
 }
 
 export default function ServicesSection({ services }: ServicesSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  // Don't render section if no services
  if (!services || services.length === 0) {

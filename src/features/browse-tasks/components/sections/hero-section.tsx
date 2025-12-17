@@ -1,12 +1,12 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import OptimizedVideoBackground from "@/components/ui/optimized-video-background";
 import { Sparkles } from "lucide-react";
 
 export default function BrowseTasksHeroSection() {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  return (
   <OptimizedVideoBackground

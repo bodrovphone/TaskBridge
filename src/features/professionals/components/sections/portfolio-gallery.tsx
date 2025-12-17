@@ -4,7 +4,7 @@ import { useState } from 'react'
 import NextImage from 'next/image'
 import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from '@nextui-org/react'
 import { Camera, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { GalleryItem } from '@/server/domain/user/user.types'
 
 interface PortfolioGalleryProps {
@@ -12,7 +12,7 @@ interface PortfolioGalleryProps {
 }
 
 export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -48,10 +48,10 @@ export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
         <div className="text-center mb-6">
           <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
             <Camera className="text-purple-600" size={28} />
-            {t('professionalDetail.gallery.title', 'Work Gallery')}
+            {t('professionalDetail.gallery.title')}
           </h3>
           <p className="text-gray-600">
-            {t('professionalDetail.gallery.subtitle', 'Examples of completed work')}
+            {t('professionalDetail.gallery.subtitle')}
           </p>
         </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Bell, Trash2, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
@@ -28,7 +28,7 @@ import NotificationCard from './notification-card';
 import { filterUnreadNotifications, clearReadNotifications } from '@/lib/utils/notification-read-state';
 
 export default function NotificationCenter() {
- const { t } = useTranslation();
+ const t = useTranslations();
  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -85,7 +85,7 @@ export default function NotificationCenter() {
       onClick={() => refetch()}
       disabled={isFetching}
       className="absolute right-14 top-4 z-10 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-      aria-label={t('notifications.refresh', 'Refresh')}
+      aria-label={t('notifications.refresh')}
      >
       <RefreshCw className={`h-5 w-5 ${isFetching ? 'animate-spin' : ''}`} />
      </button>
@@ -110,10 +110,10 @@ export default function NotificationCenter() {
            <AlertCircle className="h-8 w-8 text-red-600" />
           </div>
           <h3 className="mb-2 text-lg font-semibold text-gray-900">
-           {t('notifications.error.title', 'Failed to Load Notifications')}
+           {t('notifications.error.title')}
           </h3>
           <p className="text-sm text-gray-600 max-w-xs">
-           {t('notifications.error.message', 'Please try again later or contact support if the problem persists.')}
+           {t('notifications.error.message')}
           </p>
          </div>
         ) : displayNotifications.length > 0 ? (
@@ -183,7 +183,7 @@ export default function NotificationCenter() {
 
 // Empty State Component
 function EmptyState() {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  return (
   <div className="flex flex-col items-center justify-center py-16 px-4 text-center">

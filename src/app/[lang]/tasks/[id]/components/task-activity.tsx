@@ -6,9 +6,10 @@
 // Target: Reduce from 150 lines to ~90 lines
 
 import { useState, useEffect, useRef } from "react";
+import { useParams } from 'next/navigation';
 import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
 import { User } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { ApplicationsSection, TaskInProgressState } from "./sections";
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { MessageCircle } from "lucide-react";
@@ -31,7 +32,9 @@ interface TaskActivityProps {
 }
 
 export default function TaskActivity({ taskId, initialApplicationId }: TaskActivityProps) {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
+ const params = useParams();
+ const currentLocale = (params?.lang as string) || 'bg';
  const { toast } = useToast();
  const { authenticatedFetch } = useAuth();
  const [selectedTab, setSelectedTab] = useState("applications");
@@ -118,7 +121,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
       },
       proposedPrice: app.proposed_price_bgn,
       currency: 'EUR',
-      timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : t('common.flexible', 'Flexible'),
+      timeline: app.estimated_duration_hours ? `${app.estimated_duration_hours}h` : t('common.flexible'),
       message: app.message,
       status: app.status,
       createdAt: new Date(app.created_at),
@@ -236,8 +239,8 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
    if (!response.ok) {
     const error = await response.json();
     toast({
-     title: t('common.error', 'Error'),
-     description: error.error || t('common.error', 'An error occurred'),
+     title: t('common.error'),
+     description: error.error || t('common.error'),
      variant: 'destructive'
     });
     return;
@@ -260,8 +263,8 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
 
    // Show success toast
    toast({
-    title: t('acceptApplication.successTitle', '🎉 Application Accepted!'),
-    description: t('acceptApplication.successDescription', 'You are now working with {{name}}. All other applications have been automatically rejected.', {
+    title: t('acceptApplication.successTitle'),
+    description: t('acceptApplication.successDescription', {
      name: acceptedApp?.professional.name || 'the professional'
     }),
     variant: 'default'
@@ -271,8 +274,8 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
   } catch (error) {
    console.error('[TaskActivity] Error accepting application:', error);
    toast({
-    title: t('common.error', 'Error'),
-    description: t('common.error', 'An error occurred'),
+    title: t('common.error'),
+    description: t('common.error'),
     variant: 'destructive'
    });
   }
@@ -291,7 +294,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
 
    if (!response.ok) {
     const error = await response.json();
-    alert(error.error || t('common.error', 'An error occurred'));
+    alert(error.error || t('common.error'));
     return;
    }
 
@@ -307,7 +310,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
    console.log('❌ Application rejected:', id, 'Reason:', reason || 'Not specified');
   } catch (error) {
    console.error('[TaskActivity] Error rejecting application:', error);
-   alert(t('common.error', 'An error occurred'));
+   alert(t('common.error'));
   }
  };
 
@@ -359,7 +362,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
        <div className="mt-3 sm:mt-4 overflow-hidden">
         {isLoadingApplications ? (
          <div className="flex justify-center py-8">
-          <div className="text-gray-500">{t('common.loading', 'Loading...')}</div>
+          <div className="text-gray-500">{t('common.loading')}</div>
          </div>
         ) : applicationsError ? (
          <div className="flex justify-center py-8">
@@ -381,7 +384,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
            proposal: app.message,
            price: `${app.proposedPrice} ${app.currency}`,
            timeline: app.timeline,
-           timestamp: getRelativeTime(app.createdAt, i18n.language),
+           timestamp: getRelativeTime(app.createdAt, currentLocale),
            status: app.status
           }))}
           onAcceptApplication={handleAcceptClick}
@@ -412,7 +415,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
           completedTasks: q.asker.completedTasks,
          },
          question: q.questionText,
-         timestamp: getRelativeTime(q.createdAt, i18n.language),
+         timestamp: getRelativeTime(q.createdAt, currentLocale),
          reply: q.answer?.answerText || null,
         }))}
         onReplyToQuestion={handleReplyToQuestion}

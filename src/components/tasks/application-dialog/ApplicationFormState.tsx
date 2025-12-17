@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 
 import { WizardDialog, type WizardStep } from '@/components/ui/wizard-dialog'
@@ -58,7 +58,7 @@ export function ApplicationFormState({
   error,
   alreadyApplied,
 }: ApplicationFormStateProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [currentStep, setCurrentStep] = useState(0)
 
   // Form state
@@ -135,8 +135,8 @@ export function ApplicationFormState({
   const steps: WizardStep[] = useMemo(() => [
     {
       id: 'price',
-      title: t('application.wizard.step1Title', 'Your Offer'),
-      subtitle: t('application.wizard.step1Subtitle', 'Set your price'),
+      title: t('application.wizard.step1Title'),
+      subtitle: t('application.wizard.step1Subtitle'),
       icon: <Wallet className="w-4 h-4 text-green-600" />,
       content: (
         <div className="space-y-4">
@@ -179,8 +179,8 @@ export function ApplicationFormState({
     },
     {
       id: 'timeline',
-      title: t('application.wizard.step2Title', 'Availability'),
-      subtitle: t('application.wizard.step2Subtitle', 'When can you do it?'),
+      title: t('application.wizard.step2Title'),
+      subtitle: t('application.wizard.step2Subtitle'),
       icon: <Clock className="w-4 h-4 text-blue-600" />,
       content: (
         <TimelineStep
@@ -196,8 +196,8 @@ export function ApplicationFormState({
     },
     {
       id: 'message',
-      title: t('application.wizard.step3Title', 'Cover Letter'),
-      subtitle: t('application.wizard.step3Subtitle', 'Introduce yourself'),
+      title: t('application.wizard.step3Title'),
+      subtitle: t('application.wizard.step3Subtitle'),
       icon: <MessageSquare className="w-4 h-4 text-purple-600" />,
       content: (
         <MessageStep
@@ -214,8 +214,8 @@ export function ApplicationFormState({
     },
     {
       id: 'review',
-      title: t('application.wizard.step4Title', 'Review'),
-      subtitle: t('application.wizard.step4Subtitle', 'Confirm your application'),
+      title: t('application.wizard.step4Title'),
+      subtitle: t('application.wizard.step4Subtitle'),
       icon: <CheckCircle className="w-4 h-4 text-green-600" />,
       content: (
         <ReviewStep

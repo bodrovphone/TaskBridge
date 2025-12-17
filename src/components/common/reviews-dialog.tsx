@@ -2,7 +2,7 @@
 
 import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Chip } from "@nextui-org/react";
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface Review {
  id: string;
@@ -27,7 +27,7 @@ export default function ReviewsDialog({
  reviews,
  averageRating
 }: ReviewsDialogProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  const renderStars = (rating: number) => {
   return (

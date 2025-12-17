@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem } from '@nextui-org/react'
 import { Send, Calendar, Banknote, MapPin, User, X, AlertCircle, Briefcase, Search } from 'lucide-react'
@@ -17,7 +17,7 @@ interface ApplicationsPageContentProps {
 type ApplicationStatus = 'all' | 'pending' | 'accepted' | 'rejected' | 'withdrawn'
 
 export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('pending')
 
@@ -146,7 +146,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
       setWithdrawReason('')
     } catch (error: any) {
       console.error('[Applications] Error withdrawing:', error)
-      alert(error.message || t('myApplications.withdrawError', 'Failed to withdraw application'))
+      alert(error.message || t('myApplications.withdrawError'))
     }
   }
 
@@ -372,7 +372,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                         onPress={() => handleViewDetails(application)}
                         className="w-full sm:w-auto"
                       >
-                        {t('myApplications.viewDetails', 'View Details')}
+                        {t('myApplications.viewDetails')}
                       </Button>
                       <Button
                         size="sm"
@@ -441,7 +441,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                   {t('myApplications.withdrawDialog.reason')}
                 </label>
                 <Select
-                  placeholder={t('myApplications.withdrawDialog.selectReason', 'Select a reason (optional)')}
+                  placeholder={t('myApplications.withdrawDialog.selectReason')}
                   selectedKeys={withdrawReason ? [withdrawReason] : []}
                   onChange={(e) => setWithdrawReason(e.target.value)}
                   classNames={{
@@ -468,7 +468,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
 
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-sm text-yellow-800">
-                  {t('myApplications.withdrawDialog.warning', 'Once withdrawn, you cannot reapply to this task.')}
+                  {t('myApplications.withdrawDialog.warning')}
                 </p>
               </div>
             </div>

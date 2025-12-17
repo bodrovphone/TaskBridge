@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Wallet } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -21,7 +21,7 @@ export function PriceStep({
   error,
   onFocus,
 }: PriceStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const hasBudgetRange = taskBudget && (taskBudget.min !== undefined || taskBudget.max !== undefined)
 
@@ -64,7 +64,7 @@ export function PriceStep({
           <Wallet className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-              {t('application.wizard.budgetHint', "Client's budget range")}
+              {t('application.wizard.budgetHint')}
             </p>
             <p className="text-lg font-bold text-blue-700 dark:text-blue-300 mt-1">
               {taskBudget?.min ?? 0} - {taskBudget?.max ?? 0} €
@@ -75,7 +75,7 @@ export function PriceStep({
 
       <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          {t('application.wizard.priceHelp', 'Enter your proposed price for completing this task. Be competitive but fair.')}
+          {t('application.wizard.priceHelp')}
         </p>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { Application, SortOption } from '@/types/applications'
 import ApplicationCard from './application-card'
 import { Select, SelectItem } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { ArrowUpDown } from 'lucide-react'
 
 interface ApplicationsListProps {
@@ -20,7 +20,7 @@ export default function ApplicationsList({
   onReject,
   onViewDetails
 }: ApplicationsListProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const [sortBy, setSortBy] = useState<SortOption>('newest')
 
@@ -53,11 +53,11 @@ export default function ApplicationsList({
   }, [applications, sortBy])
 
   const sortOptions = [
-    { value: 'newest', label: t('applications.sortNewest', 'Newest First') },
-    { value: 'price-low', label: t('applications.sortPriceLow', 'Price: Low to High') },
-    { value: 'price-high', label: t('applications.sortPriceHigh', 'Price: High to Low') },
-    { value: 'rating', label: t('applications.sortRating', 'Highest Rated') },
-    { value: 'experience', label: t('applications.sortExperience', 'Most Experience') }
+    { value: 'newest', label: t('applications.sortNewest') },
+    { value: 'price-low', label: t('applications.sortPriceLow') },
+    { value: 'price-high', label: t('applications.sortPriceHigh') },
+    { value: 'rating', label: t('applications.sortRating') },
+    { value: 'experience', label: t('applications.sortExperience') }
   ]
 
   return (
@@ -66,10 +66,10 @@ export default function ApplicationsList({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">
-            {t('applications.title', 'Applications')}
+            {t('applications.title')}
           </h2>
           <p className="text-gray-600 mt-1">
-            {sortedApplications.length} {t('applications.count', 'applications')}
+            {sortedApplications.length} {t('applications.count')}
           </p>
         </div>
 
@@ -79,7 +79,7 @@ export default function ApplicationsList({
             <ArrowUpDown className="w-4 h-4 text-gray-500 flex-shrink-0" />
             <Select
               size="sm"
-              label={t('applications.sortBy', 'Sort by')}
+              label={t('applications.sortBy')}
               selectedKeys={[sortBy]}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               className="flex-1 sm:max-w-xs"
@@ -112,10 +112,10 @@ export default function ApplicationsList({
         <div className="text-center py-16">
           <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            {t('applications.emptyState.title', 'No applications yet')}
+            {t('applications.emptyState.title')}
           </h3>
           <p className="text-gray-600">
-            {t('applications.emptyState.message', 'Your task is live! Professionals will start applying soon.')}
+            {t('applications.emptyState.message')}
           </p>
         </div>
       )}

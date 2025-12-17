@@ -29,30 +29,30 @@ export const notifications = {
   'notifications.content.welcome.title': 'Welcome to Trudify!',
   'notifications.content.welcome.message': 'Your account has been created successfully. Get started by posting a task or browsing work opportunities!',
   'notifications.content.applicationReceived.title': 'New Application',
-  'notifications.content.applicationReceived.message': '{{professionalName}} applied to your task "{{taskTitle}}"',
+  'notifications.content.applicationReceived.message': '{professionalName} applied to your task "{taskTitle}"',
   'notifications.content.applicationAccepted.title': 'Application Accepted! 🎉',
-  'notifications.content.applicationAccepted.message': 'Your application for "{{taskTitle}}" was accepted by {{customerName}}',
+  'notifications.content.applicationAccepted.message': 'Your application for "{taskTitle}" was accepted by {customerName}',
   'notifications.content.applicationRejected.title': 'Application Update',
-  'notifications.content.applicationRejected.message': 'Your application for "{{taskTitle}}" was not selected this time. Keep applying!',
+  'notifications.content.applicationRejected.message': 'Your application for "{taskTitle}" was not selected this time. Keep applying!',
   'notifications.content.taskCompleted.title': 'Task Completed - Review Needed ⭐',
-  'notifications.content.taskCompleted.message': '"{{taskTitle}}" is complete! Please take a moment to review {{professionalName}}\'s work.',
+  'notifications.content.taskCompleted.message': '"{taskTitle}" is complete! Please take a moment to review {professionalName}\'s work.',
   'notifications.content.professionalWithdrew.title': 'Professional Withdrew',
-  'notifications.content.professionalWithdrew.message': '{{professionalName}} has withdrawn from your task "{{taskTitle}}". Your task is now open for new applications.',
+  'notifications.content.professionalWithdrew.message': '{professionalName} has withdrawn from your task "{taskTitle}". Your task is now open for new applications.',
   'notifications.content.removedByCustomer.title': 'Customer Removed You from Task',
-  'notifications.content.removedByCustomer.message': 'You were removed from task "{{taskTitle}}" by the customer.{{customerFeedback}}',
+  'notifications.content.removedByCustomer.message': 'You were removed from task "{taskTitle}" by the customer.{customerFeedback}',
   'notifications.content.taskCancelled.title': 'Task Cancelled',
-  'notifications.content.taskCancelled.message': 'The task "{{taskTitle}}" has been cancelled by the client',
+  'notifications.content.taskCancelled.message': 'The task "{taskTitle}" has been cancelled by the client',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'View here',
-  'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {{userName}}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
-  'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{{professionalName}}</b> has applied to your task:\n"{{taskTitle}}"\n\n{{link}}',
-  'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{{taskTitle}}" has been accepted by {{customerName}}!{{customerMessageSection}}\n\n<b>Contact Information:</b>\n{{customerContact}}\n\n{{link}}',
-  'notifications.telegram.taskCompleted': '✅ <b>Task Completed - Review Needed!</b>\n\nYour task "<b>{{taskTitle}}</b>" was completed by {{professionalName}}.\n\n⭐ <b>Please leave a review</b> to help others find great professionals.\n\n{{link}}',
-  'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{{professionalName}}</b> has withdrawn from your task:\n"{{taskTitle}}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {{link}}',
-  'notifications.telegram.removedByCustomer': '⚠️ <b>Customer Removed You from Task</b>\n\nYou were removed from task:\n"<b>{{taskTitle}}</b>"{{customerFeedback}}\n\n📋 The task has been <b>reopened</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n• Focus on building positive client relationships\n\n🔗 Browse Tasks: {{link}}',
-  'notifications.telegram.taskCancelled': '❌ <b>Task Cancelled</b>\n\nThe task "{{taskTitle}}" has been cancelled by the client.\n\nYour application and all discussions related to this task have been removed.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n\n🔗 Browse Tasks: {{link}}',
-  'notifications.telegram.taskInvitation': '🎯 <b>New Task Invitation!</b>\n\n<b>{{customerName}}</b> has invited you to apply for their task:\n\n📋 <b>{{taskTitle}}</b>\n🏷️ Category: {{taskCategory}}\n\n👉 View and apply here:\n{{link}}',
+  'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {userName}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
+  'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{professionalName}</b> has applied to your task:\n"{taskTitle}"\n\n{link}',
+  'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{taskTitle}" has been accepted by {customerName}!{customerMessageSection}\n\n<b>Contact Information:</b>\n{customerContact}\n\n{link}',
+  'notifications.telegram.taskCompleted': '✅ <b>Task Completed - Review Needed!</b>\n\nYour task "<b>{taskTitle}</b>" was completed by {professionalName}.\n\n⭐ <b>Please leave a review</b> to help others find great professionals.\n\n{link}',
+  'notifications.telegram.professionalWithdrew': '⚠️ <b>Professional Withdrew</b>\n\n<b>{professionalName}</b> has withdrawn from your task:\n"{taskTitle}"\n\n📋 Your task is now <b>open again</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Review your task details\n• Check if budget is competitive\n• Respond to new applications quickly\n\n🔗 View Task: {link}',
+  'notifications.telegram.removedByCustomer': '⚠️ <b>Customer Removed You from Task</b>\n\nYou were removed from task:\n"<b>{taskTitle}</b>"{customerFeedback}\n\n📋 The task has been <b>reopened</b> for new applications.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n• Focus on building positive client relationships\n\n🔗 Browse Tasks: {link}',
+  'notifications.telegram.taskCancelled': '❌ <b>Task Cancelled</b>\n\nThe task "{taskTitle}" has been cancelled by the client.\n\nYour application and all discussions related to this task have been removed.\n\n👉 <b>Next Steps:</b>\n• Browse other available tasks\n• Apply to tasks that match your skills\n\n🔗 Browse Tasks: {link}',
+  'notifications.telegram.taskInvitation': '🎯 <b>New Task Invitation!</b>\n\n<b>{customerName}</b> has invited you to apply for their task:\n\n📋 <b>{taskTitle}</b>\n🏷️ Category: {taskCategory}\n\n👉 View and apply here:\n{link}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Back to tasks',
@@ -131,11 +131,11 @@ export const notifications = {
   'taskDetail.sendReply': 'Send Reply',
 
   // Language Info Banner (inline)
-  'taskDetail.languageInfo': 'Task author may prefer {{language}}',
+  'taskDetail.languageInfo': 'Task author may prefer {language}',
 
   // Language Barrier Warning (deprecated - kept for reference)
   'taskDetail.languageWarning.title': 'Language Note',
-  'taskDetail.languageWarning.message': 'This task was posted by someone who may prefer communicating in {{language}}. Please ensure you\'re comfortable with potential language differences before applying.',
+  'taskDetail.languageWarning.message': 'This task was posted by someone who may prefer communicating in {language}. Please ensure you\'re comfortable with potential language differences before applying.',
   'taskDetail.languageWarning.confirm': 'I understand, continue',
   'taskDetail.languageWarning.cancel': 'Cancel',
 
@@ -143,9 +143,9 @@ export const notifications = {
   'taskDetail.askQuestionDialog.title': 'Ask a Question',
   'taskDetail.askQuestionDialog.placeholder': 'What would you like to know about this task?',
   'taskDetail.askQuestionDialog.submit': 'Post Question',
-  'taskDetail.askQuestionDialog.characterCount': '{{current}}/{{max}} characters',
-  'taskDetail.askQuestionDialog.minLength': 'Question must be at least {{min}} characters',
-  'taskDetail.askQuestionDialog.maxLength': 'Question must be at most {{max}} characters',
+  'taskDetail.askQuestionDialog.characterCount': '{current}/{max} characters',
+  'taskDetail.askQuestionDialog.minLength': 'Question must be at least {min} characters',
+  'taskDetail.askQuestionDialog.maxLength': 'Question must be at most {max} characters',
 
   // Questions Section
   'taskDetail.questions.empty.title': 'No questions yet',
@@ -186,7 +186,7 @@ export const notifications = {
   'postedTasks.filter.awaitingConfirmation': 'Awaiting Confirmation',
   'postedTasks.filter.completed': 'Completed',
   'postedTasks.filter.cancelled': 'Cancelled',
-  'postedTasks.applicationsCount': '{{count}} applications',
+  'postedTasks.applicationsCount': '{count} applications',
   'postedTasks.viewApplications': 'View Applications',
   'postedTasks.viewDetails': 'Details',
   'postedTasks.editTask': 'Edit',
@@ -223,21 +223,21 @@ export const notifications = {
   'cancelTask.descriptionPlaceholder': 'Please provide any additional context...',
   'cancelTask.descriptionHint': 'Help us understand what happened',
   'cancelTask.confirmButton': 'Cancel Task',
-  'cancelTask.rateLimit.title': 'You can cancel {{remaining}} more task(s) this month',
-  'cancelTask.rateLimit.message': 'To prevent abuse, users can cancel up to {{max}} tasks per month',
+  'cancelTask.rateLimit.title': 'You can cancel {remaining} more task(s) this month',
+  'cancelTask.rateLimit.message': 'To prevent abuse, users can cancel up to {max} tasks per month',
   'cancelTask.rateLimit.lastWarning': 'This is your last free cancellation this month. Use it wisely!',
   'cancelTask.limitExceeded.title': 'Monthly cancellation limit reached',
   'cancelTask.limitExceeded.message': 'You\'ve reached your cancellation limit for this month. Frequent cancellations may affect your account standing. Please contact support if you need assistance.',
 
   // Customer Remove Professional Dialog
   'customerRemove.title': 'Remove Professional from Task',
-  'customerRemove.subtitle': 'Removing from: {{taskTitle}}',
+  'customerRemove.subtitle': 'Removing from: {taskTitle}',
   'customerRemove.professional': 'Professional',
   'customerRemove.acceptedOn': 'Accepted',
   'customerRemove.workingFor': 'Working for',
   'customerRemove.professionalNotification': 'The professional will be notified and your task will be reopened for new applications',
   'customerRemove.taskWillReopen': 'Your task will be reopened for new applications',
-  'customerRemove.limitWarning.title': 'You can remove {{remaining}} more professional(s) this month',
+  'customerRemove.limitWarning.title': 'You can remove {remaining} more professional(s) this month',
   'customerRemove.limitWarning.message': 'Customers can remove up to 2 professionals per month.',
   'customerRemove.limitExceeded.title': 'Monthly removal limit reached',
   'customerRemove.limitExceeded.message': 'You\'ve reached your removal limit for this month. Please contact support if you have a serious issue.',
@@ -255,7 +255,7 @@ export const notifications = {
   // Edit Task Page
   'editTask.title': 'Edit Task',
   'editTask.subtitle': 'Update your task details to attract more professionals',
-  'editTask.editingBanner': 'Editing: {{title}}',
+  'editTask.editingBanner': 'Editing: {title}',
   'editTask.editingSubtext': 'Make changes to improve your task',
   'editTask.help': 'Need help? Contact our support team',
   'editTask.freeToEdit': 'Free to edit',
@@ -271,7 +271,7 @@ export const notifications = {
   'editTask.imageUpload.error': 'Image upload failed',
 
   // Task Hints System
-  'taskHints.noApplications.title': 'No applications yet? Your task has been open for {{days}} days',
+  'taskHints.noApplications.title': 'No applications yet? Your task has been open for {days} days',
   'taskHints.improveTask': 'Improve Task',
   'taskHints.dismiss': 'Dismiss',
   'taskHints.suggestions.increasePrice': 'Try increasing your budget to attract more professionals',
@@ -282,9 +282,9 @@ export const notifications = {
 
   // Email Notification Templates
   // 1. Application Received
-  'notifications.email.applicationReceived.subject': '{{customer_name}}, you have a new application!',
+  'notifications.email.applicationReceived.subject': '{customer_name}, you have a new application!',
   'notifications.email.applicationReceived.heading': 'New Application Received!',
-  'notifications.email.applicationReceived.message': '{{professional_name}} has applied to your task "{{task_title}}". Check their profile, reviews, and offer details.',
+  'notifications.email.applicationReceived.message': '{professional_name} has applied to your task "{task_title}". Check their profile, reviews, and offer details.',
   'notifications.email.applicationReceived.buttonText': 'View Application',
   'notifications.email.applicationReceived.secondaryButtonText': 'View Profile',
   'notifications.email.applicationReceived.infoTitle': 'Application Details:',
@@ -293,7 +293,7 @@ export const notifications = {
   // 2. Application Accepted
   'notifications.email.applicationAccepted.subject': 'Your application was accepted!',
   'notifications.email.applicationAccepted.heading': 'Congratulations! Application Accepted',
-  'notifications.email.applicationAccepted.message': 'Your application for "{{task_title}}" has been accepted by {{customer_name}}!',
+  'notifications.email.applicationAccepted.message': 'Your application for "{task_title}" has been accepted by {customer_name}!',
   'notifications.email.applicationAccepted.buttonText': 'View My Work',
   'notifications.email.applicationAccepted.infoTitle': 'Customer Contact Information:',
   'notifications.email.applicationAccepted.secondaryMessage': 'Get started on the task and maintain good communication with the customer.',
@@ -302,32 +302,32 @@ export const notifications = {
   'notifications.email.applicationAccepted.contactLabel': 'Contact',
 
   // 3. Application Rejected
-  'notifications.email.applicationRejected.subject': 'Application Update for «{{task_title}}»',
+  'notifications.email.applicationRejected.subject': 'Application Update for «{task_title}»',
   'notifications.email.applicationRejected.heading': 'Application Not Accepted',
-  'notifications.email.applicationRejected.message': 'Your application for "{{task_title}}" was not accepted this time. Don\'t worry! Keep applying to other opportunities.',
+  'notifications.email.applicationRejected.message': 'Your application for "{task_title}" was not accepted this time. Don\'t worry! Keep applying to other opportunities.',
   'notifications.email.applicationRejected.buttonText': 'Browse Other Tasks',
   'notifications.email.applicationRejected.secondaryMessage': 'Remember: Each application is a learning experience. Review feedback and keep improving!',
   'notifications.email.applicationRejected.footerText': "You're receiving this because you applied to a task on Trudify.",
 
   // 4. Message Received
-  'notifications.email.messageReceived.subject': 'New message from {{sender_name}}',
+  'notifications.email.messageReceived.subject': 'New message from {sender_name}',
   'notifications.email.messageReceived.heading': 'You Have a New Message',
-  'notifications.email.messageReceived.message': '{{sender_name}} sent you a message about "{{task_title}}"',
+  'notifications.email.messageReceived.message': '{sender_name} sent you a message about "{task_title}"',
   'notifications.email.messageReceived.buttonText': 'View Message',
   'notifications.email.messageReceived.infoTitle': 'Message Preview:',
   'notifications.email.messageReceived.secondaryMessage': 'Respond quickly to maintain good communication and build trust.',
   'notifications.email.messageReceived.footerText': "You're receiving this because you're involved in a task on Trudify.",
 
   // 5. Task Completed
-  'notifications.email.taskCompleted.subject': 'Task completed: «{{task_title}}»',
+  'notifications.email.taskCompleted.subject': 'Task completed: «{task_title}»',
   'notifications.email.taskCompleted.heading': 'Task Completed Successfully!',
-  'notifications.email.taskCompleted.message': 'The task "{{task_title}}" has been marked as complete. Please rate your experience and help build trust in the community.',
+  'notifications.email.taskCompleted.message': 'The task "{task_title}" has been marked as complete. Please rate your experience and help build trust in the community.',
   'notifications.email.taskCompleted.buttonText': 'Leave a Review',
   'notifications.email.taskCompleted.secondaryMessage': 'Your review helps other users find great professionals (or customers) and improves the Trudify community.',
   'notifications.email.taskCompleted.footerText': "You're receiving this because you were involved in a task on Trudify.",
 
   // 6. Welcome Email
-  'notifications.email.welcome.subject': 'Welcome to Trudify, {{user_name}}!',
+  'notifications.email.welcome.subject': 'Welcome to Trudify, {user_name}!',
   'notifications.email.welcome.heading': 'Welcome to Trudify!',
   'notifications.email.welcome.message': 'Congratulations! Your account has been created successfully.',
   'notifications.email.welcome.buttonText': 'Get Started',
@@ -336,18 +336,18 @@ export const notifications = {
   'notifications.email.welcome.footerText': "You're receiving this because you created an account on Trudify.",
 
   // 8. Removed from Task
-  'notifications.email.removedFromTask.subject': 'Task update: «{{task_title}}»',
+  'notifications.email.removedFromTask.subject': 'Task update: «{task_title}»',
   'notifications.email.removedFromTask.heading': "You've Been Removed from a Task",
-  'notifications.email.removedFromTask.message': 'You have been removed from the task "{{task_title}}" by the customer.{{customerFeedback}} The task is now open for other professionals to apply.',
+  'notifications.email.removedFromTask.message': 'You have been removed from the task "{task_title}" by the customer.{customerFeedback} The task is now open for other professionals to apply.',
   'notifications.email.removedFromTask.buttonText': 'Browse Other Tasks',
   'notifications.email.removedFromTask.secondaryMessage': 'This does not affect your rating unless there are quality or safety concerns. If you have questions, please contact support.',
   'notifications.email.removedFromTask.footerText': "You're receiving this because you were working on a task on Trudify.",
   'notifications.email.removedFromTask.feedbackLabel': 'Feedback',
 
   // 9. Task Invitation
-  'notifications.email.taskInvitation.subject': '{{customer_name}} invited you to a task!',
+  'notifications.email.taskInvitation.subject': '{customer_name} invited you to a task!',
   'notifications.email.taskInvitation.heading': "You've Been Invited to a Task!",
-  'notifications.email.taskInvitation.message': '{{customer_name}} has invited you to apply for their task in {{task_category}}.',
+  'notifications.email.taskInvitation.message': '{customer_name} has invited you to apply for their task in {task_category}.',
   'notifications.email.taskInvitation.buttonText': 'View Task & Apply',
   'notifications.email.taskInvitation.infoTitle': 'Task Details:',
   'notifications.email.taskInvitation.secondaryMessage': 'You were selected based on your skills and reviews. Apply now before the task is filled!',

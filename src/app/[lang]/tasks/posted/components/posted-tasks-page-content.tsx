@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Spinner, Tabs, Tab, Chip } from '@nextui-org/react'
 import { FileText, Plus, Filter, Star, ArrowRight } from 'lucide-react'
@@ -21,7 +21,7 @@ interface PostedTasksPageContentProps {
 type TaskStatus = 'all' | 'open' | 'in_progress' | 'completed' | 'cancelled'
 
 export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('open')
 
@@ -203,7 +203,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
             <CardBody className="p-12 text-center">
               <FileText className="w-16 h-16 mx-auto mb-4 text-red-300" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                {t('error', 'Error loading tasks')}
+                {t('error')}
               </h3>
               <p className="text-gray-500 mb-6">{error.message}</p>
               <Button
@@ -211,7 +211,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
                 size="lg"
                 onPress={() => window.location.reload()}
               >
-                {t('retry', 'Try Again')}
+                {t('retry')}
               </Button>
             </CardBody>
           </Card>
@@ -229,17 +229,17 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
               <CardBody className="p-12 text-center">
                 <Filter className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                  {t('common.noResults', 'No tasks found')}
+                  {t('common.noResults')}
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  {t('common.noResultsFilter', 'Try selecting a different status filter')}
+                  {t('common.noResultsFilter')}
                 </p>
                 <Button
                   variant="bordered"
                   size="lg"
                   onPress={() => setSelectedStatus('all')}
                 >
-                  {t('common.clearFilters', 'View All Tasks')}
+                  {t('common.clearFilters')}
                 </Button>
               </CardBody>
             </Card>

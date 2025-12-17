@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Card as NextUICard, Button as NextUIButton, Spinner } from "@nextui-org/react";
 import { Search, Filter, Sparkles, X, Coffee, RotateCw } from "lucide-react";
 import TaskCard from "@/components/ui/task-card";
@@ -34,7 +34,7 @@ export default function ResultsSection({
  isFetchingNextPage = false,
  onLoadMore
 }: ResultsSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const observerTarget = useRef<HTMLDivElement>(null);
 
  // Infinite scroll: Intersection Observer
@@ -242,7 +242,7 @@ export default function ResultsSection({
        {isFetchingNextPage ? (
         <div className="flex items-center gap-3">
          <Spinner size="sm" color="primary" />
-         <span className="text-gray-600">{t('browseTasks.results.loadingMore', 'Loading more tasks...')}</span>
+         <span className="text-gray-600">{t('browseTasks.results.loadingMore')}</span>
         </div>
        ) : null}
       </div>
@@ -255,7 +255,7 @@ export default function ResultsSection({
        animate={{ opacity: 1 }}
        className="text-center mt-8 py-4 text-gray-500"
       >
-       {t('browseTasks.results.allTasksLoaded', "You've reached the end of the list")}
+       {t('browseTasks.results.allTasksLoaded')}
       </motion.div>
      )}
     </div>
@@ -311,17 +311,17 @@ export default function ResultsSection({
 
        {/* Humorous Title */}
        <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-        {t('browseTasks.results.noTasks.title', 'Oops! No tasks here... yet!')}
+        {t('browseTasks.results.noTasks.title')}
        </h3>
 
        {/* Humorous Description */}
        <p className="text-gray-700 text-lg mb-2 max-w-md mx-auto">
-        {t('browseTasks.results.noTasks.description', 'Tasks are coming from users right now! Check back later today and they\'ll be here soon, we promise!')}
+        {t('browseTasks.results.noTasks.description')}
        </p>
 
        {/* Subtext */}
        <p className="text-gray-500 text-sm mb-6">
-        {t('browseTasks.results.noTasks.subtext', 'Try adjusting your filters or explore our featured tasks below')}
+        {t('browseTasks.results.noTasks.subtext')}
        </p>
 
        {/* Clear Filters Button */}
@@ -333,7 +333,7 @@ export default function ResultsSection({
         startContent={<X size={18} />}
         className="font-semibold"
        >
-        {t('browseTasks.results.noTasks.clearFilters', 'Clear Filters')}
+        {t('browseTasks.results.noTasks.clearFilters')}
        </NextUIButton>
       </div>
      </NextUICard>
@@ -421,17 +421,17 @@ export default function ResultsSection({
 
       {/* Humorous Title */}
       <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-       {t('browseTasks.results.noTasks.title', 'Oops! No tasks here... yet!')}
+       {t('browseTasks.results.noTasks.title')}
       </h3>
 
       {/* Humorous Description */}
       <p className="text-gray-700 text-lg mb-2 max-w-md mx-auto">
-       {t('browseTasks.results.noTasks.description', 'Tasks are coming from users right now! Check back later today and they\'ll be here soon, we promise!')}
+       {t('browseTasks.results.noTasks.description')}
       </p>
 
       {/* Subtext */}
       <p className="text-gray-500 text-sm mb-6">
-       {t('browseTasks.results.noTasks.subtext', 'Try adjusting your filters or explore our featured tasks below')}
+       {t('browseTasks.results.noTasks.subtext')}
       </p>
 
       {/* Clear Filters Button */}
@@ -443,7 +443,7 @@ export default function ResultsSection({
        startContent={<X size={18} />}
        className="font-semibold"
       >
-       {t('browseTasks.results.noTasks.clearFilters', 'Clear Filters')}
+       {t('browseTasks.results.noTasks.clearFilters')}
       </NextUIButton>
      </div>
     </NextUICard>

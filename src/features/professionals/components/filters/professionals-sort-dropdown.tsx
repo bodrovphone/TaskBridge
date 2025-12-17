@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { ArrowUpDown, ChevronDown, Crown, Star, Trophy } from 'lucide-react'
 import { useState } from 'react'
@@ -34,7 +34,7 @@ const SORT_OPTIONS = [
 ]
 
 export function ProfessionalsSortDropdown({ value, onChange }: ProfessionalsSortDropdownProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleSelect = (sortValue: ProfessionalSortOption) => {
@@ -44,7 +44,7 @@ export function ProfessionalsSortDropdown({ value, onChange }: ProfessionalsSort
 
   const getDisplayText = () => {
     const option = SORT_OPTIONS.find(opt => opt.value === value)
-    return option ? t(option.labelKey) : t('professionals.filters.sortBy', 'Sort By')
+    return option ? t(option.labelKey) : t('professionals.filters.sortBy')
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { AlertTriangle, X } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 interface NotificationWarningBannerProps {
@@ -26,7 +26,7 @@ export function NotificationWarningBanner({
   onVerifyEmail,
   onDismiss,
 }: NotificationWarningBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <Card className="shadow-lg border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-orange-50">

@@ -35,12 +35,12 @@ export const profile = {
 
   // Profile Page
   'profile.completion': 'Довършване на профил',
-  'profile.settings': 'Настройки',
+  'profile.settingsTitle': 'Настройки',
   'profile.tabs.customer': 'Клиент',
   'profile.tabs.professional': 'Професионалист',
   'profile.switchToCustomer': 'Превключи към Клиентски профил',
   'profile.switchToProfessional': 'Превключи към Професионален профил',
-  'profile.email': 'Имейл',
+  'profile.emailLabel': 'Имейл',
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
   'profile.selectCity': 'Изберете вашия град',
@@ -89,9 +89,9 @@ export const profile = {
   'profile.statistics.professional.monthlyEarnings': 'Месечни доходи',
   'profile.statistics.professional.activeJobs': 'Активни задачи',
   'profile.statistics.avgResponseTime': 'Сред. време за отговор',
-  'profile.statistics.responseTime.minutes': '{{minutes}} мин',
+  'profile.statistics.responseTime.minutes': '{minutes} мин',
   'profile.statistics.responseTime.hour': '1 час',
-  'profile.statistics.responseTime.hours': '{{hours}} часа',
+  'profile.statistics.responseTime.hours': '{hours} часа',
   'profile.professional.acceptanceRate': 'Приемане на задачи',
 
   // Quick Actions
@@ -211,7 +211,7 @@ export const profile = {
   'profile.professional.form.suggestedSkills': 'Популярни умения',
   'profile.professional.form.addCustomSkill': 'Добавете персонализирано умение',
   'profile.professional.form.customSkillPlaceholder': 'Въведете име на умение',
-  'profile.professional.form.moreSkillsAvailable': 'и още {{count}}...',
+  'profile.professional.form.moreSkillsAvailable': 'и още {count}...',
   'profile.professional.form.skillsLimitNotice': 'Препоръчваме да изберете топ 10 умения за най-добри резултати.',
   'profile.professional.form.submitting': 'Създаване на профил...',
   'profile.professional.form.createProfile': 'Създайте професионален профил',
@@ -377,7 +377,7 @@ export const profile = {
   'profile.services.pricePlaceholder': 'напр. 25 €/час',
   'profile.services.descriptionLabel': 'Описание (по избор)',
   'profile.services.descriptionPlaceholder': 'Кратко описание на услугата',
-  'profile.services.helperText': 'Добавете до {{max}} услуги. Промените се запазват автоматично.',
+  'profile.services.helperText': 'Добавете до {max} услуги. Промените се запазват автоматично.',
 
   // Achievement Banner
   'profile.achievement.title': 'Страхотна работа!',

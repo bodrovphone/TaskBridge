@@ -1,7 +1,8 @@
 'use client'
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
 import { Search, X } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue } from "react";
@@ -19,7 +20,9 @@ export default function SearchFiltersSection({
  tasksCount,
  isLoading
 }: SearchFiltersSectionProps) {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
+ const params = useParams();
+ const currentLocale = (params?.lang as string) || 'bg';
  const { filters, updateFilter } = useTaskFilters();
  // Initialize searchQuery from URL filter if present
  const [searchQuery, setSearchQuery] = useState(filters.q || '');
@@ -190,7 +193,7 @@ export default function SearchFiltersSection({
   }
 
   let cancelled = false;
-  searchCategoriesAsync(deferredSearchQuery, t, i18n.language)
+  searchCategoriesAsync(deferredSearchQuery, t, currentLocale)
    .then(results => {
     if (!cancelled) {
      setCategorySuggestions(results.slice(0, 6));
@@ -202,7 +205,7 @@ export default function SearchFiltersSection({
     }
    });
   return () => { cancelled = true; };
- }, [deferredSearchQuery, t, i18n.language]);
+ }, [deferredSearchQuery, t, currentLocale]);
 
  // Search cities (sync - no heavy data)
  const citySuggestions = searchQuery.trim() ? searchCities(searchQuery, t) : [];
@@ -286,7 +289,7 @@ export default function SearchFiltersSection({
   setDisplayText('');
   setIsDeleting(false);
   setIsPaused(false);
- }, [i18n.language]);
+ }, [currentLocale]);
 
  return (
   <motion.div
@@ -309,7 +312,7 @@ export default function SearchFiltersSection({
        {/* Active Search Query Display */}
        {filters.q && (
         <div className="mb-3 flex items-center gap-2">
-         <span className="text-sm text-gray-600">{t('browseTasks.search.searchingFor', 'Searching for')}:</span>
+         <span className="text-sm text-gray-600">{t('browseTasks.search.searchingFor')}:</span>
          <Chip
           onClose={handleClearSearch}
           variant="flat"
@@ -348,7 +351,7 @@ export default function SearchFiltersSection({
           }}
           placeholder={
            searchQuery
-            ? t('browseTasks.search.typeToSearch', 'Type to search tasks...')
+            ? t('browseTasks.search.typeToSearch')
             : `${displayText}${!isPaused ? '|' : ''}`
           }
           endContent={
@@ -392,10 +395,10 @@ export default function SearchFiltersSection({
                 <Search size={18} className="mr-3 text-blue-600" />
                 <div className="flex flex-col items-start">
                  <span className="font-medium text-blue-700">
-                  {t('browseTasks.search.searchInTasks', 'Search in task content')}
+                  {t('browseTasks.search.searchInTasks')}
                  </span>
                  <span className="text-sm text-gray-500">
-                  {t('browseTasks.search.searchInTasksDesc', 'Find tasks matching "{query}"', { query: searchQuery.trim() })}
+                  {t('browseTasks.search.searchInTasksDesc', { query: searchQuery.trim() })}
                  </span>
                 </div>
                </Button>
@@ -405,7 +408,7 @@ export default function SearchFiltersSection({
               {categorySuggestions.length > 0 && (
                <div className="mb-2">
                 <p className="px-4 pt-2 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                 {t('browseTasks.search.filterByCategory', 'Filter by category')}
+                 {t('browseTasks.search.filterByCategory')}
                 </p>
                 {categorySuggestions.map((category) => (
                  <Button
@@ -426,7 +429,7 @@ export default function SearchFiltersSection({
               {citySuggestions.length > 0 && (
                <div>
                 <p className="px-4 pt-2 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                 {t('browseTasks.search.filterByCity', 'Filter by city')}
+                 {t('browseTasks.search.filterByCity')}
                 </p>
                 {citySuggestions.map((city) => (
                  <Button
@@ -457,7 +460,7 @@ export default function SearchFiltersSection({
          isDisabled={searchQuery.trim().length < 2}
         >
          <Search size={20} className="mr-2" />
-         {t('browseTasks.search.searchButton', 'Search')}
+         {t('browseTasks.search.searchButton')}
         </Button>
        </form>
 

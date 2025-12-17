@@ -3,7 +3,7 @@ export const legal = {
   // Terms of Service Page
   'terms.title': 'Общи условия за ползване',
   'terms.subtitle': 'Условия за използване на платформата Trudify',
-  'terms.lastUpdated': 'Последна актуализация: {{date}}',
+  'terms.lastUpdated': 'Последна актуализация: {date}',
   'terms.effectiveDate': 'В сила от: 20 декември 2025 г.',
 
   // Company Info
@@ -293,7 +293,7 @@ export const legal = {
 
   'privacy.title': 'Политика за поверителност',
   'privacy.subtitle': 'Как събираме, използваме и защитаваме вашите лични данни',
-  'privacy.lastUpdated': 'Последна актуализация: {{date}}',
+  'privacy.lastUpdated': 'Последна актуализация: {date}',
   'privacy.effectiveDate': 'В сила от: 20 декември 2025 г.',
 
   // Language notice

@@ -11,7 +11,10 @@ import {
  Radio,
  Divider
 } from "@nextui-org/react"
-import { TFunction } from 'i18next'
+/**
+ * Generic translation function type compatible with both react-i18next and next-intl
+ */
+type TranslateFunction = (key: string) => string;
 import { Star, MapPin, Briefcase, SlidersHorizontal } from "lucide-react"
 import SortingPicker from "@/components/ui/sorting-picker"
 import { getLocationOptions } from '@/lib/constants/locations'
@@ -20,7 +23,7 @@ interface FilterControlsProps {
  filters: any
  onFilterChange: (key: string, value: any) => void
  categorySelectItems: JSX.Element[]
- t: TFunction
+ t: TranslateFunction
 }
 
 export default function FilterControls({ filters, onFilterChange, categorySelectItems, t }: FilterControlsProps) {

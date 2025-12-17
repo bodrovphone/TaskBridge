@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { FileText, MessageSquare, UserCheck, Star, Search, Send, TrendingUp, Briefcase } from 'lucide-react'
 import {
@@ -12,7 +12,7 @@ import {
 import { BreadcrumbJsonLd } from '@/components/seo/json-ld'
 
 export default function HowItWorksContent() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const params = useParams()
   const lang = params?.lang as string || 'bg'
 

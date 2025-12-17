@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useDeferredValue, useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, Chip, Divider } from '@nextui-org/react'
 import { MapPin, Wallet, Clock, FileText, AlertCircle } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
@@ -15,7 +15,7 @@ interface ReviewSectionProps {
 }
 
 export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const [tipDismissed, setTipDismissed] = useState(false)
 
  // Subscribe to all form field values using TanStack Form
@@ -81,10 +81,10 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
    {/* Section Header */}
    <div>
     <h2 className="text-2xl font-bold text-gray-900 mb-2">
-     {t('createTask.review.title', 'Review your task')}
+     {t('createTask.review.title')}
     </h2>
     <p className="text-gray-600">
-     {t('createTask.review.subtitle', 'Make sure everything looks good before posting')}
+     {t('createTask.review.subtitle')}
     </p>
    </div>
 
@@ -102,9 +102,9 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
       {isTitleMissing ? (
        firstMissingField === 'title' && !tipDismissed ? (
         <Tip
-         title={t('createTask.review.tipTitle', 'Title required')}
-         description={t('createTask.review.tipTitleDesc', 'Add a clear title (at least 10 characters) so professionals understand your task.')}
-         dismissText={t('common.gotIt', 'Got it')}
+         title={t('createTask.review.tipTitle')}
+         description={t('createTask.review.tipTitleDesc')}
+         dismissText={t('common.gotIt')}
          variant="warning"
          side="top"
          align="start"
@@ -119,7 +119,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
          >
           <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
           <span className="text-orange-700 font-medium">
-           {t('createTask.review.noTitle', 'No title yet')}
+           {t('createTask.review.noTitle')}
           </span>
          </button>
         </Tip>
@@ -131,7 +131,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
         >
          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
          <span className="text-orange-700 font-medium">
-          {t('createTask.review.noTitle', 'No title yet')}
+          {t('createTask.review.noTitle')}
          </span>
         </button>
        )
@@ -143,9 +143,9 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
       {isDescriptionMissing ? (
        firstMissingField === 'description' && !tipDismissed ? (
         <Tip
-         title={t('createTask.review.tipDescription', 'Description required')}
-         description={t('createTask.review.tipDescriptionDesc', 'Add details about your task (at least 15 characters) to help professionals understand what you need.')}
-         dismissText={t('common.gotIt', 'Got it')}
+         title={t('createTask.review.tipDescription')}
+         description={t('createTask.review.tipDescriptionDesc')}
+         dismissText={t('common.gotIt')}
          variant="warning"
          side="top"
          align="start"
@@ -160,7 +160,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
          >
           <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
           <span className="text-orange-700">
-           {t('createTask.review.noDescription', 'No description yet')}
+           {t('createTask.review.noDescription')}
           </span>
          </button>
         </Tip>
@@ -172,7 +172,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
         >
          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
          <span className="text-orange-700">
-          {t('createTask.review.noDescription', 'No description yet')}
+          {t('createTask.review.noDescription')}
          </span>
         </button>
        )
@@ -190,15 +190,15 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
       <div className="flex items-center gap-2 mb-2">
        <MapPin className={`w-5 h-5 ${isCityMissing ? 'text-orange-500' : 'text-gray-400'}`} />
        <h4 className={`font-semibold ${isCityMissing ? 'text-orange-700' : 'text-gray-900'}`}>
-        {t('createTask.review.location', 'Location')}
+        {t('createTask.review.location')}
        </h4>
       </div>
       {isCityMissing ? (
        firstMissingField === 'city' && !tipDismissed ? (
         <Tip
-         title={t('createTask.review.tipCity', 'City required')}
-         description={t('createTask.review.tipCityDesc', 'Select your city so professionals know where to find you.')}
-         dismissText={t('common.gotIt', 'Got it')}
+         title={t('createTask.review.tipCity')}
+         description={t('createTask.review.tipCityDesc')}
+         dismissText={t('common.gotIt')}
          variant="warning"
          side="top"
          align="start"
@@ -213,7 +213,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
          >
           <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
           <span className="text-orange-700">
-           {t('createTask.review.noCity', 'No city selected')}
+           {t('createTask.review.noCity')}
           </span>
          </button>
         </Tip>
@@ -225,7 +225,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
         >
          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
          <span className="text-orange-700">
-          {t('createTask.review.noCity', 'No city selected')}
+          {t('createTask.review.noCity')}
          </span>
         </button>
        )
@@ -244,7 +244,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
       <div className="flex items-center gap-2 mb-2">
        <Wallet className="w-5 h-5 text-gray-400" />
        <h4 className="font-semibold text-gray-900">
-        {t('createTask.review.budget', 'Budget')}
+        {t('createTask.review.budget')}
        </h4>
       </div>
       <p className="text-gray-600 ml-7">{getBudgetDisplay()}</p>
@@ -257,7 +257,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
       <div className="flex items-center gap-2 mb-2">
        <Clock className="w-5 h-5 text-gray-400" />
        <h4 className="font-semibold text-gray-900">
-        {t('createTask.review.timeline', 'Timeline')}
+        {t('createTask.review.timeline')}
        </h4>
       </div>
       <p className="text-gray-600 ml-7">{getDeadlineDisplay()}</p>
@@ -271,7 +271,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
         <div className="flex items-center gap-2 mb-2">
          <FileText className="w-5 h-5 text-gray-400" />
          <h4 className="font-semibold text-gray-900">
-          {t('createTask.review.requirements', 'Requirements')}
+          {t('createTask.review.requirements')}
          </h4>
         </div>
         <p className="text-gray-600 ml-7 whitespace-pre-wrap">
@@ -287,7 +287,7 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
        <Divider />
        <div>
         <h4 className="font-semibold text-gray-900 mb-3">
-         {t('createTask.review.photos', 'Photos')} ({deferredFormData.photos.length})
+         {t('createTask.review.photos')} ({deferredFormData.photos.length})
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
          {deferredFormData.photos.map((photoUrl: string, index: number) => (

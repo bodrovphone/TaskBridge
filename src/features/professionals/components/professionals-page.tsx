@@ -7,7 +7,8 @@
 'use client'
 
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { motion } from "framer-motion";
 import { useProfessionalFilters } from '../hooks/use-professional-filters';
 import SearchFiltersSection from './sections/search-filters-section';
@@ -18,11 +19,12 @@ import { ActiveFilters } from './filters/active-filters';
 import type { PaginatedProfessionalsResponse } from '@/server/professionals/professional.types';
 
 export default function ProfessionalsPage() {
-  const { t, i18n } = useTranslation();
+  const t = useTranslations();
+  const params = useParams();
   const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
 
   // Get current locale for API requests (for translations)
-  const currentLang = i18n.language || 'bg';
+  const currentLang = (params?.lang as string) || 'bg';
 
   // Check if any filters are active
   const hasActiveFilters = activeFilterCount > 0;
@@ -132,7 +134,7 @@ export default function ProfessionalsPage() {
               className="inline-block"
             >
               <div className="bg-white/10 rounded-full px-4 sm:px-6 py-2 border border-white/20 mb-4 sm:mb-6">
-                <span className="text-sm sm:text-base text-blue-200 font-medium tracking-wide">✨ {t('professionals.hero.badge', 'Professional Network')}</span>
+                <span className="text-sm sm:text-base text-blue-200 font-medium tracking-wide">✨ {t('professionals.hero.badge')}</span>
               </div>
             </motion.div>
 

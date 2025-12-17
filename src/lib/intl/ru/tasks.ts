@@ -43,7 +43,7 @@ export const tasks = {
   'browseTasks.search.typeToSearch': 'Введите для поиска задач...',
   'browseTasks.search.searchingFor': 'Поиск по',
   'browseTasks.search.searchInTasks': 'Поиск в содержимом задач',
-  'browseTasks.search.searchInTasksDesc': 'Найди задачи содержащие "{{query}}"',
+  'browseTasks.search.searchInTasksDesc': 'Найди задачи содержащие "{query}"',
   'browseTasks.search.filterByCategory': 'Фильтр по категории',
   'browseTasks.search.filterByCity': 'Фильтр по городу',
   'browseTasks.filters.title': 'Фильтрация и сортировка',
@@ -63,8 +63,8 @@ export const tasks = {
   'browseTasks.filters.budgetMin': 'Мин',
   'browseTasks.filters.budgetMax': 'Макс',
   'browseTasks.filters.budgetUpTo': 'До 250 €',
-  'browseTasks.filters.budgetUnder': 'До {{amount}} €',
-  'browseTasks.filters.budgetOver': '{{amount}}+ €',
+  'browseTasks.filters.budgetUnder': 'До {amount} €',
+  'browseTasks.filters.budgetOver': '{amount}+ €',
   'browseTasks.filters.sortBy': 'Сортировка',
   'browseTasks.filters.sort.newest': 'Новые',
   'browseTasks.filters.sort.oldest': 'Старые',
@@ -94,8 +94,8 @@ export const tasks = {
   'browseTasks.sort.budgetHigh': 'Высокий бюджет',
   'browseTasks.sort.budgetLow': 'Низкий бюджет',
   'browseTasks.sort.deadline': 'По сроку',
-  'browseTasks.results.shown': 'Показано {{count}} результатов',
-  'browseTasks.results.featured': 'Показано {{count}} популярных задач',
+  'browseTasks.results.shown': 'Показано {count} результатов',
+  'browseTasks.results.featured': 'Показано {count} популярных задач',
   'browseTasks.results.loading': 'Загрузка...',
   'browseTasks.results.noTasks.title': 'Задачи не найдены',
   'browseTasks.results.noTasks.description':
@@ -141,7 +141,7 @@ export const tasks = {
 
   // Create Task Form
   'createTask.checkingEligibility': 'Пожалуйста, подождите, пока мы проверяем вашу возможность.',
-  'createTask.title': 'Создать новую задачу',
+  'createTask.pageTitle': 'Создать новую задачу',
   'createTask.hero.subtitle':
     'Опишите что вам нужно и позвольте профессионалам прийти к вам',
   'createTask.hero.freeToPost': 'Бесплатная публикация',
@@ -262,7 +262,7 @@ export const tasks = {
     'Оптимизация изображения для более быстрой загрузки...',
   'createTask.photos.optimized': 'Изображение успешно оптимизировано',
   'createTask.photos.smaller': 'меньше',
-  'createTask.photos.maxImagesError': 'Вы можете загрузить максимум {{count}} изображений',
+  'createTask.photos.maxImagesError': 'Вы можете загрузить максимум {count} изображений',
 
   // Review Section
   'createTask.review.title': 'Проверьте вашу задачу',

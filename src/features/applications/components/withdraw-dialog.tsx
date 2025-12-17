@@ -13,7 +13,7 @@ import {
   Radio
 } from '@nextui-org/react'
 import { FileX, AlertCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface WithdrawDialogProps {
   application: MyApplication | null
@@ -28,7 +28,7 @@ export default function WithdrawDialog({
   onClose,
   onConfirm
 }: WithdrawDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedReason, setSelectedReason] = useState<string>('')
 
   if (!application) return null

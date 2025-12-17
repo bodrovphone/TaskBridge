@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { MyApplication, SortOption, FilterOption } from '../lib/types'
 import MyApplicationCard from './my-application-card'
 import { Select, SelectItem, Tabs, Tab, Chip } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { PackageOpen, CheckCircle, XCircle, Clock, FileX } from 'lucide-react'
 
 interface MyApplicationsListProps {
@@ -26,7 +26,7 @@ export default function MyApplicationsList({
   onFindSimilar,
   onDelete
 }: MyApplicationsListProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('all')
   const [sortBy, setSortBy] = useState<SortOption>('newest')
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { X, Save } from 'lucide-react'
 
 interface FormActionButtonsProps {
@@ -25,7 +25,7 @@ export function FormActionButtons({
   saveLabel,
   cancelLabel,
 }: FormActionButtonsProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <div className="flex justify-end gap-3">
@@ -37,7 +37,7 @@ export function FormActionButtons({
         isDisabled={isLoading || isDisabled}
         className="font-medium border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-700"
       >
-        {cancelLabel || t('common.cancel', 'Cancel')}
+        {cancelLabel || t('common.cancel')}
       </Button>
       <Button
         size="sm"
@@ -48,8 +48,8 @@ export function FormActionButtons({
         className="font-semibold border-2 border-emerald-600 bg-emerald-600 hover:bg-emerald-700 hover:border-emerald-700 text-white shadow-md"
       >
         {isLoading
-          ? t('common.saving', 'Saving...')
-          : saveLabel || t('common.save', 'Save')}
+          ? t('common.saving')
+          : saveLabel || t('common.save')}
       </Button>
     </div>
   )

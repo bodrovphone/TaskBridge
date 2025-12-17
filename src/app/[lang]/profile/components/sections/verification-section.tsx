@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardBody, CardHeader, Button, Chip } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Shield, Phone, CheckCircle } from 'lucide-react'
 
 interface VerificationSectionProps {
@@ -11,7 +11,7 @@ interface VerificationSectionProps {
 }
 
 export function VerificationSection({ phoneNumber, isPhoneVerified, onVerifyPhone }: VerificationSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">

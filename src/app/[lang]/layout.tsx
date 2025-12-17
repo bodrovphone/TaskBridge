@@ -1,6 +1,8 @@
 import { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, setRequestLocale } from 'next-intl/server'
 import { LocaleProviders } from './providers'
 import { Header, Footer } from '@/components/common'
 import ProgressBar from '@/components/common/progress-bar'
@@ -13,15 +15,15 @@ import { OrganizationJsonLd, WebSiteJsonLd, LocalBusinessJsonLd } from '@/compon
 import '../nprogress.css'
 
 interface LocaleLayoutProps {
- children: ReactNode
- params: Promise<{ lang: string }>
+  children: ReactNode
+  params: Promise<{ lang: string }>
 }
 
 /**
  * Generate static params for all supported locales
  */
 export async function generateStaticParams() {
- return SUPPORTED_LOCALES.map((locale) => ({ lang: locale }))
+  return SUPPORTED_LOCALES.map((locale) => ({ lang: locale }))
 }
 
 /**
@@ -29,18 +31,18 @@ export async function generateStaticParams() {
  * This tells search engines about all language versions of the page
  */
 export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
- const { lang } = await params
- const validatedLocale = validateLocale(lang) as SupportedLocale
+  const { lang } = await params
+  const validatedLocale = validateLocale(lang) as SupportedLocale
 
- // For layout, we use root path. Child pages will override with their specific paths.
- const pathname = ''
+  // For layout, we use root path. Child pages will override with their specific paths.
+  const pathname = ''
 
- return {
-  alternates: {
-   canonical: generateCanonicalUrl(validatedLocale, pathname),
-   languages: generateAlternateLanguages(pathname)
+  return {
+    alternates: {
+      canonical: generateCanonicalUrl(validatedLocale, pathname),
+      languages: generateAlternateLanguages(pathname)
+    }
   }
- }
 }
 
 /**
@@ -48,39 +50,47 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
  * @param children - Child components
  * @param params - Route parameters including locale
  */
-async function LocaleLayout({ 
- children, 
- params 
+async function LocaleLayout({
+  children,
+  params
 }: LocaleLayoutProps) {
- const { lang } = await params
- 
- // Validate that the locale is supported using our utility
- const validatedLocale = validateLocale(lang)
- if (!validatedLocale) {
-  notFound()
- }
+  const { lang } = await params
 
- return (
-  <LocaleProviders locale={validatedLocale}>
-   {/* JSON-LD Structured Data for SEO */}
-   <OrganizationJsonLd />
-   <WebSiteJsonLd />
-   <LocalBusinessJsonLd />
+  // Validate that the locale is supported using our utility
+  const validatedLocale = validateLocale(lang)
+  if (!validatedLocale) {
+    notFound()
+  }
 
-   <ProgressBar />
-   <div className="min-h-screen flex flex-col overflow-x-hidden w-full max-w-full">
-    <Header />
-    {/* Spacer for fixed navbar */}
-    <div className="h-20" />
-    <main className="flex-1 overflow-x-hidden w-full max-w-full">
-     {children}
-    </main>
-    <Footer />
-   </div>
-   <TelegramConnectionToast />
-   <Toaster />
-  </LocaleProviders>
- )
+  // Enable static rendering for this locale
+  setRequestLocale(validatedLocale)
+
+  // Get messages for the current locale (server-side)
+  const messages = await getMessages()
+
+  return (
+    <NextIntlClientProvider messages={messages}>
+      <LocaleProviders locale={validatedLocale}>
+        {/* JSON-LD Structured Data for SEO */}
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
+        <LocalBusinessJsonLd />
+
+        <ProgressBar />
+        <div className="min-h-screen flex flex-col overflow-x-hidden w-full max-w-full">
+          <Header />
+          {/* Spacer for fixed navbar */}
+          <div className="h-20" />
+          <main className="flex-1 overflow-x-hidden w-full max-w-full">
+            {children}
+          </main>
+          <Footer />
+        </div>
+        <TelegramConnectionToast />
+        <Toaster />
+      </LocaleProviders>
+    </NextIntlClientProvider>
+  )
 }
 
 LocaleLayout.displayName = 'LocaleLayout';

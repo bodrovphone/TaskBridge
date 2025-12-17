@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { X, ExternalLink } from "lucide-react";
 import { Button as NextUIButton } from "@nextui-org/react";
 import { useAuth } from "@/features/auth";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { LoginButton } from '@telegram-auth/react';
 import type { TelegramUserData } from '@telegram-auth/server';
 import { detectWebView, openInSystemBrowser, type WebViewInfo } from '@/lib/utils/webview-detection';
@@ -46,8 +46,10 @@ interface AuthSlideOverProps {
  */
 export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
  const { signInWithGoogle, signInWithFacebook, refreshProfile } = useAuth();
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
  const router = useRouter();
+ const params = useParams();
+ const currentLocale = (params?.lang as string) || 'bg';
 
  // Form fields
  const [fullName, setFullName] = useState("");   // Only required for registration
@@ -86,7 +88,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
 
    // Redirect based on action
    if (action === 'create-task') {
-    router.push(`/${i18n.language}/create-task`);
+    router.push(`/${currentLocale}/create-task`);
    }
    // For other actions (apply, question), the parent component will handle them
   }, 100);
@@ -138,8 +140,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   setNameRequired(false);  // Reset name highlight on new submission
 
   try {
-   // Include current locale so API can set correct user preference
-   const currentLocale = i18n.language || 'en';
+   // Use current locale for API to set correct user preference
 
    const response = await fetch('/api/auth/unified', {
     method: 'POST',
@@ -160,7 +161,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
     if (result.name_required) {
      console.log('[AuthSlideOver] Name required - highlighting name field');
      setNameRequired(true);  // This triggers red border on name field
-     setError(t('auth.nameRequired', 'Please provide your name to create an account'));
+     setError(t('auth.nameRequired'));
     } else {
      // Other errors (wrong password, validation, etc.)
      setError(result.error || 'Authentication failed');
@@ -181,7 +182,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   } catch (err) {
    // Network error or unexpected exception
    console.error('[AuthSlideOver] Auth error:', err);
-   setError(t('auth.unexpectedError', 'An unexpected error occurred. Please try again.'));
+   setError(t('auth.unexpectedError'));
    setIsLoading(false);
   }
  };
@@ -199,7 +200,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
     // If no error, redirect happens automatically
   } catch (err) {
     // Handle popup blockers or other errors
-    setError(t('auth.popupBlocked', 'Please allow popups for this site to sign in with Google'));
+    setError(t('auth.popupBlocked'));
     setIsLoading(false);
   }
  };
@@ -217,7 +218,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
     // If no error, redirect happens automatically
   } catch (err) {
     // Handle popup blockers or other errors
-    setError(t('auth.popupBlocked', 'Please allow popups for this site to sign in with Facebook'));
+    setError(t('auth.popupBlocked'));
     setIsLoading(false);
   }
  };
@@ -338,7 +339,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         {/* Email Field */}
         <div>
          <label className="block text-sm font-medium text-gray-700 mb-2">
-          {t('auth.email')}
+          {t('auth.emailLabel')}
          </label>
          <input
           type="email"
@@ -391,7 +392,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         */}
         <div className={`transition-all duration-200 ${nameRequired ? '' : 'opacity-60'}`}>
          <label className={`block text-sm font-medium mb-2 ${nameRequired ? 'text-red-600' : 'text-gray-500'}`}>
-          {t('auth.fullName', 'Your Name')}
+          {t('auth.fullName')}
          </label>
          <input
           type="text"
@@ -414,8 +415,8 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
          />
          <p className={`text-xs mt-1.5 ${nameRequired ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
           {nameRequired
-           ? t('auth.nameRequiredHint', 'Name is required to create your account')
-           : t('auth.nameHint', 'Only needed when creating a new account')
+           ? t('auth.nameRequiredHint')
+           : t('auth.nameHint')
           }
          </p>
         </div>
@@ -423,11 +424,11 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
         {/* Forgot Password Link */}
         <div className="flex items-center justify-end text-sm">
          <Link
-          href={`/${i18n.language}/forgot-password`}
+          href={`/${currentLocale}/forgot-password`}
           className="text-blue-600 hover:text-blue-800"
           onClick={onClose}
          >
-          {t('auth.forgotPassword')}
+          {t('auth.forgotPasswordLink')}
          </Link>
         </div>
 
@@ -455,7 +456,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
           isDisabled={isLoading}
           startContent={<ExternalLink className="w-5 h-5 text-gray-600" />}
          >
-          {t('auth.openInBrowser', 'Open in Browser')}
+          {t('auth.openInBrowser')}
          </NextUIButton>
         ) : (
          <NextUIButton
@@ -506,7 +507,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
             buttonSize="large"
             cornerRadius={8}
             showAvatar={false}
-            lang={i18n.language === 'bg' ? 'bg' : i18n.language === 'ru' ? 'ru' : 'en'}
+            lang={currentLocale === 'bg' ? 'bg' : currentLocale === 'ru' ? 'ru' : 'en'}
            />
            <p className="text-xs text-gray-500 text-center">
             {t('auth.telegramHint') || 'Opens Telegram app or desktop client'}

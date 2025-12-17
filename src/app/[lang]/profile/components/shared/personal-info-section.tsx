@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { MapPin, Phone, Mail, Calendar, Shield, Globe, User as UserIcon, Edit, X, AlertCircle, Send } from 'lucide-react'
 import { FormActionButtons } from './form-action-buttons'
@@ -25,7 +25,7 @@ interface PersonalInfoSectionProps {
 }
 
 export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { authenticatedFetch } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -169,7 +169,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
       setIsEditing(false)
     } catch (err) {
       console.error('Error disconnecting Telegram:', err)
-      setErrorMessage(t('profile.telegram.disconnectError', 'Failed to disconnect Telegram. Please try again.'))
+      setErrorMessage(t('profile.telegram.disconnectError'))
       setShowTelegramDisconnectDialog(false)
     } finally {
       setIsLoading(false)
@@ -201,18 +201,18 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
 
       if (!response.ok) {
         if (response.status === 400 && data.error?.includes('already verified')) {
-          setVerificationMessage({ type: 'success', text: t('auth.emailVerification.alreadyVerified', 'Your email is already verified!') })
+          setVerificationMessage({ type: 'success', text: t('auth.emailVerification.alreadyVerified') })
         } else if (response.status === 429) {
-          setVerificationMessage({ type: 'error', text: t('auth.emailVerification.rateLimited', 'Too many requests. Please try again later.') })
+          setVerificationMessage({ type: 'error', text: t('auth.emailVerification.rateLimited') })
         } else {
-          setVerificationMessage({ type: 'error', text: data.error || t('auth.emailVerification.error', 'Failed to send verification email.') })
+          setVerificationMessage({ type: 'error', text: data.error || t('auth.emailVerification.error') })
         }
       } else {
-        setVerificationMessage({ type: 'success', text: t('auth.emailVerification.success', 'Verification email sent! Please check your inbox.') })
+        setVerificationMessage({ type: 'success', text: t('auth.emailVerification.success') })
       }
     } catch (error) {
       console.error('Error resending verification email:', error)
-      setVerificationMessage({ type: 'error', text: t('auth.emailVerification.error', 'Failed to send verification email.') })
+      setVerificationMessage({ type: 'error', text: t('auth.emailVerification.error') })
     } finally {
       setIsResendingVerification(false)
     }
@@ -237,10 +237,10 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               <Mail className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <h4 className="text-sm font-bold text-amber-900 mb-1">
-                  {t('profile.verifyEmailPrompt', 'Verify your email address')}
+                  {t('profile.verifyEmailPrompt')}
                 </h4>
                 <p className="text-sm text-amber-800 mb-3">
-                  {t('profile.verifyEmailMessage', 'Get important updates about your tasks and applications. A verification email was sent when you signed up.')}
+                  {t('profile.verifyEmailMessage')}
                 </p>
                 <Button
                   size="sm"
@@ -252,8 +252,8 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                   startContent={!isResendingVerification && <Send className="w-4 h-4" />}
                 >
                   {isResendingVerification
-                    ? t('profile.sending', 'Sending...')
-                    : t('profile.sendVerificationEmail', 'Send Verification Email')}
+                    ? t('profile.sending')
+                    : t('profile.sendVerificationEmail')}
                 </Button>
 
                 {/* Verification Status Message */}
@@ -282,7 +282,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-red-900 mb-1">
-                  {t('common.error', 'Error')}
+                  {t('common.error')}
                 </p>
                 <p className="text-sm text-red-800">
                   {errorMessage}
@@ -306,7 +306,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                 <Mail className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.email')}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.emailLabel')}</p>
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="font-semibold text-gray-900 truncate">{profile.email}</p>
                   {profile.isEmailVerified && (
@@ -370,12 +370,12 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                 <Globe className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.customer.language', 'Language')}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.customer.language')}</p>
                 <p className="font-semibold text-gray-900">
-                  {profile.preferredLanguage === 'en' && t('language.en', 'English')}
-                  {profile.preferredLanguage === 'bg' && t('language.bg', 'Български')}
-                  {profile.preferredLanguage === 'ru' && t('language.ru', 'Русский')}
-                  {profile.preferredLanguage === 'ua' && t('language.ua', 'Українська')}
+                  {profile.preferredLanguage === 'en' && t('language.en')}
+                  {profile.preferredLanguage === 'bg' && t('language.bg')}
+                  {profile.preferredLanguage === 'ru' && t('language.ru')}
+                  {profile.preferredLanguage === 'ua' && t('language.ua')}
                 </p>
               </div>
             </div>
@@ -389,9 +389,9 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                 )}
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.customer.preferredContact', 'Preferred Contact')}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.customer.preferredContact')}</p>
                 <p className="font-semibold text-gray-900">
-                  {profile.preferredContact === 'email' && t('profile.email', 'Email')}
+                  {profile.preferredContact === 'email' && t('profile.emailLabel')}
                   {profile.preferredContact === 'telegram' && 'Telegram'}
                 </p>
               </div>
@@ -439,7 +439,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                 {(field) => (
                   <Input
                     type="email"
-                    label={t('profile.email')}
+                    label={t('profile.emailLabel')}
                     value={field.state.value}
                     onValueChange={field.handleChange}
                     isRequired
@@ -459,7 +459,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                 validators={{
                   onChange: ({ value }) => {
                     if (value && !/^[0-9]{8,9}$/.test(value.replace(/[\s-]/g, ''))) {
-                      return t('profile.form.validation.phoneInvalid', 'Enter 8-9 digits (e.g. 88 123 4567)')
+                      return t('profile.form.validation.phoneInvalid')
                     }
                   }
                 }}
@@ -483,7 +483,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                       </div>
                     }
                     placeholder="88 123 4567"
-                    description={t('profile.form.phoneBulgarianOnly', 'Bulgarian phone numbers only')}
+                    description={t('profile.form.phoneBulgarianOnly')}
                     classNames={{
                       input: 'text-base', // 16px font size prevents iOS zoom
                     }}
@@ -501,7 +501,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                       onChange={(city: CityOption | null) => {
                         field.handleChange(city?.slug || null)
                       }}
-                      placeholder={t('profile.selectCity', 'Select your city')}
+                      placeholder={t('profile.selectCity')}
                       showProfileCity={false}
                       showLastSearched={true}
                       showPopularCities={true}
@@ -514,7 +514,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               <personalForm.Field name="preferredLanguage">
                 {(field) => (
                   <Select
-                    label={t('profile.customer.preferredLanguage', 'Preferred Language')}
+                    label={t('profile.customer.preferredLanguage')}
                     selectedKeys={[field.state.value]}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
@@ -524,10 +524,10 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                     }}
                     startContent={<Globe className="w-4 h-4 text-gray-500" />}
                   >
-                    <SelectItem key="en" value="en">{t('language.en', 'English')}</SelectItem>
-                    <SelectItem key="bg" value="bg">{t('language.bg', 'Български')}</SelectItem>
-                    <SelectItem key="ru" value="ru">{t('language.ru', 'Русский')}</SelectItem>
-                    <SelectItem key="ua" value="ua">{t('language.ua', 'Українська')}</SelectItem>
+                    <SelectItem key="en" value="en">{t('language.en')}</SelectItem>
+                    <SelectItem key="bg" value="bg">{t('language.bg')}</SelectItem>
+                    <SelectItem key="ru" value="ru">{t('language.ru')}</SelectItem>
+                    <SelectItem key="ua" value="ua">{t('language.ua')}</SelectItem>
                   </Select>
                 )}
               </personalForm.Field>
@@ -536,7 +536,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               <personalForm.Field name="preferredContact">
                 {(field) => (
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-3">{t('profile.customer.preferredContactMethod', 'Preferred Contact Method')}</label>
+                    <label className="block text-sm font-medium mb-3">{t('profile.customer.preferredContactMethod')}</label>
                     <RadioGroup
                       value={field.state.value}
                       onValueChange={(value) => {
@@ -576,7 +576,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                       >
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
-                          <span>{t('profile.email', 'Email')}</span>
+                          <span>{t('profile.emailLabel')}</span>
                         </div>
                       </Radio>
                       <Radio
@@ -593,7 +593,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                           <div className="flex flex-col">
                             <span>Telegram</span>
                             {!hasTelegramConnected && (
-                              <span className="text-xs text-gray-500">{t('profile.telegram.clickToConnect', 'Click to connect')}</span>
+                              <span className="text-xs text-gray-500">{t('profile.telegram.clickToConnect')}</span>
                             )}
                           </div>
                         </div>
@@ -637,29 +637,29 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
       >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            <span className="text-xl">{t('profile.telegram.disconnectConfirmTitle', 'Disconnect Telegram?')}</span>
+            <span className="text-xl">{t('profile.telegram.disconnectConfirmTitle')}</span>
           </ModalHeader>
           <ModalBody>
             <div className="space-y-3">
               <p className="text-gray-700">
-                {t('profile.telegram.disconnectConfirmMessage', 'Are you sure you want to stop receiving instant free Telegram notifications?')}
+                {t('profile.telegram.disconnectConfirmMessage')}
               </p>
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-sm text-amber-800">
-                  {t('profile.telegram.disconnectWarning', 'You will lose access to:')}
+                  {t('profile.telegram.disconnectWarning')}
                 </p>
                 <ul className="mt-2 space-y-1 text-sm text-amber-700">
                   <li className="flex items-center gap-2">
                     <span className="text-amber-500">•</span>
-                    {t('profile.instantNotifications', 'Instant notifications (no delays)')}
+                    {t('profile.instantNotifications')}
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-amber-500">•</span>
-                    {t('profile.freeForever', 'Free forever (no SMS costs)')}
+                    {t('profile.freeForever')}
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-amber-500">•</span>
-                    {t('profile.richMessages', 'Rich messages with buttons and links')}
+                    {t('profile.richMessages')}
                   </li>
                 </ul>
               </div>
@@ -671,14 +671,14 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
               onPress={handleCancelDisconnect}
               isDisabled={isLoading}
             >
-              {t('profile.telegram.keepTelegram', 'Keep Telegram')}
+              {t('profile.telegram.keepTelegram')}
             </Button>
             <Button
               color="danger"
               onPress={handleDisconnectTelegram}
               isLoading={isLoading}
             >
-              {t('profile.telegram.disconnect', 'Disconnect')}
+              {t('profile.telegram.disconnect')}
             </Button>
           </ModalFooter>
         </ModalContent>

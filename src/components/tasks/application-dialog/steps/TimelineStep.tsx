@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Zap, Calendar, Sparkles, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -54,12 +54,12 @@ export function TimelineStep({
   onChange,
   error,
 }: TimelineStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        {t('application.wizard.timelineHelp', 'When can you complete this task? Choose the option that best fits your availability.')}
+        {t('application.wizard.timelineHelp')}
       </p>
 
       <div className="space-y-3">
@@ -95,7 +95,7 @@ export function TimelineStep({
                     {t(TIMELINE_DISPLAY[option])}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                    {t(TIMELINE_DESCRIPTIONS[option], '')}
+                    {t(TIMELINE_DESCRIPTIONS[option])}
                   </p>
                 </div>
                 {isSelected && (

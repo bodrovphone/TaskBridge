@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { Briefcase, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
@@ -18,7 +18,7 @@ const JOBS_OPTIONS = [
 ]
 
 export function CompletedJobsFilter({ value, onChange }: CompletedJobsFilterProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleSelect = (jobs: number) => {
@@ -31,7 +31,7 @@ export function CompletedJobsFilter({ value, onChange }: CompletedJobsFilterProp
   }
 
   const getDisplayText = () => {
-    if (!value) return t('professionals.filters.minJobs', 'Min Jobs')
+    if (!value) return t('professionals.filters.minJobs')
     return `${value}+ jobs`
   }
 
@@ -86,7 +86,7 @@ export function CompletedJobsFilter({ value, onChange }: CompletedJobsFilterProp
                   setIsOpen(false)
                 }}
               >
-                {t('professionals.filters.clear', 'Clear')}
+                {t('professionals.filters.clear')}
               </Button>
             </>
           )}

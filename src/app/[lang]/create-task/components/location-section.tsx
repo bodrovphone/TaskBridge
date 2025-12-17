@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Input, Card, CardBody } from '@nextui-org/react'
 import { MapPin } from 'lucide-react'
 import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
@@ -10,7 +10,7 @@ interface LocationSectionProps {
 }
 
 export function LocationSection({ form }: LocationSectionProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
 
  return (
   <Card className="shadow-md border border-gray-100 overflow-visible">
@@ -22,10 +22,10 @@ export function LocationSection({ form }: LocationSectionProps) {
      </div>
      <div>
       <h2 className="text-2xl font-bold text-gray-900 mb-1">
-       {t('createTask.location.title', 'Where will the task be performed?')}
+       {t('createTask.location.title')}
       </h2>
       <p className="text-gray-600">
-       {t('createTask.location.subtitle', 'Location helps professionals understand if they can reach you')}
+       {t('createTask.location.subtitle')}
       </p>
      </div>
     </div>
@@ -51,7 +51,7 @@ export function LocationSection({ form }: LocationSectionProps) {
     {(field: any) => (
      <div className="space-y-2 max-w-md">
       <label htmlFor="task-city" className="text-sm font-medium text-gray-700">
-       {t('createTask.location.cityLabel', 'City')} <span className="text-red-500">*</span>
+       {t('createTask.location.cityLabel')} <span className="text-red-500">*</span>
       </label>
       <CityAutocomplete
        value={field.state.value}
@@ -59,7 +59,7 @@ export function LocationSection({ form }: LocationSectionProps) {
         field.handleChange(city?.slug || '')
         field.handleBlur()
        }}
-       placeholder={t('createTask.location.cityPlaceholder', 'Select your city')}
+       placeholder={t('createTask.location.cityPlaceholder')}
        isInvalid={field.state.meta.isTouched && field.state.meta.errors.length > 0}
        errorMessage={field.state.meta.isTouched && field.state.meta.errors.length > 0 ? t(field.state.meta.errors[0] as string) : undefined}
        showProfileCity={true}
@@ -75,12 +75,12 @@ export function LocationSection({ form }: LocationSectionProps) {
     {(field: any) => (
      <div className="space-y-2">
       <label htmlFor="task-neighborhood" className="text-sm font-medium text-gray-700">
-       {t('createTask.location.neighborhoodLabel', 'Neighborhood/District')}
+       {t('createTask.location.neighborhoodLabel')}
       </label>
       <Input
        id="task-neighborhood"
-       placeholder={t('createTask.location.neighborhoodPlaceholder', 'e.g., Лозенец, Витоша, Център')}
-       description={t('createTask.location.neighborhoodHelp', 'Helps professionals determine if they can reach you')}
+       placeholder={t('createTask.location.neighborhoodPlaceholder')}
+       description={t('createTask.location.neighborhoodHelp')}
        value={field.state.value || ''}
        onValueChange={field.handleChange}
        startContent={<MapPin className="w-4 h-4 text-gray-400" />}

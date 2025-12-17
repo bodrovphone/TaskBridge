@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 import { Share2, Edit3, Check, LogOut, CheckCircle, Globe } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Chip } from "@nextui-org/react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
 import ApplicationDialog from "@/components/tasks/application-dialog";
@@ -26,7 +26,7 @@ interface TaskActionsProps {
 }
 
 export default function TaskActions({ task, isOwner = false }: TaskActionsProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const router = useRouter();
  const params = useParams();
  const pathname = usePathname();
@@ -54,7 +54,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const getLanguageName = (langCode: string): string => {
   // Use profile.professional.languages.* keys which are translated per locale
   // Strip the flag emoji from the beginning (format: "🇷🇺 Russian" → "Russian")
-  const translated = t(`profile.professional.languages.${langCode}`, langCode);
+  const key = `profile.professional.languages.${langCode}` as any;
+  const translated = t(key);
   return translated.replace(/^[\p{Emoji}\s]+/u, '').trim();
  };
 
@@ -138,7 +139,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  //   if (!isAuthenticated) {
  //     // Add URL param to trigger action after login using Next.js APIs
  //     const params = new URLSearchParams(searchParams.toString());
- //     params.set('action', 'question');
+ //     params.set('action');
  //     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
  //
  //     setAuthAction('question');
@@ -156,7 +157,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   const taskUrl = `${window.location.origin}/${lang}/tasks/${task.id}`;
   const shareData = {
    title: task.title,
-   text: t('taskDetail.shareText', 'Check out this task on Trudify'),
+   text: t('taskDetail.shareText'),
    url: taskUrl,
   };
 
@@ -164,7 +165,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   if (navigator.share) {
    try {
     await navigator.share(shareData);
-    toast({ title: t('taskDetail.shareSuccess', 'Shared successfully!') });
+    toast({ title: t('taskDetail.shareSuccess') });
    } catch (error: any) {
     // User cancelled or error occurred
     if (error.name !== 'AbortError') {
@@ -183,7 +184,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   try {
    await navigator.clipboard.writeText(text);
    setIsShareCopied(true);
-   toast({ title: t('taskDetail.linkCopied', 'Link copied to clipboard!') });
+   toast({ title: t('taskDetail.linkCopied') });
 
    // Reset icon after 2 seconds
    setTimeout(() => {
@@ -192,7 +193,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   } catch (error) {
    console.error('Failed to copy:', error);
    toast({
-    title: t('taskDetail.copyError', 'Failed to copy link'),
+    title: t('taskDetail.copyError'),
     variant: 'destructive',
    });
   }
@@ -253,7 +254,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     throw new Error(error.error || 'Failed to mark task as completed');
    }
 
-   toast({ title: t('taskCompletion.success') });
+   toast({ title: t('taskCompletion.successMessage') });
    setIsMarkCompletedDialogOpen(false);
 
    // Refresh the page to show updated status
@@ -261,7 +262,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   } catch (error: any) {
    console.error('Error marking task as completed:', error);
    toast({
-    title: t('taskCompletion.error'),
+    title: t('taskCompletion.errorMessage'),
     description: error.message,
     variant: 'destructive',
    });

@@ -20,8 +20,8 @@ export const taskCompletion = {
   'taskCompletion.confirmCompletion': 'Підтвердити завершення',
   'taskCompletion.alreadyMarkedByYou': 'Ви позначили як завершене',
   'taskCompletion.alreadyConfirmedByYou': 'Ви вже підтвердили',
-  'taskCompletion.success': 'Завдання позначено як завершене. Очікуємо підтвердження від замовника.',
-  'taskCompletion.error': 'Не вдалося позначити завдання. Будь ласка, спробуйте ще раз.',
+  'taskCompletion.successMessage': 'Завдання позначено як завершене. Очікуємо підтвердження від замовника.',
+  'taskCompletion.errorMessage': 'Не вдалося позначити завдання. Будь ласка, спробуйте ще раз.',
   'taskCompletion.error.alreadyCompleted': 'Це завдання вже було завершено іншою стороною.',
   'taskCompletion.error.invalidStatus': 'Це завдання не може бути позначене як завершене у поточному статусі.',
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, CardHeader, Spinner } from '@nextui-org/react'
 import {
   BarChart3,
@@ -23,7 +23,7 @@ interface StatisticsSectionProps {
 }
 
 export function StatisticsSection({ userRole, profile }: StatisticsSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [customerStats, setCustomerStats] = useState<CustomerStats | null>(null)
   const [professionalStats, setProfessionalStats] = useState<ProfessionalStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)

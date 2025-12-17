@@ -2,6 +2,7 @@
 
 import { MyApplication } from '../lib/types'
 import { Card, CardBody, CardFooter, Chip, Button } from '@nextui-org/react'
+import { useParams } from 'next/navigation'
 import FallbackAvatar from '@/components/ui/fallback-avatar'
 import {
   Clock,
@@ -15,7 +16,7 @@ import {
   FileX,
   Search
 } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { formatDistanceToNow } from 'date-fns'
 import { bg, enUS, ru } from 'date-fns/locale'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -39,10 +40,12 @@ export default function MyApplicationCard({
   onFindSimilar,
   onDelete
 }: MyApplicationCardProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
 
   const getDateFnsLocale = () => {
-    switch (i18n.language) {
+    switch (currentLocale) {
       case 'bg':
         return bg
       case 'ru':
@@ -181,7 +184,7 @@ export default function MyApplicationCard({
             <div className="flex items-center gap-2 text-sm text-green-800">
               <Clock className="w-4 h-4" />
               <span className="font-medium">
-                {t('myApplications.startDate')}: {new Date(application.startDate).toLocaleString(i18n.language, {
+                {t('myApplications.startDate')}: {new Date(application.startDate).toLocaleString(currentLocale, {
                   month: 'short',
                   day: 'numeric',
                   hour: '2-digit',

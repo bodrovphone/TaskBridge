@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, Chip, Input } from '@nextui-org/react'
 import { Badge as ShadcnBadge } from '@/components/ui/badge'
 import { useState, useMemo, useCallback } from 'react'
@@ -16,7 +16,7 @@ interface CategorySelectionProps {
 }
 
 export function CategorySelection({ form, onCategoryChange }: CategorySelectionProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const [searchQuery, setSearchQuery] = useState('')
  const [selectedMainCategory, setSelectedMainCategory] = useState<string | null>(null)
  const [selectedCategory, setSelectedCategory] = useState('')
@@ -100,14 +100,14 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
    {/* Section Header */}
    <div>
     <h2 className="text-2xl font-bold text-gray-900 mb-2">
-     {t('createTask.category.title', 'What type of service do you need?')}
+     {t('createTask.category.title')}
     </h2>
     <p className="text-gray-600">
      {selectedCategory
-      ? t('createTask.category.categorySelected', 'Selected category. Click the X to change.')
+      ? t('createTask.category.categorySelected')
       : selectedMainCategory
-       ? t('createTask.category.selectSubcategory', 'Select a specific service')
-       : t('createTask.category.subtitle', 'Select the category that best describes your task')
+       ? t('createTask.category.selectSubcategory')
+       : t('createTask.category.subtitle')
      }
     </p>
    </div>
@@ -133,7 +133,7 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
         <div className="relative group">
          <Input
           size="lg"
-          placeholder={t('professionals.searchPlaceholder', 'Search categories... (e.g. repair, cleaning, lessons)')}
+          placeholder={t('professionals.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           startContent={
@@ -189,7 +189,7 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
       className="text-sm text-primary hover:text-blue-700 font-medium flex items-center gap-1 transition-colors"
      >
       <X size={16} />
-      {t('createTask.category.backToMain', 'Back to main categories')}
+      {t('createTask.category.backToMain')}
      </button>
      <ChevronRight size={16} className="text-gray-400" />
      {(() => {
@@ -222,7 +222,7 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
         <>
          <div className="mb-4">
           <p className="text-sm text-gray-600">
-           {searchResults.length} {t('professionals.categoryResults', 'categories found')}
+           {searchResults.length} {t('professionals.categoryResults')}
           </p>
          </div>
          <div className="flex flex-wrap gap-3">
@@ -285,10 +285,10 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
         >
          <div className="text-6xl mb-4">🔍</div>
          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          {t('professionals.noResults', 'No categories match your search')}
+          {t('professionals.noResults')}
          </h3>
          <p className="text-gray-600">
-          {t('createTask.category.tryDifferent', 'Try a different search term')}
+          {t('createTask.category.tryDifferent')}
          </p>
         </motion.div>
        )}
@@ -339,10 +339,10 @@ export function CategorySelection({ form, onCategoryChange }: CategorySelectionP
         >
          <div className="text-6xl mb-4">🔍</div>
          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          {t('professionals.noResults', 'No services match your search')}
+          {t('professionals.noResults')}
          </h3>
          <p className="text-gray-600">
-          {t('createTask.category.tryDifferent', 'Try a different search term')}
+          {t('createTask.category.tryDifferent')}
          </p>
         </motion.div>
        )}

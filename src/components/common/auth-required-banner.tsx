@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { LogIn } from 'lucide-react'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
@@ -20,7 +20,7 @@ interface AuthRequiredBannerProps {
  * Provides a single unified sign-in button that opens the auth slide-over.
  */
 export function AuthRequiredBanner({ title, description, hint }: AuthRequiredBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [showAuthSlideOver, setShowAuthSlideOver] = useState(false)
 
   return (

@@ -3,7 +3,7 @@
 import { Card, CardBody, Chip, Button } from "@nextui-org/react";
 import FallbackAvatar from "@/components/ui/fallback-avatar";
 import { CheckCircle, MapPin, Star, TrendingUp, Award, Clock } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useDisclosure } from "@nextui-org/react";
 import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
 import { getCityLabelBySlug } from '@/features/cities';
@@ -33,7 +33,7 @@ interface CompletedTasksSectionProps {
 }
 
 export default function CompletedTasksSection({ completedTasks }: CompletedTasksSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
  const renderStars = (rating: number) => {
@@ -180,12 +180,12 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
 
              <div className="text-right">
               <div className="text-xl font-bold text-green-600">
-               {task.budget > 0 ? `${task.budget} €` : t('common.negotiable', 'Договорена')}
+               {task.budget > 0 ? `${task.budget} €` : t('common.negotiable')}
               </div>
               {task.durationHours > 0 && (
                <div className="text-xs text-gray-500 flex items-center gap-1">
                 <Clock size={10} />
-                {t('taskCompletion.completedIn', 'Завършено за')} {task.durationHours}{t('common.hours.short', 'ч')}
+                {t('taskCompletion.completedIn')} {task.durationHours}{t('common.hours.short')}
                </div>
               )}
              </div>
@@ -210,7 +210,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
                  {renderStars(0)}
                 </div>
                 <span className="text-xs text-gray-500 italic">
-                 {t('professionalDetail.completedTasks.pendingReview', 'Pending review')}
+                 {t('professionalDetail.completedTasks.pendingReview')}
                 </span>
                </>
               )}
@@ -252,7 +252,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
        className="font-medium"
        onPress={onOpen}
       >
-       {t('professionalDetail.completedTasks.viewAll', 'View all {{count}} tasks', { count: completedTasks.length })}
+       {t('professionalDetail.completedTasks.viewAll', { count: completedTasks.length })}
       </Button>
      </div>
     )}
@@ -283,7 +283,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
          </div>
          <div className="text-right flex-shrink-0 ml-2">
           <div className="text-lg font-bold text-green-600 whitespace-nowrap">
-           {task.budget > 0 ? `${task.budget} €` : t('common.negotiable', 'Договорена')}
+           {task.budget > 0 ? `${task.budget} €` : t('common.negotiable')}
           </div>
          </div>
         </div>
@@ -307,7 +307,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
              {renderStars(0)}
             </div>
             <span className="text-[10px] text-gray-500 italic whitespace-nowrap">
-             {t('professionalDetail.completedTasks.pendingReview', 'Pending review')}
+             {t('professionalDetail.completedTasks.pendingReview')}
             </span>
            </>
           )}
@@ -335,7 +335,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
        className="font-medium"
        onPress={onOpen}
       >
-       {t('professionalDetail.completedTasks.viewAll', 'View all {{count}} tasks', { count: completedTasks.length })}
+       {t('professionalDetail.completedTasks.viewAll', { count: completedTasks.length })}
       </Button>
      </div>
     )}

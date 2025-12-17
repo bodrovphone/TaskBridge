@@ -2,7 +2,7 @@
 
 import { useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@nextui-org/react'
@@ -80,13 +80,13 @@ export function TaskForm({
   isReopening,
   inviteProfessionalId
 }: TaskFormProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const params = useParams()
   const { toast } = useToast()
   const { user, authenticatedFetch } = useAuth()
   const queryClient = useQueryClient()
-  const locale = (params?.lang as string) || i18n.language || 'bg'
+  const locale = (params?.lang as string) || 'bg'
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showCategoryPicker, setShowCategoryPicker] = useState(false)
@@ -155,7 +155,7 @@ export function TaskForm({
             const { url, error } = await uploadTaskImage(effectiveTaskId, user.id, file, index + 1)
             if (error) {
               toast({
-                title: t('createTask.imageUpload.error', 'Image upload failed'),
+                title: t('createTask.imageUpload.error'),
                 description: error,
                 variant: 'destructive',
               })
@@ -212,7 +212,7 @@ export function TaskForm({
             // Handle invitation logic...
           } else {
             toast({
-              title: t('createTask.success', 'Task created successfully!'),
+              title: t('createTask.success'),
               variant: 'success',
             })
           }
@@ -248,7 +248,7 @@ export function TaskForm({
           }
 
           toast({
-            title: t('editTask.successMessage', 'Task updated successfully!'),
+            title: t('editTask.successMessage'),
             variant: 'success',
           })
         }
@@ -258,7 +258,7 @@ export function TaskForm({
 
       } catch (error: any) {
         toast({
-          title: mode === 'create' ? t('createTask.error', 'Error creating task') : t('editTask.errorMessage', 'Error updating task'),
+          title: mode === 'create' ? t('createTask.error') : t('editTask.errorMessage'),
           description: error.message,
           variant: 'destructive',
         })
@@ -424,7 +424,7 @@ export function TaskForm({
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8 pb-4">
                   {mode === 'edit' && (
                     <Button type="button" size="lg" variant="bordered" onPress={() => router.push(`/${locale}/tasks/posted`)} className="min-w-[200px] h-14 font-semibold text-lg">
-                      {t('editTask.cancelEdit', 'Cancel')}
+                      {t('editTask.cancelEdit')}
                     </Button>
                   )}
                   <Button
@@ -441,11 +441,11 @@ export function TaskForm({
                   >
                     {isSubmitting
                       ? mode === 'edit'
-                        ? t('editTask.savingChanges', 'Saving changes...')
-                        : t('loading', 'Loading...')
+                        ? t('editTask.savingChanges')
+                        : t('loading')
                       : mode === 'edit'
-                        ? t('editTask.saveChanges', 'Save Changes')
-                        : t('createTask.review.submit', 'Post Task')}
+                        ? t('editTask.saveChanges')
+                        : t('createTask.review.submit')}
                   </Button>
                 </div>
               </>

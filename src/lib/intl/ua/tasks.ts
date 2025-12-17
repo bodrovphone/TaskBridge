@@ -43,7 +43,7 @@ export const tasks = {
   'browseTasks.search.typeToSearch': 'Введіть для пошуку завдань...',
   'browseTasks.search.searchingFor': 'Пошук за запитом',
   'browseTasks.search.searchInTasks': 'Шукати в завданнях',
-  'browseTasks.search.searchInTasksDesc': 'Знайти завдання за запитом "{{query}}"',
+  'browseTasks.search.searchInTasksDesc': 'Знайти завдання за запитом "{query}"',
   'browseTasks.search.filterByCategory': 'Фільтрувати за категорією',
   'browseTasks.search.filterByCity': 'Фільтрувати за містом',
   'browseTasks.filters.title': 'Фільтрація та сортування',
@@ -63,8 +63,8 @@ export const tasks = {
   'browseTasks.filters.budgetMin': 'Мін',
   'browseTasks.filters.budgetMax': 'Макс',
   'browseTasks.filters.budgetUpTo': 'До 250 €',
-  'browseTasks.filters.budgetUnder': 'До {{amount}} €',
-  'browseTasks.filters.budgetOver': '{{amount}}+ €',
+  'browseTasks.filters.budgetUnder': 'До {amount} €',
+  'browseTasks.filters.budgetOver': '{amount}+ €',
   'browseTasks.filters.sortBy': 'Сортувати',
   'browseTasks.filters.sort.newest': 'Найновіші',
   'browseTasks.filters.sort.oldest': 'Найстаріші',
@@ -94,8 +94,8 @@ export const tasks = {
   'browseTasks.sort.budgetHigh': 'Найвищий бюджет',
   'browseTasks.sort.budgetLow': 'Найнижчий бюджет',
   'browseTasks.sort.deadline': 'Завершуються скоро',
-  'browseTasks.results.shown': 'Показано {{count}} результатів',
-  'browseTasks.results.featured': 'Показано {{count}} популярних завдань',
+  'browseTasks.results.shown': 'Показано {count} результатів',
+  'browseTasks.results.featured': 'Показано {count} популярних завдань',
   'browseTasks.results.loading': 'Завантаження...',
   'browseTasks.results.noTasks.title': 'Завдань не знайдено',
   'browseTasks.results.noTasks.description':
@@ -140,7 +140,7 @@ export const tasks = {
 
   // Create Task Form
   'createTask.checkingEligibility': 'Будь ласка, зачекайте, поки ми перевіряємо вашу можливість.',
-  'createTask.title': 'Опублікувати нове завдання',
+  'createTask.pageTitle': 'Опублікувати нове завдання',
   'createTask.hero.subtitle': 'Опишіть, що потрібно, і фахівці прийдуть до вас',
   'createTask.hero.freeToPost': 'Безкоштовно',
   'createTask.hero.noPayment': 'Оплата тільки після початку роботи',
@@ -190,9 +190,6 @@ export const tasks = {
   'createTask.location.neighborhoodLabel': 'Район',
   'createTask.location.neighborhoodPlaceholder': 'напр., Центр, Витоша',
   'createTask.location.neighborhoodHelp': 'Допомагає фахівцям визначити можливість приїзду',
-  'createTask.location.addressLabel': 'Повна адреса (необов\'язково)',
-  'createTask.location.addressPlaceholder': 'Вулиця, номер будинку, під\'їзд, поверх, квартира',
-  'createTask.location.addressSecurity': 'Адреса буде показана лише обраному фахівцю',
 
   // Budget Section
   'createTask.budget.title': 'Який ваш бюджет?',
@@ -239,7 +236,7 @@ export const tasks = {
   'createTask.photos.optimizing': 'Оптимізація для швидшого завантаження...',
   'createTask.photos.optimized': 'Зображення успішно оптимізовано',
   'createTask.photos.smaller': 'менше',
-  'createTask.photos.maxImagesError': 'Ви можете завантажити максимум {{count}} зображень',
+  'createTask.photos.maxImagesError': 'Ви можете завантажити максимум {count} зображень',
 
   // Review Section
   'createTask.review.title': 'Перегляньте завдання',
@@ -283,7 +280,6 @@ export const tasks = {
   'createTask.validationDialog.fieldName.requirements': 'Вимоги',
   'createTask.validationDialog.fieldName.city': 'Місто',
   'createTask.validationDialog.fieldName.neighborhood': 'Район',
-  'createTask.validationDialog.fieldName.exactAddress': 'Точна адреса',
   'createTask.validationDialog.fieldName.budgetMin': 'Мінімальний бюджет',
   'createTask.validationDialog.fieldName.budgetMax': 'Максимальний бюджет',
   'createTask.validationDialog.fieldName.urgency': 'Терміновість',

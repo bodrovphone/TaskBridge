@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { useTranslation } from "react-i18next"
+import { useTranslations } from 'next-intl'
 
 interface CompactRatingSliderProps {
  value: number
@@ -16,7 +16,7 @@ interface CompactRatingSliderProps {
 
 export default function CompactRatingSlider({ value, onChange, className = "" }: CompactRatingSliderProps) {
  const [isOpen, setIsOpen] = useState(false)
- const { t } = useTranslation()
+ const t = useTranslations()
 
  const getRatingText = (rating: number) => {
   if (rating === 0) return t('professionals.filters.anyRating')

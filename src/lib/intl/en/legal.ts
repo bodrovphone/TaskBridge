@@ -6,7 +6,7 @@ export const legal = {
   // Terms of Service Page - English placeholder
   'terms.title': 'Terms of Service',
   'terms.subtitle': 'Terms and conditions for using the Trudify platform',
-  'terms.lastUpdated': 'Last updated: {{date}}',
+  'terms.lastUpdated': 'Last updated: {date}',
   'terms.effectiveDate': 'Effective from: December 20, 2025',
 
   // Company Info
@@ -296,7 +296,7 @@ export const legal = {
 
   'privacy.title': 'Privacy Policy',
   'privacy.subtitle': 'How we collect, use, and protect your personal data',
-  'privacy.lastUpdated': 'Last updated: {{date}}',
+  'privacy.lastUpdated': 'Last updated: {date}',
   'privacy.effectiveDate': 'Effective from: December 20, 2025',
 
   // Language notice

@@ -166,7 +166,7 @@ export const common = {
   'reviews.hiddenReviewsNotice': 'Некоторые отзывы скрыты до проверки',
   'reviews.hiddenReviewsTooltip': 'Низко оцененные отзывы скрываются до обнаружения шаблона, чтобы защититься от несправедливых единичных отзывов.',
   'reviews.hiddenCountSingular': '1 скрытый отзыв',
-  'reviews.hiddenCountPlural': '{{count}} скрытых отзыва',
+  'reviews.hiddenCountPlural': '{count} скрытых отзыва',
   'reviews.patternDetected': 'Обнаружен шаблон негативных отзывов',
   'reviews.allNegativeVisible': 'Все негативные отзывы теперь видимы из-за шаблона проблем.',
 
@@ -229,6 +229,6 @@ export const common = {
   'cityAutocomplete.noResults': 'Города не найдены',
 
   // Language Preference Prompt
-  'languagePrompt.title': 'Переключить на {{language}}?',
+  'languagePrompt.title': 'Переключить на {language}?',
   'languagePrompt.switch': 'Да, переключить',
 };

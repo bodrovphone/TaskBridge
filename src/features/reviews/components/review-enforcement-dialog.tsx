@@ -13,7 +13,7 @@ import {
   Chip
 } from '@nextui-org/react'
 import { AlertTriangle, Star, User, FileText, CheckCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import type { PendingReviewTask, BlockType } from '../lib/types'
 
@@ -34,7 +34,7 @@ export function ReviewEnforcementDialog({
   onReviewTask,
   onProceedToTaskCreation
 }: ReviewEnforcementDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const params = useParams()
   const lang = (params?.lang as string) || 'bg'
 

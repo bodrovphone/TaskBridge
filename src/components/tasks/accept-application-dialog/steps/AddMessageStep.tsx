@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { MessageSquare, Lightbulb } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
@@ -25,7 +25,7 @@ export function AddMessageStep({
   isMobile = false,
   isKeyboardOpen = false,
 }: AddMessageStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const charCount = message.length
 
   // Hide tips when keyboard is open on mobile to keep action buttons visible
@@ -35,7 +35,7 @@ export function AddMessageStep({
     <div className="space-y-4">
       {showTips && (
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          {t('acceptApplication.wizard.messageHelp', 'Add a personal message for {{name}} (optional).', { name: professionalName })}
+          {t('acceptApplication.wizard.messageHelp', { name: professionalName })}
         </p>
       )}
 
@@ -79,12 +79,12 @@ export function AddMessageStep({
             </div>
             <div>
               <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                {t('acceptApplication.wizard.messageTipTitle', 'Quick tips')}
+                {t('acceptApplication.wizard.messageTipTitle')}
               </p>
               <ul className="text-xs text-blue-700 dark:text-blue-300 mt-1 space-y-1">
-                <li>{t('acceptApplication.wizard.messageTip1', '• Mention when you\'re available')}</li>
-                <li>{t('acceptApplication.wizard.messageTip2', '• Ask any last questions')}</li>
-                <li>{t('acceptApplication.wizard.messageTip3', '• Share relevant details about the task')}</li>
+                <li>{t('acceptApplication.wizard.messageTip1')}</li>
+                <li>{t('acceptApplication.wizard.messageTip2')}</li>
+                <li>{t('acceptApplication.wizard.messageTip3')}</li>
               </ul>
             </div>
           </div>

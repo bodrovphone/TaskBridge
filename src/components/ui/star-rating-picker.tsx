@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,7 @@ interface StarRatingPickerProps {
 export default function StarRatingPicker({ value, onChange, className = "" }: StarRatingPickerProps) {
  const [hoveredStar, setHoveredStar] = useState<number | null>(null)
  const [isOpen, setIsOpen] = useState(false)
- const { t } = useTranslation()
+ const t = useTranslations()
 
  const handleStarClick = (rating: number) => {
   onChange(rating)

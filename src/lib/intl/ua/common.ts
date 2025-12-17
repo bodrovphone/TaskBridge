@@ -165,7 +165,7 @@ export const common = {
   'reviews.hiddenReviewsNotice': 'Деякі відгуки приховано до перевірки',
   'reviews.hiddenReviewsTooltip': 'Низькі оцінки приховуються до виявлення закономірності для захисту від несправедливих поодиноких відгуків.',
   'reviews.hiddenCountSingular': '1 відгук приховано',
-  'reviews.hiddenCountPlural': '{{count}} відгуків приховано',
+  'reviews.hiddenCountPlural': '{count} відгуків приховано',
   'reviews.patternDetected': 'Виявлено закономірність негативних відгуків',
   'reviews.allNegativeVisible': 'Усі негативні відгуки тепер видимі через виявлену закономірність проблем.',
 
@@ -228,6 +228,6 @@ export const common = {
   'cityAutocomplete.noResults': 'Міста не знайдено',
 
   // Language Preference Prompt
-  'languagePrompt.title': 'Переключити на {{language}}?',
+  'languagePrompt.title': 'Переключити на {language}?',
   'languagePrompt.switch': 'Так, переключити',
 };

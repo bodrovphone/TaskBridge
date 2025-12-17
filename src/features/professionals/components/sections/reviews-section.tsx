@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@nextui-org/react";
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import ReviewsDialog from '@/components/common/reviews-dialog';
 import { HiddenReviewsNotice } from '@/components/reviews/hidden-reviews-notice';
 import { getVisibleReviews, getReviewVisibilityStats, type ReviewWithVisibility } from '@/lib/reviews';
@@ -25,7 +25,7 @@ interface ReviewsSectionProps {
 }
 
 export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
  // Filter to only show visible reviews (pattern detection logic)

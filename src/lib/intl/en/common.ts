@@ -165,7 +165,7 @@ export const common = {
   'reviews.hiddenReviewsNotice': 'Some reviews are hidden pending verification',
   'reviews.hiddenReviewsTooltip': 'Low-rated reviews are hidden until a pattern is detected to protect against unfair single reviews.',
   'reviews.hiddenCountSingular': '1 review hidden',
-  'reviews.hiddenCountPlural': '{{count}} reviews hidden',
+  'reviews.hiddenCountPlural': '{count} reviews hidden',
   'reviews.patternDetected': 'Pattern of negative reviews detected',
   'reviews.allNegativeVisible': 'All negative reviews are now visible due to a pattern of issues.',
 
@@ -228,6 +228,6 @@ export const common = {
   'cityAutocomplete.noResults': 'No cities found',
 
   // Language Preference Prompt
-  'languagePrompt.title': 'Switch to {{language}}?',
+  'languagePrompt.title': 'Switch to {language}?',
   'languagePrompt.switch': 'Yes, switch',
 };

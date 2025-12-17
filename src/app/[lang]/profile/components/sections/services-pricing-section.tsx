@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Card, CardHeader, CardBody, Button, Input, Divider, Chip } from '@nextui-org/react'
 import { Banknote, Plus, Trash2, Edit } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { ServiceItem } from '@/server/domain/user/user.types'
 import { FormActionButtons } from '../shared/form-action-buttons'
 
@@ -27,7 +27,7 @@ export function ServicesPricingSection({
   onSave,
   maxServices = 10
 }: ServicesPricingSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isEditing, setIsEditing] = useState(false)
   const [localServices, setLocalServices] = useState<ServiceItem[]>(services)
   const [isSaving, setIsSaving] = useState(false)
@@ -93,10 +93,10 @@ export function ServicesPricingSection({
           </div>
           <div className="min-w-0">
             <h3 className="text-lg md:text-xl font-bold text-gray-900">
-              {t('profile.services.title', 'Services & Pricing')}
+              {t('profile.services.title')}
             </h3>
             <p className="text-xs text-gray-500 hidden sm:block">
-              {t('profile.services.description', 'List your services with pricing')}
+              {t('profile.services.description')}
             </p>
           </div>
         </div>
@@ -109,10 +109,10 @@ export function ServicesPricingSection({
               <div className="text-center py-8 text-gray-500">
                 <Banknote className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                 <p className="text-sm">
-                  {t('profile.services.empty', 'No services added yet')}
+                  {t('profile.services.empty')}
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
-                  {t('profile.services.emptyHint', 'Add your services to let clients know what you offer')}
+                  {t('profile.services.emptyHint')}
                 </p>
               </div>
             ) : (
@@ -171,8 +171,8 @@ export function ServicesPricingSection({
                       <Input
                         size="md"
                         variant="bordered"
-                        label={t('profile.services.serviceName', 'Service name')}
-                        placeholder={t('profile.services.serviceNamePlaceholder', 'e.g., Plumbing repair')}
+                        label={t('profile.services.serviceName')}
+                        placeholder={t('profile.services.serviceNamePlaceholder')}
                         value={service.name}
                         onValueChange={(value) => updateService(service.id, 'name', value)}
                         maxLength={50}
@@ -186,8 +186,8 @@ export function ServicesPricingSection({
                       <Input
                         size="md"
                         variant="bordered"
-                        label={t('profile.services.price', 'Price')}
-                        placeholder={t('profile.services.pricePlaceholder', 'e.g., 50 лв/час')}
+                        label={t('profile.services.price')}
+                        placeholder={t('profile.services.pricePlaceholder')}
                         value={service.price}
                         onValueChange={(value) => updateService(service.id, 'price', value)}
                         maxLength={30}
@@ -202,8 +202,8 @@ export function ServicesPricingSection({
                     <Input
                       size="md"
                       variant="bordered"
-                      label={t('profile.services.descriptionLabel', 'Description (optional)')}
-                      placeholder={t('profile.services.descriptionPlaceholder', 'Brief description of this service')}
+                      label={t('profile.services.descriptionLabel')}
+                      placeholder={t('profile.services.descriptionPlaceholder')}
                       value={service.description}
                       onValueChange={(value) => updateService(service.id, 'description', value)}
                       maxLength={100}
@@ -233,13 +233,13 @@ export function ServicesPricingSection({
                 className="w-full border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600"
                 size="lg"
               >
-                {t('profile.services.addService', 'Add Service')}
+                {t('profile.services.addService')}
               </Button>
             )}
 
             {/* Helper text */}
             <p className="text-xs text-gray-500 text-center">
-              {t('profile.services.helperText', 'Add up to {{max}} services. Changes are saved automatically.', { max: maxServices })}
+              {t('profile.services.helperText', { max: maxServices })}
             </p>
           </>
         )}
@@ -254,7 +254,7 @@ export function ServicesPricingSection({
               onPress={handleStartEditing}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              {t('common.edit', 'Edit')}
+              {t('common.edit')}
             </Button>
           ) : (
             <FormActionButtons

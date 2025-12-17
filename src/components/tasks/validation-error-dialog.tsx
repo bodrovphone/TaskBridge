@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { AlertCircle } from 'lucide-react'
 import { Button } from '@nextui-org/react'
 import {
@@ -25,7 +25,7 @@ interface ValidationErrorDialogProps {
 }
 
 export function ValidationErrorDialog({ isOpen, onClose, errors, onFixClick }: ValidationErrorDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const handleFixClick = () => {
     onClose()
@@ -42,10 +42,10 @@ export function ValidationErrorDialog({ isOpen, onClose, errors, onFixClick }: V
             </div>
             <div>
               <DialogTitle className="text-lg font-semibold text-gray-800">
-                {t('createTask.validationDialog.title', 'Please fix the following issues')}
+                {t('createTask.validationDialog.title')}
               </DialogTitle>
               <DialogDescription className="text-sm text-gray-500 mt-1">
-                {t('createTask.validationDialog.subtitle', 'Some fields need your attention')}
+                {t('createTask.validationDialog.subtitle')}
               </DialogDescription>
             </div>
           </div>
@@ -62,10 +62,10 @@ export function ValidationErrorDialog({ isOpen, onClose, errors, onFixClick }: V
                 </div>
                 <div>
                   <p className="font-medium text-gray-800">
-                    {t(`createTask.validationDialog.fieldName.${error.field}`, error.field)}
+                    {t(`createTask.validationDialog.fieldName.${error.field}` as any)}
                   </p>
                   <p className="text-sm text-gray-600 mt-0.5">
-                    {t(error.message, error.message)}
+                    {t(error.message as any)}
                   </p>
                 </div>
               </li>
@@ -81,7 +81,7 @@ export function ValidationErrorDialog({ isOpen, onClose, errors, onFixClick }: V
             size="lg"
             className="w-full font-semibold"
           >
-            {t('createTask.validationDialog.fixButton', 'Fix These Issues')}
+            {t('createTask.validationDialog.fixButton')}
           </Button>
         </DialogFooter>
       </DialogContent>

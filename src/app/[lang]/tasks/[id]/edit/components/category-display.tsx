@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Chip } from '@nextui-org/react'
 import { getCategoryName } from '@/lib/utils/category'
 
@@ -11,17 +11,17 @@ interface CategoryDisplayProps {
 }
 
 export function CategoryDisplay({ category, subcategory, onReset }: CategoryDisplayProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <div className="space-y-4">
       {/* Section Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          {t('createTask.category.title', 'What type of service do you need?')}
+          {t('createTask.category.title')}
         </h2>
         <p className="text-gray-600">
-          {t('createTask.category.categorySelected', 'Selected category. Click the X to change.')}
+          {t('createTask.category.categorySelected')}
         </p>
       </div>
 

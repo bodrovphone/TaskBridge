@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
 import { Sparkles, Lightbulb, Plus } from "lucide-react";
@@ -15,7 +15,7 @@ import { ReviewEnforcementDialog } from '@/features/reviews';
  * Encourages users to create their first task with a friendly, creative design
  */
 export default function EmptyPostedTasks() {
-  const { t } = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;

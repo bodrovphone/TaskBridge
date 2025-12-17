@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Card, CardBody, Progress } from '@nextui-org/react'
 import { Upload, X, Image as ImageIcon, Camera, CheckCircle2 } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
@@ -15,7 +15,7 @@ interface PhotosSectionProps {
 const MAX_IMAGES = 3
 
 export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isCompressing, setIsCompressing] = useState(false)
   const [compressionProgress, setCompressionProgress] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -52,7 +52,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
 
     for (const file of Array.from(files)) {
       if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-        setImageErrors(prev => [...prev, t('createTask.photos.invalidType', `File is not a supported image format (JPG, PNG, WebP)`)])
+        setImageErrors(prev => [...prev, t('createTask.photos.invalidType')])
         continue
       }
 
@@ -63,7 +63,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
 
         const MAX_SIZE = 5 * 1024 * 1024;
         if (result.compressedSize > MAX_SIZE) {
-          setImageErrors(prev => [...prev, t('createTask.photos.fileTooLarge', `Image is still too large after optimization (max 5MB).`)]);
+          setImageErrors(prev => [...prev, t('createTask.photos.fileTooLarge')]);
           continue;
         }
 
@@ -125,10 +125,10 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-1">
-            {t('createTask.photos.title', 'Add photos (optional)')}
+            {t('createTask.photos.title')}
           </h2>
           <p className="text-gray-600">
-            {t('createTask.photos.help', `Photos help professionals understand your task better. You can add up to ${MAX_IMAGES} images.`)}
+            {t('createTask.photos.help', { count: MAX_IMAGES })}
           </p>
         </div>
       </div>
@@ -148,19 +148,19 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
                 <div>
                   {/* Desktop: show drag & drop text */}
                   <p className="hidden sm:block font-semibold text-gray-900">
-                    {t('createTask.photos.dragDrop', 'Drag and drop an image here')}
+                    {t('createTask.photos.dragDrop')}
                   </p>
                   <p className="hidden sm:block text-sm text-gray-500">
-                    {t('createTask.photos.orBrowse', 'or click to browse')}
+                    {t('createTask.photos.orBrowse')}
                   </p>
                   {/* Mobile: show tap to select text */}
                   <p className="block sm:hidden font-semibold text-gray-900">
-                    {t('createTask.photos.tapToSelect', 'Tap to select a photo')}
+                    {t('createTask.photos.tapToSelect')}
                   </p>
                 </div>
                 <div className="text-xs text-gray-400 space-y-1">
-                  <p>{t('createTask.photos.maxSize', '5MB maximum per image')}</p>
-                  <p>{t('createTask.photos.formats', 'JPG, PNG, WebP')}</p>
+                  <p>{t('createTask.photos.maxSize')}</p>
+                  <p>{t('createTask.photos.formats')}</p>
                 </div>
               </div>
             </CardBody>
@@ -175,7 +175,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
               onPress={() => cameraInputRef.current?.click()}
               className="w-full sm:w-auto"
             >
-              {t('createTask.photos.takePhoto', 'Take a Photo')}
+              {t('createTask.photos.takePhoto')}
             </Button>
           </div>
         </div>
@@ -208,7 +208,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
                   <ImageIcon className="w-5 h-5 text-blue-600" />
                 </div>
                 <p className="text-sm font-medium text-blue-800">
-                  {t('createTask.photos.optimizing', 'Optimizing image(s)...')}
+                  {t('createTask.photos.optimizing')}
                 </p>
               </div>
               <Progress value={compressionProgress} color="primary" size="sm" className="max-w-full" />
@@ -250,7 +250,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
                     <div className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-green-600" />
                       <div>
-                        <p className="text-sm font-medium text-green-800">{t('createTask.photos.optimized', 'Image optimized')}</p>
+                        <p className="text-sm font-medium text-green-800">{t('createTask.photos.optimized')}</p>
                         <p className="text-xs text-green-600">
                           {formatBytes(compressionStats[index].originalSize)} → {formatBytes(compressionStats[index].compressedSize)}
                         </p>
@@ -258,7 +258,7 @@ export function PhotosSection({ form, initialImages }: PhotosSectionProps) {
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-green-700">{compressionStats[index].savingsPercent}%</p>
-                      <p className="text-xs text-green-600">{t('createTask.photos.smaller', 'smaller')}</p>
+                      <p className="text-xs text-green-600">{t('createTask.photos.smaller')}</p>
                     </div>
                   </div>
                 </CardBody>

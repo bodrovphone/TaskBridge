@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Phone, Mail, Send, CheckCircle } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -31,7 +31,7 @@ export function ShareContactStep({
   onCustomContactChange,
   disabled = false,
 }: ShareContactStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const hasPhone = Boolean(userProfile?.phone)
   const hasEmail = Boolean(userProfile?.email)
@@ -40,7 +40,7 @@ export function ShareContactStep({
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        {t('acceptApplication.wizard.contactHelp', 'Choose how the professional can contact you.')}
+        {t('acceptApplication.wizard.contactHelp')}
       </p>
 
       {hasSavedContacts ? (
@@ -194,7 +194,7 @@ export function ShareContactStep({
           className="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl"
         >
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            {t('acceptApplication.noSavedContacts', 'Please provide a way for the professional to contact you.')}
+            {t('acceptApplication.noSavedContacts')}
           </p>
           <Input
             id="custom-contact-direct"

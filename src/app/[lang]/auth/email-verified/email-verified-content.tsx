@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Button as NextUIButton, Card, CardBody, CardHeader } from '@nextui-org/react'
 import { CheckCircle, Briefcase, Search, UserCircle } from 'lucide-react'
@@ -10,7 +10,7 @@ interface EmailVerifiedContentProps {
 }
 
 export function EmailVerifiedContent({ lang }: EmailVerifiedContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-green-50 to-blue-50">

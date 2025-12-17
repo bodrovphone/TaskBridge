@@ -11,7 +11,7 @@ import {
   Select,
   SelectItem,
 } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Briefcase } from 'lucide-react'
 
 interface Task {
@@ -42,7 +42,7 @@ export function TaskSelectionModal({
   isLoading = false,
   isLoadingTasks = false,
 }: TaskSelectionModalProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedTaskId, setSelectedTaskId] = useState<string>('')
 
   const handleSubmit = () => {
@@ -69,7 +69,7 @@ export function TaskSelectionModal({
             <ModalHeader className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
                 <Briefcase className="w-5 h-5 text-primary" />
-                <span>{t('inviteModal.title', 'Invite Professional to Task')}</span>
+                <span>{t('inviteModal.title')}</span>
               </div>
               <p className="text-sm font-normal text-gray-600">
                 {t('inviteModal.subtitle', {
@@ -82,13 +82,13 @@ export function TaskSelectionModal({
               {isLoadingTasks ? (
                 <div className="py-8 text-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">{t('inviteModal.loadingTasks', 'Loading your tasks...')}</p>
+                  <p className="text-gray-600">{t('inviteModal.loadingTasks')}</p>
                 </div>
               ) : (
                 <>
                   <Select
-                    label={t('inviteModal.selectLabel', 'Choose a task')}
-                    placeholder={t('inviteModal.selectPlaceholder', 'Select your task')}
+                    label={t('inviteModal.selectLabel')}
+                    placeholder={t('inviteModal.selectPlaceholder')}
                     selectedKeys={selectedTaskId ? [selectedTaskId] : []}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
@@ -104,7 +104,7 @@ export function TaskSelectionModal({
                           return (
                             <div key={item.key} className="flex flex-col">
                               <span className="font-medium text-sm text-blue-600">
-                                {t('inviteModal.createNewTask', '+ Create New Task')}
+                                {t('inviteModal.createNewTask')}
                               </span>
                             </div>
                           )
@@ -126,13 +126,13 @@ export function TaskSelectionModal({
                       <SelectItem
                         key="CREATE_NEW"
                         value="CREATE_NEW"
-                        textValue={t('inviteModal.createNewTask', '+ Create New Task')}
+                        textValue={t('inviteModal.createNewTask')}
                         className="text-blue-600 font-semibold"
                       >
                         <div className="flex items-center gap-2 py-1">
                           <span className="text-blue-600 text-lg">+</span>
                           <span className="font-semibold text-blue-600">
-                            {t('inviteModal.createNewTask', 'Create New Task')}
+                            {t('inviteModal.createNewTask')}
                           </span>
                         </div>
                       </SelectItem>,
@@ -153,10 +153,7 @@ export function TaskSelectionModal({
                     <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                       <p className="text-sm text-gray-700">
                         <span className="font-semibold">{professionalName}</span>{' '}
-                        {t(
-                          'inviteModal.confirmText',
-                          'will receive a notification about this task invitation.'
-                        )}
+                        {t('inviteModal.confirmText')}
                       </p>
                     </div>
                   )}
@@ -170,7 +167,7 @@ export function TaskSelectionModal({
                 onPress={onClose}
                 className="font-medium"
               >
-                {t('common.cancel', 'Cancel')}
+                {t('common.cancel')}
               </Button>
               <Button
                 color="primary"
@@ -180,8 +177,8 @@ export function TaskSelectionModal({
                 className="font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
               >
                 {selectedTaskId === 'CREATE_NEW'
-                  ? t('inviteModal.continue', 'Continue')
-                  : t('inviteModal.sendInvitation', 'Send Invitation')}
+                  ? t('inviteModal.continue')
+                  : t('inviteModal.sendInvitation')}
               </Button>
             </ModalFooter>
           </>

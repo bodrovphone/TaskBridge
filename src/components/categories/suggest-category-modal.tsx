@@ -11,7 +11,7 @@ import {
   Textarea
 } from '@nextui-org/react'
 import { HelpCircle, Send } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { toast } from '@/hooks/use-toast'
 import { useAuth } from '@/features/auth'
 
@@ -26,7 +26,7 @@ export function SuggestCategoryModal({
   onClose,
   isAuthenticated
 }: SuggestCategoryModalProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { authenticatedFetch } = useAuth()
   const [suggestion, setSuggestion] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Chip } from '@nextui-org/react'
 import { X } from 'lucide-react'
 import { getCategoryLabelBySlug } from '@/features/categories'
@@ -8,7 +8,7 @@ import { getCityLabelBySlug } from '@/features/cities'
 import { useProfessionalFilters } from '../../hooks/use-professional-filters'
 
 export function ActiveFilters() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { filters, updateFilter, resetFilters, activeFilterCount } = useProfessionalFilters()
 
   if (activeFilterCount === 0) return null
@@ -47,7 +47,7 @@ export function ActiveFilters() {
   if (filters.minJobs !== undefined) {
     activeChips.push({
       key: 'minJobs',
-      label: `${filters.minJobs}+ ${t('professionals.filters.jobs', 'jobs')}`,
+      label: `${filters.minJobs}+ ${t('professionals.filters.jobs')}`,
       onRemove: () => updateFilter('minJobs', undefined),
     })
   }
@@ -55,7 +55,7 @@ export function ActiveFilters() {
   return (
     <div className="flex flex-wrap items-center gap-2 mb-4">
       <span className="text-sm font-medium text-gray-600">
-        {t('professionals.filters.activeFilters', 'Active filters')}:
+        {t('professionals.filters.activeFilters')}:
       </span>
 
       {activeChips.map((chip) => (
@@ -86,7 +86,7 @@ export function ActiveFilters() {
             <X className="w-3 h-3 ml-1" />
           }
         >
-          {t('professionals.filters.clearAll', 'Clear all')}
+          {t('professionals.filters.clearAll')}
         </Chip>
       )}
     </div>

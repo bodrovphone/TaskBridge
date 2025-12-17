@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Star, TrendingUp, Briefcase, SlidersHorizontal, Crown, Trophy, Target } from 'lucide-react'
@@ -15,7 +15,7 @@ interface SortingPickerProps {
 
 export default function SortingPicker({ value, onChange, className = "" }: SortingPickerProps) {
  const [isOpen, setIsOpen] = useState(false)
- const { t } = useTranslation()
+ const t = useTranslations()
 
  const sortOptions = [
   {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, Button, Link } from '@nextui-org/react'
 import { Shield, AlertCircle, Mail, Building2, Hash } from 'lucide-react'
 import { LocaleLink } from '@/components/common/locale-link'
@@ -14,7 +14,7 @@ const LAST_UPDATED_DATE_EN = 'November 25, 2025'
 const LAST_UPDATED_DATE_RU = '25 ноября 2025'
 
 export function PrivacyPageContent({ lang }: PrivacyPageContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const lastUpdated = lang === 'en' ? LAST_UPDATED_DATE_EN : lang === 'ru' ? LAST_UPDATED_DATE_RU : LAST_UPDATED_DATE
 

@@ -43,7 +43,7 @@ export const tasks = {
   'browseTasks.search.typeToSearch': 'Type to search tasks...',
   'browseTasks.search.searchingFor': 'Searching for',
   'browseTasks.search.searchInTasks': 'Search in task content',
-  'browseTasks.search.searchInTasksDesc': 'Find tasks matching "{{query}}"',
+  'browseTasks.search.searchInTasksDesc': 'Find tasks matching "{query}"',
   'browseTasks.search.filterByCategory': 'Filter by category',
   'browseTasks.search.filterByCity': 'Filter by city',
   'browseTasks.filters.title': 'Filtering and sorting',
@@ -63,8 +63,8 @@ export const tasks = {
   'browseTasks.filters.budgetMin': 'Min',
   'browseTasks.filters.budgetMax': 'Max',
   'browseTasks.filters.budgetUpTo': 'Up to 250 €',
-  'browseTasks.filters.budgetUnder': 'Under {{amount}} €',
-  'browseTasks.filters.budgetOver': '{{amount}}+ €',
+  'browseTasks.filters.budgetUnder': 'Under {amount} €',
+  'browseTasks.filters.budgetOver': '{amount}+ €',
   'browseTasks.filters.sortBy': 'Sort by',
   'browseTasks.filters.sort.newest': 'Newest',
   'browseTasks.filters.sort.oldest': 'Oldest',
@@ -94,8 +94,8 @@ export const tasks = {
   'browseTasks.sort.budgetHigh': 'High Budget',
   'browseTasks.sort.budgetLow': 'Low Budget',
   'browseTasks.sort.deadline': 'By Deadline',
-  'browseTasks.results.shown': 'Shown {{count}} results',
-  'browseTasks.results.featured': 'Showing {{count}} popular tasks',
+  'browseTasks.results.shown': 'Shown {count} results',
+  'browseTasks.results.featured': 'Showing {count} popular tasks',
   'browseTasks.results.loading': 'Loading...',
   'browseTasks.results.noTasks.title': 'No tasks found',
   'browseTasks.results.noTasks.description':
@@ -140,7 +140,7 @@ export const tasks = {
 
   // Create Task Form
   'createTask.checkingEligibility': 'Please wait while we check your eligibility.',
-  'createTask.title': 'Post a New Task',
+  'createTask.pageTitle': 'Post a New Task',
   'createTask.hero.subtitle': 'Describe what you need and let professionals come to you',
   'createTask.hero.freeToPost': 'Free to post',
   'createTask.hero.noPayment': 'No payment until work starts',
@@ -238,7 +238,7 @@ export const tasks = {
   'createTask.photos.optimizing': 'Optimizing image for faster upload...',
   'createTask.photos.optimized': 'Image optimized successfully',
   'createTask.photos.smaller': 'smaller',
-  'createTask.photos.maxImagesError': 'You can upload a maximum of {{count}} images',
+  'createTask.photos.maxImagesError': 'You can upload a maximum of {count} images',
 
   // Review Section
   'createTask.review.title': 'Review your task',

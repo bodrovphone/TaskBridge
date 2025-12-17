@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
 import { useToast } from '@/hooks/use-toast'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
@@ -65,7 +65,7 @@ export function useCreateTask() {
   const router = useRouter()
   const params = useParams()
   const lang = (params?.lang as string) || 'bg'
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { user, profile, authenticatedFetch } = useAuth()
   const isAuthenticated = !!user && !!profile
   const { toast } = useToast()
@@ -204,8 +204,8 @@ export function useCreateTask() {
     // If eligibility is still loading, show a toast and return
     if (!eligibility) {
       toast({
-        title: t('common.loading', 'Loading...'),
-        description: t('createTask.checkingEligibility', 'Please wait while we check your eligibility.'),
+        title: t('common.loading'),
+        description: t('createTask.checkingEligibility'),
       })
       return
     }

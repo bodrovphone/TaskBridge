@@ -20,6 +20,7 @@ import { uk } from '@/lib/intl/ua';
 import { generateNotificationAutoLoginUrl } from '@/lib/auth/notification-auto-login';
 
 // Initialize i18next for server-side translations
+// Using single braces {variable} to match next-intl syntax
 const i18nInstance = i18next.createInstance();
 i18nInstance.init({
   lng: 'en',
@@ -32,6 +33,8 @@ i18nInstance.init({
   },
   interpolation: {
     escapeValue: false, // Don't escape - SendGrid templates handle HTML encoding
+    prefix: '{',
+    suffix: '}',
   },
 });
 

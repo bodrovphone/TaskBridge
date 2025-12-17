@@ -9,8 +9,8 @@ import { ActiveFilters } from "@/app/[lang]/browse-tasks/components/active-filte
 import { BrowseTasksHeroSection, SearchFiltersSection, ResultsSection } from "./sections";
 import { useAuth } from "@/features/auth";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
+import { useRouter, useParams } from "next/navigation";
+import { useTranslations } from 'next-intl';
 
 interface PaginatedTasksResponse {
  tasks: any[];
@@ -28,7 +28,8 @@ export default function BrowseTasksPage() {
  const { filters, updateFilter, resetFilters, buildApiQuery, activeFilterCount } = useTaskFilters();
  const { user } = useAuth();
  const router = useRouter();
- const { i18n } = useTranslation();
+ const params = useParams();
+ const currentLocale = (params?.lang as string) || 'bg';
 
  const [authSlideOverOpen, setAuthSlideOverOpen] = useState(false);
  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
@@ -129,7 +130,7 @@ export default function BrowseTasksPage() {
    setAuthSlideOverOpen(true);
   } else {
    // User authenticated - navigate to task detail page where they can apply
-   router.push(`/${i18n.language}/tasks/${taskId}`);
+   router.push(`/${currentLocale}/tasks/${taskId}`);
   }
  };
 
@@ -141,10 +142,10 @@ export default function BrowseTasksPage() {
  useEffect(() => {
   if (user && selectedTaskId && !authSlideOverOpen) {
    // User just logged in and we have a pending task to redirect to
-   router.push(`/${i18n.language}/tasks/${selectedTaskId}`);
+   router.push(`/${currentLocale}/tasks/${selectedTaskId}`);
    setSelectedTaskId(null); // Clear the selected task
   }
- }, [user, selectedTaskId, authSlideOverOpen, router, i18n.language]);
+ }, [user, selectedTaskId, authSlideOverOpen, router, currentLocale]);
 
  // Log featured tasks errors
  useEffect(() => {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import {
  Button,
  Input,
@@ -38,7 +38,7 @@ const experienceOptions = [
 ]
 
 export function ProfessionalSetupForm({ isOpen, onClose, onSuccess }: ProfessionalSetupFormProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const [isSubmitting, setIsSubmitting] = useState(false)
 
  const form = useForm({

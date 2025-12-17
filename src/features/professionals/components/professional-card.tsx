@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import {
  Card as NextUICard,
  CardBody,
@@ -26,7 +26,7 @@ interface ProfessionalCardProps {
 }
 
 export default function ProfessionalCard({ professional, featured = false, isMock = false, compact = false, actionText }: ProfessionalCardProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
 
  // Direct access to API Professional properties
  const name = professional.full_name || 'Unknown'
@@ -37,7 +37,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
  const categories = professional.service_categories || []
  const location = professional.city
    ? getCityLabelBySlug(professional.city, t)
-   : `${t('common.country.bulgaria', 'Bulgaria')} 🇧🇬`
+   : `${t('common.country.bulgaria')} 🇧🇬`
  const bio = professional.bio || ''
  const isVerified = professional.is_phone_verified || professional.is_email_verified
 
@@ -105,11 +105,11 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
        <div className="flex items-center gap-2 text-sm text-gray-600 whitespace-nowrap">
         <Briefcase size={14} className="text-blue-500 flex-shrink-0" />
         {completedJobs === 0 ? (
-          <span className="font-medium text-blue-600">{t('professionals.card.lookingForFirstTask', 'Looking to get first task from you')}</span>
+          <span className="font-medium text-blue-600">{t('professionals.card.lookingForFirstTask')}</span>
         ) : (
           <>
             <span className="font-semibold text-blue-600">{completedJobs}</span>
-            <span>{t('professionals.card.completedJobsShort', 'jobs')}</span>
+            <span>{t('professionals.card.completedJobsShort')}</span>
           </>
         )}
        </div>
@@ -160,7 +160,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
 
      {/* Enhanced Description */}
      <p className={`text-gray-700 text-sm mb-4 leading-relaxed group-hover:text-gray-800 transition-colors ${compact ? 'line-clamp-2' : ''}`}>
-      {bio || (compact ? '' : t('professionals.card.noBio', 'No bio available'))}
+      {bio || (compact ? '' : t('professionals.card.noBio'))}
      </p>
 
      {/* Enhanced Details */}

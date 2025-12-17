@@ -35,12 +35,12 @@ export const profile = {
 
   // Profile Page
   'profile.completion': 'Заповнення профілю',
-  'profile.settings': 'Налаштування',
+  'profile.settingsTitle': 'Налаштування',
   'profile.tabs.customer': 'Замовник',
   'profile.tabs.professional': 'Фахівець',
   'profile.switchToCustomer': 'Перейти до профілю Замовника',
   'profile.switchToProfessional': 'Перейти до профілю Фахівця',
-  'profile.email': 'Email',
+  'profile.emailLabel': 'Email',
   'profile.phone': 'Телефон',
   'profile.location': 'Місце',
   'profile.selectCity': 'Оберіть ваше місто',
@@ -89,9 +89,9 @@ export const profile = {
   'profile.statistics.professional.monthlyEarnings': 'Місячний заробіток',
   'profile.statistics.professional.activeJobs': 'Активні завдання',
   'profile.statistics.avgResponseTime': 'Сер. час відповіді',
-  'profile.statistics.responseTime.minutes': '{{minutes}} хв',
+  'profile.statistics.responseTime.minutes': '{minutes} хв',
   'profile.statistics.responseTime.hour': '1 година',
-  'profile.statistics.responseTime.hours': '{{hours}} годин',
+  'profile.statistics.responseTime.hours': '{hours} годин',
   'profile.professional.acceptanceRate': 'Прийняття завдань',
 
   // Quick Actions
@@ -211,7 +211,7 @@ export const profile = {
   'profile.professional.form.suggestedSkills': 'Популярні навички',
   'profile.professional.form.addCustomSkill': 'Додати власну навичку',
   'profile.professional.form.customSkillPlaceholder': 'Введіть назву навички',
-  'profile.professional.form.moreSkillsAvailable': 'та ще {{count}}...',
+  'profile.professional.form.moreSkillsAvailable': 'та ще {count}...',
   'profile.professional.form.skillsLimitNotice': 'Рекомендуємо обрати топ-10 навичок для найкращих результатів.',
   'profile.professional.form.submitting': 'Створення профілю...',
   'profile.professional.form.createProfile': 'Створити професійний профіль',
@@ -382,5 +382,5 @@ export const profile = {
   'profile.services.pricePlaceholder': 'напр. 25 €/год',
   'profile.services.descriptionLabel': 'Опис (необов\'язково)',
   'profile.services.descriptionPlaceholder': 'Короткий опис послуги',
-  'profile.services.helperText': 'Додайте до {{max}} послуг. Зміни зберігаються автоматично.',
+  'profile.services.helperText': 'Додайте до {max} послуг. Зміни зберігаються автоматично.',
 };

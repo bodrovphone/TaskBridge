@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import type { UserProfile } from '@/server/domain/user/user.types'
 
 export interface ProfessionalRequirement {
@@ -50,7 +50,7 @@ export interface ProfessionalListingStatus {
 export function useProfessionalListingStatus(
   profile: UserProfile | null | undefined
 ): ProfessionalListingStatus {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return useMemo(() => {
     // Default requirements structure (used for both auth and non-auth users)
@@ -58,21 +58,21 @@ export function useProfessionalListingStatus(
     const defaultRequirements: ProfessionalRequirement[] = [
       {
         key: 'title',
-        label: t('profile.listing.requirement.title', 'Professional title'),
+        label: t('profile.listing.requirement.title'),
         met: false,
         required: true,
         sectionId: 'professional-identity-section',
       },
       {
         key: 'bio',
-        label: t('profile.listing.requirement.bio', 'Description/Bio'),
+        label: t('profile.listing.requirement.bio'),
         met: false,
         required: true,
         sectionId: 'professional-identity-section',
       },
       {
         key: 'skills',
-        label: t('profile.listing.requirement.skills', 'Service categories'),
+        label: t('profile.listing.requirement.skills'),
         met: false,
         required: true,
         sectionId: 'service-categories-section',
@@ -99,21 +99,21 @@ export function useProfessionalListingStatus(
     const requirements: ProfessionalRequirement[] = [
       {
         key: 'title',
-        label: t('profile.listing.requirement.title', 'Professional title'),
+        label: t('profile.listing.requirement.title'),
         met: !!(profile.professionalTitle && profile.professionalTitle.length >= 3),
         required: true,
         sectionId: 'professional-identity-section',
       },
       {
         key: 'bio',
-        label: t('profile.listing.requirement.bio', 'Description/Bio'),
+        label: t('profile.listing.requirement.bio'),
         met: !!(profile.bio && profile.bio.length >= 20),
         required: true,
         sectionId: 'professional-identity-section',
       },
       {
         key: 'skills',
-        label: t('profile.listing.requirement.skills', 'Service categories'),
+        label: t('profile.listing.requirement.skills'),
         met: !!(profile.serviceCategories && profile.serviceCategories.length > 0),
         required: true,
         sectionId: 'service-categories-section',

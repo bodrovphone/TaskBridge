@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import { Button } from '@nextui-org/react'
 import { X } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { CategoryFilter } from './category-filter'
 import { CityFilter } from './city-filter'
 import { BudgetFilter } from './budget-filter'
@@ -12,7 +12,7 @@ import { SortDropdown } from './sort-dropdown'
 import { useTaskFilters } from '../hooks/use-task-filters'
 
 export function FilterBar() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { filters, updateFilter, updateFilters, resetFilters, activeFilterCount } = useTaskFilters()
 
   // Smooth scroll to results after filter selection
@@ -88,7 +88,7 @@ export function FilterBar() {
               startContent={<X className="w-4 h-4" />}
               onPress={resetFilters}
             >
-              {t('browseTasks.filters.reset', 'Reset')} ({activeFilterCount})
+              {t('browseTasks.filters.reset')} ({activeFilterCount})
             </Button>
           )}
         </div>

@@ -2,7 +2,7 @@
 
 import { Tooltip, Chip } from '@nextui-org/react'
 import { Trophy } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface TopProfessionalBadgeProps {
   tasksCount?: number
@@ -19,7 +19,7 @@ export function TopProfessionalBadge({
   size = 'md',
   showTooltip = true,
 }: TopProfessionalBadgeProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const sizeClasses = {
     sm: 'h-5 text-xs',
@@ -41,7 +41,7 @@ export function TopProfessionalBadge({
       className={`${sizeClasses[size]} bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium`}
       startContent={<Trophy size={iconSizes[size]} className="text-white" />}
     >
-      {t('professionals.badge.topProfessional', 'Top Professional')}
+      {t('professionals.badge.topProfessionalLabel')}
     </Chip>
   )
 
@@ -52,7 +52,6 @@ export function TopProfessionalBadge({
   return (
     <Tooltip
       content={t('professionals.badge.topProfessional.tooltip', {
-        defaultValue: 'Completed {{count}} tasks in the last 30 days',
         count: tasksCount,
       })}
       placement="top"

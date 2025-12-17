@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { Search, ClipboardList, Briefcase, ArrowRightLeft } from 'lucide-react'
@@ -19,7 +19,7 @@ interface ProfessionalProfilePageContentProps {
 }
 
 export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePageContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { user, profile, loading, refreshProfile } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -52,7 +52,7 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('loading', 'Loading...')}</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     )
@@ -117,7 +117,7 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
             startContent={<ArrowRightLeft className="w-4 h-4" />}
             className="bg-gradient-to-r from-blue-100 to-indigo-100 hover:from-blue-200 hover:to-indigo-200 text-blue-700 font-semibold border border-blue-200 shadow-sm"
           >
-            {t('profile.switchToCustomer', 'Switch to Customer Profile')}
+            {t('profile.switchToCustomer')}
           </Button>
         </div>
 

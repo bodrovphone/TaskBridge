@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import type { TaskHint } from '@/components/ui/task-hint-banner'
 import { generateTaskHints, shouldShowTaskHints, getTaskAgeDays } from '@/lib/services/task-hints'
 
@@ -32,7 +32,7 @@ const STORAGE_KEY = 'taskHintDismissals'
  * Hook to manage task hints with dismissal state
  */
 export function useTaskHints(task: Task) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [hints, setHints] = useState<TaskHint[]>([])
   const [shouldShow, setShouldShow] = useState(false)
   const [taskAge, setTaskAge] = useState(0)

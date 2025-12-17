@@ -5,7 +5,7 @@ import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, Chip } from '@nextui-org/react'
 import { Clock, MapPinned, Languages, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { getCityLabelBySlug } from '@/features/cities'
 
 interface AvailabilitySectionProps {
@@ -29,14 +29,14 @@ export function AvailabilitySection({
   onSave,
   onLanguageChange
 }: AvailabilitySectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentLanguages, setCurrentLanguages] = useState(languages)
 
   // Get translated city label
   const cityLabel = useMemo(() => {
-    if (!city) return t('profile.professional.notSet', 'Not set')
+    if (!city) return t('profile.professional.notSet')
     return getCityLabelBySlug(city, t)
   }, [city, t])
 
@@ -90,12 +90,12 @@ export function AvailabilitySection({
                 <MapPinned className="w-5 h-5 text-orange-600" />
               </div>
               <div className="flex-1">
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.serviceLocation', 'Service Location')}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.serviceLocation')}</p>
                 <p className="font-semibold text-gray-900">
-                  {city ? cityLabel : t('profile.professional.notSet', 'Not set')}
+                  {city ? cityLabel : t('profile.professional.notSet')}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {t('profile.professional.setInPersonalInfo', 'Set in Personal Information section')}
+                  {t('profile.professional.setInPersonalInfo')}
                 </p>
               </div>
             </div>
@@ -152,13 +152,13 @@ export function AvailabilitySection({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-blue-900 mb-1">
-                      {t('profile.professional.serviceLocation', 'Service Location')}
+                      {t('profile.professional.serviceLocation')}
                     </p>
                     <p className="font-semibold text-gray-900">
-                      {city ? cityLabel : t('profile.professional.notSet', 'Not set')}
+                      {city ? cityLabel : t('profile.professional.notSet')}
                     </p>
                     <p className="text-xs text-blue-700 mt-1">
-                      {t('profile.professional.editInPersonalInfo', 'Edit in Personal Information section')}
+                      {t('profile.professional.editInPersonalInfo')}
                     </p>
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export function AvailabilitySection({
               onPress={() => setIsEditing(true)}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              {t('common.edit', 'Edit')}
+              {t('common.edit')}
             </Button>
           ) : (
             <FormActionButtons

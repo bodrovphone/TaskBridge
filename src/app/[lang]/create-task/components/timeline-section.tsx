@@ -1,6 +1,7 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import { Card, CardBody } from '@nextui-org/react'
 import { Clock, Calendar } from 'lucide-react'
 import DatePicker from 'react-datepicker'
@@ -18,28 +19,30 @@ interface TimelineSectionProps {
 }
 
 export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSectionProps) {
- const { t, i18n } = useTranslation()
+ const t = useTranslations()
+ const params = useParams()
+ const currentLocale = (params?.lang as string) || 'bg'
 
  // Map app language to date-fns locale
- const dateLocale = i18n.language === 'bg' ? bg : i18n.language === 'ru' ? ru : enGB
+ const dateLocale = currentLocale === 'bg' ? bg : currentLocale === 'ru' ? ru : enGB
 
  const urgencyOptions = [
   {
    value: 'same_day' as const,
-   title: t('createTask.timeline.urgentTitle', 'Urgent - Same Day'),
-   description: t('createTask.timeline.urgentDesc', 'I need this done today'),
+   title: t('createTask.timeline.urgentTitle'),
+   description: t('createTask.timeline.urgentDesc'),
    radioColor: 'text-red-500 border-red-500',
   },
   {
    value: 'within_week' as const,
-   title: t('createTask.timeline.soonTitle', 'Soon - Within a Week'),
-   description: t('createTask.timeline.soonDesc', 'I need this done in the next 7 days'),
+   title: t('createTask.timeline.soonTitle'),
+   description: t('createTask.timeline.soonDesc'),
    radioColor: 'text-yellow-500 border-yellow-500',
   },
   {
    value: 'flexible' as const,
-   title: t('createTask.timeline.flexibleTitle', 'Flexible'),
-   description: t('createTask.timeline.flexibleDesc', "I'm flexible with timing"),
+   title: t('createTask.timeline.flexibleTitle'),
+   description: t('createTask.timeline.flexibleDesc'),
    radioColor: 'text-green-500 border-green-500',
   },
  ]
@@ -54,10 +57,10 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
      </div>
      <div>
       <h2 className="text-2xl font-bold text-gray-900 mb-1">
-       {t('createTask.timeline.title', 'When do you need this done?')}
+       {t('createTask.timeline.title')}
       </h2>
       <p className="text-gray-600">
-       {t('createTask.timeline.subtitle', 'Let professionals know your timeline')}
+       {t('createTask.timeline.subtitle')}
       </p>
      </div>
     </div>
@@ -123,12 +126,12 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
      return (
       <div className="max-w-md">
        <label className="block text-sm font-medium text-foreground mb-1.5">
-        {t('createTask.timeline.deadlineLabel', 'Specific Deadline (Optional)')}
+        {t('createTask.timeline.deadlineLabel')}
        </label>
        {isPastDate && (
         <div className="mb-2 p-3 bg-amber-50 border border-amber-300 rounded-lg">
          <p className="text-sm text-amber-800 font-medium">
-          ⚠️ {t('createTask.timeline.pastDateWarning', 'This deadline is in the past. Please select a future date or clear this field.')}
+          ⚠️ {t('createTask.timeline.pastDateWarning')}
          </p>
         </div>
        )}
@@ -148,7 +151,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
          dateFormat="dd/MM/yyyy"
          locale={dateLocale}
          disabled={urgency === 'same_day' && !isPastDate}
-         placeholderText={t('createTask.timeline.selectDate', 'Select date')}
+         placeholderText={t('createTask.timeline.selectDate')}
          calendarStartDay={1}
          portalId="root-portal"
          popperClassName="z-[9999]"
@@ -159,7 +162,7 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
         <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-default-400 pointer-events-none" />
        </div>
        <p className="text-xs text-default-500 mt-1.5">
-        {t('createTask.timeline.deadlineHelp', "Leave empty if you don't have a specific deadline")}
+        {t('createTask.timeline.deadlineHelp')}
        </p>
       </div>
      )

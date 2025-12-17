@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
 import { replaceLocaleInPathname } from '@/lib/utils/url-locale'
@@ -38,7 +38,7 @@ interface LanguagePreferencePromptProps {
  * Testing: Add ?showLangPrompt=1 to URL to force show the prompt
  */
 export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
   const params = useParams()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -119,13 +119,10 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
     // Save preference to cookie/localStorage
     saveUserLocalePreference(preferredLanguage)
 
-    // Update i18next
-    i18n.changeLanguage(preferredLanguage)
-
-    // Navigate to new locale URL
+    // Navigate to new locale URL (next-intl handles locale via URL)
     const newPath = replaceLocaleInPathname(pathname, preferredLanguage)
     router.push(newPath)
-  }, [preferredLanguage, profile?.id, pathname, router, i18n])
+  }, [preferredLanguage, profile?.id, pathname, router])
 
   // Handle dismiss (clicking outside or X)
   const handleDismiss = useCallback(() => {
@@ -140,12 +137,9 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
     ? NATIVE_LANGUAGE_NAMES[preferredLanguage]
     : ''
 
-  // Get translations in the user's PREFERRED language (not current URL locale)
-  // This way the popup speaks to the user in their preferred language
-  const preferredT = useMemo(() => {
-    if (!preferredLanguage) return t
-    return i18n.getFixedT(preferredLanguage)
-  }, [preferredLanguage, i18n, t])
+  // Note: In next-intl, translations are determined by URL locale
+  // The prompt will show in current locale (user can still understand it)
+  const preferredT = t
 
   return (
     <Tip

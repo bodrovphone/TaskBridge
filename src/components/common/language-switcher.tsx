@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import {
  Dropdown,
@@ -30,7 +30,7 @@ interface LanguageSwitcherProps {
  * Handles both URL navigation and persistence of user preferences
  */
 function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
- const { i18n } = useTranslation()
+ const t = useTranslations()
  const router = useRouter()
  const pathname = usePathname()
  const { authenticatedFetch } = useAuth()
@@ -58,10 +58,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
    // Update authenticated user's profile language preference (silently fails if not logged in)
    await updateUserLanguagePreference(newLocale, authenticatedFetch)
 
-   // Update i18next for immediate UI feedback
-   i18n.changeLanguage(newLocale)
-
-   // Navigate to new locale URL
+   // Navigate to new locale URL (next-intl handles locale via URL)
    const newPath = replaceLocaleInPathname(pathname, newLocale)
    router.push(newPath)
   } catch (error) {

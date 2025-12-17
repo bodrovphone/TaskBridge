@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Button, Input, Progress, Card, CardBody, Spinner } from '@nextui-org/react'
 import { Plus, Trash2, Upload, CheckCircle2, AlertCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { GalleryItem } from '@/server/domain/user/user.types'
 import { useAuth } from '@/features/auth'
@@ -51,7 +51,7 @@ export function PortfolioGalleryManager({
   onChange,
   maxItems = 5
 }: GalleryManagerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { authenticatedFetch } = useAuth()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [activeSlot, setActiveSlot] = useState<number | null>(null)
@@ -122,7 +122,7 @@ export function PortfolioGalleryManager({
     const validTypes = ['image/jpeg', 'image/png', 'image/webp']
     if (!validTypes.includes(file.type)) {
       updateSlotState(slotIndex, {
-        error: t('profile.gallery.useJpgPngWebp', 'Please use JPG, PNG, or WEBP')
+        error: t('profile.gallery.useJpgPngWebp')
       })
       return
     }
@@ -152,7 +152,7 @@ export function PortfolioGalleryManager({
       if (result.compressedSize > MAX_SIZE) {
         updateSlotState(slotIndex, {
           isCompressing: false,
-          error: t('profile.gallery.maxSize', 'Maximum 5MB allowed')
+          error: t('profile.gallery.maxSize')
         })
         return
       }
@@ -215,7 +215,7 @@ export function PortfolioGalleryManager({
       })
 
       toast({
-        title: t('profile.gallery.uploadSuccess', 'Image uploaded'),
+        title: t('profile.gallery.uploadSuccess'),
       })
     } catch (error: any) {
       console.error('Gallery upload error:', error)
@@ -226,7 +226,7 @@ export function PortfolioGalleryManager({
         error: error.message
       })
       toast({
-        title: t('profile.gallery.uploadError', 'Upload failed'),
+        title: t('profile.gallery.uploadError'),
         description: error.message,
         variant: 'destructive'
       })
@@ -263,12 +263,12 @@ export function PortfolioGalleryManager({
       })
 
       toast({
-        title: t('profile.gallery.deleteSuccess', 'Image deleted'),
+        title: t('profile.gallery.deleteSuccess'),
       })
     } catch (error: any) {
       console.error('Gallery delete error:', error)
       toast({
-        title: t('profile.gallery.deleteError', 'Delete failed'),
+        title: t('profile.gallery.deleteError'),
         description: error.message,
         variant: 'destructive'
       })
@@ -332,8 +332,8 @@ export function PortfolioGalleryManager({
                         <Spinner size="sm" color="white" />
                         <p className="text-xs text-white text-center">
                           {slotState.isCompressing
-                            ? t('profile.gallery.compressing', 'Optimizing...')
-                            : t('profile.gallery.uploading', 'Uploading...')}
+                            ? t('profile.gallery.compressing')
+                            : t('profile.gallery.uploading')}
                         </p>
                         {slotState.isCompressing && (
                           <Progress
@@ -387,7 +387,7 @@ export function PortfolioGalleryManager({
                       <>
                         <Plus className="w-8 h-8 mb-1" />
                         <span className="text-xs font-medium">
-                          {t('profile.gallery.addImage', 'Add')}
+                          {t('profile.gallery.addImage')}
                         </span>
                       </>
                     )}
@@ -414,7 +414,7 @@ export function PortfolioGalleryManager({
                           {slotState.compressionStats.savingsPercent}%
                         </span>
                         <span className="text-success-600 ml-1">
-                          {t('profile.gallery.smaller', 'smaller')}
+                          {t('profile.gallery.smaller')}
                         </span>
                         <p className="text-success-500">
                           {formatBytes(slotState.compressionStats.originalSize)} → {formatBytes(slotState.compressionStats.compressedSize)}
@@ -430,7 +430,7 @@ export function PortfolioGalleryManager({
                 <div className="rounded-lg border-2 border-purple-200 bg-purple-50/50 p-1.5 shadow-sm">
                   <Input
                     size="sm"
-                    placeholder={t('profile.gallery.captionPlaceholder', 'Caption (optional)')}
+                    placeholder={t('profile.gallery.captionPlaceholder')}
                     value={localCaptions[item.id] ?? item.caption}
                     onValueChange={(value) => handleCaptionChange(item.id, value)}
                     maxLength={30}
@@ -448,7 +448,7 @@ export function PortfolioGalleryManager({
 
       {/* Helper text */}
       <p className="text-xs text-gray-500 text-center">
-        {t('profile.gallery.helperText', 'Click on empty slots to upload images. JPG, PNG, or WEBP (max 5MB each)')}
+        {t('profile.gallery.helperText')}
       </p>
     </div>
   )

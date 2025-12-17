@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Chip } from '@nextui-org/react'
 import { Shield, AlertCircle, Mail, Send, CheckCircle2 } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { AvatarUpload } from '../avatar-upload'
 import type { UserProfile } from '@/server/domain/user/user.types'
 import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
@@ -19,7 +19,7 @@ export function ProfileHeader({
   onAvatarChange,
   profileType = 'customer'
 }: ProfileHeaderProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   // Calculate profile completion based on profile type
   const calculateCompletion = () => {
@@ -111,8 +111,8 @@ export function ProfileHeader({
             <div className="mb-6">
               <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
                 {profileType === 'professional'
-                  ? t('profile.professionalProfileTitle', 'Professional Profile Information')
-                  : t('profile.customerProfileTitle', 'Customer Profile Information')
+                  ? t('profile.professionalProfileTitle')
+                  : t('profile.customerProfileTitle')
                 }
               </h2>
             </div>
@@ -210,8 +210,8 @@ export function ProfileHeader({
                         <div className="flex items-center justify-between">
                           <h4 className={`font-bold mb-1 ${isProfessionalIncomplete ? 'text-amber-900' : 'text-blue-900'}`}>
                             {isProfessionalIncomplete
-                              ? t('profile.listing.notListed', 'Your profile is not listed yet')
-                              : t('profile.listing.incomplete', 'Complete your profile')
+                              ? t('profile.listing.notListed')
+                              : t('profile.listing.incomplete')
                             }
                           </h4>
                           <span className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${
@@ -219,13 +219,13 @@ export function ProfileHeader({
                               ? 'bg-amber-200 text-amber-800 group-hover:bg-amber-300'
                               : 'bg-blue-200 text-blue-800 group-hover:bg-blue-300'
                           }`}>
-                            {t('profile.listing.clickToFix', 'Click to fix')} →
+                            {t('profile.listing.clickToFix')} →
                           </span>
                         </div>
                         <p className={`text-sm mb-3 ${isProfessionalIncomplete ? 'text-amber-800' : 'text-blue-800'}`}>
                           {isProfessionalIncomplete
-                            ? t('profile.listing.notListedMessage', 'Add a professional title to appear in our search and receive job opportunities from customers.')
-                            : t('profile.listing.incompleteMessage', 'Fill in the missing information to improve your visibility and attract more customers.')
+                            ? t('profile.listing.notListedMessage')
+                            : t('profile.listing.incompleteMessage')
                           }
                         </p>
 

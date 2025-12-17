@@ -7,7 +7,10 @@
  * - Subcategory to main category mapping
  */
 
-import type { TFunction } from 'i18next'
+/**
+ * Generic translation function type compatible with both react-i18next and next-intl
+ */
+type TranslateFunction = (key: string) => string;
 
 /**
  * Maps subcategories to their main category for consistent color grouping
@@ -261,7 +264,7 @@ export function getCategoryColor(category: string): string {
  * getCategoryName(t, 'handyman', 'plumber') // Returns translated name or "Plumber"
  */
 export function getCategoryName(
-  t: TFunction,
+  t: TranslateFunction,
   category: string,
   subcategory?: string | null
 ): string {
@@ -270,15 +273,23 @@ export function getCategoryName(
     // Convert kebab-case to camelCase for translation key (e.g., "martial-arts" → "martialArts")
     const camelCase = subcategory.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
     const subcategoryKey = `categories.sub.${camelCase}`
-    const translated = t(subcategoryKey, '')
 
-    // If translation exists, use it
-    if (translated) return translated
+    try {
+      const translated = t(subcategoryKey)
+      // If translation exists and doesn't look like a key, use it
+      if (translated && !translated.startsWith('categories.')) return translated
+    } catch {
+      // Translation not found, continue to fallback
+    }
 
     // Try taskCard category translation as fallback
-    const taskCardKey = `taskCard.category.${subcategory}`
-    const taskCardTranslation = t(taskCardKey, '')
-    if (taskCardTranslation) return taskCardTranslation
+    try {
+      const taskCardKey = `taskCard.category.${subcategory}`
+      const taskCardTranslation = t(taskCardKey)
+      if (taskCardTranslation && !taskCardTranslation.startsWith('taskCard.')) return taskCardTranslation
+    } catch {
+      // Translation not found, continue to fallback
+    }
 
     // Format subcategory as final fallback (e.g., "courier-delivery" → "Courier Delivery")
     return subcategory
@@ -288,9 +299,13 @@ export function getCategoryName(
   }
 
   // Fall back to main category
-  const categoryKey = `taskCard.category.${category}`
-  const categoryTranslation = t(categoryKey, '')
-  if (categoryTranslation) return categoryTranslation
+  try {
+    const categoryKey = `taskCard.category.${category}`
+    const categoryTranslation = t(categoryKey)
+    if (categoryTranslation && !categoryTranslation.startsWith('taskCard.')) return categoryTranslation
+  } catch {
+    // Translation not found, continue to fallback
+  }
 
   // Final fallback: format category name
   return category

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Input, Chip, Button, Card, CardBody } from '@nextui-org/react'
 import { Plus, X, Search } from 'lucide-react'
 
@@ -34,7 +34,7 @@ const predefinedSkills = [
 ]
 
 export function SkillsSelector({ selectedSkills, onChange }: SkillsSelectorProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const [searchTerm, setSearchTerm] = useState('')
  const [customSkill, setCustomSkill] = useState('')
 

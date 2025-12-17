@@ -12,7 +12,7 @@ import {
   Radio
 } from '@nextui-org/react'
 import { XCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 interface RejectApplicationDialogProps {
@@ -28,7 +28,7 @@ export default function RejectApplicationDialog({
   onClose,
   onConfirm
 }: RejectApplicationDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedReason, setSelectedReason] = useState<string>('')
 
   if (!application) return null

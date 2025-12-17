@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Button } from "@nextui-org/react";
 import { AlertCircle, RotateCw, Home } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 export default function TaskError({
  error,
@@ -16,7 +16,7 @@ export default function TaskError({
  const router = useRouter();
  const params = useParams();
  const lang = (params?.lang as string) || 'bg';
- const { t } = useTranslation();
+ const t = useTranslations();
 
  useEffect(() => {
   // Log the error to an error reporting service
@@ -35,12 +35,10 @@ export default function TaskError({
 
     {/* Message */}
     <h1 className="text-3xl font-bold text-gray-900 mb-4">
-     {t('taskDetail.error.title', 'Something went wrong!')}
+     {t('taskDetail.error.title')}
     </h1>
     <p className="text-gray-600 mb-2">
-     {t('taskDetail.error.description',
-      "We couldn't load this task. This might be a temporary issue."
-     )}
+     {t('taskDetail.error.description')}
     </p>
 
     {/* Error details (dev only) */}
@@ -63,14 +61,14 @@ export default function TaskError({
       startContent={<RotateCw size={18} />}
       onClick={reset}
      >
-      {t('taskDetail.error.retry', 'Try Again')}
+      {t('taskDetail.error.retry')}
      </Button>
      <Button
       color="primary"
       startContent={<Home size={18} />}
       onClick={() => router.push(`/${lang}`)}
      >
-      {t('taskDetail.error.goHome', 'Go to Home')}
+      {t('taskDetail.error.goHome')}
      </Button>
     </div>
    </div>

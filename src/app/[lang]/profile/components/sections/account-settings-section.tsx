@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, CardHeader, Button } from '@nextui-org/react'
 import { Settings, Trash2 } from 'lucide-react'
 import Link from 'next/link'
@@ -23,7 +23,7 @@ export function AccountSettingsSection({
   telegramFirstName,
   onTelegramConnectionChange
 }: AccountSettingsSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
@@ -33,7 +33,7 @@ export function AccountSettingsSection({
             <Settings className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.settings')}</h3>
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.settingsTitle')}</h3>
             <p className="text-xs text-gray-500 hidden sm:block">{t('profile.settings.description')}</p>
           </div>
         </div>

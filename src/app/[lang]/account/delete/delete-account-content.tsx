@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import {
   Button,
@@ -54,7 +54,7 @@ interface PreflightResponse {
 }
 
 export function DeleteAccountContent({ lang }: DeleteAccountContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { user, profile, loading: authLoading, signInWithGoogle, signInWithFacebook } = useAuth()
 
   const [preflight, setPreflight] = useState<PreflightResponse | null>(null)

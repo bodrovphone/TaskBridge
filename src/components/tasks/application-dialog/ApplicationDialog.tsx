@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useRouter, useParams } from 'next/navigation'
 import { AnimatePresence } from 'framer-motion'
 
 import {
@@ -48,7 +48,7 @@ export default function ApplicationDialog({
   taskTitle,
   taskBudget,
 }: ApplicationDialogProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const { user, authenticatedFetch } = useAuth()
   const isKeyboardOpen = useKeyboardHeight()
@@ -125,7 +125,8 @@ export default function ApplicationDialog({
   )
 
   // Navigation handlers
-  const currentLang = i18n.language || 'bg'
+  const params = useParams()
+  const currentLang = (params?.lang as string) || 'bg'
 
   const handleViewApplication = useCallback(() => {
     handleClose()

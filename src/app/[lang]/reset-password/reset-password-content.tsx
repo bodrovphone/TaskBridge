@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button as NextUIButton, Input, Card, CardBody, CardHeader } from '@nextui-org/react'
@@ -13,7 +13,7 @@ interface ResetPasswordContentProps {
 }
 
 export function ResetPasswordContent({ lang }: ResetPasswordContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

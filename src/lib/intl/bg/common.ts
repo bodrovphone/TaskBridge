@@ -165,7 +165,7 @@ export const common = {
   'reviews.hiddenReviewsNotice': 'Някои отзиви са скрити до потвърждение',
   'reviews.hiddenReviewsTooltip': 'Ниско оценени отзиви се скриват докато не се открие модел, за да се защитят от несправедливи единични отзиви.',
   'reviews.hiddenCountSingular': '1 скрит отзив',
-  'reviews.hiddenCountPlural': '{{count}} скрити отзива',
+  'reviews.hiddenCountPlural': '{count} скрити отзива',
   'reviews.patternDetected': 'Открит е модел на негативни отзиви',
   'reviews.allNegativeVisible': 'Всички негативни отзиви сега са видими поради модел на проблеми.',
 
@@ -228,6 +228,6 @@ export const common = {
   'cityAutocomplete.noResults': 'Не са намерени градове',
 
   // Language Preference Prompt
-  'languagePrompt.title': 'Превключи на {{language}}?',
+  'languagePrompt.title': 'Превключи на {language}?',
   'languagePrompt.switch': 'Да, превключи',
 };

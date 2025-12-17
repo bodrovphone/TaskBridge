@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { CheckCircle, User, Phone, MessageSquare, ClipboardCheck } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 import { Application } from '@/types/applications'
 import {
@@ -50,7 +50,7 @@ export default function AcceptApplicationDialog({
   onConfirm,
   userProfile
 }: AcceptApplicationDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const isMobile = useIsMobile()
   const isKeyboardOpen = useKeyboardHeight()
 
@@ -134,8 +134,8 @@ export default function AcceptApplicationDialog({
   const steps: WizardStep[] = useMemo(() => [
     {
       id: 'review',
-      title: t('acceptApplication.wizard.reviewTitle', 'Review Offer'),
-      subtitle: t('acceptApplication.wizard.reviewSubtitle', 'Professional\'s proposal'),
+      title: t('acceptApplication.wizard.reviewTitle'),
+      subtitle: t('acceptApplication.wizard.reviewSubtitle'),
       icon: <User className="w-4 h-4 text-blue-600" />,
       content: (
         <ReviewApplicationStep
@@ -150,8 +150,8 @@ export default function AcceptApplicationDialog({
     },
     {
       id: 'contact',
-      title: t('acceptApplication.wizard.contactTitle', 'Share Contact'),
-      subtitle: t('acceptApplication.wizard.contactSubtitle', 'How to reach you'),
+      title: t('acceptApplication.wizard.contactTitle'),
+      subtitle: t('acceptApplication.wizard.contactSubtitle'),
       icon: <Phone className="w-4 h-4 text-green-600" />,
       content: (
         <ShareContactStep
@@ -167,8 +167,8 @@ export default function AcceptApplicationDialog({
     },
     {
       id: 'message',
-      title: t('acceptApplication.wizard.messageTitle', 'Add Message'),
-      subtitle: t('acceptApplication.wizard.messageSubtitle', 'Optional note'),
+      title: t('acceptApplication.wizard.messageTitle'),
+      subtitle: t('acceptApplication.wizard.messageSubtitle'),
       icon: <MessageSquare className="w-4 h-4 text-purple-600" />,
       isOptional: true,
       content: (
@@ -185,8 +185,8 @@ export default function AcceptApplicationDialog({
     },
     {
       id: 'confirm',
-      title: t('acceptApplication.wizard.confirmTitle', 'Confirm'),
-      subtitle: t('acceptApplication.wizard.confirmSubtitle', 'Final review'),
+      title: t('acceptApplication.wizard.confirmTitle'),
+      subtitle: t('acceptApplication.wizard.confirmSubtitle'),
       icon: <ClipboardCheck className="w-4 h-4 text-green-600" />,
       content: (
         <ConfirmStep
@@ -253,7 +253,7 @@ export default function AcceptApplicationDialog({
             onComplete={handleConfirm}
             onClose={handleClose}
             isSubmitting={isSubmitting}
-            submitText={t('acceptApplication.confirm', 'Accept')}
+            submitText={t('acceptApplication.confirm')}
             isMobile={isMobile}
             headerGradient="from-green-500 to-green-600"
             headerIcon={<CheckCircle className="w-5 h-5 text-white" />}

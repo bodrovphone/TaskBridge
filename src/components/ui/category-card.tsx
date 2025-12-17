@@ -1,7 +1,7 @@
 'use client'
 
 import { LucideIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from 'next-intl';
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 
 interface CategoryCardProps {
@@ -21,7 +21,7 @@ function CategoryCard({
  color,
  onClick 
 }: CategoryCardProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  
  const colorConfig = {
   blue: {
@@ -82,11 +82,11 @@ function CategoryCard({
    <CardFooter className="px-3 pb-3 md:px-6 md:pb-6 lg:px-8 lg:pb-8 pt-0 md:justify-center">
     {count === 0 ? (
      <div className="text-xs md:text-sm font-bold text-blue-600 group-hover:text-blue-700 transition-colors duration-300">
-      {t('landing.categories.checkTasks', 'Check tasks')}
+      {t('landing.categories.checkTasks')}
      </div>
     ) : (
      <div className="text-xs md:text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors duration-300">
-      <span className="text-sm md:text-lg font-bold">{count}+</span> {t('landing.categories.activeTasks', 'tasks')}
+      <span className="text-sm md:text-lg font-bold">{count}+</span> {t('landing.categories.activeTasks')}
      </div>
     )}
    </CardFooter>

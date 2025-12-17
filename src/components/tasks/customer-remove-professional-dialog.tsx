@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import {
   Modal,
   ModalContent,
@@ -41,7 +42,9 @@ export function CustomerRemoveProfessionalDialog({
   acceptedDate,
   isLoading = false,
 }: CustomerRemoveProfessionalDialogProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
   const [feedback, setFeedback] = useState('')
 
   const remainingRemovals = maxRemovalsPerMonth - removalsThisMonth
@@ -53,7 +56,7 @@ export function CustomerRemoveProfessionalDialog({
 
   // Get locale for date-fns
   const getLocale = () => {
-    switch (i18n.language) {
+    switch (currentLocale) {
       case 'bg':
         return bgLocale
       case 'ru':
@@ -178,12 +181,12 @@ export function CustomerRemoveProfessionalDialog({
           {!hasExceededLimit && (
             <div>
               <p className="text-sm font-medium text-gray-900 mb-2">
-                {t('customerRemove.feedbackLabel', 'Feedback for the professional (optional)')}
+                {t('customerRemove.feedbackLabel')}
               </p>
               <Textarea
                 value={feedback}
                 onValueChange={setFeedback}
-                placeholder={t('customerRemove.feedbackPlaceholder', 'Let them know why you\'re removing them from this task...')}
+                placeholder={t('customerRemove.feedbackPlaceholder')}
                 minRows={3}
                 maxRows={5}
                 classNames={{
@@ -191,7 +194,7 @@ export function CustomerRemoveProfessionalDialog({
                 }}
               />
               <p className="text-xs text-gray-500 mt-1">
-                {t('customerRemove.feedbackHint', 'This message will be included in the notification sent to the professional.')}
+                {t('customerRemove.feedbackHint')}
               </p>
             </div>
           )}

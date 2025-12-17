@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardBody, Input } from '@nextui-org/react'
 import { useState, useMemo, useCallback } from 'react'
 import { Search, X } from 'lucide-react'
@@ -27,7 +27,7 @@ interface CategorySearchProps {
  * <CategorySearch onCategorySelect={(slug) => router.push(`/professionals/${slug}`)} />
  */
 export function CategorySearch({ onCategorySelect, placeholder, className }: CategorySearchProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const [searchQuery, setSearchQuery] = useState('')
  const [isSearching, setIsSearching] = useState(false)
 
@@ -74,7 +74,7 @@ export function CategorySearch({ onCategorySelect, placeholder, className }: Cat
     <CardBody className="p-4">
      <Input
       size="lg"
-      placeholder={placeholder || t('professionals.searchPlaceholder', 'Search categories... (e.g. repair, cleaning, lessons)')}
+      placeholder={placeholder || t('professionals.searchPlaceholder')}
       value={searchQuery}
       onChange={(e) => {
        setSearchQuery(e.target.value)
@@ -129,7 +129,7 @@ export function CategorySearch({ onCategorySelect, placeholder, className }: Cat
     >
      <div className="p-2 bg-gray-50 border-b border-gray-200">
       <p className="text-xs text-gray-600 font-medium px-2">
-       {searchResults.length} {t('professionals.categoryResults', 'categories found')}
+       {searchResults.length} {t('professionals.categoryResults')}
       </p>
      </div>
 
@@ -173,10 +173,10 @@ export function CategorySearch({ onCategorySelect, placeholder, className }: Cat
     >
      <div className="text-4xl mb-2">🔍</div>
      <p className="text-sm font-semibold text-gray-900 mb-1">
-      {t('professionals.noResults', 'No categories match your search')}
+      {t('professionals.noResults')}
      </p>
      <p className="text-xs text-gray-600">
-      {t('createTask.category.tryDifferent', 'Try a different search term')}
+      {t('createTask.category.tryDifferent')}
      </p>
     </motion.div>
    )}

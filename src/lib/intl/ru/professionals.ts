@@ -91,7 +91,7 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Выберите минимальный рейтинг',
   'professionals.filters.showingVerifiedFirst':
     'Показать проверенных топ профессионалов первыми',
-  'professionals.filters.sortingBy': 'Сортировка по {{option}}',
+  'professionals.filters.sortingBy': 'Сортировка по {option}',
   'professionals.filters.sortingDescFeatured':
     'Показать проверенных топ профессионалов первыми',
   'professionals.filters.sortingDescRating':
@@ -99,21 +99,20 @@ export const professionals = {
   'professionals.filters.sortingDescJobs':
     'Самые опытные профессионалы показываются первыми',
   'professionals.filters.activeFilters': 'Активные фильтры',
-  'professionals.filters.filterApplied': '{{count}} фильтр применен',
-  'professionals.filters.filtersApplied': '{{count}} фильтров применено',
+  'professionals.filters.filterApplied': '{count} фильтр применен',
+  'professionals.filters.filtersApplied': '{count} фильтров применено',
   'professionals.filters.showProfessionalsWithRating':
-    'Показать профессионалов с {{rating}}+ звездным рейтингом',
+    'Показать профессионалов с {rating}+ звездным рейтингом',
   'professionals.filters.showPerfectRating':
     'Показать только профессионалов с совершенным 5-звездным рейтингом',
 
   // Results section
-  'professionals.results.showing': 'Показано {{count}} специалистов',
+  'professionals.results.showing': 'Показано {count} специалистов',
   'professionals.results.loading': 'Загрузка специалистов...',
   'professionals.results.noResults.title': 'Специалисты не найдены',
   'professionals.results.noResults.description':
     'Попробуйте изменить фильтры или поискать в другом районе',
   'professionals.results.noResults.clearFilters': 'Очистить фильтры',
-  'professionals.results.noResults.subtext': 'Или посмотрите рекомендуемых специалистов ниже',
   'professionals.results.error.title': 'Упс! Что-то пошло не так',
   'professionals.results.error.description': 'Нашим серверам нужен кофе-брейк',
   'professionals.results.error.subtext': 'Не волнуйтесь, мы уже работаем над этим!',
@@ -132,7 +131,7 @@ export const professionals = {
   // Pagination
   'professionals.pagination.previous': 'Предыдущая',
   'professionals.pagination.next': 'Следующая',
-  'professionals.pagination.pageOf': 'Страница {{current}} из {{total}}',
+  'professionals.pagination.pageOf': 'Страница {current} из {total}',
 
   'professionalDetail.about': 'О специалисте',
   'professionalDetail.reviews': 'отзывов',
@@ -198,9 +197,9 @@ export const professionals = {
   'professionalDetail.completedTasks.stats.fiveStarTasks':
     '5-звёздочные задачи',
   'professionalDetail.completedTasks.pendingReview': 'Ожидает отзыв',
-  'professionalDetail.completedTasks.viewAll': 'Посмотреть все {{count}} задач',
+  'professionalDetail.completedTasks.viewAll': 'Посмотреть все {count} задач',
   'professionalDetail.completedTasks.totalTasks': 'Всего задач',
-  'professionalDetail.completedTasks.averageRatingStars': 'Средний рейтинг: {{rating}} звёзд',
+  'professionalDetail.completedTasks.averageRatingStars': 'Средний рейтинг: {rating} звёзд',
   'professionalDetail.verified': 'Подтверждён',
   'professionalDetail.shareText': 'Посмотрите на этого специалиста в Trudify',
   'professionalDetail.shareSuccess': 'Успешно поделились!',
@@ -213,16 +212,16 @@ export const professionals = {
   'professionals.filters.filters': 'Фильтры',
 
   // Professional Badges
-  'professionals.badge.topProfessional': 'Топ Про',
-  'professionals.badge.topProfessional.tooltip': 'Выполнил {{count}} задач за последние 30 дней',
-  'professionals.badge.earlyAdopter': 'Ранний последователь',
+  'professionals.badge.topProfessionalLabel': 'Топ Про',
+  'professionals.badge.topProfessional.tooltip': 'Выполнил {count} задач за последние 30 дней',
+  'professionals.badge.earlyAdopterLabel': 'Ранний последователь',
   'professionals.badge.earlyAdopter.tooltip': 'Один из первых специалистов на нашей платформе. Спасибо, что поверили в нас с самого начала!',
-  'professionals.badge.featuredProfessional': 'Избранный специалист',
+  'professionals.badge.featuredProfessionalLabel': 'Избранный специалист',
   'professionals.badge.featuredProfessional.tooltip': 'Лично отобран нашей командой за исключительное качество и надёжность. Этот специалист прошёл проверку и рекомендован нами.',
 
   // Invite Modal
   'inviteModal.title': 'Пригласить специалиста на задачу',
-  'inviteModal.subtitle': 'Выберите, на какую задачу пригласить {{name}}',
+  'inviteModal.subtitle': 'Выберите, на какую задачу пригласить {name}',
   'inviteModal.selectLabel': 'Выберите задачу',
   'inviteModal.selectPlaceholder': 'Выберите вашу задачу',
   'inviteModal.noTasks': 'У вас пока нет открытых задач.',
@@ -230,13 +229,13 @@ export const professionals = {
   'inviteModal.confirmText': 'получит уведомление об этом приглашении на задачу.',
   'inviteModal.sendInvitation': 'Отправить приглашение',
   'inviteModal.success': 'Приглашение отправлено!',
-  'inviteModal.successDescription': '{{name}} будет уведомлен о вашей задаче.',
+  'inviteModal.successDescription': '{name} будет уведомлен о вашей задаче.',
   'inviteModal.error': 'Не удалось отправить приглашение',
   'inviteModal.errorFetchingTasks': 'Не удалось загрузить ваши задачи',
   'inviteModal.alreadyInvited': 'Уже приглашён',
-  'inviteModal.alreadyInvitedDescription': 'Вы уже пригласили {{name}} на эту задачу.',
+  'inviteModal.alreadyInvitedDescription': 'Вы уже пригласили {name} на эту задачу.',
   'inviteModal.alreadyInvitedProfessional': 'Уже приглашён',
-  'inviteModal.alreadyInvitedProfessionalDescription': 'Вы уже пригласили {{name}} на вашу задачу. Они могут откликнуться в течение 24 часов, если доступны.',
+  'inviteModal.alreadyInvitedProfessionalDescription': 'Вы уже пригласили {name} на вашу задачу. Они могут откликнуться в течение 24 часов, если доступны.',
   'inviteModal.selfInviteTitle': '🤔 Хорошая попытка!',
   'inviteModal.selfInviteDescription': 'Нельзя предложить задачу самому себе. Но мы ценим креативность!',
   'inviteModal.createNewTask': 'Создать новую задачу',

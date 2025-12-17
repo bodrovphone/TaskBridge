@@ -1,8 +1,9 @@
 'use client'
 
 import { Avatar, Badge, Chip } from "@nextui-org/react";
+import { useParams } from 'next/navigation';
 import { Star, MapPin, Clock, CheckCircle, Shield, Phone, Users } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
 import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
 import { formatYearsExperience } from '@/lib/utils/pluralization';
@@ -40,7 +41,9 @@ interface ProfessionalHeaderProps {
 }
 
 export default function ProfessionalHeader({ professional }: ProfessionalHeaderProps) {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
+ const params = useParams();
+ const currentLocale = (params?.lang as string) || 'bg';
 
  // Determine which warning to show (prioritize multiple reports over negative reviews)
  const warningType: WarningType | null = professional.safetyStatus.multipleReports
@@ -158,7 +161,7 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
         ) : (
           <div className="flex items-center gap-1 text-gray-500">
            <Star className="w-4 h-4 text-gray-400" />
-           <span className="font-medium">{t('professionals.card.waitingForReviews', 'Waiting for first reviews')}</span>
+           <span className="font-medium">{t('professionals.card.waitingForReviews')}</span>
           </div>
         )}
         
@@ -186,7 +189,7 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
          ) : (
            <>
              <div className="text-xl sm:text-2xl font-bold text-blue-500">0</div>
-             <div className="text-xs sm:text-sm text-blue-600 leading-tight font-medium mt-1">{t('professionals.card.lookingForFirstTask', 'Ready for first task')}</div>
+             <div className="text-xs sm:text-sm text-blue-600 leading-tight font-medium mt-1">{t('professionals.card.lookingForFirstTask')}</div>
            </>
          )}
         </div>
@@ -194,11 +197,11 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
          <div className="text-xl sm:text-2xl font-bold text-green-600">
           {formatYearsExperience(
             professional.yearsExperience,
-            i18n.language,
-            (key: string, fallback?: string) => t(key, fallback || '')
+            currentLocale,
+            (key: string) => t(key as any)
           )}
          </div>
-         <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.experience', 'Experience')}</div>
+         <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.experience')}</div>
         </div>
         <div>
          <div className="text-xl sm:text-2xl font-bold text-purple-600">{professional.responseTime}</div>

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { ProfessionalCard } from '@/features/professionals';
 import type { Professional } from '@/server/professionals/professional.types';
@@ -17,7 +17,7 @@ interface FeaturedProfessionalsSectionProps {
 }
 
 export default function FeaturedProfessionalsSection({ professionals }: FeaturedProfessionalsSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const router = useRouter();
  const pathname = usePathname();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
@@ -120,13 +120,13 @@ export default function FeaturedProfessionalsSection({ professionals }: Featured
      <div className="space-y-4">
       <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full text-blue-700 text-sm font-semibold">
        <Users className="mr-2 h-4 w-4" />
-       {t('landing.professionals.badge', 'Top Professionals')}
+       {t('landing.professionals.badge')}
       </div>
       <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
-       {t('landing.professionals.title', 'Find Your Specialist')}
+       {t('landing.professionals.title')}
       </h2>
       <p className="text-xl text-slate-600 font-light">
-       {t('landing.professionals.subtitle', 'Found someone you like? Suggest a task directly — no waiting, you make the first move')}
+       {t('landing.professionals.subtitle')}
       </p>
      </div>
      <Button
@@ -134,7 +134,7 @@ export default function FeaturedProfessionalsSection({ professionals }: Featured
       asChild
      >
       <LocaleLink href="/professionals" className="flex items-center">
-       {t('landing.professionals.viewAll', 'View All Professionals')}
+       {t('landing.professionals.viewAll')}
        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
       </LocaleLink>
      </Button>
@@ -154,7 +154,7 @@ export default function FeaturedProfessionalsSection({ professionals }: Featured
         <ProfessionalCard
          professional={professional}
          compact
-         actionText={t('professionals.suggestTask', 'Suggest a task')}
+         actionText={t('professionals.suggestTask')}
         />
        </div>
       ))}
@@ -166,9 +166,9 @@ export default function FeaturedProfessionalsSection({ professionals }: Featured
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
      <div className="text-center py-12 bg-white/50 rounded-2xl">
       <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-      <p className="text-gray-600">{t('landing.professionals.noProfessionals', 'Be the first professional to join!')}</p>
+      <p className="text-gray-600">{t('landing.professionals.noProfessionals')}</p>
       <Button className="mt-4" onClick={handleJoinAsProfessional}>
-       {t('landing.cta.joinProfessionals', 'Join as Professional')}
+       {t('landing.cta.joinProfessionals')}
       </Button>
      </div>
     </div>

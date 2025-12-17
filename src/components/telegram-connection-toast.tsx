@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth';
@@ -11,11 +11,13 @@ const TELEGRAM_TOAST_DISMISSED_KEY = 'telegram-toast-dismissed';
 const TOAST_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
 
 export function TelegramConnectionToast() {
-  const { t, i18n } = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
   const { user, profile } = useAuth();
   const [hasShownToast, setHasShownToast] = useState(false);
+  const currentLocale = (params?.lang as string) || 'bg';
 
   useEffect(() => {
     const checkAndShowToast = () => {
@@ -42,8 +44,6 @@ export function TelegramConnectionToast() {
 
       // Show the toast
       setHasShownToast(true);
-
-      const currentLocale = i18n.language || 'bg';
 
       const toastInstance = toast({
         duration: 10000, // Show for 10 seconds
@@ -102,13 +102,13 @@ export function TelegramConnectionToast() {
       });
     };
 
-    // Small delay to ensure i18n and auth are ready
+    // Small delay to ensure auth is ready
     const timeoutId = setTimeout(() => {
       checkAndShowToast();
     }, 5000);
 
     return () => clearTimeout(timeoutId);
-  }, [hasShownToast, user, profile, t, i18n.language, router, searchParams]);
+  }, [hasShownToast, user, profile, t, currentLocale, router, searchParams]);
 
   return null; // This component doesn't render anything
 }

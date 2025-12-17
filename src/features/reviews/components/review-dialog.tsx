@@ -17,7 +17,7 @@ import {
   CardBody
 } from '@nextui-org/react'
 import { Star, User, Calendar, AlertCircle, Info, X } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { StarRating } from '@/components/common/star-rating'
 import type { PendingReviewTask, ReviewSubmitData } from '../lib/types'
 import { getReviewPublishingDelay, getReviewDelayLabel } from '@/lib/utils/review-delay'
@@ -43,7 +43,7 @@ export function ReviewDialog({
   currentIndex,
   totalCount
 }: ReviewDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const isKeyboardOpen = useKeyboardHeight()
   const isMobile = useIsMobile() // < 640px (sm breakpoint)
 

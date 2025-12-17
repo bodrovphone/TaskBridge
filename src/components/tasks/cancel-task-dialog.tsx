@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import {
   Modal,
   ModalContent,
@@ -34,7 +34,7 @@ export function CancelTaskDialog({
   cancellationsThisMonth,
   maxCancellationsPerMonth,
 }: CancelTaskDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedReason, setSelectedReason] = useState<string>('')
   const [description, setDescription] = useState('')
 

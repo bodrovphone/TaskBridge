@@ -5,7 +5,7 @@ import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
 import { Briefcase, Award, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface ProfessionalIdentitySectionProps {
   title: string
@@ -33,7 +33,7 @@ export function ProfessionalIdentitySection({
   sectionId,
   isHighlighted = false
 }: ProfessionalIdentitySectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -152,7 +152,7 @@ export function ProfessionalIdentitySection({
               onPress={() => setIsEditing(true)}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              {t('common.edit', 'Edit')}
+              {t('common.edit')}
             </Button>
           ) : (
             <FormActionButtons

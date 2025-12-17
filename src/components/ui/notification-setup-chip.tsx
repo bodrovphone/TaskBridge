@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/react'
 import { AlertCircle, X } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface NotificationSetupChipProps {
   onSetup: () => void
@@ -19,7 +19,7 @@ export function NotificationSetupChip({
   onSetup,
   onDismiss,
 }: NotificationSetupChipProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-center gap-2">

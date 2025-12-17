@@ -2,7 +2,7 @@
 
 import { Button, Chip } from '@nextui-org/react'
 import { Check, Clock, X, Send } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import type { ApplicationStatus } from './types'
 
 interface TaskApplicationBadgeProps {
@@ -18,7 +18,7 @@ export default function TaskApplicationBadge({
  isDisabled = false,
  className = '',
 }: TaskApplicationBadgeProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
 
  // If no status, show "Apply" button
  if (!status) {

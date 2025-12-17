@@ -3,7 +3,7 @@
 import { useState, useCallback, ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, Check } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
@@ -72,7 +72,7 @@ export function WizardDialog({
   subtitle,
   error,
 }: WizardDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [currentStep, setCurrentStep] = useState(0)
   const [direction, setDirection] = useState(0)
 
@@ -143,7 +143,7 @@ export function WizardDialog({
             onClick={onClose}
             disabled={isSubmitting}
             className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-            aria-label={t('common.close', 'Close')}
+            aria-label={t('common.close')}
           >
             <X className="w-4 h-4 text-white" />
           </button>
@@ -196,7 +196,7 @@ export function WizardDialog({
           </div>
           {currentStepData?.isOptional && (
             <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
-              {t('common.optional', 'Optional')}
+              {t('common.optional')}
             </span>
           )}
         </div>
@@ -251,11 +251,11 @@ export function WizardDialog({
             className="flex-1 font-medium h-11 gap-1"
           >
             {isFirstStep ? (
-              t('common.cancel', 'Cancel')
+              t('common.cancel')
             ) : (
               <>
                 <ChevronLeft className="w-4 h-4" />
-                {t('wizard.back', 'Back')}
+                {t('wizard.back')}
               </>
             )}
           </Button>
@@ -275,16 +275,16 @@ export function WizardDialog({
                   transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                   className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                 />
-                {t('submitting', 'Submitting...')}
+                {t('submitting')}
               </span>
             ) : isLastStep ? (
               <>
-                {submitText || t('wizard.submit', 'Submit')}
+                {submitText || t('wizard.submit')}
                 <Check className="w-4 h-4" />
               </>
             ) : (
               <>
-                {t('wizard.next', 'Next')}
+                {t('wizard.next')}
                 <ChevronRight className="w-4 h-4" />
               </>
             )}

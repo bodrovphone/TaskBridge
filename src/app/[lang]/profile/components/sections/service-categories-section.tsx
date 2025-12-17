@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Card, CardBody, CardHeader, Button } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { FileText, Edit, X, Save } from 'lucide-react'
 import {
   Dialog,
@@ -33,7 +33,7 @@ export function ServiceCategoriesSection({
   sectionId,
   isHighlighted = false
 }: ServiceCategoriesSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const isMobile = useIsMobile()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [tempCategories, setTempCategories] = useState<string[]>([])
@@ -84,7 +84,7 @@ export function ServiceCategoriesSection({
                 onPress={openModal}
                 className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800 flex-shrink-0 text-xs md:text-sm"
               >
-                {t('common.edit', 'Edit')}
+                {t('common.edit')}
               </Button>
             )}
           </div>
@@ -178,14 +178,14 @@ export function ServiceCategoriesSection({
                 className="flex-1 sm:flex-initial"
               >
                 <X className="w-4 h-4 mr-2" />
-                {t('common.cancel', 'Cancel')}
+                {t('common.cancel')}
               </RadixButton>
               <RadixButton
                 onClick={saveModal}
                 className="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700"
               >
                 <Save className="w-4 h-4 mr-2" />
-                {t('profile.serviceCategories.saveCategories', 'Save Categories')}
+                {t('profile.serviceCategories.saveCategories')}
               </RadixButton>
             </div>
           </DialogFooter>

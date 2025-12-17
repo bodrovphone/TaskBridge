@@ -2,7 +2,7 @@
 
 import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Chip } from "@nextui-org/react";
 import { CheckCircle, MapPin, Star, Clock } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { getCityLabelBySlug } from '@/features/cities';
 import { getCategoryLabelBySlug } from '@/features/categories';
 import { getCategoryColor } from '@/lib/utils/category';
@@ -35,7 +35,7 @@ export default function CompletedTasksDialog({
  onOpenChange,
  completedTasks
 }: CompletedTasksDialogProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  const renderStars = (rating: number) => {
   return (
@@ -91,12 +91,12 @@ export default function CompletedTasksDialog({
       </h2>
       <div className="text-right">
        <div className="text-2xl font-bold text-green-600">{totalTasks}</div>
-       <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.totalTasks', 'Total Tasks')}</div>
+       <div className="text-sm text-gray-600">{t('professionalDetail.completedTasks.totalTasks')}</div>
       </div>
      </div>
      {reviewedTasks.length > 0 && (
       <div className="text-sm text-gray-600">
-       {t('professionalDetail.completedTasks.averageRatingStars', 'Average rating: {{rating}} stars', { rating: averageRating.toFixed(1) })}
+       {t('professionalDetail.completedTasks.averageRatingStars', { rating: averageRating.toFixed(1) })}
       </div>
      )}
     </ModalHeader>
@@ -132,14 +132,14 @@ export default function CompletedTasksDialog({
               color="default"
               startContent={<Clock size={12} />}
              >
-              {t('taskCompletion.completedIn', 'Завършено за')} {task.durationHours}{t('common.hours.short', 'ч')}
+              {t('taskCompletion.completedIn')} {task.durationHours}{t('common.hours.short')}
              </Chip>
             )}
            </div>
           </div>
           <div className="text-right flex-shrink-0">
            <div className="text-xl font-bold text-green-600 mb-2">
-            {task.budget > 0 ? `${task.budget} €` : t('common.negotiable', 'Договорена')}
+            {task.budget > 0 ? `${task.budget} €` : t('common.negotiable')}
            </div>
            <div className="flex flex-col items-end gap-1">
             {task.clientRating > 0 ? (
@@ -153,7 +153,7 @@ export default function CompletedTasksDialog({
                {renderStars(0)}
               </div>
               <span className="text-xs text-gray-500 italic">
-               {t('professionalDetail.completedTasks.pendingReview', 'Pending review')}
+               {t('professionalDetail.completedTasks.pendingReview')}
               </span>
              </>
             )}

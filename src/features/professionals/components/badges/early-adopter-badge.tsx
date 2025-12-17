@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Chip } from '@nextui-org/react'
 import { Star } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Tip } from '@/components/ui/tip'
 
 interface EarlyAdopterBadgeProps {
@@ -20,7 +20,7 @@ export function EarlyAdopterBadge({
   size = 'md',
   showTooltip = true,
 }: EarlyAdopterBadgeProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isOpen, setIsOpen] = useState(false)
 
   const sizeClasses = {
@@ -43,7 +43,7 @@ export function EarlyAdopterBadge({
       className={`${sizeClasses[size]} bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium cursor-pointer`}
       startContent={<Star size={iconSizes[size]} className="text-white fill-white" />}
     >
-      {t('professionals.badge.earlyAdopter', 'Early Adopter')}
+      {t('professionals.badge.earlyAdopterLabel')}
     </Chip>
   )
 
@@ -53,12 +53,12 @@ export function EarlyAdopterBadge({
 
   return (
     <Tip
-      title={t('professionals.badge.earlyAdopter', 'Early Adopter')}
+      title={t('professionals.badge.earlyAdopterLabel')}
       description={t('professionals.badge.earlyAdopter.tooltip')}
       variant="warning"
       side="bottom"
       align="center"
-      dismissText={t('common.gotIt', 'Got it')}
+      dismissText={t('common.gotIt')}
       open={isOpen}
       onOpenChange={setIsOpen}
     >

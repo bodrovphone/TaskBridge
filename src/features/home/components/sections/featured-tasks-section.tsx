@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import TaskCard from "@/components/ui/task-card";
 import { LocaleLink } from "@/components/common/locale-link";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { DEFAULT_LOCALE } from '@/lib/constants/locales';
@@ -39,7 +39,7 @@ interface FeaturedTasksSectionProps {
 }
 
 export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const router = useRouter();
  const pathname = usePathname();
  const scrollContainerRef = useRef<HTMLDivElement>(null);

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Button as NextUIButton, Input, Card, CardBody, CardHeader } from '@nextui-org/react'
 import { ArrowLeft, Mail, CheckCircle } from 'lucide-react'
@@ -11,7 +11,7 @@ interface ForgotPasswordContentProps {
 }
 
 export function ForgotPasswordContent({ lang }: ForgotPasswordContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

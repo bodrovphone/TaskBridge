@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Tooltip } from '@nextui-org/react'
 import { Info, AlertCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 export interface HiddenReviewsNoticeProps {
   hiddenCount: number
@@ -19,7 +19,7 @@ export function HiddenReviewsNotice({
   hasPattern,
   className = ''
 }: HiddenReviewsNoticeProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   // Pattern detected - all negative reviews visible
   if (hasPattern) {

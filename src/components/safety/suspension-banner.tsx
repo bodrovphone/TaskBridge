@@ -2,7 +2,7 @@
 
 import { Card, CardBody } from '@nextui-org/react'
 import { ShieldX } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 export interface SuspensionBannerProps {
   suspensionReason?: string
@@ -16,7 +16,7 @@ export function SuspensionBanner({
   suspensionReason,
   className = ''
 }: SuspensionBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <Card className={`bg-danger-50 border-2 border-danger-200 shadow-lg ${className}`}>

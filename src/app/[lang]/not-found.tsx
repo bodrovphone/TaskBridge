@@ -1,15 +1,16 @@
 'use client'
 
 import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Home, Search, PlusCircle, Palmtree } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
 
 export default function NotFound() {
   const router = useRouter();
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language || 'bg';
+  const params = useParams();
+  const t = useTranslations();
+  const locale = (params?.lang as string) || 'bg';
 
   return (
     <div className="min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-12">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { Star, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
@@ -17,7 +17,7 @@ const RATING_OPTIONS = [
 ]
 
 export function RatingFilter({ value, onChange }: RatingFilterProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleSelect = (rating: number) => {
@@ -30,7 +30,7 @@ export function RatingFilter({ value, onChange }: RatingFilterProps) {
   }
 
   const getDisplayText = () => {
-    if (!value) return t('professionals.filters.minRating', 'Min Rating')
+    if (!value) return t('professionals.filters.minRating')
     return `${value}+ ⭐`
   }
 
@@ -94,7 +94,7 @@ export function RatingFilter({ value, onChange }: RatingFilterProps) {
                   setIsOpen(false)
                 }}
               >
-                {t('professionals.filters.clear', 'Clear')}
+                {t('professionals.filters.clear')}
               </Button>
             </>
           )}

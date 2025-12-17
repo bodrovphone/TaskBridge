@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import {
   Modal,
   ModalContent,
@@ -38,7 +38,7 @@ export function ProfessionalWithdrawDialog({
   taskBudget,
   acceptedDate,
 }: ProfessionalWithdrawDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedReason, setSelectedReason] = useState<string>('')
   const [description, setDescription] = useState('')
 

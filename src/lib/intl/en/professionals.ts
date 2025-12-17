@@ -91,7 +91,7 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Select Minimum Rating',
   'professionals.filters.showingVerifiedFirst':
     'Showing verified top performers first',
-  'professionals.filters.sortingBy': 'Sorting by {{option}}',
+  'professionals.filters.sortingBy': 'Sorting by {option}',
   'professionals.filters.sortingDescFeatured':
     'Showing verified top performers first',
   'professionals.filters.sortingDescRating':
@@ -99,15 +99,15 @@ export const professionals = {
   'professionals.filters.sortingDescJobs':
     'Most experienced professionals appear first',
   'professionals.filters.activeFilters': 'Active Filters',
-  'professionals.filters.filterApplied': '{{count}} filter applied',
-  'professionals.filters.filtersApplied': '{{count}} filters applied',
+  'professionals.filters.filterApplied': '{count} filter applied',
+  'professionals.filters.filtersApplied': '{count} filters applied',
   'professionals.filters.showProfessionalsWithRating':
-    'Show professionals with {{rating}}+ star ratings',
+    'Show professionals with {rating}+ star ratings',
   'professionals.filters.showPerfectRating':
     'Show only professionals with perfect 5-star ratings',
 
   // Results section
-  'professionals.results.showing': 'Showing {{count}} professionals',
+  'professionals.results.showing': 'Showing {count} professionals',
   'professionals.results.loading': 'Loading professionals...',
   'professionals.results.noResults.title': 'No professionals found',
   'professionals.results.noResults.description':
@@ -131,7 +131,7 @@ export const professionals = {
   // Pagination
   'professionals.pagination.previous': 'Previous',
   'professionals.pagination.next': 'Next',
-  'professionals.pagination.pageOf': 'Page {{current}} of {{total}}',
+  'professionals.pagination.pageOf': 'Page {current} of {total}',
 
   'professionalDetail.about': 'About the Professional',
   'professionalDetail.reviews': 'reviews',
@@ -194,9 +194,9 @@ export const professionals = {
   'professionalDetail.completedTasks.stats.avgRating': 'Avg Rating',
   'professionalDetail.completedTasks.stats.fiveStarTasks': '5-Star Tasks',
   'professionalDetail.completedTasks.pendingReview': 'Pending review',
-  'professionalDetail.completedTasks.viewAll': 'View all {{count}} tasks',
+  'professionalDetail.completedTasks.viewAll': 'View all {count} tasks',
   'professionalDetail.completedTasks.totalTasks': 'Total Tasks',
-  'professionalDetail.completedTasks.averageRatingStars': 'Average rating: {{rating}} stars',
+  'professionalDetail.completedTasks.averageRatingStars': 'Average rating: {rating} stars',
   'professionalDetail.verified': 'Verified',
   'professionalDetail.shareText': 'Check out this professional on Trudify',
   'professionalDetail.shareSuccess': 'Shared successfully!',
@@ -209,16 +209,16 @@ export const professionals = {
   'professionals.filters.filters': 'Filters',
 
   // Professional Badges
-  'professionals.badge.topProfessional': 'Top Pro',
-  'professionals.badge.topProfessional.tooltip': 'Completed {{count}} tasks in the last 30 days',
-  'professionals.badge.earlyAdopter': 'Early Adopter',
+  'professionals.badge.topProfessionalLabel': 'Top Pro',
+  'professionals.badge.topProfessional.tooltip': 'Completed {count} tasks in the last 30 days',
+  'professionals.badge.earlyAdopterLabel': 'Early Adopter',
   'professionals.badge.earlyAdopter.tooltip': 'One of the first professionals to join our platform. Thank you for believing in us from the start!',
-  'professionals.badge.featuredProfessional': 'Featured Professional',
+  'professionals.badge.featuredProfessionalLabel': 'Featured Professional',
   'professionals.badge.featuredProfessional.tooltip': 'Hand-picked by our team for exceptional quality and reliability. This professional has been personally vetted and recommended.',
 
   // Invite Modal
   'inviteModal.title': 'Invite Professional to Task',
-  'inviteModal.subtitle': 'Select which task to invite {{name}} to',
+  'inviteModal.subtitle': 'Select which task to invite {name} to',
   'inviteModal.selectLabel': 'Choose a task',
   'inviteModal.selectPlaceholder': 'Select your task',
   'inviteModal.noTasks': "You don't have any open tasks yet.",
@@ -226,13 +226,13 @@ export const professionals = {
   'inviteModal.confirmText': 'will receive a notification about this task invitation.',
   'inviteModal.sendInvitation': 'Send Invitation',
   'inviteModal.success': 'Invitation sent!',
-  'inviteModal.successDescription': '{{name}} will be notified about your task.',
+  'inviteModal.successDescription': '{name} will be notified about your task.',
   'inviteModal.error': 'Failed to send invitation',
   'inviteModal.errorFetchingTasks': 'Could not load your tasks',
   'inviteModal.alreadyInvited': 'Already invited',
-  'inviteModal.alreadyInvitedDescription': 'You have already invited {{name}} to this task.',
+  'inviteModal.alreadyInvitedDescription': 'You have already invited {name} to this task.',
   'inviteModal.alreadyInvitedProfessional': 'Already invited',
-  'inviteModal.alreadyInvitedProfessionalDescription': 'You have already invited {{name}} to your task. They may apply within 24 hours if available.',
+  'inviteModal.alreadyInvitedProfessionalDescription': 'You have already invited {name} to your task. They may apply within 24 hours if available.',
   'inviteModal.selfInviteTitle': '🤔 Nice try!',
   'inviteModal.selfInviteDescription': "You can't suggest a task to yourself. But we appreciate the creativity!",
   'inviteModal.createNewTask': 'Create New Task',

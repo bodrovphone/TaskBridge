@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import {
   Modal,
   ModalContent,
@@ -28,7 +28,7 @@ export function CancelTaskConfirmDialog({
   applicationsCount,
   isLoading = false
 }: CancelTaskConfirmDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <Modal

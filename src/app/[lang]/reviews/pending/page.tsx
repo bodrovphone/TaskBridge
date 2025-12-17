@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { PendingReviewsList, ReviewDialog } from '@/features/reviews'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useToast } from '@/hooks/use-toast'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -12,7 +12,7 @@ import type { ReviewSubmitData } from '@/features/reviews/lib/types'
 import { useAuth } from '@/features/auth'
 
 export default function PendingReviewsPage() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { toast } = useToast()
   const queryClient = useQueryClient()
   const router = useRouter()

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Chip } from '@nextui-org/react'
 import { X } from 'lucide-react'
 import { getCategoryLabelBySlug } from '@/features/categories'
@@ -8,7 +8,7 @@ import { getCityLabelBySlug } from '@/features/cities'
 import { useTaskFilters } from '../hooks/use-task-filters'
 
 export function ActiveFilters() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { filters, updateFilter, updateFilters, resetFilters, activeFilterCount } = useTaskFilters()
 
   if (activeFilterCount === 0) return null
@@ -55,9 +55,9 @@ export function ActiveFilters() {
   // Urgency
   if (filters.urgency) {
     const urgencyLabels = {
-      same_day: t('browseTasks.filters.urgentSameDay', 'Urgent (Same Day)'),
-      within_week: t('browseTasks.filters.thisWeek', 'This Week'),
-      flexible: t('browseTasks.filters.flexible', 'Flexible'),
+      same_day: t('browseTasks.filters.urgentSameDay'),
+      within_week: t('browseTasks.filters.thisWeek'),
+      flexible: t('browseTasks.filters.flexible'),
     }
     activeChips.push({
       key: 'urgency',
@@ -69,7 +69,7 @@ export function ActiveFilters() {
   return (
     <div className="flex flex-wrap items-center gap-2 mb-4">
       <span className="text-sm font-medium text-gray-600">
-        {t('browseTasks.filters.activeFilters', 'Active filters')}:
+        {t('browseTasks.filters.activeFilters')}:
       </span>
 
       {activeChips.map((chip) => (
@@ -100,7 +100,7 @@ export function ActiveFilters() {
             <X className="w-3 h-3 ml-1" />
           }
         >
-          {t('browseTasks.filters.clearAll', 'Clear all')}
+          {t('browseTasks.filters.clearAll')}
         </Chip>
       )}
     </div>

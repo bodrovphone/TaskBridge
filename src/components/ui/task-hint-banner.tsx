@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { Lightbulb, X, Edit } from 'lucide-react'
@@ -19,7 +19,7 @@ interface TaskHintBannerProps {
 }
 
 export function TaskHintBanner({ taskId, taskAge, hints, onDismiss }: TaskHintBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const params = useParams()
   const lang = params?.lang as string

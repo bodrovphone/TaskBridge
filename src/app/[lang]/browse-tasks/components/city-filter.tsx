@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Popover, PopoverTrigger, PopoverContent, Input, Chip } from '@nextui-org/react'
 import { MapPin, ChevronDown, Search, Clock, Home } from 'lucide-react'
 import { useState, useMemo, useCallback } from 'react'
@@ -22,7 +22,7 @@ interface CityOption {
 const POPULAR_CITY_SLUGS = ['sofia', 'plovdiv', 'varna', 'burgas', 'sunny-beach', 'bansko']
 
 export function CityFilter({ value, onChange }: CityFilterProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { profile } = useAuth()
   const { lastSearched, saveLocation } = useSearchLocationPreference()
 
@@ -95,7 +95,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
   }
 
   const getDisplayText = () => {
-    if (!value) return t('browseTasks.filters.city', 'City')
+    if (!value) return t('browseTasks.filters.city')
     // Try to get label from known cities
     const knownCity = allCities.find(c => c.slug === value)
     if (knownCity) return knownCity.label
@@ -124,7 +124,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
         <div className="space-y-3">
           {/* Search */}
           <Input
-            placeholder={t('browseTasks.filters.searchCity', 'Search city...')}
+            placeholder={t('browseTasks.filters.searchCity')}
             value={searchQuery}
             onValueChange={handleSearchChange}
             startContent={<Search className="w-4 h-4 text-gray-400" />}
@@ -147,7 +147,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
                 >
                   <Clock className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-600">
-                    {t('cityAutocomplete.lastSearched', 'Last searched:')}
+                    {t('cityAutocomplete.lastSearched')}
                   </span>
                   <span className="font-medium text-gray-900">{lastSearchedCity.label}</span>
                 </button>
@@ -166,7 +166,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
                 >
                   <Home className="w-4 h-4 text-blue-500" />
                   <span className="text-sm text-gray-600">
-                    {t('cityAutocomplete.yourCity', 'Your city:')}
+                    {t('cityAutocomplete.yourCity')}
                   </span>
                   <span className="font-medium text-gray-900">{profileCity.label}</span>
                 </button>
@@ -175,7 +175,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
               {/* Popular Cities */}
               <div className="space-y-2">
                 <span className="text-xs text-gray-500 uppercase tracking-wide">
-                  {t('cityAutocomplete.popular', 'Popular')}
+                  {t('cityAutocomplete.popular')}
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {popularCities.map((city) => (
@@ -221,7 +221,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
                 })
               ) : (
                 <div className="text-center text-sm text-gray-500 py-4">
-                  {t('cityAutocomplete.noResults', 'No cities found')}
+                  {t('cityAutocomplete.noResults')}
                 </div>
               )}
             </div>
@@ -242,7 +242,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
                   setIsOpen(false)
                 }}
               >
-                {t('browseTasks.filters.clear', 'Clear')}
+                {t('browseTasks.filters.clear')}
               </Button>
             </>
           )}

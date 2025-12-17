@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Chip } from '@nextui-org/react'
 import { CheckCircle, Users } from 'lucide-react'
 import { CreateTaskForm } from './components/create-task-form'
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 
 export default function CreateTaskContent() {
- const { t, i18n } = useTranslation()
+ const t = useTranslations()
  const { user, loading } = useAuth()
  const router = useRouter()
  const params = useParams()
@@ -34,12 +34,7 @@ export default function CreateTaskContent() {
  const inviteProfessionalId = searchParams.get('inviteProfessionalId')
  const inviteProfessionalName = searchParams.get('inviteProfessionalName')
 
- // Ensure i18n language matches URL locale
- useEffect(() => {
-  if (i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
- }, [i18n, lang])
+ // Locale is handled by next-intl via URL routing - no manual sync needed
 
  // Set up invitation state if inviting a professional
  useEffect(() => {
@@ -110,7 +105,7 @@ export default function CreateTaskContent() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">{t('loading', 'Loading...')}</p>
+        <p className="text-gray-600">{t('loading')}</p>
       </div>
     </div>
   )
@@ -124,11 +119,11 @@ export default function CreateTaskContent() {
  const trustIndicators = [
   {
    icon: <CheckCircle className="w-5 h-5" />,
-   text: t('createTask.hero.freeToPost', 'Free to post'),
+   text: t('createTask.hero.freeToPost'),
   },
   {
    icon: <Users className="w-5 h-5" />,
-   text: t('createTask.hero.verifiedPros', 'Verified professionals'),
+   text: t('createTask.hero.verifiedPros'),
   },
  ]
 
@@ -138,7 +133,7 @@ export default function CreateTaskContent() {
     {/* Hero Section */}
     <div className="text-center mb-4 sm:mb-8">
      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-4 pb-1">
-      {t('createTask.title')}
+      {t('createTask.pageTitle')}
      </h1>
 
      {/* Trust Indicators */}
@@ -172,7 +167,7 @@ export default function CreateTaskContent() {
      {taskLoading ? (
       <div className="text-center py-12">
        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-       <p className="text-gray-600">{t('loading', 'Loading task details...')}</p>
+       <p className="text-gray-600">{t('loading')}</p>
       </div>
      ) : (
       <CreateTaskForm

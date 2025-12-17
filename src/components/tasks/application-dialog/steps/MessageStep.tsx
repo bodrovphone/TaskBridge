@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { AlertCircle } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
@@ -27,7 +27,7 @@ export function MessageStep({
   error,
   onFocus,
 }: MessageStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isFocused, setIsFocused] = useState(false)
 
   const messageLength = value?.length || 0
@@ -44,7 +44,7 @@ export function MessageStep({
       <div className="space-y-2">
         <Label htmlFor="message" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           {t('application.message')}{' '}
-          <span className="text-gray-400 font-normal">({t('common.optional', 'Optional')})</span>
+          <span className="text-gray-400 font-normal">({t('common.optional')})</span>
         </Label>
         <Textarea
           id="message"
@@ -108,7 +108,7 @@ export function MessageStep({
           <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
-              {t('application.wizard.messageTitle', 'Why write a message?')}
+              {t('application.wizard.messageTitle')}
             </p>
             <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
               {t('application.messageInfo')}

@@ -3,7 +3,7 @@
 import { Avatar, Button as NextUIButton, Textarea, Chip, Skeleton, Card } from "@nextui-org/react";
 import { MessageCircle, Star, CheckCircle2, Clock } from "lucide-react";
 import { useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 
 interface Question {
@@ -26,7 +26,7 @@ interface QuestionsSectionProps {
 }
 
 export default function QuestionsSection({ questions, onReplyToQuestion, isLoading = false }: QuestionsSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
  const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
  const [showReplyForm, setShowReplyForm] = useState<Record<string, boolean>>({});
 

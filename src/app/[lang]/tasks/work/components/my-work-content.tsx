@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Card, CardBody, Button, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
 import { Briefcase, Calendar, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle, ClipboardList, Search } from 'lucide-react'
@@ -42,7 +42,7 @@ const cleanPhoneForHref = (phone: string): string => {
 type WorkFilter = 'in_progress' | 'completed'
 
 export function MyWorkContent({ lang }: MyWorkContentProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const router = useRouter()
   const [selectedFilter, setSelectedFilter] = useState<WorkFilter>('in_progress')
   const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false)
@@ -279,7 +279,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
           <Card className="shadow-xl border border-white/20 bg-white/95">
             <CardBody className="p-12 text-center">
               <Spinner size="lg" className="mx-auto mb-4" />
-              <p className="text-gray-600">{t('myWork.loading', 'Loading your work...')}</p>
+              <p className="text-gray-600">{t('myWork.loading')}</p>
             </CardBody>
           </Card>
         ) : error ? (
@@ -288,7 +288,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
             <CardBody className="p-12 text-center">
               <AlertCircle className="w-16 h-16 mx-auto mb-4 text-red-500" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                {t('myWork.error.title', 'Failed to Load')}
+                {t('myWork.error.title')}
               </h3>
               <p className="text-gray-500 mb-6">{error}</p>
               <Button
@@ -296,7 +296,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                 size="lg"
                 onPress={() => window.location.reload()}
               >
-                {t('common.retry', 'Try Again')}
+                {t('common.retry')}
               </Button>
             </CardBody>
           </Card>
@@ -473,7 +473,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
                       <h4 className="text-sm font-semibold text-amber-900 mb-2 flex items-center gap-1.5">
                         <MessageCircle className="w-4 h-4" />
-                        {t('myWork.customerMessage', 'Message from customer')}
+                        {t('myWork.customerMessage')}
                       </h4>
                       <p className="text-sm text-amber-800 italic break-words">
                         "{task.sharedContactInfo.message}"

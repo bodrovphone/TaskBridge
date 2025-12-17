@@ -1,3 +1,4 @@
+// Barrel export combining all Russian translation chunks
 import { common } from './common';
 import { navigation } from './navigation';
 import { landing } from './landing';
@@ -12,7 +13,10 @@ import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
 import { contentPages } from './content-pages';
+import type en from '../en';
 
+// Combine all chunks into single translation object
+// Using 'satisfies' ensures TypeScript will error if keys don't match English
 export const ru = {
   ...common,
   ...navigation,
@@ -28,6 +32,6 @@ export const ru = {
   ...reviews,
   ...legal,
   ...contentPages,
-};
+} satisfies typeof en;
 
 export default ru;

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Card, CardBody, Button, Divider } from '@nextui-org/react'
 import { CheckCircle, Star, FileText } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface CompletionSuccessViewProps {
   professionalName: string
@@ -18,7 +18,7 @@ export function CompletionSuccessView({
   onViewDetails,
   className = ''
 }: CompletionSuccessViewProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <Card className={`bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 border-2 border-green-300 shadow-2xl ${className}`}>

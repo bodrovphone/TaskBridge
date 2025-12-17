@@ -13,6 +13,7 @@ import { ru } from '@/lib/intl/ru';
 import { uk } from '@/lib/intl/ua';
 
 // Initialize i18next for server-side translations
+// Using single braces {variable} to match next-intl syntax
 const i18nInstance = i18next.createInstance();
 i18nInstance.init({
   lng: 'en',
@@ -25,6 +26,8 @@ i18nInstance.init({
   },
   interpolation: {
     escapeValue: false, // HTML is allowed in Telegram
+    prefix: '{',
+    suffix: '}',
   },
 });
 

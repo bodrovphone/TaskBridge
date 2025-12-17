@@ -12,7 +12,7 @@ import {
   CardBody,
 } from '@nextui-org/react'
 import { CheckCircle, User, Briefcase, Star, PartyPopper } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'
 
 interface ConfirmCompletionDialogProps {
@@ -32,7 +32,7 @@ export function ConfirmCompletionDialog({
   taskTitle,
   isLoading = false,
 }: ConfirmCompletionDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const params = useParams()
   const router = useRouter()
   const lang = params?.lang as string || 'bg'
@@ -86,7 +86,7 @@ export function ConfirmCompletionDialog({
                     {t('taskCompletion.success.message')}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {t('taskCompletion.success.reviewPrompt', 'Share your experience and help others find great professionals.')}
+                    {t('taskCompletion.success.reviewPrompt')}
                   </p>
                 </div>
 
@@ -96,10 +96,10 @@ export function ConfirmCompletionDialog({
                       <Star className="w-6 h-6 text-warning flex-shrink-0" />
                       <div className="text-left">
                         <p className="text-sm font-medium text-warning-900">
-                          {t('taskCompletion.success.leaveReviewTitle', 'Leave a review for')} {professionalName}
+                          {t('taskCompletion.success.leaveReviewTitle')} {professionalName}
                         </p>
                         <p className="text-xs text-warning-700">
-                          {t('taskCompletion.success.leaveReviewHint', 'Your feedback helps the community')}
+                          {t('taskCompletion.success.leaveReviewHint')}
                         </p>
                       </div>
                     </div>

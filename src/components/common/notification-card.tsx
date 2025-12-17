@@ -1,7 +1,8 @@
 'use client';
 
 import { LocaleLink } from '@/components/common/locale-link';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, bg as bgLocale, ru as ruLocale } from 'date-fns/locale';
 import {
@@ -82,7 +83,9 @@ const getTelegramUsername = (text: string): string => {
 };
 
 export default function NotificationCard({ notification, onMarkAsRead }: NotificationCardProps) {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
+ const params = useParams();
+ const currentLocale = (params?.lang as string) || 'bg';
  const { setOpen } = useNotificationStore();
 
  // Fallback to FileText icon if type not found
@@ -91,7 +94,7 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
 
  // Get locale for date-fns
  const getLocale = () => {
-  switch (i18n.language) {
+  switch (currentLocale) {
    case 'bg':
     return bgLocale;
    case 'ru':
@@ -102,7 +105,7 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
  };
 
  // Safely format date, fallback to "just now" if invalid
- let timeAgo = t('notifications.justNow', 'Just now');
+ let timeAgo = t('notifications.justNow');
  try {
   const date = new Date(notification.createdAt);
   if (!isNaN(date.getTime())) {
@@ -149,7 +152,7 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
      <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg w-full">
       <h5 className="text-xs font-semibold text-blue-900 mb-2 flex items-center gap-1.5">
        <MessageCircle className="w-3.5 h-3.5" />
-       {t('notifications.customerMessage', 'Message from customer')}
+       {t('notifications.customerMessage')}
       </h5>
       <p className="text-sm text-blue-800 italic break-words overflow-wrap-anywhere">
        "{notification.metadata.customerMessage}"

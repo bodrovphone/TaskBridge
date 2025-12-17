@@ -2,7 +2,7 @@
 
 import { Avatar, Button as NextUIButton, Chip, Tooltip } from "@nextui-org/react";
 import { Star, CheckCircle, X, Eye } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { getTimelineLabel } from '@/lib/utils/timeline';
 
 interface Application {
@@ -34,7 +34,7 @@ export default function ApplicationsSection({
  onRejectApplication,
  onViewDetails
 }: ApplicationsSectionProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  return (
   <div className="space-y-4 mt-4">
@@ -60,12 +60,12 @@ export default function ApplicationsSection({
          {/* Rating with fresh professional tooltip */}
          {application.user.rating === 0 ? (
           <Tooltip
-           content={t('applications.freshProfessional', 'Fresh, perspective professional is getting their first reviews')}
+           content={t('applications.freshProfessional')}
            placement="top"
           >
            <div className="flex items-center gap-1 cursor-help">
             <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-gray-300 text-gray-300" />
-            <span className="text-gray-500">{t('applications.new', 'New')}</span>
+            <span className="text-gray-500">{t('applications.new')}</span>
            </div>
           </Tooltip>
          ) : (
@@ -139,7 +139,7 @@ export default function ApplicationsSection({
        onPress={() => onViewDetails(application.id)}
        className="w-full sm:w-auto text-xs sm:text-sm h-10 sm:h-auto"
       >
-       {t('applications.viewDetails', 'View Details')}
+       {t('applications.viewDetails')}
       </NextUIButton>
 
       {application.status === "pending" && (

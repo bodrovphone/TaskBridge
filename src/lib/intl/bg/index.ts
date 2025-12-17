@@ -13,8 +13,10 @@ import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
 import { contentPages } from './content-pages';
+import type en from '../en';
 
 // Combine all chunks into single translation object
+// Using 'satisfies' ensures TypeScript will error if keys don't match English
 export const bg = {
   ...common,
   ...navigation,
@@ -30,6 +32,6 @@ export const bg = {
   ...reviews,
   ...legal,
   ...contentPages,
-};
+} satisfies typeof en;
 
 export default bg;

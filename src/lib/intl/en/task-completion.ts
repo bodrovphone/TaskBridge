@@ -20,8 +20,8 @@ export const taskCompletion = {
   'taskCompletion.confirmCompletion': 'Confirm Completion',
   'taskCompletion.alreadyMarkedByYou': 'You marked as complete',
   'taskCompletion.alreadyConfirmedByYou': 'You already confirmed',
-  'taskCompletion.success': 'Task marked as completed. Waiting for customer confirmation.',
-  'taskCompletion.error': 'Failed to mark task as completed. Please try again.',
+  'taskCompletion.successMessage': 'Task marked as completed. Waiting for customer confirmation.',
+  'taskCompletion.errorMessage': 'Failed to mark task as completed. Please try again.',
   'taskCompletion.error.alreadyCompleted': 'This task has already been completed by the other party.',
   'taskCompletion.error.invalidStatus': 'This task cannot be marked as completed in its current status.',
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import {
  Dropdown,
  DropdownTrigger,
@@ -34,7 +34,7 @@ export default function UserAvatarDropdown({
  onLoginClick
 }: UserAvatarDropdownProps) {
  const { profile, signOut, authenticatedFetch } = useAuth()
- const { t } = useTranslation()
+ const t = useTranslations()
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'

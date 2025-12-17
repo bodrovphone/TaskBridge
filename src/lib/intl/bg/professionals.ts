@@ -92,7 +92,7 @@ export const professionals = {
   'professionals.filters.selectMinimumRating': 'Изберете минимален рейтинг',
   'professionals.filters.showingVerifiedFirst':
     'Показване на проверени топ професионалисти първо',
-  'professionals.filters.sortingBy': 'Сортиране по {{option}}',
+  'professionals.filters.sortingBy': 'Сортиране по {option}',
   'professionals.filters.sortingDescFeatured':
     'Показване на проверени топ професионалисти първо',
   'professionals.filters.sortingDescRating':
@@ -100,21 +100,20 @@ export const professionals = {
   'professionals.filters.sortingDescJobs':
     'Най-опитните професионалисти се показват първо',
   'professionals.filters.activeFilters': 'Активни филтри',
-  'professionals.filters.filterApplied': '{{count}} филтър приложен',
-  'professionals.filters.filtersApplied': '{{count}} филтъра приложени',
+  'professionals.filters.filterApplied': '{count} филтър приложен',
+  'professionals.filters.filtersApplied': '{count} филтъра приложени',
   'professionals.filters.showProfessionalsWithRating':
-    'Покажи професионалисти с {{rating}}+ звездни оценки',
+    'Покажи професионалисти с {rating}+ звездни оценки',
   'professionals.filters.showPerfectRating':
     'Покажи само професионалисти с пърфектни 5-звездни оценки',
 
   // Results section
-  'professionals.results.showing': 'Показване на {{count}} професионалисти',
+  'professionals.results.showing': 'Показване на {count} професионалисти',
   'professionals.results.loading': 'Зареждане на професионалисти...',
   'professionals.results.noResults.title': 'Не са намерени професионалисти',
   'professionals.results.noResults.description':
     'Опитайте да промените филтрите или да търсите в друг район',
   'professionals.results.noResults.clearFilters': 'Изчисти филтрите',
-  'professionals.results.noResults.subtext': 'Или разгледайте препоръчаните професионалисти по-долу',
   'professionals.results.error.title': 'Опа! Нещо се обърка',
   'professionals.results.error.description': 'Сървърите ни имат нужда от почивка с кафе',
   'professionals.results.error.subtext': 'Не се притеснявайте, работим по проблема!',
@@ -133,7 +132,7 @@ export const professionals = {
   // Pagination
   'professionals.pagination.previous': 'Предишна',
   'professionals.pagination.next': 'Следваща',
-  'professionals.pagination.pageOf': 'Страница {{current}} от {{total}}',
+  'professionals.pagination.pageOf': 'Страница {current} от {total}',
 
   'professionalDetail.about': 'За професионалиста',
   'professionalDetail.reviews': 'отзива',
@@ -196,9 +195,9 @@ export const professionals = {
   'professionalDetail.completedTasks.stats.avgRating': 'Средна оценка',
   'professionalDetail.completedTasks.stats.fiveStarTasks': '5-звездни задачи',
   'professionalDetail.completedTasks.pendingReview': 'Чака ревю',
-  'professionalDetail.completedTasks.viewAll': 'Виж всички {{count}} задачи',
+  'professionalDetail.completedTasks.viewAll': 'Виж всички {count} задачи',
   'professionalDetail.completedTasks.totalTasks': 'Общо задачи',
-  'professionalDetail.completedTasks.averageRatingStars': 'Средна оценка: {{rating}} звезди',
+  'professionalDetail.completedTasks.averageRatingStars': 'Средна оценка: {rating} звезди',
   'professionalDetail.verified': 'Потвърден',
   'professionalDetail.shareText': 'Разгледайте този професионалист в Trudify',
   'professionalDetail.shareSuccess': 'Споделено успешно!',
@@ -211,16 +210,16 @@ export const professionals = {
   'professionals.filters.filters': 'Филтри',
 
   // Professional Badges
-  'professionals.badge.topProfessional': 'Топ Про',
-  'professionals.badge.topProfessional.tooltip': 'Завърши {{count}} задачи през последните 30 дни',
-  'professionals.badge.earlyAdopter': 'Ранен последовател',
+  'professionals.badge.topProfessionalLabel': 'Топ Про',
+  'professionals.badge.topProfessional.tooltip': 'Завърши {count} задачи през последните 30 дни',
+  'professionals.badge.earlyAdopterLabel': 'Ранен последовател',
   'professionals.badge.earlyAdopter.tooltip': 'Един от първите професионалисти в нашата платформа. Благодарим ви, че повярвахте в нас от самото начало!',
-  'professionals.badge.featuredProfessional': 'Избран професионалист',
+  'professionals.badge.featuredProfessionalLabel': 'Избран професионалист',
   'professionals.badge.featuredProfessional.tooltip': 'Лично подбран от нашия екип за изключително качество и надеждност. Този професионалист е проверен и препоръчан от нас.',
 
   // Invite Modal
   'inviteModal.title': 'Поканете професионалист за задача',
-  'inviteModal.subtitle': 'Изберете коя задача да поканите {{name}}',
+  'inviteModal.subtitle': 'Изберете коя задача да поканите {name}',
   'inviteModal.selectLabel': 'Изберете задача',
   'inviteModal.selectPlaceholder': 'Изберете вашата задача',
   'inviteModal.noTasks': 'Все още нямате отворени задачи.',
@@ -228,13 +227,13 @@ export const professionals = {
   'inviteModal.confirmText': 'ще получи известие за тази покана за задача.',
   'inviteModal.sendInvitation': 'Изпрати покана',
   'inviteModal.success': 'Поканата е изпратена!',
-  'inviteModal.successDescription': '{{name}} ще бъде уведомен за вашата задача.',
+  'inviteModal.successDescription': '{name} ще бъде уведомен за вашата задача.',
   'inviteModal.error': 'Неуспешно изпращане на покана',
   'inviteModal.errorFetchingTasks': 'Не можахме да заредим вашите задачи',
   'inviteModal.alreadyInvited': 'Вече поканен',
-  'inviteModal.alreadyInvitedDescription': 'Вече сте поканили {{name}} за тази задача.',
+  'inviteModal.alreadyInvitedDescription': 'Вече сте поканили {name} за тази задача.',
   'inviteModal.alreadyInvitedProfessional': 'Вече поканен',
-  'inviteModal.alreadyInvitedProfessionalDescription': 'Вече сте поканили {{name}} за вашата задача. Те могат да кандидатстват в рамките на 24 часа, ако са налични.',
+  'inviteModal.alreadyInvitedProfessionalDescription': 'Вече сте поканили {name} за вашата задача. Те могат да кандидатстват в рамките на 24 часа, ако са налични.',
   'inviteModal.selfInviteTitle': '🤔 Хубав опит!',
   'inviteModal.selfInviteDescription': 'Не можете да предложите задача на себе си. Но оценяваме креативността!',
   'inviteModal.createNewTask': 'Създай нова задача',

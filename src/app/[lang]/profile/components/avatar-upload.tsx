@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Progress } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Camera, Upload, X, Check, CircleUser } from 'lucide-react'
 import { uploadAvatar, deleteAvatar } from '@/lib/utils/avatar-upload'
 import { useAuth } from '@/features/auth'
@@ -23,7 +23,7 @@ export function AvatarUpload({
  size = 'lg',
  className = ''
 }: AvatarUploadProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const { authenticatedFetch } = useAuth()
  const [isModalOpen, setIsModalOpen] = useState(false)
  const [previewImage, setPreviewImage] = useState<string | null>(null)

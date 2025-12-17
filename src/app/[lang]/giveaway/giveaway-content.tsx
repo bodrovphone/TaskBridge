@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { Button, Card, CardBody, Chip } from '@nextui-org/react'
 import {
@@ -139,7 +139,7 @@ function BenefitCard({
 }
 
 export default function GiveawayContent() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const params = useParams()
   const lang = (params?.lang as string) || 'bg'
 

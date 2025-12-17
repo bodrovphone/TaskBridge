@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ChevronLeft, MapPin, Clock, Wallet, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
 import { Card as NextUICard, CardBody, Chip, Tooltip } from "@nextui-org/react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useAuth } from "@/features/auth";
 import TaskGallery from "./task-gallery";
 import TaskActions from "./task-actions";
@@ -52,7 +52,7 @@ function formatDeadline(deadline: string | undefined, t: any) {
  const diffDays = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 
  // If deadline has passed, show "As soon as possible"
- if (diffDays < 0) return t('taskDetail.asap', 'As soon as possible');
+ if (diffDays < 0) return t('taskDetail.asap');
 
  if (diffDays === 0) return t('taskDetail.today');
  if (diffDays === 1) return t('taskDetail.tomorrow');
@@ -119,18 +119,18 @@ function getPublishedTime(createdAt: string | Date, t: any): string {
  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
  if (diffDays === 0) {
-  return t('taskDetail.published.today', 'published today');
+  return t('taskDetail.published.today');
  }
 
  if (diffDays <= 7) {
-  return t('taskDetail.published.thisWeek', 'published this week');
+  return t('taskDetail.published.thisWeek');
  }
 
  if (diffDays <= 30) {
-  return t('taskDetail.published.thisMonth', 'published this month');
+  return t('taskDetail.published.thisMonth');
  }
 
- return t('taskDetail.published.someTimeAgo', 'published some time ago');
+ return t('taskDetail.published.someTimeAgo');
 }
 
 function getTaskStatus(taskId: string, taskStatus?: string) {
@@ -207,7 +207,7 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
 }
 
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
  const searchParams = useSearchParams();
  const { user, profile } = useAuth();
 
@@ -223,8 +223,8 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
  const publishedTime = getPublishedTime(task.created_at || task.createdAt, t);
 
  // Get localized content based on user's locale (BG viewers see translations, others see original)
- // Use `lang` prop (from URL) for SSR/SEO, not i18n.language (client-side)
- const viewerLocale = lang || i18n.language || 'bg';
+ // Use `lang` prop (from URL) for SSR/SEO
+ const viewerLocale = lang || 'bg';
  const localizedContent = getLocalizedTaskContent(task, viewerLocale);
  const showTranslationIndicator = shouldShowTranslationIndicator(task, viewerLocale);
 
@@ -313,7 +313,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
          {/* Translation indicator for BG viewers seeing translated content */}
          {showTranslationIndicator && (
           <p className="text-xs text-gray-500 italic">
-           {t('taskDetail.originallyWrittenIn', 'Originally written in')}
+           {t('taskDetail.originallyWrittenIn')}
            {' '}{getLanguageName(task.source_language, viewerLocale)}
           </p>
          )}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { Grid3X3, ChevronDown } from 'lucide-react'
 import { useState, useMemo } from 'react'
@@ -12,7 +12,7 @@ interface CategoryFilterProps {
 }
 
 export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isOpen, setIsOpen] = useState(false)
 
   // Get all subcategories (not main categories) since both tasks and professionals use subcategories
@@ -42,7 +42,7 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
   }
 
   const getDisplayText = () => {
-    if (!value) return t('browseTasks.filters.category', 'Category')
+    if (!value) return t('browseTasks.filters.category')
     return getCategoryLabelBySlug(value, t)
   }
 
@@ -120,7 +120,7 @@ export function CategoryFilter({ value, onChange }: CategoryFilterProps) {
                   setIsOpen(false)
                 }}
               >
-                {t('browseTasks.filters.clear', 'Clear')}
+                {t('browseTasks.filters.clear')}
               </Button>
             </>
           )}

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Check, Clock, MessageSquare, ArrowRight } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 import { DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -24,7 +24,7 @@ export function ApplicationSuccessState({
   onViewApplication,
   onBrowseOther,
 }: ApplicationSuccessStateProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <motion.div

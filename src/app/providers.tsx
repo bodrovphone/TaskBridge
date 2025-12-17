@@ -1,10 +1,8 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { I18nextProvider } from 'react-i18next'
 import { I18nProvider } from '@react-aria/i18n'
 import { useState } from 'react'
-import i18n from '@/lib/intl/config'
 import { Toaster } from '@/components/ui/toaster'
 import { NextUIProvider } from '@nextui-org/react'
 import { AuthProvider } from '@/features/auth'
@@ -26,14 +24,12 @@ function Providers({ children }: { children: React.ReactNode }) {
  return (
   <NextUIProvider>
    <QueryClientProvider client={queryClient}>
-    <I18nextProvider i18n={i18n}>
-     <I18nProvider locale="en-GB">
-      <AuthProvider>
-       {children}
-       <Toaster />
-      </AuthProvider>
-     </I18nProvider>
-    </I18nextProvider>
+    <I18nProvider locale="en-GB">
+     <AuthProvider>
+      {children}
+      <Toaster />
+     </AuthProvider>
+    </I18nProvider>
    </QueryClientProvider>
   </NextUIProvider>
  )

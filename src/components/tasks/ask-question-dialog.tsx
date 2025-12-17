@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useForm } from '@tanstack/react-form'
 import {
   Modal,
@@ -39,7 +39,7 @@ export default function AskQuestionDialog({
   currentUserId,
   onQuestionSubmitted,
 }: AskQuestionDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 

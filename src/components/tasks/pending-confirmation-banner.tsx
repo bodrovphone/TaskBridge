@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { Clock, CheckCircle, XCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface PendingConfirmationBannerProps {
   status: 'pending_professional_confirmation' | 'pending_customer_confirmation'
@@ -21,7 +21,7 @@ export function PendingConfirmationBanner({
   onReject,
   className = ''
 }: PendingConfirmationBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   // Check if current user is waiting or needs to act
   const isWaiting =

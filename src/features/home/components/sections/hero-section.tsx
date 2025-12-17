@@ -5,7 +5,7 @@ import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
 import {
@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export default function HeroSection() {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  const {
   handleCreateTask,

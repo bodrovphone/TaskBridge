@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Input, Card, CardBody } from '@nextui-org/react'
 import { Wallet, Info } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -15,7 +15,7 @@ interface BudgetSectionProps {
 }
 
 export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSectionProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
 
  // Local state for input values - allows free editing without form state restrictions
  const [localBudgetMin, setLocalBudgetMin] = useState(() => {
@@ -30,20 +30,20 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
  const budgetOptions = [
   {
    value: 'fixed' as const,
-   title: t('createTask.budget.typeFixed', 'Fixed Price'),
-   description: t('createTask.budget.fixedDesc', 'I know exactly what I want to pay'),
+   title: t('createTask.budget.typeFixed'),
+   description: t('createTask.budget.fixedDesc'),
    radioColor: 'text-blue-500 border-blue-500',
   },
   {
    value: 'range' as const,
-   title: t('createTask.budget.typeRange', 'Price Range'),
-   description: t('createTask.budget.rangeDesc', 'I have a minimum and maximum budget'),
+   title: t('createTask.budget.typeRange'),
+   description: t('createTask.budget.rangeDesc'),
    radioColor: 'text-purple-500 border-purple-500',
   },
   {
    value: 'unclear' as const,
-   title: t('createTask.budget.typeUnclear', "I'm not sure about the budget"),
-   description: t('createTask.budget.unclearDesc', 'Let professionals suggest a price'),
+   title: t('createTask.budget.typeUnclear'),
+   description: t('createTask.budget.unclearDesc'),
    radioColor: 'text-gray-500 border-gray-500',
   },
  ]
@@ -91,11 +91,11 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      </div>
      <div className="flex-1">
       <h2 className="text-2xl font-bold text-gray-900 mb-1">
-       {t('createTask.budget.title', 'What is your budget?')}
+       {t('createTask.budget.title')}
       </h2>
       <div className="flex items-start gap-2 text-sm text-gray-600">
        <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
-       <p>{t('createTask.budget.help', 'Fair budgets get 3x more applications')}</p>
+       <p>{t('createTask.budget.help')}</p>
       </div>
      </div>
     </div>
@@ -139,7 +139,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       onBlur: ({ value }: any) => {
        // Only validate if user has entered a value
        if (value !== undefined && value !== null && value !== '' && value <= 0) {
-        return t('createTask.budget.mustBePositive', 'Budget must be positive')
+        return t('createTask.budget.mustBePositive')
        }
        return undefined
       }
@@ -148,7 +148,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
      {(field: any) => (
       <div className="space-y-2">
        <label htmlFor="budget-fixed" className="text-sm font-medium text-gray-700">
-        {t('createTask.budget.fixedLabel', 'Your Budget')}
+        {t('createTask.budget.fixedLabel')}
        </label>
        <Input
         id="budget-fixed"
@@ -183,7 +183,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        onBlur: ({ value }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
-         return t('createTask.budget.mustBePositive', 'Budget must be positive')
+         return t('createTask.budget.mustBePositive')
         }
         return undefined
        }
@@ -192,7 +192,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       {(field: any) => (
        <div className="space-y-2">
         <label htmlFor="budget-min" className="text-sm font-medium text-gray-700">
-         {t('createTask.budget.minLabel', 'Minimum')}
+         {t('createTask.budget.minLabel')}
         </label>
         <Input
          id="budget-min"
@@ -225,7 +225,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
        onBlur: ({ value, fieldApi }: any) => {
         // Only validate if user has entered a value
         if (value !== undefined && value !== null && value !== '' && value <= 0) {
-         return t('createTask.budget.mustBePositive', 'Budget must be positive')
+         return t('createTask.budget.mustBePositive')
         }
         // Check if max is greater than min when both are provided
         const minValue = fieldApi.form.getFieldValue('budgetMin')
@@ -239,7 +239,7 @@ export function BudgetSection({ form, budgetType, onBudgetTypeChange }: BudgetSe
       {(field: any) => (
        <div className="space-y-2">
         <label htmlFor="budget-max" className="text-sm font-medium text-gray-700">
-         {t('createTask.budget.maxLabel', 'Maximum')}
+         {t('createTask.budget.maxLabel')}
         </label>
         <Input
          id="budget-max"

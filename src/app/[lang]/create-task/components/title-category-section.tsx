@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef, useDeferredValue } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import { Input, Button, Card, CardBody } from '@nextui-org/react'
 import { Check, X, ChevronDown, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -34,7 +35,9 @@ export function TitleCategorySection({
   initialCategory = '',
   initialSubcategory = '',
 }: TitleCategorySectionProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
   const [title, setTitle] = useState(initialTitle)
   const deferredTitle = useDeferredValue(title) // Deferred value for expensive search
   const [flowState, setFlowState] = useState<FlowState>(
@@ -112,7 +115,7 @@ export function TitleCategorySection({
       setIsSearching(true)
 
       // Run the search
-      searchCategoriesAsync(trimmedQuery, t, i18n.language)
+      searchCategoriesAsync(trimmedQuery, t, currentLocale)
         .then((results) => {
           // Get top 3 matches that have mainCategoryId
           const topMatches = results
@@ -148,7 +151,7 @@ export function TitleCategorySection({
         clearTimeout(debounceTimerRef.current)
       }
     }
-  }, [deferredTitle, hasSelectedCategory, flowState, t, i18n.language])
+  }, [deferredTitle, hasSelectedCategory, flowState, t, currentLocale])
 
   // Handle title input changes - just update state, search is handled by useEffect above
   const handleTitleChange = useCallback((value: string) => {
@@ -195,13 +198,13 @@ export function TitleCategorySection({
         body: JSON.stringify({
           title: titleForFeedbackRef.current,
           subcategory,
-          language: i18n.language,
+          language: currentLocale,
         }),
       }).catch(() => {
         // Ignore errors - non-blocking analytics
       })
     }
-  }, [manualSelectionTriggered, i18n.language, onCategoryConfirmed])
+  }, [manualSelectionTriggered, currentLocale, onCategoryConfirmed])
 
   // Change confirmed category
   const handleChangeCategory = useCallback(() => {
@@ -214,16 +217,16 @@ export function TitleCategorySection({
       {/* Title Input */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          {t('createTask.title.label', 'What do you need done?')} *
+          {t('createTask.title.label')} *
         </label>
         <Input
           size="lg"
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
           onBlur={() => setTitleTouched(true)}
-          placeholder={t('createTask.title.placeholder', 'e.g., Fix a leaking faucet in the bathroom')}
+          placeholder={t('createTask.title.placeholder')}
           isInvalid={showTitleError}
-          errorMessage={showTitleError ? t('createTask.errors.titleTooShort', 'Title must be at least 10 characters') : undefined}
+          errorMessage={showTitleError ? t('createTask.errors.titleTooShort') : undefined}
           classNames={{
             input: "text-lg",
             inputWrapper: showTitleError
@@ -233,12 +236,12 @@ export function TitleCategorySection({
         />
         {!showTitleError && (
           <p className="mt-1 text-sm text-gray-500">
-            {t('createTask.title.hint', 'Be specific - this helps us match you with the right professionals')}
+            {t('createTask.title.hint')}
           </p>
         )}
         {title.length > 0 && title.length < 10 && !titleTouched && (
           <p className="mt-1 text-sm text-orange-500">
-            {title.length}/10 {t('createTask.title.minChars', 'characters minimum')}
+            {title.length}/10 {t('createTask.title.minChars')}
           </p>
         )}
       </div>
@@ -258,7 +261,7 @@ export function TitleCategorySection({
                 <div className="flex items-center gap-2 mb-3">
                   <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0" />
                   <p className="text-sm text-blue-800 font-medium">
-                    {t('createTask.category.suggestion', 'This looks like:')}
+                    {t('createTask.category.suggestion')}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -295,7 +298,7 @@ export function TitleCategorySection({
                       onPress={() => handleConfirmSuggestion(0)}
                       className="w-full sm:w-auto"
                     >
-                      {t('createTask.category.confirm', 'Yes, correct')}
+                      {t('createTask.category.confirm')}
                     </Button>
                   )}
                   <Button
@@ -304,7 +307,7 @@ export function TitleCategorySection({
                     onPress={handleRejectSuggestion}
                     className="w-full sm:w-auto"
                   >
-                    {t('createTask.category.different', 'Choose different')}
+                    {t('createTask.category.different')}
                   </Button>
                 </div>
               </CardBody>
@@ -323,7 +326,7 @@ export function TitleCategorySection({
             <Card className="border-2 border-amber-200 bg-amber-50 mb-4">
               <CardBody className="p-4">
                 <p className="text-sm text-amber-800">
-                  {t('createTask.category.helpUs', "Help us find the right specialists - please select a category:")}
+                  {t('createTask.category.helpUs')}
                 </p>
               </CardBody>
             </Card>
@@ -356,7 +359,7 @@ export function TitleCategorySection({
                     </div>
                     <div>
                       <p className="text-sm text-green-700 font-medium">
-                        {t('createTask.category.selected', 'Category')}
+                        {t('createTask.category.selected')}
                       </p>
                       <p className="text-lg font-semibold text-green-800">
                         {getCategoryLabelBySlug(confirmedSubcategory, t)}
@@ -369,7 +372,7 @@ export function TitleCategorySection({
                     startContent={<ChevronDown className="w-4 h-4" />}
                     onPress={handleChangeCategory}
                   >
-                    {t('createTask.category.change', 'Change')}
+                    {t('createTask.category.change')}
                   </Button>
                 </div>
               </CardBody>
@@ -389,7 +392,7 @@ export function TitleCategorySection({
                 <div className="flex items-center gap-3">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600" />
                   <p className="text-sm text-gray-600">
-                    {t('createTask.category.analyzing', 'Analyzing your request...')}
+                    {t('createTask.category.analyzing')}
                   </p>
                 </div>
               </CardBody>

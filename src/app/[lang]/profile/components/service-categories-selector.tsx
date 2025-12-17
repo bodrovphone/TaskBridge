@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Chip, Input } from '@nextui-org/react'
 import { Search, X } from 'lucide-react'
 import {
@@ -33,7 +33,7 @@ export function ServiceCategoriesSelector({
   onChange,
   maxSelections = 10
 }: ServiceCategoriesSelectorProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [searchQuery, setSearchQuery] = useState('')
 
   // Get all subcategories organized by main category
@@ -127,7 +127,7 @@ export function ServiceCategoriesSelector({
     <div className="space-y-4">
       {/* Search Input */}
       <Input
-        placeholder={t('profile.serviceCategories.searchPlaceholder', 'Search categories...')}
+        placeholder={t('profile.serviceCategories.searchPlaceholder')}
         value={searchQuery}
         onValueChange={setSearchQuery}
         startContent={<Search className="w-4 h-4 text-gray-400" />}
@@ -149,7 +149,7 @@ export function ServiceCategoriesSelector({
       {!searchQuery && popularSubcategories.length > 0 && (
         <div>
           <p className="text-sm font-medium text-gray-600 mb-2">
-            {t('profile.serviceCategories.popularCategories', 'Popular Categories')}
+            {t('profile.serviceCategories.popularCategories')}
           </p>
           <div className="flex flex-wrap gap-2">
             {popularSubcategories.map(subcategory => {
@@ -209,13 +209,13 @@ export function ServiceCategoriesSelector({
         <div className="pt-4 border-t border-gray-200">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-medium text-gray-700">
-              {t('profile.serviceCategories.selected', 'Selected')} ({selectedCategories.length}/{maxSelections})
+              {t('profile.serviceCategories.selected')} ({selectedCategories.length}/{maxSelections})
             </p>
             <button
               onClick={() => onChange([])}
               className="text-xs text-gray-500 hover:text-primary underline"
             >
-              {t('profile.serviceCategories.clearAll', 'Clear all')}
+              {t('profile.serviceCategories.clearAll')}
             </button>
           </div>
           <div className="flex flex-wrap gap-2">

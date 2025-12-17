@@ -5,7 +5,7 @@ import { MapPin, Clock, Wallet } from "lucide-react";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { bg, enUS, ru } from "date-fns/locale";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { DEFAULT_LOCALE } from '@/lib/constants/locales';
@@ -61,13 +61,16 @@ interface TaskCardProps {
 // @note: getCategoryColor, getCategoryName, getCategoryImage moved to @/lib/utils/category - see line 19 for import
 
 function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
  const router = useRouter();
  const pathname = usePathname();
  const [imageError, setImageError] = useState(false);
 
+ // Get locale from URL pathname
+ const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
+
  const getDateLocale = () => {
-  switch (i18n.language) {
+  switch (currentLocale) {
    case 'bg': return bg;
    case 'ru': return ru;
    case 'en':
@@ -88,10 +91,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  const categoryColor = getCategoryColor(displayCategory);
  const categoryName = getCategoryName(t, task.category, task.subcategory);
 
- // Get locale from URL path for SSR/SEO consistency
- const currentLocale = extractLocaleFromPathname(pathname) || i18n.language || DEFAULT_LOCALE;
-
- // Get localized content based on user's locale
+ // Get localized content based on user's locale (currentLocale defined above)
  const localizedContent = getLocalizedTaskContent(task as any, currentLocale);
 
  const formatBudget = () => {
@@ -117,23 +117,23 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  const formatDeadline = () => {
   // Check explicit urgency type first (mock data or form data)
   if (task.urgency === 'same_day') {
-   return t('taskDetail.urgency.same_day', 'Urgent');
+   return t('taskDetail.urgency.same_day');
   }
   if (task.urgency === 'within_week') {
-   return t('taskDetail.urgency.within_week', 'Within a week');
+   return t('taskDetail.urgency.within_week');
   }
   if (task.urgency === 'flexible') {
-   return t('taskCard.deadline.flexible', 'Flexible');
+   return t('taskCard.deadline.flexible');
   }
 
   // Derive urgency from database fields (is_urgent + deadline)
   // This matches the logic in task-detail-content.tsx
   if (task.is_urgent) {
-   return t('taskDetail.urgency.same_day', 'Urgent');
+   return t('taskDetail.urgency.same_day');
   }
 
   if (!task.deadline) {
-   return t('taskCard.deadline.flexible', 'Flexible');
+   return t('taskCard.deadline.flexible');
   }
 
   const deadline = new Date(task.deadline);
@@ -141,15 +141,15 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
   const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 
   // Past deadline - show as ASAP
-  if (diffDays < 0) return t('taskDetail.asap', 'ASAP');
+  if (diffDays < 0) return t('taskDetail.asap');
 
   // Within 7 days = "Within a week"
   if (diffDays <= 7) {
-   return t('taskDetail.urgency.within_week', 'Within a week');
+   return t('taskDetail.urgency.within_week');
   }
 
   // More than 7 days = "Flexible"
-  return t('taskCard.deadline.flexible', 'Flexible');
+  return t('taskCard.deadline.flexible');
  };
 
  const handleCardPress = () => {
@@ -249,7 +249,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
       className="flex-1 w-full py-3 text-sm"
       onPress={handleCardPress}
      >
-      {t('taskCard.seeDetails', 'See details')}
+      {t('taskCard.seeDetails')}
      </Button>
 
      {showApplyButton && onApply && (
@@ -262,7 +262,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
        isDisabled={!canApply}
        title={applyDisabledReason}
       >
-       {t('taskCard.apply', 'Apply')}
+       {t('taskCard.apply')}
       </Button>
      )}
     </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ProfessionalHeader from '@/features/professionals/components/sections/professional-header';
 import ActionButtonsRow from '@/features/professionals/components/sections/action-buttons-row';
@@ -25,8 +25,10 @@ interface ProfessionalDetailPageContentProps {
 }
 
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
-  const { t, i18n } = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
+  // Use lang prop from server component (or fallback to params)
+  const currentLocale = lang || 'bg';
   const { user, authenticatedFetch } = useAuth();
   const [isShareCopied, setIsShareCopied] = useState(false);
   const [showAuthSlideOver, setShowAuthSlideOver] = useState(false);
@@ -61,18 +63,18 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     id: professional.id,
     name: professional.fullName || professional.name,
     // Use professional_title as title, fallback to first service category or default
-    title: professional.specialization || t('professionals.card.lookingForFirstTask', 'Professional service provider'),
+    title: professional.specialization || t('professionals.card.lookingForFirstTask'),
     avatar: professional.avatarUrl || professional.avatar,
     rating: professional.rating || 0,
     // Use reviewsCount from API (already filtered to published reviews only)
     reviewCount: professional.reviewsCount || professional.reviewCount || 0,
     completedTasks: professional.completedJobs || professional.completedTasks || 0,
     yearsExperience: professional.yearsExperience || 0,
-    responseTime: formatResponseTime(professional.responseTimeHours, i18n.language, t),
+    responseTime: formatResponseTime(professional.responseTimeHours, currentLocale, (key: string) => t(key as any)),
     // Show city if available, otherwise show "Bulgaria 🇧🇬" like on professional cards
     location: professional.city
       ? getCityLabelBySlug(professional.city, t)
-      : `${t('common.country.bulgaria', 'Bulgaria')} 🇧🇬`,
+      : `${t('common.country.bulgaria')} 🇧🇬`,
     isOnline: professional.isOnline || false,
     isVerified: {
       phone: professional.phoneVerified || false,
@@ -85,7 +87,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       policeCertificate: false,
       backgroundCheckPassed: false
     },
-    bio: professional.bio || t('professionalDetail.defaultBio', 'Професионален специалист с опит в сферата.'),
+    bio: professional.bio || t('professionalDetail.defaultBio'),
     services: professional.services || [],
     serviceCategories: professional.serviceCategories || [],
     gallery: professional.gallery || [],
@@ -107,7 +109,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     const professionalUrl = `${window.location.origin}/${lang}/professionals/${professional.id}`;
     const shareData = {
       title: transformedProfessional.name,
-      text: t('professionalDetail.shareText', 'Check out this professional on Trudify'),
+      text: t('professionalDetail.shareText'),
       url: professionalUrl,
     };
 
@@ -115,7 +117,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-        toast({ title: t('professionalDetail.shareSuccess', 'Shared successfully!') });
+        toast({ title: t('professionalDetail.shareSuccess') });
       } catch (error: any) {
         // User cancelled or error occurred
         if (error.name !== 'AbortError') {
@@ -134,7 +136,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     try {
       await navigator.clipboard.writeText(text);
       setIsShareCopied(true);
-      toast({ title: t('professionalDetail.linkCopied', 'Link copied to clipboard!') });
+      toast({ title: t('professionalDetail.linkCopied') });
 
       // Reset icon after 2 seconds
       setTimeout(() => {
@@ -143,7 +145,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     } catch (error) {
       console.error('Failed to copy:', error);
       toast({
-        title: t('professionalDetail.copyError', 'Failed to copy link'),
+        title: t('professionalDetail.copyError'),
         variant: 'destructive',
       });
     }
@@ -179,8 +181,8 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     // Check if user is trying to invite themselves (viewing own profile)
     if (user && user.id === professional.id) {
       toast({
-        title: t('inviteModal.selfInviteTitle', '🤔 Nice try!'),
-        description: t('inviteModal.selfInviteDescription', "You can't suggest a task to yourself. But we appreciate the creativity!"),
+        title: t('inviteModal.selfInviteTitle'),
+        description: t('inviteModal.selfInviteDescription'),
         variant: 'default',
       });
       return;
@@ -189,7 +191,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     // Check if already invited this session
     if (hasInvitedThisSession) {
       toast({
-        title: t('inviteModal.alreadyInvitedProfessional', 'Already invited'),
+        title: t('inviteModal.alreadyInvitedProfessional'),
         description: t('inviteModal.alreadyInvitedProfessionalDescription', {
           defaultValue: 'You have already invited {{name}} to your task. They may apply within 24 hours if available.',
           name: transformedProfessional.name,
@@ -212,7 +214,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     // Show error if fetch failed
     if (result.error) {
       toast({
-        title: t('inviteModal.errorFetchingTasks', 'Could not load your tasks'),
+        title: t('inviteModal.errorFetchingTasks'),
         description: result.error,
         variant: 'destructive',
       });
@@ -253,7 +255,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
         // Handle duplicate invitation error specifically
         if (data.error?.includes('already invited')) {
           toast({
-            title: t('inviteModal.alreadyInvited', 'Already invited'),
+            title: t('inviteModal.alreadyInvited'),
             description: t('inviteModal.alreadyInvitedDescription', {
               defaultValue: 'You have already invited {{name}} to this task.',
               name: transformedProfessional.name,
@@ -267,7 +269,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       }
 
       toast({
-        title: t('inviteModal.success', 'Invitation sent!'),
+        title: t('inviteModal.success'),
         description: t('inviteModal.successDescription', {
           defaultValue: '{{name}} will be notified about your task.',
           name: transformedProfessional.name,
@@ -287,7 +289,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     } catch (error: any) {
       console.error('Error sending invitation:', error);
       toast({
-        title: t('inviteModal.error', 'Failed to send invitation'),
+        title: t('inviteModal.error'),
         description: error.message,
         variant: 'destructive',
       });

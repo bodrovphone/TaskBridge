@@ -6,7 +6,7 @@ export const legal = {
   // Terms of Service Page - Russian translation
   'terms.title': 'Условия использования',
   'terms.subtitle': 'Условия использования платформы Trudify',
-  'terms.lastUpdated': 'Последнее обновление: {{date}}',
+  'terms.lastUpdated': 'Последнее обновление: {date}',
   'terms.effectiveDate': 'Вступает в силу: 20 декабря 2025 г.',
 
   // Company Info
@@ -296,7 +296,7 @@ export const legal = {
 
   'privacy.title': 'Политика конфиденциальности',
   'privacy.subtitle': 'Как мы собираем, используем и защищаем ваши персональные данные',
-  'privacy.lastUpdated': 'Последнее обновление: {{date}}',
+  'privacy.lastUpdated': 'Последнее обновление: {date}',
   'privacy.effectiveDate': 'Вступает в силу: 20 декабря 2025 г.',
 
   // Language notice

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 interface TaskImageUploadProps {
@@ -17,7 +17,7 @@ export default function TaskImageUpload({
   onChange,
   disabled = false
 }: TaskImageUploadProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [preview, setPreview] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
 

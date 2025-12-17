@@ -35,12 +35,12 @@ export const profile = {
 
   // Profile Page
   'profile.completion': 'Profile completion',
-  'profile.settings': 'Settings',
+  'profile.settingsTitle': 'Settings',
   'profile.tabs.customer': 'Customer',
   'profile.tabs.professional': 'Professional',
   'profile.switchToCustomer': 'Switch to Customer Profile',
   'profile.switchToProfessional': 'Switch to Professional Profile',
-  'profile.email': 'Email',
+  'profile.emailLabel': 'Email',
   'profile.phone': 'Phone',
   'profile.location': 'Location',
   'profile.selectCity': 'Select your city',
@@ -89,9 +89,9 @@ export const profile = {
   'profile.statistics.professional.monthlyEarnings': 'Monthly Earnings',
   'profile.statistics.professional.activeJobs': 'Active Jobs',
   'profile.statistics.avgResponseTime': 'Avg. Response Time',
-  'profile.statistics.responseTime.minutes': '{{minutes}} min',
+  'profile.statistics.responseTime.minutes': '{minutes} min',
   'profile.statistics.responseTime.hour': '1 hour',
-  'profile.statistics.responseTime.hours': '{{hours}} hours',
+  'profile.statistics.responseTime.hours': '{hours} hours',
   'profile.professional.acceptanceRate': 'Acceptance Rate',
 
   // Quick Actions
@@ -211,7 +211,7 @@ export const profile = {
   'profile.professional.form.suggestedSkills': 'Popular Skills',
   'profile.professional.form.addCustomSkill': 'Add Custom Skill',
   'profile.professional.form.customSkillPlaceholder': 'Enter skill name',
-  'profile.professional.form.moreSkillsAvailable': 'and {{count}} more...',
+  'profile.professional.form.moreSkillsAvailable': 'and {count} more...',
   'profile.professional.form.skillsLimitNotice': 'We recommend selecting your top 10 skills for the best results.',
   'profile.professional.form.submitting': 'Creating Profile...',
   'profile.professional.form.createProfile': 'Create Professional Profile',
@@ -376,7 +376,7 @@ export const profile = {
   'profile.services.pricePlaceholder': 'e.g., 25 €/hour',
   'profile.services.descriptionLabel': 'Description (optional)',
   'profile.services.descriptionPlaceholder': 'Brief description of this service',
-  'profile.services.helperText': 'Add up to {{max}} services. Changes are saved automatically.',
+  'profile.services.helperText': 'Add up to {max} services. Changes are saved automatically.',
 
   // Achievement Banner
   'profile.achievement.title': "You're doing amazing!",

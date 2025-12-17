@@ -12,6 +12,7 @@ import {
   Divider,
   Avatar
 } from '@nextui-org/react'
+import { useParams } from 'next/navigation'
 import {
   MapPin,
   Calendar,
@@ -29,7 +30,7 @@ import {
   FileX,
   Star
 } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { getCityLabelBySlug } from '@/features/cities'
 import { getTimelineLabel } from '@/lib/utils/timeline'
 
@@ -60,7 +61,9 @@ export default function ApplicationDetailView({
   onFindSimilar,
   onDelete
 }: ApplicationDetailViewProps) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
 
   if (!application) return null
 
@@ -188,7 +191,7 @@ export default function ApplicationDetailView({
                       <Calendar className="w-4 h-4" />
                       <span>
                         {t('myApplications.detail.completeBy', {
-                          date: new Date(task.deadline).toLocaleDateString(i18n.language, {
+                          date: new Date(task.deadline).toLocaleDateString(currentLocale, {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric'
@@ -237,7 +240,7 @@ export default function ApplicationDetailView({
                     <div className="flex items-center gap-2 text-purple-700">
                       <Clock className="w-4 h-4" />
                       <span className="font-medium">
-                        {t('myApplications.startDate')}: {new Date(application.startDate).toLocaleString(i18n.language, {
+                        {t('myApplications.startDate')}: {new Date(application.startDate).toLocaleString(currentLocale, {
                           month: 'short',
                           day: 'numeric',
                           year: 'numeric',
@@ -260,16 +263,16 @@ export default function ApplicationDetailView({
 
                 <div className="mt-2 text-xs text-gray-500">
                   {t('myApplications.appliedAgo', {
-                    time: new Date(application.appliedAt).toLocaleString(i18n.language)
+                    time: new Date(application.appliedAt).toLocaleString(currentLocale)
                   })}
                   {application.respondedAt && (
                     <>
                       {' • '}
                       {status === 'accepted' && t('myApplications.acceptedAgo', {
-                        time: new Date(application.respondedAt).toLocaleString(i18n.language)
+                        time: new Date(application.respondedAt).toLocaleString(currentLocale)
                       })}
                       {status === 'rejected' && t('myApplications.rejectedAgo', {
-                        time: new Date(application.respondedAt).toLocaleString(i18n.language)
+                        time: new Date(application.respondedAt).toLocaleString(currentLocale)
                       })}
                     </>
                   )}
@@ -321,7 +324,7 @@ export default function ApplicationDetailView({
                         <span className="w-4 h-4 flex-shrink-0">•</span>
                         <span>
                           {t('myApplications.detail.completeBy', {
-                            date: new Date(task.deadline).toLocaleDateString(i18n.language, {
+                            date: new Date(task.deadline).toLocaleDateString(currentLocale, {
                               month: 'long',
                               day: 'numeric',
                               year: 'numeric'

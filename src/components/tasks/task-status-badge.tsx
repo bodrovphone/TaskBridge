@@ -9,7 +9,7 @@ import {
   XCircle,
   AlertTriangle
 } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 export type TaskStatus =
   | 'open'
@@ -33,7 +33,7 @@ export function TaskStatusBadge({
   showTooltip = true,
   className = ''
 }: TaskStatusBadgeProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const statusConfig = {
     open: {

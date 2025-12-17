@@ -1,5 +1,9 @@
-import { TFunction } from 'i18next';
 import { MAIN_CATEGORIES, getMainCategoryById } from './main-categories';
+
+/**
+ * Generic translation function type compatible with both react-i18next and next-intl
+ */
+type TranslateFunction = (key: string) => string;
 import { SUBCATEGORIES, getSubcategoriesByMainCategory } from './subcategories';
 import {
   MainCategoryWithLabel,
@@ -38,7 +42,7 @@ const getKeywordsModule = async () => {
 /**
  * Get all main categories with translated labels
  */
-export const getMainCategoriesWithLabels = (t: TFunction): MainCategoryWithLabel[] => {
+export const getMainCategoriesWithLabels = (t: TranslateFunction): MainCategoryWithLabel[] => {
   return MAIN_CATEGORIES.map(cat => ({
     ...cat,
     title: t(`${cat.translationKey}.title`),
@@ -51,7 +55,7 @@ export const getMainCategoriesWithLabels = (t: TFunction): MainCategoryWithLabel
  */
 export const getSubcategoriesWithLabels = (
   mainCategoryId: string,
-  t: TFunction
+  t: TranslateFunction
 ): SubcategoryWithLabel[] => {
   const subcategories = getSubcategoriesByMainCategory(mainCategoryId);
   return subcategories.map(cat => ({
@@ -63,7 +67,7 @@ export const getSubcategoriesWithLabels = (
 /**
  * Get all subcategories with translated labels (flat list)
  */
-export const getAllSubcategoriesWithLabels = (t: TFunction): SubcategoryWithLabel[] => {
+export const getAllSubcategoriesWithLabels = (t: TranslateFunction): SubcategoryWithLabel[] => {
   return SUBCATEGORIES.map(cat => ({
     ...cat,
     label: t(cat.translationKey),
@@ -74,7 +78,7 @@ export const getAllSubcategoriesWithLabels = (t: TFunction): SubcategoryWithLabe
  * Get main categories with their subcategories (for Categories page)
  */
 export const getMainCategoriesWithSubcategories = (
-  t: TFunction
+  t: TranslateFunction
 ): MainCategoryWithSubcategories[] => {
   const mainCategories = getMainCategoriesWithLabels(t);
 
@@ -89,7 +93,7 @@ export const getMainCategoriesWithSubcategories = (
 /**
  * Get category options for dropdowns/filters (flat list of subcategories)
  */
-export const getCategoryOptions = (t: TFunction): CategoryOption[] => {
+export const getCategoryOptions = (t: TranslateFunction): CategoryOption[] => {
   const subcategories = getAllSubcategoriesWithLabels(t);
 
   return subcategories.map(cat => ({
@@ -103,7 +107,7 @@ export const getCategoryOptions = (t: TFunction): CategoryOption[] => {
  * Get category label by slug (for active filters display)
  * Checks both main categories and subcategories
  */
-export const getCategoryLabelBySlug = (slug: string, t: TFunction): string => {
+export const getCategoryLabelBySlug = (slug: string, t: TranslateFunction): string => {
   // First check subcategories
   const subcategory = SUBCATEGORIES.find(cat => cat.slug === slug);
   if (subcategory) {
@@ -134,7 +138,7 @@ export const getMainCategoryForSubcategory = (subcategorySlug: string) => {
  * Search categories by query string (sync version - no keyword matching)
  * Use searchCategoriesAsync for full keyword support
  */
-export const searchCategories = (query: string, t: TFunction): CategoryOption[] => {
+export const searchCategories = (query: string, t: TranslateFunction): CategoryOption[] => {
   if (!query.trim()) return [];
 
   const lowerQuery = query.toLowerCase();
@@ -178,7 +182,7 @@ export const searchCategories = (query: string, t: TFunction): CategoryOption[] 
  */
 export const searchCategoriesAsync = async (
   query: string,
-  t: TFunction,
+  t: TranslateFunction,
   language?: string
 ): Promise<CategoryOption[]> => {
   if (!query.trim()) return [];
@@ -186,8 +190,8 @@ export const searchCategoriesAsync = async (
   const lowerQuery = query.toLowerCase();
   const subcategories = getAllSubcategoriesWithLabels(t);
 
-  // Detect language from i18n or default to 'en'
-  const lang = (language || t('language', { defaultValue: 'en' })) as 'en' | 'bg' | 'ru';
+  // Detect language from provided param or default to 'en'
+  const lang = (language || 'en') as 'en' | 'bg' | 'ru';
 
   // Get keyword matches with scores (lazy loaded)
   const keywords = await getKeywordsModule();

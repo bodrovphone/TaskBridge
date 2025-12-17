@@ -8,7 +8,7 @@ import AuthSlideOver from "@/components/ui/auth-slide-over"
 import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import NotificationCenter from "./notification-center"
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Plus, FileText, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Users, Hammer, SquarePen } from "lucide-react"
 import Image from "next/image"
 import { useAuth } from "@/features/auth"
@@ -32,7 +32,7 @@ import {
 
 function Header() {
  const pathname = usePathname()
- const { t } = useTranslation()
+ const t = useTranslations()
  const { user, profile, signOut, notificationToken } = useAuth()
  // User is authenticated if they have a profile (either via Supabase auth OR notification token)
  const isAuthenticated = !!profile && (!!user || !!notificationToken)
@@ -532,7 +532,7 @@ function Header() {
        className="w-full font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
        onPress={() => setIsMenuOpen(false)}
       >
-       {t('nav.closeMenu', 'Close Menu')}
+       {t('nav.closeMenu')}
       </Button>
      </div>
     </div>

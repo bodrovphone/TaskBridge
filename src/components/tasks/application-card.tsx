@@ -3,7 +3,7 @@
 import { Application } from '@/types/applications'
 import { Card, CardBody, Button, Avatar, Chip } from '@nextui-org/react'
 import { Star, CheckCircle, XCircle, Eye } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface ApplicationCardProps {
   application: Application
@@ -18,7 +18,7 @@ export default function ApplicationCard({
   onReject,
   onViewDetails
 }: ApplicationCardProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { professional, proposedPrice, currency, timeline, message, status } = application
 
   const getStatusColor = (status: string) => {
@@ -40,16 +40,16 @@ export default function ApplicationCard({
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'accepted':
-        return t('applications.filterAccepted', 'Accepted')
+        return t('applications.filterAccepted')
       case 'rejected':
-        return t('applications.filterRejected', 'Rejected')
+        return t('applications.filterRejected')
       case 'withdrawn':
-        return t('applications.filterWithdrawn', 'Withdrawn')
+        return t('applications.filterWithdrawn')
       case 'removed_by_customer':
-        return t('applications.removedByCustomer', 'Removed by Customer')
+        return t('applications.removedByCustomer')
       case 'pending':
       default:
-        return t('applications.filterPending', 'Pending')
+        return t('applications.filterPending')
     }
   }
 
@@ -85,9 +85,9 @@ export default function ApplicationCard({
               </div>
               <div className="text-sm text-gray-600 space-y-0.5">
                 <div className="truncate">
-                  {professional.skills?.[0] ? t(professional.skills[0]) : t('common.professional', 'Professional')}
+                  {professional.skills?.[0] ? t(professional.skills[0]) : t('common.professional')}
                 </div>
-                <div className="text-gray-500">{professional.completedTasks} {t('applications.tasksCompleted', 'tasks completed')}</div>
+                <div className="text-gray-500">{professional.completedTasks} {t('applications.tasksCompleted')}</div>
               </div>
             </div>
           </div>
@@ -112,13 +112,13 @@ export default function ApplicationCard({
         {/* Price & Timeline */}
         <div className="flex items-center gap-6 mb-4 pb-4 border-b">
           <div>
-            <div className="text-sm text-gray-500">{t('applications.proposedPrice', 'Price')}</div>
+            <div className="text-sm text-gray-500">{t('applications.proposedPrice')}</div>
             <div className="font-bold text-lg text-blue-600">
               {proposedPrice} {currency}
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-500">{t('applications.timeline', 'Timeline')}</div>
+            <div className="text-sm text-gray-500">{t('applications.timeline')}</div>
             <div className="font-semibold">{timeline}</div>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default function ApplicationCard({
                   onPress={() => onAccept(application.id)}
                   className="flex-1"
                 >
-                  {t('applications.acceptApplication', 'Accept')}
+                  {t('applications.acceptApplication')}
                 </Button>
                 <Button
                   color="danger"
@@ -153,7 +153,7 @@ export default function ApplicationCard({
                   onPress={() => onReject(application.id)}
                   className="flex-1"
                 >
-                  {t('applications.rejectApplication', 'Reject')}
+                  {t('applications.rejectApplication')}
                 </Button>
               </div>
               <Button
@@ -162,7 +162,7 @@ export default function ApplicationCard({
                 onPress={() => onViewDetails(application.id)}
                 className="w-full"
               >
-                {t('applications.viewDetails', 'View Details')}
+                {t('applications.viewDetails')}
               </Button>
             </>
           ) : (
@@ -172,7 +172,7 @@ export default function ApplicationCard({
               onPress={() => onViewDetails(application.id)}
               className="w-full"
             >
-              {t('applications.viewDetails', 'View Details')}
+              {t('applications.viewDetails')}
             </Button>
           )}
         </div>

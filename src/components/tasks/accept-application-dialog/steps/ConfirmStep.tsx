@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Wallet, Calendar, Phone, Mail, Send, MessageSquare, Edit2, Check, AlertTriangle } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -47,7 +47,7 @@ export function ConfirmStep({
   onEditMessage,
   disabled = false,
 }: ConfirmStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const readableTimeline = getTimelineLabel(timeline, t)
 
   // Get contact display value
@@ -80,7 +80,7 @@ export function ConfirmStep({
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        {t('acceptApplication.wizard.confirmHelp', 'Review your acceptance details before confirming.')}
+        {t('acceptApplication.wizard.confirmHelp')}
       </p>
 
       {/* Summary cards */}
@@ -125,7 +125,7 @@ export function ConfirmStep({
               </div>
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {t('acceptApplication.wizard.sharingContact', 'Sharing with professional')}
+                  {t('acceptApplication.wizard.sharingContact')}
                 </p>
                 <p className="font-medium text-gray-900 dark:text-gray-100">{contact.label}</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{contact.value}</p>
@@ -156,7 +156,7 @@ export function ConfirmStep({
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {t('acceptApplication.wizard.yourMessage', 'Your message')}
+                  {t('acceptApplication.wizard.yourMessage')}
                 </p>
                 {message ? (
                   <p className="text-sm text-gray-900 dark:text-gray-100 mt-1 line-clamp-2">
@@ -164,7 +164,7 @@ export function ConfirmStep({
                   </p>
                 ) : (
                   <p className="text-sm text-gray-400 dark:text-gray-500 italic mt-1">
-                    {t('acceptApplication.wizard.noMessage', 'No message added')}
+                    {t('acceptApplication.wizard.noMessage')}
                   </p>
                 )}
               </div>
@@ -224,10 +224,10 @@ export function ConfirmStep({
           </div>
           <div>
             <p className="text-sm font-medium text-green-800 dark:text-green-200">
-              {t('acceptApplication.wizard.readyToAccept', 'Ready to accept!')}
+              {t('acceptApplication.wizard.readyToAccept')}
             </p>
             <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-              {t('acceptApplication.wizard.acceptNote', 'Click Accept to confirm. {{name}} will be notified.', { name: professional.name })}
+              {t('acceptApplication.wizard.acceptNote', { name: professional.name })}
             </p>
           </div>
         </motion.div>
@@ -242,10 +242,10 @@ export function ConfirmStep({
           </div>
           <div>
             <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
-              {t('acceptApplication.wizard.agreementRequired', 'Agreement required')}
+              {t('acceptApplication.wizard.agreementRequired')}
             </p>
             <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
-              {t('acceptApplication.wizard.pleaseAgree', 'Please check the box above to proceed.')}
+              {t('acceptApplication.wizard.pleaseAgree')}
             </p>
           </div>
         </motion.div>

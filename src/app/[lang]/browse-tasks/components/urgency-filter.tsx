@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
 import { Clock, ChevronDown, Zap, Calendar, Sparkles } from 'lucide-react'
 import { useState } from 'react'
@@ -38,7 +38,7 @@ const URGENCY_OPTIONS = [
 ]
 
 export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isOpen, setIsOpen] = useState(false)
 
   const selectedOption = URGENCY_OPTIONS.find(opt => opt.value === value)
@@ -53,8 +53,8 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
   }
 
   const getDisplayText = () => {
-    if (!value) return t('browseTasks.filters.urgency', 'Urgency')
-    return t(selectedOption?.labelKey || '', selectedOption?.label || '')
+    if (!value) return t('browseTasks.filters.urgency')
+    return selectedOption ? t(selectedOption.labelKey) : t('browseTasks.filters.urgency')
   }
 
   return (
@@ -91,7 +91,7 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
                 startContent={<Icon className="w-4 h-4" />}
                 onPress={() => handleSelect(option.value)}
               >
-                {t(option.labelKey, option.label)}
+                {t(option.labelKey)}
               </Button>
             )
           })}
@@ -107,7 +107,7 @@ export function UrgencyFilter({ value, onChange }: UrgencyFilterProps) {
                   setIsOpen(false)
                 }}
               >
-                {t('browseTasks.filters.clear', 'Clear')}
+                {t('browseTasks.filters.clear')}
               </Button>
             </>
           )}

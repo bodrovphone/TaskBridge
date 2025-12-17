@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { CheckCircle2, XCircle, ClipboardPaste } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from '@/features/auth';
@@ -22,7 +23,9 @@ export function TelegramConnection({
   telegramFirstName,
   onConnectionChange
 }: TelegramConnectionProps) {
-  const { t, i18n } = useTranslation();
+  const t = useTranslations();
+  const params = useParams();
+  const currentLocale = (params?.lang as string) || 'bg';
   const { authenticatedFetch } = useAuth();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
@@ -51,7 +54,7 @@ export function TelegramConnection({
   }, [telegramConnected]);
 
   const handleOpenBot = async () => {
-    const locale = i18n.language || 'bg';
+    const locale = currentLocale;
 
     // iOS Safari blocks window.open() after async operations
     // So we open the window FIRST, then update the URL after token is fetched
@@ -128,7 +131,7 @@ export function TelegramConnection({
 
     try {
       // Get current app locale from i18next
-      const locale = i18n.language || 'bg';
+      const locale = currentLocale;
 
       const response = await authenticatedFetch('/api/telegram/connect', {
         method: 'POST',
@@ -188,7 +191,7 @@ export function TelegramConnection({
     } catch (err) {
       console.error('Failed to read clipboard:', err);
       // Fallback: just focus the input if clipboard access denied
-      setError(t('profile.telegram.clipboardError', 'Please paste the ID manually'));
+      setError(t('profile.telegram.clipboardError'));
     }
   };
 
@@ -353,7 +356,7 @@ export function TelegramConnection({
                 startContent={!isConnecting && <ClipboardPaste className="w-5 h-5" />}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3"
               >
-                {isConnecting ? t('profile.telegram.connecting', 'Connecting...') : t('profile.telegram.pasteAndConnect', 'Paste ID & Connect')}
+                {isConnecting ? t('profile.telegram.connecting') : t('profile.telegram.pasteAndConnect')}
               </Button>
 
               <div className="relative">
@@ -362,7 +365,7 @@ export function TelegramConnection({
                 </div>
                 <div className="relative flex justify-center text-xs">
                   <span className="px-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-500">
-                    {t('common.or', 'or paste manually')}
+                    {t('common.or')}
                   </span>
                 </div>
               </div>
@@ -379,7 +382,7 @@ export function TelegramConnection({
                 classNames={{
                   input: 'text-center text-xl font-bold tracking-wide'
                 }}
-                description={t('profile.telegram.autoSaveHint', 'Paste your ID here - it will connect automatically')}
+                description={t('profile.telegram.autoSaveHint')}
               />
             </div>
           </>

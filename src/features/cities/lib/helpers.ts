@@ -1,5 +1,9 @@
-import { TFunction } from 'i18next';
 import { CITIES, getCityBySlug } from './cities';
+
+/**
+ * Generic translation function type compatible with both react-i18next and next-intl
+ */
+type TranslateFunction = (key: string) => string;
 
 /**
  * City with translated label
@@ -13,7 +17,7 @@ export interface CityWithLabel {
 /**
  * Get all cities with translated labels
  */
-export const getCitiesWithLabels = (t: TFunction): CityWithLabel[] => {
+export const getCitiesWithLabels = (t: TranslateFunction): CityWithLabel[] => {
   return CITIES.map(city => ({
     slug: city.slug,
     label: t(city.translationKey),
@@ -25,7 +29,7 @@ export const getCitiesWithLabels = (t: TFunction): CityWithLabel[] => {
  * Get city label by slug
  * Returns translated name from i18n for known cities
  */
-export const getCityLabelBySlug = (slug: string, t: TFunction): string => {
+export const getCityLabelBySlug = (slug: string, t: TranslateFunction): string => {
   const city = getCityBySlug(slug);
   if (city) {
     return t(city.translationKey);
@@ -37,7 +41,7 @@ export const getCityLabelBySlug = (slug: string, t: TFunction): string => {
 /**
  * Search cities by query string
  */
-export const searchCities = (query: string, t: TFunction): CityWithLabel[] => {
+export const searchCities = (query: string, t: TranslateFunction): CityWithLabel[] => {
   if (!query.trim()) return [];
 
   const lowerQuery = query.toLowerCase();

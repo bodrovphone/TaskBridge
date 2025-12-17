@@ -1,6 +1,7 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import { Input, Textarea, Card, CardBody, Tooltip } from '@nextui-org/react'
 import { FileText } from 'lucide-react'
 import { useRef, useState, useImperativeHandle, forwardRef } from 'react'
@@ -13,7 +14,9 @@ interface TaskDetailsSectionProps {
 
 export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focusDescriptionInput: () => void }, TaskDetailsSectionProps>(
  function TaskDetailsSection({ form, hideTitle }, ref) {
-  const { t, i18n } = useTranslation()
+  const t = useTranslations()
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
   const titleInputRef = useRef<HTMLInputElement>(null)
   const descriptionTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [showTitleTooltip, setShowTitleTooltip] = useState(false)
@@ -58,7 +61,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
    if (value.length > 200) {
     return 'createTask.errors.titleTooLong'
    }
-   const profanityCheck = validateProfanity(value, i18n.language, true)
+   const profanityCheck = validateProfanity(value, currentLocale, true)
    if (!profanityCheck.valid) {
     return profanityCheck.severity === 'severe'
      ? 'validation.profanitySeverity.severe'
@@ -75,7 +78,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
    if (value.length > 2000) {
     return 'createTask.errors.descriptionTooLong'
    }
-   const profanityCheck = validateProfanity(value, i18n.language, true)
+   const profanityCheck = validateProfanity(value, currentLocale, true)
    if (!profanityCheck.valid) {
     return profanityCheck.severity === 'severe'
      ? 'validation.profanitySeverity.severe'
@@ -94,10 +97,10 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
      </div>
      <div>
       <h2 className="text-2xl font-bold text-gray-900 mb-1">
-       {t('createTask.details.title', 'Tell us about your task')}
+       {t('createTask.details.title')}
       </h2>
       <p className="text-gray-600">
-       {t('createTask.details.subtitle', 'Provide clear information to attract the right professionals')}
+       {t('createTask.details.subtitle')}
       </p>
      </div>
     </div>
@@ -115,7 +118,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
      <div className="space-y-2">
       <div className="flex items-center justify-between">
        <label htmlFor="task-title" className="text-sm font-medium text-gray-700">
-        {t('createTask.details.titleLabel', 'Task Title')} <span className="text-red-500">*</span>
+        {t('createTask.details.titleLabel')} <span className="text-red-500">*</span>
        </label>
        <span className="text-xs text-gray-400">
         {(field.state.value || '').length}/200
@@ -127,8 +130,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
         <div className="absolute bottom-full left-4 mb-3 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
          {/* Tooltip content */}
          <div className="bg-white text-gray-900 shadow-2xl border-2 border-primary/30 rounded-xl px-4 py-3 max-w-md">
-          <div className="text-sm font-bold mb-2 text-gray-900">{t('createTask.details.titleTooltipTitle', 'Write a clear task title')}</div>
-          <div className="text-xs text-gray-700 leading-relaxed">{t('createTask.details.titleTooltipContent', 'Be specific about what you need. Good examples: "Fix leaking kitchen faucet", "Professional apartment cleaning", "Website homepage redesign"')}</div>
+          <div className="text-sm font-bold mb-2 text-gray-900">{t('createTask.details.titleTooltipTitle')}</div>
+          <div className="text-xs text-gray-700 leading-relaxed">{t('createTask.details.titleTooltipContent')}</div>
          </div>
          {/* Comic-style tail/pointer */}
          <div className="absolute -bottom-[1px] left-8">
@@ -143,8 +146,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
        <Input
         id="task-title"
         ref={titleInputRef}
-        placeholder={t('createTask.details.titlePlaceholder', 'What do you need done?')}
-        description={t('createTask.details.titleHelp', 'Be specific and clear (e.g., "Professional house cleaning for 2-bedroom apartment")')}
+        placeholder={t('createTask.details.titlePlaceholder')}
+        description={t('createTask.details.titleHelp')}
         value={field.state.value || ''}
         onValueChange={(val) => handleTitleChange(val, field.handleChange)}
         onBlur={field.handleBlur}
@@ -173,7 +176,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
      <div className="space-y-2">
       <div className="flex items-center justify-between">
        <label htmlFor="task-description" className="text-sm font-medium text-gray-700">
-        {t('createTask.details.descriptionLabel', 'Description')} <span className="text-red-500">*</span>
+        {t('createTask.details.descriptionLabel')} <span className="text-red-500">*</span>
        </label>
        <span className="text-xs text-gray-400">
         {(field.state.value || '').length}/2000
@@ -182,8 +185,8 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
       <Textarea
        id="task-description"
        ref={descriptionTextareaRef}
-       placeholder={t('createTask.details.descriptionPlaceholder', 'Describe your task in detail...')}
-       description={t('createTask.details.descriptionHelp', 'Include all important details: what needs to be done, any special requirements, tools/materials needed, etc.')}
+       placeholder={t('createTask.details.descriptionPlaceholder')}
+       description={t('createTask.details.descriptionHelp')}
        value={field.state.value || ''}
        onValueChange={field.handleChange}
        onBlur={field.handleBlur}
@@ -204,12 +207,12 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
     {(field: any) => (
      <div className="space-y-2">
       <label htmlFor="task-requirements" className="text-sm font-medium text-gray-700">
-       {t('createTask.details.requirementsLabel', 'Specific Requirements (Optional)')}
+       {t('createTask.details.requirementsLabel')}
       </label>
       <Textarea
        id="task-requirements"
-       placeholder={t('createTask.details.requirementsPlaceholder', '• Requirement 1\n• Requirement 2\n• Requirement 3')}
-       description={t('createTask.details.requirementsHelp', 'List any special skills, certifications, or equipment needed (one per line)')}
+       placeholder={t('createTask.details.requirementsPlaceholder')}
+       description={t('createTask.details.requirementsHelp')}
        value={field.state.value || ''}
        onValueChange={(val) => {
         // Ensure value starts with bullet point if not empty

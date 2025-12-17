@@ -1,4 +1,7 @@
-import { TFunction } from 'i18next';
+/**
+ * Generic translation function type compatible with both react-i18next and next-intl
+ */
+type TranslateFunction = (key: string) => string;
 
 export type LocationSlug =
   | 'sofia-center'
@@ -20,51 +23,51 @@ export interface LocationOption {
 /**
  * Get all location options with translations
  */
-export function getLocationOptions(t: TFunction): LocationOption[] {
+export function getLocationOptions(t: TranslateFunction): LocationOption[] {
   return [
     {
       value: 'sofia-center',
-      label: t('locations.sofiaCenter', { defaultValue: 'София, Център' }),
+      label: t('locations.sofiaCenter'),
       emoji: '🏛️'
     },
     {
       value: 'sofia-lyulin',
-      label: t('locations.sofiaLyulin', { defaultValue: 'София, Люлин' }),
+      label: t('locations.sofiaLyulin'),
       emoji: '🏘️'
     },
     {
       value: 'sofia-studentski-grad',
-      label: t('locations.sofiaStudentski', { defaultValue: 'София, Студентски град' }),
+      label: t('locations.sofiaStudentski'),
       emoji: '🎓'
     },
     {
       value: 'sofia-vitosha',
-      label: t('locations.sofiaVitosha', { defaultValue: 'София, Витоша' }),
+      label: t('locations.sofiaVitosha'),
       emoji: '🏔️'
     },
     {
       value: 'plovdiv',
-      label: t('locations.plovdiv', { defaultValue: 'Пловдив' }),
+      label: t('locations.plovdiv'),
       emoji: '🏛️'
     },
     {
       value: 'varna',
-      label: t('locations.varna', { defaultValue: 'Варна' }),
+      label: t('locations.varna'),
       emoji: '🌊'
     },
     {
       value: 'burgas',
-      label: t('locations.burgas', { defaultValue: 'Бургас' }),
+      label: t('locations.burgas'),
       emoji: '🏖️'
     },
     {
       value: 'ruse',
-      label: t('locations.ruse', { defaultValue: 'Русе' }),
+      label: t('locations.ruse'),
       emoji: '🏙️'
     },
     {
       value: 'stara-zagora',
-      label: t('locations.staraZagora', { defaultValue: 'Стара Загора' }),
+      label: t('locations.staraZagora'),
       emoji: '🌳'
     },
   ];
@@ -73,7 +76,7 @@ export function getLocationOptions(t: TFunction): LocationOption[] {
 /**
  * Get location label by slug
  */
-export function getLocationLabel(slug: LocationSlug, t: TFunction): string {
+export function getLocationLabel(slug: LocationSlug, t: TranslateFunction): string {
   const location = getLocationOptions(t).find(loc => loc.value === slug);
   return location?.label || slug;
 }

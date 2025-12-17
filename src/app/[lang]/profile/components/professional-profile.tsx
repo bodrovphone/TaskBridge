@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Card, CardHeader, CardBody } from '@nextui-org/react'
 import { Camera } from 'lucide-react'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
@@ -20,7 +20,7 @@ interface ProfessionalProfileProps {
 }
 
 export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalProfileProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [error, setError] = useState<string | null>(null)
 
   // Get incomplete section IDs for highlighting
@@ -230,8 +230,8 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
               <Camera className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.gallery.title', 'Work Gallery')}</h3>
-              <p className="text-xs text-gray-500 hidden sm:block">{t('profile.gallery.description', 'Showcase your best work (max 5 images)')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-gray-900">{t('profile.gallery.title')}</h3>
+              <p className="text-xs text-gray-500 hidden sm:block">{t('profile.gallery.description')}</p>
             </div>
           </div>
         </CardHeader>

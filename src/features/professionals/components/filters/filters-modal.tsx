@@ -14,7 +14,7 @@ import {
   Divider,
 } from '@nextui-org/react'
 import { SlidersHorizontal, Grid3X3, MapPin, Star, Briefcase, ArrowUpDown, X } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { CategoryFilter } from '@/app/[lang]/browse-tasks/components/category-filter'
 import { CityFilter } from '@/app/[lang]/browse-tasks/components/city-filter'
 import { RatingFilter } from './rating-filter'
@@ -31,7 +31,7 @@ const filterSections = [
 ]
 
 export function FiltersModal() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const { filters, updateFilters, resetFilters, activeFilterCount } = useProfessionalFilters()
 
@@ -102,7 +102,7 @@ export function FiltersModal() {
         className="md:hidden"
       >
         <div className="flex items-center gap-2">
-          <span>{t('professionals.filters.filtersButton', 'Filters')}</span>
+          <span>{t('professionals.filters.filtersButton')}</span>
           {activeFilterCount > 0 && (
             <Chip
               size="sm"
@@ -159,12 +159,12 @@ export function FiltersModal() {
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-gray-900">
-                        {t('professionals.filters.filters', 'Filters')}
+                        {t('professionals.filters.filters')}
                       </h2>
                       {localActiveFilterCount > 0 && (
                         <div className="flex items-center gap-2 mt-0.5">
                           <Chip size="sm" variant="flat" className="bg-orange-100 text-orange-700 border border-orange-300">
-                            {localActiveFilterCount} {t('professionals.filters.active', 'active')}
+                            {localActiveFilterCount} {t('professionals.filters.active')}
                           </Chip>
                         </div>
                       )}
@@ -250,7 +250,7 @@ export function FiltersModal() {
                     onPress={handleApplyFilters}
                     className="w-full font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
                   >
-                    {t('professionals.filters.showResults', 'Show Results')}
+                    {t('professionals.filters.showResults')}
                   </Button>
 
                   {/* Second row - Secondary actions */}
@@ -261,7 +261,7 @@ export function FiltersModal() {
                       onPress={onClose}
                       className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-100"
                     >
-                      {t('common.close', 'Close')}
+                      {t('common.close')}
                     </Button>
                     <Button
                       size="lg"
@@ -270,7 +270,7 @@ export function FiltersModal() {
                       isDisabled={localActiveFilterCount === 0}
                       className="flex-1 bg-red-500 text-white hover:bg-red-600 disabled:bg-gray-200 disabled:text-gray-400"
                     >
-                      {t('professionals.filters.reset', 'Reset')}
+                      {t('professionals.filters.reset')}
                     </Button>
                   </div>
                 </div>

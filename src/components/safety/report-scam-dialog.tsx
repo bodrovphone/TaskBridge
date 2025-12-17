@@ -14,7 +14,7 @@ import {
   SelectItem,
 } from '@nextui-org/react'
 import { AlertTriangle, Upload } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
 
 export interface ReportScamDialogProps {
@@ -44,7 +44,7 @@ export function ReportScamDialog({
   reportedUserName,
   relatedTaskId,
 }: ReportScamDialogProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { authenticatedFetch } = useAuth()
   const [reportType, setReportType] = useState<ReportType>('fraud_scam')
   const [description, setDescription] = useState('')

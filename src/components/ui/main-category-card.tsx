@@ -3,7 +3,7 @@
 import { LucideIcon } from "lucide-react"
 import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react"
 import { useRouter, useParams } from "next/navigation"
-import { useTranslation } from "react-i18next"
+import { useTranslations } from 'next-intl'
 import { useMemo, useState } from "react"
 import { Briefcase, Search, HelpCircle } from "lucide-react"
 import { SuggestCategoryModal } from "@/components/categories/suggest-category-modal"
@@ -57,7 +57,7 @@ function MainCategoryCard({
  showActionButtons = true,
  variant = 'full'
 }: MainCategoryCardProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'
@@ -273,7 +273,7 @@ function MainCategoryCard({
        }}
        className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
       >
-       ← {t('nav.browseTasks', 'Browse Tasks')}
+       ← {t('nav.browseTasks')}
       </button>
      ) : (
       <div className="text-sm font-semibold text-slate-700">
@@ -284,7 +284,7 @@ function MainCategoryCard({
       onClick={() => handleSubcategoryClick(subcategories[0]?.value || '')}
       className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
      >
-      {t('professionals.viewProfessionals', 'View Professionals')} →
+      {t('professionals.viewProfessionals')} →
      </button>
     </CardFooter>
    )}

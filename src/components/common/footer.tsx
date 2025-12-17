@@ -2,7 +2,7 @@
 
 import { Mail, Shield, Star, Award, Heart } from "lucide-react";
 import Image from "next/image";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from "next/navigation";
 import { LocaleLink } from "./locale-link";
 import { LANGUAGE_CONFIG } from "@/lib/constants/locales";
@@ -14,7 +14,7 @@ import { useAuth } from "@/features/auth";
 import { SocialLinks } from "@/components/ui/social-icons";
 
 function Footer() {
- const { t, i18n } = useTranslation();
+ const t = useTranslations();
  const pathname = usePathname();
  const router = useRouter();
  const { authenticatedFetch } = useAuth();
@@ -162,10 +162,7 @@ function Footer() {
            // Update authenticated user's profile language preference (silently fails if not logged in)
            await updateUserLanguagePreference(language.code, authenticatedFetch);
 
-           // Update i18next for immediate UI feedback
-           i18n.changeLanguage(language.code);
-
-           // Navigate to new locale URL
+           // Navigate to new locale URL (next-intl handles locale via URL)
            const newPath = replaceLocaleInPathname(pathname, language.code);
            router.push(newPath);
           } catch (error) {

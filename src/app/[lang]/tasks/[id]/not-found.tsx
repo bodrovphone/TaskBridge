@@ -1,14 +1,15 @@
 'use client'
 
 import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Search, ArrowLeft } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 export default function TaskNotFound() {
  const router = useRouter();
- const { t, i18n } = useTranslation();
- const locale = i18n.language || 'bg';
+ const params = useParams();
+ const t = useTranslations();
+ const locale = (params?.lang as string) || 'bg';
 
  return (
   <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4">
@@ -25,12 +26,10 @@ export default function TaskNotFound() {
 
     {/* Message */}
     <h1 className="text-3xl font-bold text-gray-900 mb-4">
-     {t('taskDetail.notFound.title', 'Task Not Found')}
+     {t('taskDetail.notFound.title')}
     </h1>
     <p className="text-gray-600 mb-8">
-     {t('taskDetail.notFound.description',
-      "The task you're looking for doesn't exist or has been removed."
-     )}
+     {t('taskDetail.notFound.description')}
     </p>
 
     {/* Actions */}
@@ -40,13 +39,13 @@ export default function TaskNotFound() {
       startContent={<ArrowLeft size={18} />}
       onClick={() => router.back()}
      >
-      {t('common.goBack', 'Go Back')}
+      {t('common.goBack')}
      </Button>
      <Button
       color="primary"
       onClick={() => router.push(`/${locale}/browse-tasks`)}
      >
-      {t('taskDetail.notFound.browseTasks', 'Browse Tasks')}
+      {t('taskDetail.notFound.browseTasks')}
      </Button>
     </div>
    </div>

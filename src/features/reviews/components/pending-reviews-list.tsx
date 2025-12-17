@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Button, Avatar, Skeleton, Chip } from '@nextui-org/react'
 import { Star, Calendar, User, FileText, Sparkles } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import type { PendingReviewTask } from '../lib/types'
 
 interface PendingReviewsListProps {
@@ -16,7 +16,7 @@ export function PendingReviewsList({
   onReviewTask,
   isLoading = false
 }: PendingReviewsListProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const formatDaysAgo = (daysAgo: number) => {
     if (daysAgo === 0) return t('common.today')

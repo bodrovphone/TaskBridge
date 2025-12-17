@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Chip } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Settings, Banknote, Clock, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
 
@@ -25,7 +25,7 @@ export function BusinessSettingsSection({
   weekendHours,
   onSave
 }: BusinessSettingsSectionProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isEditing, setIsEditing] = useState(false)
   const [currentPaymentMethods, setCurrentPaymentMethods] = useState(paymentMethods)
   const [currentWeekdayHours, setCurrentWeekdayHours] = useState(weekdayHours)
@@ -200,7 +200,7 @@ export function BusinessSettingsSection({
               onPress={() => setIsEditing(true)}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
-              {t('common.edit', 'Edit')}
+              {t('common.edit')}
             </Button>
           ) : (
             <FormActionButtons

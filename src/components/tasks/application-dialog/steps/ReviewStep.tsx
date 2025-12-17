@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Wallet, Clock, MessageSquare, Check, Edit2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -31,18 +31,18 @@ export function ReviewStep({
   onEditTimeline,
   onEditMessage,
 }: ReviewStepProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        {t('application.wizard.reviewHelp', 'Please review your application before submitting.')}
+        {t('application.wizard.reviewHelp')}
       </p>
 
       {/* Task reference */}
       <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-          {t('application.wizard.applyingTo', 'Applying to')}
+          {t('application.wizard.applyingTo')}
         </p>
         <p className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
           {taskTitle}
@@ -135,7 +135,7 @@ export function ReviewStep({
                   </p>
                 ) : (
                   <p className="text-sm text-gray-400 dark:text-gray-500 italic mt-1">
-                    {t('application.wizard.noMessage', 'No message added')}
+                    {t('application.wizard.noMessage')}
                   </p>
                 )}
               </div>
@@ -163,10 +163,10 @@ export function ReviewStep({
         </div>
         <div>
           <p className="text-sm font-medium text-green-800 dark:text-green-200">
-            {t('application.wizard.readyToSubmit', 'Ready to submit!')}
+            {t('application.wizard.readyToSubmit')}
           </p>
           <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-            {t('application.wizard.submitNote', 'Click Submit to send your application. The client will be notified.')}
+            {t('application.wizard.submitNote')}
           </p>
         </div>
       </motion.div>

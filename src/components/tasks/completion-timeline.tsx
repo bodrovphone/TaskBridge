@@ -2,7 +2,7 @@
 
 import { Card, CardBody } from '@nextui-org/react'
 import { PlayCircle, CheckCircle, Clock } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface TimelineEvent {
   label: string
@@ -25,7 +25,7 @@ export function CompletionTimeline({
   completedAt,
   className = ''
 }: CompletionTimelineProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const events: TimelineEvent[] = [
     {

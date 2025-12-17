@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
 import {
@@ -53,7 +53,7 @@ const experienceOptions = [
 ]
 
 export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
- const { t } = useTranslation()
+ const t = useTranslations()
  const [isEditingInfo, setIsEditingInfo] = useState(false)
  const [isEditingBusiness, setIsEditingBusiness] = useState(false)
  const [isLoading, setIsLoading] = useState(false)

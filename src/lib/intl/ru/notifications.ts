@@ -29,30 +29,30 @@ export const notifications = {
   'notifications.content.welcome.title': 'Добро пожаловать в Trudify!',
   'notifications.content.welcome.message': 'Ваш аккаунт успешно создан. Начните с публикации задачи или просмотра рабочих предложений!',
   'notifications.content.applicationReceived.title': 'Новая заявка',
-  'notifications.content.applicationReceived.message': '{{professionalName}} откликнулся на вашу задачу "{{taskTitle}}"',
+  'notifications.content.applicationReceived.message': '{professionalName} откликнулся на вашу задачу "{taskTitle}"',
   'notifications.content.applicationAccepted.title': 'Заявка принята! 🎉',
-  'notifications.content.applicationAccepted.message': 'Ваша заявка на "{{taskTitle}}" была принята {{customerName}}',
+  'notifications.content.applicationAccepted.message': 'Ваша заявка на "{taskTitle}" была принята {customerName}',
   'notifications.content.applicationRejected.title': 'Обновление заявки',
-  'notifications.content.applicationRejected.message': 'Ваша заявка на "{{taskTitle}}" не была выбрана на этот раз. Продолжайте откликаться!',
+  'notifications.content.applicationRejected.message': 'Ваша заявка на "{taskTitle}" не была выбрана на этот раз. Продолжайте откликаться!',
   'notifications.content.taskCompleted.title': 'Задание завершено - Нужен отзыв ⭐',
-  'notifications.content.taskCompleted.message': '"{{taskTitle}}" завершено! Пожалуйста, уделите минуту и оцените работу {{professionalName}}.',
+  'notifications.content.taskCompleted.message': '"{taskTitle}" завершено! Пожалуйста, уделите минуту и оцените работу {professionalName}.',
   'notifications.content.professionalWithdrew.title': 'Профессионал отказался',
-  'notifications.content.professionalWithdrew.message': '{{professionalName}} отказался от вашей задачи "{{taskTitle}}". Задача снова открыта для новых заявок.',
+  'notifications.content.professionalWithdrew.message': '{professionalName} отказался от вашей задачи "{taskTitle}". Задача снова открыта для новых заявок.',
   'notifications.content.removedByCustomer.title': 'Клиент удалил вас из задачи',
-  'notifications.content.removedByCustomer.message': 'Вы были удалены из задачи "{{taskTitle}}" клиентом.{{customerFeedback}}',
+  'notifications.content.removedByCustomer.message': 'Вы были удалены из задачи "{taskTitle}" клиентом.{customerFeedback}',
   'notifications.content.taskCancelled.title': 'Задача отменена',
-  'notifications.content.taskCancelled.message': 'Задача "{{taskTitle}}" была отменена клиентом',
+  'notifications.content.taskCancelled.message': 'Задача "{taskTitle}" была отменена клиентом',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'Посмотреть здесь',
-  'notifications.telegram.welcome': '👋 <b>Добро пожаловать в Trudify, {{userName}}!</b>\n\n🎉 Поздравляем! Ваш аккаунт успешно создан.\n\n✅ Вы будете получать мгновенные уведомления здесь о:\n• Новых заявках на ваши задачи\n• Сообщениях от специалистов\n• Обновлениях и завершениях задач\n\nНачните прямо сейчас:\n📝 Опубликуйте задачу или\n💼 Просмотрите рабочие предложения!',
-  'notifications.telegram.applicationReceived': '✅ <b>Новая заявка!</b>\n\n<b>{{professionalName}}</b> откликнулся на вашу задачу:\n"{{taskTitle}}"\n\n{{link}}',
-  'notifications.telegram.applicationAccepted': '🎉 <b>Заявка принята!</b>\n\nВаша заявка на "{{taskTitle}}" была принята {{customerName}}!{{customerMessageSection}}\n\n<b>Контактная информация:</b>\n{{customerContact}}\n\n{{link}}',
-  'notifications.telegram.taskCompleted': '✅ <b>Задание завершено - Нужен отзыв!</b>\n\nВаше задание "<b>{{taskTitle}}</b>" было завершено специалистом {{professionalName}}.\n\n⭐ <b>Пожалуйста, оставьте отзыв</b>, чтобы помочь другим найти хороших профессионалов.\n\n{{link}}',
-  'notifications.telegram.professionalWithdrew': '⚠️ <b>Профессионал отказался</b>\n\n<b>{{professionalName}}</b> отказался от вашей задачи:\n"{{taskTitle}}"\n\n📋 Ваша задача снова <b>открыта</b> для новых заявок.\n\n👉 <b>Следующие шаги:</b>\n• Проверьте детали задачи\n• Убедитесь, что бюджет конкурентный\n• Быстро отвечайте на новые заявки\n\n🔗 Просмотреть задачу: {{link}}',
-  'notifications.telegram.removedByCustomer': '⚠️ <b>Клиент удалил вас из задачи</b>\n\nВы были удалены из задачи:\n"<b>{{taskTitle}}</b>"{{customerFeedback}}\n\n📋 Задача была <b>открыта снова</b> для новых заявок.\n\n👉 <b>Следующие шаги:</b>\n• Просмотрите другие доступные задачи\n• Откликайтесь на задачи, соответствующие вашим навыкам\n• Сфокусируйтесь на построении позитивных отношений с клиентами\n\n🔗 Просмотреть задачи: {{link}}',
-  'notifications.telegram.taskCancelled': '❌ <b>Задача отменена</b>\n\nЗадача "{{taskTitle}}" была отменена клиентом.\n\nВаша заявка и все обсуждения, связанные с этой задачей, были удалены.\n\n👉 <b>Следующие шаги:</b>\n• Просмотрите другие доступные задачи\n• Откликайтесь на задачи, соответствующие вашим навыкам\n\n🔗 Просмотреть задачи: {{link}}',
-  'notifications.telegram.taskInvitation': '🎯 <b>Новое приглашение на задачу!</b>\n\n<b>{{customerName}}</b> пригласил вас откликнуться на свою задачу:\n\n📋 <b>{{taskTitle}}</b>\n🏷️ Категория: {{taskCategory}}\n\n👉 Посмотреть и откликнуться:\n{{link}}',
+  'notifications.telegram.welcome': '👋 <b>Добро пожаловать в Trudify, {userName}!</b>\n\n🎉 Поздравляем! Ваш аккаунт успешно создан.\n\n✅ Вы будете получать мгновенные уведомления здесь о:\n• Новых заявках на ваши задачи\n• Сообщениях от специалистов\n• Обновлениях и завершениях задач\n\nНачните прямо сейчас:\n📝 Опубликуйте задачу или\n💼 Просмотрите рабочие предложения!',
+  'notifications.telegram.applicationReceived': '✅ <b>Новая заявка!</b>\n\n<b>{professionalName}</b> откликнулся на вашу задачу:\n"{taskTitle}"\n\n{link}',
+  'notifications.telegram.applicationAccepted': '🎉 <b>Заявка принята!</b>\n\nВаша заявка на "{taskTitle}" была принята {customerName}!{customerMessageSection}\n\n<b>Контактная информация:</b>\n{customerContact}\n\n{link}',
+  'notifications.telegram.taskCompleted': '✅ <b>Задание завершено - Нужен отзыв!</b>\n\nВаше задание "<b>{taskTitle}</b>" было завершено специалистом {professionalName}.\n\n⭐ <b>Пожалуйста, оставьте отзыв</b>, чтобы помочь другим найти хороших профессионалов.\n\n{link}',
+  'notifications.telegram.professionalWithdrew': '⚠️ <b>Профессионал отказался</b>\n\n<b>{professionalName}</b> отказался от вашей задачи:\n"{taskTitle}"\n\n📋 Ваша задача снова <b>открыта</b> для новых заявок.\n\n👉 <b>Следующие шаги:</b>\n• Проверьте детали задачи\n• Убедитесь, что бюджет конкурентный\n• Быстро отвечайте на новые заявки\n\n🔗 Просмотреть задачу: {link}',
+  'notifications.telegram.removedByCustomer': '⚠️ <b>Клиент удалил вас из задачи</b>\n\nВы были удалены из задачи:\n"<b>{taskTitle}</b>"{customerFeedback}\n\n📋 Задача была <b>открыта снова</b> для новых заявок.\n\n👉 <b>Следующие шаги:</b>\n• Просмотрите другие доступные задачи\n• Откликайтесь на задачи, соответствующие вашим навыкам\n• Сфокусируйтесь на построении позитивных отношений с клиентами\n\n🔗 Просмотреть задачи: {link}',
+  'notifications.telegram.taskCancelled': '❌ <b>Задача отменена</b>\n\nЗадача "{taskTitle}" была отменена клиентом.\n\nВаша заявка и все обсуждения, связанные с этой задачей, были удалены.\n\n👉 <b>Следующие шаги:</b>\n• Просмотрите другие доступные задачи\n• Откликайтесь на задачи, соответствующие вашим навыкам\n\n🔗 Просмотреть задачи: {link}',
+  'notifications.telegram.taskInvitation': '🎯 <b>Новое приглашение на задачу!</b>\n\n<b>{customerName}</b> пригласил вас откликнуться на свою задачу:\n\n📋 <b>{taskTitle}</b>\n🏷️ Категория: {taskCategory}\n\n👉 Посмотреть и откликнуться:\n{link}',
 
   // Task Detail
   'taskDetail.backToTasks': 'Обратно к задачам',
@@ -132,11 +132,11 @@ export const notifications = {
   'taskDetail.sendReply': 'Отправить ответ',
 
   // Language Info Banner (inline)
-  'taskDetail.languageInfo': 'Автор может предпочитать {{language}}',
+  'taskDetail.languageInfo': 'Автор может предпочитать {language}',
 
   // Language Barrier Warning (deprecated - kept for reference)
   'taskDetail.languageWarning.title': 'Языковая заметка',
-  'taskDetail.languageWarning.message': 'Эта задача опубликована человеком, который может предпочитать общение на {{language}}. Пожалуйста, убедитесь, что вам комфортно с возможными языковыми различиями перед подачей заявки.',
+  'taskDetail.languageWarning.message': 'Эта задача опубликована человеком, который может предпочитать общение на {language}. Пожалуйста, убедитесь, что вам комфортно с возможными языковыми различиями перед подачей заявки.',
   'taskDetail.languageWarning.confirm': 'Понятно, продолжить',
   'taskDetail.languageWarning.cancel': 'Отмена',
 
@@ -144,9 +144,9 @@ export const notifications = {
   'taskDetail.askQuestionDialog.title': 'Задать вопрос',
   'taskDetail.askQuestionDialog.placeholder': 'Что бы вы хотели узнать об этой задаче?',
   'taskDetail.askQuestionDialog.submit': 'Опубликовать вопрос',
-  'taskDetail.askQuestionDialog.characterCount': '{{current}}/{{max}} символов',
-  'taskDetail.askQuestionDialog.minLength': 'Вопрос должен содержать не менее {{min}} символов',
-  'taskDetail.askQuestionDialog.maxLength': 'Вопрос должен содержать не более {{max}} символов',
+  'taskDetail.askQuestionDialog.characterCount': '{current}/{max} символов',
+  'taskDetail.askQuestionDialog.minLength': 'Вопрос должен содержать не менее {min} символов',
+  'taskDetail.askQuestionDialog.maxLength': 'Вопрос должен содержать не более {max} символов',
 
   // Questions Section
   'taskDetail.questions.empty.title': 'Вопросов пока нет',
@@ -187,7 +187,7 @@ export const notifications = {
   'postedTasks.filter.awaitingConfirmation': 'Ожидает подтверждения',
   'postedTasks.filter.completed': 'Завершенные',
   'postedTasks.filter.cancelled': 'Отмененные',
-  'postedTasks.applicationsCount': '{{count}} заявок',
+  'postedTasks.applicationsCount': '{count} заявок',
   'postedTasks.viewApplications': 'Заявки',
   'postedTasks.viewDetails': 'Детали',
   'postedTasks.editTask': 'Изменить',
@@ -224,21 +224,21 @@ export const notifications = {
   'cancelTask.descriptionPlaceholder': 'Пожалуйста, опишите что произошло...',
   'cancelTask.descriptionHint': 'Помогите нам понять ситуацию',
   'cancelTask.confirmButton': 'Отменить задачу',
-  'cancelTask.rateLimit.title': 'Вы можете отменить еще {{remaining}} задач(у) в этом месяце',
-  'cancelTask.rateLimit.message': 'Для предотвращения злоупотреблений пользователи могут отменять до {{max}} задач в месяц',
+  'cancelTask.rateLimit.title': 'Вы можете отменить еще {remaining} задач(у) в этом месяце',
+  'cancelTask.rateLimit.message': 'Для предотвращения злоупотреблений пользователи могут отменять до {max} задач в месяц',
   'cancelTask.rateLimit.lastWarning': 'Это ваша последняя бесплатная отмена в этом месяце. Используйте её с умом!',
   'cancelTask.limitExceeded.title': 'Достигнут месячный лимит отмен',
   'cancelTask.limitExceeded.message': 'Вы достигли лимита отмен на этот месяц. Частые отмены могут повлиять на репутацию вашего аккаунта. Пожалуйста, свяжитесь с поддержкой, если нужна помощь.',
 
   // Customer Remove Professional Dialog
   'customerRemove.title': 'Удалить специалиста из задачи',
-  'customerRemove.subtitle': 'Удаление из: {{taskTitle}}',
+  'customerRemove.subtitle': 'Удаление из: {taskTitle}',
   'customerRemove.professional': 'Специалист',
   'customerRemove.acceptedOn': 'Принят',
   'customerRemove.workingFor': 'Работает',
   'customerRemove.professionalNotification': 'Специалист получит уведомление, и ваша задача будет снова открыта для новых заявок',
   'customerRemove.taskWillReopen': 'Ваша задача будет снова открыта для новых заявок',
-  'customerRemove.limitWarning.title': 'Вы можете удалить еще {{remaining}} специалист(ов) в этом месяце',
+  'customerRemove.limitWarning.title': 'Вы можете удалить еще {remaining} специалист(ов) в этом месяце',
   'customerRemove.limitWarning.message': 'Клиенты могут удалять до 2 специалистов в месяц.',
   'customerRemove.limitExceeded.title': 'Достигнут месячный лимит удалений',
   'customerRemove.limitExceeded.message': 'Вы достигли лимита удалений на этот месяц. Пожалуйста, свяжитесь с поддержкой, если у вас серьезная проблема.',
@@ -256,7 +256,7 @@ export const notifications = {
   // Edit Task Page
   'editTask.title': 'Редактировать задачу',
   'editTask.subtitle': 'Обновите детали задачи, чтобы привлечь больше специалистов',
-  'editTask.editingBanner': 'Редактирование: {{title}}',
+  'editTask.editingBanner': 'Редактирование: {title}',
   'editTask.editingSubtext': 'Внесите изменения, чтобы улучшить свою задачу',
   'editTask.help': 'Нужна помощь? Свяжитесь с нашей службой поддержки',
   'editTask.freeToEdit': 'Бесплатное редактирование',
@@ -272,7 +272,7 @@ export const notifications = {
   'editTask.imageUpload.error': 'Не удалось загрузить изображение',
 
   // Task Hints System
-  'taskHints.noApplications.title': 'Пока нет заявок? Ваша задача открыта уже {{days}} дней',
+  'taskHints.noApplications.title': 'Пока нет заявок? Ваша задача открыта уже {days} дней',
   'taskHints.improveTask': 'Улучшить задачу',
   'taskHints.dismiss': 'Закрыть',
   'taskHints.suggestions.increasePrice': 'Попробуйте увеличить бюджет, чтобы привлечь больше специалистов',
@@ -283,9 +283,9 @@ export const notifications = {
 
   // Email-уведомления
   // 1. Получена заявка
-  'notifications.email.applicationReceived.subject': '{{customer_name}}, у вас новая заявка!',
+  'notifications.email.applicationReceived.subject': '{customer_name}, у вас новая заявка!',
   'notifications.email.applicationReceived.heading': 'Получена новая заявка!',
-  'notifications.email.applicationReceived.message': '{{professional_name}} откликнулся на вашу задачу "{{task_title}}". Проверьте профиль, отзывы и предложение.',
+  'notifications.email.applicationReceived.message': '{professional_name} откликнулся на вашу задачу "{task_title}". Проверьте профиль, отзывы и предложение.',
   'notifications.email.applicationReceived.buttonText': 'Посмотреть заявку',
   'notifications.email.applicationReceived.secondaryButtonText': 'Посмотреть профиль',
   'notifications.email.applicationReceived.infoTitle': 'Детали заявки:',
@@ -294,7 +294,7 @@ export const notifications = {
   // 2. Заявка принята
   'notifications.email.applicationAccepted.subject': 'Ваша заявка принята!',
   'notifications.email.applicationAccepted.heading': 'Поздравляем! Заявка принята',
-  'notifications.email.applicationAccepted.message': 'Ваша заявка на "{{task_title}}" была принята {{customer_name}}!',
+  'notifications.email.applicationAccepted.message': 'Ваша заявка на "{task_title}" была принята {customer_name}!',
   'notifications.email.applicationAccepted.buttonText': 'Посмотреть мою работу',
   'notifications.email.applicationAccepted.infoTitle': 'Контактная информация заказчика:',
   'notifications.email.applicationAccepted.secondaryMessage': 'Приступайте к выполнению задачи и поддерживайте хорошую коммуникацию с заказчиком.',
@@ -303,32 +303,32 @@ export const notifications = {
   'notifications.email.applicationAccepted.contactLabel': 'Контакт',
 
   // 3. Заявка отклонена
-  'notifications.email.applicationRejected.subject': 'Обновление заявки на «{{task_title}}»',
+  'notifications.email.applicationRejected.subject': 'Обновление заявки на «{task_title}»',
   'notifications.email.applicationRejected.heading': 'Заявка не принята',
-  'notifications.email.applicationRejected.message': 'Ваша заявка на "{{task_title}}" не была принята в этот раз. Не расстраивайтесь! Продолжайте откликаться на другие возможности.',
+  'notifications.email.applicationRejected.message': 'Ваша заявка на "{task_title}" не была принята в этот раз. Не расстраивайтесь! Продолжайте откликаться на другие возможности.',
   'notifications.email.applicationRejected.buttonText': 'Посмотреть другие задачи',
   'notifications.email.applicationRejected.secondaryMessage': 'Помните: Каждая заявка - это опыт обучения. Изучайте обратную связь и продолжайте совершенствоваться!',
   'notifications.email.applicationRejected.footerText': 'Вы получили это письмо, потому что откликнулись на задачу в Trudify.',
 
   // 4. Получено сообщение
-  'notifications.email.messageReceived.subject': 'Новое сообщение от {{sender_name}}',
+  'notifications.email.messageReceived.subject': 'Новое сообщение от {sender_name}',
   'notifications.email.messageReceived.heading': 'У вас новое сообщение',
-  'notifications.email.messageReceived.message': '{{sender_name}} отправил вам сообщение о "{{task_title}}"',
+  'notifications.email.messageReceived.message': '{sender_name} отправил вам сообщение о "{task_title}"',
   'notifications.email.messageReceived.buttonText': 'Посмотреть сообщение',
   'notifications.email.messageReceived.infoTitle': 'Предпросмотр сообщения:',
   'notifications.email.messageReceived.secondaryMessage': 'Отвечайте быстро, чтобы поддерживать хорошую коммуникацию и доверие.',
   'notifications.email.messageReceived.footerText': 'Вы получили это письмо, потому что участвуете в задаче в Trudify.',
 
   // 5. Задача завершена
-  'notifications.email.taskCompleted.subject': 'Задача завершена: «{{task_title}}»',
+  'notifications.email.taskCompleted.subject': 'Задача завершена: «{task_title}»',
   'notifications.email.taskCompleted.heading': 'Задача успешно завершена!',
-  'notifications.email.taskCompleted.message': 'Задача "{{task_title}}" была отмечена как завершённая. Пожалуйста, оцените свой опыт и помогите построить доверие в сообществе.',
+  'notifications.email.taskCompleted.message': 'Задача "{task_title}" была отмечена как завершённая. Пожалуйста, оцените свой опыт и помогите построить доверие в сообществе.',
   'notifications.email.taskCompleted.buttonText': 'Оставить отзыв',
   'notifications.email.taskCompleted.secondaryMessage': 'Ваш отзыв помогает другим пользователям найти отличных специалистов (или заказчиков) и улучшает сообщество Trudify.',
   'notifications.email.taskCompleted.footerText': 'Вы получили это письмо, потому что участвовали в задаче в Trudify.',
 
   // 6. Приветственное письмо
-  'notifications.email.welcome.subject': 'Добро пожаловать в Trudify, {{user_name}}!',
+  'notifications.email.welcome.subject': 'Добро пожаловать в Trudify, {user_name}!',
   'notifications.email.welcome.heading': 'Добро пожаловать в Trudify!',
   'notifications.email.welcome.message': 'Поздравляем! Ваш аккаунт успешно создан.',
   'notifications.email.welcome.buttonText': 'Начать',
@@ -337,18 +337,18 @@ export const notifications = {
   'notifications.email.welcome.footerText': 'Вы получили это письмо, потому что создали аккаунт в Trudify.',
 
   // 8. Удалён из задачи
-  'notifications.email.removedFromTask.subject': 'Обновление задачи: «{{task_title}}»',
+  'notifications.email.removedFromTask.subject': 'Обновление задачи: «{task_title}»',
   'notifications.email.removedFromTask.heading': 'Вас удалили из задачи',
-  'notifications.email.removedFromTask.message': 'Вас удалили из задачи "{{task_title}}" заказчиком.{{customerFeedback}} Задача теперь открыта для других специалистов.',
+  'notifications.email.removedFromTask.message': 'Вас удалили из задачи "{task_title}" заказчиком.{customerFeedback} Задача теперь открыта для других специалистов.',
   'notifications.email.removedFromTask.buttonText': 'Посмотреть другие задачи',
   'notifications.email.removedFromTask.secondaryMessage': 'Это не влияет на ваш рейтинг, если нет проблем с качеством или безопасностью. Если у вас есть вопросы, пожалуйста, свяжитесь с поддержкой.',
   'notifications.email.removedFromTask.footerText': 'Вы получили это письмо, потому что работали над задачей в Trudify.',
   'notifications.email.removedFromTask.feedbackLabel': 'Отзыв',
 
   // 9. Приглашение на задачу
-  'notifications.email.taskInvitation.subject': '{{customer_name}} пригласил вас на задачу!',
+  'notifications.email.taskInvitation.subject': '{customer_name} пригласил вас на задачу!',
   'notifications.email.taskInvitation.heading': 'Вас пригласили на задачу!',
-  'notifications.email.taskInvitation.message': '{{customer_name}} пригласил вас откликнуться на их задачу в {{task_category}}.',
+  'notifications.email.taskInvitation.message': '{customer_name} пригласил вас откликнуться на их задачу в {task_category}.',
   'notifications.email.taskInvitation.buttonText': 'Посмотреть задачу',
   'notifications.email.taskInvitation.infoTitle': 'Детали задачи:',
   'notifications.email.taskInvitation.secondaryMessage': 'Вы были выбраны на основе ваших навыков и отзывов. Откликайтесь сейчас, пока задача не заполнена!',

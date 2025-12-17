@@ -529,10 +529,8 @@ export const profile = {
     'Создайте новую задачу и найдите проверенных специалистов для выполнения вашей работы.',
   'auth.loginDescription':
     'Войдите в аккаунт для управления задачами и связи со специалистами.',
-  'auth.email': 'Email адрес',
   'auth.password': 'Пароль',
   'auth.rememberMe': 'Запомнить меня',
-  'auth.forgotPassword': 'Забыли пароль?',
   'auth.loginOrRegister': 'Войти / Регистрация',
   'auth.loginOrRegisterToContinue': 'Для продолжения войдите или зарегистрируйтесь',
   'auth.loginOrRegisterDescription': 'Введите свои данные для доступа к аккаунту или создайте новый.',
@@ -559,7 +557,7 @@ export const profile = {
   'application.message': 'Почему вы лучше всего подходите?',
   'application.messagePlaceholder': 'Поделитесь своим опытом и почему вы идеально подходите для этой задачи...',
   'application.messageInfo': 'Сосредоточьтесь на навыках и опыте. Контактной информацией можно обменяться после принятия заявки.',
-  'application.characterCount': '{{current}}/{{max}} символов',
+  'application.characterCount': '{current}/{max} символов',
   'application.submit': 'Отправить заявку',
   'application.submitting': 'Отправка...',
   'application.cancel': 'Отмена',
@@ -589,12 +587,12 @@ export const profile = {
 
   // Profile Page
   'profile.completion': 'Заполнение профиля',
-  'profile.settings': 'Настройки',
+  'profile.settingsTitle': 'Настройки',
   'profile.tabs.customer': 'Клиент',
   'profile.tabs.professional': 'Специалист',
   'profile.switchToCustomer': 'Перейти в профиль Клиента',
   'profile.switchToProfessional': 'Перейти в профиль Специалиста',
-  'profile.email': 'Email',
+  'profile.emailLabel': 'Email',
   'profile.phone': 'Телефон',
   'profile.location': 'Местоположение',
   'profile.selectCity': 'Выберите ваш город',
@@ -643,9 +641,9 @@ export const profile = {
   'profile.statistics.professional.monthlyEarnings': 'Месячный доход',
   'profile.statistics.professional.activeJobs': 'Активные задачи',
   'profile.statistics.avgResponseTime': 'Среднее время ответа',
-  'profile.statistics.responseTime.minutes': '{{minutes}} мин',
+  'profile.statistics.responseTime.minutes': '{minutes} мин',
   'profile.statistics.responseTime.hour': '1 час',
-  'profile.statistics.responseTime.hours': '{{hours}} часа',
+  'profile.statistics.responseTime.hours': '{hours} часа',
   'profile.professional.acceptanceRate': 'Принятие задач',
 
   // Quick Actions
@@ -765,7 +763,7 @@ export const profile = {
   'profile.professional.form.suggestedSkills': 'Популярные навыки',
   'profile.professional.form.addCustomSkill': 'Добавить пользовательский навык',
   'profile.professional.form.customSkillPlaceholder': 'Введите название навыка',
-  'profile.professional.form.moreSkillsAvailable': 'и еще {{count}}...',
+  'profile.professional.form.moreSkillsAvailable': 'и еще {count}...',
   'profile.professional.form.skillsLimitNotice': 'Мы рекомендуем выбрать топ 10 навыков для лучших результатов.',
   'profile.professional.form.submitting': 'Создание профиля...',
   'profile.professional.form.createProfile': 'Создать профессиональный профиль',
@@ -931,7 +929,7 @@ export const profile = {
   'profile.services.pricePlaceholder': 'напр. 25 €/час',
   'profile.services.descriptionLabel': 'Описание (необязательно)',
   'profile.services.descriptionPlaceholder': 'Краткое описание услуги',
-  'profile.services.helperText': 'Добавьте до {{max}} услуг. Изменения сохраняются автоматически.',
+  'profile.services.helperText': 'Добавьте до {max} услуг. Изменения сохраняются автоматически.',
 
   // Achievement Banner
   'profile.achievement.title': 'У вас отлично получается!',
@@ -951,7 +949,6 @@ export const profile = {
 
   // Notifications
   'notifications.title': 'Уведомления',
-  'notifications.markAllRead': 'Отметить все как прочитанное',
   'notifications.tabAll': 'Все',
   'notifications.tabApplications': 'Заявки',
   'notifications.tabTasks': 'Задачи',
@@ -1004,20 +1001,20 @@ export const profile = {
 
   // Accept Application Dialog
   'acceptApplication.title': 'Принять заявку',
-  'acceptApplication.description': 'Вы собираетесь принять заявку от {{name}}. Пожалуйста, проверьте детали и подтвердите ваше согласие.',
+  'acceptApplication.description': 'Вы собираетесь принять заявку от {name}. Пожалуйста, проверьте детали и подтвердите ваше согласие.',
   'acceptApplication.agreedPrice': 'Согласованная цена',
   'acceptApplication.timeline': 'Сроки',
   'acceptApplication.pleaseConfirm': 'Пожалуйста, подтвердите:',
-  'acceptApplication.agreement.priceTimeline': 'Я согласен с предложенной ценой ({{price}} {{currency}}) и сроками ({{timeline}})',
-  'acceptApplication.agreement.contactSharing': 'Я понимаю, что моя контактная информация будет передана {{name}}',
+  'acceptApplication.agreement.priceTimeline': 'Я согласен с предложенной ценой ({price} {currency}) и сроками ({timeline})',
+  'acceptApplication.agreement.contactSharing': 'Я понимаю, что моя контактная информация будет передана {name}',
   'acceptApplication.agreement.otherApplications': 'Я понимаю, что все остальные ожидающие заявки будут автоматически отклонены',
-  'acceptApplication.warning': 'После принятия этой заявки вы обязуетесь работать с {{name}}. Все остальные заявки будут отклонены автоматически.',
+  'acceptApplication.warning': 'После принятия этой заявки вы обязуетесь работать с {name}. Все остальные заявки будут отклонены автоматически.',
   'acceptApplication.confirm': 'Принять заявку',
   'acceptApplication.cancel': 'Отмена',
 
   // Reject Application Dialog
   'rejectApplication.title': 'Отклонить заявку',
-  'rejectApplication.description': 'Вы собираетесь отклонить заявку от {{name}}. Это действие уведомит специалиста, что вы не будете продолжать с его заявкой.',
+  'rejectApplication.description': 'Вы собираетесь отклонить заявку от {name}. Это действие уведомит специалиста, что вы не будете продолжать с его заявкой.',
   'rejectApplication.reasonTitle': 'Причина отклонения (по желанию)',
   'rejectApplication.reasonHelp': 'Указание причины помогает специалистам улучшить будущие заявки.',
   'rejectApplication.reasons.betterFit': 'Нашел более подходящего кандидата для этой задачи',
@@ -1025,13 +1022,13 @@ export const profile = {
   'rejectApplication.reasons.timelineIssue': 'График мне не подходит',
   'rejectApplication.reasons.changedMind': 'Передумал насчет задачи',
   'rejectApplication.reasons.other': 'Другая причина',
-  'rejectApplication.note': '{{name}} будет уведомлен, что его заявка не выбрана. Вы все еще можете просматривать другие заявки и принять другого специалиста.',
+  'rejectApplication.note': '{name} будет уведомлен, что его заявка не выбрана. Вы все еще можете просматривать другие заявки и принять другого специалиста.',
   'rejectApplication.confirm': 'Отклонить заявку',
   'rejectApplication.cancel': 'Отмена',
 
   // My Applications (Professional Applications Dashboard)
   'myApplications.title': 'Мои заявки',
-  'myApplications.count': '{{count}} заявок',
+  'myApplications.count': '{count} заявок',
   'myApplications.sortBy': 'Сортировать по',
   'myApplications.sortNewest': 'Сначала новые',
   'myApplications.sortOldest': 'Сначала старые',
@@ -1069,7 +1066,7 @@ export const profile = {
 
   'myApplications.detail.waitingResponse': 'Ожидание ответа клиента',
   'myApplications.detail.usuallyResponds': 'Обычно клиенты отвечают в течение 24-48 часов.',
-  'myApplications.detail.otherApplicants': 'Также подали заявки еще {{count}} человек.',
+  'myApplications.detail.otherApplicants': 'Также подали заявки еще {count} человек.',
   'myApplications.detail.customerApproved': 'Клиент одобрил вашу заявку',
   'myApplications.detail.nextSteps': 'Следующие шаги:',
   'myApplications.detail.contactCustomer': 'Свяжитесь с клиентом для уточнения деталей',
@@ -1109,7 +1106,6 @@ export const profile = {
   'taskCompletion.confirmCompletion': 'Подтвердить завершение',
   'taskCompletion.alreadyMarkedByYou': 'Вы уже отметили как завершённую',
   'taskCompletion.alreadyConfirmedByYou': 'Вы уже подтвердили завершение',
-  'taskCompletion.rejectCompletion': 'Отклонить завершение',
 
   // Mark Completed Dialog (Professional)
   'taskCompletion.markDialog.title': 'Отметить задачу как завершённую',
@@ -1118,21 +1114,6 @@ export const profile = {
 
   // Confirm Completion Dialog (Customer)
   'taskCompletion.confirmDialog.title': 'Подтвердить завершение задачи',
-
-  'taskCompletion.confirmDialog.question': 'Вы удовлетворены выполненной работой?',
-  'taskCompletion.confirmDialog.yes': 'Да, я удовлетворён',
-  'taskCompletion.confirmDialog.no': 'Нет, у меня есть замечания',
-
-  // Reject Completion
-  'taskCompletion.reject.title': 'Укажите свои замечания',
-
-  'taskCompletion.reject.notCompleted': 'Работа не завершена',
-  'taskCompletion.reject.poorQuality': 'Качество не соответствует ожиданиям',
-  'taskCompletion.reject.differentScope': 'Работа отличается от согласованной',
-  'taskCompletion.reject.other': 'Другая причина',
-
-  'taskCompletion.reject.disclaimer': 'Эта задача вернётся к статусу "В процессе" и может снова стать видимой для других специалистов, если работа не может быть завершена с текущим специалистом.',
-  'taskCompletion.reject.button': 'Отклонить',
 
   // Pending Confirmation Banners
   'taskCompletion.pending.waitingCustomer': 'Ожидание подтверждения клиента',
@@ -1147,11 +1128,6 @@ export const profile = {
   // Success View
   'taskCompletion.success.title': 'Задача завершена!',
   'taskCompletion.success.message': 'Обе стороны подтвердили завершение этой задачи',
-  'taskCompletion.success.nextSteps': 'Следующие шаги',
-  'taskCompletion.success.step1': 'Оставить отзыв',
-  'taskCompletion.success.step1Description': 'Помогите другим, поделившись своим опытом работы с {{name}}',
-  'taskCompletion.success.step2': 'Просмотреть детали',
-  'taskCompletion.success.step2Description': 'Получите доступ к полному резюме задачи и фотографиям завершения',
   'taskCompletion.success.leaveReview': 'Оставить отзыв',
   'taskCompletion.success.viewDetails': 'Просмотреть детали',
 

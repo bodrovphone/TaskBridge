@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { Trophy, Star, X, PartyPopper } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 interface AchievementBannerProps {
   isTopProfessional: boolean
@@ -20,7 +20,7 @@ export function AchievementBanner({
   isEarlyAdopter,
   earlyAdopterCategories,
 }: AchievementBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [isDismissed, setIsDismissed] = useState(true) // Start true to prevent flash
 
   // Check localStorage on mount
@@ -56,7 +56,7 @@ export function AchievementBanner({
           <button
             onClick={handleDismiss}
             className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-amber-200/50 transition-colors text-amber-600"
-            aria-label={t('common.dismiss', 'Dismiss')}
+            aria-label={t('common.dismiss')}
           >
             <X size={18} />
           </button>
@@ -72,11 +72,11 @@ export function AchievementBanner({
             {/* Content */}
             <div className="flex-1 min-w-0 pr-6">
               <h3 className="text-lg sm:text-xl font-bold text-amber-900 mb-2">
-                {t('profile.achievement.title', "You're doing amazing!")}
+                {t('profile.achievement.title')}
               </h3>
 
               <p className="text-amber-800 text-sm sm:text-base mb-4">
-                {t('profile.achievement.subtitle', 'Thank you for being an outstanding member of our community. Your hard work and dedication make a real difference!')}
+                {t('profile.achievement.subtitle')}
               </p>
 
               {/* Badges earned */}
@@ -84,14 +84,14 @@ export function AchievementBanner({
                 {isTopProfessional && (
                   <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-medium shadow-md">
                     <Trophy size={14} />
-                    <span>{t('professionals.badge.topProfessional', 'Top Professional')}</span>
-                    <span className="text-amber-100">({topProfessionalTasksCount} {t('profile.achievement.tasksCompleted', 'tasks')})</span>
+                    <span>{t('professionals.badge.topProfessionalLabel')}</span>
+                    <span className="text-amber-100">({topProfessionalTasksCount} {t('profile.achievement.tasksCompleted')})</span>
                   </div>
                 )}
                 {isEarlyAdopter && (
                   <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-medium shadow-md">
                     <Star size={14} className="fill-white" />
-                    <span>{t('professionals.badge.earlyAdopter', 'Early Adopter')}</span>
+                    <span>{t('professionals.badge.earlyAdopterLabel')}</span>
                   </div>
                 )}
               </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Chip, Skeleton, Card, CardBody } from '@nextui-org/react'
 import { useParams, useRouter } from 'next/navigation'
 import { Edit, CheckCircle, Clock, Shield, Users } from 'lucide-react'
@@ -27,7 +27,7 @@ interface TaskFormData {
 }
 
 export default function EditTaskPage() {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const params = useParams()
   const router = useRouter()
   const { user, loading: authLoading, authenticatedFetch } = useAuth()
@@ -218,7 +218,7 @@ export default function EditTaskPage() {
             onClick={() => router.push(`/${lang}/tasks/posted`)}
             className="text-blue-600 hover:text-blue-700 underline"
           >
-            {t('common.goBack', 'Go back to my tasks')}
+            {t('common.goBack')}
           </button>
         </div>
       </div>
@@ -228,19 +228,19 @@ export default function EditTaskPage() {
   const trustIndicators = [
     {
       icon: <CheckCircle className="w-5 h-5" />,
-      text: t('editTask.freeToEdit', 'Free to edit'),
+      text: t('editTask.freeToEdit'),
     },
     {
       icon: <Shield className="w-5 h-5" />,
-      text: t('editTask.noPayment', 'No payment until work starts'),
+      text: t('editTask.noPayment'),
     },
     {
       icon: <Clock className="w-5 h-5" />,
-      text: t('editTask.instantSave', 'Changes saved instantly'),
+      text: t('editTask.instantSave'),
     },
     {
       icon: <Users className="w-5 h-5" />,
-      text: t('editTask.prosWillSee', 'Professionals will see updates'),
+      text: t('editTask.prosWillSee'),
     },
   ]
 
@@ -257,16 +257,16 @@ export default function EditTaskPage() {
                 {t('editTask.editingBanner', { title: taskData.title })}
               </p>
               <p className="text-xs text-amber-700">
-                {t('editTask.editingSubtext', 'Make changes to improve your task')}
+                {t('editTask.editingSubtext')}
               </p>
             </div>
           </div>
 
           <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            {t('editTask.title', 'Edit Task')}
+            {t('editTask.title')}
           </h1>
           <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-            {t('editTask.subtitle', 'Update your task details to attract more professionals')}
+            {t('editTask.subtitle')}
           </p>
 
           {/* Trust Indicators */}

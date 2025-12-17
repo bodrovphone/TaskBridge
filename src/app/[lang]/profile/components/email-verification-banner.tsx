@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Card, CardBody, Button } from '@nextui-org/react'
 import { X, Mail } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { toast } from '@/hooks/use-toast'
 import { useAuth } from '@/features/auth'
 
@@ -12,7 +12,7 @@ interface EmailVerificationBannerProps {
 }
 
 export function EmailVerificationBanner({ telegramConnected }: EmailVerificationBannerProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const { authenticatedFetch } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -27,7 +27,7 @@ export function EmailVerificationBanner({ telegramConnected }: EmailVerification
 
       if (!response.ok) {
         toast({
-          title: t('profile.email.verificationFailed', 'Failed to send verification email'),
+          title: t('profile.email.verificationFailed'),
           description: data.error,
           variant: 'destructive',
         })
@@ -41,7 +41,7 @@ export function EmailVerificationBanner({ telegramConnected }: EmailVerification
       }
 
       toast({
-        title: t('profile.email.verificationSent', 'Verification email sent! Check your inbox.'),
+        title: t('profile.email.verificationSent'),
       })
 
       // Trigger page refresh to show the check inbox banner
@@ -49,7 +49,7 @@ export function EmailVerificationBanner({ telegramConnected }: EmailVerification
     } catch (error) {
       console.error('Failed to resend verification email:', error)
       toast({
-        title: t('profile.email.verificationFailed', 'Failed to send verification email'),
+        title: t('profile.email.verificationFailed'),
         variant: 'destructive',
       })
     } finally {
@@ -69,12 +69,12 @@ export function EmailVerificationBanner({ telegramConnected }: EmailVerification
           {/* Content */}
           <div className="flex-1 min-w-0">
             <h3 className="text-lg font-bold text-gray-900 mb-1">
-              📧 {t('profile.email.promptTitle', 'Verify Your Email!')}
+              📧 {t('profile.email.promptTitle')}
             </h3>
             <p className="text-sm text-gray-600 mb-3">
               {telegramConnected
-                ? t('profile.email.promptDescriptionSecurity', 'Verify your email address for account security and to receive important updates about your tasks and applications.')
-                : t('profile.email.promptDescription', 'Verify your email address to receive important notifications about your tasks, applications, and messages.')
+                ? t('profile.email.promptDescriptionSecurity')
+                : t('profile.email.promptDescription')
               }
             </p>
             <Button
@@ -86,7 +86,7 @@ export function EmailVerificationBanner({ telegramConnected }: EmailVerification
               isLoading={isLoading}
               className="hover:scale-105 transition-transform shadow-md font-semibold bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
             >
-              {t('profile.email.sendVerification', 'Send Verification Email')}
+              {t('profile.email.sendVerification')}
             </Button>
           </div>
         </div>

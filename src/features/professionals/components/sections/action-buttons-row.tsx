@@ -2,7 +2,7 @@
 
 import { Button } from "@nextui-org/react";
 import { Share2, UserPlus, Check } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface Professional {
  id: string;
@@ -26,7 +26,7 @@ export default function ActionButtonsRow({
  onShare,
  isShareCopied = false
 }: ActionButtonsRowProps) {
- const { t } = useTranslation();
+ const t = useTranslations();
 
  return (
   <div className="bg-white/80 rounded-2xl p-6 shadow-lg border border-gray-100">
@@ -39,7 +39,7 @@ export default function ActionButtonsRow({
      startContent={<UserPlus size={18} />}
      onClick={onInviteToApply}
     >
-     {t('professionalDetail.actions.suggestMyTask', 'Suggest My Task')}
+     {t('professionalDetail.actions.suggestMyTask')}
     </Button>
 
     {/* Share */}

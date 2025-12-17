@@ -1,14 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 
 interface TypingPlaceholderProps {
  onComplete?: (text: string) => void;
 }
 
 const TypingPlaceholder: React.FC<TypingPlaceholderProps> = ({ onComplete }) => {
- const { t } = useTranslation();
+ const t = useTranslations();
  const [currentText, setCurrentText] = useState('');
  const [currentIndex, setCurrentIndex] = useState(0);
  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import { Button, Input, Popover, PopoverTrigger, PopoverContent, Chip } from '@nextui-org/react'
 import { Wallet, ChevronDown } from 'lucide-react'
 
@@ -11,14 +11,14 @@ interface BudgetFilterProps {
 }
 
 export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   const BUDGET_PRESETS = [
-    { label: t('browseTasks.filters.budgetUnder', 'Under {{amount}} €', { amount: 25 }), min: undefined, max: 25 },
+    { label: t('browseTasks.filters.budgetUnder', { amount: 25 }), min: undefined, max: 25 },
     { label: '25-75 €', min: 25, max: 75 },
     { label: '75-150 €', min: 75, max: 150 },
     { label: '150-250 €', min: 150, max: 250 },
-    { label: t('browseTasks.filters.budgetOver', '{{amount}}+ €', { amount: 250 }), min: 250, max: undefined },
+    { label: t('browseTasks.filters.budgetOver', { amount: 250 }), min: 250, max: undefined },
   ]
   const [isOpen, setIsOpen] = useState(false)
   const [minInput, setMinInput] = useState(value?.min?.toString() || '')
@@ -53,7 +53,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
   const hasValue = value?.min !== undefined || value?.max !== undefined
 
   const getDisplayText = () => {
-    if (!hasValue) return t('browseTasks.filters.budget', 'Budget')
+    if (!hasValue) return t('browseTasks.filters.budget')
 
     if (value?.min !== undefined && value?.max !== undefined) {
       return `${value.min}-${value.max} €`
@@ -62,7 +62,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
     } else if (value?.max !== undefined) {
       return `< ${value.max} €`
     }
-    return t('browseTasks.filters.budget', 'Budget')
+    return t('browseTasks.filters.budget')
   }
 
   return (
@@ -85,11 +85,11 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-semibold text-sm">
-              {t('browseTasks.filters.budget', 'Budget')}
+              {t('browseTasks.filters.budget')}
             </h4>
             {hasValue && (
               <Button size="sm" variant="light" className="text-red-600 hover:bg-red-50" onPress={handleClear}>
-                {t('browseTasks.filters.clear', 'Clear')}
+                {t('browseTasks.filters.clear')}
               </Button>
             )}
           </div>
@@ -111,12 +111,12 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
           {/* Custom Range */}
           <div className="space-y-3">
             <div className="text-sm font-medium text-gray-700">
-              {t('browseTasks.filters.customRange', 'Custom Range')}
+              {t('browseTasks.filters.customRange')}
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Input
                 type="number"
-                label={t('browseTasks.filters.min', 'Min')}
+                label={t('browseTasks.filters.min')}
                 placeholder="0"
                 value={minInput}
                 onValueChange={setMinInput}
@@ -125,7 +125,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
               />
               <Input
                 type="number"
-                label={t('browseTasks.filters.max', 'Max')}
+                label={t('browseTasks.filters.max')}
                 placeholder="∞"
                 value={maxInput}
                 onValueChange={setMaxInput}
@@ -137,7 +137,7 @@ export function BudgetFilter({ value, onChange }: BudgetFilterProps) {
 
           {/* Apply Button */}
           <Button className="w-full bg-blue-600 text-white hover:bg-blue-700" onPress={handleApply}>
-            {t('browseTasks.filters.apply', 'Apply')}
+            {t('browseTasks.filters.apply')}
           </Button>
         </div>
       </PopoverContent>

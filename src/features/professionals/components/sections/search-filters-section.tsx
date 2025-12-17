@@ -6,7 +6,8 @@
 'use client'
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
 import { Search, MapPin } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -25,7 +26,9 @@ export default function SearchFiltersSection({
   professionalsCount,
   isLoading
 }: SearchFiltersSectionProps) {
-  const { t, i18n } = useTranslation();
+  const t = useTranslations();
+  const params = useParams();
+  const currentLocale = (params?.lang as string) || 'bg';
   const { filters, updateFilter } = useProfessionalFilters();
   const { saveLocation } = useSearchLocationPreference();
 
@@ -199,7 +202,7 @@ export default function SearchFiltersSection({
     setDisplayText('');
     setIsDeleting(false);
     setIsPaused(false);
-  }, [i18n.language]);
+  }, [currentLocale]);
 
   return (
     <motion.div
@@ -242,7 +245,7 @@ export default function SearchFiltersSection({
                   }}
                   placeholder={
                     searchQuery
-                      ? t('professionals.search.searching', 'Searching professionals...')
+                      ? t('professionals.search.searching')
                       : `${displayText}${!isPaused ? '|' : ''}`
                   }
                 />
@@ -264,7 +267,7 @@ export default function SearchFiltersSection({
                           {categorySuggestions.length > 0 && (
                             <div className="mb-2">
                               <p className="px-4 pt-3 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                                {t('professionals.search.categories', 'Service Categories')}
+                                {t('professionals.search.categories')}
                               </p>
                               {categorySuggestions.map((category) => (
                                 <Button
@@ -285,7 +288,7 @@ export default function SearchFiltersSection({
                           {citySuggestions.length > 0 && (
                             <div>
                               <p className="px-4 pt-2 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                                {t('professionals.search.cities', 'Cities')}
+                                {t('professionals.search.cities')}
                               </p>
                               {citySuggestions.map((city) => (
                                 <Button
@@ -309,7 +312,7 @@ export default function SearchFiltersSection({
 
               {/* Popular Categories & Cities */}
               <div className="mt-6">
-                <p className="text-sm text-gray-600 mb-3 font-medium">{t('professionals.search.popular', 'Popular')}:</p>
+                <p className="text-sm text-gray-600 mb-3 font-medium">{t('professionals.search.popular')}:</p>
                 <div className="flex flex-wrap gap-3">
                   {/* Category Chips */}
                   {popularCategories.map((category) => {
@@ -360,7 +363,7 @@ export default function SearchFiltersSection({
           <div className="pt-4 border-t border-gray-100">
             <span className="text-sm text-gray-600">
               {isLoading
-                ? t('professionals.results.loading', 'Loading professionals...')
+                ? t('professionals.results.loading')
                 : t('professionals.results.showing', { count: professionalsCount, defaultValue: `Showing ${professionalsCount} professionals` })
               }
             </span>

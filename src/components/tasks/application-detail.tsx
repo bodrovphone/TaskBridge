@@ -13,7 +13,7 @@ import {
   Divider
 } from '@nextui-org/react'
 import { Star, CheckCircle, XCircle, Calendar, Wallet, Award, BadgeCheck, Clock } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState } from 'react'
 import { getTimelineLabel } from '@/lib/utils/timeline'
@@ -33,7 +33,7 @@ export default function ApplicationDetail({
   onAccept,
   onReject
 }: ApplicationDetailProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
   const [selectedImage, setSelectedImage] = useState(0)
 
   if (!application) return null

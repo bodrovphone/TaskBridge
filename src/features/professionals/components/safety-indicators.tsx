@@ -2,7 +2,7 @@
 
 import { Chip, Tooltip } from '@nextui-org/react'
 import { Shield, Phone, Mail, CheckCircle, AlertTriangle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslations } from 'next-intl'
 
 export interface SafetyStatus {
   phoneVerified: boolean
@@ -28,7 +28,7 @@ export function SafetyIndicators({
   mode = 'badges',
   className = ''
 }: SafetyIndicatorsProps) {
-  const { t } = useTranslation()
+  const t = useTranslations()
 
   if (mode === 'compact') {
     // Compact mode: Show only critical indicators

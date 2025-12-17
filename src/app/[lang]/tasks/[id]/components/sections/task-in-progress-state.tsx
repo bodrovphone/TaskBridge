@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Avatar } from "@nextui-org/react";
 import { CheckCircle, Star } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslations } from 'next-intl';
 import { Application } from '@/types/applications';
 import { getCityLabelBySlug } from '@/features/cities';
 
@@ -11,7 +11,7 @@ interface TaskInProgressStateProps {
 }
 
 export default function TaskInProgressState({ acceptedApplication }: TaskInProgressStateProps) {
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   const { professional } = acceptedApplication;
 
@@ -23,10 +23,10 @@ export default function TaskInProgressState({ acceptedApplication }: TaskInProgr
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          {t('taskInProgress.title', 'Task In Progress!')}
+          {t('taskInProgress.title')}
         </h3>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          {t('taskInProgress.description', 'You have accepted an application. Your task is now in progress with a professional.')}
+          {t('taskInProgress.description')}
         </p>
       </div>
 
@@ -41,7 +41,7 @@ export default function TaskInProgressState({ acceptedApplication }: TaskInProgr
             />
             <div className="flex-1">
               <h4 className="text-lg font-semibold text-gray-900 mb-1">
-                {t('taskInProgress.workingWith', 'Working with')} {professional.name}
+                {t('taskInProgress.workingWith')} {professional.name}
               </h4>
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
@@ -62,16 +62,16 @@ export default function TaskInProgressState({ acceptedApplication }: TaskInProgr
           <div className="space-y-2 text-sm">
             {professional.skills?.[0] && (
               <div className="text-gray-700">
-                <span className="font-medium">{t('taskInProgress.specialization', 'Specialization')}:</span> {t(professional.skills[0])}
+                <span className="font-medium">{t('taskInProgress.specialization')}:</span> {t(professional.skills[0])}
               </div>
             )}
             {professional.city && (
               <div className="text-gray-700">
-                <span className="font-medium">{t('taskInProgress.location', 'Location')}:</span> {getCityLabelBySlug(professional.city, t)}
+                <span className="font-medium">{t('taskInProgress.location')}:</span> {getCityLabelBySlug(professional.city, t)}
               </div>
             )}
             <div className="text-gray-700">
-              <span className="font-medium">{t('taskInProgress.agreedPrice', 'Agreed Price')}:</span> {acceptedApplication.proposedPrice} {acceptedApplication.currency}
+              <span className="font-medium">{t('taskInProgress.agreedPrice')}:</span> {acceptedApplication.proposedPrice} {acceptedApplication.currency}
             </div>
           </div>
         </CardBody>
@@ -80,7 +80,7 @@ export default function TaskInProgressState({ acceptedApplication }: TaskInProgr
       {/* Info Message */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-900">
-          {t('taskInProgress.infoMessage', 'All other applications have been automatically rejected. You can track the progress of your task and communicate with the professional through your task management page.')}
+          {t('taskInProgress.infoMessage')}
         </p>
       </div>
     </div>
