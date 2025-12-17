@@ -18,7 +18,7 @@ import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { sendTelegramNotification } from '@/lib/services/telegram-notification'
 import { sendEmailNotification } from '@/lib/services/email-notification'
 import { getUserNotificationChannel } from '@/lib/services/email-notification'
-import { getNotificationContent, getTelegramMessage, getUserLocale, getViewHereText } from '@/lib/utils/notification-i18n'
+import { getNotificationContent, getTelegramMessage, getUserLocale, getViewHereText, getMessageFromText } from '@/lib/utils/notification-i18n'
 import { generateNotificationAutoLoginUrl, type NotificationChannel } from '@/lib/auth/notification-auto-login'
 
 export type NotificationType =
@@ -319,7 +319,8 @@ export async function createNotification(
               // Build customer message section for application accepted notifications
               let customerMessageSection = ''
               if (templateData?.customerMessage) {
-                customerMessageSection = `\n\n<b>Message from ${templateData?.customerName || 'customer'}:</b>\n"${templateData.customerMessage}"`
+                const messageFromText = getMessageFromText(userLocale)
+                customerMessageSection = `\n\n<b>${messageFromText} ${templateData?.customerName || 'customer'}:</b>\n"${templateData.customerMessage}"`
               }
 
               // Prepare template data with localized link

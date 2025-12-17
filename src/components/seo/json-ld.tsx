@@ -36,9 +36,9 @@ export function OrganizationJsonLd() {
       availableLanguage: ['Bulgarian', 'English', 'Russian'],
     },
     sameAs: [
-      // Add social media profiles when available
-      // 'https://facebook.com/trudify',
-      // 'https://instagram.com/trudify',
+      'https://www.instagram.com/trudify_com',
+      'https://www.facebook.com/profile.php?id=61584366488168',
+      'https://www.linkedin.com/company/trudify',
     ],
   }
 

@@ -111,3 +111,12 @@ export function getViewHereText(locale: Locale): string {
   const key = 'notifications.telegram.viewHere' as keyof typeof lang;
   return (lang[key] as string) || 'View here';
 }
+
+/**
+ * Get localized "Message from" text for Telegram notifications
+ */
+export function getMessageFromText(locale: Locale): string {
+  const lang = messages[locale] || messages.en;
+  const key = 'notifications.telegram.messageFrom' as keyof typeof lang;
+  return (lang[key] as string) || 'Message from';
+}

@@ -46,6 +46,7 @@ export const notifications = {
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'View here',
+  'notifications.telegram.messageFrom': 'Message from',
   'notifications.telegram.welcome': '👋 <b>Welcome to Trudify, {userName}!</b>\n\n🎉 Congratulations! Your account has been created successfully.\n\n✅ You\'ll receive instant notifications here for:\n• New applications on your tasks\n• Messages from professionals\n• Task updates and completions\n\nGet started now:\n📝 Post a task or\n💼 Browse work opportunities!',
   'notifications.telegram.applicationReceived': '✅ <b>New Application!</b>\n\n<b>{professionalName}</b> has applied to your task:\n"{taskTitle}"\n\n{link}',
   'notifications.telegram.applicationAccepted': '🎉 <b>Application Accepted!</b>\n\nYour application for "{taskTitle}" has been accepted by {customerName}!{customerMessageSection}\n\n<b>Contact Information:</b>\n{customerContact}\n\n{link}',
