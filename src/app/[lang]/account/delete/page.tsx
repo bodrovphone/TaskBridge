@@ -1,6 +1,9 @@
 import { Metadata } from 'next'
 import { DeleteAccountContent } from './delete-account-content'
 
+// Skip static generation for authenticated pages
+export const dynamic = 'force-dynamic'
+
 interface DeleteAccountPageProps {
   params: Promise<{
     lang: string

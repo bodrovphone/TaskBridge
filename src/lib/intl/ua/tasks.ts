@@ -100,6 +100,7 @@ export const tasks = {
   'browseTasks.results.noTasks.title': 'Завдань не знайдено',
   'browseTasks.results.noTasks.description':
     'Спробуйте змінити фільтри або шукати за іншими критеріями.',
+  'browseTasks.results.noTasks.subtext': 'Нові завдання публікуються щодня!',
   'browseTasks.results.noTasks.clearFilters': 'Очистити фільтри',
   'browseTasks.results.suggestedTasks': 'Популярні завдання, які можуть вас зацікавити',
   'browseTasks.results.suggestedDescription':

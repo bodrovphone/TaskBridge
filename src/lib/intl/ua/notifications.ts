@@ -21,6 +21,7 @@ export const notifications = {
   'notifications.viewApplication': 'Переглянути заявку',
   'notifications.viewMyWork': 'Переглянути мою роботу',
   'notifications.viewTask': 'Переглянути завдання',
+  'notifications.justNow': 'Щойно',
   'notifications.getStarted': 'Почати',
   'notifications.customerContact': 'Контактна інформація замовника',
   'notifications.customerMessage': 'Повідомлення від замовника',

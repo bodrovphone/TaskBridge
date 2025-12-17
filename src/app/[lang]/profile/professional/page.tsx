@@ -1,6 +1,9 @@
 import { Metadata } from 'next'
 import { ProfessionalProfilePageContent } from './components/professional-profile-page-content'
 
+// Skip static generation for authenticated pages
+export const dynamic = 'force-dynamic'
+
 interface ProfessionalProfilePageProps {
   params: Promise<{
     lang: string

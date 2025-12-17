@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth';
@@ -13,19 +13,26 @@ const TOAST_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
 export function TelegramConnectionToast() {
   const t = useTranslations();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const params = useParams();
   const { user, profile } = useAuth();
   const [hasShownToast, setHasShownToast] = useState(false);
   const currentLocale = (params?.lang as string) || 'bg';
+  // Store searchParams check result in ref to avoid re-checking
+  const isNotificationSessionRef = useRef<boolean | null>(null);
 
   useEffect(() => {
+    // Check for notification session client-side only (once)
+    if (isNotificationSessionRef.current === null && typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      isNotificationSessionRef.current = !!searchParams.get('notificationSession');
+    }
+
     const checkAndShowToast = () => {
       // Only show once per session
       if (hasShownToast) return;
 
       // Don't show on magic link sessions (user just clicked notification link)
-      if (searchParams.get('notificationSession')) return;
+      if (isNotificationSessionRef.current) return;
 
       // Check if toast was recently dismissed
       const dismissedTimestamp = localStorage.getItem(TELEGRAM_TOAST_DISMISSED_KEY);
@@ -108,7 +115,7 @@ export function TelegramConnectionToast() {
     }, 5000);
 
     return () => clearTimeout(timeoutId);
-  }, [hasShownToast, user, profile, t, currentLocale, router, searchParams]);
+  }, [hasShownToast, user, profile, t, currentLocale, router]);
 
   return null; // This component doesn't render anything
 }

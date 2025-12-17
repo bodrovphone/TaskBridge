@@ -74,6 +74,7 @@ export const applications = {
 
   // Applications Management
   'applications.title': 'Applications',
+  'applications.apply.title': 'Apply for Task',
   'applications.count': 'applications',
   'applications.sortBy': 'Sort by',
   'applications.sortNewest': 'Newest First',

@@ -21,6 +21,7 @@ export const notifications = {
   'notifications.viewApplication': 'View Application',
   'notifications.viewMyWork': 'View My Work',
   'notifications.viewTask': 'View Task',
+  'notifications.justNow': 'Just now',
   'notifications.getStarted': 'Get Started',
   'notifications.customerContact': 'Customer Contact Information',
   'notifications.customerMessage': 'Message from customer',

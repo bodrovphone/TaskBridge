@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
@@ -41,18 +41,23 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
   const t = useTranslations()
   const params = useParams()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const router = useRouter()
   const { profile, loading } = useAuth()
 
   const [showTip, setShowTip] = useState(false)
+  const [forceShow, setForceShow] = useState(false)
   const wrapperRef = useRef<HTMLSpanElement>(null)
 
   const currentLocale = (params?.lang as SupportedLocale) || 'bg'
   const preferredLanguage = profile?.preferredLanguage as PreferredLanguage | undefined
 
-  // Check for force-show param (for testing)
-  const forceShow = searchParams.get('showLangPrompt') === '1'
+  // Check for force-show param (for testing) - client-side only
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search)
+      setForceShow(searchParams.get('showLangPrompt') === '1')
+    }
+  }, [])
 
   // Check if this element is visible (not hidden by CSS)
   const isVisible = useCallback(() => {

@@ -21,6 +21,7 @@ export const notifications = {
   'notifications.viewApplication': 'Към заявката',
   'notifications.viewMyWork': 'Моята работа',
   'notifications.viewTask': 'Към задачата',
+  'notifications.justNow': 'Току-що',
   'notifications.getStarted': 'Започнете',
   'notifications.customerContact': 'Контактна информация на клиента',
   'notifications.customerMessage': 'Съобщение от клиента',

@@ -100,6 +100,7 @@ export const tasks = {
   'browseTasks.results.noTasks.title': 'Няма намерени задачи',
   'browseTasks.results.noTasks.description':
     'Опитайте да промените филтрите или да търсите по различни критерии.',
+  'browseTasks.results.noTasks.subtext': 'Нови задачи се публикуват всеки ден!',
   'browseTasks.results.noTasks.clearFilters': 'Изчисти филтрите',
   'browseTasks.results.suggestedTasks':
     'Популярни задачи, които може да ви харесат',

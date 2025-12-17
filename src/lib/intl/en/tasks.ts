@@ -100,6 +100,7 @@ export const tasks = {
   'browseTasks.results.noTasks.title': 'No tasks found',
   'browseTasks.results.noTasks.description':
     'Try changing the filters or searching by different criteria.',
+  'browseTasks.results.noTasks.subtext': 'New tasks are posted every day!',
   'browseTasks.results.noTasks.clearFilters': 'Clear filters',
   'browseTasks.results.suggestedTasks': 'Popular Tasks You Might Like',
   'browseTasks.results.suggestedDescription':

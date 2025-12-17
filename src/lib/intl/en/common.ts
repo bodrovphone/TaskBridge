@@ -45,6 +45,8 @@ export const common = {
   'common.reviews': 'reviews',
   'common.tasksCompleted': 'tasks completed',
   'common.newProfessional': 'New on Trudify',
+  'common.negotiable': 'Negotiable',
+  'common.loading': 'Loading...',
 
   // Countries
   'common.country.bulgaria': 'Bulgaria',

@@ -4,6 +4,9 @@ import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale } from '@/lib/constants/locales'
 import CreateTaskContent from './create-task-content'
 
+// Skip static generation for authenticated pages
+export const dynamic = 'force-dynamic'
+
 interface CreateTaskPageProps {
   params: Promise<{ lang: string }>
 }

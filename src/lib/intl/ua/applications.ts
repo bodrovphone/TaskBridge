@@ -74,6 +74,7 @@ export const applications = {
 
   // Applications Management
   'applications.title': 'Заявки',
+  'applications.apply.title': 'Подати заявку на завдання',
   'applications.count': 'заявок',
   'applications.sortBy': 'Сортувати',
   'applications.sortNewest': 'Спочатку нові',
