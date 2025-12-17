@@ -98,9 +98,10 @@ export default function SearchFiltersSection({
   if (trimmedQuery.length >= 2) {
    // Clear category filter when doing text search to avoid confusion
    if (filters.category) {
-    updateFilter('category', undefined);
+    updateFilter('category', undefined, false, true);
    }
-   updateFilter('q', trimmedQuery);
+   // Pass skipScrollRestore=true to avoid race condition with scrollToResults
+   updateFilter('q', trimmedQuery, false, true);
    setShowSuggestions(false);
    scrollToResults();
   }
