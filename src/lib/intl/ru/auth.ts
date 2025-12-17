@@ -10,7 +10,7 @@ export const auth = {
     'Задайте вопрос клиенту перед тем как откликнуться на задачу.',
   'auth.createTaskDescription':
     'Создайте новую задачу и найдите проверенных специалистов для выполнения вашей работы.',
-  'auth.joinAsProfessional': 'Присоединиться как специалист',
+  'auth.joinAsProfessional': 'Стать специалистом',
   'auth.joinAsProfessionalDescription':
     'Начните зарабатывать, предлагая свои навыки и услуги клиентам в вашем регионе.',
   'auth.loginDescription':

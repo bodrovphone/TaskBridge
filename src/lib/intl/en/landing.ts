@@ -1,6 +1,6 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
-  'landing.hero.badge': 'First Bulgarian Platform for All Services',
+  'landing.hero.badge': '#1 Service Platform in Bulgaria',
   'landing.hero.title': 'Find a Specialist or Find Work',
   'landing.hero.subtitle':
     "Whether you need a handyman, a cleaner, a tutor, or any other help — post your task and receive offers from verified professionals. You pick the best one.\n\nOr if you're looking to earn — browse tasks that match your skills, apply with your offer, and work on your own terms. No middlemen, no complicated fees.",
@@ -144,7 +144,7 @@ export const landing = {
   'landing.cta.subtitle': 'Be part of the community from day one',
   'landing.cta.postTask': 'Post a Task',
   'landing.cta.joinProfessionals': 'Join as Professional',
-  'landing.cta.freeToJoin': 'Free to join, no hidden fees',
+  'landing.cta.freeToJoin': 'Free, no fees',
   'landing.cta.stats.completedTasks': 'Service Categories',
   'landing.cta.stats.activeSpecialists': 'Bulgarian Cities',
   'landing.cta.stats.averageRating': 'Community Trust',

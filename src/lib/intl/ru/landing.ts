@@ -1,6 +1,6 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
-  'landing.hero.badge': 'Первая болгарская платформа для всех услуг',
+  'landing.hero.badge': 'Платформа услуг #1 в Болгарии',
   'landing.hero.title': 'Найди специалиста или найди работу',
   'landing.hero.subtitle':
     'Нужен сантехник, уборщик, репетитор или другая помощь? Опубликуй задачу и получи предложения от проверенных специалистов. Ты выбираешь лучшее.\n\nИли если хочешь заработать — просматривай доступные задачи, подавай заявку со своим предложением и работай по своему графику. Без посредников, без сложных комиссий.',
@@ -145,7 +145,7 @@ export const landing = {
   'landing.cta.subtitle': 'Станьте частью сообщества с первого дня',
   'landing.cta.postTask': 'Создать задачу',
   'landing.cta.joinProfessionals': 'Стать специалистом',
-  'landing.cta.freeToJoin': 'Бесплатное присоединение, без скрытых комиссий',
+  'landing.cta.freeToJoin': 'Бесплатно, без комиссий',
   'landing.cta.stats.completedTasks': 'Категории услуг',
   'landing.cta.stats.activeSpecialists': 'Болгарские города',
   'landing.cta.stats.averageRating': 'Доверие сообщества',
