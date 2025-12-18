@@ -21,10 +21,10 @@ const messages = {
 
 /**
  * Simple template string interpolation
- * Replaces {{key}} placeholders with values from data object
+ * Replaces {key} placeholders with values from data object (next-intl format)
  */
 function interpolate(template: string, data: Record<string, any>): string {
-  return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+  return template.replace(/\{(\w+)\}/g, (match, key) => {
     return data[key] !== undefined ? String(data[key]) : match;
   });
 }
