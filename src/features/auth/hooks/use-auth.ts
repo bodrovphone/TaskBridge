@@ -6,7 +6,7 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { User as SupabaseUser } from '@supabase/supabase-js'
 import type { UserProfile } from '@/server/domain/user/user.types'
 
@@ -36,6 +36,9 @@ export function useAuth(): UseAuthReturn {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [notificationToken, setNotificationToken] = useState<string | null>(null)
+
+  // Ref to track if user is authenticated (for use in callbacks/intervals)
+  const isAuthenticatedRef = useRef(false)
 
   // Note: We no longer create a Supabase client here to avoid CORS issues
   // All auth operations go through our API routes
@@ -119,7 +122,73 @@ export function useAuth(): UseAuthReturn {
   }, [])
 
   /**
-   * Initialize auth state
+   * Check and update auth state from API
+   */
+  const checkAuthState = useCallback(async () => {
+    try {
+      const response = await fetch('/api/auth/profile')
+
+      if (response.ok) {
+        const data = await response.json()
+        const userObj: SupabaseUser = {
+          id: data.user.id,
+          email: data.user.email,
+          app_metadata: {},
+          user_metadata: {},
+          aud: 'authenticated',
+          created_at: data.user.createdAt || new Date().toISOString(),
+        }
+        setUser(userObj)
+        setProfile(data.user)
+        isAuthenticatedRef.current = true
+        return true
+      } else if (response.status === 404) {
+        // 404 means auth user exists but no profile - create it
+        console.log('[useAuth] Profile not found, creating...')
+        const createResponse = await fetch('/api/auth/profile', {
+          method: 'POST',
+        })
+
+        if (createResponse.ok) {
+          const data = await createResponse.json()
+          const userObj: SupabaseUser = {
+            id: data.user.id,
+            email: data.user.email,
+            app_metadata: {},
+            user_metadata: {},
+            aud: 'authenticated',
+            created_at: data.user.createdAt || new Date().toISOString(),
+          }
+          setUser(userObj)
+          setProfile(data.user)
+          isAuthenticatedRef.current = true
+          console.log('[useAuth] Profile created successfully')
+          return true
+        } else {
+          console.error('[useAuth] Failed to create profile:', await createResponse.text())
+          setUser(null)
+          setProfile(null)
+          isAuthenticatedRef.current = false
+          return false
+        }
+      } else {
+        // 401 or other error - not authenticated
+        setUser(null)
+        setProfile(null)
+        isAuthenticatedRef.current = false
+        return false
+      }
+    } catch (err) {
+      console.error('[useAuth] Error checking auth status:', err)
+      setUser(null)
+      setProfile(null)
+      isAuthenticatedRef.current = false
+      return false
+    }
+  }, [])
+
+  /**
+   * Initialize auth state and set up listeners
    */
   useEffect(() => {
     // Check for notification session token in URL
@@ -134,71 +203,62 @@ export function useAuth(): UseAuthReturn {
       }
     }
 
-    // Check auth via our API route instead of directly calling Supabase
-    fetch('/api/auth/profile')
-      .then(async (response) => {
-        if (response.ok) {
-          const data = await response.json()
-          // Create a minimal user object from profile data
-          const userObj: SupabaseUser = {
-            id: data.user.id,
-            email: data.user.email,
-            app_metadata: {},
-            user_metadata: {},
-            aud: 'authenticated',
-            created_at: data.user.createdAt || new Date().toISOString(),
-          }
-          setUser(userObj)
-          setProfile(data.user)
-          setLoading(false)
-        } else if (response.status === 404) {
-          // 404 means auth user exists but no profile - create it
-          console.log('[useAuth] Profile not found, creating...')
-          try {
-            const createResponse = await fetch('/api/auth/profile', {
-              method: 'POST',
-            })
+    // Initial auth check
+    checkAuthState().finally(() => setLoading(false))
 
-            if (createResponse.ok) {
-              const data = await createResponse.json()
-              const userObj: SupabaseUser = {
-                id: data.user.id,
-                email: data.user.email,
-                app_metadata: {},
-                user_metadata: {},
-                aud: 'authenticated',
-                created_at: data.user.createdAt || new Date().toISOString(),
-              }
-              setUser(userObj)
-              setProfile(data.user)
-              console.log('[useAuth] Profile created successfully')
-            } else {
-              console.error('[useAuth] Failed to create profile:', await createResponse.text())
-              setUser(null)
-              setProfile(null)
-            }
-          } catch (err) {
-            console.error('[useAuth] Error creating profile:', err)
-            setUser(null)
-            setProfile(null)
-          }
-          setLoading(false)
-        } else {
-          // 401 or other error - not authenticated
+    // Set up Supabase auth state change listener for token refresh
+    const supabase = createClient()
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('[useAuth] Auth state changed:', event)
+
+        if (event === 'TOKEN_REFRESHED') {
+          console.log('[useAuth] Token refreshed, updating state...')
+          await checkAuthState()
+        } else if (event === 'SIGNED_OUT') {
           setUser(null)
           setProfile(null)
-          setLoading(false)
+          isAuthenticatedRef.current = false
+        } else if (event === 'SIGNED_IN') {
+          await checkAuthState()
         }
-      })
-      .catch((err) => {
-        console.error('[useAuth] Error checking auth status:', err)
-        setUser(null)
-        setProfile(null)
-        setLoading(false)
-      })
+      }
+    )
 
-    // Note: We no longer use onAuthStateChange to avoid CORS issues
-    // Auth state changes will be detected when components refetch data after login/logout
+    // Refresh session when tab becomes visible (handles returning after idle)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isAuthenticatedRef.current) {
+        console.log('[useAuth] Tab visible, refreshing session...')
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          if (session) {
+            // Session is valid, just refresh the profile to sync state
+            checkAuthState()
+          } else {
+            // Session expired, clear auth state
+            console.log('[useAuth] Session expired')
+            setUser(null)
+            setProfile(null)
+            isAuthenticatedRef.current = false
+          }
+        })
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Periodic session refresh every 10 minutes (Supabase tokens expire in 1 hour)
+    const refreshInterval = setInterval(() => {
+      if (isAuthenticatedRef.current) {
+        console.log('[useAuth] Periodic session refresh...')
+        supabase.auth.getSession()
+      }
+    }, 10 * 60 * 1000) // 10 minutes
+
+    return () => {
+      subscription.unsubscribe()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      clearInterval(refreshInterval)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Run only once on mount
 
@@ -404,7 +464,9 @@ export function useAuth(): UseAuthReturn {
         return { error: data.error }
       }
 
+      setUser(null)
       setProfile(null)
+      isAuthenticatedRef.current = false
       return { error: null }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to sign out. Please try again.'
