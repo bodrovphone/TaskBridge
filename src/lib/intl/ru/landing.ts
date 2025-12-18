@@ -144,7 +144,7 @@ export const landing = {
   'landing.cta.title': 'Готовы начать?',
   'landing.cta.subtitle': 'Станьте частью сообщества с первого дня',
   'landing.cta.postTask': 'Создать задачу',
-  'landing.cta.joinProfessionals': 'Стать специалистом',
+  'landing.cta.joinProfessionals': 'Я специалист',
   'landing.cta.freeToJoin': 'Бесплатно, без комиссий',
   'landing.cta.stats.completedTasks': 'Категории услуг',
   'landing.cta.stats.activeSpecialists': 'Болгарские города',

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
@@ -17,6 +17,7 @@ import CategoryCard from '@/components/ui/category-card';
 import { MAIN_CATEGORIES } from '@/features/categories';
 import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
+import { useAuth } from '@/features/auth';
 
 interface Task {
   id: string
@@ -75,6 +76,19 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
  const isDesktop = useIsDesktop();
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
+ const { user, profile } = useAuth();
+ const isAuthenticated = !!user && !!profile;
+
+ // Handler for "Join as Professional" button
+ const handleJoinAsProfessional = useCallback(() => {
+  if (isAuthenticated) {
+   // Navigate to professional profile page
+   router.push(`/${currentLocale}/profile/professional`);
+  } else {
+   // Open auth slideover for unauthenticated users
+   setIsAuthSlideOverOpen(true);
+  }
+ }, [isAuthenticated, router, currentLocale]);
 
  // Use create task hook for auth checking and review enforcement
  const {
@@ -333,22 +347,22 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
        </p>
        
        {/* Enhanced Stats Row */}
-       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 max-w-5xl mx-auto">
-        <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">{t('landing.cta.stats.completedTasksValue')}</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.completedTasks')}</div>
+       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-16 max-w-5xl mx-auto px-2 sm:px-0">
+        <div className="group text-center bg-white/10 rounded-2xl p-4 sm:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
+         <div className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">{t('landing.cta.stats.completedTasksValue')}</div>
+         <div className="text-blue-200 text-xs sm:text-sm lg:text-base font-semibold leading-tight">{t('landing.cta.stats.completedTasks')}</div>
         </div>
-        <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">{t('landing.cta.stats.activeSpecialistsValue')}</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.activeSpecialists')}</div>
+        <div className="group text-center bg-white/10 rounded-2xl p-4 sm:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
+         <div className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">{t('landing.cta.stats.activeSpecialistsValue')}</div>
+         <div className="text-blue-200 text-xs sm:text-sm lg:text-base font-semibold leading-tight">{t('landing.cta.stats.activeSpecialists')}</div>
         </div>
-        <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">{t('landing.cta.stats.averageRatingValue')}</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.averageRating')}</div>
+        <div className="group text-center bg-white/10 rounded-2xl p-4 sm:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
+         <div className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">{t('landing.cta.stats.averageRatingValue')}</div>
+         <div className="text-blue-200 text-xs sm:text-sm lg:text-base font-semibold leading-tight">{t('landing.cta.stats.averageRating')}</div>
         </div>
-        <div className="group text-center bg-white/10 rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-         <div className="text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">{t('landing.cta.stats.contractTemplatesValue')}</div>
-         <div className="text-blue-200 text-sm lg:text-base font-semibold">{t('landing.cta.stats.contractTemplates')}</div>
+        <div className="group text-center bg-white/10 rounded-2xl p-4 sm:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
+         <div className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">{t('landing.cta.stats.contractTemplatesValue')}</div>
+         <div className="text-blue-200 text-xs sm:text-sm lg:text-base font-semibold leading-tight">{t('landing.cta.stats.contractTemplates')}</div>
         </div>
        </div>
        
@@ -365,7 +379,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
          size="lg"
          variant="outline"
          className="group w-full sm:w-auto border-2 border-white/30 text-white bg-white/10 hover:bg-white/20 hover:border-white/50 transform hover:scale-105 transition-all duration-300 px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-xl font-bold rounded-2xl"
-         onClick={() => setIsAuthSlideOverOpen(true)}
+         onClick={handleJoinAsProfessional}
         >
          <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.cta.joinProfessionals')}
