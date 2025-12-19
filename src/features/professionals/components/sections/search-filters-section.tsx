@@ -388,7 +388,13 @@ export default function SearchFiltersSection({
                     return (
                       <Chip
                         key={category.slug}
-                        onClick={() => handleCategorySelect(category.slug)}
+                        as="button"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleCategorySelect(category.slug);
+                        }}
                         className={`cursor-pointer bg-gradient-to-r ${colorClasses} border font-medium transition-all duration-200 hover:scale-105 hover:shadow-md`}
                         startContent={Icon ? <Icon className="w-4 h-4" /> : undefined}
                         variant="flat"
@@ -403,7 +409,13 @@ export default function SearchFiltersSection({
                     return (
                       <Chip
                         key={city.slug}
-                        onClick={() => handleCitySelect(city.slug, city.label)}
+                        as="button"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleCitySelect(city.slug, city.label);
+                        }}
                         className="cursor-pointer bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 text-emerald-700 hover:from-emerald-100 hover:to-emerald-200 font-medium transition-all duration-200 hover:scale-105 hover:shadow-md"
                         startContent={<MapPin className="w-4 h-4" />}
                         variant="flat"
