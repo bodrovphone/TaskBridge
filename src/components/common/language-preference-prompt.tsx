@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
 import { saveUserLocalePreference } from '@/lib/utils/client-locale'
 import { replaceLocaleInPathname } from '@/lib/utils/url-locale'
@@ -19,6 +18,14 @@ const NATIVE_LANGUAGE_NAMES: Record<PreferredLanguage, string> = {
   bg: 'български',
   ru: 'русский',
   ua: 'українська',
+}
+
+// Language prompt translations in each language (shown in user's PREFERRED language)
+const LANGUAGE_PROMPT_TRANSLATIONS: Record<PreferredLanguage, { title: string; switch: string }> = {
+  en: { title: 'Switch to {language}?', switch: 'Yes, switch' },
+  bg: { title: 'Превключи на {language}?', switch: 'Да, превключи' },
+  ru: { title: 'Переключить на {language}?', switch: 'Да, переключить' },
+  ua: { title: 'Переключити на {language}?', switch: 'Так, переключити' },
 }
 
 interface LanguagePreferencePromptProps {
@@ -38,7 +45,6 @@ interface LanguagePreferencePromptProps {
  * Testing: Add ?showLangPrompt=1 to URL to force show the prompt
  */
 export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptProps) {
-  const t = useTranslations()
   const params = useParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -142,9 +148,14 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
     ? NATIVE_LANGUAGE_NAMES[preferredLanguage]
     : ''
 
-  // Note: In next-intl, translations are determined by URL locale
-  // The prompt will show in current locale (user can still understand it)
-  const preferredT = t
+  // Get translations in the user's PREFERRED language (not current URL locale)
+  // This ensures the prompt is shown in a language the user understands
+  const promptTranslations = preferredLanguage
+    ? LANGUAGE_PROMPT_TRANSLATIONS[preferredLanguage]
+    : LANGUAGE_PROMPT_TRANSLATIONS.en
+
+  const promptTitle = promptTranslations.title.replace('{language}', nativeLanguageName)
+  const promptSwitch = promptTranslations.switch
 
   return (
     <Tip
@@ -152,9 +163,9 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
       onOpenChange={(open) => !open && handleDismiss()}
       onDismiss={handleDismiss}
       onAction={handleSwitch}
-      title={preferredT('languagePrompt.title', { language: nativeLanguageName })}
+      title={promptTitle}
       description=""
-      dismissText={preferredT('languagePrompt.switch')}
+      dismissText={promptSwitch}
       variant="primary"
       side="bottom"
       align="center"
