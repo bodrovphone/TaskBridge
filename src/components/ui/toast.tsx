@@ -15,8 +15,9 @@ const ToastViewport = React.forwardRef<
   ref={ref}
   className={cn(
    // z-[100001] to be above NextUI modals (which use z-index up to 100000)
-   // bottom-0 on mobile for better visibility (users often miss top toasts)
-   "fixed bottom-0 z-[100001] flex max-h-screen w-full flex-col p-4 sm:right-0 sm:flex-col md:max-w-[420px]",
+   // bottom-20 on mobile to stay above Safari toolbar and provide breathing room
+   // Uses safe-area-inset-bottom for iOS notch/home indicator
+   "fixed bottom-20 z-[100001] flex max-h-screen w-full flex-col p-4 pb-[env(safe-area-inset-bottom)] sm:right-0 sm:bottom-0 sm:flex-col md:max-w-[420px]",
    className
   )}
   {...props}
