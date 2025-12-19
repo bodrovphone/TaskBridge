@@ -379,8 +379,11 @@ export function useAuth(): UseAuthReturn {
       // The callback will read this cookie if the query param is lost during OAuth flow
       document.cookie = `NEXT_LOCALE=${pathLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
 
-      // Pass locale in redirect URL so callback can preserve it
-      const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}`
+      // Store the current page URL to redirect back after auth
+      const currentPageUrl = window.location.href
+
+      // Pass locale and redirect URL so callback can redirect back to current page
+      const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}&next=${encodeURIComponent(currentPageUrl)}`
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -418,8 +421,11 @@ export function useAuth(): UseAuthReturn {
       // The callback will read this cookie if the query param is lost during OAuth flow
       document.cookie = `NEXT_LOCALE=${pathLocale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
 
-      // Pass locale in redirect URL so callback can preserve it
-      const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}`
+      // Store the current page URL to redirect back after auth
+      const currentPageUrl = window.location.href
+
+      // Pass locale and redirect URL so callback can redirect back to current page
+      const redirectTo = `${window.location.origin}/auth/callback?locale=${pathLocale}&next=${encodeURIComponent(currentPageUrl)}`
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',

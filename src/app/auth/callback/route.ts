@@ -80,14 +80,7 @@ export async function GET(request: NextRequest) {
       return createRedirectWithLocale(`${origin}/${redirectLocale}?error=auth_error`)
     }
 
-    // Check if this is a password reset flow (indicated by 'next' parameter)
-    if (next && data?.user) {
-      console.log('[Auth Callback] Password reset flow detected, redirecting to:', next)
-      // 'next' is already a full URL, use it directly
-      return NextResponse.redirect(next)
-    }
-
-    // Create or sync user profile for OAuth users
+    // Create or sync user profile for OAuth users FIRST (before redirect)
     // This is CRITICAL - without this, the user won't have a profile in the users table
     if (data?.user) {
       try {
@@ -123,6 +116,18 @@ export async function GET(request: NextRequest) {
         console.error('[Auth Callback] Error creating/syncing profile:', profileError)
         // Don't fail the auth flow - user can retry profile creation later
       }
+    }
+
+    // Redirect to 'next' URL if provided (OAuth flow or password reset)
+    if (next && data?.user) {
+      console.log('[Auth Callback] Redirecting to next URL:', next)
+      // Decode the URL if it was encoded
+      const decodedNext = decodeURIComponent(next)
+      // Ensure it's a same-origin URL for security
+      if (decodedNext.startsWith(origin) || decodedNext.startsWith('/')) {
+        return createRedirectWithLocale(decodedNext)
+      }
+      console.warn('[Auth Callback] Blocked redirect to external URL:', decodedNext)
     }
   }
 

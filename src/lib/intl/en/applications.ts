@@ -303,6 +303,9 @@ export const applications = {
   'myWork.viewReview': 'View Review',
   'myWork.withdrawFromTask': 'Withdraw from Task',
   'myWork.leaveReview': 'Leave Review',
+  'myWork.auth.title': 'Sign in to view your work',
+  'myWork.auth.description': 'This page shows your active tasks and completed work as a professional. Sign in to manage your assignments and track your progress.',
+  'myWork.auth.hint': 'Are you a professional? Sign in to see tasks you\'ve been hired for.',
 
   // Professional Withdrawal from Accepted Task
   'professionalWithdraw.title': 'Withdraw from Task',

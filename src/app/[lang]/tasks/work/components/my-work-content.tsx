@@ -8,6 +8,8 @@ import { Briefcase, Calendar, Mail, MapPin, User, Banknote, Send, AlertCircle, L
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
 import { PhoneContactActions } from '@/components/ui/phone-contact-actions'
 import { ProfessionalWithdrawDialog } from '@/components/tasks/professional-withdraw-dialog'
+import { AuthRequiredBanner } from '@/components/common/auth-required-banner'
+import { useAuth } from '@/features/auth'
 import { getCityLabelBySlug } from '@/features/cities'
 import { useWorkTasks, type WorkTask } from '../hooks/use-work-tasks'
 
@@ -44,6 +46,7 @@ type WorkFilter = 'in_progress' | 'completed'
 export function MyWorkContent({ lang }: MyWorkContentProps) {
   const t = useTranslations()
   const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
   const [selectedFilter, setSelectedFilter] = useState<WorkFilter>('in_progress')
   const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false)
   const [selectedTaskForCompletion, setSelectedTaskForCompletion] = useState<WorkTask | null>(null)
@@ -59,8 +62,37 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const withdrawalsThisMonth = 0 // Mock data
   const maxWithdrawalsPerMonth = 2 // As per PRD
 
-  // Fetch accepted applications from API
+  // Fetch accepted applications from API (only if authenticated)
   const { tasks: workTasks, isLoading, error, refetch, markComplete, withdraw, isMarkingComplete: isMutatingComplete, isWithdrawing: isMutatingWithdraw } = useWorkTasks()
+
+  // Show auth banner for non-authenticated users
+  if (!authLoading && !user) {
+    return (
+      <div
+        className="min-h-screen relative"
+        style={{
+          backgroundImage: 'url(/images/cardboard.png)',
+          backgroundRepeat: 'repeat',
+          backgroundSize: 'auto'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-blue-50/50"></div>
+        <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
+              {t('myWork.title')}
+            </h1>
+            <p className="text-gray-600 mt-1">{t('myWork.subtitle')}</p>
+          </div>
+          <AuthRequiredBanner
+            title={t('myWork.auth.title')}
+            description={t('myWork.auth.description')}
+            hint={t('myWork.auth.hint')}
+          />
+        </div>
+      </div>
+    )
+  }
 
   const filteredTasks = workTasks.filter(task => {
     switch (selectedFilter) {

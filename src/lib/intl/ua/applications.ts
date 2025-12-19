@@ -303,6 +303,9 @@ export const applications = {
   'myWork.viewReview': 'Переглянути відгук',
   'myWork.withdrawFromTask': 'Відмовитись',
   'myWork.leaveReview': 'Залишити відгук',
+  'myWork.auth.title': 'Увійдіть, щоб переглянути вашу роботу',
+  'myWork.auth.description': 'На цій сторінці показані ваші активні завдання та виконана робота як фахівця. Увійдіть, щоб керувати завданнями та відстежувати прогрес.',
+  'myWork.auth.hint': 'Ви фахівець? Увійдіть, щоб побачити завдання, на які вас найняли.',
 
   // Professional Withdrawal from Accepted Task
   'professionalWithdraw.title': 'Відмовитись від завдання',
