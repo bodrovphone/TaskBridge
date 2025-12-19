@@ -14,8 +14,22 @@ import { getCategoryLabelBySlug } from '@/features/categories'
 import { getCityLabelBySlug } from '@/features/cities'
 import { LocaleLink } from '@/components/common/locale-link'
 import type { Professional } from '@/server/professionals/professional.types'
-import { SafetyIndicators } from './safety-indicators'
 import { BadgeDisplay } from './badges'
+
+/**
+ * Obfuscates a name for privacy: "John Smith" → "John S."
+ * Handles names with usernames in parentheses: "Игорь Гладков (igor)" → "Игорь Г."
+ */
+function obfuscateName(fullName: string): string {
+  // Remove anything in parentheses (usernames, etc.)
+  const cleanName = fullName.replace(/\s*\([^)]*\)\s*/g, '').trim()
+  const parts = cleanName.split(/\s+/).filter(p => p.length > 0)
+  if (parts.length === 0) return fullName
+  if (parts.length === 1) return parts[0]
+  const firstName = parts[0]
+  const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase()
+  return `${firstName} ${lastInitial}.`
+}
 
 interface ProfessionalCardProps {
  professional: Professional
@@ -29,7 +43,8 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
  const t = useTranslations()
 
  // Direct access to API Professional properties
- const name = professional.full_name || 'Unknown'
+ const fullName = professional.full_name || 'Unknown'
+ const name = obfuscateName(fullName)
  const avatar = professional.avatar_url || undefined
  const rating = professional.average_rating || 0
  const reviewsCount = professional.total_reviews || 0
@@ -39,6 +54,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
    ? getCityLabelBySlug(professional.city, t)
    : `${t('common.country.bulgaria')} 🇧🇬`
  const bio = professional.bio || ''
+ const title = professional.professional_title || ''
  const isVerified = professional.is_phone_verified || professional.is_email_verified
 
  return (
@@ -69,12 +85,12 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
     
     <CardBody className={`p-6 relative z-10 ${compact ? 'h-full flex flex-col' : ''}`}>
      {/* Enhanced Header */}
-     <div className="flex items-start gap-4 mb-6">
+     <div className="flex items-start gap-4 mb-4">
       <LocaleLink href={`/professionals/${professional.id}`} className="relative group">
        <div className="hover:scale-110 transition-transform duration-200">
         <FallbackAvatar
          src={avatar}
-         name={name}
+         name={fullName}
          size="lg"
          userId={professional.id}
          className=""
@@ -89,11 +105,14 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
 
       <div className="flex-1 min-w-0">
        <LocaleLink href={`/professionals/${professional.id}`} className="block">
-        <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-blue-700 hover:text-blue-600 transition-colors cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap w-full max-w-[180px] sm:max-w-[220px]">
+        <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-700 hover:text-blue-600 transition-colors cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap w-full max-w-[180px] sm:max-w-[220px]">
          {name}
         </h3>
        </LocaleLink>
-       <div className="flex items-center gap-3 mb-3">
+       {title && (
+        <p className="text-sm text-gray-600 mb-1 truncate max-w-[200px]">{title}</p>
+       )}
+       <div className="flex items-center gap-2 mb-2 flex-wrap">
         <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
          <Star className="text-yellow-500 fill-current" size={16} />
          <span className="font-bold text-gray-900">{rating.toFixed(1)}</span>
@@ -101,16 +120,14 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
            <span className="text-gray-600 text-sm">({reviewsCount})</span>
          )}
         </div>
-       </div>
-       <div className="flex items-center gap-2 text-sm text-gray-600 whitespace-nowrap">
-        <Briefcase size={14} className="text-blue-500 flex-shrink-0" />
         {completedJobs === 0 ? (
-          <span className="font-medium text-blue-600">{t('professionals.card.lookingForFirstTask')}</span>
+          <span className="text-sm font-medium text-blue-600">{t('professionals.card.lookingForFirstTask')}</span>
         ) : (
-          <>
-            <span className="font-semibold text-blue-600">{completedJobs}</span>
-            <span>{t('professionals.card.completedJobsShort')}</span>
-          </>
+          <div className="flex items-center gap-1 text-sm text-gray-600">
+           <Briefcase size={14} className="text-blue-500 flex-shrink-0" />
+           <span className="font-semibold text-blue-600">{completedJobs}</span>
+           <span>{t('professionals.card.completedJobsShort')}</span>
+          </div>
         )}
        </div>
       </div>

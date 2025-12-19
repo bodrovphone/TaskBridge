@@ -23,7 +23,7 @@ export const professionals = {
   'professionals.completedJobs': 'Completed Jobs',
   'professionals.card.completedJobs': 'completed jobs',
   'professionals.card.completedJobsShort': 'jobs',
-  'professionals.card.lookingForFirstTask': 'Ready for first task',
+  'professionals.card.lookingForFirstTask': 'Newcomer',
   'professionals.card.waitingForReviews': 'Waiting for first reviews',
   'professionals.startingFrom': 'Starting from',
   'professionals.noResults': 'No categories match your search',

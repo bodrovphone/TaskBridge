@@ -23,7 +23,7 @@ export const professionals = {
   'professionals.completedJobs': 'Завършени задачи',
   'professionals.card.completedJobs': 'завършени задачи',
   'professionals.card.completedJobsShort': 'задачи',
-  'professionals.card.lookingForFirstTask': 'Готов за първа задача',
+  'professionals.card.lookingForFirstTask': 'Новак',
   'professionals.card.waitingForReviews': 'Очаква първи отзиви',
   'professionals.startingFrom': 'Започва от',
   'professionals.noResults':

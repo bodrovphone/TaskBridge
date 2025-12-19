@@ -24,7 +24,7 @@ export const professionals = {
   'professionals.completedJobs': 'Виконаних завдань',
   'professionals.card.completedJobs': 'виконаних завдань',
   'professionals.card.completedJobsShort': 'завдань',
-  'professionals.card.lookingForFirstTask': 'Готовий до завдання',
+  'professionals.card.lookingForFirstTask': 'Новачок',
   'professionals.card.waitingForReviews': 'Чекає на перші відгуки',
   'professionals.startingFrom': 'Від',
   'professionals.noResults': 'Категорій за вашим запитом не знайдено',

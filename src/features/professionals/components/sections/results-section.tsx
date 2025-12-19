@@ -14,6 +14,72 @@ import ProfessionalCard from "../professional-card";
 import type { Professional } from '@/server/professionals/professional.types';
 import { useEffect, useRef } from "react";
 
+/**
+ * Animated empty state card for no results
+ */
+function NoResultsCard({
+  t,
+  onClearFilters
+}: {
+  t: ReturnType<typeof useTranslations>
+  onClearFilters?: () => void
+}) {
+  return (
+    <NextUICard className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 shadow-xl border-2 border-purple-200">
+      <div className="p-12 text-center">
+        {/* Animated Search Icon */}
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", bounce: 0.6, duration: 0.8 }}
+          className="mb-6"
+        >
+          <div className="relative inline-block">
+            <motion.div
+              animate={{ rotate: [0, -10, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Search className="w-16 h-16 text-purple-500 mx-auto" strokeWidth={2.5} />
+            </motion.div>
+            {/* Sparkles around the icon */}
+            <motion.div
+              animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-2 -right-2"
+            >
+              <Sparkles className="w-6 h-6 text-pink-500" />
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
+          {t('professionals.results.noResults.title')}
+        </h3>
+
+        <p className="text-gray-700 text-lg mb-2 max-w-md mx-auto">
+          {t('professionals.results.noResults.description')}
+        </p>
+
+        <p className="text-gray-500 text-sm mb-6">
+          {t('professionals.results.noResults.subtext')}
+        </p>
+
+        {onClearFilters && (
+          <NextUIButton
+            color="secondary"
+            variant="shadow"
+            size="lg"
+            onClick={onClearFilters}
+            className="font-semibold"
+          >
+            {t('professionals.results.noResults.clearFilters')}
+          </NextUIButton>
+        )}
+      </div>
+    </NextUICard>
+  );
+}
+
 interface ResultsSectionProps {
   // API Data
   professionals: Professional[];
@@ -184,7 +250,7 @@ export default function ResultsSection({
                 className="masonry-item"
               >
                 <ProfessionalCard
-                  professional={professional as any}
+                  professional={professional}
                   featured={true}
                 />
               </motion.div>
@@ -204,7 +270,7 @@ export default function ResultsSection({
                 className="masonry-item"
               >
                 <ProfessionalCard
-                  professional={professional as any}
+                  professional={professional}
                   featured={professional.featured}
                 />
               </motion.div>
@@ -237,80 +303,7 @@ export default function ResultsSection({
       ) : hasActiveFilters && professionals.length === 0 ? (
         /* FILTERS ACTIVE BUT NO RESULTS: Show colorful "no results" + Featured Professionals as fallback */
         <div className="space-y-12">
-          <NextUICard className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 shadow-xl border-2 border-purple-200">
-            <div className="p-12 text-center">
-              {/* Animated Search Icon */}
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{
-                  scale: 1,
-                  rotate: 0,
-                }}
-                transition={{
-                  type: "spring",
-                  bounce: 0.6,
-                  duration: 0.8
-                }}
-                className="mb-6"
-              >
-                <div className="relative inline-block">
-                  <motion.div
-                    animate={{
-                      rotate: [0, -10, 10, -10, 0],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <Search className="w-16 h-16 text-purple-500 mx-auto" strokeWidth={2.5} />
-                  </motion.div>
-                  {/* Sparkles around the icon */}
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 1, 0.5]
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    className="absolute -top-2 -right-2"
-                  >
-                    <Sparkles className="w-6 h-6 text-pink-500" />
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Humorous Title */}
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-                {t('professionals.results.noResults.title')}
-              </h3>
-
-              {/* Humorous Description */}
-              <p className="text-gray-700 text-lg mb-2 max-w-md mx-auto">
-                {t('professionals.results.noResults.description')}
-              </p>
-
-              {/* Subtext */}
-              <p className="text-gray-500 text-sm mb-6">
-                {t('professionals.results.noResults.subtext')}
-              </p>
-
-              {/* Clear Filters Button */}
-              <NextUIButton
-                color="secondary"
-                variant="shadow"
-                size="lg"
-                onClick={onClearFilters}
-                className="font-semibold"
-              >
-                {t('professionals.results.noResults.clearFilters')}
-              </NextUIButton>
-            </div>
-          </NextUICard>
+          <NoResultsCard t={t} onClearFilters={onClearFilters} />
 
           {/* Featured Professionals as Fallback */}
           {featuredProfessionals.length > 0 && (
@@ -337,7 +330,7 @@ export default function ResultsSection({
                     className="masonry-item"
                   >
                     <ProfessionalCard
-                      professional={professional as any}
+                      professional={professional}
                       featured={true}
                     />
                   </motion.div>
@@ -348,64 +341,7 @@ export default function ResultsSection({
         </div>
       ) : (
         /* Fallback: Show colorful empty state */
-        <NextUICard className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 shadow-xl border-2 border-purple-200">
-          <div className="p-12 text-center">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{
-                scale: 1,
-                rotate: 0,
-              }}
-              transition={{
-                type: "spring",
-                bounce: 0.6,
-                duration: 0.8
-              }}
-              className="mb-6"
-            >
-              <div className="relative inline-block">
-                <motion.div
-                  animate={{
-                    rotate: [0, -10, 10, -10, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <Search className="w-16 h-16 text-purple-500 mx-auto" strokeWidth={2.5} />
-                </motion.div>
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 1, 0.5]
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute -top-2 -right-2"
-                >
-                  <Sparkles className="w-6 h-6 text-pink-500" />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-              {t('professionals.results.noResults.title')}
-            </h3>
-
-            <p className="text-gray-700 text-lg mb-2 max-w-md mx-auto">
-              {t('professionals.results.noResults.description')}
-            </p>
-
-            <p className="text-gray-500 text-sm mb-6">
-              {t('professionals.results.noResults.subtext')}
-            </p>
-          </div>
-        </NextUICard>
+        <NoResultsCard t={t} />
       )}
     </motion.div>
   );
