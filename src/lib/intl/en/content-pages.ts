@@ -195,7 +195,7 @@ export const contentPages = {
   'giveaway.benefits.customers.winPrizes.description': 'Post tasks and win prizes! Customers are eligible for our bi-monthly giveaway too.',
 
   'giveaway.nextDraw.label': 'Next Draw',
-  'giveaway.nextDraw.date': 'February 2025',
+  'giveaway.nextDraw.date': 'February 2026',
   'giveaway.nextDraw.frequency': 'Draw Frequency',
   'giveaway.nextDraw.frequencyValue': 'Every 2 Months',
 

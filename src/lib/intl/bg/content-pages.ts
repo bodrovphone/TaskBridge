@@ -195,7 +195,7 @@ export const contentPages = {
   'giveaway.benefits.customers.winPrizes.description': 'Публикувайте задачи и печелете награди! Клиентите също участват в двумесечния ни розигриш.',
 
   'giveaway.nextDraw.label': 'Следващо теглене',
-  'giveaway.nextDraw.date': 'Февруари 2025',
+  'giveaway.nextDraw.date': 'Февруари 2026',
   'giveaway.nextDraw.frequency': 'Честота на теглене',
   'giveaway.nextDraw.frequencyValue': 'На всеки 2 месеца',
 
