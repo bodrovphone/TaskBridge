@@ -168,15 +168,14 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
     setIsWithdrawDialogOpen(true)
   }
 
-  const handleWithdrawConfirm = async (reason: string, description?: string) => {
+  const handleWithdrawConfirm = async (reason?: string) => {
     if (!selectedTaskForWithdrawal) return
 
     setIsWithdrawing(true)
     try {
       await withdraw({
         taskId: selectedTaskForWithdrawal.taskId,
-        reason,
-        description
+        reason
       })
 
       // Success! Close dialog (refetch handled automatically by TanStack Query)

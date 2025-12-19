@@ -10,15 +10,13 @@ import {
   ModalFooter,
   Button,
   Textarea,
-  RadioGroup,
-  Radio,
 } from '@nextui-org/react'
 import { LogOut, AlertTriangle, Info, AlertCircle } from 'lucide-react'
 
 interface ProfessionalWithdrawDialogProps {
   isOpen: boolean
   onClose: () => void
-  onConfirm: (reason: string, description?: string) => void
+  onConfirm: (reason?: string) => void
   taskTitle: string
   customerName: string
   withdrawalsThisMonth: number
@@ -39,8 +37,7 @@ export function ProfessionalWithdrawDialog({
   acceptedDate,
 }: ProfessionalWithdrawDialogProps) {
   const t = useTranslations()
-  const [selectedReason, setSelectedReason] = useState<string>('')
-  const [description, setDescription] = useState('')
+  const [reason, setReason] = useState('')
 
   // Calculate timing impact
   const timingInfo = useMemo(() => {
@@ -77,15 +74,12 @@ export function ProfessionalWithdrawDialog({
   const hasExceededLimit = remainingWithdrawals <= 0 && timingInfo.countsTowardLimit
 
   const handleConfirm = () => {
-    if (!selectedReason) return
-    onConfirm(selectedReason, description || undefined)
-    setSelectedReason('')
-    setDescription('')
+    onConfirm(reason || undefined)
+    setReason('')
   }
 
   const handleClose = () => {
-    setSelectedReason('')
-    setDescription('')
+    setReason('')
     onClose()
   }
 
@@ -190,118 +184,15 @@ export function ProfessionalWithdrawDialog({
             </div>
           )}
 
-          {/* Withdrawal Reasons */}
+          {/* Reason (Optional) */}
           {!hasExceededLimit && (
             <>
               <div>
-                <p className="text-sm font-medium text-gray-900 mb-2">
-                  {t('professionalWithdraw.reasonLabel')}
-                </p>
-                <RadioGroup
-                  value={selectedReason}
-                  onValueChange={setSelectedReason}
-                  classNames={{
-                    wrapper: 'gap-3'
-                  }}
-                >
-                  <Radio
-                    value="health_emergency"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.health_emergency')}
-                  </Radio>
-                  <Radio
-                    value="capacity_issue"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.capacity_issue')}
-                  </Radio>
-                  <Radio
-                    value="scope_mismatch"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.scope_mismatch')}
-                  </Radio>
-                  <Radio
-                    value="customer_unresponsive"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.customer_unresponsive')}
-                  </Radio>
-                  <Radio
-                    value="location_issue"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.location_issue')}
-                  </Radio>
-                  <Radio
-                    value="budget_dispute"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.budget_dispute')}
-                  </Radio>
-                  <Radio
-                    value="equipment_issue"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.equipment_issue')}
-                  </Radio>
-                  <Radio
-                    value="other"
-                    classNames={{
-                      base: 'max-w-full m-0 bg-gray-50 hover:bg-gray-100 rounded-lg p-3 cursor-pointer border-2 border-transparent data-[selected=true]:border-primary data-[selected=true]:bg-blue-50 transition-all',
-                      wrapper: 'group-data-[selected=true]:border-primary',
-                      labelWrapper: 'ml-2',
-                      label: 'text-sm text-gray-700'
-                    }}
-                  >
-                    {t('professionalWithdraw.reasons.other')}
-                  </Radio>
-                </RadioGroup>
-              </div>
-
-              {/* Additional Details */}
-              <div>
                 <Textarea
-                  label={t('professionalWithdraw.descriptionLabel')}
+                  label={t('professionalWithdraw.reasonLabel')}
                   placeholder={t('professionalWithdraw.descriptionPlaceholder')}
-                  value={description}
-                  onValueChange={setDescription}
+                  value={reason}
+                  onValueChange={setReason}
                   minRows={3}
                   maxRows={5}
                   classNames={{
@@ -334,7 +225,6 @@ export function ProfessionalWithdrawDialog({
             <Button
               color="warning"
               onPress={handleConfirm}
-              isDisabled={!selectedReason}
               startContent={<LogOut className="w-4 h-4" />}
             >
               {t('professionalWithdraw.confirmButton')}

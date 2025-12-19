@@ -203,15 +203,14 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   setIsWithdrawDialogOpen(true);
  };
 
- const handleWithdrawConfirm = async (reason: string, description?: string) => {
+ const handleWithdrawConfirm = async (reason?: string) => {
   setIsWithdrawing(true);
   try {
    const response = await authenticatedFetch(`/api/tasks/${task.id}/withdraw`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-     reason,
-     description
+     reason
     })
    });
 

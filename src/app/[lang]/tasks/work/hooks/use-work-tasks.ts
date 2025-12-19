@@ -168,8 +168,7 @@ async function markTaskComplete(
  */
 async function withdrawFromTask(
   taskId: string,
-  reason: string,
-  description: string | undefined,
+  reason: string | undefined,
   authenticatedFetch: (url: string, options?: RequestInit) => Promise<Response>
 ): Promise<void> {
   const response = await authenticatedFetch(`/api/tasks/${taskId}/withdraw`, {
@@ -178,7 +177,6 @@ async function withdrawFromTask(
     credentials: 'include',
     body: JSON.stringify({
       reason,
-      description,
     }),
   });
 
@@ -224,12 +222,10 @@ export function useWorkTasks() {
     mutationFn: ({
       taskId,
       reason,
-      description,
     }: {
       taskId: string;
-      reason: string;
-      description?: string;
-    }) => withdrawFromTask(taskId, reason, description, authenticatedFetch),
+      reason?: string;
+    }) => withdrawFromTask(taskId, reason, authenticatedFetch),
     onSuccess: () => {
       // Invalidate and refetch work tasks
       queryClient.invalidateQueries({ queryKey: WORK_TASKS_QUERY_KEY });
