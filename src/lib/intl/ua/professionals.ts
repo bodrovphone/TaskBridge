@@ -15,6 +15,10 @@ export const professionals = {
     'Шукайте категорії... (напр., ремонт, прибирання, репетитор)',
   'professionals.search.popular': 'Популярне',
   'professionals.search.categories': 'Категорії послуг',
+  'professionals.search.cities': 'Міста',
+  'professionals.search.searching': 'Пошук...',
+  'professionals.search.noResults': 'Немає відповідних категорій або міст',
+  'professionals.search.noResultsHint': 'Спробуйте інші ключові слова або скористайтеся фільтрами нижче',
   'professionals.allCategories': 'Усі категорії',
   'professionals.featuredTitle': 'Рекомендовані фахівці',
   'professionals.viewProfile': 'Переглянути профіль',
@@ -113,6 +117,7 @@ export const professionals = {
   'professionals.results.noResults.title': 'Фахівців не знайдено',
   'professionals.results.noResults.description':
     'Спробуйте змінити фільтри або шукати в іншому районі',
+  'professionals.results.noResults.subtext': 'Нові фахівці приєднуються щодня!',
   'professionals.results.noResults.clearFilters': 'Очистити фільтри',
   'professionals.results.error.title': 'Ой! Щось пішло не так',
   'professionals.results.error.description':

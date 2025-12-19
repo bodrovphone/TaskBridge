@@ -14,6 +14,10 @@ export const professionals = {
     'Поиск категорий... (например, ремонт, уборка, уроки)',
   'professionals.search.popular': 'Популярные',
   'professionals.search.categories': 'Категории услуг',
+  'professionals.search.cities': 'Города',
+  'professionals.search.searching': 'Поиск...',
+  'professionals.search.noResults': 'Нет совпадающих категорий или городов',
+  'professionals.search.noResultsHint': 'Попробуйте другие ключевые слова или используйте фильтры ниже',
   'professionals.allCategories': 'Все категории',
   'professionals.featuredTitle': 'Рекомендуемые специалисты',
   'professionals.viewProfile': 'Посмотреть профиль',
@@ -112,6 +116,7 @@ export const professionals = {
   'professionals.results.noResults.title': 'Специалисты не найдены',
   'professionals.results.noResults.description':
     'Попробуйте изменить фильтры или поискать в другом районе',
+  'professionals.results.noResults.subtext': 'Новые специалисты присоединяются каждый день!',
   'professionals.results.noResults.clearFilters': 'Очистить фильтры',
   'professionals.results.error.title': 'Упс! Что-то пошло не так',
   'professionals.results.error.description': 'Нашим серверам нужен кофе-брейк',

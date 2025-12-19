@@ -14,6 +14,10 @@ export const professionals = {
     'Търсете категории... (напр. ремонт, почистване, уроци)',
   'professionals.search.popular': 'Популярни',
   'professionals.search.categories': 'Категории услуги',
+  'professionals.search.cities': 'Градове',
+  'professionals.search.searching': 'Търсене...',
+  'professionals.search.noResults': 'Няма съвпадащи категории или градове',
+  'professionals.search.noResultsHint': 'Опитайте други ключови думи или използвайте филтрите по-долу',
   'professionals.allCategories': 'Всички категории',
   'professionals.featuredTitle': 'Препоръчани професионалисти',
   'professionals.viewProfile': 'Вижте профила',
@@ -113,6 +117,7 @@ export const professionals = {
   'professionals.results.noResults.title': 'Не са намерени професионалисти',
   'professionals.results.noResults.description':
     'Опитайте да промените филтрите или да търсите в друг район',
+  'professionals.results.noResults.subtext': 'Нови професионалисти се присъединяват всеки ден!',
   'professionals.results.noResults.clearFilters': 'Изчисти филтрите',
   'professionals.results.error.title': 'Опа! Нещо се обърка',
   'professionals.results.error.description': 'Сървърите ни имат нужда от почивка с кафе',

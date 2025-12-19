@@ -14,6 +14,10 @@ export const professionals = {
     'Search categories... (e.g., repair, cleaning, tutoring)',
   'professionals.search.popular': 'Popular',
   'professionals.search.categories': 'Service Categories',
+  'professionals.search.cities': 'Cities',
+  'professionals.search.searching': 'Searching...',
+  'professionals.search.noResults': 'No matching categories or cities',
+  'professionals.search.noResultsHint': 'Try different keywords or use the filters below',
   'professionals.allCategories': 'All Categories',
   'professionals.featuredTitle': 'Featured Professionals',
   'professionals.viewProfile': 'View Profile',
@@ -112,6 +116,7 @@ export const professionals = {
   'professionals.results.noResults.title': 'No professionals found',
   'professionals.results.noResults.description':
     'Try adjusting your filters or search in a different area',
+  'professionals.results.noResults.subtext': 'New professionals join every day!',
   'professionals.results.noResults.clearFilters': 'Clear Filters',
   'professionals.results.error.title': 'Oops! Something went wrong',
   'professionals.results.error.description': 'Our servers need a coffee break',

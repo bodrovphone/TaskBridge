@@ -26,41 +26,41 @@ function NoResultsCard({
 }) {
   return (
     <NextUICard className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 shadow-xl border-2 border-purple-200">
-      <div className="p-12 text-center">
+      <div className="p-6 sm:p-8 text-center">
         {/* Animated Search Icon */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", bounce: 0.6, duration: 0.8 }}
-          className="mb-6"
+          className="mb-4"
         >
           <div className="relative inline-block">
             <motion.div
               animate={{ rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Search className="w-16 h-16 text-purple-500 mx-auto" strokeWidth={2.5} />
+              <Search className="w-12 h-12 text-purple-500 mx-auto" strokeWidth={2.5} />
             </motion.div>
             {/* Sparkles around the icon */}
             <motion.div
               animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-2 -right-2"
+              className="absolute -top-1 -right-1"
             >
-              <Sparkles className="w-6 h-6 text-pink-500" />
+              <Sparkles className="w-5 h-5 text-pink-500" />
             </motion.div>
           </div>
         </motion.div>
 
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
+        <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
           {t('professionals.results.noResults.title')}
         </h3>
 
-        <p className="text-gray-700 text-lg mb-2 max-w-md mx-auto">
+        <p className="text-gray-700 mb-1 max-w-md mx-auto">
           {t('professionals.results.noResults.description')}
         </p>
 
-        <p className="text-gray-500 text-sm mb-6">
+        <p className="text-gray-500 text-sm mb-4">
           {t('professionals.results.noResults.subtext')}
         </p>
 
@@ -68,7 +68,7 @@ function NoResultsCard({
           <NextUIButton
             color="secondary"
             variant="shadow"
-            size="lg"
+            size="md"
             onClick={onClearFilters}
             className="font-semibold"
           >

@@ -10,8 +10,8 @@ import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
 import { Search, MapPin } from "lucide-react";
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { searchCategories, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
+import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue } from "react";
+import { searchCategoriesAsync, preloadCategoryKeywords, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';
 import { searchCities, getCitiesWithLabels } from '@/features/cities';
 import { useSearchLocationPreference } from '@/hooks/use-search-location-preference';
 import { useProfessionalFilters } from '../../hooks/use-professional-filters';
@@ -33,11 +33,14 @@ export default function SearchFiltersSection({
   const { saveLocation } = useSearchLocationPreference();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [currentTypingIndex, setCurrentTypingIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [categorySuggestions, setCategorySuggestions] = useState<{ value: string; label: string; mainCategoryId?: string }[]>([]);
+  const keywordsPreloaded = useRef(false);
 
   // Get popular subcategories (not main categories) since professionals select subcategories
   const popularCategories = useMemo(() => {
@@ -77,14 +80,52 @@ export default function SearchFiltersSection({
 
   const currentExamples = typingExamples;
 
-  // Search categories and cities based on input
-  const categorySuggestions = useMemo(() => {
-    const trimmed = searchQuery.trim();
-    if (!trimmed || trimmed.length > 200) return [];
+  // Preload keywords after 2s delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!keywordsPreloaded.current) {
+        preloadCategoryKeywords();
+        keywordsPreloaded.current = true;
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Search categories with async keyword matching
+  useEffect(() => {
+    const trimmedQuery = deferredSearchQuery.trim();
+
+    if (!trimmedQuery) {
+      setCategorySuggestions([]);
+      return;
+    }
+
+    // Skip if too short or too long
+    if (trimmedQuery.length < 2 || trimmedQuery.length > 200) {
+      setCategorySuggestions([]);
+      return;
+    }
+
     // Skip if no letters (gibberish like "1111111")
-    if (!/[a-zA-Zа-яА-ЯёЁ]/u.test(trimmed)) return [];
-    return searchCategories(searchQuery, t).slice(0, 6); // Limit to 6 categories
-  }, [searchQuery, t]);
+    if (!/[a-zA-Zа-яА-ЯёЁ]/u.test(trimmedQuery)) {
+      setCategorySuggestions([]);
+      return;
+    }
+
+    let cancelled = false;
+    searchCategoriesAsync(deferredSearchQuery, t, currentLocale)
+      .then(results => {
+        if (!cancelled) {
+          setCategorySuggestions(results.slice(0, 6));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCategorySuggestions([]);
+        }
+      });
+    return () => { cancelled = true; };
+  }, [deferredSearchQuery, t, currentLocale]);
 
   // Search cities locally (instant, no API)
   const citySuggestions = useMemo(() => {
@@ -96,11 +137,12 @@ export default function SearchFiltersSection({
   }, [searchQuery, t]);
 
   const hasSuggestions = categorySuggestions.length > 0 || citySuggestions.length > 0;
+  const hasMinimumInput = searchQuery.trim().length >= 2;
 
-  // Show/hide suggestions based on input
+  // Show/hide suggestions based on input (show dropdown even for no results to display fallback)
   useEffect(() => {
-    setShowSuggestions(searchQuery.trim().length > 0 && hasSuggestions);
-  }, [searchQuery, hasSuggestions]);
+    setShowSuggestions(hasMinimumInput);
+  }, [hasMinimumInput]);
 
   // Smooth scroll to results after filter selection
   // Uses requestAnimationFrame to ensure scroll happens after React re-render
@@ -224,15 +266,20 @@ export default function SearchFiltersSection({
             <div className="relative mb-8 overflow-visible">
               <div className="relative">
                 <Search
-                  className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   style={{ zIndex: Z_INDEX.STICKY_ELEMENTS }}
-                  size={24}
+                  size={18}
                 />
                 <Input
                   size="lg"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => {
+                    // Preload keywords on focus
+                    if (!keywordsPreloaded.current) {
+                      preloadCategoryKeywords();
+                      keywordsPreloaded.current = true;
+                    }
                     if (hasSuggestions) setShowSuggestions(true);
                   }}
                   onBlur={() => {
@@ -240,8 +287,8 @@ export default function SearchFiltersSection({
                     setTimeout(() => setShowSuggestions(false), 200);
                   }}
                   classNames={{
-                    input: "pl-16 pr-4 text-xl font-light h-16",
-                    inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl h-16"
+                    input: "pl-6 pr-4 text-lg font-light h-14",
+                    inputWrapper: "bg-white border-2 border-gray-200 hover:border-blue-400 focus-within:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl h-14"
                   }}
                   placeholder={
                     searchQuery
@@ -301,6 +348,18 @@ export default function SearchFiltersSection({
                                   <span className="font-medium text-gray-900">{city.label}</span>
                                 </Button>
                               ))}
+                            </div>
+                          )}
+
+                          {/* No Results Fallback */}
+                          {!hasSuggestions && (
+                            <div className="px-4 py-4 text-center">
+                              <p className="text-gray-500 text-sm mb-1">
+                                {t('professionals.search.noResults')}
+                              </p>
+                              <p className="text-gray-400 text-xs">
+                                {t('professionals.search.noResultsHint')}
+                              </p>
                             </div>
                           )}
                         </div>
