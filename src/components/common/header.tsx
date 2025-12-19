@@ -310,7 +310,7 @@ function Header() {
     </NavbarItem>
     <NavbarItem id="mobile-nav-user-menu">
      {isAuthenticated ? (
-      <UserAvatarDropdown size="sm" />
+      <UserAvatarDropdown size="sm" onNavigate={() => setIsMenuOpen(false)} />
      ) : (
       <UserAvatarDropdown
        size="sm"
@@ -318,6 +318,7 @@ function Header() {
         setAuthAction(null)
         setIsAuthSlideOverOpen(true)
        }}
+       onNavigate={() => setIsMenuOpen(false)}
       />
      )}
     </NavbarItem>

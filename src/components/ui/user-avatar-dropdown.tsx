@@ -26,12 +26,14 @@ interface UserAvatarDropdownProps {
  size?: 'sm' | 'md' | 'lg'
  className?: string
  onLoginClick?: () => void
+ onNavigate?: () => void  // Called when user navigates via dropdown (to close parent menus)
 }
 
 export default function UserAvatarDropdown({
  size = 'md',
  className,
- onLoginClick
+ onLoginClick,
+ onNavigate
 }: UserAvatarDropdownProps) {
  const { profile, signOut, authenticatedFetch } = useAuth()
  const t = useTranslations()
@@ -81,18 +83,23 @@ export default function UserAvatarDropdown({
     handleResendVerification()
     break
    case 'profile-customer':
+    onNavigate?.()
     router.push(`/${lang}/profile/customer`)
     break
    case 'profile-professional':
+    onNavigate?.()
     router.push(`/${lang}/profile/professional`)
     break
    case 'tasks-posted':
+    onNavigate?.()
     router.push(`/${lang}/tasks/posted`)
     break
    case 'tasks-work':
+    onNavigate?.()
     router.push(`/${lang}/tasks/work`)
     break
    case 'logout':
+    onNavigate?.()
     signOut()
     router.push(`/${lang}`)
     break
