@@ -213,6 +213,15 @@ export const common = {
   'notificationWarning.verifyEmail': 'Подтвердить email',
   'notificationWarning.dismiss': 'Понятно',
 
+  // Profile Completion Warning (Application Wizard)
+  'profileCompletion.stepTitle': 'Заполните свой профиль',
+  'profileCompletion.stepSubtitle': 'Увеличьте свои шансы быть нанятым',
+  'profileCompletion.warningTitle': 'Ваш профиль неполный',
+  'profileCompletion.warningDescription': 'Клиенты чаще нанимают профессионалов с полными профилями. Уделите минуту, чтобы заполнить недостающую информацию.',
+  'profileCompletion.missing': 'Отсутствует',
+  'profileCompletion.updateProfile': 'Обновить профиль',
+  'profileCompletion.ignoreAndProceed': 'Игнорировать и продолжить',
+
   // Profanity Validation
   'validation.profanityDetected': 'Ваш текст содержит неприемлемую лексику. Пожалуйста, измените его.',
   'validation.profanityTitle': 'Название задачи содержит неприемлемую лексику',

@@ -212,6 +212,15 @@ export const common = {
   'notificationWarning.verifyEmail': 'Verify Email',
   'notificationWarning.dismiss': 'I Understand',
 
+  // Profile Completion Warning (Application Wizard)
+  'profileCompletion.stepTitle': 'Complete Your Profile',
+  'profileCompletion.stepSubtitle': 'Increase your chances of being hired',
+  'profileCompletion.warningTitle': 'Your profile is incomplete',
+  'profileCompletion.warningDescription': 'Customers are more likely to hire professionals with complete profiles. Take a moment to fill in the missing information.',
+  'profileCompletion.missing': 'Missing',
+  'profileCompletion.updateProfile': 'Update Profile',
+  'profileCompletion.ignoreAndProceed': 'Ignore and Proceed',
+
   // Profanity Validation
   'validation.profanityDetected': 'Your text contains inappropriate language. Please revise.',
   'validation.profanityTitle': 'Task title contains inappropriate language',

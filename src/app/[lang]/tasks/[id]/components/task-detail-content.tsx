@@ -240,7 +240,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
    {/* Background overlay */}
    <div className="absolute inset-0 bg-white/30"></div>
    
-   <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10 overflow-x-hidden">
+   <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10 overflow-x-hidden">
     {/* Back Navigation */}
     <div className="mb-6">
      <Link
@@ -284,16 +284,16 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
 
       {/* Task Details - Server Rendered */}
       <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-       <CardBody className="p-4 sm:p-6 overflow-hidden">
-        <div className="space-y-4">
-         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+       <CardBody className="p-3 sm:p-6 overflow-hidden">
+        <div className="space-y-3 sm:space-y-4 min-w-0">
+         <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
           <Chip
            color="secondary"
            variant="solid"
            size="sm"
-           className="font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600 text-xs sm:text-sm"
+           className="font-semibold text-white bg-gradient-to-r from-purple-500 to-indigo-600 text-xs sm:text-sm max-w-full"
           >
-           {getCategoryName(t, task.category, task.subcategory)}
+           <span className="truncate">{getCategoryName(t, task.category, task.subcategory)}</span>
           </Chip>
           <Chip
            color={getUrgencyColor(task.urgency || (task.is_urgent ? 'same_day' : task.deadline ? 'within_week' : 'flexible')) as any}
@@ -306,7 +306,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
           <span className="text-xs sm:text-sm text-gray-500 w-full sm:w-auto sm:ml-auto mt-1 sm:mt-0">{publishedTime}</span>
          </div>
 
-         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+         <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-900 break-words">
           {localizedContent.title}
          </h1>
 
@@ -318,18 +318,18 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
           </p>
          )}
 
-         <p className="text-gray-700 text-lg leading-relaxed">
+         <p className="text-gray-700 text-base sm:text-lg leading-relaxed break-words">
           {localizedContent.description}
          </p>
 
          {/* Requirements - supports both requirements (frontend) and location_notes (database) */}
          {localizedContent.requirements && (
           <div>
-           <h3 className="text-lg font-semibold text-gray-900 mb-2">
+           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
             {t('taskDetail.requirements')}
            </h3>
-           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-            <pre className="whitespace-pre-wrap text-gray-700 font-sans">
+           <div className="bg-blue-50 border-l-4 border-blue-400 p-3 sm:p-4 rounded-r-lg">
+            <pre className="whitespace-pre-wrap text-gray-700 font-sans text-sm sm:text-base break-words overflow-wrap-anywhere">
              {localizedContent.requirements}
             </pre>
            </div>
@@ -341,60 +341,60 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
 
       {/* Key Information - Server Rendered */}
       <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-       <CardBody className="p-4 sm:p-6 overflow-hidden">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
+       <CardBody className="p-3 sm:p-6 overflow-hidden">
+        <h2 className="text-base sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
          {t('taskDetail.keyInformation')}
         </h2>
-        
-        <div className="grid md:grid-cols-2 gap-4">
-         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg">
-           <Wallet className="text-blue-600" size={20} />
+
+        <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex-shrink-0">
+           <Wallet className="text-blue-600" size={18} />
           </div>
-          <div>
-           <p className="text-sm text-gray-600">{t('task.budget')}</p>
-           <p className="font-semibold text-gray-900">{formatBudget(task, t)}</p>
+          <div className="min-w-0">
+           <p className="text-xs sm:text-sm text-gray-600">{t('task.budget')}</p>
+           <p className="font-semibold text-gray-900 text-sm sm:text-base">{formatBudget(task, t)}</p>
           </div>
          </div>
 
-         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-lg">
-           <MapPin className="text-green-600" size={20} />
+         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex-shrink-0">
+           <MapPin className="text-green-600" size={18} />
           </div>
-          <div>
-           <p className="text-sm text-gray-600">{t('task.location')}</p>
-           <p className="font-semibold text-gray-900">
+          <div className="min-w-0">
+           <p className="text-xs sm:text-sm text-gray-600">{t('task.location')}</p>
+           <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">
             {getCityLabelBySlug(task.city, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
            </p>
           </div>
          </div>
 
-         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-lg">
-           <Clock className="text-orange-600" size={20} />
+         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-orange-100 rounded-lg flex-shrink-0">
+           <Clock className="text-orange-600" size={18} />
           </div>
-          <div>
-           <p className="text-sm text-gray-600">{t('task.deadline')}</p>
-           <p className="font-semibold text-gray-900">{formatDeadline(task.deadline, t)}</p>
+          <div className="min-w-0">
+           <p className="text-xs sm:text-sm text-gray-600">{t('task.deadline')}</p>
+           <p className="font-semibold text-gray-900 text-sm sm:text-base">{formatDeadline(task.deadline, t)}</p>
           </div>
          </div>
 
-         <div className="flex items-center gap-3">
+         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           {(() => {
            const status = getTaskStatus(task.id, task.status);
            const StatusIcon = status.icon;
            const statusContent = (
             <>
-             <div className={`flex items-center justify-center w-10 h-10 ${status.bgColor} rounded-lg`}>
-              <StatusIcon className={status.iconColor} size={20} />
+             <div className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 ${status.bgColor} rounded-lg flex-shrink-0`}>
+              <StatusIcon className={status.iconColor} size={18} />
              </div>
-             <div>
-              <p className="text-sm text-gray-600">{t('taskDetail.status')}</p>
+             <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-gray-600">{t('taskDetail.status')}</p>
               <Chip
                color={status.color as any}
                variant="flat"
                size="sm"
-               className="font-semibold"
+               className="font-semibold text-xs sm:text-sm"
               >
                {t(`taskDetail.statusTypes.${status.key}`)}
               </Chip>
@@ -432,10 +432,10 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
      </div>
 
      {/* Sidebar */}
-     <div className="space-y-4 sm:space-y-6">
+     <div className="space-y-4 sm:space-y-6 min-w-0">
       {/* Customer Profile - Server Rendered with Client Privacy Toggle */}
       <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-       <CardBody className="p-4 sm:p-6 overflow-hidden">
+       <CardBody className="p-3 sm:p-6 overflow-hidden">
         <PrivacyToggle customer={task.customer} isOwner={isOwner}>
          <></>
         </PrivacyToggle>
@@ -448,11 +448,11 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
       {/* Similar Tasks - Server Rendered (only show if tasks exist) */}
       {similarTasks && similarTasks.length > 0 && (
         <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-         <CardBody className="p-4 sm:p-6 overflow-hidden">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
+         <CardBody className="p-3 sm:p-6 overflow-hidden">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">
            {t('taskDetail.similarTasks')}
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
            {similarTasks.map((similarTask) => (
             <TaskCard
              key={similarTask.id}

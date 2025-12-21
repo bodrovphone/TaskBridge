@@ -212,6 +212,15 @@ export const common = {
   'notificationWarning.verifyEmail': 'Підтвердити Email',
   'notificationWarning.dismiss': 'Зрозуміло',
 
+  // Profile Completion Warning (Application Wizard)
+  'profileCompletion.stepTitle': 'Заповніть свій профіль',
+  'profileCompletion.stepSubtitle': 'Збільште свої шанси бути найнятим',
+  'profileCompletion.warningTitle': 'Ваш профіль неповний',
+  'profileCompletion.warningDescription': 'Клієнти частіше наймають професіоналів з повними профілями. Виділіть хвилину, щоб заповнити відсутню інформацію.',
+  'profileCompletion.missing': 'Відсутнє',
+  'profileCompletion.updateProfile': 'Оновити профіль',
+  'profileCompletion.ignoreAndProceed': 'Ігнорувати і продовжити',
+
   // Profanity Validation
   'validation.profanityDetected': 'Ваш текст містить неприпустиму лексику. Будь ласка, виправте.',
   'validation.profanityTitle': 'Назва завдання містить неприпустиму лексику',

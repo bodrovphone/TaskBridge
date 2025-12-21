@@ -23,6 +23,8 @@ export const notifications = {
   'notifications.viewTask': 'Переглянути завдання',
   'notifications.justNow': 'Щойно',
   'notifications.getStarted': 'Почати',
+  'notifications.becomeProfessional': 'Стати професіоналом',
+  'notifications.createTask': 'Створити завдання',
   'notifications.customerContact': 'Контактна інформація замовника',
   'notifications.customerMessage': 'Повідомлення від замовника',
 

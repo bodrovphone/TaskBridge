@@ -13,6 +13,7 @@ import {
 import { useAuth } from '@/features/auth'
 import { useKeyboardHeight } from '@/hooks/use-keyboard-height'
 import { useIsMobile } from '@/hooks/use-is-mobile'
+import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
 import { cn } from '@/lib/utils'
 
 import { ApplicationFormState } from './ApplicationFormState'
@@ -50,9 +51,12 @@ export default function ApplicationDialog({
 }: ApplicationDialogProps) {
   const t = useTranslations()
   const router = useRouter()
-  const { user, authenticatedFetch } = useAuth()
+  const { user, profile, authenticatedFetch } = useAuth()
   const isKeyboardOpen = useKeyboardHeight()
   const isMobile = useIsMobile()
+
+  // Profile completion status
+  const { isListed, missingRequired } = useProfessionalListingStatus(profile)
 
   // Dialog state
   const [isSuccess, setIsSuccess] = useState(false)
@@ -63,6 +67,9 @@ export default function ApplicationDialog({
   // Notification state
   const [showNotificationWarning, setShowNotificationWarning] = useState(false)
   const [bannerDismissed, setBannerDismissed] = useState(false)
+
+  // Profile completion state
+  const [profileBannerDismissed, setProfileBannerDismissed] = useState(false)
 
   // Check notification status when modal opens
   useEffect(() => {
@@ -83,6 +90,7 @@ export default function ApplicationDialog({
     setError(null)
     setAlreadyApplied(false)
     setBannerDismissed(false)
+    setProfileBannerDismissed(false)
     onClose()
   }, [onClose, isSubmitting, isSuccess])
 
@@ -172,6 +180,10 @@ export default function ApplicationDialog({
               showNotificationWarning={showNotificationWarning && !bannerDismissed}
               onDismissNotificationBanner={() => setBannerDismissed(true)}
               onSetupNotifications={handleSetupNotifications}
+              showProfileWarning={!isListed && !profileBannerDismissed}
+              missingProfileFields={missingRequired.map((r) => r.key)}
+              onDismissProfileBanner={() => setProfileBannerDismissed(true)}
+              onCompleteProfile={handleSetupNotifications}
               onClose={handleClose}
               onSubmit={handleSubmit}
               error={error}

@@ -212,6 +212,15 @@ export const common = {
   'notificationWarning.verifyEmail': 'Потвърдете имейл',
   'notificationWarning.dismiss': 'Разбрах',
 
+  // Profile Completion Warning (Application Wizard)
+  'profileCompletion.stepTitle': 'Попълнете профила си',
+  'profileCompletion.stepSubtitle': 'Увеличете шансовете си да бъдете наети',
+  'profileCompletion.warningTitle': 'Профилът ви е непълен',
+  'profileCompletion.warningDescription': 'Клиентите са по-склонни да наемат професионалисти с пълни профили. Отделете момент да попълните липсващата информация.',
+  'profileCompletion.missing': 'Липсва',
+  'profileCompletion.updateProfile': 'Обнови профила',
+  'profileCompletion.ignoreAndProceed': 'Игнорирай и продължи',
+
   // Profanity Validation
   'validation.profanityDetected': 'Вашият текст съдържа неподходящ език. Моля, преработете го.',
   'validation.profanityTitle': 'Заглавието на задачата съдържа неподходящ език',

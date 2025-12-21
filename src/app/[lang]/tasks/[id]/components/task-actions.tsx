@@ -288,13 +288,13 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   return (
    <>
     <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-     <CardBody className="p-4 sm:p-6 space-y-3">
+     <CardBody className="p-3 sm:p-6 space-y-3">
       <NextUIButton
        color="success"
        variant="solid"
        size="lg"
-       className="w-full"
-       startContent={<CheckCircle size={20} />}
+       className="w-full text-sm sm:text-base"
+       startContent={<CheckCircle size={18} />}
        onPress={handleMarkCompletedClick}
        isLoading={isMarkingCompleted}
       >
@@ -305,8 +305,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
        color="warning"
        variant="bordered"
        size="lg"
-       className="w-full"
-       startContent={<LogOut size={20} />}
+       className="w-full text-sm sm:text-base"
+       startContent={<LogOut size={18} />}
        onPress={handleWithdrawClick}
       >
        {t('taskDetail.professional.withdraw')}
@@ -316,8 +316,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
        color="warning"
        variant="flat"
        size="lg"
-       className="w-full"
-       startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+       className="w-full text-sm sm:text-base"
+       startContent={isShareCopied ? <Check size={18} /> : <Share2 size={18} />}
        onPress={handleShareClick}
       >
        {t('taskDetail.share')}
@@ -357,15 +357,15 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   return (
    <>
     <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-     <CardBody className="p-4 sm:p-6 space-y-3">
+     <CardBody className="p-3 sm:p-6 space-y-3">
       {/* Mark as Complete - only when task is in progress */}
       {taskStatus === 'in_progress' && (
        <NextUIButton
         color="success"
         variant="solid"
         size="lg"
-        className="w-full"
-        startContent={<CheckCircle size={20} />}
+        className="w-full text-sm sm:text-base"
+        startContent={<CheckCircle size={18} />}
         onPress={handleMarkCompletedClick}
         isLoading={isMarkingCompleted}
        >
@@ -382,8 +382,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
          color="primary"
          variant="bordered"
          size="lg"
-         className="w-full"
-         startContent={<Edit3 size={20} />}
+         className="w-full text-sm sm:text-base"
+         startContent={<Edit3 size={18} />}
          onPress={handleEditClick}
          isDisabled={!canEdit}
         >
@@ -396,8 +396,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
        color="warning"
        variant="flat"
        size="lg"
-       className="w-full"
-       startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+       className="w-full text-sm sm:text-base"
+       startContent={isShareCopied ? <Check size={18} /> : <Share2 size={18} />}
        onPress={handleShareClick}
       >
        {t('taskDetail.share')}
@@ -423,12 +423,12 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  return (
   <>
    <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-    <CardBody className="p-4 sm:p-6 space-y-3">
+    <CardBody className="p-3 sm:p-6 space-y-3">
      {/* Language Barrier Info - Shown when task author prefers different language */}
      {hasLanguageBarrier && (
-      <div className="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700">
-       <Globe className="w-5 h-5 flex-shrink-0" />
-       <span className="text-sm">
+      <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700">
+       <Globe className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+       <span className="text-xs sm:text-sm">
         {t('taskDetail.languageInfo', {
          language: getLanguageName(task.customer?.preferred_language || 'en')
         })}
@@ -479,8 +479,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
       color="warning"
       variant="flat"
       size="lg"
-      className="w-full"
-      startContent={isShareCopied ? <Check size={20} /> : <Share2 size={20} />}
+      className="w-full text-sm sm:text-base"
+      startContent={isShareCopied ? <Check size={18} /> : <Share2 size={18} />}
       onPress={handleShareClick}
      >
       {t('taskDetail.share')}

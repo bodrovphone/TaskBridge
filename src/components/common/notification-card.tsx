@@ -214,12 +214,26 @@ export default function NotificationCard({ notification, onMarkAsRead }: Notific
 
     {/* Action Buttons */}
     <div className="pt-3 flex flex-col gap-2 w-full">
-     {notification.actionUrl && (
+     {/* Welcome message: Two action buttons */}
+     {notification.type === 'welcome_message' ? (
+      <div className="flex flex-col gap-2">
+       <Button asChild className="h-12 text-sm w-full justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-md hover:shadow-lg transition-all">
+        <LocaleLink href="/profile/professional" onClick={handleActionClick} className="flex items-center gap-2">
+         <Wallet className="h-4 w-4" />
+         {t('notifications.becomeProfessional')}
+        </LocaleLink>
+       </Button>
+       <Button asChild variant="outline" className="h-12 text-sm w-full justify-center border-2 border-green-500 text-green-700 hover:bg-green-50 hover:border-green-600 font-medium transition-all">
+        <LocaleLink href="/create-task" onClick={handleActionClick} className="flex items-center gap-2">
+         <FileText className="h-4 w-4" />
+         {t('notifications.createTask')}
+        </LocaleLink>
+       </Button>
+      </div>
+     ) : notification.actionUrl && (
       <Button asChild variant="outline" className="h-11 text-sm w-full justify-center">
        <LocaleLink href={notification.actionUrl} onClick={handleActionClick}>
-        {notification.type === 'welcome_message'
-         ? t('notifications.getStarted')
-         : notification.type === 'application_accepted'
+        {notification.type === 'application_accepted'
          ? t('notifications.viewMyWork')
          : notification.type.includes('application')
          ? t('notifications.viewApplication')

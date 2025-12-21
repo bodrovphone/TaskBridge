@@ -23,6 +23,8 @@ export const notifications = {
   'notifications.viewTask': 'View Task',
   'notifications.justNow': 'Just now',
   'notifications.getStarted': 'Get Started',
+  'notifications.becomeProfessional': 'Become a Professional',
+  'notifications.createTask': 'Create a Task',
   'notifications.customerContact': 'Customer Contact Information',
   'notifications.customerMessage': 'Message from customer',
 
