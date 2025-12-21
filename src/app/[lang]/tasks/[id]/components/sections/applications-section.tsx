@@ -1,12 +1,14 @@
 'use client'
 
 import { Avatar, Button as NextUIButton, Chip, Tooltip } from "@nextui-org/react";
-import { Star, CheckCircle, X, Eye } from "lucide-react";
+import { Star, CheckCircle, X, Eye, ExternalLink } from "lucide-react";
 import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { getTimelineLabel } from '@/lib/utils/timeline';
 
 interface Application {
  id: string;
+ professionalId: string;  // Professional user ID for profile link
  user: {
   name: string;
   avatar: string | null;  // Maps to avatar_url from database
@@ -35,6 +37,8 @@ export default function ApplicationsSection({
  onViewDetails
 }: ApplicationsSectionProps) {
  const t = useTranslations();
+ const params = useParams();
+ const currentLang = (params?.lang as string) || 'bg';
 
  return (
   <div className="space-y-4 mt-4">
@@ -49,7 +53,24 @@ export default function ApplicationsSection({
         className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0"
        />
        <div className="min-w-0 flex-1">
-        <h4 className="font-semibold text-gray-900 truncate">{application.user.name}</h4>
+        <div className="font-semibold text-gray-900 truncate">
+         {application.user.name}
+        </div>
+        {/* View Profile Button */}
+        <NextUIButton
+         as="a"
+         href={`/${currentLang}/professionals/${application.professionalId}`}
+         target="_blank"
+         rel="noopener noreferrer"
+         size="sm"
+         variant="light"
+         color="primary"
+         startContent={<ExternalLink size={12} />}
+         className="h-6 min-w-0 px-1 text-xs -ml-1"
+         onClick={(e) => e.stopPropagation()}
+        >
+         {t('applications.viewProfile')}
+        </NextUIButton>
         {/* Specialization */}
         {application.user.skills?.[0] && (
          <div className="text-sm text-gray-600 mb-1 truncate">
@@ -90,7 +111,12 @@ export default function ApplicationsSection({
      {/* Skills/Categories */}
      <div className="flex flex-wrap gap-2 mb-3">
       {application.user.skills?.map((skill, index) => (
-       <Chip key={index} size="sm" variant="flat" color="primary" className="text-xs">
+       <Chip
+        key={index}
+        size="sm"
+        variant="flat"
+        className="text-xs bg-blue-100 text-blue-700"
+       >
         {t(skill)}
        </Chip>
       ))}

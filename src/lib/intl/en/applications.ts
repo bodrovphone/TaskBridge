@@ -97,6 +97,7 @@ export const applications = {
   'applications.tasksCompleted': 'tasks completed',
   'applications.yearsExperience': 'years experience',
   'applications.viewDetails': 'View Details',
+  'applications.viewProfile': 'View Profile',
   'applications.freshProfessional': 'New to the platform - help them build their reputation!',
   'applications.new': 'New',
   'applications.acceptApplication': 'Accept',

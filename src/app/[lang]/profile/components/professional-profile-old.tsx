@@ -448,7 +448,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
        </div>
 
        <div>
-        <p className="text-sm text-gray-600">{t('profile.professional.responseTime')}</p>
+        <p className="text-sm text-gray-600">{t('profile.professional.responseTimeLabel')}</p>
         <p className="font-medium">{businessSettings.responseTime}</p>
        </div>
 
@@ -476,7 +476,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
        />
 
        <Input
-        label={t('profile.professional.responseTime')}
+        label={t('profile.professional.responseTimeLabel')}
         value={businessSettings.responseTime}
         onValueChange={(value) => setBusinessSettings(prev => ({ ...prev, responseTime: value }))}
         placeholder="Within 4 hours"

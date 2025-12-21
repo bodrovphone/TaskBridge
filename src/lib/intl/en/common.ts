@@ -47,6 +47,8 @@ export const common = {
   'common.newProfessional': 'New on Trudify',
   'common.negotiable': 'Negotiable',
   'common.loading': 'Loading...',
+  'common.applicationSingular': 'application',
+  'common.applicationPlural': 'applications',
 
   // Countries
   'common.country.bulgaria': 'Bulgaria',

@@ -97,6 +97,7 @@ export const applications = {
   'applications.tasksCompleted': 'завършени задачи',
   'applications.yearsExperience': 'години опит',
   'applications.viewDetails': 'Детайли',
+  'applications.viewProfile': 'Виж профил',
   'applications.freshProfessional': 'Нов в платформата - помогнете му да изгради репутация!',
   'applications.new': 'Нов',
   'applications.acceptApplication': 'Приеми',

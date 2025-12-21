@@ -65,7 +65,7 @@ export function CancelTaskConfirmDialog({
                     <>
                       {t('taskDetail.cancelDialog.consequence1')}
                       <strong className="ml-1">
-                        ({applicationsCount} {applicationsCount === 1 ? t('application') : t('applications')})
+                        ({applicationsCount} {applicationsCount === 1 ? t('common.applicationSingular') : t('common.applicationPlural')})
                       </strong>
                     </>
                   ) : (

@@ -97,6 +97,7 @@ export const applications = {
   'applications.tasksCompleted': 'задач',
   'applications.yearsExperience': 'лет опыта',
   'applications.viewDetails': 'Детали',
+  'applications.viewProfile': 'Смотреть профиль',
   'applications.freshProfessional': 'Новичок на платформе - помогите ему построить репутацию!',
   'applications.new': 'Новый',
   'applications.acceptApplication': 'Принять',

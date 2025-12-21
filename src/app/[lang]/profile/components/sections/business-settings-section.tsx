@@ -92,7 +92,7 @@ export function BusinessSettingsSection({
             <div className="p-3 rounded-xl bg-gray-50/50">
               <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                {t('profile.professional.businessHours')}
+                {t('profile.professional.businessHoursLabel')}
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export function BusinessSettingsSection({
             <div className="space-y-4">
               <label className="block text-sm font-medium flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                {t('profile.professional.businessHours')}
+                {t('profile.professional.businessHoursLabel')}
               </label>
 
               {/* Weekday Hours */}

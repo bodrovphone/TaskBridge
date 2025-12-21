@@ -12,8 +12,9 @@ import {
   Chip,
   Divider
 } from '@nextui-org/react'
-import { Star, CheckCircle, XCircle, Calendar, Wallet, Award, BadgeCheck, Clock } from 'lucide-react'
+import { Star, CheckCircle, XCircle, Calendar, Wallet, Award, BadgeCheck, Clock, ExternalLink } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { useState } from 'react'
 import { getTimelineLabel } from '@/lib/utils/timeline'
@@ -34,6 +35,8 @@ export default function ApplicationDetail({
   onReject
 }: ApplicationDetailProps) {
   const t = useTranslations()
+  const params = useParams()
+  const currentLang = (params?.lang as string) || 'bg'
   const [selectedImage, setSelectedImage] = useState(0)
 
   if (!application) return null
@@ -65,9 +68,11 @@ export default function ApplicationDetail({
                 <div className="grid grid-cols-2 sm:flex sm:flex-row items-start gap-4">
                   {/* Left Column (Mobile) / Avatar (Desktop) */}
                   <div className="flex flex-col gap-3 items-center">
-                    {/* Name - centered */}
+                    {/* Name */}
                     <div className="flex items-center justify-center gap-2 flex-wrap">
-                      <h3 className="text-lg sm:text-xl font-bold text-center">{professional.name}</h3>
+                      <span className="text-lg sm:text-xl font-bold text-center">
+                        {professional.name}
+                      </span>
                       {professional.verified && (
                         <BadgeCheck className="w-5 h-5 text-blue-500 flex-shrink-0" />
                       )}
@@ -104,20 +109,33 @@ export default function ApplicationDetail({
                     )}
 
                     {/* Skills/Categories */}
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 max-w-full overflow-hidden">
                       {professional.skills?.map((skill, index) => (
-                        <Chip
+                        <div
                           key={index}
-                          size="sm"
-                          variant="solid"
-                          className="bg-white text-gray-900 font-medium"
+                          className="bg-white text-gray-900 font-medium text-xs px-2 py-1 rounded-full max-w-[120px] truncate"
                         >
                           {t(skill)}
-                        </Chip>
+                        </div>
                       ))}
                     </div>
                   </div>
                 </div>
+
+                {/* View Profile Button - full width at bottom */}
+                <Button
+                  as="a"
+                  href={`/${currentLang}/professionals/${professional.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="sm"
+                  variant="bordered"
+                  color="primary"
+                  startContent={<ExternalLink className="w-4 h-4" />}
+                  className="w-full mt-4 bg-white"
+                >
+                  {t('applications.viewProfile')}
+                </Button>
               </div>
 
               <Divider className="my-4" />

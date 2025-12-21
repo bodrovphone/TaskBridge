@@ -374,6 +374,7 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
          <ApplicationsSection
           applications={applications.map(app => ({
            id: app.id,
+           professionalId: app.professional.id,
            user: {
             name: app.professional.name,
             avatar: app.professional.avatar || '',

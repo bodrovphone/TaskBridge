@@ -556,49 +556,49 @@ function PostedTaskCard({
             </>
           ) : (
             <>
-              {/* Open - View Details + Edit Task + View Applications + Cancel */}
-              <Button
-                size="sm"
-                variant="solid"
-                color="primary"
-                startContent={<Eye className="w-5 h-5" />}
-                onPress={() => router.push(`/${lang}/tasks/${id}`)}
-                className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white h-12"
-              >
-                {t('postedTasks.viewDetails')}
-              </Button>
-              <Button
-                size="sm"
-                variant="bordered"
-                color="primary"
-                startContent={<Edit className="w-5 h-5" />}
-                onPress={() => router.push(`/${lang}/tasks/${id}/edit`)}
-                className="w-full md:w-auto h-12"
-              >
-                {t('postedTasks.editTask')}
-              </Button>
-              {applicationsCount > 0 && (
+              {/* Open - 2x2 grid on desktop: Row 1: Details + Edit, Row 2: Applications + Cancel */}
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
+                <Button
+                  size="sm"
+                  variant="solid"
+                  color="primary"
+                  startContent={<Eye className="w-5 h-5" />}
+                  onPress={() => router.push(`/${lang}/tasks/${id}`)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12"
+                >
+                  {t('postedTasks.viewDetails')}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="bordered"
+                  color="primary"
+                  startContent={<Edit className="w-5 h-5" />}
+                  onPress={() => router.push(`/${lang}/tasks/${id}/edit`)}
+                  className="w-full h-12"
+                >
+                  {t('postedTasks.editTask')}
+                </Button>
                 <Button
                   size="sm"
                   variant="solid"
                   color="secondary"
                   startContent={<FileText className="w-5 h-5" />}
                   onPress={() => router.push(`/${lang}/tasks/${id}#applications`)}
-                  className="w-full md:flex-1 bg-green-600 hover:bg-green-700 text-white h-12"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white h-12"
                 >
                   {t('postedTasks.viewApplications')} ({applicationsCount})
                 </Button>
-              )}
-              <Button
-                size="sm"
-                variant="bordered"
-                color="danger"
-                startContent={<XCircle className="w-5 h-5" />}
-                onPress={() => setShowCancelDialog(true)}
-                className="w-full md:flex-1 h-12"
-              >
-                {t('postedTasks.cancelTask')}
-              </Button>
+                <Button
+                  size="sm"
+                  variant="bordered"
+                  color="danger"
+                  startContent={<XCircle className="w-5 h-5" />}
+                  onPress={() => setShowCancelDialog(true)}
+                  className="w-full h-12"
+                >
+                  {t('postedTasks.cancelTask')}
+                </Button>
+              </div>
             </>
           )}
         </div>

@@ -78,7 +78,7 @@ export function AvailabilitySection({
                 <Clock className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.responseTime')}</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider">{t('profile.professional.responseTimeLabel')}</p>
                 <p className="font-semibold text-gray-900">
                   {t(`profile.professional.responseTime.${responseTime}`)}
                 </p>
@@ -127,7 +127,7 @@ export function AvailabilitySection({
               <form.Field name="responseTime">
                 {(field) => (
                   <Select
-                    label={t('profile.professional.responseTime')}
+                    label={t('profile.professional.responseTimeLabel')}
                     selectedKeys={[field.state.value]}
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
