@@ -2,6 +2,8 @@
  * Professionals Page (Refactored)
  * Integrates real API data with infinite scroll
  * Reduced from 806 lines to ~200 lines by extracting sections
+ *
+ * SSR: Receives initial featured professionals from server for instant hydration
  */
 
 'use client'
@@ -16,9 +18,14 @@ import ResultsSection from './sections/results-section';
 import { FilterBar } from './filters/filter-bar';
 import { FiltersModal } from './filters/filters-modal';
 import { ActiveFilters } from './filters/active-filters';
-import type { PaginatedProfessionalsResponse } from '@/server/professionals/professional.types';
+import type { PaginatedProfessionalsResponse, Professional } from '@/server/professionals/professional.types';
 
-export default function ProfessionalsPage() {
+interface ProfessionalsPageProps {
+  /** Initial featured professionals from SSR - provides instant content for SEO */
+  initialFeaturedProfessionals?: Professional[];
+}
+
+export default function ProfessionalsPage({ initialFeaturedProfessionals = [] }: ProfessionalsPageProps) {
   const t = useTranslations();
   const params = useParams();
   const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
@@ -30,6 +37,7 @@ export default function ProfessionalsPage() {
   const hasActiveFilters = activeFilterCount > 0;
 
   // Always fetch featured professionals (used as fallback when filters return no results)
+  // Uses SSR initial data for instant hydration - improves SEO and initial load
   const { data: featuredData } = useQuery<PaginatedProfessionalsResponse>({
     queryKey: ['featured-professionals', currentLang],
     queryFn: async () => {
@@ -37,6 +45,17 @@ export default function ProfessionalsPage() {
       if (!response.ok) throw new Error('Failed to fetch featured professionals');
       return response.json();
     },
+    // SSR hydration: Use server-fetched data as initial data
+    // This means the page renders with content immediately (no loading state)
+    initialData: initialFeaturedProfessionals.length > 0
+      ? {
+          professionals: initialFeaturedProfessionals,
+          featuredProfessionals: initialFeaturedProfessionals,
+          pagination: { page: 1, limit: 20, total: initialFeaturedProfessionals.length, totalPages: 1, hasNext: false, hasPrevious: false }
+        }
+      : undefined,
+    // Stale time matches ISR revalidation (1 hour) - don't refetch if data is fresh
+    staleTime: 60 * 60 * 1000, // 1 hour
     // Always enabled - featured professionals are shown in two scenarios:
     // 1. No filters applied (primary featured section)
     // 2. Filters applied but no results (fallback/suggestion)

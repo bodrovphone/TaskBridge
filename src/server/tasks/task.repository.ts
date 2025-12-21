@@ -187,7 +187,8 @@ export class TaskRepository {
   async findFeaturedTasks(): Promise<Result<Task[], DatabaseError>> {
     try {
       console.log('[TaskRepository] findFeaturedTasks: Starting query')
-      const supabase = await createClient()
+      // Use admin client for static generation (no cookies dependency)
+      const supabase = createAdminClient()
 
       // Fetch more tasks than we need for diversity selection
       const { data: tasks, error } = await supabase

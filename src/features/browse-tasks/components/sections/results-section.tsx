@@ -161,29 +161,6 @@ export default function ResultsSection({
       </div>
      </div>
     </div>
-   ) : isLoading ? (
-    <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
-     {[1, 2, 3, 4, 5, 6].map((i) => (
-      <motion.div
-       key={i}
-       initial={{ opacity: 0, y: 20 }}
-       animate={{ opacity: 1, y: 0 }}
-       transition={{ delay: i * 0.1 }}
-       className="w-full"
-      >
-       <NextUICard className="animate-pulse">
-        <div className="p-6 space-y-4">
-         <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-         <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-         <div className="space-y-2">
-          <div className="h-3 bg-gray-200 rounded"></div>
-          <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-         </div>
-        </div>
-       </NextUICard>
-      </motion.div>
-     ))}
-    </div>
    ) : !hasActiveFilters && recommendedTasks.length > 0 ? (
     /* NO FILTERS: Show ONLY Featured Tasks */
     <div>
@@ -258,6 +235,30 @@ export default function ResultsSection({
        {t('browseTasks.results.allTasksLoaded')}
       </motion.div>
      )}
+    </div>
+   ) : hasActiveFilters && isLoading && tasks.length === 0 ? (
+    /* FILTERS ACTIVE AND LOADING: Show skeleton cards */
+    <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
+     {[1, 2, 3, 4, 5, 6].map((i) => (
+      <motion.div
+       key={i}
+       initial={{ opacity: 0, y: 20 }}
+       animate={{ opacity: 1, y: 0 }}
+       transition={{ delay: i * 0.1 }}
+       className="w-full"
+      >
+       <NextUICard className="animate-pulse">
+        <div className="p-6 space-y-4">
+         <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+         <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+         <div className="space-y-2">
+          <div className="h-3 bg-gray-200 rounded"></div>
+          <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+         </div>
+        </div>
+       </NextUICard>
+      </motion.div>
+     ))}
     </div>
    ) : hasActiveFilters && tasks.length === 0 ? (
     /* FILTERS ACTIVE BUT NO RESULTS: Show colorful "no results" + Featured Tasks as fallback */

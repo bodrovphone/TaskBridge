@@ -27,8 +27,26 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
 /**
  * Server-rendered SEO content - this text will be in the HTML source for search engines
  */
-async function SEOContent({ locale }: { locale: string }) {
+async function SEOContent({
+  locale,
+  featuredTasks,
+  featuredProfessionals
+}: {
+  locale: string
+  featuredTasks: any[]
+  featuredProfessionals: any[]
+}) {
   const t = await getTranslations({ locale })
+
+  // Helper to get localized task content
+  const getLocalizedTitle = (task: any) => {
+    if (locale === 'bg' && task.title_bg) return task.title_bg
+    return task.title
+  }
+  const getLocalizedDescription = (task: any) => {
+    if (locale === 'bg' && task.description_bg) return task.description_bg
+    return task.description
+  }
 
   return (
     <div className="sr-only" aria-hidden="false">
@@ -44,6 +62,36 @@ async function SEOContent({ locale }: { locale: string }) {
       <p>{t('landing.trustIndicators.freeToUseDescription')}</p>
       <h2>{t('landing.trustIndicators.instantNotifications')}</h2>
       <p>{t('landing.trustIndicators.instantNotificationsDescription')}</p>
+
+      {/* Featured Tasks for SEO */}
+      <h2>{t('landing.featured.title')}</h2>
+      <ul>
+        {featuredTasks.slice(0, 6).map((task) => (
+          <li key={task.id}>
+            <article>
+              <h3>{getLocalizedTitle(task)}</h3>
+              <p>{getLocalizedDescription(task)}</p>
+              <span>{task.city}</span>
+              <span>{task.category}</span>
+            </article>
+          </li>
+        ))}
+      </ul>
+
+      {/* Featured Professionals for SEO */}
+      <h2>{t('professionals.featuredTitle')}</h2>
+      <ul>
+        {featuredProfessionals.slice(0, 6).map((pro) => (
+          <li key={pro.id}>
+            <article>
+              <h3>{pro.full_name}</h3>
+              {pro.professional_title && <p>{pro.professional_title}</p>}
+              {pro.bio && <p>{pro.bio}</p>}
+              {pro.city && <span>{pro.city}</span>}
+            </article>
+          </li>
+        ))}
+      </ul>
 
       {/* Categories section */}
       <h2>{t('landing.categories.title')}</h2>
@@ -81,7 +129,11 @@ async function HomePage({ params }: HomePageProps) {
   return (
     <>
       {/* Server-rendered SEO content (visually hidden but in HTML source) */}
-      <SEOContent locale={locale} />
+      <SEOContent
+        locale={locale}
+        featuredTasks={featuredTasks}
+        featuredProfessionals={featuredProfessionals}
+      />
 
       {/* Client-rendered interactive landing page */}
       <LandingPage featuredTasks={featuredTasks} featuredProfessionals={featuredProfessionals} />

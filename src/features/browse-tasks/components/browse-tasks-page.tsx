@@ -11,6 +11,7 @@ import { useAuth } from "@/features/auth";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from 'next-intl';
+import type { Task } from '@/server/tasks/task.types';
 
 interface PaginatedTasksResponse {
  tasks: any[];
@@ -24,7 +25,12 @@ interface PaginatedTasksResponse {
  };
 }
 
-export default function BrowseTasksPage() {
+interface BrowseTasksPageProps {
+ /** Initial featured tasks from SSR - provides instant content for SEO */
+ initialFeaturedTasks?: Task[];
+}
+
+export default function BrowseTasksPage({ initialFeaturedTasks = [] }: BrowseTasksPageProps) {
  const { filters, updateFilter, resetFilters, buildApiQuery, activeFilterCount } = useTaskFilters();
  const { user } = useAuth();
  const router = useRouter();
@@ -38,6 +44,7 @@ export default function BrowseTasksPage() {
  const hasActiveFilters = activeFilterCount > 0;
 
  // Always fetch featured tasks (used as fallback when filters return no results)
+ // Uses SSR initial data for instant hydration - improves SEO and initial load
  const { data: featuredData, error: featuredError } = useQuery<PaginatedTasksResponse>({
   queryKey: ['featured-tasks'],
   queryFn: async () => {
@@ -58,6 +65,13 @@ export default function BrowseTasksPage() {
     throw error;
    }
   },
+  // SSR hydration: Use server-fetched data as initial data
+  // This means the page renders with content immediately (no loading state)
+  initialData: initialFeaturedTasks.length > 0
+   ? { tasks: initialFeaturedTasks, pagination: { page: 1, limit: 20, total: initialFeaturedTasks.length, totalPages: 1, hasNext: false, hasPrevious: false } }
+   : undefined,
+  // Stale time matches ISR revalidation (1 hour) - don't refetch if data is fresh
+  staleTime: 60 * 60 * 1000, // 1 hour
   // Always enabled - featured tasks are shown in two scenarios:
   // 1. No filters applied (primary featured section)
   // 2. Filters applied but no results (fallback/suggestion)
