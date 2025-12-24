@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createAdminClient } from '@/lib/supabase/server'
 import { SUPPORTED_LOCALES } from '@/lib/constants/locales'
+import { getAllArticleSlugs } from '@/features/blog'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
 
@@ -10,9 +11,10 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticUrls = generateStaticUrls()
+  const blogUrls = generateBlogUrls()
   const dynamicUrls = await generateDynamicUrls()
 
-  return [...staticUrls, ...dynamicUrls]
+  return [...staticUrls, ...blogUrls, ...dynamicUrls]
 }
 
 /**
@@ -46,6 +48,20 @@ function generateStaticUrls(): MetadataRoute.Sitemap {
       priority: page.priority,
     }))
   )
+}
+
+/**
+ * Generate URLs for article pages (at root level, no /blog/ prefix)
+ */
+function generateBlogUrls(): MetadataRoute.Sitemap {
+  const articleSlugs = getAllArticleSlugs()
+
+  return articleSlugs.map(({ slug, locale }) => ({
+    url: `${baseUrl}/${locale}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
 }
 
 /**

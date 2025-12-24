@@ -1,9 +1,9 @@
 // Landing page translations - hero, categories, featured tasks, how it works, testimonials, CTA, trust section
 export const landing = {
   'landing.hero.badge': '#1 Service Platform in Bulgaria',
-  'landing.hero.title': 'Find a Specialist or Find Work',
+  'landing.hero.title': 'Looking for Work or a Handyman?',
   'landing.hero.subtitle':
-    "Whether you need a handyman, a cleaner, a tutor, or any other help — post your task and receive offers from verified professionals. You pick the best one.\n\nOr if you're looking to earn — browse tasks that match your skills, apply with your offer, and work on your own terms. No middlemen, no complicated fees.",
+    "Movers, apartment cleaning, home repairs — find a task or specialist in Sofia, Burgas, Plovdiv, Varna. Free, no commissions.\n\nLooking for work? Browse tasks and apply. Need a handyman? Post a task and get offers.",
   'landing.hero.getStarted': 'create a task',
   'landing.hero.browseServices': 'Find Work',
   'landing.hero.giveawayBadge': 'Win Prizes!',

@@ -273,3 +273,62 @@ export function ProfileJsonLd({ name, description, image, jobTitle, url }: Profi
     />
   )
 }
+
+/**
+ * Article Schema - For blog posts
+ * Enables article rich snippets in search results
+ */
+interface ArticleJsonLdProps {
+  title: string
+  description: string
+  url: string
+  datePublished: string
+  dateModified?: string
+  authorName: string
+  image?: string
+}
+
+export function ArticleJsonLd({
+  title,
+  description,
+  url,
+  datePublished,
+  dateModified,
+  authorName,
+  image,
+}: ArticleJsonLdProps) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: url.startsWith('http') ? url : `${baseUrl}${url}`,
+    datePublished,
+    dateModified: dateModified || datePublished,
+    author: {
+      '@type': 'Organization',
+      name: authorName,
+      url: baseUrl,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Trudify',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${baseUrl}/images/logo/trudify-logo-512.png`,
+      },
+    },
+    image: image || `${baseUrl}/images/logo/trudify-og-image.png`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': url.startsWith('http') ? url : `${baseUrl}${url}`,
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}

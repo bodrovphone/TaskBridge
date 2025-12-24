@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { useParams } from 'next/navigation'
 import { useAuth } from '@/features/auth'
 import { UserProfile } from '@/server/domain/user/user.types'
 
@@ -22,6 +23,8 @@ export function ProfileDataProvider({ children }: ProfileDataProviderProps) {
   const { profile: authProfile, user, refreshProfile, authenticatedFetch } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
 
   const updateProfile = useCallback(async (updates: Partial<UserProfile>) => {
     if (!user) {
@@ -32,7 +35,8 @@ export function ProfileDataProvider({ children }: ProfileDataProviderProps) {
     setError(null)
 
     try {
-      const response = await authenticatedFetch('/api/profile', {
+      // Pass locale to trigger translation for non-BG content
+      const response = await authenticatedFetch(`/api/profile?locale=${currentLocale}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +59,7 @@ export function ProfileDataProvider({ children }: ProfileDataProviderProps) {
     } finally {
       setIsLoading(false)
     }
-  }, [user, refreshProfile, authenticatedFetch])
+  }, [user, refreshProfile, authenticatedFetch, currentLocale])
 
   return children({
     profile: authProfile,

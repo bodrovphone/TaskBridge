@@ -11,20 +11,20 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
 const pageMetadata: Record<string, Record<SupportedLocale, { title: string; description: string }>> = {
   home: {
     en: {
-      title: 'Find Verified Professionals',
-      description: 'Connect with verified local professionals for any task - from home repairs to deliveries and personal assistance. Secure platform with verified specialists in Bulgaria.',
+      title: 'Looking for Work or a Handyman? | Movers, Cleaning | Trudify',
+      description: 'Looking for work? Find tasks as a handyman, mover, or cleaner. Or find a specialist for moving, apartment cleaning. Sofia, Burgas, Plovdiv, Varna. Free!',
     },
     bg: {
-      title: 'Намерете проверени професионалисти',
-      description: 'Свържете се с проверени местни професионалисти за всякакви задачи - от домашни ремонти до доставки и лична помощ. Сигурна платформа с проверени специалисти.',
+      title: 'Търся работа или майстор? | Хамали, Почистване | Trudify',
+      description: 'Търсиш работа? Намери задачи като майстор, хамалин, чистач. Или намери специалист за преместване, почистване. София, Бургас, Пловдив, Варна. Безплатно!',
     },
     ru: {
-      title: 'Найдите проверенных специалистов',
-      description: 'Свяжитесь с проверенными местными специалистами для любых задач - от ремонта до доставки и личной помощи. Безопасная платформа с проверенными специалистами в Болгарии.',
+      title: 'Ищу работу или мастера? | Грузчики, Уборка | Trudify',
+      description: 'Ищете работу? Найдите задачи как мастер, грузчик, уборщик. Или найдите специалиста для переезда, уборки квартиры. София, Бургас, Пловдив, Варна. Бесплатно!',
     },
     ua: {
-      title: 'Знайдіть перевірених фахівців',
-      description: 'Зв\'яжіться з перевіреними місцевими фахівцями для будь-яких завдань - від ремонту до доставки та особистої допомоги. Безпечна платформа з перевіреними спеціалістами в Болгарії.',
+      title: 'Шукаю роботу або майстра? | Вантажники, Прибирання | Trudify',
+      description: 'Шукаєте роботу? Знайдіть завдання як майстер, вантажник, прибиральник. Або знайдіть спеціаліста для переїзду, прибирання. Софія, Бургас, Пловдив, Варна. Безкоштовно!',
     },
   },
   'browse-tasks': {

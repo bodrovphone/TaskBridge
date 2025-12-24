@@ -13,6 +13,7 @@ import { notifications } from './notifications';
 import { reviews } from './reviews';
 import { legal } from './legal';
 import { contentPages } from './content-pages';
+import { blog } from './blog';
 import type en from '../en';
 
 // Combine all chunks into single translation object
@@ -32,6 +33,7 @@ export const bg = {
   ...reviews,
   ...legal,
   ...contentPages,
+  ...blog,
 } satisfies typeof en;
 
 export default bg;
