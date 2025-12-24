@@ -96,6 +96,18 @@ export const tarsyaRabotaArticle: BlogArticle = {
     Затова създадохме Trudify. Не сме поредният сайт за обяви. Ние сме <strong>маркетплейс за микро-договори</strong> - мястото, където клиенти и изпълнители се намират за конкретни задачи.
   </p>
 
+  <div class="my-6 flex justify-center">
+    <div class="relative w-full max-w-[280px] aspect-[9/16] rounded-2xl overflow-hidden shadow-lg bg-gray-100">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/oij2SdjZwGU"
+        title="Какво е Trudify - кратко видео"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        class="absolute inset-0 w-full h-full"
+      ></iframe>
+    </div>
+  </div>
+
   <ul>
     <li>✅ <strong>Свобода на избор</strong> - професионалистите избират задачи, клиентите избират изпълнители</li>
     <li>✅ <strong>Директен контакт</strong> - след избор получавате телефон и имейл, договаряте се директно</li>

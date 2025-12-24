@@ -104,6 +104,8 @@ export const landing = {
   'landing.howItWorks.professionals.step3.title': 'Виконайте роботу',
   'landing.howItWorks.professionals.step3.description':
     'Надайте якісні послуги та будуйте репутацію',
+  'landing.howItWorks.customersLearnMore': 'Дивитись відео гайди',
+  'landing.howItWorks.professionalsLearnMore': 'Дивитись відео гайди',
 
   'landing.testimonials.title': 'Що кажуть користувачі',
   'landing.testimonials.subtitle': 'Справжні відгуки нашої спільноти',
