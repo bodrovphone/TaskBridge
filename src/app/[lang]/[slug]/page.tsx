@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { generateCanonicalUrl } from '@/lib/utils/seo'
@@ -168,6 +169,21 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </div>
       </header>
+
+      {/* Cover Image */}
+      {article.coverImage && (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 mb-8">
+          <div className="relative aspect-[2/1] rounded-2xl overflow-hidden shadow-lg">
+            <Image
+              src={article.coverImage}
+              alt={article.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </div>
+      )}
 
       {/* Article Content */}
       <article className="py-12 md:py-16">

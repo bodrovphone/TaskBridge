@@ -19,7 +19,7 @@ export const tarsyaRabotaArticle: BlogArticle = {
   category: 'for-professionals',
   tags: ['търся работа', 'работа на час', 'допълнителна работа', 'работа без опит', 'работа студенти'],
   readingTime: 8,
-  coverImage: '/images/blog/tarsya-rabota-cover.jpg',
+  coverImage: '/assets/bg-money.jpg',
   relatedLinks: [
     { text: 'Разгледай задачи', href: '/bg/browse-tasks' },
     { text: 'Как работи Trudify', href: '/bg/how-it-works' },
