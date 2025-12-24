@@ -457,6 +457,15 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
         </div>
        ))}
       </div>
+      <div className="mt-10 text-center">
+       <LocaleLink
+        href="/for-customers"
+        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
+       >
+        {t('landing.howItWorks.customersLearnMore')}
+        <ArrowRight className="ml-2 h-5 w-5" />
+       </LocaleLink>
+      </div>
      </div>
 
      {/* For Professionals */}
@@ -481,6 +490,15 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
          <p className="text-slate-600 leading-relaxed text-lg">{step.description}</p>
         </div>
        ))}
+      </div>
+      <div className="mt-10 text-center">
+       <LocaleLink
+        href="/for-professionals"
+        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl"
+       >
+        {t('landing.howItWorks.professionalsLearnMore')}
+        <ArrowRight className="ml-2 h-5 w-5" />
+       </LocaleLink>
       </div>
      </div>
     </div>

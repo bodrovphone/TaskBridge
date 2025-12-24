@@ -171,6 +171,24 @@ const pageMetadata: Record<string, Record<SupportedLocale, { title: string; desc
       description: 'Приєднуйтесь до Trudify як фахівець. Знаходьте місцевих клієнтів, розвивайте бізнес та створюйте репутацію.',
     },
   },
+  'for-customers': {
+    en: {
+      title: 'For Customers',
+      description: 'Find verified professionals for any task on Trudify. Post your job for free, receive quotes, and get things done.',
+    },
+    bg: {
+      title: 'За клиенти',
+      description: 'Намерете проверени професионалисти за всяка задача в Trudify. Публикувайте безплатно, получете оферти и свършете работата.',
+    },
+    ru: {
+      title: 'Для клиентов',
+      description: 'Найдите проверенных специалистов для любой задачи на Trudify. Размещайте задачи бесплатно, получайте предложения и решайте задачи.',
+    },
+    ua: {
+      title: 'Для клієнтів',
+      description: 'Знайдіть перевірених фахівців для будь-якого завдання на Trudify. Розміщуйте завдання безкоштовно, отримуйте пропозиції та вирішуйте задачі.',
+    },
+  },
   testimonials: {
     en: {
       title: 'Testimonials',

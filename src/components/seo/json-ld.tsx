@@ -275,6 +275,106 @@ export function ProfileJsonLd({ name, description, image, jobTitle, url }: Profi
 }
 
 /**
+ * VideoObject Schema - For video content
+ * Enables video rich snippets in search results
+ */
+interface VideoJsonLdProps {
+  name: string
+  description: string
+  thumbnailUrl: string
+  uploadDate: string
+  contentUrl: string
+  embedUrl: string
+  duration?: string // ISO 8601 duration format, e.g., "PT1M30S"
+}
+
+export function VideoJsonLd({
+  name,
+  description,
+  thumbnailUrl,
+  uploadDate,
+  contentUrl,
+  embedUrl,
+  duration,
+}: VideoJsonLdProps) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name,
+    description,
+    thumbnailUrl,
+    uploadDate,
+    contentUrl,
+    embedUrl,
+    ...(duration && { duration }),
+    publisher: {
+      '@type': 'Organization',
+      name: 'Trudify',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${baseUrl}/images/logo/trudify-logo-512.png`,
+      },
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+/**
+ * ItemList of Videos - For pages with multiple videos
+ */
+interface VideoItem {
+  name: string
+  description: string
+  thumbnailUrl: string
+  contentUrl: string
+  embedUrl: string
+  uploadDate: string
+  duration?: string
+}
+
+interface VideoListJsonLdProps {
+  videos: VideoItem[]
+}
+
+export function VideoListJsonLd({ videos }: VideoListJsonLdProps) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: videos.map((video, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'VideoObject',
+        name: video.name,
+        description: video.description,
+        thumbnailUrl: video.thumbnailUrl,
+        uploadDate: video.uploadDate,
+        contentUrl: video.contentUrl,
+        embedUrl: video.embedUrl,
+        ...(video.duration && { duration: video.duration }),
+        publisher: {
+          '@type': 'Organization',
+          name: 'Trudify',
+        },
+      },
+    })),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+/**
  * Article Schema - For blog posts
  * Enables article rich snippets in search results
  */

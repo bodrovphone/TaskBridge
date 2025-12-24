@@ -77,6 +77,8 @@ export const landing = {
     'Простой процесс поиска и выполнения задач с проверенными специалистами',
   'landing.howItWorks.forCustomers': 'Для клиентов',
   'landing.howItWorks.forProfessionals': 'Для специалистов',
+  'landing.howItWorks.customersLearnMore': 'Смотреть видео гайды',
+  'landing.howItWorks.professionalsLearnMore': 'Смотреть видео гайды',
   'landing.howItWorks.step1.title': 'Опубликуйте вашу задачу',
   'landing.howItWorks.step1.description':
     'Опишите, что нужно сделать, и установите ваш бюджет',

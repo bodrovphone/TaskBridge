@@ -46,6 +46,7 @@ export const contentPages = {
   'howItWorks.customers.step3.description': 'Изберете професионалиста, който най-добре отговаря на нуждите ви. Разговаряйте с него, за да обсъдите детайлите преди потвърждение.',
   'howItWorks.customers.step4.title': 'Свършете работата',
   'howItWorks.customers.step4.description': 'Професионалистът завършва работата. Платете само когато сте доволни и оставете отзив.',
+  'howItWorks.customers.learnMore': 'Научете повече и гледайте видео гайдове',
 
   'howItWorks.professionals.title': 'За професионалисти',
   'howItWorks.professionals.subtitle': 'Развийте бизнеса си с Trudify',
@@ -57,6 +58,7 @@ export const contentPages = {
   'howItWorks.professionals.step3.description': 'Изпращайте конкурентни оферти на клиентите. Откройте се с профила и отзивите си.',
   'howItWorks.professionals.step4.title': 'Изградете репутацията си',
   'howItWorks.professionals.step4.description': 'Изпълнявайте задачи, събирайте отзиви и развивайте бизнеса си. Най-добре оценените професионалисти получават повече работа.',
+  'howItWorks.professionals.learnMore': 'Научете повече и гледайте видео гайдове',
 
   'howItWorks.cta.title': 'Готови да започнете?',
   'howItWorks.cta.subtitle': 'Независимо дали имате нужда от помощ или искате да предложите услугите си, ние сме тук за вас.',
@@ -119,11 +121,53 @@ export const contentPages = {
   'forProfessionals.howEarnings.title': 'Как работят приходите',
   'forProfessionals.howEarnings.description': 'Вие задавате собствените си цени и преговаряте директно с клиентите. Trudify в момента е безплатен за професионалисти по време на стартовия период.',
 
+  'forProfessionals.videoGuides.title': 'Видео гайдове',
+  'forProfessionals.videoGuides.subtitle': 'Гледайте кратки уроци и започнете за минути',
+  'forProfessionals.videoGuides.video1.title': 'Първи стъпки',
+  'forProfessionals.videoGuides.video1.description': 'Как да се регистрирате и попълните професионалния си профил',
+  'forProfessionals.videoGuides.video2.title': 'Намиране на работа',
+  'forProfessionals.videoGuides.video2.description': 'Как да търсите задачи, да кандидатствате и да получавате известия',
+
   'forProfessionals.stats.title': 'Присъединете се към растяща общност',
 
   'forProfessionals.cta.title': 'Готови да започнете да печелите?',
   'forProfessionals.cta.subtitle': 'Създайте профила си днес и започнете да се свързвате с клиенти във вашия район.',
   'forProfessionals.cta.button': 'Създайте професионален профил',
+
+  // For Customers Page
+  'forCustomers.hero.title': 'Свършете нещата с Trudify',
+  'forCustomers.hero.subtitle': 'Намерете проверени професионалисти за всяка задача. Публикувайте и получете оферти за минути.',
+  'forCustomers.hero.cta': 'Публикувайте първата задача',
+
+  'forCustomers.benefits.title': 'Защо клиентите обичат Trudify',
+  'forCustomers.benefits.fast': 'Бързи резултати',
+  'forCustomers.benefits.fastDesc': 'Публикувайте задача и получете оферти в рамките на часове. Без повече безкрайно търсене и чакане.',
+  'forCustomers.benefits.verified': 'Проверени професионалисти',
+  'forCustomers.benefits.verifiedDesc': 'Всеки професионалист е проверен. Вижте техните оценки, отзиви и история на завършените задачи.',
+  'forCustomers.benefits.communicate': 'Лесна комуникация',
+  'forCustomers.benefits.communicateDesc': 'Разговаряйте директно с професионалисти, за да обсъдите детайли, да договорите цени и да потвърдите графици.',
+  'forCustomers.benefits.reviews': 'Достоверни отзиви',
+  'forCustomers.benefits.reviewsDesc': 'Реални отзиви от реални клиенти ви помагат да изберете най-добрия професионалист за вашата задача.',
+
+  'forCustomers.howItWorks.title': 'Просто и безплатно',
+  'forCustomers.howItWorks.description': 'Публикуването на задачи в Trudify е напълно безплатно. Плащате на професионалиста директно само след като работата е свършена и сте доволни.',
+
+  'forCustomers.videoGuides.title': 'Видео гайдове',
+  'forCustomers.videoGuides.subtitle': 'Научете как да използвате Trudify за няколко минути',
+  'forCustomers.videoGuides.video1.title': 'Първи стъпки',
+  'forCustomers.videoGuides.video1.description': 'Как да се регистрирате и публикувате първата си задача',
+  'forCustomers.videoGuides.video2.title': 'Поканете професионалист',
+  'forCustomers.videoGuides.video2.description': 'Как да поканите конкретен професионалист към вашата задача',
+  'forCustomers.videoGuides.video3.title': 'Прегледайте кандидатурите',
+  'forCustomers.videoGuides.video3.description': 'Как да прегледате и приемете кандидатури',
+  'forCustomers.videoGuides.video4.title': 'Оставете отзив',
+  'forCustomers.videoGuides.video4.description': 'Как да оставите отзив след завършване на задачата',
+
+  'forCustomers.stats.title': 'Присъединете се към хилядите доволни клиенти',
+
+  'forCustomers.cta.title': 'Готови да започнете?',
+  'forCustomers.cta.subtitle': 'Публикувайте първата си задача безплатно и намерете перфектния професионалист днес.',
+  'forCustomers.cta.button': 'Публикувайте задача сега',
 
   // Pricing Page
   'pricing.hero.title': 'Просто и прозрачно ценообразуване',

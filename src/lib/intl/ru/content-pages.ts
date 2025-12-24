@@ -46,6 +46,7 @@ export const contentPages = {
   'howItWorks.customers.step3.description': 'Выберите специалиста, который лучше всего подходит. Обсудите детали в чате перед подтверждением.',
   'howItWorks.customers.step4.title': 'Получите результат',
   'howItWorks.customers.step4.description': 'Специалист выполняет работу. Платите только когда довольны результатом и оставьте отзыв.',
+  'howItWorks.customers.learnMore': 'Узнать больше и смотреть видео гайды',
 
   'howItWorks.professionals.title': 'Для специалистов',
   'howItWorks.professionals.subtitle': 'Развивайте бизнес с Trudify',
@@ -57,6 +58,7 @@ export const contentPages = {
   'howItWorks.professionals.step3.description': 'Отправляйте конкурентные предложения клиентам. Выделяйтесь профилем и отзывами.',
   'howItWorks.professionals.step4.title': 'Создавайте репутацию',
   'howItWorks.professionals.step4.description': 'Выполняйте задачи, собирайте отзывы и развивайте бизнес. Лучшие специалисты получают больше работы.',
+  'howItWorks.professionals.learnMore': 'Узнать больше и смотреть видео гайды',
 
   'howItWorks.cta.title': 'Готовы начать?',
   'howItWorks.cta.subtitle': 'Нужна помощь или хотите предложить услуги - мы поможем.',
@@ -119,11 +121,53 @@ export const contentPages = {
   'forProfessionals.howEarnings.title': 'Как работает заработок',
   'forProfessionals.howEarnings.description': 'Вы устанавливаете свои цены и договариваетесь напрямую с клиентами. Trudify сейчас бесплатен для специалистов в период запуска.',
 
+  'forProfessionals.videoGuides.title': 'Видео гайды',
+  'forProfessionals.videoGuides.subtitle': 'Смотрите короткие уроки и начните за минуты',
+  'forProfessionals.videoGuides.video1.title': 'Начало работы',
+  'forProfessionals.videoGuides.video1.description': 'Как зарегистрироваться и заполнить профиль специалиста',
+  'forProfessionals.videoGuides.video2.title': 'Поиск работы',
+  'forProfessionals.videoGuides.video2.description': 'Как искать задачи, откликаться и получать уведомления',
+
   'forProfessionals.stats.title': 'Присоединяйтесь к растущему сообществу',
 
   'forProfessionals.cta.title': 'Готовы начать зарабатывать?',
   'forProfessionals.cta.subtitle': 'Создайте профиль сегодня и начните находить клиентов в вашем районе.',
   'forProfessionals.cta.button': 'Создать профиль специалиста',
+
+  // For Customers Page
+  'forCustomers.hero.title': 'Решайте задачи с Trudify',
+  'forCustomers.hero.subtitle': 'Найдите проверенных специалистов для любой задачи. Разместите заказ и получите предложения за минуты.',
+  'forCustomers.hero.cta': 'Разместить первую задачу',
+
+  'forCustomers.benefits.title': 'Почему клиенты выбирают Trudify',
+  'forCustomers.benefits.fast': 'Быстрый результат',
+  'forCustomers.benefits.fastDesc': 'Разместите задачу и получите предложения за часы. Больше никакого бесконечного поиска и ожидания.',
+  'forCustomers.benefits.verified': 'Проверенные специалисты',
+  'forCustomers.benefits.verifiedDesc': 'Каждый специалист проверен. Смотрите их рейтинги, отзывы и историю выполненных работ.',
+  'forCustomers.benefits.communicate': 'Простое общение',
+  'forCustomers.benefits.communicateDesc': 'Общайтесь напрямую со специалистами, обсуждайте детали, договаривайтесь о ценах и согласовывайте график.',
+  'forCustomers.benefits.reviews': 'Достоверные отзывы',
+  'forCustomers.benefits.reviewsDesc': 'Реальные отзывы от реальных клиентов помогут выбрать лучшего специалиста для вашей задачи.',
+
+  'forCustomers.howItWorks.title': 'Просто и бесплатно',
+  'forCustomers.howItWorks.description': 'Размещение задач на Trudify полностью бесплатно. Вы платите специалисту напрямую только после завершения работы, когда довольны результатом.',
+
+  'forCustomers.videoGuides.title': 'Видео гайды',
+  'forCustomers.videoGuides.subtitle': 'Узнайте, как пользоваться Trudify за несколько минут',
+  'forCustomers.videoGuides.video1.title': 'Начало работы',
+  'forCustomers.videoGuides.video1.description': 'Как зарегистрироваться и разместить первую задачу',
+  'forCustomers.videoGuides.video2.title': 'Пригласить специалиста',
+  'forCustomers.videoGuides.video2.description': 'Как пригласить конкретного специалиста к вашей задаче',
+  'forCustomers.videoGuides.video3.title': 'Просмотр заявок',
+  'forCustomers.videoGuides.video3.description': 'Как просмотреть и принять заявки',
+  'forCustomers.videoGuides.video4.title': 'Оставить отзыв',
+  'forCustomers.videoGuides.video4.description': 'Как оставить отзыв после завершения задачи',
+
+  'forCustomers.stats.title': 'Присоединяйтесь к тысячам довольных клиентов',
+
+  'forCustomers.cta.title': 'Готовы начать?',
+  'forCustomers.cta.subtitle': 'Разместите первую задачу бесплатно и найдите идеального специалиста сегодня.',
+  'forCustomers.cta.button': 'Разместить задачу',
 
   // Pricing Page
   'pricing.hero.title': 'Простое и прозрачное ценообразование',

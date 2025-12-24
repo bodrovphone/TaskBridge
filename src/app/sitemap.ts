@@ -33,6 +33,7 @@ function generateStaticUrls(): MetadataRoute.Sitemap {
     { path: '/how-it-works', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/for-professionals', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/for-customers', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/testimonials', priority: 0.5, changeFrequency: 'monthly' as const },
     { path: '/giveaway', priority: 0.8, changeFrequency: 'weekly' as const },
     // Legal pages

@@ -76,6 +76,8 @@ export const landing = {
     'Easy process for finding and completing tasks with verified specialists',
   'landing.howItWorks.forCustomers': 'For Customers',
   'landing.howItWorks.forProfessionals': 'For Professionals',
+  'landing.howItWorks.customersLearnMore': 'Watch Video Guides',
+  'landing.howItWorks.professionalsLearnMore': 'Watch Video Guides',
   'landing.howItWorks.step1.title': 'Post Your Task',
   'landing.howItWorks.step1.description':
     'Describe what you need done and set your budget',

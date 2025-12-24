@@ -46,6 +46,7 @@ export const contentPages = {
   'howItWorks.customers.step3.description': 'Pick the professional that best fits your needs. Chat with them to discuss details before confirming.',
   'howItWorks.customers.step4.title': 'Get It Done',
   'howItWorks.customers.step4.description': 'The professional completes the work. Pay only when you\'re satisfied and leave a review.',
+  'howItWorks.customers.learnMore': 'Learn more & watch video guides',
 
   'howItWorks.professionals.title': 'For Professionals',
   'howItWorks.professionals.subtitle': 'Grow your business with Trudify',
@@ -57,6 +58,7 @@ export const contentPages = {
   'howItWorks.professionals.step3.description': 'Send competitive quotes to customers. Stand out with your profile and reviews.',
   'howItWorks.professionals.step4.title': 'Build Your Reputation',
   'howItWorks.professionals.step4.description': 'Complete tasks, collect reviews, and grow your business. Top-rated professionals get more work.',
+  'howItWorks.professionals.learnMore': 'Learn more & watch video guides',
 
   'howItWorks.cta.title': 'Ready to Start?',
   'howItWorks.cta.subtitle': 'Whether you need help or want to offer your services, we\'ve got you covered.',
@@ -119,11 +121,53 @@ export const contentPages = {
   'forProfessionals.howEarnings.title': 'How Earnings Work',
   'forProfessionals.howEarnings.description': 'You set your own prices and negotiate directly with customers. Trudify is currently free for professionals during our launch period.',
 
+  'forProfessionals.videoGuides.title': 'Video Guides',
+  'forProfessionals.videoGuides.subtitle': 'Watch quick tutorials to get started in minutes',
+  'forProfessionals.videoGuides.video1.title': 'Getting Started',
+  'forProfessionals.videoGuides.video1.description': 'How to register and set up your professional profile',
+  'forProfessionals.videoGuides.video2.title': 'Finding Work',
+  'forProfessionals.videoGuides.video2.description': 'How to search tasks, apply, and get notifications',
+
   'forProfessionals.stats.title': 'Join a Growing Community',
 
   'forProfessionals.cta.title': 'Ready to Start Earning?',
   'forProfessionals.cta.subtitle': 'Create your profile today and start connecting with customers in your area.',
   'forProfessionals.cta.button': 'Create Professional Profile',
+
+  // For Customers Page
+  'forCustomers.hero.title': 'Get Things Done with Trudify',
+  'forCustomers.hero.subtitle': 'Find verified professionals for any task. Post your job and get quotes in minutes.',
+  'forCustomers.hero.cta': 'Post Your First Task',
+
+  'forCustomers.benefits.title': 'Why Customers Love Trudify',
+  'forCustomers.benefits.fast': 'Quick Results',
+  'forCustomers.benefits.fastDesc': 'Post a task and receive quotes within hours. No more endless searching or waiting.',
+  'forCustomers.benefits.verified': 'Verified Professionals',
+  'forCustomers.benefits.verifiedDesc': 'Every professional is verified. View their ratings, reviews, and completed work history.',
+  'forCustomers.benefits.communicate': 'Easy Communication',
+  'forCustomers.benefits.communicateDesc': 'Chat directly with professionals to discuss details, negotiate prices, and confirm schedules.',
+  'forCustomers.benefits.reviews': 'Trusted Reviews',
+  'forCustomers.benefits.reviewsDesc': 'Real reviews from real customers help you choose the best professional for your task.',
+
+  'forCustomers.howItWorks.title': 'Simple and Free',
+  'forCustomers.howItWorks.description': 'Posting tasks on Trudify is completely free. You only pay the professional directly after the work is done and you are satisfied.',
+
+  'forCustomers.videoGuides.title': 'Video Guides',
+  'forCustomers.videoGuides.subtitle': 'Learn how to use Trudify in just a few minutes',
+  'forCustomers.videoGuides.video1.title': 'Getting Started',
+  'forCustomers.videoGuides.video1.description': 'How to register and post your first task',
+  'forCustomers.videoGuides.video2.title': 'Invite Professional',
+  'forCustomers.videoGuides.video2.description': 'How to invite a specific professional to your task',
+  'forCustomers.videoGuides.video3.title': 'Review Applications',
+  'forCustomers.videoGuides.video3.description': 'How to review and accept applications',
+  'forCustomers.videoGuides.video4.title': 'Leave a Review',
+  'forCustomers.videoGuides.video4.description': 'How to leave feedback after task completion',
+
+  'forCustomers.stats.title': 'Join Thousands of Happy Customers',
+
+  'forCustomers.cta.title': 'Ready to Get Started?',
+  'forCustomers.cta.subtitle': 'Post your first task for free and find the perfect professional today.',
+  'forCustomers.cta.button': 'Post a Task Now',
 
   // Pricing Page
   'pricing.hero.title': 'Simple, Transparent Pricing',

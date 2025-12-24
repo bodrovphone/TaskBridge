@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
-import { FileText, MessageSquare, UserCheck, Star, Search, Send, TrendingUp, Briefcase } from 'lucide-react'
+import { FileText, MessageSquare, UserCheck, Star, Search, Send, TrendingUp, Briefcase, ArrowRight } from 'lucide-react'
 import {
   ContentPageHero,
   ContentSection,
@@ -11,6 +11,8 @@ import {
   CTASection,
 } from '@/components/content'
 import { BreadcrumbJsonLd } from '@/components/seo/json-ld'
+import { Button } from '@nextui-org/react'
+import Link from 'next/link'
 
 // Static generation for all locales
 export const dynamic = 'force-static'
@@ -103,6 +105,17 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
       >
         <div className="max-w-2xl mx-auto">
           <ProcessSteps steps={customerSteps} />
+          <div className="mt-8 text-center">
+            <Button
+              as={Link}
+              href={`/${locale}/for-customers`}
+              variant="flat"
+              color="primary"
+              endContent={<ArrowRight className="w-4 h-4" />}
+            >
+              {t('howItWorks.customers.learnMore')}
+            </Button>
+          </div>
         </div>
       </ContentSection>
 
@@ -114,6 +127,17 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
       >
         <div className="max-w-2xl mx-auto">
           <ProcessSteps steps={professionalSteps} />
+          <div className="mt-8 text-center">
+            <Button
+              as={Link}
+              href={`/${locale}/for-professionals`}
+              variant="flat"
+              color="primary"
+              endContent={<ArrowRight className="w-4 h-4" />}
+            >
+              {t('howItWorks.professionals.learnMore')}
+            </Button>
+          </div>
         </div>
       </ContentSection>
 

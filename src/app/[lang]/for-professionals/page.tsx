@@ -12,7 +12,7 @@ import {
   StatsSection,
   CTASection,
 } from '@/components/content'
-import { BreadcrumbJsonLd } from '@/components/seo/json-ld'
+import { BreadcrumbJsonLd, VideoListJsonLd } from '@/components/seo/json-ld'
 
 // Static generation for all locales
 export const dynamic = 'force-static'
@@ -74,6 +74,28 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
           { name: t('forProfessionals.hero.title'), url: `/${locale}/for-professionals` },
         ]}
       />
+      <VideoListJsonLd
+        videos={[
+          {
+            name: t('forProfessionals.videoGuides.video1.title'),
+            description: t('forProfessionals.videoGuides.video1.description'),
+            thumbnailUrl: 'https://i.ytimg.com/vi/CxX2YdOva60/maxresdefault.jpg',
+            contentUrl: 'https://www.youtube.com/shorts/CxX2YdOva60',
+            embedUrl: 'https://www.youtube-nocookie.com/embed/CxX2YdOva60',
+            uploadDate: '2024-12-01',
+            duration: 'PT1M',
+          },
+          {
+            name: t('forProfessionals.videoGuides.video2.title'),
+            description: t('forProfessionals.videoGuides.video2.description'),
+            thumbnailUrl: 'https://i.ytimg.com/vi/u5PXMrdE9OQ/maxresdefault.jpg',
+            contentUrl: 'https://www.youtube.com/shorts/u5PXMrdE9OQ',
+            embedUrl: 'https://www.youtube-nocookie.com/embed/u5PXMrdE9OQ',
+            uploadDate: '2024-12-01',
+            duration: 'PT1M',
+          },
+        ]}
+      />
 
       {/* Hero */}
       <ContentPageHero
@@ -122,6 +144,53 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
           <p className="text-lg text-gray-600 leading-relaxed">
             {t('forProfessionals.howEarnings.description')}
           </p>
+        </div>
+      </ContentSection>
+
+      {/* Video Guides */}
+      <ContentSection
+        title={t('forProfessionals.videoGuides.title')}
+        subtitle={t('forProfessionals.videoGuides.subtitle')}
+        variant="default"
+      >
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Video 1: Getting Started */}
+          <div className="text-center">
+            <div className="relative mx-auto w-full max-w-[280px] aspect-[9/16] rounded-2xl overflow-hidden shadow-lg bg-gray-100">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/CxX2YdOva60"
+                title={t('forProfessionals.videoGuides.video1.title')}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-gray-900">
+              {t('forProfessionals.videoGuides.video1.title')}
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {t('forProfessionals.videoGuides.video1.description')}
+            </p>
+          </div>
+
+          {/* Video 2: Finding Work */}
+          <div className="text-center">
+            <div className="relative mx-auto w-full max-w-[280px] aspect-[9/16] rounded-2xl overflow-hidden shadow-lg bg-gray-100">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/u5PXMrdE9OQ"
+                title={t('forProfessionals.videoGuides.video2.title')}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-gray-900">
+              {t('forProfessionals.videoGuides.video2.title')}
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {t('forProfessionals.videoGuides.video2.description')}
+            </p>
+          </div>
         </div>
       </ContentSection>
 
