@@ -57,6 +57,8 @@ export const contentPages = {
   'howItWorks.professionals.step3.description': 'Надсилайте конкурентні пропозиції клієнтам. Виділяйтесь профілем та відгуками.',
   'howItWorks.professionals.step4.title': 'Створюйте репутацію',
   'howItWorks.professionals.step4.description': 'Виконуйте завдання, збирайте відгуки та розвивайте бізнес. Найкращі фахівці отримують більше роботи.',
+  'howItWorks.customers.learnMore': 'Дізнатись більше та дивитись відео гайди',
+  'howItWorks.professionals.learnMore': 'Дізнатись більше та дивитись відео гайди',
 
   'howItWorks.cta.title': 'Готові почати?',
   'howItWorks.cta.subtitle': 'Потрібна допомога чи хочете запропонувати послуги - ми допоможемо.',
@@ -131,11 +133,53 @@ export const contentPages = {
   'forProfessionals.howEarnings.title': 'Як працює заробіток',
   'forProfessionals.howEarnings.description': 'Ви встановлюєте свої ціни та домовляєтесь напряму з клієнтами. Trudify зараз безкоштовний для фахівців в період запуску.',
 
+  'forProfessionals.videoGuides.title': 'Відео гайди',
+  'forProfessionals.videoGuides.subtitle': 'Дивіться короткі уроки, щоб почати за кілька хвилин',
+  'forProfessionals.videoGuides.video1.title': 'Початок роботи',
+  'forProfessionals.videoGuides.video1.description': 'Як зареєструватись та налаштувати профіль фахівця',
+  'forProfessionals.videoGuides.video2.title': 'Пошук роботи',
+  'forProfessionals.videoGuides.video2.description': 'Як шукати завдання, подавати заявки та отримувати сповіщення',
+
   'forProfessionals.stats.title': 'Приєднуйтесь до зростаючої спільноти',
 
   'forProfessionals.cta.title': 'Готові почати заробляти?',
   'forProfessionals.cta.subtitle': 'Створіть профіль сьогодні та починайте знаходити клієнтів у вашому районі.',
   'forProfessionals.cta.button': 'Створити профіль фахівця',
+
+  // For Customers Page
+  'forCustomers.hero.title': 'Виконуйте справи з Trudify',
+  'forCustomers.hero.subtitle': 'Знайдіть перевірених фахівців для будь-якого завдання. Розмістіть запит і отримайте пропозиції за хвилини.',
+  'forCustomers.hero.cta': 'Розмістити перше завдання',
+
+  'forCustomers.benefits.title': 'Чому клієнти обирають Trudify',
+  'forCustomers.benefits.fast': 'Швидкий результат',
+  'forCustomers.benefits.fastDesc': 'Розмістіть завдання та отримайте пропозиції за години. Більше ніякого нескінченного пошуку.',
+  'forCustomers.benefits.verified': 'Перевірені фахівці',
+  'forCustomers.benefits.verifiedDesc': 'Кожен фахівець перевірений. Дивіться їх рейтинги, відгуки та історію виконаних робіт.',
+  'forCustomers.benefits.communicate': 'Легке спілкування',
+  'forCustomers.benefits.communicateDesc': 'Спілкуйтесь напряму з фахівцями для обговорення деталей, узгодження ціни та підтвердження часу.',
+  'forCustomers.benefits.reviews': 'Надійні відгуки',
+  'forCustomers.benefits.reviewsDesc': 'Реальні відгуки від реальних клієнтів допомагають вибрати найкращого фахівця.',
+
+  'forCustomers.howItWorks.title': 'Просто і безкоштовно',
+  'forCustomers.howItWorks.description': 'Розміщення завдань на Trudify повністю безкоштовне. Ви платите фахівцю напряму після виконання роботи і вашого задоволення.',
+
+  'forCustomers.videoGuides.title': 'Відео гайди',
+  'forCustomers.videoGuides.subtitle': 'Навчіться користуватись Trudify за кілька хвилин',
+  'forCustomers.videoGuides.video1.title': 'Початок роботи',
+  'forCustomers.videoGuides.video1.description': 'Як зареєструватись та розмістити перше завдання',
+  'forCustomers.videoGuides.video2.title': 'Запросити фахівця',
+  'forCustomers.videoGuides.video2.description': 'Як запросити конкретного фахівця до вашого завдання',
+  'forCustomers.videoGuides.video3.title': 'Переглянути заявки',
+  'forCustomers.videoGuides.video3.description': 'Як переглядати та приймати заявки',
+  'forCustomers.videoGuides.video4.title': 'Залишити відгук',
+  'forCustomers.videoGuides.video4.description': 'Як залишити відгук після завершення завдання',
+
+  'forCustomers.stats.title': 'Приєднуйтесь до тисяч задоволених клієнтів',
+
+  'forCustomers.cta.title': 'Готові почати?',
+  'forCustomers.cta.subtitle': 'Розмістіть перше завдання безкоштовно і знайдіть ідеального фахівця сьогодні.',
+  'forCustomers.cta.button': 'Розмістити завдання',
 
   // Pricing Page
   'pricing.hero.title': 'Просте і прозоре ціноутворення',
