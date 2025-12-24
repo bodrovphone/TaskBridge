@@ -50,7 +50,7 @@ export default function CategoriesContent() {
   <div
    className="min-h-screen relative"
    style={{
-    backgroundImage: 'url(/images/cardboard.png)',
+    backgroundImage: 'url(/images/cardboard.webp)',
     backgroundRepeat: 'repeat',
     backgroundSize: 'auto'
    }}

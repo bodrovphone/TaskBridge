@@ -232,7 +232,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
   <div
    className="min-h-screen relative overflow-x-hidden"
    style={{
-    backgroundImage: 'url(/images/cardboard.png)',
+    backgroundImage: 'url(/images/cardboard.webp)',
     backgroundRepeat: 'repeat',
     backgroundSize: 'auto'
    }}

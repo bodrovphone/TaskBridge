@@ -233,7 +233,7 @@ export default function ProfessionalsPage({ initialFeaturedProfessionals = [] }:
         <div
           className="fixed inset-0 -z-10"
           style={{
-            backgroundImage: 'url(/images/cardboard.png)',
+            backgroundImage: 'url(/images/cardboard.webp)',
             backgroundRepeat: 'repeat',
             backgroundSize: 'auto',
             opacity: 0.3

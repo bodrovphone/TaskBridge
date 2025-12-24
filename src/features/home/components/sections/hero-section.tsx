@@ -178,7 +178,7 @@ export default function HeroSection() {
        <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-lg opacity-20 lg:group-hover:opacity-30 lg:transition-opacity lg:duration-500"></div>
        <OptimizedVideoHero
         videoSrc="/assets/hero_video_2.mp4"
-        poster="/images/hero_image_1.jpg"
+        poster="/images/hero_image_1.webp"
         alt="Professional working on home repairs"
         width={800}
         height={600}
