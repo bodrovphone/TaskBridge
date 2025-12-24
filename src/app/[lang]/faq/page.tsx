@@ -4,8 +4,9 @@ import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { Button } from '@nextui-org/react'
-import { Mail } from 'lucide-react'
+import { Mail, PlayCircle, BookOpen, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { LocaleLink } from '@/components/common/locale-link'
 import {
   ContentPageHero,
   ContentSection,
@@ -55,6 +56,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
     { question: t('faq.general.q1'), answer: t('faq.general.a1') },
     { question: t('faq.general.q2'), answer: t('faq.general.a2') },
     { question: t('faq.general.q3'), answer: t('faq.general.a3') },
+    { question: t('faq.general.q4'), answer: t('faq.general.a4') },
   ]
 
   return (
@@ -91,6 +93,75 @@ export default async function FAQPage({ params }: FAQPageProps) {
         <div className="max-w-3xl mx-auto">
           {/* Include schema only once with all FAQs */}
           <FAQAccordion faqs={generalFAQs} includeSchema={true} />
+        </div>
+      </ContentSection>
+
+      {/* Helpful Resources */}
+      <ContentSection title={t('faq.resources.title')} variant="gray">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Video Guide for Customers */}
+            <LocaleLink
+              href="/for-customers"
+              className="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all hover:border-blue-200"
+            >
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mb-4">
+                <PlayCircle className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                {t('faq.resources.customerGuide')}
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                {t('faq.resources.customerGuideDesc')}
+              </p>
+              <span className="inline-flex items-center text-blue-600 text-sm font-medium">
+                {t('faq.resources.watchVideos')}
+                <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </LocaleLink>
+
+            {/* Video Guide for Professionals */}
+            <LocaleLink
+              href="/for-professionals"
+              className="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all hover:border-emerald-200"
+            >
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 mb-4">
+                <PlayCircle className="w-6 h-6 text-emerald-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                {t('faq.resources.professionalGuide')}
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                {t('faq.resources.professionalGuideDesc')}
+              </p>
+              <span className="inline-flex items-center text-emerald-600 text-sm font-medium">
+                {t('faq.resources.watchVideos')}
+                <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </LocaleLink>
+
+            {/* Blog Post - only show for BG locale since article is in Bulgarian */}
+            {locale === 'bg' && (
+              <Link
+                href="/bg/tarsya-rabota-v-bulgaria"
+                className="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all hover:border-purple-200"
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 mb-4">
+                  <BookOpen className="w-6 h-6 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                  {t('faq.resources.blogPost')}
+                </h3>
+                <p className="text-gray-600 text-sm mb-3">
+                  {t('faq.resources.blogPostDesc')}
+                </p>
+                <span className="inline-flex items-center text-purple-600 text-sm font-medium">
+                  {t('faq.resources.readArticle')}
+                  <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+            )}
+          </div>
         </div>
       </ContentSection>
 
