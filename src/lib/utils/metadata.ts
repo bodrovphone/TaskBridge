@@ -117,24 +117,6 @@ const pageMetadata: Record<string, Record<SupportedLocale, { title: string; desc
       description: 'Дізнайтеся про Trudify - платформу, що з\'єднує клієнтів з перевіреними фахівцями в Болгарії. Наша місія, історія та цінності.',
     },
   },
-  'how-it-works': {
-    en: {
-      title: 'How It Works',
-      description: 'Learn how Trudify works for customers and professionals. Post tasks, receive quotes, and get work done - simple and secure.',
-    },
-    bg: {
-      title: 'Как работи',
-      description: 'Научете как работи Trudify за клиенти и професионалисти. Публикувайте задачи, получете оферти и свършете работата - лесно и сигурно.',
-    },
-    ru: {
-      title: 'Как это работает',
-      description: 'Узнайте, как работает Trudify для клиентов и специалистов. Размещайте задачи, получайте предложения и выполняйте работу - просто и безопасно.',
-    },
-    ua: {
-      title: 'Як це працює',
-      description: 'Дізнайтеся, як працює Trudify для клієнтів та фахівців. Розміщуйте завдання, отримуйте пропозиції та виконуйте роботу - просто і безпечно.',
-    },
-  },
   faq: {
     en: {
       title: 'Frequently Asked Questions',

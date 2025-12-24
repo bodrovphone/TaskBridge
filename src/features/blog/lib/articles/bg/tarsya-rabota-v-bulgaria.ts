@@ -22,7 +22,6 @@ export const tarsyaRabotaArticle: BlogArticle = {
   coverImage: '/assets/bg-money.jpg',
   relatedLinks: [
     { text: 'Разгледай задачи', href: '/bg/browse-tasks' },
-    { text: 'Как работи Trudify', href: '/bg/how-it-works' },
     { text: 'Стани професионалист', href: '/bg/for-professionals' },
   ],
   faqs: [

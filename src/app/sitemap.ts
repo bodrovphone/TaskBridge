@@ -30,7 +30,6 @@ function generateStaticUrls(): MetadataRoute.Sitemap {
     { path: '/categories', priority: 0.7, changeFrequency: 'weekly' as const },
     // Content/Marketing pages
     { path: '/about', priority: 0.6, changeFrequency: 'monthly' as const },
-    { path: '/how-it-works', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/for-professionals', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/for-customers', priority: 0.7, changeFrequency: 'monthly' as const },
