@@ -188,6 +188,15 @@ export function useAuth(): UseAuthReturn {
   }, [])
 
   /**
+   * Check if auth cookies exist (quick client-side check to avoid unnecessary API calls)
+   */
+  const hasAuthCookies = (): boolean => {
+    if (typeof document === 'undefined') return false
+    // Supabase auth cookies start with 'sb-' and contain 'auth-token'
+    return document.cookie.split(';').some(c => c.trim().startsWith('sb-') && c.includes('auth-token'))
+  }
+
+  /**
    * Initialize auth state and set up listeners
    */
   useEffect(() => {
@@ -203,7 +212,14 @@ export function useAuth(): UseAuthReturn {
       }
     }
 
-    // Initial auth check
+    // Quick check: if no auth cookies exist, skip API call entirely (faster LCP)
+    if (!hasAuthCookies()) {
+      console.log('[useAuth] No auth cookies found, skipping profile fetch')
+      setLoading(false)
+      return
+    }
+
+    // Initial auth check (only if cookies suggest user might be authenticated)
     checkAuthState().finally(() => setLoading(false))
 
     // Set up Supabase auth state change listener for token refresh

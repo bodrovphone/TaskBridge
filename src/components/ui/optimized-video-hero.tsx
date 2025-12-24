@@ -111,6 +111,7 @@ export default function OptimizedVideoHero({
      sizes="(max-width: 1024px) 100vw, 50vw"
      className={`${className} object-cover`}
      priority
+     fetchPriority="high"
     />
    </div>
   )
@@ -127,6 +128,7 @@ export default function OptimizedVideoHero({
      sizes="(max-width: 1024px) 100vw, 50vw"
      className={`${className} object-cover`}
      priority
+     fetchPriority="high"
     />
    )}
 

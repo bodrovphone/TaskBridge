@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
@@ -86,6 +86,10 @@ export function useCreateTask() {
   const [blockType, setBlockType] = useState<BlockType>(null)
 
   // Check if user can create task (enforcement check)
+  // IMPORTANT: Disabled by default to avoid blocking LCP - only fetches when button is clicked
+  const [shouldCheckEligibility, setShouldCheckEligibility] = useState(false)
+  const pendingActionRef = useRef(false) // Track if we're waiting to proceed after eligibility check
+
   const { data: eligibility, isLoading } = useQuery<CanCreateResponse>({
     queryKey: ['can-create-task'],
     queryFn: async () => {
@@ -95,10 +99,30 @@ export function useCreateTask() {
       }
       return res.json()
     },
-    enabled: isAuthenticated, // Only check if user is logged in
+    enabled: isAuthenticated && shouldCheckEligibility, // Only check when explicitly triggered
     staleTime: 30000, // 30 seconds
     refetchOnWindowFocus: false
   })
+
+  // Auto-proceed when eligibility data loads after button click
+  useEffect(() => {
+    if (!pendingActionRef.current || isLoading || !eligibility) return
+
+    pendingActionRef.current = false // Reset flag
+
+    // Handle enforcement blocks
+    if (eligibility.blockType === 'soft_block' || eligibility.blockType === 'hard_block') {
+      setBlockType(eligibility.blockType)
+      setBlockingTasks(eligibility.pendingReviews)
+      setShowEnforcementDialog(true)
+      return
+    }
+
+    // All clear - proceed to create task
+    const professionalId = pendingInviteProfessionalId
+    const professionalName = pendingInviteProfessionalName
+    router.push(buildCreateTaskUrl(professionalId, professionalName))
+  }, [eligibility, isLoading, router, pendingInviteProfessionalId, pendingInviteProfessionalName])
 
   // Submit review mutation
   const submitReviewMutation = useMutation({
@@ -201,27 +225,35 @@ export function useCreateTask() {
     }
 
     // Check eligibility (review enforcement)
-    // If eligibility is still loading, show a toast and return
-    if (!eligibility) {
-      toast({
-        title: t('common.loading'),
-        description: t('createTask.checkingEligibility'),
-      })
+    // If eligibility is already loaded (from previous check), use it directly
+    if (eligibility) {
+      // Show enforcement dialog for both soft and hard blocks
+      if (eligibility.blockType === 'soft_block' || eligibility.blockType === 'hard_block') {
+        setBlockType(eligibility.blockType)
+        setBlockingTasks(eligibility.pendingReviews)
+        setShowEnforcementDialog(true)
+        return
+      }
+
+      // All clear - proceed to create task
+      const professionalId = options?.inviteProfessionalId || pendingInviteProfessionalId
+      const professionalName = options?.inviteProfessionalName || pendingInviteProfessionalName
+      router.push(buildCreateTaskUrl(professionalId, professionalName))
       return
     }
 
-    // Show enforcement dialog for both soft and hard blocks
-    if (eligibility.blockType === 'soft_block' || eligibility.blockType === 'hard_block') {
-      setBlockType(eligibility.blockType)
-      setBlockingTasks(eligibility.pendingReviews)
-      setShowEnforcementDialog(true)
+    // Trigger lazy fetch if not already done (to avoid blocking LCP)
+    if (!shouldCheckEligibility) {
+      setShouldCheckEligibility(true)
+      pendingActionRef.current = true // Effect will auto-proceed when data loads
       return
     }
 
-    // All clear - proceed to create task (use stored or passed professional context)
-    const professionalId = options?.inviteProfessionalId || pendingInviteProfessionalId
-    const professionalName = options?.inviteProfessionalName || pendingInviteProfessionalName
-    router.push(buildCreateTaskUrl(professionalId, professionalName))
+    // If already triggered but still loading, just wait (effect will handle it)
+    if (isLoading) {
+      pendingActionRef.current = true
+      return
+    }
   }
 
   /**

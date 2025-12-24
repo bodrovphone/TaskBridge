@@ -1,7 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import type { Notification } from '@/types/notifications';
 
 const NOTIFICATIONS_QUERY_KEY = ['notifications'];
+// Delay before fetching notifications to avoid blocking LCP
+const NOTIFICATIONS_FETCH_DELAY_MS = 2000;
 
 interface NotificationsResponse {
   notifications: Array<{
@@ -65,6 +68,7 @@ async function deleteAllNotifications(
 /**
  * Custom hook for notifications with TanStack Query
  * Fetches notifications with 10-minute stale time to reduce API calls
+ * IMPORTANT: Adds a startup delay to avoid blocking LCP on page load
  * @param authenticatedFetch - Function to make authenticated API requests
  * @param enabled - Whether to enable the query (should be true only when user is authenticated)
  */
@@ -74,11 +78,24 @@ export function useNotificationsQuery(
 ) {
   const queryClient = useQueryClient();
 
+  // Delay fetching to avoid blocking LCP - only start after initial page paint
+  const [isReadyToFetch, setIsReadyToFetch] = useState(false);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    const timer = setTimeout(() => {
+      setIsReadyToFetch(true);
+    }, NOTIFICATIONS_FETCH_DELAY_MS);
+
+    return () => clearTimeout(timer);
+  }, [enabled]);
+
   // Fetch notifications query with 10-minute stale time
   const notificationsQuery = useQuery({
     queryKey: NOTIFICATIONS_QUERY_KEY,
     queryFn: () => fetchNotifications(authenticatedFetch),
-    enabled, // Only run query when enabled (i.e., user is authenticated)
+    enabled: enabled && isReadyToFetch, // Only run after delay AND when authenticated
     staleTime: 10 * 60 * 1000, // 10 minutes - data considered fresh for this duration
     refetchOnWindowFocus: false, // Don't refetch when user returns to tab
     refetchOnMount: false, // Don't refetch on component mount if data is fresh
