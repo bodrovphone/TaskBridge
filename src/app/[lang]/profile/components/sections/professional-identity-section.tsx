@@ -117,6 +117,8 @@ export function ProfessionalIdentitySection({
                     onValueChange={field.handleChange}
                     minRows={4}
                     maxRows={8}
+                    maxLength={400}
+                    description={`${field.state.value?.length || 0}/400`}
                   />
                 )}
               </form.Field>

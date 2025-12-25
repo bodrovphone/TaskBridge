@@ -96,7 +96,7 @@ export async function PUT(request: NextRequest) {
       user.city = updates.city && updates.city.trim() !== '' ? updates.city : null
     }
     if (updates.country !== undefined) user.country = updates.country
-    if (updates.bio !== undefined) user.bio = updates.bio
+    if (updates.bio !== undefined) user.bio = updates.bio?.slice(0, 400) || null // Max 400 chars
     if (updates.preferredLanguage !== undefined) user.preferredLanguage = updates.preferredLanguage
     if (updates.preferredContact !== undefined) user.preferredContact = updates.preferredContact
     if (updates.avatarUrl !== undefined) user.avatarUrl = updates.avatarUrl

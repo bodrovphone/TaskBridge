@@ -67,7 +67,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
  }
 
  return (
-  <Dropdown>
+  <Dropdown shouldBlockScroll={false}>
    <DropdownTrigger>
     {mode === 'icon' ? (
      <Button

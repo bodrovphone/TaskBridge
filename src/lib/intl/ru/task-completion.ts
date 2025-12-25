@@ -16,7 +16,7 @@ export const taskCompletion = {
   'taskStatus.disputedTooltip': 'Возникли разногласия, требуется разрешение',
 
   // Task Completion Actions
-  'taskCompletion.markCompleted': 'Отметить как завершённую',
+  'taskCompletion.markCompleted': 'Завершить',
   'taskCompletion.confirmCompletion': 'Подтвердить завершение',
   'taskCompletion.alreadyMarkedByYou': 'Вы уже отметили как завершённую',
   'taskCompletion.alreadyConfirmedByYou': 'Вы уже подтвердили завершение',

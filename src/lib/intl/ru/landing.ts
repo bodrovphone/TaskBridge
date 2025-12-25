@@ -120,10 +120,10 @@ export const landing = {
   'landing.testimonials.customers.customer2.location': 'Пловдив, Болгария',
   'landing.testimonials.customers.customer2.quote':
     'Услуга уборки была исключительной. Определенно буду использовать Trudify снова.',
-  'landing.testimonials.customers.customer3.name': 'Елена Димитрова',
+  'landing.testimonials.customers.customer3.name': 'Димитър Колев',
   'landing.testimonials.customers.customer3.location': 'Варна, Болгария',
   'landing.testimonials.customers.customer3.quote':
-    'Быстро, надежно и доступно. Именно то, что я искала.',
+    'Быстро, надежно и доступно. Именно то, что я искал.',
 
   'landing.testimonials.professionals.title': 'От специалистов',
   'landing.testimonials.professionals.pro1.name': 'Иван Стоев',

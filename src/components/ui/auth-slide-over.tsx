@@ -474,7 +474,7 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
             ? 'border-2 border-red-500 bg-red-50'
             : 'border border-gray-300 bg-gray-50/50'
           }`}
-          placeholder="John Doe"
+          placeholder="Хитър Петър"
          />
          <p className={`text-xs mt-1.5 ${nameRequired ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
           {nameRequired

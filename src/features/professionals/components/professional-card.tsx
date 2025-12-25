@@ -176,7 +176,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
      </div>
 
      {/* Enhanced Description */}
-     <p className={`text-gray-700 text-sm mb-4 leading-relaxed group-hover:text-gray-800 transition-colors ${compact ? 'line-clamp-2' : ''}`}>
+     <p className={`text-gray-700 text-sm mb-4 leading-relaxed group-hover:text-gray-800 transition-colors ${compact ? 'line-clamp-2' : 'line-clamp-6'}`}>
       {bio || (compact ? '' : t('professionals.card.noBio'))}
      </p>
 
