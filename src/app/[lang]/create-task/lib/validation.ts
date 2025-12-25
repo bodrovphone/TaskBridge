@@ -20,7 +20,7 @@ export const createTaskSchema = z.object({
 
   // Location
   city: z.string().min(1, 'createTask.errors.cityRequired'),
-  neighborhood: z.string().optional(),
+  neighborhood: z.string().nullable().optional().transform(val => val || undefined),
 
   // Budget (completely optional)
   budgetType: z.enum(['fixed', 'range', 'unclear']).optional().default('unclear'),

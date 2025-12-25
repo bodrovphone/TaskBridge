@@ -24,10 +24,10 @@ export const createTaskSchema = z.object({
     .max(2000, 'Description must be less than 2000 characters'),
   city: z.string().min(1, 'City is required'),
 
-  // Optional fields
-  subcategory: z.string().optional(),
-  neighborhood: z.string().optional(),
-  requirements: z.string().optional(),
+  // Optional fields (nullable to handle null from database/API)
+  subcategory: z.string().nullable().optional().transform(val => val || undefined),
+  neighborhood: z.string().nullable().optional().transform(val => val || undefined),
+  requirements: z.string().nullable().optional().transform(val => val || undefined),
 
   // Budget (optional)
   budgetType: z.enum(['fixed', 'range', 'unclear']).optional(),
@@ -79,7 +79,7 @@ export const updateTaskSchema = z.object({
 
   // Location
   city: z.string().min(1, 'City is required').optional(),
-  neighborhood: z.string().optional(),
+  neighborhood: z.string().nullable().optional().transform(val => val || undefined),
 
   // Budget
   budgetType: z.enum(['fixed', 'range', 'unclear']).optional(),

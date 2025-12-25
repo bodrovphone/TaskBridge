@@ -64,17 +64,19 @@ export default function CreateTaskContent() {
           const taskData = data.task || data
 
           // Transform API data to match form's expected format
+          // Note: Convert null values to empty strings to avoid Zod validation errors
+          // (Zod's .optional() accepts undefined but NOT null)
           const formData = {
-            title: taskData.title,
-            description: taskData.description,
-            category: taskData.category,
-            subcategory: taskData.subcategory,
-            city: taskData.location?.city || taskData.city,
-            neighborhood: taskData.location?.neighborhood || taskData.neighborhood,
-            requirements: taskData.requirements,
+            title: taskData.title || '',
+            description: taskData.description || '',
+            category: taskData.category || '',
+            subcategory: taskData.subcategory || '',
+            city: taskData.location?.city || taskData.city || '',
+            neighborhood: taskData.location?.neighborhood || taskData.neighborhood || '',
+            requirements: taskData.requirements || '',
             budgetType: taskData.budgetType || 'unclear',
-            budgetMin: taskData.budgetMin || taskData.budget,
-            budgetMax: taskData.budgetMax,
+            budgetMin: taskData.budgetMin || taskData.budget || null,
+            budgetMax: taskData.budgetMax || null,
             // Always set to flexible when reopening (avoid past dates)
             urgency: 'flexible',
             deadline: undefined,
