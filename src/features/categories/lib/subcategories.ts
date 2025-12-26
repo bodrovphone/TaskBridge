@@ -87,6 +87,13 @@ export const SUBCATEGORIES: Subcategory[] = [
     translationKey: 'categories.sub.phoneRepair',
     sortOrder: 5,
   },
+  {
+    id: 'ac-maintenance',
+    slug: 'ac-maintenance',
+    mainCategoryId: 'appliance-repair',
+    translationKey: 'categories.sub.acMaintenance',
+    sortOrder: 6,
+  },
 
   // ===== FINISHING WORK (Отделочные работы) =====
   {
@@ -271,6 +278,13 @@ export const SUBCATEGORIES: Subcategory[] = [
     mainCategoryId: 'logistics',
     translationKey: 'categories.sub.officeRelocation',
     sortOrder: 5,
+  },
+  {
+    id: 'passenger-transfer',
+    slug: 'passenger-transfer',
+    mainCategoryId: 'logistics',
+    translationKey: 'categories.sub.passengerTransfer',
+    sortOrder: 6,
   },
 
   // ===== HOUSEHOLD SERVICES (Бытовые услуги) =====

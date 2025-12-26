@@ -640,7 +640,7 @@ export const profile = {
   'profile.professional.setupFormDescription': 'Заполните свою профессиональную информацию, чтобы продемонстрировать свои навыки и опыт.',
   'profile.professional.selectCategories': 'Выбрать категории',
   'profile.professional.serviceCategories': 'Категории услуг',
-  'profile.serviceCategories.saveCategories': 'Сохранить категории',
+  'profile.serviceCategories.saveCategories': 'Сохранить',
   'profile.serviceCategories.searchPlaceholder': 'Поиск категорий...',
   'profile.serviceCategories.popularCategories': 'Популярные категории',
   'profile.serviceCategories.selected': 'Выбрано',

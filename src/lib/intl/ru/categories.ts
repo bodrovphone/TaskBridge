@@ -193,6 +193,7 @@ export const categories = {
   'categories.sub.computerHelp': 'Компьютерная помощь',
   'categories.sub.digitalTechRepair': 'Ремонт цифровой техники',
   'categories.sub.phoneRepair': 'Ремонт телефонов',
+  'categories.sub.acMaintenance': 'Кондиционеры',
 
   // Finishing Work
   'categories.sub.apartmentRenovation': 'Ремонт квартиры',
@@ -228,6 +229,7 @@ export const categories = {
   'categories.sub.constructionWasteRemoval': 'Вывоз строительного мусора',
   'categories.sub.furnitureApplianceMoving': 'Перевозка мебели и техники',
   'categories.sub.officeRelocation': 'Переезд офиса',
+  'categories.sub.passengerTransfer': 'Трансфер',
 
   // Household Services
   'categories.sub.gardening': 'Садоводство',

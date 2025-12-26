@@ -156,7 +156,7 @@ export const profile = {
   'profile.professional.setupFormDescription': 'Заповніть інформацію, щоб продемонструвати навички та досвід.',
   'profile.professional.selectCategories': 'Обрати категорії',
   'profile.professional.serviceCategories': 'Категорії послуг',
-  'profile.serviceCategories.saveCategories': 'Зберегти категорії',
+  'profile.serviceCategories.saveCategories': 'Зберегти',
   'profile.serviceCategories.searchPlaceholder': 'Шукати категорії...',
   'profile.serviceCategories.popularCategories': 'Популярні категорії',
   'profile.serviceCategories.selected': 'Обрано',

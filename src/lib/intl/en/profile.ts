@@ -156,7 +156,7 @@ export const profile = {
   'profile.professional.setupFormDescription': 'Fill out your professional information to showcase your skills and experience.',
   'profile.professional.selectCategories': 'Select Categories',
   'profile.professional.serviceCategories': 'Service Categories',
-  'profile.serviceCategories.saveCategories': 'Save Categories',
+  'profile.serviceCategories.saveCategories': 'Save',
   'profile.serviceCategories.searchPlaceholder': 'Search categories...',
   'profile.serviceCategories.popularCategories': 'Popular Categories',
   'profile.serviceCategories.selected': 'Selected',

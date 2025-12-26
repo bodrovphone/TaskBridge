@@ -159,6 +159,7 @@ export const categories = {
   'categories.sub.computerHelp': 'Computer Help',
   'categories.sub.digitalTechRepair': 'Digital Tech Repair',
   'categories.sub.phoneRepair': 'Phone Repair',
+  'categories.sub.acMaintenance': 'Air Conditioners',
 
   // Finishing Work
   'categories.sub.apartmentRenovation': 'Apartment Renovation',
@@ -194,6 +195,7 @@ export const categories = {
   'categories.sub.constructionWasteRemoval': 'Construction Waste Removal',
   'categories.sub.furnitureApplianceMoving': 'Furniture & Appliance Moving',
   'categories.sub.officeRelocation': 'Office Relocation',
+  'categories.sub.passengerTransfer': 'Transfers',
 
   // Household Services
   'categories.sub.gardening': 'Gardening',

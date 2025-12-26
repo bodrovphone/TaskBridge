@@ -159,6 +159,7 @@ export const categories = {
   'categories.sub.computerHelp': 'Компютърна помощ',
   'categories.sub.digitalTechRepair': 'Ремонт на дигитална техника',
   'categories.sub.phoneRepair': 'Ремонт на телефони',
+  'categories.sub.acMaintenance': 'Климатици',
 
   // Finishing Work
   'categories.sub.apartmentRenovation': 'Ремонт на апартамент',
@@ -194,6 +195,7 @@ export const categories = {
   'categories.sub.constructionWasteRemoval': 'Извозване на строителни отпадъци',
   'categories.sub.furnitureApplianceMoving': 'Преместване на мебели и техника',
   'categories.sub.officeRelocation': 'Преместване на офис',
+  'categories.sub.passengerTransfer': 'Трансфер',
 
   // Household Services
   'categories.sub.gardening': 'Градинарство',

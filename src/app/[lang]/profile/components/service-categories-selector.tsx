@@ -1,13 +1,16 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Chip, Input } from '@nextui-org/react'
+import { useParams } from 'next/navigation'
+import { Chip, Input, Spinner } from '@nextui-org/react'
 import { Search, X } from 'lucide-react'
 import {
   getAllSubcategoriesWithLabels,
   getMainCategoriesWithLabels,
-  getCategoryLabelBySlug
+  getCategoryLabelBySlug,
+  searchCategoriesAsync,
+  preloadCategoryKeywords
 } from '@/features/categories'
 
 interface ServiceCategoriesSelectorProps {
@@ -34,7 +37,40 @@ export function ServiceCategoriesSelector({
   maxSelections = 10
 }: ServiceCategoriesSelectorProps) {
   const t = useTranslations()
+  const params = useParams()
+  const currentLocale = (params?.lang as string) || 'bg'
   const [searchQuery, setSearchQuery] = useState('')
+  const [keywordSearchResults, setKeywordSearchResults] = useState<string[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+
+  // Preload keywords on mount
+  useEffect(() => {
+    preloadCategoryKeywords()
+  }, [])
+
+  // Keyword search effect
+  useEffect(() => {
+    const trimmedQuery = searchQuery.trim()
+
+    if (trimmedQuery.length < 2) {
+      setKeywordSearchResults([])
+      return
+    }
+
+    const searchTimeout = setTimeout(async () => {
+      setIsSearching(true)
+      try {
+        const results = await searchCategoriesAsync(trimmedQuery, t, currentLocale)
+        setKeywordSearchResults(results.map(r => r.value))
+      } catch {
+        setKeywordSearchResults([])
+      } finally {
+        setIsSearching(false)
+      }
+    }, 150) // Small debounce
+
+    return () => clearTimeout(searchTimeout)
+  }, [searchQuery, t, currentLocale])
 
   // Get all subcategories organized by main category
   const categoriesByMainCategory = useMemo(() => {
@@ -72,12 +108,24 @@ export function ServiceCategoriesSelector({
     onChange(selectedCategories.filter(c => c !== categorySlug))
   }
 
-  // Filter subcategories based on search
+  // Filter subcategories based on keyword search results
   const filteredCategoriesByMainCategory = useMemo(() => {
     if (!searchQuery.trim()) return categoriesByMainCategory
 
-    const query = searchQuery.toLowerCase()
+    // Use keyword search results if available, otherwise fall back to label matching
+    if (keywordSearchResults.length > 0) {
+      return categoriesByMainCategory
+        .map(mainCat => ({
+          ...mainCat,
+          subcategories: mainCat.subcategories.filter(sub =>
+            keywordSearchResults.includes(sub.slug)
+          )
+        }))
+        .filter(mainCat => mainCat.subcategories.length > 0)
+    }
 
+    // Fallback to simple label matching while keyword search is loading
+    const query = searchQuery.toLowerCase()
     return categoriesByMainCategory
       .map(mainCat => ({
         ...mainCat,
@@ -86,7 +134,7 @@ export function ServiceCategoriesSelector({
         )
       }))
       .filter(mainCat => mainCat.subcategories.length > 0)
-  }, [searchQuery, categoriesByMainCategory])
+  }, [searchQuery, categoriesByMainCategory, keywordSearchResults])
 
   // Get color classes for chips based on main category color
   const getChipClasses = (color: string, isSelected: boolean) => {
@@ -132,12 +180,14 @@ export function ServiceCategoriesSelector({
         onValueChange={setSearchQuery}
         startContent={<Search className="w-4 h-4 text-gray-400" />}
         endContent={
-          searchQuery && (
+          isSearching ? (
+            <Spinner size="sm" color="primary" />
+          ) : searchQuery ? (
             <X
               className="w-4 h-4 text-gray-400 cursor-pointer"
               onClick={() => setSearchQuery('')}
             />
-          )
+          ) : null
         }
         classNames={{
           input: "text-sm",

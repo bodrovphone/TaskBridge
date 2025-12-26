@@ -156,7 +156,7 @@ export const profile = {
   'profile.professional.setupFormDescription': 'Попълнете професионалната си информация, за да покажете уменията и опита си.',
   'profile.professional.selectCategories': 'Избери категории',
   'profile.professional.serviceCategories': 'Категории услуги',
-  'profile.serviceCategories.saveCategories': 'Запази категориите',
+  'profile.serviceCategories.saveCategories': 'Запази',
   'profile.serviceCategories.searchPlaceholder': 'Търси категории...',
   'profile.serviceCategories.popularCategories': 'Популярни категории',
   'profile.serviceCategories.selected': 'Избрани',
