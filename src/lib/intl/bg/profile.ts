@@ -1,5 +1,12 @@
 // Profile page translations - personal info, professional info, statistics, settings
 export const profile = {
+  // Auto-save
+  'profile.autoSave.saved': 'Промените са запазени',
+  'profile.autoSave.error': 'Грешка при запазване',
+
+  // Loading
+  'profile.loading': 'Зареждане на профила...',
+
   'profile.title': 'Моят профил',
   'profile.customerProfileTitle': 'Информация за клиентски профил',
   'profile.professionalProfileTitle': 'Информация за професионален профил',

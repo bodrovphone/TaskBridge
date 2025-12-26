@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
 import { useTranslations } from 'next-intl'
@@ -12,6 +12,8 @@ import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domai
 import { getCityLabelBySlug } from '@/features/cities'
 import { useAuth } from '@/features/auth'
 import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { toast } from '@/hooks/use-toast'
 
 interface PersonalInfoSectionProps {
   profile: UserProfile
@@ -36,6 +38,13 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
   const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const pathname = usePathname()
   const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg'
+
+  // Local state for auto-save tracking
+  const [localName, setLocalName] = useState(profile.fullName || '')
+  const [localPhone, setLocalPhone] = useState(profile.phoneNumber || '')
+  const [localLocation, setLocalLocation] = useState(profile.city || '')
+  const [localLanguage, setLocalLanguage] = useState(profile.preferredLanguage)
+  const [localContact, setLocalContact] = useState(profile.preferredContact)
 
   // Check if user has Telegram connected
   const hasTelegramConnected = !!profile.telegramId
@@ -66,6 +75,46 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
       clearInterval(interval)
     }
   }, [])
+
+  // Memoize data for auto-save
+  const formData = useMemo(() => ({
+    name: localName,
+    phone: localPhone,
+    location: localLocation,
+    preferredLanguage: localLanguage,
+    preferredContact: localContact
+  }), [localName, localPhone, localLocation, localLanguage, localContact])
+
+  // Auto-save callback
+  const handleAutoSave = useCallback(async (data: typeof formData) => {
+    try {
+      await onSave(data)
+    } catch (error) {
+      console.error('[PersonalInfoSection] Auto-save failed:', error)
+    }
+  }, [onSave])
+
+  // Auto-save when editing (5 second debounce)
+  useAutoSave({
+    data: formData,
+    onSave: handleAutoSave,
+    delay: 5000,
+    enabled: isEditing,
+    onSuccess: () => {
+      toast({
+        description: t('profile.autoSave.saved'),
+        variant: 'default',
+        duration: 2000
+      })
+    },
+    onError: () => {
+      toast({
+        description: t('profile.autoSave.error'),
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  })
 
   // Helper to strip +359 prefix for display
   const stripBulgarianPrefix = (phone: string | null | undefined): string => {
@@ -121,8 +170,22 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
     }
   })
 
+  const handleStartEditing = () => {
+    setLocalName(profile.fullName || '')
+    setLocalPhone(stripBulgarianPrefix(profile.phoneNumber))
+    setLocalLocation(profile.city || '')
+    setLocalLanguage(profile.preferredLanguage)
+    setLocalContact(profile.preferredContact)
+    setIsEditing(true)
+  }
+
   const handleCancel = () => {
     personalForm.reset()
+    setLocalName(profile.fullName || '')
+    setLocalPhone(stripBulgarianPrefix(profile.phoneNumber))
+    setLocalLocation(profile.city || '')
+    setLocalLanguage(profile.preferredLanguage)
+    setLocalContact(profile.preferredContact)
     setIsEditing(false)
     setErrorMessage(null) // Clear errors on cancel
     setShowTelegramDisconnectDialog(false)
@@ -413,7 +476,10 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                   <Input
                     label={t('profile.form.name')}
                     value={field.state.value}
-                    onValueChange={field.handleChange}
+                    onValueChange={(v) => {
+                      field.handleChange(v)
+                      setLocalName(v)
+                    }}
                     startContent={<UserIcon className="w-4 h-4 text-gray-500" />}
                     classNames={{
                       input: 'text-base', // 16px font size prevents iOS zoom
@@ -473,6 +539,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                       // Only allow digits, spaces, and dashes
                       const cleaned = value.replace(/[^\d\s-]/g, '')
                       field.handleChange(cleaned)
+                      setLocalPhone(addBulgarianPrefix(cleaned))
                     }}
                     isInvalid={!!field.state.meta.errors.length}
                     errorMessage={field.state.meta.errors[0]}
@@ -500,6 +567,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                       value={field.state.value || undefined}
                       onChange={(city: CityOption | null) => {
                         field.handleChange(city?.slug || null)
+                        setLocalLocation(city?.slug || '')
                       }}
                       placeholder={t('profile.selectCity')}
                       showProfileCity={false}
@@ -520,6 +588,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                       const selected = Array.from(keys)[0] as string
                       if (selected === 'en' || selected === 'bg' || selected === 'ru' || selected === 'ua') {
                         field.handleChange(selected)
+                        setLocalLanguage(selected)
                       }
                     }}
                     startContent={<Globe className="w-4 h-4 text-gray-500" />}
@@ -559,6 +628,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                         }
 
                         field.handleChange(value)
+                        setLocalContact(value)
                       }}
                       orientation="horizontal"
                       classNames={{
@@ -613,7 +683,7 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
             <Button
               size="sm"
               startContent={<Edit className="w-4 h-4 text-white" />}
-              onPress={() => setIsEditing(true)}
+              onPress={handleStartEditing}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
               {t('profile.editPersonalInfo')}

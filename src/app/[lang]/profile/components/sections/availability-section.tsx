@@ -1,12 +1,14 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, Chip } from '@nextui-org/react'
 import { Clock, MapPinned, Languages, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslations } from 'next-intl'
 import { getCityLabelBySlug } from '@/features/cities'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { toast } from '@/hooks/use-toast'
 
 interface AvailabilitySectionProps {
   responseTime: string
@@ -33,12 +35,51 @@ export function AvailabilitySection({
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentLanguages, setCurrentLanguages] = useState(languages)
+  const [localResponseTime, setLocalResponseTime] = useState(responseTime)
 
   // Get translated city label
   const cityLabel = useMemo(() => {
     if (!city) return t('profile.professional.notSet')
     return getCityLabelBySlug(city, t)
   }, [city, t])
+
+  // Memoize data for auto-save
+  const formData = useMemo(() => ({
+    responseTime: localResponseTime,
+    languages: currentLanguages
+  }), [localResponseTime, currentLanguages])
+
+  // Auto-save callback
+  const handleAutoSave = useCallback(async (data: typeof formData) => {
+    try {
+      await onSave({ responseTime: data.responseTime })
+      onLanguageChange(data.languages)
+    } catch (error) {
+      console.error('[AvailabilitySection] Auto-save failed:', error)
+    }
+  }, [onSave, onLanguageChange])
+
+  // Auto-save when editing (5 second debounce)
+  useAutoSave({
+    data: formData,
+    onSave: handleAutoSave,
+    delay: 5000,
+    enabled: isEditing,
+    onSuccess: () => {
+      toast({
+        description: t('profile.autoSave.saved'),
+        variant: 'default',
+        duration: 2000
+      })
+    },
+    onError: () => {
+      toast({
+        description: t('profile.autoSave.error'),
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  })
 
   const form = useForm({
     defaultValues: { responseTime },
@@ -50,6 +91,19 @@ export function AvailabilitySection({
       setIsEditing(false)
     }
   })
+
+  const handleStartEditing = () => {
+    setLocalResponseTime(responseTime)
+    setCurrentLanguages(languages)
+    setIsEditing(true)
+  }
+
+  const handleCancel = () => {
+    form.reset()
+    setLocalResponseTime(responseTime)
+    setCurrentLanguages(languages)
+    setIsEditing(false)
+  }
 
   const handleLanguageToggle = (langCode: string, checked: boolean) => {
     if (checked) {
@@ -132,6 +186,7 @@ export function AvailabilitySection({
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
                       field.handleChange(selected)
+                      setLocalResponseTime(selected)
                     }}
                     startContent={<Clock className="w-4 h-4 text-gray-500" />}
                   >
@@ -195,18 +250,14 @@ export function AvailabilitySection({
             <Button
               size="sm"
               startContent={<Edit className="w-4 h-4 text-white" />}
-              onPress={() => setIsEditing(true)}
+              onPress={handleStartEditing}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
               {t('common.edit')}
             </Button>
           ) : (
             <FormActionButtons
-              onCancel={() => {
-                form.reset()
-                setCurrentLanguages(languages)
-                setIsEditing(false)
-              }}
+              onCancel={handleCancel}
               onSave={() => form.handleSubmit()}
               isLoading={isLoading}
             />

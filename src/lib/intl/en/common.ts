@@ -243,4 +243,10 @@ export const common = {
   // Language Preference Prompt
   'languagePrompt.title': 'Switch to {language}?',
   'languagePrompt.switch': 'Yes, switch',
+
+  // Unsaved Changes Dialog
+  'common.unsavedChanges.title': 'Unsaved Changes',
+  'common.unsavedChanges.description': 'You have unsaved changes. Are you sure you want to leave? Your changes will be lost.',
+  'common.unsavedChanges.stay': 'Stay',
+  'common.unsavedChanges.leave': 'Leave',
 };

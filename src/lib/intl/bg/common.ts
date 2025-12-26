@@ -243,4 +243,10 @@ export const common = {
   // Language Preference Prompt
   'languagePrompt.title': 'Превключи на {language}?',
   'languagePrompt.switch': 'Да, превключи',
+
+  // Unsaved Changes Dialog
+  'common.unsavedChanges.title': 'Незапазени промени',
+  'common.unsavedChanges.description': 'Имате незапазени промени. Сигурни ли сте, че искате да напуснете? Промените ви ще бъдат загубени.',
+  'common.unsavedChanges.stay': 'Остани',
+  'common.unsavedChanges.leave': 'Напусни',
 };

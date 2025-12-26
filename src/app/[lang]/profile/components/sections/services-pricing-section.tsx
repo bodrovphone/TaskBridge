@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Card, CardHeader, CardBody, Button, Input, Divider, Chip } from '@nextui-org/react'
 import { Banknote, Plus, Trash2, Edit } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ServiceItem } from '@/server/domain/user/user.types'
 import { FormActionButtons } from '../shared/form-action-buttons'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { toast } from '@/hooks/use-toast'
 
 interface ServicesPricingSectionProps {
   services: ServiceItem[]
@@ -38,6 +40,42 @@ export function ServicesPricingSection({
       setLocalServices(services)
     }
   }, [services, isEditing])
+
+  // Memoize data for auto-save (filter out empty services)
+  const formData = useMemo(() => ({
+    services: localServices.filter(s => s.name.trim() !== '')
+  }), [localServices])
+
+  // Auto-save callback
+  const handleAutoSave = useCallback(async (data: typeof formData) => {
+    try {
+      await onSave(data.services)
+    } catch (error) {
+      console.error('[ServicesPricingSection] Auto-save failed:', error)
+    }
+  }, [onSave])
+
+  // Auto-save when editing (5 second debounce)
+  useAutoSave({
+    data: formData,
+    onSave: handleAutoSave,
+    delay: 5000,
+    enabled: isEditing,
+    onSuccess: () => {
+      toast({
+        description: t('profile.autoSave.saved'),
+        variant: 'default',
+        duration: 2000
+      })
+    },
+    onError: () => {
+      toast({
+        description: t('profile.autoSave.error'),
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  })
 
   // When entering edit mode with no services, add one empty service
   const handleStartEditing = useCallback(() => {

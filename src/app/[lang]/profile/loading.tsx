@@ -1,6 +1,11 @@
+'use client'
+
 import { Spinner, Card, Skeleton } from '@nextui-org/react'
+import { useTranslations } from 'next-intl'
 
 export default function ProfileLoading() {
+  const t = useTranslations()
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
@@ -20,7 +25,7 @@ export default function ProfileLoading() {
         <div className="flex justify-center py-8">
           <div className="flex flex-col items-center gap-4">
             <Spinner size="lg" color="primary" />
-            <p className="text-gray-600 text-sm">Loading your profile...</p>
+            <p className="text-gray-600 text-sm">{t('profile.loading')}</p>
           </div>
         </div>
       </div>

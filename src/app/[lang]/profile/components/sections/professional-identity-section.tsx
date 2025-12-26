@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
 import { Briefcase, Award, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslations } from 'next-intl'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { toast } from '@/hooks/use-toast'
 
 interface ProfessionalIdentitySectionProps {
   title: string
@@ -30,12 +32,53 @@ export function ProfessionalIdentitySection({
   bio,
   yearsExperience,
   onSave,
-  sectionId,
+  sectionId = 'professional-identity',
   isHighlighted = false
 }: ProfessionalIdentitySectionProps) {
   const t = useTranslations()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [localTitle, setLocalTitle] = useState(title)
+  const [localBio, setLocalBio] = useState(bio)
+  const [localExperience, setLocalExperience] = useState(yearsExperience)
+
+  // Memoize data for auto-save
+  const formData = useMemo(() => ({
+    title: localTitle,
+    bio: localBio,
+    yearsExperience: localExperience
+  }), [localTitle, localBio, localExperience])
+
+  // Auto-save callback
+  const handleAutoSave = useCallback(async (data: typeof formData) => {
+    try {
+      await onSave(data)
+    } catch (error) {
+      console.error('[ProfessionalIdentitySection] Auto-save failed:', error)
+    }
+  }, [onSave])
+
+  // Auto-save when editing (5 second debounce)
+  useAutoSave({
+    data: formData,
+    onSave: handleAutoSave,
+    delay: 5000,
+    enabled: isEditing,
+    onSuccess: () => {
+      toast({
+        description: t('profile.autoSave.saved'),
+        variant: 'default',
+        duration: 2000
+      })
+    },
+    onError: () => {
+      toast({
+        description: t('profile.autoSave.error'),
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  })
 
   const form = useForm({
     defaultValues: { title, bio, yearsExperience },
@@ -46,6 +89,21 @@ export function ProfessionalIdentitySection({
       setIsEditing(false)
     }
   })
+
+  const handleStartEditing = () => {
+    setLocalTitle(title)
+    setLocalBio(bio)
+    setLocalExperience(yearsExperience)
+    setIsEditing(true)
+  }
+
+  const handleCancel = () => {
+    form.reset()
+    setLocalTitle(title)
+    setLocalBio(bio)
+    setLocalExperience(yearsExperience)
+    setIsEditing(false)
+  }
 
   return (
     <Card
@@ -102,7 +160,10 @@ export function ProfessionalIdentitySection({
                     label={t('profile.professional.title')}
                     placeholder={t('profile.professional.titlePlaceholder')}
                     value={field.state.value}
-                    onValueChange={field.handleChange}
+                    onValueChange={(v) => {
+                      field.handleChange(v)
+                      setLocalTitle(v)
+                    }}
                     startContent={<Briefcase className="w-4 h-4 text-gray-500" />}
                   />
                 )}
@@ -114,7 +175,10 @@ export function ProfessionalIdentitySection({
                     label={t('profile.professional.bio')}
                     placeholder={t('profile.professional.bioPlaceholder')}
                     value={field.state.value}
-                    onValueChange={field.handleChange}
+                    onValueChange={(v) => {
+                      field.handleChange(v)
+                      setLocalBio(v)
+                    }}
                     minRows={4}
                     maxRows={8}
                     maxLength={400}
@@ -131,6 +195,7 @@ export function ProfessionalIdentitySection({
                     onSelectionChange={(keys) => {
                       const selected = Array.from(keys)[0] as string
                       field.handleChange(selected)
+                      setLocalExperience(selected)
                     }}
                     startContent={<Award className="w-4 h-4 text-gray-500" />}
                   >
@@ -151,14 +216,14 @@ export function ProfessionalIdentitySection({
             <Button
               size="sm"
               startContent={<Edit className="w-4 h-4 text-white" />}
-              onPress={() => setIsEditing(true)}
+              onPress={handleStartEditing}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
               {t('common.edit')}
             </Button>
           ) : (
             <FormActionButtons
-              onCancel={() => { form.reset(); setIsEditing(false) }}
+              onCancel={handleCancel}
               onSave={() => form.handleSubmit()}
               isLoading={isLoading}
             />

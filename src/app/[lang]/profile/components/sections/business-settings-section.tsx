@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Card, CardBody, CardHeader, Button, Divider, Input, Chip } from '@nextui-org/react'
 import { useTranslations } from 'next-intl'
 import { Settings, Banknote, Clock, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { toast } from '@/hooks/use-toast'
 
 interface BusinessSettingsSectionProps {
   paymentMethods: string[]
@@ -31,6 +33,44 @@ export function BusinessSettingsSection({
   const [currentWeekdayHours, setCurrentWeekdayHours] = useState(weekdayHours)
   const [currentWeekendHours, setCurrentWeekendHours] = useState(weekendHours)
 
+  // Memoize data for auto-save
+  const formData = useMemo(() => ({
+    paymentMethods: currentPaymentMethods,
+    weekdayHours: currentWeekdayHours,
+    weekendHours: currentWeekendHours
+  }), [currentPaymentMethods, currentWeekdayHours, currentWeekendHours])
+
+  // Auto-save callback
+  const handleAutoSave = useCallback(async (data: typeof formData) => {
+    try {
+      onSave(data)
+    } catch (error) {
+      console.error('[BusinessSettingsSection] Auto-save failed:', error)
+    }
+  }, [onSave])
+
+  // Auto-save when editing (5 second debounce)
+  useAutoSave({
+    data: formData,
+    onSave: handleAutoSave,
+    delay: 5000,
+    enabled: isEditing,
+    onSuccess: () => {
+      toast({
+        description: t('profile.autoSave.saved'),
+        variant: 'default',
+        duration: 2000
+      })
+    },
+    onError: () => {
+      toast({
+        description: t('profile.autoSave.error'),
+        variant: 'destructive',
+        duration: 3000
+      })
+    }
+  })
+
   const handlePaymentMethodToggle = (method: string, checked: boolean) => {
     if (checked) {
       setCurrentPaymentMethods(prev => [...prev, method])
@@ -46,6 +86,13 @@ export function BusinessSettingsSection({
       weekendHours: currentWeekendHours
     })
     setIsEditing(false)
+  }
+
+  const handleStartEditing = () => {
+    setCurrentPaymentMethods(paymentMethods)
+    setCurrentWeekdayHours(weekdayHours)
+    setCurrentWeekendHours(weekendHours)
+    setIsEditing(true)
   }
 
   const handleCancel = () => {
@@ -197,7 +244,7 @@ export function BusinessSettingsSection({
             <Button
               size="sm"
               startContent={<Edit className="w-4 h-4 text-white" />}
-              onPress={() => setIsEditing(true)}
+              onPress={handleStartEditing}
               className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
             >
               {t('common.edit')}
