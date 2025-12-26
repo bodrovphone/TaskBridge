@@ -1,13 +1,12 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { Card, CardBody } from '@nextui-org/react'
 import { Clock, Calendar } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import { enGB, bg, ru } from 'date-fns/locale'
-import 'react-datepicker/dist/react-datepicker.css'
-import './timeline-section.css'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 
@@ -22,6 +21,16 @@ export function TimelineSection({ form, urgency, onUrgencyChange }: TimelineSect
  const t = useTranslations()
  const params = useParams()
  const currentLocale = (params?.lang as string) || 'bg'
+ const cssLoaded = useRef(false)
+
+ // Lazy load datepicker CSS on mount (non-blocking)
+ useEffect(() => {
+  if (!cssLoaded.current) {
+   import('react-datepicker/dist/react-datepicker.css')
+   import('./timeline-section.css')
+   cssLoaded.current = true
+  }
+ }, [])
 
  // Map app language to date-fns locale
  const dateLocale = currentLocale === 'bg' ? bg : currentLocale === 'ru' ? ru : enGB

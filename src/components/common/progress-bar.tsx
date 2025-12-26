@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import NProgress from 'nprogress'
-// Don't import default nprogress.css - we use our custom styles
 
 // Configure nprogress
 NProgress.configure({
@@ -20,6 +19,15 @@ export default function ProgressBar() {
   // This prevents the progress bar from showing on filter/search changes
   // which are handled via router.replace with scroll: false
   const prevPathname = useRef(pathname)
+  const cssLoaded = useRef(false)
+
+  // Lazy load CSS on mount (non-blocking)
+  useEffect(() => {
+    if (!cssLoaded.current) {
+      import('@/app/nprogress.css')
+      cssLoaded.current = true
+    }
+  }, [])
 
   useEffect(() => {
     // Only show progress bar when actual page (pathname) changes

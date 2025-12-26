@@ -12,7 +12,6 @@ import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/se
 import { Toaster } from '@/components/ui/toaster'
 import { TelegramConnectionToast } from '@/components/telegram-connection-toast'
 import { OrganizationJsonLd, WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/seo/json-ld'
-import '../nprogress.css'
 
 interface LocaleLayoutProps {
   children: ReactNode

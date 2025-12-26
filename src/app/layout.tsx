@@ -9,6 +9,7 @@ const montserrat = Montserrat({
  subsets: ['latin', 'cyrillic'],
  variable: '--font-montserrat',
  weight: ['300', '400', '500', '600', '700'],
+ display: 'swap',
 })
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
