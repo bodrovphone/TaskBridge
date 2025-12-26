@@ -63,13 +63,34 @@ export function PortfolioGalleryManager({
   // Sort by order
   const sortedItems = [...items].sort((a, b) => a.order - b.order)
 
-  // Initialize local captions from items
+  // Initialize local captions from items - only for NEW items, don't overwrite existing local state
+  const initializedIdsRef = useRef<Set<string>>(new Set())
   useEffect(() => {
-    const captions: Record<string, string> = {}
-    items.forEach(item => {
-      captions[item.id] = item.caption
+    setLocalCaptions(prev => {
+      const updated = { ...prev }
+      let hasChanges = false
+
+      items.forEach(item => {
+        // Only initialize if we haven't seen this item before
+        if (!initializedIdsRef.current.has(item.id)) {
+          updated[item.id] = item.caption
+          initializedIdsRef.current.add(item.id)
+          hasChanges = true
+        }
+      })
+
+      // Clean up deleted items from the ref
+      const currentIds = new Set(items.map(i => i.id))
+      initializedIdsRef.current.forEach(id => {
+        if (!currentIds.has(id)) {
+          initializedIdsRef.current.delete(id)
+          delete updated[id]
+          hasChanges = true
+        }
+      })
+
+      return hasChanges ? updated : prev
     })
-    setLocalCaptions(captions)
   }, [items])
 
   // Debounced captions for saving
