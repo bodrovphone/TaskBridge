@@ -21,7 +21,7 @@ export const profile = {
   'profile.form.email': 'Имейл',
   'profile.form.phone': 'Телефон',
   'profile.form.location': 'Местоположение',
-  'profile.form.bio': 'Биография',
+  'profile.form.bio': 'Кратко представяне',
   'profile.form.skills': 'Умения',
   'profile.form.experience': 'Години опит',
   'profile.form.hourlyRate': 'Часова ставка (€)',
@@ -125,9 +125,9 @@ export const profile = {
 
   // Professional Profile
   'profile.professional.info': 'Професионална информация',
-  'profile.professional.identitySection': 'Професионална идентичност',
-  'profile.professional.title': 'Професионална титла',
-  'profile.professional.bio': 'Биография',
+  'profile.professional.identitySection': 'За вас',
+  'profile.professional.title': 'Какво правите',
+  'profile.professional.bio': 'Кратко представяне',
   'profile.professional.yearsOfExperience': 'Години опит',
   'profile.professional.description': 'Описание',
   'profile.professional.hourlyRate': 'Часова ставка',
@@ -162,7 +162,7 @@ export const profile = {
   'profile.professional.bioPlaceholder': 'Разкажете на клиентите за вашия опит, специализации и подход...',
   'profile.professional.setupFormDescription': 'Попълнете професионалната си информация, за да покажете уменията и опита си.',
   'profile.professional.selectCategories': 'Избери категории',
-  'profile.professional.serviceCategories': 'Категории услуги',
+  'profile.professional.serviceCategories': 'Вашите категории',
   'profile.serviceCategories.saveCategories': 'Запази',
   'profile.serviceCategories.searchPlaceholder': 'Търси категории...',
   'profile.serviceCategories.popularCategories': 'Популярни категории',
@@ -189,19 +189,19 @@ export const profile = {
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Завършете професионалния си профил',
   'profile.professional.minimumRequired': 'Минимум изисквано',
-  'profile.professional.titleField': 'Професионално заглавие',
+  'profile.professional.titleField': 'Какво правите',
   'profile.professional.recommended': 'Препоръчително',
-  'profile.professional.recommendedFields': 'Категории (Услуги), Местоположение и Биография',
+  'profile.professional.recommendedFields': 'Категории (Услуги), Местоположение и Кратко представяне',
 
   // Professional Listing Banner
   'profile.listing.notListed': 'Профилът ви все още не е публикуван',
-  'profile.listing.notListedMessage': 'Добавете професионално заглавие, за да се появите в нашето търсене и да получавате възможности за работа от клиенти.',
+  'profile.listing.notListedMessage': 'Кажете ни какво правите, за да се появите в нашето търсене и да получавате възможности за работа от клиенти.',
   'profile.listing.incomplete': 'Довършете профила си',
   'profile.listing.incompleteMessage': 'Попълнете липсващата информация, за да подобрите видимостта си и да привлечете повече клиенти.',
-  'profile.listing.requirement.title': 'Професионално заглавие',
-  'profile.listing.requirement.bio': 'Описание/Биография',
+  'profile.listing.requirement.title': 'Какво правите',
+  'profile.listing.requirement.bio': 'Кратко представяне',
   'profile.listing.requirement.rate': 'Часова ставка',
-  'profile.listing.requirement.skills': 'Категории услуги',
+  'profile.listing.requirement.skills': 'Вашите категории',
   'profile.listing.clickToFix': 'Натиснете за корекция',
 
   // Telegram Connection
@@ -373,7 +373,7 @@ export const profile = {
   'profile.gallery.smaller': 'по-малък',
 
   // Services & Pricing
-  'profile.services.title': 'Услуги и цени',
+  'profile.services.title': 'Моите цени',
   'profile.services.description': 'Добавете услугите си с цени',
   'profile.services.empty': 'Все още няма добавени услуги',
   'profile.services.emptyHint': 'Добавете услугите си, за да знаят клиентите какво предлагате',

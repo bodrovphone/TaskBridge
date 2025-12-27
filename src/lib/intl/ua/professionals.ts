@@ -158,7 +158,7 @@ export const professionals = {
   'professionalDetail.actions.contact': 'Контакт',
   'professionalDetail.actions.share': 'Поділитись',
   'professionalDetail.contactHours': 'Доступний',
-  'professionalDetail.services.title': 'Послуги та ціни',
+  'professionalDetail.services.title': 'Мої ціни',
   'professionalDetail.services.pricingNote.title': 'Інформація про ціни',
   'professionalDetail.services.pricingNote.description':
     'Остаточні ціни узгоджуються індивідуально залежно від складності та вимог завдання.',

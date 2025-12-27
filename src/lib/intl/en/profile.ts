@@ -21,7 +21,7 @@ export const profile = {
   'profile.form.email': 'Email',
   'profile.form.phone': 'Phone',
   'profile.form.location': 'Location',
-  'profile.form.bio': 'Bio',
+  'profile.form.bio': 'Short intro',
   'profile.form.skills': 'Skills',
   'profile.form.experience': 'Years of Experience',
   'profile.form.hourlyRate': 'Hourly Rate (€)',
@@ -125,9 +125,9 @@ export const profile = {
 
   // Professional Profile
   'profile.professional.info': 'Professional Information',
-  'profile.professional.identitySection': 'Professional Identity',
-  'profile.professional.title': 'Professional Title',
-  'profile.professional.bio': 'Bio',
+  'profile.professional.identitySection': 'About You',
+  'profile.professional.title': 'What you do',
+  'profile.professional.bio': 'Short intro',
   'profile.professional.yearsOfExperience': 'Years of Experience',
   'profile.professional.description': 'Description',
   'profile.professional.hourlyRate': 'Hourly Rate',
@@ -162,7 +162,7 @@ export const profile = {
   'profile.professional.bioPlaceholder': 'Tell customers about your experience, specializations, and approach...',
   'profile.professional.setupFormDescription': 'Fill out your professional information to showcase your skills and experience.',
   'profile.professional.selectCategories': 'Select Categories',
-  'profile.professional.serviceCategories': 'Service Categories',
+  'profile.professional.serviceCategories': 'Your categories',
   'profile.serviceCategories.saveCategories': 'Save',
   'profile.serviceCategories.searchPlaceholder': 'Search categories...',
   'profile.serviceCategories.popularCategories': 'Popular Categories',
@@ -189,19 +189,19 @@ export const profile = {
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Complete Your Professional Profile',
   'profile.professional.minimumRequired': 'Minimum required',
-  'profile.professional.titleField': 'Professional Title',
+  'profile.professional.titleField': 'What you do',
   'profile.professional.recommended': 'Recommended',
-  'profile.professional.recommendedFields': 'Categories (Services), Location, and Bio',
+  'profile.professional.recommendedFields': 'Categories (Services), Location, and Short intro',
 
   // Professional Listing Banner
   'profile.listing.notListed': 'Your profile is not listed yet',
-  'profile.listing.notListedMessage': 'Add a professional title to appear in our search and receive job opportunities from customers.',
+  'profile.listing.notListedMessage': 'Tell us what you do to appear in our search and receive job opportunities from customers.',
   'profile.listing.incomplete': 'Complete your profile',
   'profile.listing.incompleteMessage': 'Fill in the missing information to improve your visibility and attract more customers.',
-  'profile.listing.requirement.title': 'Professional title',
-  'profile.listing.requirement.bio': 'Description/Bio',
+  'profile.listing.requirement.title': 'What you do',
+  'profile.listing.requirement.bio': 'Short intro',
   'profile.listing.requirement.rate': 'Hourly rate',
-  'profile.listing.requirement.skills': 'Service categories',
+  'profile.listing.requirement.skills': 'Your categories',
   'profile.listing.clickToFix': 'Click to fix',
 
   // Telegram Connection
@@ -372,7 +372,7 @@ export const profile = {
   'profile.gallery.deleteError': 'Delete failed',
 
   // Services & Pricing
-  'profile.services.title': 'Services & Pricing',
+  'profile.services.title': 'My prices',
   'profile.services.description': 'List your services with pricing',
   'profile.services.empty': 'No services added yet',
   'profile.services.emptyHint': 'Add your services to let clients know what you offer',

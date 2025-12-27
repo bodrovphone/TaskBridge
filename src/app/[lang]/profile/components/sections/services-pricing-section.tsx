@@ -20,7 +20,6 @@ const createEmptyService = (order: number): ServiceItem => ({
   id: Date.now().toString() + '-' + order,
   name: '',
   price: '',
-  description: '',
   order
 })
 
@@ -162,9 +161,6 @@ export function ServicesPricingSection({
                   >
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-gray-900">{service.name}</h4>
-                      {service.description && (
-                        <p className="text-sm text-gray-600 mt-1">{service.description}</p>
-                      )}
                     </div>
                     <Chip
                       size="sm"
@@ -236,21 +232,6 @@ export function ServicesPricingSection({
                         }}
                       />
                     </div>
-                    {/* Description */}
-                    <Input
-                      size="md"
-                      variant="bordered"
-                      label={t('profile.services.descriptionLabel')}
-                      placeholder={t('profile.services.descriptionPlaceholder')}
-                      value={service.description}
-                      onValueChange={(value) => updateService(service.id, 'description', value)}
-                      maxLength={100}
-                      classNames={{
-                        inputWrapper: 'border-2 border-gray-300 hover:border-gray-400 focus-within:border-blue-500 bg-white',
-                        label: 'text-gray-700 font-medium',
-                        input: 'text-gray-900'
-                      }}
-                    />
                   </div>
 
                   {/* Divider between services */}

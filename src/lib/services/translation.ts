@@ -38,7 +38,7 @@ export interface TranslateProfessionalProfileInput {
     id: string
     name: string
     price: string
-    description: string
+    description?: string  // Optional - not used in MVP
     order: number
   }> | null
   sourceLocale: string
@@ -51,7 +51,7 @@ export interface TranslateProfessionalProfileOutput {
     id: string
     name: string
     price: string
-    description: string
+    description?: string  // Optional - not used in MVP
     order: number
   }> | null
   content_source_language: string

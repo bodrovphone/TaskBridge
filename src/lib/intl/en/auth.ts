@@ -160,4 +160,11 @@ export const auth = {
   'accountDeletion.deleteError': 'Failed to delete account. Please try again.',
   'accountDeletion.preflightError': 'Failed to check deletion status. Please try again.',
   'accountDeletion.unknownError': 'An unexpected error occurred. Please try again.',
+
+  // Professional Onboarding Dialog
+  'auth.professionalOnboarding.title': 'One Step Away',
+  'auth.professionalOnboarding.description': 'Complete your profile to become visible to customers looking for professionals like you.',
+  'auth.professionalOnboarding.benefits': 'Takes just 2 minutes. You\'ll appear in search results and receive task notifications.',
+  'auth.professionalOnboarding.confirm': 'Complete Profile',
+  'auth.professionalOnboarding.later': 'Later',
 };

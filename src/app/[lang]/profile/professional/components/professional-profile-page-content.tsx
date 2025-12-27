@@ -11,7 +11,8 @@ import { ProfileDataProvider } from '../../components/profile-data-provider'
 import { NotificationBannerManager } from '../../components/notification-banner-manager'
 import { AchievementBanner } from '../../components/achievement-banner'
 import { ProfileHeader } from '../../components/shared/profile-header'
-import { StatisticsSection } from '../../components/sections/statistics-section'
+// HIDDEN: Business Overview section - not in MVP, may bring back later
+// import { StatisticsSection } from '../../components/sections/statistics-section'
 import { AccountSettingsSection } from '../../components/sections/account-settings-section'
 
 interface ProfessionalProfilePageContentProps {
@@ -183,13 +184,13 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
           </CardBody>
         </Card>
 
-        {/* Statistics Section (inline) */}
-        <div className="mb-4">
+        {/* HIDDEN: Business Overview section - not in MVP, may bring back later */}
+        {/* <div className="mb-4">
           <StatisticsSection
             userRole="professional"
             profile={profile}
           />
-        </div>
+        </div> */}
 
         {/* Account Settings Section (inline) */}
         <div id="account-settings" className="mb-4">

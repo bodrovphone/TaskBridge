@@ -21,7 +21,7 @@ export const profile = {
   'profile.form.email': 'Email',
   'profile.form.phone': 'Телефон',
   'profile.form.location': 'Місце',
-  'profile.form.bio': 'Про себе',
+  'profile.form.bio': 'Коротко про себе',
   'profile.form.skills': 'Навички',
   'profile.form.experience': 'Років досвіду',
   'profile.form.hourlyRate': 'Погодинна ставка (€)',
@@ -125,9 +125,9 @@ export const profile = {
 
   // Professional Profile
   'profile.professional.info': 'Професійна інформація',
-  'profile.professional.identitySection': 'Професійна ідентичність',
-  'profile.professional.title': 'Професійна назва',
-  'profile.professional.bio': 'Про себе',
+  'profile.professional.identitySection': 'Про вас',
+  'profile.professional.title': 'Чим ви займаєтесь',
+  'profile.professional.bio': 'Коротко про себе',
   'profile.professional.yearsOfExperience': 'Років досвіду',
   'profile.professional.description': 'Опис',
   'profile.professional.hourlyRate': 'Погодинна ставка',
@@ -162,7 +162,7 @@ export const profile = {
   'profile.professional.bioPlaceholder': 'Розкажіть клієнтам про свій досвід, спеціалізацію та підхід...',
   'profile.professional.setupFormDescription': 'Заповніть інформацію, щоб продемонструвати навички та досвід.',
   'profile.professional.selectCategories': 'Обрати категорії',
-  'profile.professional.serviceCategories': 'Категорії послуг',
+  'profile.professional.serviceCategories': 'Ваші категорії',
   'profile.serviceCategories.saveCategories': 'Зберегти',
   'profile.serviceCategories.searchPlaceholder': 'Шукати категорії...',
   'profile.serviceCategories.popularCategories': 'Популярні категорії',
@@ -189,19 +189,19 @@ export const profile = {
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Заповніть професійний профіль',
   'profile.professional.minimumRequired': 'Мінімально необхідне',
-  'profile.professional.titleField': 'Професійна назва',
+  'profile.professional.titleField': 'Чим ви займаєтесь',
   'profile.professional.recommended': 'Рекомендовано',
-  'profile.professional.recommendedFields': 'Категорії (Послуги), Місце та Про себе',
+  'profile.professional.recommendedFields': 'Категорії (Послуги), Місце та Коротко про себе',
 
   // Professional Listing Banner
   'profile.listing.notListed': 'Ваш профіль ще не опубліковано',
-  'profile.listing.notListedMessage': 'Додайте професійну назву, щоб з\'явитися в нашому пошуку та отримувати пропозиції роботи від клієнтів.',
+  'profile.listing.notListedMessage': 'Вкажіть, чим ви займаєтесь, щоб з\'явитися в нашому пошуку та отримувати пропозиції роботи від клієнтів.',
   'profile.listing.incomplete': 'Заповніть профіль',
   'profile.listing.incompleteMessage': 'Заповніть відсутню інформацію, щоб покращити видимість та залучити більше клієнтів.',
-  'profile.listing.requirement.title': 'Професійна назва',
-  'profile.listing.requirement.bio': 'Опис/Про себе',
+  'profile.listing.requirement.title': 'Чим ви займаєтесь',
+  'profile.listing.requirement.bio': 'Коротко про себе',
   'profile.listing.requirement.rate': 'Погодинна ставка',
-  'profile.listing.requirement.skills': 'Категорії послуг',
+  'profile.listing.requirement.skills': 'Ваші категорії',
   'profile.listing.clickToFix': 'Натисніть для виправлення',
 
   // Telegram Connection
@@ -378,7 +378,7 @@ export const profile = {
   'profile.achievement.tasksCompleted': 'завдань',
 
   // Services & Pricing
-  'profile.services.title': 'Послуги та ціни',
+  'profile.services.title': 'Мої ціни',
   'profile.services.description': 'Додайте ваші послуги з цінами',
   'profile.services.empty': 'Послуги ще не додано',
   'profile.services.emptyHint': 'Додайте ваші послуги, щоб клієнти знали, що ви пропонуєте',

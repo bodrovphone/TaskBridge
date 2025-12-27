@@ -204,7 +204,7 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
          <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.experience')}</div>
         </div>
         <div>
-         <div className="text-xl sm:text-2xl font-bold text-purple-600">{professional.responseTime}</div>
+         <div className="text-xl sm:text-2xl font-bold text-purple-600">{t('profile.professional.responseTime.24h')}</div>
          <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.responseTime')}</div>
         </div>
        </div>

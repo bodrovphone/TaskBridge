@@ -53,6 +53,13 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
   }
  };
 
+ // Set professional intent before navigating to browse-tasks
+ const setProfessionalIntent = () => {
+  if (typeof window !== 'undefined') {
+   localStorage.setItem('trudify_registration_intent', 'professional');
+  }
+ };
+
  // Center the scroll position on mount (desktop only - 1024px+)
  // Disabled on mobile/tablet to prevent layout shifts during scroll
  useEffect(() => {
@@ -162,7 +169,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
       className="group bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 px-8 py-4 rounded-xl font-semibold"
       asChild
      >
-      <LocaleLink href="/browse-tasks" className="flex items-center">
+      <LocaleLink href="/browse-tasks" onClick={setProfessionalIntent} className="flex items-center">
        {t('landing.featured.viewAll')}
        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
       </LocaleLink>

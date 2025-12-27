@@ -82,6 +82,17 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   // Reset loading state before closing
   setIsLoading(false);
 
+  // Check for professional intent to show onboarding dialog (for both login and registration)
+  if (typeof window !== 'undefined') {
+    const registrationIntent = localStorage.getItem('trudify_registration_intent');
+    if (registrationIntent === 'professional') {
+      // Set flag to trigger the global onboarding dialog
+      localStorage.setItem('trudify_show_onboarding_dialog', 'true');
+      // Clean up the intent
+      localStorage.removeItem('trudify_registration_intent');
+    }
+  }
+
   // Small delay to allow auth state to update
   setTimeout(() => {
    onClose();
@@ -187,9 +198,29 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   }
  };
 
+ // Helper to set onboarding cookies before OAuth redirect
+ // These are read by /auth/callback to save intent and redirect appropriately
+ const setOnboardingCookies = () => {
+   if (typeof window !== 'undefined') {
+     // Read from localStorage and set as cookies for server-side access
+     const registrationIntent = localStorage.getItem('trudify_registration_intent');
+     const returnTo = localStorage.getItem('trudify_return_to');
+
+     if (registrationIntent) {
+       document.cookie = `trudify_registration_intent=${registrationIntent}; path=/; max-age=3600; SameSite=Lax`;
+     }
+     if (returnTo) {
+       document.cookie = `trudify_return_to=${encodeURIComponent(returnTo)}; path=/; max-age=3600; SameSite=Lax`;
+     }
+   }
+ };
+
  const handleGoogleAuth = async () => {
   setIsLoading(true);
   setError(null);
+
+  // Set cookies before OAuth redirect for server-side access in callback
+  setOnboardingCookies();
 
   try {
     const result = await signInWithGoogle();
@@ -208,6 +239,9 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
  const handleFacebookAuth = async () => {
   setIsLoading(true);
   setError(null);
+
+  // Set cookies before OAuth redirect for server-side access in callback
+  setOnboardingCookies();
 
   try {
     const result = await signInWithFacebook();

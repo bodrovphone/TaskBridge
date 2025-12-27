@@ -128,6 +128,16 @@ async function HomePage({ params }: HomePageProps) {
 
   return (
     <>
+      {/* Preload hero image on mobile only (LCP optimization) */}
+      {/* Desktop shows video instead, so we only preload image for mobile viewport */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero_image_1.webp"
+        media="(max-width: 1024px)"
+        fetchPriority="high"
+      />
+
       {/* Server-rendered SEO content (visually hidden but in HTML source) */}
       <SEOContent
         locale={locale}

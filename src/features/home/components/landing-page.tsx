@@ -85,6 +85,11 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
    // Navigate to professional profile page
    router.push(`/${currentLocale}/profile/professional`);
   } else {
+   // Store professional intent for post-registration flow
+   // This enables: signup → profile onboarding → browse tasks
+   if (typeof window !== 'undefined') {
+    localStorage.setItem('trudify_registration_intent', 'professional');
+   }
    // Open auth slideover for unauthenticated users
    setIsAuthSlideOverOpen(true);
   }

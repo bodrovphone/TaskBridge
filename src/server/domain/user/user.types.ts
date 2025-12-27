@@ -9,6 +9,8 @@ export type PreferredContact = 'email' | 'phone' | 'sms' | 'telegram'
 
 export type AvailabilityStatus = 'available' | 'busy' | 'unavailable'
 
+export type RegistrationIntent = 'professional' | 'customer'
+
 export interface WorkingHours {
   start: string // Format: "HH:MM" (24-hour)
   end: string   // Format: "HH:MM" (24-hour)
@@ -36,7 +38,7 @@ export interface ServiceItem {
   id: string           // Unique ID for the service
   name: string         // Service name (e.g., "Plumbing repair")
   price: string        // Price display (e.g., "25 €/час", "от 15 €")
-  description: string  // Brief description
+  description?: string // Brief description (optional, not used in MVP)
   order: number        // Display order
 }
 
@@ -138,10 +140,11 @@ export interface UserProfile {
   serviceCategories: string[]
   availabilityStatus: AvailabilityStatus
   serviceAreaCities: string[]
-  paymentMethods: string[]
-  languages: string[]
-  weekdayHours: WorkingHours
-  weekendHours: WorkingHours
+  // HIDDEN: Not displayed anywhere - optional for MVP
+  paymentMethods?: string[]
+  languages?: string[]
+  weekdayHours?: WorkingHours
+  weekendHours?: WorkingHours
   totalEarningsBgn: number
   profileViews: number
   gallery: GalleryItem[]
@@ -151,7 +154,8 @@ export interface UserProfile {
   tasksCompleted: number
   averageRating: number | null
   totalReviews: number
-  responseTimeHours: number | null
+  // HIDDEN: Hardcoded on detail page - optional for MVP
+  responseTimeHours?: number | null
   acceptanceRate: number | null
 
   // Settings
@@ -175,6 +179,11 @@ export interface UserProfile {
   banReason: string | null
   bannedAt: Date | null
   lastActiveAt: Date | null
+
+  // Registration & Onboarding
+  registrationIntent: RegistrationIntent | null
+  profileReminderSentAt: Date | null
+  lastTaskNotificationAt: Date | null
 
   // Badge fields
   isEarlyAdopter: boolean

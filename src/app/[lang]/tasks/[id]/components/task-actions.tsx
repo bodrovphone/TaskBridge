@@ -121,6 +121,14 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
 
  const handleApplyClick = () => {
   if (!isAuthenticated) {
+   // Store current task URL for post-registration redirect
+   // This enables: signup → profile completion → return to this task
+   if (typeof window !== 'undefined') {
+    localStorage.setItem('trudify_return_to', pathname);
+    // Mark as professional intent - applying to tasks = professional
+    localStorage.setItem('trudify_registration_intent', 'professional');
+   }
+
    // Add URL param to trigger action after login using Next.js APIs
    const params = new URLSearchParams(searchParams.toString());
    params.set('action', 'apply');

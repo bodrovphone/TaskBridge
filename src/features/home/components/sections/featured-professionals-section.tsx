@@ -102,6 +102,10 @@ export default function FeaturedProfessionalsSection({ professionals }: Featured
   if (isAuthenticated) {
    router.push(`/${currentLocale}/profile/professional`);
   } else {
+   // Store professional intent for post-registration onboarding dialog
+   if (typeof window !== 'undefined') {
+    localStorage.setItem('trudify_registration_intent', 'professional');
+   }
    setIsAuthOpen(true);
   }
  };

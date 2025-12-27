@@ -36,15 +36,17 @@ export function EarlyAdopterBadge({
   }
 
   const badge = (
-    <Chip
-      variant="flat"
-      color="secondary"
-      size={size}
-      className={`${sizeClasses[size]} bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium cursor-pointer`}
-      startContent={<Star size={iconSizes[size]} className="text-white fill-white" />}
-    >
-      {t('professionals.badge.earlyAdopterLabel')}
-    </Chip>
+    <button type="button" className="appearance-none bg-transparent border-none p-0 cursor-pointer">
+      <Chip
+        variant="flat"
+        color="secondary"
+        size={size}
+        className={`${sizeClasses[size]} bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium`}
+        startContent={<Star size={iconSizes[size]} className="text-white fill-white" />}
+      >
+        {t('professionals.badge.earlyAdopterLabel')}
+      </Chip>
+    </button>
   )
 
   if (!showTooltip) {

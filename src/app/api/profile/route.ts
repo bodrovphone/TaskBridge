@@ -115,12 +115,14 @@ export async function PUT(request: NextRequest) {
     const categoriesUpdated = updates.serviceCategories !== undefined
     if (updates.serviceCategories !== undefined) user.serviceCategories = updates.serviceCategories
     if (updates.availabilityStatus !== undefined) user.availabilityStatus = updates.availabilityStatus
-    if (updates.responseTimeHours !== undefined) user.responseTimeHours = updates.responseTimeHours
+    // HIDDEN: Response time hardcoded on detail page
+    // if (updates.responseTimeHours !== undefined) user.responseTimeHours = updates.responseTimeHours
     if (updates.serviceAreaCities !== undefined) user.serviceAreaCities = updates.serviceAreaCities
-    if (updates.paymentMethods !== undefined) user.paymentMethods = updates.paymentMethods
-    if (updates.languages !== undefined) user.languages = updates.languages
-    if (updates.weekdayHours !== undefined) user.weekdayHours = updates.weekdayHours
-    if (updates.weekendHours !== undefined) user.weekendHours = updates.weekendHours
+    // HIDDEN: Not displayed anywhere - commented out to reduce data transfer
+    // if (updates.paymentMethods !== undefined) user.paymentMethods = updates.paymentMethods
+    // if (updates.languages !== undefined) user.languages = updates.languages
+    // if (updates.weekdayHours !== undefined) user.weekdayHours = updates.weekdayHours
+    // if (updates.weekendHours !== undefined) user.weekendHours = updates.weekendHours
     if (updates.gallery !== undefined) user.gallery = updates.gallery
     if (updates.services !== undefined) user.services = updates.services
 

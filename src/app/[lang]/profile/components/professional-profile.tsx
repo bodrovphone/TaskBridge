@@ -6,8 +6,9 @@ import { Card, CardHeader, CardBody } from '@nextui-org/react'
 import { Camera } from 'lucide-react'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
 import { ServiceCategoriesSection } from './sections/service-categories-section'
-import { AvailabilitySection } from './sections/availability-section'
-import { BusinessSettingsSection } from './sections/business-settings-section'
+// HIDDEN: Not in MVP
+// import { AvailabilitySection } from './sections/availability-section'
+// import { BusinessSettingsSection } from './sections/business-settings-section'
 import { ServicesPricingSection } from './sections/services-pricing-section'
 import { PersonalInfoSection } from './shared/personal-info-section'
 import { PortfolioGalleryManager } from './portfolio-gallery-manager'
@@ -68,14 +69,14 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
     return map[rangeString] || 1
   }
 
-  // Format response time for display (hours to string)
-  const formatResponseTime = (hours: number | null): string => {
-    if (!hours) return '24h'
-    if (hours < 1) return '30m'
-    if (hours <= 2) return `${Math.round(hours)}h`
-    if (hours <= 24) return `${Math.round(hours)}h`
-    return '24h+'
-  }
+  // HIDDEN: Not in MVP - format response time for display
+  // const formatResponseTime = (hours: number | null): string => {
+  //   if (!hours) return '24h'
+  //   if (hours < 1) return '30m'
+  //   if (hours <= 2) return `${Math.round(hours)}h`
+  //   if (hours <= 24) return `${Math.round(hours)}h`
+  //   return '24h+'
+  // }
 
   // Handlers for each section
   const handleIdentitySave = async (data: { title: string; bio: string; yearsExperience: string }) => {
@@ -102,47 +103,42 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
     }
   }
 
-  const handleAvailabilitySave = async (data: {
-    responseTime: string
-  }) => {
-    setError(null)
-    try {
-      await onProfileUpdate({
-        responseTimeHours: parseFloat(data.responseTime) || null,
-      })
-    } catch (err: any) {
-      setError(err.message || 'Failed to save availability settings')
-      throw err
-    }
-  }
-
-  const handleLanguageChange = async (languages: string[]) => {
-    setError(null)
-    try {
-      await onProfileUpdate({ languages })
-    } catch (err: any) {
-      setError(err.message || 'Failed to update languages')
-      throw err
-    }
-  }
-
-  const handleBusinessSettingsSave = async (data: {
-    paymentMethods: string[]
-    weekdayHours: { start: string; end: string }
-    weekendHours: { start: string; end: string }
-  }) => {
-    setError(null)
-    try {
-      await onProfileUpdate({
-        paymentMethods: data.paymentMethods,
-        weekdayHours: data.weekdayHours,
-        weekendHours: data.weekendHours
-      })
-    } catch (err: any) {
-      setError(err.message || 'Failed to save business settings')
-      throw err
-    }
-  }
+  // HIDDEN: Not in MVP - availability and business settings handlers
+  // const handleAvailabilitySave = async (data: { responseTime: string }) => {
+  //   setError(null)
+  //   try {
+  //     await onProfileUpdate({ responseTimeHours: parseFloat(data.responseTime) || null })
+  //   } catch (err: any) {
+  //     setError(err.message || 'Failed to save availability settings')
+  //     throw err
+  //   }
+  // }
+  // const handleLanguageChange = async (languages: string[]) => {
+  //   setError(null)
+  //   try {
+  //     await onProfileUpdate({ languages })
+  //   } catch (err: any) {
+  //     setError(err.message || 'Failed to update languages')
+  //     throw err
+  //   }
+  // }
+  // const handleBusinessSettingsSave = async (data: {
+  //   paymentMethods: string[]
+  //   weekdayHours: { start: string; end: string }
+  //   weekendHours: { start: string; end: string }
+  // }) => {
+  //   setError(null)
+  //   try {
+  //     await onProfileUpdate({
+  //       paymentMethods: data.paymentMethods,
+  //       weekdayHours: data.weekdayHours,
+  //       weekendHours: data.weekendHours
+  //     })
+  //   } catch (err: any) {
+  //     setError(err.message || 'Failed to save business settings')
+  //     throw err
+  //   }
+  // }
 
   const handleGalleryChange = async (items: GalleryItem[]) => {
     setError(null)
@@ -173,12 +169,6 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         </div>
       )}
 
-      {/* 0. Personal Information */}
-      <PersonalInfoSection
-        profile={profile}
-        onSave={handlePersonalInfoSave}
-      />
-
       {/* 1. Professional Identity */}
       <ProfessionalIdentitySection
         title={profile.professionalTitle || ''}
@@ -197,32 +187,38 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         isHighlighted={!isComplete && incompleteSectionIds.has('service-categories-section')}
       />
 
-      {/* 3. Services & Pricing */}
+      {/* 3. Personal Information */}
+      <PersonalInfoSection
+        profile={profile}
+        onSave={handlePersonalInfoSave}
+      />
+
+      {/* 4. Services & Pricing */}
       <ServicesPricingSection
         services={profile.services || []}
         onSave={handleServicesSave}
         maxServices={10}
       />
 
-      {/* 4. Availability & Preferences */}
-      <AvailabilitySection
+      {/* 5. Availability & Preferences - HIDDEN: Response time hardcoded on detail page */}
+      {/* <AvailabilitySection
         responseTime={formatResponseTime(profile.responseTimeHours)}
         city={profile.city}
         country={profile.country}
         languages={profile.languages || []}
         onSave={handleAvailabilitySave}
         onLanguageChange={handleLanguageChange}
-      />
+      /> */}
 
-      {/* 5. Business Settings */}
-      <BusinessSettingsSection
+      {/* 6. Business Settings - HIDDEN: Not displayed anywhere */}
+      {/* <BusinessSettingsSection
         paymentMethods={profile.paymentMethods || []}
         weekdayHours={profile.weekdayHours || { start: '08:00', end: '18:00' }}
         weekendHours={profile.weekendHours || { start: '09:00', end: '14:00' }}
         onSave={handleBusinessSettingsSave}
-      />
+      /> */}
 
-      {/* 6. Work Gallery (Premium Feature) */}
+      {/* 7. Work Gallery (Premium Feature) */}
       <Card className="shadow-lg border border-gray-100/50 bg-white/90 hover:shadow-xl transition-shadow">
         <CardHeader className="border-b border-gray-100 bg-gradient-to-r from-gray-50/50 to-white px-4 md:px-6">
           <div className="flex items-center gap-2 md:gap-3">

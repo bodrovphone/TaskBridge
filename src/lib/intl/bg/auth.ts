@@ -160,4 +160,11 @@ export const auth = {
   'accountDeletion.deleteError': 'Неуспешно изтриване на акаунта. Моля, опитайте отново.',
   'accountDeletion.preflightError': 'Неуспешна проверка на статуса. Моля, опитайте отново.',
   'accountDeletion.unknownError': 'Възникна неочаквана грешка. Моля, опитайте отново.',
+
+  // Professional Onboarding Dialog
+  'auth.professionalOnboarding.title': 'Една стъпка остава',
+  'auth.professionalOnboarding.description': 'Попълнете профила си, за да станете видими за клиенти, които търсят професионалисти като вас.',
+  'auth.professionalOnboarding.benefits': 'Отнема само 2 минути. Ще се показвате в търсенето и ще получавате известия за задачи.',
+  'auth.professionalOnboarding.confirm': 'Попълни профила',
+  'auth.professionalOnboarding.later': 'По-късно',
 };

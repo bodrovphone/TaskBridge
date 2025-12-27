@@ -12,6 +12,7 @@ import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/se
 import { Toaster } from '@/components/ui/toaster'
 import { TelegramConnectionToast } from '@/components/telegram-connection-toast'
 import { OrganizationJsonLd, WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/seo/json-ld'
+import ProfessionalOnboardingDialog from '@/components/ui/professional-onboarding-dialog'
 
 interface LocaleLayoutProps {
   children: ReactNode
@@ -87,6 +88,7 @@ async function LocaleLayout({
         </div>
         <TelegramConnectionToast />
         <Toaster />
+        <ProfessionalOnboardingDialog />
       </LocaleProviders>
     </NextIntlClientProvider>
   )

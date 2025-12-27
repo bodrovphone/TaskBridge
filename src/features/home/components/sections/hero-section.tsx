@@ -33,6 +33,13 @@ export default function HeroSection() {
   handleReviewTask
  } = useCreateTask();
 
+ // Set professional intent before navigating to browse-tasks
+ const setProfessionalIntent = () => {
+  if (typeof window !== 'undefined') {
+   localStorage.setItem('trudify_registration_intent', 'professional');
+  }
+ };
+
  return (
   <section className="relative overflow-hidden py-12 lg:py-20 z-10" style={{ contain: 'layout style' }}>
    {/* Cardboard background with hero overlay */}
@@ -131,7 +138,7 @@ export default function HeroSection() {
         className="group border-2 border-slate-300 text-slate-700 bg-white/70 hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
         asChild
        >
-        <LocaleLink href="/browse-tasks">
+        <LocaleLink href="/browse-tasks" onClick={setProfessionalIntent}>
          <Search className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.hero.browseServices')}
         </LocaleLink>
@@ -232,7 +239,7 @@ export default function HeroSection() {
         className="group border-2 border-slate-300 text-slate-700 bg-white/70 hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
         asChild
        >
-        <LocaleLink href="/browse-tasks">
+        <LocaleLink href="/browse-tasks" onClick={setProfessionalIntent}>
          <Search className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.hero.browseServices')}
         </LocaleLink>

@@ -189,10 +189,11 @@ export class UserRepository {
       serviceCategories: raw.service_categories || [],
       availabilityStatus: raw.availability_status || 'available',
       serviceAreaCities: raw.service_area_cities || [],
-      paymentMethods: raw.payment_methods || ['cash', 'bank_transfer'],
-      languages: raw.languages || [raw.preferred_language || 'bg'],
-      weekdayHours: raw.weekday_hours || { start: '08:00', end: '18:00' },
-      weekendHours: raw.weekend_hours || { start: '09:00', end: '14:00' },
+      // HIDDEN: Not displayed anywhere - commented out to reduce data transfer
+      // paymentMethods: raw.payment_methods || ['cash', 'bank_transfer'],
+      // languages: raw.languages || [raw.preferred_language || 'bg'],
+      // weekdayHours: raw.weekday_hours || { start: '08:00', end: '18:00' },
+      // weekendHours: raw.weekend_hours || { start: '09:00', end: '14:00' },
       totalEarningsBgn: raw.total_earnings_bgn ? parseFloat(raw.total_earnings_bgn) : 0,
       profileViews: raw.profile_views || 0,
       gallery: raw.portfolio || [],
@@ -202,7 +203,8 @@ export class UserRepository {
       tasksCompleted: raw.tasks_completed || 0,
       averageRating: raw.average_rating ? parseFloat(raw.average_rating) : null,
       totalReviews: raw.total_reviews || 0,
-      responseTimeHours: raw.response_time_hours ? parseFloat(raw.response_time_hours) : null,
+      // HIDDEN: Hardcoded on detail page
+      // responseTimeHours: raw.response_time_hours ? parseFloat(raw.response_time_hours) : null,
       acceptanceRate: raw.acceptance_rate ? parseFloat(raw.acceptance_rate) : null,
 
       // Settings
@@ -239,6 +241,11 @@ export class UserRepository {
       banReason: raw.ban_reason,
       bannedAt: raw.banned_at ? new Date(raw.banned_at) : null,
       lastActiveAt: raw.last_active_at ? new Date(raw.last_active_at) : null,
+
+      // Registration & Onboarding
+      registrationIntent: raw.registration_intent,
+      profileReminderSentAt: raw.profile_reminder_sent_at ? new Date(raw.profile_reminder_sent_at) : null,
+      lastTaskNotificationAt: raw.last_task_notification_at ? new Date(raw.last_task_notification_at) : null,
 
       // Badge fields
       isEarlyAdopter: raw.is_early_adopter || false,
@@ -286,10 +293,11 @@ export class UserRepository {
       service_categories: user.serviceCategories,
       availability_status: user.availabilityStatus,
       service_area_cities: user.serviceAreaCities,
-      payment_methods: user.paymentMethods,
-      languages: user.languages,
-      weekday_hours: user.weekdayHours,
-      weekend_hours: user.weekendHours,
+      // HIDDEN: Not displayed anywhere
+      // payment_methods: user.paymentMethods,
+      // languages: user.languages,
+      // weekday_hours: user.weekdayHours,
+      // weekend_hours: user.weekendHours,
       total_earnings_bgn: user.totalEarningsBgn,
       profile_views: user.profileViews,
       portfolio: user.gallery,
@@ -299,7 +307,8 @@ export class UserRepository {
       tasks_completed: user.tasksCompleted,
       average_rating: user.averageRating,
       total_reviews: user.totalReviews,
-      response_time_hours: user.responseTimeHours,
+      // HIDDEN: Hardcoded on detail page
+      // response_time_hours: user.responseTimeHours,
       acceptance_rate: user.acceptanceRate,
 
       // Settings
@@ -323,6 +332,11 @@ export class UserRepository {
       ban_reason: user.banReason,
       banned_at: user.bannedAt?.toISOString(),
       last_active_at: user.lastActiveAt?.toISOString(),
+
+      // Registration & Onboarding
+      registration_intent: user.registrationIntent,
+      profile_reminder_sent_at: user.profileReminderSentAt?.toISOString(),
+      last_task_notification_at: user.lastTaskNotificationAt?.toISOString(),
 
       // Timestamps
       created_at: user.createdAt.toISOString(),

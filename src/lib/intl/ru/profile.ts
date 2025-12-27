@@ -21,7 +21,7 @@ export const profile = {
   'profile.form.email': 'Email',
   'profile.form.phone': 'Телефон',
   'profile.form.location': 'Местоположение',
-  'profile.form.bio': 'Биография',
+  'profile.form.bio': 'Краткое описание',
   'profile.form.skills': 'Навыки',
   'profile.form.experience': 'Лет опыта',
   'profile.form.hourlyRate': 'Почасовая ставка (€)',
@@ -381,7 +381,7 @@ export const profile = {
   'professionalDetail.stats.responseTime': 'Ответ',
   'professionalDetail.actions.contact': 'Связаться',
   'professionalDetail.contactHours': 'Доступен',
-  'professionalDetail.services.title': 'Услуги и цены',
+  'professionalDetail.services.title': 'Мои цены',
   'professionalDetail.services.pricingNote.title': 'Информация о ценах',
   'professionalDetail.services.pricingNote.description':
     'Окончательные цены согласовываются индивидуально в зависимости от сложности и требований задачи.',
@@ -610,8 +610,8 @@ export const profile = {
   // Professional Profile
   'profile.professional.info': 'Профессиональная информация',
   'profile.professional.identitySection': 'О себе',
-  'profile.professional.title': 'Профессиональная должность',
-  'profile.professional.bio': 'Биография',
+  'profile.professional.title': 'Ваша профессия',
+  'profile.professional.bio': 'Краткое описание',
   'profile.professional.yearsOfExperience': 'Лет опыта',
   'profile.professional.description': 'Описание',
   'profile.professional.hourlyRate': 'Почасовая ставка',
@@ -646,7 +646,7 @@ export const profile = {
   'profile.professional.bioPlaceholder': 'Расскажите клиентам о своем опыте, специализациях и подходе...',
   'profile.professional.setupFormDescription': 'Заполните свою профессиональную информацию, чтобы продемонстрировать свои навыки и опыт.',
   'profile.professional.selectCategories': 'Выбрать категории',
-  'profile.professional.serviceCategories': 'Категории услуг',
+  'profile.professional.serviceCategories': 'Ваши категории',
   'profile.serviceCategories.saveCategories': 'Сохранить',
   'profile.serviceCategories.searchPlaceholder': 'Поиск категорий...',
   'profile.serviceCategories.popularCategories': 'Популярные категории',
@@ -673,19 +673,19 @@ export const profile = {
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Завершите свой профессиональный профиль',
   'profile.professional.minimumRequired': 'Минимум требуется',
-  'profile.professional.titleField': 'Профессиональное название',
+  'profile.professional.titleField': 'Ваша профессия',
   'profile.professional.recommended': 'Рекомендуется',
-  'profile.professional.recommendedFields': 'Категории (Услуги), Местоположение и Биография',
+  'profile.professional.recommendedFields': 'Категории (Услуги), Местоположение и Краткое описание',
 
   // Professional Listing Banner
   'profile.listing.notListed': 'Ваш профиль еще не опубликован',
-  'profile.listing.notListedMessage': 'Добавьте профессиональное название, чтобы появиться в нашем поиске и получать предложения работы от клиентов.',
+  'profile.listing.notListedMessage': 'Укажите вашу профессию, чтобы появиться в нашем поиске и получать предложения работы от клиентов.',
   'profile.listing.incomplete': 'Заполните профиль',
   'profile.listing.incompleteMessage': 'Заполните недостающую информацию, чтобы улучшить видимость и привлечь больше клиентов.',
-  'profile.listing.requirement.title': 'Профессиональное название',
-  'profile.listing.requirement.bio': 'Описание/Биография',
+  'profile.listing.requirement.title': 'Ваша профессия',
+  'profile.listing.requirement.bio': 'Краткое описание',
   'profile.listing.requirement.rate': 'Почасовая ставка',
-  'profile.listing.requirement.skills': 'Категории услуг',
+  'profile.listing.requirement.skills': 'Ваши категории',
   'profile.listing.clickToFix': 'Нажмите для исправления',
 
   // Telegram Connection
@@ -741,7 +741,7 @@ export const profile = {
   'profile.professional.businessHours.weekend': 'Сб-Вс',
 
   // Form Validation
-  'profile.professional.form.validation.titleRequired': 'Профессиональная должность обязательна (минимум 3 символа)',
+  'profile.professional.form.validation.titleRequired': 'Укажите вашу профессию (минимум 3 символа)',
   'profile.professional.form.validation.descriptionRequired': 'Описание обязательно (минимум 20 символов)',
   'profile.professional.form.validation.rateRequired': 'Почасовая ставка должна быть больше 0',
   'profile.professional.form.validation.skillsRequired': 'Пожалуйста, выберите хотя бы один навык',
@@ -857,7 +857,7 @@ export const profile = {
   'profile.gallery.smaller': 'меньше',
 
   // Services & Pricing
-  'profile.services.title': 'Услуги и цены',
+  'profile.services.title': 'Мои цены',
   'profile.services.description': 'Добавьте ваши услуги с ценами',
   'profile.services.empty': 'Услуги пока не добавлены',
   'profile.services.emptyHint': 'Добавьте ваши услуги, чтобы клиенты знали, что вы предлагаете',

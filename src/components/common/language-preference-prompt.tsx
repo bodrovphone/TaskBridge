@@ -11,6 +11,8 @@ import type { PreferredLanguage } from '@/server/domain/user/user.types'
 
 // Session storage key - only persists for the browser session
 const LANGUAGE_PROMPT_DISMISSED_KEY = 'trudify_language_prompt_dismissed'
+// Flag to coordinate with other dialogs (e.g., professional onboarding)
+const LANGUAGE_PROMPT_ACTIVE_KEY = 'trudify_language_prompt_active'
 
 // Language names in their OWN language (native names)
 const NATIVE_LANGUAGE_NAMES: Record<PreferredLanguage, string> = {
@@ -106,6 +108,8 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
     const timer = setTimeout(() => {
       animationFrameId = requestAnimationFrame(() => {
         if (shouldShow()) {
+          // Set active flag so other dialogs (professional onboarding) know to wait
+          sessionStorage.setItem(LANGUAGE_PROMPT_ACTIVE_KEY, 'true')
           setShowTip(true)
         }
       })
@@ -125,6 +129,8 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
 
     // Mark as dismissed for this session
     sessionStorage.setItem(LANGUAGE_PROMPT_DISMISSED_KEY, profile.id)
+    // Clear active flag so other dialogs can show
+    sessionStorage.removeItem(LANGUAGE_PROMPT_ACTIVE_KEY)
     setShowTip(false)
 
     // Save preference to cookie/localStorage
@@ -140,6 +146,8 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
     if (profile?.id) {
       sessionStorage.setItem(LANGUAGE_PROMPT_DISMISSED_KEY, profile.id)
     }
+    // Clear active flag so other dialogs can show
+    sessionStorage.removeItem(LANGUAGE_PROMPT_ACTIVE_KEY)
     setShowTip(false)
   }, [profile?.id])
 

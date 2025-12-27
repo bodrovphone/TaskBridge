@@ -76,6 +76,10 @@ export class User {
     public banReason: string | null,
     public bannedAt: Date | null,
     public lastActiveAt: Date | null,
+    // Registration & Onboarding
+    public registrationIntent: 'professional' | 'customer' | null,
+    public profileReminderSentAt: Date | null,
+    public lastTaskNotificationAt: Date | null,
     // Badge fields
     public isEarlyAdopter: boolean,
     public earlyAdopterCategories: string[],
@@ -144,6 +148,9 @@ export class User {
       null, // banReason
       null, // bannedAt
       now, // lastActiveAt
+      null, // registrationIntent
+      null, // profileReminderSentAt
+      null, // lastTaskNotificationAt
       false, // isEarlyAdopter
       [], // earlyAdopterCategories
       false, // isTopProfessional
@@ -181,10 +188,11 @@ export class User {
       profile.serviceCategories,
       profile.availabilityStatus,
       profile.serviceAreaCities,
-      profile.paymentMethods,
-      profile.languages,
-      profile.weekdayHours,
-      profile.weekendHours,
+      // HIDDEN fields - use defaults if not provided
+      profile.paymentMethods ?? ['cash', 'bank_transfer'],
+      profile.languages ?? ['bg'],
+      profile.weekdayHours ?? { start: '08:00', end: '18:00' },
+      profile.weekendHours ?? { start: '09:00', end: '14:00' },
       profile.totalEarningsBgn,
       profile.profileViews,
       profile.gallery,
@@ -192,7 +200,7 @@ export class User {
       profile.tasksCompleted,
       profile.averageRating,
       profile.totalReviews,
-      profile.responseTimeHours,
+      profile.responseTimeHours ?? null,
       profile.acceptanceRate,
       profile.preferredLanguage,
       profile.preferredContact,
@@ -210,6 +218,9 @@ export class User {
       profile.banReason,
       profile.bannedAt,
       profile.lastActiveAt,
+      profile.registrationIntent,
+      profile.profileReminderSentAt,
+      profile.lastTaskNotificationAt,
       profile.isEarlyAdopter,
       profile.earlyAdopterCategories,
       profile.isTopProfessional,
@@ -276,6 +287,9 @@ export class User {
       banReason: this.banReason,
       bannedAt: this.bannedAt,
       lastActiveAt: this.lastActiveAt,
+      registrationIntent: this.registrationIntent,
+      profileReminderSentAt: this.profileReminderSentAt,
+      lastTaskNotificationAt: this.lastTaskNotificationAt,
       isEarlyAdopter: this.isEarlyAdopter,
       earlyAdopterCategories: this.earlyAdopterCategories,
       isTopProfessional: this.isTopProfessional,

@@ -48,14 +48,35 @@ export async function GET(request: NextRequest) {
 
   console.log('[Auth Callback] Final redirect locale:', redirectLocale)
 
-  // Helper to create redirect response with locale cookie
-  const createRedirectWithLocale = (url: string) => {
+  // Read onboarding cookies (set by auth-slide-over before OAuth redirect)
+  const registrationIntentCookie = request.cookies.get('trudify_registration_intent')?.value as 'professional' | 'customer' | undefined
+  const returnToCookie = request.cookies.get('trudify_return_to')?.value
+
+  console.log('[Auth Callback] Onboarding cookies:', { registrationIntentCookie, returnToCookie })
+
+  // Helper to create redirect response with locale cookie and handle onboarding
+  const createRedirectWithLocale = (url: string, showOnboardingDialog = false) => {
     const response = NextResponse.redirect(url)
     response.cookies.set('NEXT_LOCALE', redirectLocale, {
       path: '/',
       maxAge: 60 * 60 * 24 * 365, // 1 year
       sameSite: 'lax',
     })
+    // If professional intent detected, set cookie to trigger client-side dialog
+    if (showOnboardingDialog) {
+      response.cookies.set('trudify_show_onboarding_dialog', 'true', {
+        path: '/',
+        maxAge: 60, // Short-lived - just needs to survive the redirect
+        sameSite: 'lax',
+      })
+    }
+    // Clear onboarding cookies after use
+    if (registrationIntentCookie) {
+      response.cookies.delete('trudify_registration_intent')
+    }
+    if (returnToCookie) {
+      response.cookies.delete('trudify_return_to')
+    }
     return response
   }
 
@@ -129,8 +150,30 @@ export async function GET(request: NextRequest) {
       }
       console.warn('[Auth Callback] Blocked redirect to external URL:', decodedNext)
     }
+
+    // Determine if we should show the professional onboarding dialog
+    const shouldShowOnboardingDialog = registrationIntentCookie === 'professional'
+
+    // Handle returnTo URL if provided
+    if (returnToCookie) {
+      const decodedReturnTo = decodeURIComponent(returnToCookie)
+      console.log('[Auth Callback] Redirecting to returnTo URL:', decodedReturnTo)
+      if (decodedReturnTo.startsWith('/') || decodedReturnTo.startsWith(origin)) {
+        // Ensure locale is in the path
+        const finalUrl = decodedReturnTo.startsWith('/')
+          ? `${origin}/${redirectLocale}${decodedReturnTo.replace(/^\/(en|bg|ru|ua)/, '')}`
+          : decodedReturnTo
+        return createRedirectWithLocale(finalUrl, shouldShowOnboardingDialog)
+      }
+    }
+
+    // Redirect to home, with onboarding dialog if professional intent
+    if (shouldShowOnboardingDialog) {
+      console.log('[Auth Callback] Professional intent - will show onboarding dialog')
+    }
+    return createRedirectWithLocale(`${origin}/${redirectLocale}`, shouldShowOnboardingDialog)
   }
 
-  // Redirect to home page with detected locale (cookie is set by helper)
+  // Redirect to home page with detected locale
   return createRedirectWithLocale(`${origin}/${redirectLocale}`)
 }

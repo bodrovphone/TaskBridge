@@ -155,7 +155,7 @@ export const professionals = {
   'professionalDetail.actions.contact': 'Contact',
   'professionalDetail.actions.share': 'Share',
   'professionalDetail.contactHours': 'Available',
-  'professionalDetail.services.title': 'Services & Pricing',
+  'professionalDetail.services.title': 'My prices',
   'professionalDetail.services.pricingNote.title': 'Pricing Information',
   'professionalDetail.services.pricingNote.description':
     'Final prices are agreed upon individually based on task complexity and requirements.',
