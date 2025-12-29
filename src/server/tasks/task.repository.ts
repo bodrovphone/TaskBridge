@@ -7,6 +7,8 @@ import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { DatabaseError } from '../shared/errors'
 import { Result, ok, err } from '../shared/result'
 import type { Task, TaskDbInsert } from './task.types'
+import { generateSlug, makeSlugUnique } from '@/lib/utils/transliterate'
+import { getCategoryLabelForSlug } from '@/features/categories'
 
 /**
  * Result from full-text search RPC function
@@ -33,11 +35,61 @@ interface TextSearchResult {
 
 export class TaskRepository {
   /**
+   * Generate a unique slug for a task
+   * Uses title + city + translated category, with collision detection
+   * Category is translated to source language for consistency (all parts in same language)
+   */
+  async generateUniqueSlug(
+    title: string,
+    city: string,
+    category: string,
+    sourceLocale: string = 'bg'
+  ): Promise<string> {
+    // Translate category to source language for consistent slug
+    // e.g., 'appliance-repair' → 'Ремонт на уреди' (bg) → 'remont-na-uredi'
+    const locale = (sourceLocale === 'en' || sourceLocale === 'ru') ? sourceLocale : 'bg'
+    const translatedCategory = getCategoryLabelForSlug(category, locale as 'bg' | 'en' | 'ru')
+
+    // Generate base slug from title + city + translated category
+    const slugBase = [title, city, translatedCategory].filter(Boolean).join(' ').trim()
+    const baseSlug = generateSlug(slugBase, 80)
+
+    if (!baseSlug) {
+      // Fallback to random slug if no meaningful text
+      return `task-${Date.now()}`
+    }
+
+    // Check for existing slugs with same prefix
+    const supabase = createAdminClient()
+    const { data: existingSlugs } = await supabase
+      .from('tasks')
+      .select('slug')
+      .like('slug', `${baseSlug}%`)
+
+    const slugList = (existingSlugs || []).map(s => s.slug).filter(Boolean) as string[]
+    return makeSlugUnique(baseSlug, slugList)
+  }
+
+  /**
    * Create a new task
    */
   async create(data: TaskDbInsert): Promise<Result<Task, DatabaseError>> {
     try {
       const supabase = await createClient()
+
+      // Generate unique slug (title + city + translated category) with fallback
+      try {
+        const uniqueSlug = await this.generateUniqueSlug(
+          data.title,
+          data.city,
+          data.category,
+          data.source_language || 'bg'
+        )
+        data = { ...data, slug: uniqueSlug }
+      } catch (slugError) {
+        // If slug generation fails, continue without slug (will use UUID)
+        console.warn('Slug generation failed, continuing without slug:', slugError)
+      }
 
       const { data: task, error } = await supabase
         .from('tasks')
@@ -98,6 +150,41 @@ export class TaskRepository {
     } catch (error) {
       console.error('Unexpected error finding task:', error)
       return err(new DatabaseError('Unexpected error finding task'))
+    }
+  }
+
+  /**
+   * Find task by slug
+   */
+  async findBySlug(slug: string): Promise<Result<Task | null, DatabaseError>> {
+    try {
+      const supabase = await createClient()
+
+      const { data: task, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('slug', slug)
+        .single()
+
+      if (error) {
+        // Not found is not an error, it's a valid result
+        if (error.code === 'PGRST116') {
+          return ok(null)
+        }
+
+        console.error('Database error finding task by slug:', error)
+        return err(
+          new DatabaseError('Failed to find task by slug', {
+            code: error.code,
+            message: error.message
+          })
+        )
+      }
+
+      return ok(task as Task)
+    } catch (error) {
+      console.error('Unexpected error finding task by slug:', error)
+      return err(new DatabaseError('Unexpected error finding task by slug'))
     }
   }
 
@@ -471,7 +558,7 @@ export class TaskRepository {
       const { data: task, error } = await supabase
         .from('tasks')
         .select(`
-          id, created_at, updated_at, title, description, category, subcategory, city, neighborhood, location_notes, budget_min_bgn, budget_max_bgn, budget_type, deadline, estimated_duration_hours, status, customer_id, selected_professional_id, accepted_application_id, completed_at, completed_by_professional_at, confirmed_by_customer_at, reviewed_by_customer, reviewed_by_professional, cancelled_at, cancelled_by, cancellation_reason, images, documents, views_count, applications_count, is_urgent, requires_license, requires_insurance, source_language, title_bg, description_bg, requirements_bg,
+          id, slug, created_at, updated_at, title, description, category, subcategory, city, neighborhood, location_notes, budget_min_bgn, budget_max_bgn, budget_type, deadline, estimated_duration_hours, status, customer_id, selected_professional_id, accepted_application_id, completed_at, completed_by_professional_at, confirmed_by_customer_at, reviewed_by_customer, reviewed_by_professional, cancelled_at, cancelled_by, cancellation_reason, images, documents, views_count, applications_count, is_urgent, requires_license, requires_insurance, source_language, title_bg, description_bg, requirements_bg,
           applications!applications_task_id_fkey(count)
         `)
         .eq('id', id)
@@ -514,12 +601,96 @@ export class TaskRepository {
 
       return ok({
         ...task,
+        slug: task.slug || '', // Slug may not exist in DB yet
         customer: customerData,
         applicationsCount
       } as Task & { applicationsCount: number })
     } catch (error) {
       console.error('Unexpected error finding task:', error)
       return err(new DatabaseError('Unexpected error finding task'))
+    }
+  }
+
+  /**
+   * Find task by ID or slug with related counts and customer data
+   * Determines if identifier is UUID or slug and calls appropriate method
+   */
+  async findByIdOrSlugWithRelations(
+    identifier: string
+  ): Promise<Result<Task & { applicationsCount: number }, DatabaseError>> {
+    // UUID v4 pattern: 8-4-4-4-12 hex characters
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(identifier)
+
+    if (isUuid) {
+      return this.findByIdWithRelations(identifier)
+    }
+    return this.findBySlugWithRelations(identifier)
+  }
+
+  /**
+   * Find single task by slug with related counts and customer data
+   */
+  async findBySlugWithRelations(
+    slug: string
+  ): Promise<Result<Task & { applicationsCount: number }, DatabaseError>> {
+    try {
+      // Use admin client to bypass RLS for public task viewing
+      const supabase = createAdminClient()
+
+      // 1. Get task with applications count (pending only)
+      const { data: task, error } = await supabase
+        .from('tasks')
+        .select(`
+          id, slug, created_at, updated_at, title, description, category, subcategory, city, neighborhood, location_notes, budget_min_bgn, budget_max_bgn, budget_type, deadline, estimated_duration_hours, status, customer_id, selected_professional_id, accepted_application_id, completed_at, completed_by_professional_at, confirmed_by_customer_at, reviewed_by_customer, reviewed_by_professional, cancelled_at, cancelled_by, cancellation_reason, images, documents, views_count, applications_count, is_urgent, requires_license, requires_insurance, source_language, title_bg, description_bg, requirements_bg,
+          applications!applications_task_id_fkey(count)
+        `)
+        .eq('slug', slug)
+        .eq('applications.status', 'pending')
+        .single()
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          return ok(null as any) // Not found
+        }
+
+        console.error('Database error finding task by slug:', error)
+        return err(
+          new DatabaseError('Failed to find task by slug', {
+            code: error.code,
+            message: error.message
+          })
+        )
+      }
+
+      // 2. Get customer data separately using admin client (bypasses RLS)
+      let customerData = null
+      if (task.customer_id) {
+        const adminClient = createAdminClient()
+        const { data: customer, error: customerError } = await adminClient
+          .from('users')
+          .select('id, full_name, avatar_url, tasks_completed, created_at, preferred_language')
+          .eq('id', task.customer_id)
+          .single()
+
+        if (!customerError && customer) {
+          customerData = customer
+        } else {
+          console.warn('⚠️  Customer not found for task:', task.customer_id)
+        }
+      }
+
+      // Extract applications count from nested query
+      const applicationsCount = task?.applications?.[0]?.count || 0
+
+      return ok({
+        ...task,
+        slug: task.slug || '',
+        customer: customerData,
+        applicationsCount
+      } as Task & { applicationsCount: number })
+    } catch (error) {
+      console.error('Unexpected error finding task by slug:', error)
+      return err(new DatabaseError('Unexpected error finding task by slug'))
     }
   }
 

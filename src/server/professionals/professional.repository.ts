@@ -682,6 +682,7 @@ export async function getProfessionalDetailById(
   const detail: ProfessionalDetail = {
     // Base Professional fields
     id: professional.id,
+    slug: professional.slug || null,
     full_name: professional.full_name,
     professional_title: professional.professional_title || 'Professional',
     avatar_url: professional.avatar_url,
@@ -739,4 +740,51 @@ export async function getProfessionalDetailById(
   }
 
   return detail
+}
+
+/**
+ * Get professional detail by ID or slug (determines which method to use)
+ * @param identifier - UUID or slug
+ * @param lang - Language for date formatting (bg, en, ru)
+ * @returns Full professional detail or null if not found
+ */
+export async function getProfessionalDetailByIdOrSlug(
+  identifier: string,
+  lang: string = 'bg'
+): Promise<ProfessionalDetail | null> {
+  // UUID v4 pattern: 8-4-4-4-12 hex characters
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(identifier)
+
+  if (isUuid) {
+    return getProfessionalDetailById(identifier, lang)
+  }
+  return getProfessionalDetailBySlug(identifier, lang)
+}
+
+/**
+ * Get professional detail by slug
+ * @param slug - URL-friendly slug
+ * @param lang - Language for date formatting (bg, en, ru)
+ * @returns Full professional detail or null if not found
+ */
+export async function getProfessionalDetailBySlug(
+  slug: string,
+  lang: string = 'bg'
+): Promise<ProfessionalDetail | null> {
+  // First, look up the professional ID by slug
+  const { data: userData, error: slugError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('slug', slug)
+    .single()
+
+  if (slugError || !userData) {
+    if (slugError?.code !== 'PGRST116') {
+      console.error('Error finding professional by slug:', slugError)
+    }
+    return null
+  }
+
+  // Use existing function with the resolved ID
+  return getProfessionalDetailById(userData.id, lang)
 }

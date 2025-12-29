@@ -74,18 +74,21 @@ async function generateDynamicUrls(): Promise<MetadataRoute.Sitemap> {
     const supabase = createAdminClient()
 
     // Fetch public tasks (open or in_progress status)
+    // Include slug for SEO-friendly URLs
     const { data: tasks } = await supabase
       .from('tasks')
-      .select('id, updated_at')
+      .select('id, slug, updated_at')
       .in('status', ['open', 'in_progress'])
       .order('updated_at', { ascending: false })
       .limit(1000) // Limit for performance
 
     if (tasks) {
       tasks.forEach((task) => {
+        // Use slug for SEO-friendly URLs, fallback to id for legacy tasks
+        const identifier = task.slug || task.id
         SUPPORTED_LOCALES.forEach((locale) => {
           urls.push({
-            url: `${baseUrl}/${locale}/tasks/${task.id}`,
+            url: `${baseUrl}/${locale}/tasks/${identifier}`,
             lastModified: new Date(task.updated_at),
             changeFrequency: 'daily',
             priority: 0.7,
@@ -94,19 +97,22 @@ async function generateDynamicUrls(): Promise<MetadataRoute.Sitemap> {
       })
     }
 
-    // Fetch public professional profiles (users with is_professional = true)
+    // Fetch public professional profiles (users with professional_title)
+    // Include slug for SEO-friendly URLs
     const { data: professionals } = await supabase
       .from('users')
-      .select('id, updated_at')
-      .eq('is_professional', true)
+      .select('id, slug, updated_at')
+      .not('professional_title', 'is', null)
       .order('updated_at', { ascending: false })
       .limit(1000) // Limit for performance
 
     if (professionals) {
       professionals.forEach((professional) => {
+        // Use slug for SEO-friendly URLs, fallback to id for legacy profiles
+        const identifier = professional.slug || professional.id
         SUPPORTED_LOCALES.forEach((locale) => {
           urls.push({
-            url: `${baseUrl}/${locale}/professionals/${professional.id}`,
+            url: `${baseUrl}/${locale}/professionals/${identifier}`,
             lastModified: new Date(professional.updated_at),
             changeFrequency: 'weekly',
             priority: 0.6,

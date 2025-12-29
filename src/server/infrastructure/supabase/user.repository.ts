@@ -4,11 +4,51 @@
  * Implements repository pattern for clean architecture
  */
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { User } from '@/server/domain/user/user.entity'
 import { UserProfile } from '@/server/domain/user/user.types'
+import { generateSlug, makeSlugUnique } from '@/lib/utils/transliterate'
+import { getCategoryLabelForSlug } from '@/features/categories'
 
 export class UserRepository {
+  /**
+   * Generate a unique slug for a professional
+   * Uses name + translated category + city, with collision detection
+   * Category is translated to Bulgarian for consistency
+   */
+  async generateUniqueSlug(
+    fullName: string | null,
+    primaryCategory: string | null,
+    city: string | null
+  ): Promise<string | null> {
+    if (!fullName) {
+      return null
+    }
+
+    // Translate category to Bulgarian for consistent slug
+    // e.g., 'plumber' → 'Водопроводчик' → 'vodoprovodchik'
+    const translatedCategory = primaryCategory
+      ? getCategoryLabelForSlug(primaryCategory, 'bg')
+      : null
+
+    // Generate base slug from name + translated category + city
+    const slugBase = [fullName, translatedCategory, city].filter(Boolean).join(' ').trim()
+    const baseSlug = generateSlug(slugBase, 80)
+
+    if (!baseSlug) {
+      return null
+    }
+
+    // Check for existing slugs with same prefix
+    const supabase = createAdminClient()
+    const { data: existingSlugs } = await supabase
+      .from('users')
+      .select('slug')
+      .like('slug', `${baseSlug}%`)
+
+    const slugList = (existingSlugs || []).map(s => s.slug).filter(Boolean) as string[]
+    return makeSlugUnique(baseSlug, slugList)
+  }
   /**
    * Find user by Supabase auth ID
    */
@@ -58,14 +98,28 @@ export class UserRepository {
   }
 
   /**
+   * Check if user has a complete professional profile
+   * Requirements: professional_title, bio (>= 20 chars), service_categories (>= 1)
+   */
+  private hasProfessionalProfile(user: User): boolean {
+    const hasTitle = user.professionalTitle && user.professionalTitle.length >= 3
+    const hasBio = user.bio && user.bio.length >= 20
+    const hasCategories = user.serviceCategories && user.serviceCategories.length > 0
+    return !!(hasTitle && hasBio && hasCategories)
+  }
+
+  /**
    * Create new user profile
+   * Note: Slug is NOT generated on creation - only when professional profile is complete
    */
   async create(user: User): Promise<User> {
     const supabase = await createClient()
 
+    const persistenceData = this.toPersistence(user)
+
     const { data, error } = await supabase
       .from('users')
-      .insert(this.toPersistence(user))
+      .insert(persistenceData)
       .select()
       .single()
 
@@ -78,13 +132,30 @@ export class UserRepository {
 
   /**
    * Update existing user profile
+   * Generates slug only when user completes their professional profile
    */
   async update(user: User): Promise<User> {
     const supabase = await createClient()
 
+    const persistenceData = this.toPersistence(user)
+
+    // Only generate slug when professional profile is complete
+    if (this.hasProfessionalProfile(user)) {
+      try {
+        const primaryCategory = user.serviceCategories?.[0] || null
+        const slug = await this.generateUniqueSlug(user.fullName, primaryCategory, user.city)
+        if (slug) {
+          persistenceData.slug = slug
+        }
+      } catch (slugError) {
+        // If slug generation fails, continue without slug (will use UUID)
+        console.warn('Slug generation failed, continuing without slug:', slugError)
+      }
+    }
+
     const { data, error } = await supabase
       .from('users')
-      .update(this.toPersistence(user))
+      .update(persistenceData)
       .eq('id', user.id)
       .select()
       .single()
@@ -165,6 +236,7 @@ export class UserRepository {
   private toDomain(raw: any): User {
     const profile: UserProfile = {
       id: raw.id,
+      slug: raw.slug || null,
       email: raw.email,
       fullName: raw.full_name,
       phoneNumber: raw.phone,
@@ -265,10 +337,12 @@ export class UserRepository {
 
   /**
    * Convert domain entity to database record
+   * Note: slug is generated separately in create/update methods with collision detection
    */
   private toPersistence(user: User): any {
     return {
       id: user.id,
+      // slug is set separately in create/update with collision detection
       email: user.email,
       full_name: user.fullName,
       phone: user.phoneNumber,

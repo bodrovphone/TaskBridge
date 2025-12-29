@@ -178,20 +178,20 @@ export class ProfessionalService {
    * Get professional detail by ID with completed tasks and reviews
    * Optimized for detail page - fetches all related data in parallel
    *
-   * @param id - Professional user ID
+   * @param identifier - Professional user ID or slug
    * @param lang - Language for date formatting (bg, en, ru)
    * @returns Full professional detail (already filtered by repository)
    */
   async getProfessionalDetail(
-    id: string,
+    identifier: string,
     lang: string = 'bg'
   ): Promise<ServiceResult<ProfessionalDetail | null>> {
     try {
-      const { getProfessionalDetailById } = await import(
+      const { getProfessionalDetailByIdOrSlug } = await import(
         './professional.repository'
       )
 
-      const detail = await getProfessionalDetailById(id, lang)
+      const detail = await getProfessionalDetailByIdOrSlug(identifier, lang)
 
       if (!detail) {
         return {

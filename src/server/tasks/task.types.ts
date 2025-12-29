@@ -3,6 +3,8 @@
  * Defines the structure of tasks in the system
  */
 
+import { generateSlug } from '@/lib/utils/transliterate'
+
 /**
  * Input from create task form
  * This matches the frontend form structure
@@ -69,6 +71,7 @@ export interface UpdateTaskInput {
  */
 export interface Task {
   id: string
+  slug: string // URL-friendly identifier (e.g., "fix-leaky-faucet-sofia")
   created_at: string
   updated_at: string
 
@@ -147,6 +150,7 @@ export type TaskStatus =
  * Only includes fields needed for insertion
  */
 export interface TaskDbInsert {
+  slug: string // URL-friendly identifier
   title: string
   description: string
   category: string
@@ -232,7 +236,12 @@ export const mapCreateInputToDbInsert = (
   input: CreateTaskInput,
   customerId: string
 ): TaskDbInsert => {
+  // Generate slug from title and city (e.g., "fix-leaky-faucet-sofia")
+  const slugBase = `${input.title} ${input.city}`.trim()
+  const slug = generateSlug(slugBase, 80)
+
   return {
+    slug,
     title: input.title,
     description: input.description,
     category: input.category,

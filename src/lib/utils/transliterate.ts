@@ -53,3 +53,60 @@ export function generateCitySlug(name: string): string {
     .replace(/[^a-z0-9]+/g, '-')     // Replace non-alphanumeric with hyphens
     .replace(/^-+|-+$/g, '')         // Remove leading/trailing hyphens
 }
+
+/**
+ * Generate a URL-safe slug from any text with optional max length
+ * Used for tasks, professionals, and other entities
+ *
+ * Examples:
+ * - "Fix my leaky faucet in Sofia" → "fix-my-leaky-faucet-in-sofia"
+ * - "Иван Петров - Водопроводчик" → "ivan-petrov-vodoprovodchik"
+ * - "Need help with 🔧 plumbing!" → "need-help-with-plumbing"
+ *
+ * @param text - The text to convert to a slug
+ * @param maxLength - Maximum length of the slug (default: 80)
+ * @returns URL-safe slug
+ */
+export function generateSlug(text: string, maxLength: number = 80): string {
+  const slug = transliterate(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[^a-z0-9]+/g, '-')     // Replace non-alphanumeric with hyphens
+    .replace(/^-+|-+$/g, '')         // Remove leading/trailing hyphens
+
+  // Truncate at word boundary if needed
+  if (slug.length <= maxLength) {
+    return slug
+  }
+
+  // Find last hyphen before maxLength to avoid cutting words
+  const truncated = slug.substring(0, maxLength)
+  const lastHyphen = truncated.lastIndexOf('-')
+
+  return lastHyphen > maxLength * 0.5 ? truncated.substring(0, lastHyphen) : truncated
+}
+
+/**
+ * Generate a unique slug by appending a suffix if needed
+ * Used when checking for duplicates in the database
+ *
+ * @param baseSlug - The base slug to make unique
+ * @param existingSlugs - Array of existing slugs to check against
+ * @returns A unique slug (original or with numeric suffix)
+ */
+export function makeSlugUnique(baseSlug: string, existingSlugs: string[]): string {
+  if (!existingSlugs.includes(baseSlug)) {
+    return baseSlug
+  }
+
+  let counter = 2
+  let uniqueSlug = `${baseSlug}-${counter}`
+
+  while (existingSlugs.includes(uniqueSlug)) {
+    counter++
+    uniqueSlug = `${baseSlug}-${counter}`
+  }
+
+  return uniqueSlug
+}

@@ -90,14 +90,16 @@ export async function generateMetadata({ params }: ProfessionalPageProps): Promi
 
 export default async function ProfessionalPage({ params }: ProfessionalPageProps) {
   const resolvedParams = await params;
-  const professional = await getProfessional(resolvedParams.id, resolvedParams.lang);
+  const { id, lang } = resolvedParams;
+  const professional = await getProfessional(id, lang);
 
   if (!professional) {
     notFound();
   }
 
+
   // Transform to client format
   const clientData = transformForClient(professional);
 
-  return <ProfessionalDetailPageContent professional={clientData} lang={resolvedParams.lang} />;
+  return <ProfessionalDetailPageContent professional={clientData} lang={lang} />;
 }

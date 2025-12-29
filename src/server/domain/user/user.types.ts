@@ -112,6 +112,7 @@ export interface UpdateUserProfileDto {
 
 export interface UserProfile {
   id: string
+  slug: string | null // URL-friendly identifier (e.g., "ivan-petrov-plumber")
   email: string
   fullName: string | null
   phoneNumber: string | null

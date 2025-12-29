@@ -337,14 +337,14 @@ export class TaskService {
   }
 
   /**
-   * Get single task by ID with privacy filtering
+   * Get single task by ID or slug with privacy filtering
    */
   async getTaskDetail(
-    id: string,
+    identifier: string,
     viewerId?: string
   ): Promise<Result<import('./task.query-types').TaskDetailResponse<Task>, DatabaseError | import('../shared/errors').NotFoundError>> {
-    // 1. Get task with relations
-    const result = await this.repository.findByIdWithRelations(id)
+    // 1. Get task with relations (supports both UUID and slug)
+    const result = await this.repository.findByIdOrSlugWithRelations(identifier)
 
     if (!result.success) {
       return err(result.error)
@@ -352,7 +352,7 @@ export class TaskService {
 
     if (!result.data) {
       const { NotFoundError } = await import('../shared/errors')
-      return err(new NotFoundError('Task', id))
+      return err(new NotFoundError('Task', identifier))
     }
 
     const task = result.data

@@ -9,6 +9,7 @@
  */
 export interface Professional {
   id: string
+  slug: string | null // URL-friendly identifier (e.g., "ivan-petrov-plumber")
   full_name: string | null
   professional_title: string
   avatar_url: string | null
@@ -54,6 +55,7 @@ export interface Professional {
  */
 export interface ProfessionalRaw {
   id: string
+  slug: string | null // URL-friendly identifier
   created_at: string
   updated_at: string
 

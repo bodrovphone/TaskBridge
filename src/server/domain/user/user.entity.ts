@@ -238,6 +238,7 @@ export class User {
   toProfile(): UserProfile {
     return {
       id: this.id,
+      slug: null, // Slug is managed at repository level, not in domain entity
       email: this.email,
       fullName: this.fullName,
       phoneNumber: this.phoneNumber,

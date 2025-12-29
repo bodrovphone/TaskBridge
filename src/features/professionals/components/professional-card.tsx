@@ -56,6 +56,8 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
  const bio = professional.bio || ''
  const title = professional.professional_title || ''
  const isVerified = professional.is_phone_verified || professional.is_email_verified
+ // Use slug for SEO-friendly URLs, fallback to id for legacy profiles
+ const profileIdentifier = professional.slug || professional.id
 
  return (
   <div
@@ -86,7 +88,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
     <CardBody className={`p-6 relative z-10 ${compact ? 'h-full flex flex-col' : ''}`}>
      {/* Enhanced Header */}
      <div className="flex items-start gap-4 mb-4">
-      <LocaleLink href={`/professionals/${professional.id}`} className="relative group">
+      <LocaleLink href={`/professionals/${profileIdentifier}`} className="relative group">
        <div className="hover:scale-110 transition-transform duration-200">
         <FallbackAvatar
          src={avatar}
@@ -104,7 +106,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
       </LocaleLink>
 
       <div className="flex-1 min-w-0">
-       <LocaleLink href={`/professionals/${professional.id}`} className="block">
+       <LocaleLink href={`/professionals/${profileIdentifier}`} className="block">
         <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-700 hover:text-blue-600 transition-colors cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap w-full max-w-[180px] sm:max-w-[220px]">
          {name}
         </h3>
@@ -199,7 +201,7 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
      {/* Enhanced Action */}
      <NextUIButton
       as={LocaleLink}
-      href={`/professionals/${professional.id}`}
+      href={`/professionals/${profileIdentifier}`}
       color="primary"
       variant="shadow"
       size="lg"

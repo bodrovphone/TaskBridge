@@ -96,6 +96,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
 
   const data: TaskDetailResponse = await response.json();
 
+
   // Fetch similar tasks in parallel (don't block on this)
   const similarTasks = await fetchSimilarTasks(
    data.task.category || 'other',

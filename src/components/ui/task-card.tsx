@@ -25,6 +25,7 @@ import { getLocalizedTaskContent } from '@/lib/utils/task-localization';
 // Task type definition (to be moved to global types later)
 interface Task {
  id: string;
+ slug?: string; // URL-friendly identifier
  title: string;
  description: string;
  category: string;
@@ -154,7 +155,9 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
 
  const handleCardPress = () => {
   const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
-  router.push(`/${currentLocale}/tasks/${task.id}`);
+  // Use slug for SEO-friendly URLs, fallback to id for legacy tasks
+  const identifier = task.slug || task.id;
+  router.push(`/${currentLocale}/tasks/${identifier}`);
  };
 
  // Check if apply button should be enabled based on task status
