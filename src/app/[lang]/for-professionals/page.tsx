@@ -149,6 +149,7 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
 
       {/* Video Guides */}
       <ContentSection
+        id="video-guides"
         title={t('forProfessionals.videoGuides.title')}
         subtitle={t('forProfessionals.videoGuides.subtitle')}
         variant="default"

@@ -167,6 +167,7 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
 
       {/* Video Guides */}
       <ContentSection
+        id="video-guides"
         title={t('forCustomers.videoGuides.title')}
         subtitle={t('forCustomers.videoGuides.subtitle')}
         variant="default"
