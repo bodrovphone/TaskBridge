@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useIsDesktop } from '@/hooks/use-media-query'
 import Image from 'next/image'
 
 interface OptimizedVideoHeroProps {
@@ -17,52 +16,90 @@ interface OptimizedVideoHeroProps {
 /**
  * Performance-optimized video component for hero sections
  *
- * Features:
- * - Desktop only (mobile shows static image)
- * - Lazy loads after initial page paint
- * - Pauses during scroll for smooth performance
- * - GPU-accelerated rendering
- * - Fallback to poster image on error
+ * LCP Optimized Architecture:
+ * 1. Image renders IMMEDIATELY (SSR) - no JS needed
+ * 2. Video loads ONLY on desktop AFTER hydration
+ * 3. Image stays visible until video is ready
+ *
+ * This ensures fast LCP by not blocking on JS hydration.
  */
 export default function OptimizedVideoHero({
  videoSrc,
  poster,
  alt,
  className = '',
- width = 800,
- height = 600,
  maxHeight = '420px'
 }: OptimizedVideoHeroProps) {
- const isDesktop = useIsDesktop()
  const videoRef = useRef<HTMLVideoElement>(null)
- const [isLoaded, setIsLoaded] = useState(false)
+
+ // Start with image-only mode (SSR safe)
+ const [showVideo, setShowVideo] = useState(false)
+ const [videoReady, setVideoReady] = useState(false)
  const [hasError, setHasError] = useState(false)
- const [isScrolling, setIsScrolling] = useState(false)
+
+ // After hydration, check if desktop and enable video
+ useEffect(() => {
+  // Check if desktop (width > 1024px)
+  const isDesktop = window.innerWidth > 1024
+
+  if (isDesktop) {
+   // Small delay to prioritize LCP image
+   const timer = setTimeout(() => {
+    setShowVideo(true)
+   }, 100)
+   return () => clearTimeout(timer)
+  }
+ }, [])
+
+ // Handle video loading
+ useEffect(() => {
+  if (!showVideo || !videoRef.current) return
+
+  const video = videoRef.current
+
+  const handleCanPlay = () => {
+   setVideoReady(true)
+   video.play().catch(() => {
+    // Autoplay blocked, keep showing image
+    console.log('Autoplay blocked')
+   })
+  }
+
+  const handleError = () => {
+   console.error('Video failed to load')
+   setHasError(true)
+   setShowVideo(false)
+  }
+
+  video.addEventListener('canplay', handleCanPlay)
+  video.addEventListener('error', handleError)
+
+  // Start loading video
+  video.load()
+
+  return () => {
+   video.removeEventListener('canplay', handleCanPlay)
+   video.removeEventListener('error', handleError)
+  }
+ }, [showVideo])
 
  // Pause video during scroll for smooth scrolling
  useEffect(() => {
-  if (!isDesktop || !videoRef.current) return
+  if (!showVideo || !videoReady || !videoRef.current) return
 
   let scrollTimeout: NodeJS.Timeout
 
   const handleScroll = () => {
-   setIsScrolling(true)
-
-   // Pause video while scrolling
    if (videoRef.current && !videoRef.current.paused) {
     videoRef.current.pause()
    }
 
-   // Resume after scroll stops
    clearTimeout(scrollTimeout)
    scrollTimeout = setTimeout(() => {
-    setIsScrolling(false)
     if (videoRef.current && videoRef.current.paused) {
-     videoRef.current.play().catch(() => {
-      // Autoplay blocked, that's ok
-     })
+     videoRef.current.play().catch(() => {})
     }
-   }, 300) // Resume 300ms after scroll stops (debounced)
+   }, 300)
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true })
@@ -70,92 +107,51 @@ export default function OptimizedVideoHero({
    window.removeEventListener('scroll', handleScroll)
    clearTimeout(scrollTimeout)
   }
- }, [isDesktop])
-
- // Lazy load video after initial page paint
- useEffect(() => {
-  if (!isDesktop) return
-
-  // Wait for initial page load
-  const timer = setTimeout(() => {
-   if (videoRef.current) {
-    videoRef.current.load()
-   }
-  }, 300) // 300ms delay to let page render first
-
-  return () => clearTimeout(timer)
- }, [isDesktop])
-
- const handleVideoLoad = () => {
-  setIsLoaded(true)
-  if (videoRef.current) {
-   videoRef.current.play().catch(() => {
-    console.log('Autoplay blocked - video will play when user scrolls')
-   })
-  }
- }
-
- const handleVideoError = () => {
-  console.error('Video failed to load, showing poster image')
-  setHasError(true)
- }
-
- // Show static image on mobile or if video errors
- if (!isDesktop || hasError) {
-  return (
-   <div style={{ width: '100%', height: maxHeight, position: 'relative' }}>
-    <Image
-     src={poster}
-     alt={alt}
-     fill
-     sizes="(max-width: 1024px) 100vw, 50vw"
-     className={`${className} object-cover`}
-     priority
-     fetchPriority="high"
-    />
-   </div>
-  )
- }
+ }, [showVideo, videoReady])
 
  return (
   <div style={{ width: '100%', height: maxHeight, position: 'relative' }}>
-   {/* Poster image - shown until video loads */}
-   {!isLoaded && (
-    <Image
-     src={poster}
-     alt={alt}
-     fill
-     sizes="(max-width: 1024px) 100vw, 50vw"
-     className={`${className} object-cover`}
-     priority
-     fetchPriority="high"
-    />
-   )}
+   {/*
+    * PRIMARY LCP ELEMENT - Always rendered (SSR)
+    * This image loads immediately without waiting for JS
+    * Stays visible until video is ready (on desktop)
+    */}
+   <Image
+    src={poster}
+    alt={alt}
+    fill
+    sizes="(max-width: 640px) 400px, (max-width: 1024px) 450px, 600px"
+    className={`${className} object-cover transition-opacity duration-500 ${
+     videoReady && !hasError ? 'opacity-0' : 'opacity-100'
+    }`}
+    priority
+    fetchPriority="high"
+   />
 
-   {/* Optimized video with WebM + MP4 fallback */}
-   <video
-    ref={videoRef}
-    autoPlay
-    loop
-    muted
-    playsInline
-    preload="none"
-    className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} absolute inset-0 w-full h-full object-cover transition-opacity duration-500`}
-    style={{
-     // Force GPU acceleration
-     transform: 'translateZ(0)',
-     backfaceVisibility: 'hidden',
-     willChange: 'auto', // Don't use will-change: transform on video
-    }}
-    onLoadedData={handleVideoLoad}
-    onError={handleVideoError}
-   >
-    {/* WebM first (smaller, better quality for modern browsers) */}
-    <source src={videoSrc.replace('.mp4', '.webm')} type="video/webm" />
-    {/* MP4 fallback (Safari/iOS compatibility) */}
-    <source src={videoSrc} type="video/mp4" />
-    Your browser does not support the video tag.
-   </video>
+   {/*
+    * VIDEO - Only loads on desktop after hydration
+    * Fades in over the image when ready
+    */}
+   {showVideo && !hasError && (
+    <video
+     ref={videoRef}
+     autoPlay
+     loop
+     muted
+     playsInline
+     preload="none"
+     className={`${className} absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+      videoReady ? 'opacity-100' : 'opacity-0'
+     }`}
+     style={{
+      transform: 'translateZ(0)',
+      backfaceVisibility: 'hidden',
+     }}
+    >
+     <source src={videoSrc.replace('.mp4', '.webm')} type="video/webm" />
+     <source src={videoSrc} type="video/mp4" />
+    </video>
+   )}
   </div>
  )
 }
