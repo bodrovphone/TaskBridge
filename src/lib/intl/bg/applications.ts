@@ -10,7 +10,7 @@ export const applications = {
   // Application Dialog
   'application.title': 'Кандидатствайте за тази задача',
   'application.proposedPrice': 'Вашата цена',
-  'application.pricePlaceholder': 'Въведете вашата цена в лева',
+  'application.pricePlaceholder': 'Въведете вашата цена в евро',
   'application.timeline': 'Кога можете да започнете?',
   'application.timelineToday': 'Днес',
   'application.timelineWeek': 'В рамките на седмица',

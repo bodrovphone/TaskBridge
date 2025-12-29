@@ -488,7 +488,7 @@ export const profile = {
   // Application Dialog
   'application.title': 'Откликнуться на задачу',
   'application.proposedPrice': 'Ваша цена',
-  'application.pricePlaceholder': 'Введите вашу цену в левах',
+  'application.pricePlaceholder': 'Введите вашу цену в евро',
   'application.timeline': 'Когда можете начать?',
   'application.timelineToday': 'Сегодня',
   'application.timelineWeek': 'В течение недели',
