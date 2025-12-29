@@ -14,9 +14,16 @@ export function generateAlternateLanguages(
 ) {
   const alternates: Record<string, string> = {}
 
+  // Map URL locale to valid ISO 639-1 hreflang code
+  // 'ua' is country code, 'uk' is correct language code for Ukrainian
+  const hreflangMap: Record<string, string> = {
+    ua: 'uk',
+  }
+
   // Add each supported locale
   SUPPORTED_LOCALES.forEach((locale) => {
-    alternates[locale] = `${baseUrl}/${locale}${pathname}`
+    const hreflang = hreflangMap[locale] || locale
+    alternates[hreflang] = `${baseUrl}/${locale}${pathname}`
   })
 
   // Add x-default (fallback for unknown languages) - use English

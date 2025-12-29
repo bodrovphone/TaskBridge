@@ -178,7 +178,7 @@ export function LanguagePreferencePrompt({ children }: LanguagePreferencePromptP
       side="bottom"
       align="center"
     >
-      <span ref={wrapperRef} className="inline-flex">{children}</span>
+      <span ref={wrapperRef} className="inline-flex" role="button" tabIndex={0}>{children}</span>
     </Tip>
   )
 }

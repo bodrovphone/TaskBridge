@@ -89,6 +89,7 @@ export default function UserAvatar({
     onClick={onClick}
     role={isClickable ? 'button' : undefined}
     tabIndex={isClickable ? 0 : undefined}
+    aria-label={user?.fullName || user?.email || 'User menu'}
     onKeyDown={isClickable ? (e) => {
      if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()

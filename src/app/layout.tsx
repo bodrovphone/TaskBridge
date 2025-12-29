@@ -78,6 +78,15 @@ function RootLayout({
 }) {
  return (
   <html lang="bg" className="overflow-x-hidden">
+   <head>
+    {/* Preload LCP image for faster initial paint */}
+    <link
+     rel="preload"
+     href="/images/hero_image_1.webp"
+     as="image"
+     type="image/webp"
+    />
+   </head>
    <body className={`${montserrat.variable} font-sans overflow-x-hidden w-full`}>
     {children}
     <Analytics />
