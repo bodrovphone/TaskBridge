@@ -82,10 +82,31 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
  // Parse timestamp safely - check both camelCase and snake_case
  const timestamp = task.createdAt || task.created_at;
  const createdDate = timestamp ? new Date(timestamp) : new Date();
- const timeAgo = formatDistanceToNow(createdDate, {
-  addSuffix: true,
-  locale: getDateLocale(),
- });
+
+ // Get simplified time display (same logic as task detail page)
+ const getTimeAgo = (): string => {
+  const now = new Date();
+  const createdDay = new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate());
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffDays = Math.floor((today.getTime() - createdDay.getTime()) / (1000 * 60 * 60 * 24));
+
+  // Show exact time for today (e.g., "2 hours ago")
+  if (diffDays === 0) {
+   return formatDistanceToNow(createdDate, { addSuffix: true, locale: getDateLocale() });
+  }
+  // Show "this week" for 1-7 days
+  if (diffDays <= 7) {
+   return t('taskCard.time.thisWeek');
+  }
+  // Show "this month" for 8-30 days
+  if (diffDays <= 30) {
+   return t('taskCard.time.thisMonth');
+  }
+  // Show "some time ago" for older
+  return t('taskCard.time.someTimeAgo');
+ };
+
+ const timeAgo = getTimeAgo();
 
  // Use subcategory for color if it exists, otherwise use category
  const displayCategory = task.subcategory || task.category;

@@ -97,6 +97,39 @@ export class TaskRepository {
         .select()
         .single()
 
+      // Handle unique constraint violation - retry with incremental suffix
+      if (error?.code === '23505' && data.slug) {
+        console.warn('Slug collision detected, retrying with incremental suffix')
+
+        // Re-fetch existing slugs and find next available number
+        const supabaseAdmin = createAdminClient()
+        const { data: existingSlugs } = await supabaseAdmin
+          .from('tasks')
+          .select('slug')
+          .like('slug', `${data.slug}%`)
+
+        const slugList = (existingSlugs || []).map(s => s.slug).filter(Boolean) as string[]
+        const retrySlug = makeSlugUnique(data.slug, slugList)
+
+        const { data: retryTask, error: retryError } = await supabase
+          .from('tasks')
+          .insert({ ...data, slug: retrySlug })
+          .select()
+          .single()
+
+        if (retryError) {
+          console.error('Database error creating task (retry):', retryError)
+          return err(
+            new DatabaseError('Failed to create task', {
+              code: retryError.code,
+              message: retryError.message
+            })
+          )
+        }
+
+        return ok(retryTask as Task)
+      }
+
       if (error) {
         console.error('Database error creating task:', error)
         return err(

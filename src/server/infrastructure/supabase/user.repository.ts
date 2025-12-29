@@ -160,6 +160,34 @@ export class UserRepository {
       .select()
       .single()
 
+    // Handle unique constraint violation - retry with incremental suffix
+    if (error?.code === '23505' && persistenceData.slug) {
+      console.warn('Slug collision detected, retrying with incremental suffix')
+
+      // Re-fetch existing slugs and find next available number
+      const supabaseAdmin = createAdminClient()
+      const { data: existingSlugs } = await supabaseAdmin
+        .from('users')
+        .select('slug')
+        .like('slug', `${persistenceData.slug}%`)
+
+      const slugList = (existingSlugs || []).map(s => s.slug).filter(Boolean) as string[]
+      const retrySlug = makeSlugUnique(persistenceData.slug, slugList)
+
+      const { data: retryData, error: retryError } = await supabase
+        .from('users')
+        .update({ ...persistenceData, slug: retrySlug })
+        .eq('id', user.id)
+        .select()
+        .single()
+
+      if (retryError) {
+        throw new Error(`Failed to update user: ${retryError.message}`)
+      }
+
+      return this.toDomain(retryData)
+    }
+
     if (error) {
       throw new Error(`Failed to update user: ${error.message}`)
     }
