@@ -48,15 +48,14 @@ function getBadgeData(prof: ProfessionalRaw) {
  * Check if a professional meets minimum listing requirements
  * Requirements:
  * - professional_title: not null and >= 3 chars
- * - bio: not null and >= 20 chars
  * - service_categories: not null and has at least 1 category
+ * Note: bio is optional (removed requirement for easier onboarding)
  */
 function meetsListingRequirements(prof: ProfessionalRaw): boolean {
   const hasTitle = prof.professional_title && prof.professional_title.length >= 3
-  const hasBio = prof.bio && prof.bio.length >= 20
   const hasCategories = prof.service_categories && prof.service_categories.length > 0
 
-  return !!(hasTitle && hasBio && hasCategories)
+  return !!(hasTitle && hasCategories)
 }
 
 /**
@@ -96,12 +95,11 @@ export async function getFeaturedProfessionals(limit: number = 20, lang: string 
   const now = new Date().toISOString()
 
   // === Step 1: Fetch DB-flagged featured professionals ===
-  // Requirements: professional_title, bio, service_categories (filtered in JS for length checks)
+  // Requirements: professional_title, service_categories (filtered in JS for length checks)
   const { data: dbFeatured, error: dbError } = await supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
-    .not('bio', 'is', null)
     .not('service_categories', 'is', null)
     .neq('is_banned', true)
     .or(`is_featured.eq.true,is_early_adopter.eq.true,and(is_top_professional.eq.true,top_professional_until.gte.${now})`)
@@ -153,12 +151,11 @@ async function getQualityScoredProfessionals(
   excludeIds: string[] = [],
   lang: string = 'bg'
 ): Promise<Professional[]> {
-  // Build query - require all listing fields
+  // Build query - require listing fields (title + categories)
   let query = supabaseAdmin
     .from('users')
     .select('*')
     .not('professional_title', 'is', null)
-    .not('bio', 'is', null)
     .not('service_categories', 'is', null)
     .neq('is_banned', true)
     .order('created_at', { ascending: false })
@@ -284,16 +281,14 @@ export async function getProfessionals(
   params: ProfessionalQueryParams,
   lang: string = 'bg'
 ): Promise<PaginatedProfessionalsResponse> {
-  // Build base query - require all listing fields:
-  // - professional_title (not null)
-  // - bio (not null, length checked in JS)
+  // Build base query - require listing fields:
+  // - professional_title (not null, length checked in JS)
   // - service_categories (not null, not empty)
-  // Note: Using service role to bypass RLS - professional listings are public
+  // Note: bio is optional, using service role to bypass RLS - professional listings are public
   let query = supabaseAdmin
     .from('users')
     .select('*', { count: 'exact' })
     .not('professional_title', 'is', null)
-    .not('bio', 'is', null)
     .not('service_categories', 'is', null)
 
   // === Apply Filters ===

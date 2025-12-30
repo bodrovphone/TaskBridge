@@ -30,6 +30,7 @@ export const professionals = {
   'professionals.card.completedJobsShort': 'завдань',
   'professionals.card.lookingForFirstTask': 'Новачок',
   'professionals.card.waitingForReviews': 'Чекає на перші відгуки',
+  'professionals.card.noBio': 'Перевірений фахівець. Більше інформації незабаром.',
   'professionals.startingFrom': 'Від',
   'professionals.noResults': 'Категорій за вашим запитом не знайдено',
   'professionals.categoryResults': 'знайдено категорій',

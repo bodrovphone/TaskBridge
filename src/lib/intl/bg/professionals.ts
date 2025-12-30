@@ -29,6 +29,7 @@ export const professionals = {
   'professionals.card.completedJobsShort': 'задачи',
   'professionals.card.lookingForFirstTask': 'Новак',
   'professionals.card.waitingForReviews': 'Очаква първи отзиви',
+  'professionals.card.noBio': 'Проверен професионалист. Повече информация скоро.',
   'professionals.startingFrom': 'Започва от',
   'professionals.noResults':
     'Няма категории, които да съвпадат с вашето търсене',
