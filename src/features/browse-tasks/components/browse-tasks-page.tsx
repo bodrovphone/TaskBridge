@@ -6,11 +6,10 @@ import { useTaskFilters } from "@/app/[lang]/browse-tasks/hooks/use-task-filters
 import { FilterBar } from "@/app/[lang]/browse-tasks/components/filter-bar";
 import { FiltersModal } from "@/app/[lang]/browse-tasks/components/filters-modal";
 import { ActiveFilters } from "@/app/[lang]/browse-tasks/components/active-filters";
-import { BrowseTasksHeroSection, SearchFiltersSection, ResultsSection } from "./sections";
+import { SearchFiltersSection, ResultsSection } from "./sections";
 import { useAuth } from "@/features/auth";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useRouter, useParams } from "next/navigation";
-import { useTranslations } from 'next-intl';
 import type { Task } from '@/server/tasks/task.types';
 
 interface PaginatedTasksResponse {
@@ -168,11 +167,11 @@ export default function BrowseTasksPage({ initialFeaturedTasks = [] }: BrowseTas
   }
  }, [featuredError]);
 
+ // Hero is now server-rendered in page.tsx for instant LCP
  return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
-   <BrowseTasksHeroSection />
-
-   <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+  <>
+   {/* min-h-[600px] prevents CLS by reserving space even while tasks load */}
+   <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 min-h-[600px]">
     {/* Search Section */}
     <SearchFiltersSection
      tasksCount={pagination?.total || tasks.length}
@@ -214,6 +213,6 @@ export default function BrowseTasksPage({ initialFeaturedTasks = [] }: BrowseTas
     onClose={() => setAuthSlideOverOpen(false)}
     action="apply"
    />
-  </div>
+  </>
  );
 }

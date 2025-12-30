@@ -7,6 +7,8 @@ import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale } from '@/lib/constants/locales'
 import { TaskService } from '@/server/tasks/task.service'
 import type { Task } from '@/server/tasks/task.types'
+import BrowseTasksSkeleton from './skeleton'
+import BrowseTasksHero from './hero'
 
 /**
  * ISR Configuration - Incremental Static Regeneration
@@ -104,14 +106,18 @@ export default async function BrowseTasksPage({ params }: BrowseTasksPageProps) 
   const initialFeaturedTasks = await getFeaturedTasks()
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
       {/* SEO content - crawlable by search engines */}
       <SEOTasksContent tasks={initialFeaturedTasks} locale={lang} />
 
+      {/* Hero - SERVER RENDERED outside Suspense for instant LCP */}
+      <BrowseTasksHero locale={lang} />
+
       {/* Interactive client component - wrapped in Suspense for useSearchParams */}
-      <Suspense fallback={null}>
+      {/* IMPORTANT: Skeleton fallback prevents CLS (Cumulative Layout Shift) */}
+      <Suspense fallback={<BrowseTasksSkeleton />}>
         <BrowseTasksComponent initialFeaturedTasks={initialFeaturedTasks} />
       </Suspense>
-    </>
+    </div>
   )
 }
