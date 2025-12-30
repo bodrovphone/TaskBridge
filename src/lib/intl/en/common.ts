@@ -38,6 +38,7 @@ export const common = {
   'common.cancel': 'Cancel',
   'common.edit': 'Edit',
   'common.save': 'Save',
+  'common.saving': 'Saving...',
   'common.anonymous': 'Anonymous User',
   'common.goBack': 'Go Back',
   'common.today': 'Today',

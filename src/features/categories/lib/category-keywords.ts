@@ -16,8 +16,8 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
   // ===== HANDYMAN =====
   'plumber': {
     en: ['plumber', 'plumbing', 'pipe', 'pipes', 'faucet', 'tap', 'toilet', 'leak', 'leaking', 'drain', 'clogged', 'water', 'bathroom', 'sink', 'shower', 'bathtub', 'fix pipe', 'fix faucet', 'fix toilet', 'fix leak', 'fix', 'repair', 'broken pipe', 'unclog', 'water heater', 'boiler', 'need plumber'],
-    bg: ['водопроводчик', 'ВиК', 'тръба', 'тръби', 'кран', 'тоалетна', 'течове', 'запушване', 'канал', 'мивка', 'душ', 'вана', 'бойлер', 'поправка кран', 'поправка', 'ремонт', 'запушен канал', 'течаща тръба', 'счупена тръба'],
-    ru: ['сантехник', 'сантехника', 'труба', 'трубы', 'кран', 'унитаз', 'течь', 'течет', 'засор', 'канализация', 'раковина', 'душ', 'ванна', 'бойлер', 'починить кран', 'починить', 'ремонт', 'прочистить', 'замена труб', 'установка смесителя'],
+    bg: ['водопроводчик', 'ВиК', 'тръба', 'тръби', 'кран', 'тоалетна', 'течове', 'запушване', 'канал', 'мивка', 'душ', 'вана', 'бойлер', 'бойлери', 'поправка кран', 'поправка', 'ремонт', 'запушен канал', 'течаща тръба', 'счупена тръба'],
+    ru: ['сантехник', 'сантехника', 'труба', 'трубы', 'кран', 'унитаз', 'течь', 'течет', 'засор', 'канализация', 'раковина', 'душ', 'ванна', 'бойлер', 'бойлера', 'бойлеров', 'водонагреватель', 'починить кран', 'починить', 'ремонт', 'прочистить', 'замена труб', 'установка смесителя'],
   },
   'electrician': {
     en: ['electrician', 'electrical', 'wiring', 'wire', 'outlet', 'socket', 'light', 'lighting', 'switch', 'circuit', 'breaker', 'fuse', 'power', 'voltage', 'install light', 'fix outlet', 'fix light', 'fix switch', 'fix', 'repair', 'broken outlet', 'no power', 'need electrician'],
@@ -31,7 +31,7 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
   },
   'carpenter': {
     en: ['carpenter', 'carpentry', 'wood', 'wooden', 'door', 'window', 'frame', 'cabinet', 'closet', 'wardrobe', 'woodwork', 'fix door', 'fix window', 'fix', 'repair', 'install door', 'wooden floor', 'broken door', 'broken window'],
-    bg: ['дърводелец', 'дърводелски', 'дърво', 'дървен', 'врата', 'прозорец', 'рамка', 'шкаф', 'гардероб', 'паркет', 'ламинат', 'монтаж врата', 'поправка', 'ремонт', 'счупена врата'],
+    bg: ['дърводелец', 'дърводелски', 'столяр', 'дърво', 'дървен', 'врата', 'прозорец', 'рамка', 'шкаф', 'гардероб', 'паркет', 'ламинат', 'монтаж врата', 'поправка', 'ремонт', 'счупена врата'],
     ru: ['плотник', 'столяр', 'дерево', 'деревянный', 'дверь', 'окно', 'рама', 'шкаф', 'гардероб', 'паркет', 'ламинат', 'установка двери', 'деревянные работы', 'починить', 'ремонт', 'сломанная дверь'],
   },
   'locksmith': {
@@ -128,9 +128,9 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
 
   // ===== CONSTRUCTION WORK =====
   'general-labor': {
-    en: ['labor', 'helper', 'construction helper', 'demolition', 'cleanup', 'heavy lifting', 'manual labor'],
-    bg: ['общи работи', 'помощник', 'разрушаване', 'събаряне', 'чистене', 'тежък труд'],
-    ru: ['разнорабочий', 'подсобник', 'демонтаж', 'снос', 'уборка мусора', 'грузчик'],
+    en: ['labor', 'helper', 'construction helper', 'demolition', 'cleanup', 'heavy lifting', 'manual labor', 'disassembly'],
+    bg: ['общи работи', 'помощник', 'разрушаване', 'събаряне', 'чистене', 'тежък труд', 'демонтаж', 'демонтажни работи'],
+    ru: ['разнорабочий', 'подсобник', 'демонтаж', 'снос', 'уборка мусора', 'грузчик', 'демонтажные работы'],
   },
   'welding': {
     en: ['welding', 'welder', 'metal work', 'steel', 'iron', 'gate', 'fence', 'railing', 'metal fabrication'],
@@ -155,19 +155,19 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
 
   // ===== FURNITURE WORK =====
   'furniture-manufacturing': {
-    en: ['custom furniture', 'furniture making', 'built-in', 'cabinet making', 'custom cabinet', 'bespoke furniture'],
-    bg: ['мебели по поръчка', 'изработка мебели', 'вградени мебели', 'корпусна мебел'],
-    ru: ['мебель на заказ', 'изготовление мебели', 'встроенная мебель', 'корпусная мебель'],
+    en: ['custom furniture', 'furniture making', 'built-in', 'cabinet making', 'custom cabinet', 'bespoke furniture', 'furniture maker'],
+    bg: ['мебели по поръчка', 'изработка мебели', 'вградени мебели', 'корпусна мебел', 'мебляр', 'мебелист'],
+    ru: ['мебель на заказ', 'изготовление мебели', 'встроенная мебель', 'корпусная мебель', 'мебельщик'],
   },
   'furniture-repair': {
     en: ['furniture repair', 'fix furniture', 'broken furniture', 'chair repair', 'table repair', 'drawer repair'],
-    bg: ['ремонт мебели', 'поправка мебели', 'счупена мебел', 'ремонт стол', 'ремонт маса'],
-    ru: ['ремонт мебели', 'починить мебель', 'сломанная мебель', 'ремонт стула', 'ремонт стола'],
+    bg: ['ремонт мебели', 'поправка мебели', 'счупена мебел', 'ремонт стол', 'ремонт маса', 'мебляр'],
+    ru: ['ремонт мебели', 'починить мебель', 'сломанная мебель', 'ремонт стула', 'ремонт стола', 'мебельщик'],
   },
   'furniture-assembly': {
-    en: ['furniture assembly', 'ikea assembly', 'assemble furniture', 'put together', 'flatpack', 'bed assembly', 'wardrobe assembly'],
-    bg: ['сглобяване мебели', 'монтаж мебели', 'сглобяване икеа', 'монтаж легло', 'монтаж гардероб'],
-    ru: ['сборка мебели', 'собрать мебель', 'икеа сборка', 'сборка кровати', 'сборка шкафа'],
+    en: ['furniture assembly', 'ikea assembly', 'assemble furniture', 'put together', 'flatpack', 'bed assembly', 'wardrobe assembly', 'disassembly'],
+    bg: ['сглобяване мебели', 'монтаж мебели', 'сглобяване икеа', 'монтаж легло', 'монтаж гардероб', 'демонтаж мебели', 'демонтаж'],
+    ru: ['сборка мебели', 'собрать мебель', 'икеа сборка', 'сборка кровати', 'сборка шкафа', 'демонтаж мебели', 'разборка мебели'],
   },
   'furniture-restoration': {
     en: ['furniture restoration', 'antique restoration', 'refinishing', 'wood restoration', 'vintage furniture'],
@@ -718,7 +718,18 @@ export const searchKeywords = (
   if (!lowerQuery) return [];
 
   // Split query into words, filter out short words (< 3 chars) and common stop words
-  const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'to', 'for', 'in', 'on', 'at', 'is', 'it', 'my', 'me', 'i', 'need', 'want', 'have', 'get', 'can', 'do', 'be', 'с', 'в', 'на', 'и', 'для', 'мне', 'нужен', 'нужна', 'нужно', 'за', 'от', 'към', 'ми', 'трябва']);
+  // Including generic repair words that appear in too many categories
+  const stopWords = new Set([
+    // English stop words
+    'the', 'a', 'an', 'and', 'or', 'to', 'for', 'in', 'on', 'at', 'is', 'it', 'my', 'me', 'i',
+    'need', 'want', 'have', 'get', 'can', 'do', 'be', 'fix', 'repair', 'broken', 'services',
+    // Bulgarian stop words
+    'с', 'в', 'на', 'и', 'за', 'от', 'към', 'ми', 'трябва', 'услуги',
+    'ремонт', 'поправка', 'счупен', 'счупена', 'счупено',
+    // Russian stop words
+    'для', 'мне', 'нужен', 'нужна', 'нужно',
+    'ремонт', 'починить', 'поправить', 'сломан', 'сломана', 'сломано'
+  ]);
   const queryWords = lowerQuery
     .split(/\s+/)
     .filter(word => word.length >= 3 && !stopWords.has(word));

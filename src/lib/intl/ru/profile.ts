@@ -670,6 +670,16 @@ export const profile = {
   'profile.professional.addServiceCategories': 'Добавьте категории услуг',
   'profile.professional.categoriesHelp': 'Помогите клиентам найти вас! Выберите услуги, которые вы предлагаете, чтобы начать получать заявки.',
 
+  // Auto-suggested categories (based on professional title)
+  'profile.professional.suggestedCategories': 'Нашли подходящие категории!',
+  'profile.professional.suggestedCategoriesHelp': 'На основе вашей профессии эти категории могут подойти:',
+  'profile.professional.acceptSuggestions': 'Использовать эти категории',
+  'profile.professional.chooseOther': 'Выбрать другие',
+  'profile.professional.categoriesAutoApplied': 'Категории добавлены автоматически',
+  'profile.professional.categoriesAutoAppliedDescription': 'Мы подобрали категории по вашей профессии. Вы можете изменить их в любое время.',
+  'profile.professional.categoriesAutoAppliedCheck': 'Мы правильно угадали ваши категории?',
+  'profile.professional.looksGood': 'Да, всё верно',
+
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Завершите свой профессиональный профиль',
   'profile.professional.minimumRequired': 'Минимум требуется',
@@ -686,7 +696,7 @@ export const profile = {
   'profile.listing.requirement.bio': 'Краткое описание',
   'profile.listing.requirement.rate': 'Почасовая ставка',
   'profile.listing.requirement.skills': 'Ваши категории',
-  'profile.listing.clickToFix': 'Нажмите для исправления',
+  'profile.listing.clickToFix': 'Исправить',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Нажмите для подключения',

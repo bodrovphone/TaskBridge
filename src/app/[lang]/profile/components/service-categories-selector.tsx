@@ -19,18 +19,6 @@ interface ServiceCategoriesSelectorProps {
   maxSelections?: number
 }
 
-// Popular subcategories (most frequently used)
-const POPULAR_SUBCATEGORY_SLUGS: string[] = [
-  'house-cleaning',
-  'plumber',
-  'electrician',
-  'delivery',
-  'babysitting',
-  'tutoring',
-  'moving-service',
-  'handyman-service'
-]
-
 export function ServiceCategoriesSelector({
   selectedCategories,
   onChange,
@@ -84,14 +72,6 @@ export function ServiceCategoriesSelector({
       color: mainCat.color,
       subcategories: allSubcategories.filter(sub => sub.mainCategoryId === mainCat.id)
     }))
-  }, [t])
-
-  // Popular subcategories
-  const popularSubcategories = useMemo(() => {
-    const allSubcategories = getAllSubcategoriesWithLabels(t)
-    return POPULAR_SUBCATEGORY_SLUGS
-      .map(slug => allSubcategories.find(sub => sub.slug === slug))
-      .filter(Boolean)
   }, [t])
 
   const toggleCategory = (categorySlug: string) => {
@@ -195,26 +175,32 @@ export function ServiceCategoriesSelector({
         }}
       />
 
-      {/* Popular Categories */}
-      {!searchQuery && popularSubcategories.length > 0 && (
-        <div>
-          <p className="text-sm font-medium text-gray-600 mb-2">
-            {t('profile.serviceCategories.popularCategories')}
-          </p>
+      {/* Selected Categories - shown at top */}
+      {selectedCategories.length > 0 && (
+        <div className="pb-3 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-medium text-gray-700">
+              {t('profile.serviceCategories.selected')} ({selectedCategories.length}/{maxSelections})
+            </p>
+            <button
+              onClick={() => onChange([])}
+              className="text-xs text-gray-500 hover:text-primary underline"
+            >
+              {t('profile.serviceCategories.clearAll')}
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
-            {popularSubcategories.map(subcategory => {
-              if (!subcategory) return null
-              const mainCat = getMainCategoryForSubcategory(subcategory.slug)
-              const isSelected = selectedCategories.includes(subcategory.slug)
+            {selectedCategories.map(categorySlug => {
+              const mainCat = getMainCategoryForSubcategory(categorySlug)
 
               return (
                 <Chip
-                  key={subcategory.slug}
-                  variant={isSelected ? 'solid' : 'flat'}
-                  onClick={() => toggleCategory(subcategory.slug)}
-                  className={`cursor-pointer hover:scale-105 transition-transform ${getChipClasses(mainCat.color, isSelected)}`}
+                  key={categorySlug}
+                  onClose={() => removeCategory(categorySlug)}
+                  variant="solid"
+                  className={`shadow-sm ${getChipClasses(mainCat.color, true)}`}
                 >
-                  {subcategory.label}
+                  {getCategoryLabelBySlug(categorySlug, t)}
                 </Chip>
               )
             })}
@@ -253,39 +239,6 @@ export function ServiceCategoriesSelector({
           )
         })}
       </div>
-
-      {/* Selected Categories */}
-      {selectedCategories.length > 0 && (
-        <div className="pt-4 border-t border-gray-200">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium text-gray-700">
-              {t('profile.serviceCategories.selected')} ({selectedCategories.length}/{maxSelections})
-            </p>
-            <button
-              onClick={() => onChange([])}
-              className="text-xs text-gray-500 hover:text-primary underline"
-            >
-              {t('profile.serviceCategories.clearAll')}
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {selectedCategories.map(categorySlug => {
-              const mainCat = getMainCategoryForSubcategory(categorySlug)
-
-              return (
-                <Chip
-                  key={categorySlug}
-                  onClose={() => removeCategory(categorySlug)}
-                  variant="solid"
-                  className={`shadow-sm ${getChipClasses(mainCat.color, true)}`}
-                >
-                  {getCategoryLabelBySlug(categorySlug, t)}
-                </Chip>
-              )
-            })}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

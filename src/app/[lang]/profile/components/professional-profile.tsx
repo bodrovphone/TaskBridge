@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
+import { useParams } from 'next/navigation'
 import { Card, CardHeader, CardBody } from '@nextui-org/react'
 import { Camera } from 'lucide-react'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
@@ -14,6 +15,8 @@ import { PersonalInfoSection } from './shared/personal-info-section'
 import { PortfolioGalleryManager } from './portfolio-gallery-manager'
 import { UserProfile, PreferredContact, PreferredLanguage, GalleryItem, ServiceItem } from '@/server/domain/user/user.types'
 import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
+import { searchKeywords } from '@/features/categories/lib/category-keywords'
+import { toast } from '@/hooks/use-toast'
 
 interface ProfessionalProfileProps {
   profile: UserProfile
@@ -22,10 +25,37 @@ interface ProfessionalProfileProps {
 
 export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalProfileProps) {
   const t = useTranslations()
+  const params = useParams()
   const [error, setError] = useState<string | null>(null)
+  const [categoriesAutoApplied, setCategoriesAutoApplied] = useState(false)
+
+  // Get current locale for keyword search
+  const currentLocale = (params?.lang as 'en' | 'bg' | 'ru') || 'bg'
 
   // Get incomplete section IDs for highlighting
   const { incompleteSectionIds, isComplete } = useProfessionalListingStatus(profile)
+
+  // Auto-suggest categories based on professional title
+  // Only shows medium-confidence matches (70-89) since high-confidence (90+) are auto-applied
+  const suggestedCategories = useMemo(() => {
+    // Only suggest if user has a title but no categories yet
+    if (!profile.professionalTitle || profile.professionalTitle.length < 3) {
+      return []
+    }
+    if (profile.serviceCategories && profile.serviceCategories.length > 0) {
+      return [] // User already has categories, don't suggest
+    }
+
+    // Search for matching categories based on title
+    const results = searchKeywords(profile.professionalTitle, currentLocale)
+
+    // Return top 3 medium-confidence suggestions (70-89)
+    // High-confidence matches (90+) are auto-applied in handleIdentitySave
+    return results
+      .filter(r => r.score >= 70 && r.score < 90)
+      .slice(0, 3)
+      .map(r => r.slug)
+  }, [profile.professionalTitle, profile.serviceCategories, currentLocale])
 
   // Handler for personal information
   const handlePersonalInfoSave = async (data: {
@@ -87,6 +117,24 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         bio: data.bio,
         yearsExperience: parseYearsExperience(data.yearsExperience)
       })
+
+      // Hybrid auto-category matching:
+      // If user has no categories and title changed, auto-apply high-confidence matches (score >= 90)
+      if ((!profile.serviceCategories || profile.serviceCategories.length === 0) && data.title.length >= 3) {
+        const results = searchKeywords(data.title, currentLocale)
+        const highConfidenceMatches = results
+          .filter(r => r.score >= 90)
+          .slice(0, 3)
+          .map(r => r.slug)
+
+        if (highConfidenceMatches.length > 0) {
+          // Auto-apply high-confidence categories
+          await onProfileUpdate({ serviceCategories: highConfidenceMatches })
+
+          // Flag to show confirmation banner in categories section
+          setCategoriesAutoApplied(true)
+        }
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to save professional identity')
       throw err
@@ -185,6 +233,9 @@ export function ProfessionalProfile({ profile, onProfileUpdate }: ProfessionalPr
         onSave={handleCategoriesSave}
         sectionId="service-categories-section"
         isHighlighted={!isComplete && incompleteSectionIds.has('service-categories-section')}
+        suggestedCategories={suggestedCategories}
+        wasAutoApplied={categoriesAutoApplied}
+        onAutoAppliedDismiss={() => setCategoriesAutoApplied(false)}
       />
 
       {/* 3. Personal Information */}

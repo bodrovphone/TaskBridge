@@ -38,6 +38,7 @@ export const common = {
   'common.cancel': 'Отказ',
   'common.edit': 'Редактирай',
   'common.save': 'Запази',
+  'common.saving': 'Запазване...',
   'common.anonymous': 'Анонимен потребител',
   'common.goBack': 'Назад',
   'common.today': 'Днес',

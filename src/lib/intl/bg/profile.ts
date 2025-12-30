@@ -186,6 +186,16 @@ export const profile = {
   'profile.professional.addServiceCategories': 'Добавете категории услуги',
   'profile.professional.categoriesHelp': 'Помогнете на клиентите да ви намерят! Изберете услугите, които предлагате, за да започнете да получавате заявки.',
 
+  // Auto-suggested categories (based on professional title)
+  'profile.professional.suggestedCategories': 'Намерихме подходящи категории!',
+  'profile.professional.suggestedCategoriesHelp': 'На базата на вашата дейност, тези категории може да са подходящи:',
+  'profile.professional.acceptSuggestions': 'Използвай тези категории',
+  'profile.professional.chooseOther': 'Избери други',
+  'profile.professional.categoriesAutoApplied': 'Категориите са добавени автоматично',
+  'profile.professional.categoriesAutoAppliedDescription': 'Избрахме категории според вашата дейност. Можете да ги промените по всяко време.',
+  'profile.professional.categoriesAutoAppliedCheck': 'Познахме ли правилно вашите категории?',
+  'profile.professional.looksGood': 'Да, правилно е',
+
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Завършете професионалния си профил',
   'profile.professional.minimumRequired': 'Минимум изисквано',
@@ -202,7 +212,7 @@ export const profile = {
   'profile.listing.requirement.bio': 'Кратко представяне',
   'profile.listing.requirement.rate': 'Часова ставка',
   'profile.listing.requirement.skills': 'Вашите категории',
-  'profile.listing.clickToFix': 'Натиснете за корекция',
+  'profile.listing.clickToFix': 'Поправи',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Кликнете за свързване',

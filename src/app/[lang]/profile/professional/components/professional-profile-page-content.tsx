@@ -77,11 +77,6 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
     }
   }
 
-  const handleTelegramConnect = () => {
-    // Scroll to settings section where Telegram connection is
-    document.getElementById('account-settings')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <div
       className="min-h-screen relative"
@@ -126,7 +121,6 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
         <NotificationBannerManager
           emailVerified={profile.isEmailVerified || false}
           telegramConnected={!!profile.telegramId}
-          onTelegramConnect={handleTelegramConnect}
         />
 
         {/* Achievement Banner for professionals with badges */}

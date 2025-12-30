@@ -1,28 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { TelegramPromptBanner } from './telegram-prompt-banner'
 import { EmailVerificationBanner } from './email-verification-banner'
 import { CheckInboxBanner } from './check-inbox-banner'
 
 interface NotificationBannerManagerProps {
   emailVerified: boolean
   telegramConnected: boolean
-  onTelegramConnect: () => void
 }
 
 export function NotificationBannerManager({
   emailVerified,
   telegramConnected,
-  onTelegramConnect,
 }: NotificationBannerManagerProps) {
-  const [telegramBannerDismissed, setTelegramBannerDismissed] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('telegram_banner_dismissed') === 'true'
-    }
-    return false
-  })
-
   const [checkInboxBannerDismissed, setCheckInboxBannerDismissed] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('check_inbox_banner_dismissed') === 'true'
@@ -30,17 +20,12 @@ export function NotificationBannerManager({
     return false
   })
 
-  const [emailVerificationSent, setEmailVerificationSent] = useState(() => {
+  const [emailVerificationSent] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('email_verification_sent') === 'true'
     }
     return false
   })
-
-  const handleTelegramDismiss = () => {
-    setTelegramBannerDismissed(true)
-    localStorage.setItem('telegram_banner_dismissed', 'true')
-  }
 
   const handleCheckInboxDismiss = () => {
     setCheckInboxBannerDismissed(true)
@@ -49,16 +34,15 @@ export function NotificationBannerManager({
 
   // Logic:
   // 1. Email verification sent AND not dismissed → Show "Check Inbox" banner (highest priority)
-  // 2. Telegram NOT connected + NOT dismissed → Show Telegram banner (top)
-  // 3. Telegram dismissed OR connected → Show Email banner (top) if email not verified
-  // 4. Both verified → Show nothing
+  // 2. Email not verified → Show Email verification banner
+  // 3. Both verified → Show nothing
+  // Note: Telegram prompts are handled via modal/toast, not banner
 
   const shouldShowCheckInboxBanner = emailVerificationSent && !checkInboxBannerDismissed && !emailVerified
-  const shouldShowTelegramBanner = !telegramConnected && !telegramBannerDismissed && !shouldShowCheckInboxBanner
-  const shouldShowEmailBannerTop = (telegramConnected || telegramBannerDismissed) && !emailVerified && !shouldShowCheckInboxBanner
+  const shouldShowEmailBanner = !emailVerified && !shouldShowCheckInboxBanner
 
-  // Don't show anything if both are verified
-  if (emailVerified && telegramConnected) {
+  // Don't show anything if email is verified
+  if (emailVerified) {
     return null
   }
 
@@ -67,13 +51,7 @@ export function NotificationBannerManager({
       {shouldShowCheckInboxBanner && (
         <CheckInboxBanner onDismiss={handleCheckInboxDismiss} />
       )}
-      {shouldShowTelegramBanner && (
-        <TelegramPromptBanner
-          onConnect={onTelegramConnect}
-          onDismiss={handleTelegramDismiss}
-        />
-      )}
-      {shouldShowEmailBannerTop && (
+      {shouldShowEmailBanner && (
         <EmailVerificationBanner
           telegramConnected={telegramConnected}
         />

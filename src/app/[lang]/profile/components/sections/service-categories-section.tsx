@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, CardHeader, Button } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider } from '@nextui-org/react'
 import { useTranslations } from 'next-intl'
-import { FileText, Edit, X, Save } from 'lucide-react'
+import { FileText, Edit, X, Save, Sparkles, Check } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -25,13 +25,22 @@ interface ServiceCategoriesSectionProps {
   sectionId?: string
   /** Whether this section should be highlighted as incomplete */
   isHighlighted?: boolean
+  /** Suggested categories based on professional title (auto-matched) */
+  suggestedCategories?: string[]
+  /** Whether categories were just auto-applied (shows confirmation banner) */
+  wasAutoApplied?: boolean
+  /** Callback to dismiss the auto-applied banner */
+  onAutoAppliedDismiss?: () => void
 }
 
 export function ServiceCategoriesSection({
   serviceCategories,
   onSave,
   sectionId,
-  isHighlighted = false
+  isHighlighted = false,
+  suggestedCategories = [],
+  wasAutoApplied = false,
+  onAutoAppliedDismiss
 }: ServiceCategoriesSectionProps) {
   const t = useTranslations()
   const isMobile = useIsMobile()
@@ -52,6 +61,14 @@ export function ServiceCategoriesSection({
     setTempCategories([])
     setIsModalOpen(false)
   }
+
+  // Accept all suggested categories with one click
+  const handleAcceptSuggestions = () => {
+    onSave(suggestedCategories)
+  }
+
+  // Check if we should show suggestions (has suggestions, no current categories)
+  const showSuggestions = suggestedCategories.length > 0 && serviceCategories.length === 0
 
   return (
     <>
@@ -77,37 +94,124 @@ export function ServiceCategoriesSection({
                 {t('profile.professional.serviceCategories')}
               </h3>
             </div>
-            {serviceCategories.length > 0 && (
-              <Button
-                size="sm"
-                startContent={<Edit className="w-3 h-3 md:w-4 md:h-4 text-white" />}
-                onPress={openModal}
-                className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800 flex-shrink-0 text-xs md:text-sm"
-              >
-                {t('common.edit')}
-              </Button>
-            )}
           </div>
         </CardHeader>
         <CardBody className="space-y-4 px-4 md:px-6 py-6">
           {serviceCategories.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {serviceCategories.map(categorySlug => {
-                const categoryColor = getCategoryColor(categorySlug)
-                const subcategory = getSubcategoryBySlug(categorySlug)
-                const categoryName = subcategory ? t(subcategory.translationKey) : categorySlug
-                return (
-                  <span
-                    key={categorySlug}
-                    className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border shadow-sm ${categoryColor}`}
+            <div className="space-y-4">
+              {/* Auto-applied confirmation banner */}
+              {wasAutoApplied && (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-sm text-amber-800">
+                    {t('profile.professional.categoriesAutoAppliedCheck')}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="flat"
+                      color="warning"
+                      onPress={openModal}
+                      className="flex-1 sm:flex-initial"
+                    >
+                      {t('common.edit')}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="light"
+                      onPress={onAutoAppliedDismiss}
+                      className="flex-1 sm:flex-initial"
+                    >
+                      {t('profile.professional.looksGood')}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Categories display */}
+              <div className="flex flex-wrap gap-2">
+                {serviceCategories.map(categorySlug => {
+                  const categoryColor = getCategoryColor(categorySlug)
+                  const subcategory = getSubcategoryBySlug(categorySlug)
+                  const categoryName = subcategory ? t(subcategory.translationKey) : categorySlug
+                  return (
+                    <span
+                      key={categorySlug}
+                      className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border shadow-sm ${categoryColor}`}
+                    >
+                      {categoryName}
+                    </span>
+                  )
+                })}
+              </div>
+
+              {/* Edit button at bottom */}
+              <Divider className="my-4" />
+              <div className="flex justify-end">
+                <Button
+                  size="sm"
+                  startContent={<Edit className="w-4 h-4 text-white" />}
+                  onPress={openModal}
+                  className="hover:scale-105 transition-transform shadow-md bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800"
+                >
+                  {t('common.edit')}
+                </Button>
+              </div>
+            </div>
+          ) : showSuggestions ? (
+            // Suggestions banner - show when we have auto-matched categories from title
+            <div className="text-center py-8 px-4 bg-gradient-to-br from-emerald-50 to-green-50/50 rounded-xl border-2 border-emerald-200 overflow-hidden">
+              <div className="space-y-4">
+                <div className="w-14 h-14 mx-auto bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                  <Sparkles className="w-7 h-7 text-white" />
+                </div>
+                <h4 className="text-lg font-bold text-gray-900">
+                  {t('profile.professional.suggestedCategories')}
+                </h4>
+                <p className="text-sm text-gray-600 max-w-sm mx-auto">
+                  {t('profile.professional.suggestedCategoriesHelp')}
+                </p>
+
+                {/* Show suggested categories */}
+                <div className="flex flex-wrap justify-center gap-2 py-2">
+                  {suggestedCategories.map(categorySlug => {
+                    const categoryColor = getCategoryColor(categorySlug)
+                    const subcategory = getSubcategoryBySlug(categorySlug)
+                    const categoryName = subcategory ? t(subcategory.translationKey) : categorySlug
+                    return (
+                      <span
+                        key={categorySlug}
+                        className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border shadow-sm ${categoryColor}`}
+                      >
+                        {categoryName}
+                      </span>
+                    )
+                  })}
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
+                  <Button
+                    size="lg"
+                    color="success"
+                    onPress={handleAcceptSuggestions}
+                    startContent={<Check className="w-5 h-5" />}
+                    className="font-semibold shadow-lg"
                   >
-                    {categoryName}
-                  </span>
-                )
-              })}
+                    {t('profile.professional.acceptSuggestions')}
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="bordered"
+                    onPress={openModal}
+                    className="font-semibold"
+                  >
+                    {t('profile.professional.chooseOther')}
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : (
-            // Empty state - Call to Action
+            // Empty state - Call to Action (no suggestions available)
             <div className="text-center py-10 px-4 bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-xl border-2 border-dashed border-blue-200 overflow-hidden">
               <div className="space-y-4">
                 <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">

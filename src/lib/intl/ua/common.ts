@@ -38,6 +38,7 @@ export const common = {
   'common.cancel': 'Скасувати',
   'common.edit': 'Редагувати',
   'common.save': 'Зберегти',
+  'common.saving': 'Збереження...',
   'common.goBack': 'Повернутися',
   'common.anonymous': 'Анонімний користувач',
   'common.today': 'Сьогодні',

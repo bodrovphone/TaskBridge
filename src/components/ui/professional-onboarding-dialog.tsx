@@ -75,11 +75,10 @@ export default function ProfessionalOnboardingDialog() {
 
       if (localStorageFlag === 'true' || cookieFlag === 'true') {
         // Only show if user doesn't already have a professional profile
-        // hasProfessionalProfile requires: title (3+ chars), bio (20+ chars), categories (1+)
+        // hasProfessionalProfile requires: title (3+ chars), categories (1+)
+        // Bio is optional - not required for listing
         const hasProfessionalProfile = profile?.professionalTitle &&
           profile?.professionalTitle.length >= 3 &&
-          profile?.bio &&
-          profile?.bio.length >= 20 &&
           profile?.serviceCategories &&
           profile?.serviceCategories.length > 0
 

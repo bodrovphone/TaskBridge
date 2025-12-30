@@ -117,7 +117,7 @@ export function ProfileHeader({
               </h2>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="flex flex-row items-start gap-4 md:gap-6">
               <AvatarUpload
                 currentAvatar={profile.avatarUrl}
                 userName={profile.fullName || profile.email}
@@ -125,9 +125,9 @@ export function ProfileHeader({
                 size="lg"
               />
 
-              <div className="flex-1 w-full sm:w-auto">
-                <div className="flex items-center gap-3 mb-2 flex-wrap">
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 md:gap-3 mb-2 flex-wrap">
+                  <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent truncate">
                     {profile.fullName || profile.email}
                   </h1>
                   {(profile.isEmailVerified && profile.isPhoneVerified) && (
@@ -177,7 +177,7 @@ export function ProfileHeader({
                 </p>
 
                 {/* Profile completion with visual indicator */}
-                <div className="w-full mb-4">
+                <div className="w-full">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-700">{t('profile.completion')}</span>
                     <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -192,72 +192,73 @@ export function ProfileHeader({
                   </div>
                 </div>
 
-                {/* Professional Listing Requirements Checklist - Clickable Banner */}
-                {profileType === 'professional' && !allProfessionalRequirementsMet && (
-                  <button
-                    onClick={scrollToIncompleteSection}
-                    className={`w-full text-left mb-4 p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md cursor-pointer group ${
-                      isProfessionalIncomplete
-                        ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300 hover:border-amber-400 hover:from-amber-100 hover:to-orange-100'
-                        : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:border-blue-300 hover:from-blue-100 hover:to-indigo-100'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg transition-transform group-hover:scale-110 ${isProfessionalIncomplete ? 'bg-amber-100' : 'bg-blue-100'}`}>
-                        <AlertCircle className={`w-5 h-5 ${isProfessionalIncomplete ? 'text-amber-600' : 'text-blue-600'}`} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className={`font-bold mb-1 ${isProfessionalIncomplete ? 'text-amber-900' : 'text-blue-900'}`}>
-                            {isProfessionalIncomplete
-                              ? t('profile.listing.notListed')
-                              : t('profile.listing.incomplete')
-                            }
-                          </h4>
-                          <span className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${
-                            isProfessionalIncomplete
-                              ? 'bg-amber-200 text-amber-800 group-hover:bg-amber-300'
-                              : 'bg-blue-200 text-blue-800 group-hover:bg-blue-300'
-                          }`}>
-                            {t('profile.listing.clickToFix')} →
-                          </span>
-                        </div>
-                        <p className={`text-sm mb-3 ${isProfessionalIncomplete ? 'text-amber-800' : 'text-blue-800'}`}>
-                          {isProfessionalIncomplete
-                            ? t('profile.listing.notListedMessage')
-                            : t('profile.listing.incompleteMessage')
-                          }
-                        </p>
-
-                        {/* Requirements checklist */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                          {professionalRequirements.map((req) => (
-                            <div
-                              key={req.key}
-                              className={`flex items-center gap-2 text-sm ${
-                                req.met ? 'text-green-700' : isProfessionalIncomplete ? 'text-amber-700' : 'text-blue-700'
-                              }`}
-                            >
-                              {req.met ? (
-                                <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                              ) : (
-                                <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
-                                  isProfessionalIncomplete ? 'border-amber-400' : 'border-blue-400'
-                                }`} />
-                              )}
-                              <span className={req.met ? 'line-through opacity-60' : 'font-medium'}>
-                                {req.label}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
-
               </div>
             </div>
+
+            {/* Professional Listing Requirements Checklist - Full Width Banner */}
+            {profileType === 'professional' && !allProfessionalRequirementsMet && (
+              <button
+                onClick={scrollToIncompleteSection}
+                className={`w-full text-left mt-4 p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md cursor-pointer group ${
+                  isProfessionalIncomplete
+                    ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-300 hover:border-amber-400 hover:from-amber-100 hover:to-orange-100'
+                    : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:border-blue-300 hover:from-blue-100 hover:to-indigo-100'
+                }`}
+              >
+                <div>
+                  {/* Title with inline icon */}
+                  <h4 className={`font-bold flex items-center gap-2 ${isProfessionalIncomplete ? 'text-amber-900' : 'text-blue-900'}`}>
+                    <span className={`inline-flex p-1.5 rounded-lg ${isProfessionalIncomplete ? 'bg-amber-100' : 'bg-blue-100'}`}>
+                      <AlertCircle className={`w-4 h-4 ${isProfessionalIncomplete ? 'text-amber-600' : 'text-blue-600'}`} />
+                    </span>
+                    {isProfessionalIncomplete
+                      ? t('profile.listing.notListed')
+                      : t('profile.listing.incomplete')
+                    }
+                  </h4>
+
+                  <p className={`text-sm my-2 ${isProfessionalIncomplete ? 'text-amber-800' : 'text-blue-800'}`}>
+                    {isProfessionalIncomplete
+                      ? t('profile.listing.notListedMessage')
+                      : t('profile.listing.incompleteMessage')
+                    }
+                  </p>
+
+                  {/* Requirements checklist */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                    {professionalRequirements.map((req) => (
+                      <div
+                        key={req.key}
+                        className={`flex items-center gap-2 text-sm ${
+                          req.met ? 'text-green-700' : isProfessionalIncomplete ? 'text-amber-700' : 'text-blue-700'
+                        }`}
+                      >
+                        {req.met ? (
+                          <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                        ) : (
+                          <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                            isProfessionalIncomplete ? 'border-amber-400' : 'border-blue-400'
+                          }`} />
+                        )}
+                        <span className={req.met ? 'line-through opacity-60' : 'font-medium'}>
+                          {req.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Fix button at bottom */}
+                  <span className={`inline-flex items-center text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${
+                    isProfessionalIncomplete
+                      ? 'bg-amber-200 text-amber-800 group-hover:bg-amber-300'
+                      : 'bg-blue-200 text-blue-800 group-hover:bg-blue-300'
+                  }`}>
+                    {t('profile.listing.clickToFix')} →
+                  </span>
+                </div>
+              </button>
+            )}
+
           </div>
         </CardBody>
       </Card>

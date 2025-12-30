@@ -37,8 +37,9 @@ export interface ProfessionalListingStatus {
  *
  * Requirements (ALL REQUIRED for listing in search):
  * - Professional title (>= 3 chars)
- * - Description/Bio (>= 20 chars)
  * - Service categories (at least 1)
+ *
+ * Bio is optional - nice to have for profile quality but not required
  *
  * @example
  * const { isListed, isComplete, requirements } = useProfessionalListingStatus(profile)
@@ -55,17 +56,11 @@ export function useProfessionalListingStatus(
   return useMemo(() => {
     // Default requirements structure (used for both auth and non-auth users)
     // All fields are REQUIRED to appear in professional search results
+    // Bio is optional - not required for listing
     const defaultRequirements: ProfessionalRequirement[] = [
       {
         key: 'title',
         label: t('profile.listing.requirement.title'),
-        met: false,
-        required: true,
-        sectionId: 'professional-identity-section',
-      },
-      {
-        key: 'bio',
-        label: t('profile.listing.requirement.bio'),
         met: false,
         required: true,
         sectionId: 'professional-identity-section',
@@ -96,18 +91,12 @@ export function useProfessionalListingStatus(
     }
 
     // All fields are REQUIRED to appear in professional search results
+    // Bio is optional - not required for listing
     const requirements: ProfessionalRequirement[] = [
       {
         key: 'title',
         label: t('profile.listing.requirement.title'),
         met: !!(profile.professionalTitle && profile.professionalTitle.length >= 3),
-        required: true,
-        sectionId: 'professional-identity-section',
-      },
-      {
-        key: 'bio',
-        label: t('profile.listing.requirement.bio'),
-        met: !!(profile.bio && profile.bio.length >= 20),
         required: true,
         sectionId: 'professional-identity-section',
       },

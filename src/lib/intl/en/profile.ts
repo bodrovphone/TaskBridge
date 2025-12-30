@@ -186,6 +186,16 @@ export const profile = {
   'profile.professional.addServiceCategories': 'Add Your Service Categories',
   'profile.professional.categoriesHelp': 'Help customers find you! Select the services you offer to start receiving task requests.',
 
+  // Auto-suggested categories (based on professional title)
+  'profile.professional.suggestedCategories': 'We found matching categories!',
+  'profile.professional.suggestedCategoriesHelp': 'Based on your professional title, these categories might be a good fit:',
+  'profile.professional.acceptSuggestions': 'Use These Categories',
+  'profile.professional.chooseOther': 'Choose Different',
+  'profile.professional.categoriesAutoApplied': 'Categories added automatically',
+  'profile.professional.categoriesAutoAppliedDescription': 'We matched categories based on your title. You can change them anytime.',
+  'profile.professional.categoriesAutoAppliedCheck': 'Did we guess your categories correctly?',
+  'profile.professional.looksGood': 'Looks good',
+
   // Professional Profile Completion
   'profile.professional.incompleteTitle': 'Complete Your Professional Profile',
   'profile.professional.minimumRequired': 'Minimum required',
@@ -202,7 +212,7 @@ export const profile = {
   'profile.listing.requirement.bio': 'Short intro',
   'profile.listing.requirement.rate': 'Hourly rate',
   'profile.listing.requirement.skills': 'Your categories',
-  'profile.listing.clickToFix': 'Click to fix',
+  'profile.listing.clickToFix': 'Fix',
 
   // Telegram Connection
   'profile.telegram.clickToConnect': 'Click to connect',

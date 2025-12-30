@@ -333,13 +333,13 @@ export class User {
 
   /**
    * Check if user has a complete professional profile
-   * Requires: professional_title, bio (>= 20 chars), service_categories (>= 1)
+   * Requires: professional_title, service_categories (>= 1)
+   * Bio is optional - nice to have but not required for listing
    */
   hasProfessionalProfile(): boolean {
     const hasTitle = this.professionalTitle && this.professionalTitle.length >= 3
-    const hasBio = this.bio && this.bio.length >= 20
     const hasCategories = this.serviceCategories && this.serviceCategories.length > 0
-    return !!(hasTitle && hasBio && hasCategories)
+    return !!(hasTitle && hasCategories)
   }
 
   /**
