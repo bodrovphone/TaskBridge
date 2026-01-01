@@ -4,6 +4,7 @@ import { generateEmailVerificationToken } from '@/lib/auth/email-verification'
 import { getEmailVerificationContent, getLocaleFromRequest, type SupportedLocale } from '@/lib/email/verification-templates'
 import { AuthService } from '@/server/application/auth/auth.service'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
+import { notifyAdminNewUser } from '@/lib/services/admin-notifications'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // =============================================================================
@@ -50,7 +51,8 @@ async function handleSuccessfulRegistration(
   email: string,
   fullName: string,
   request: Request,
-  explicitLocale?: string
+  explicitLocale?: string,
+  registrationIntent?: 'professional' | 'customer' | null
 ) {
   // Priority: explicit locale from client > detected from request > default
   const detectedLocale = getLocaleFromRequest(request)
@@ -169,6 +171,13 @@ async function handleSuccessfulRegistration(
 
   console.log('[Auth/Unified] 🎉 REGISTRATION COMPLETE')
 
+  // Notify admin of new registration (non-blocking)
+  notifyAdminNewUser({
+    fullName: fullName || undefined,
+    provider: 'email',
+    intent: registrationIntent || undefined,
+  }).catch(() => {})
+
   return NextResponse.json({
     success: true,
     action: 'register',
@@ -244,12 +253,13 @@ async function handleSuccessfulRegistration(
  */
 export async function POST(request: Request) {
   try {
-    const { email, password, fullName, locale: explicitLocale } = await request.json()
+    const { email, password, fullName, locale: explicitLocale, registrationIntent } = await request.json()
 
     console.log('[Auth/Unified] Request received:', {
       email,
       hasPassword: !!password,
       hasFullName: !!fullName,
+      registrationIntent,
       fullNameLength: fullName?.length,
       explicitLocale,
     })
@@ -316,7 +326,7 @@ export async function POST(request: Request) {
         })
 
         // Continue to post-registration setup (locale, email verification)
-        return await handleSuccessfulRegistration(supabase, signUpData, email, fullName, request, explicitLocale)
+        return await handleSuccessfulRegistration(supabase, signUpData, email, fullName, request, explicitLocale, registrationIntent)
       }
 
       // SIGNUP FAILED: Check if it's because user already exists

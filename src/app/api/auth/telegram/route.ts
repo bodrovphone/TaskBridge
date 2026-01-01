@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { verifyTelegramAuth, formatTelegramUser } from '@/lib/auth/telegram';
 import { sendTemplatedNotification } from '@/lib/services/telegram-notification';
+import { notifyAdminNewUser } from '@/lib/services/admin-notifications';
 import type { TelegramUserData } from '@telegram-auth/server';
 
 export async function POST(request: NextRequest) {
@@ -116,6 +117,12 @@ export async function POST(request: NextRequest) {
       // Don't fail the registration if notification fails
       console.error('Failed to send welcome notification:', notifError);
     }
+
+    // Notify admin of new Telegram registration (non-blocking)
+    notifyAdminNewUser({
+      fullName: fullName || undefined,
+      provider: 'telegram',
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

@@ -10,6 +10,7 @@ import { isAppError } from '@/server/shared/errors'
 import type { CreateTaskInput } from '@/server/tasks/task.types'
 import { authenticateRequest } from '@/lib/auth/api-auth'
 import { batchCheckProfanity } from '@/lib/services/profanity-filter'
+import { notifyAdminNewTask } from '@/lib/services/admin-notifications'
 
 /**
  * POST /api/tasks
@@ -149,7 +150,18 @@ export async function POST(request: NextRequest) {
       console.warn('Failed to increment grace period counter:', error)
     }
 
-    // 7. Return success response
+    // 7. Notify admin of new task (non-blocking)
+    const createdTask = result.data?.task
+    if (createdTask) {
+      notifyAdminNewTask({
+        title: createdTask.title,
+        category: createdTask.category || createdTask.subcategory || 'Unknown',
+        city: createdTask.city,
+        customerName: authUser.user_metadata?.full_name,
+      }).catch(() => {})
+    }
+
+    // 8. Return success response
     return NextResponse.json(
       result.data,
       { status: 201 }

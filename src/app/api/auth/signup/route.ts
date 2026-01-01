@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { generateEmailVerificationToken } from '@/lib/auth/email-verification'
 import { getEmailVerificationContent, getLocaleFromRequest } from '@/lib/email/verification-templates'
+import { notifyAdminNewUser } from '@/lib/services/admin-notifications'
 
 export async function POST(request: Request) {
   try {
@@ -202,6 +203,12 @@ export async function POST(request: Request) {
     } catch (err) {
       console.error('[Auth] Failed to fetch user profile:', err)
     }
+
+    // Notify admin of new registration (non-blocking)
+    notifyAdminNewUser({
+      fullName: fullName || undefined,
+      provider: 'email',
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,

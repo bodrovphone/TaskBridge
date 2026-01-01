@@ -152,11 +152,13 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
 
   try {
    // Use current locale for API to set correct user preference
+   // Include registration intent if available
+   const registrationIntent = localStorage.getItem('trudify_registration_intent') as 'professional' | 'customer' | null;
 
    const response = await fetch('/api/auth/unified', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, fullName: fullName.trim(), locale: currentLocale }),
+    body: JSON.stringify({ email, password, fullName: fullName.trim(), locale: currentLocale, registrationIntent }),
    });
 
    const result = await response.json();

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { type NextRequest } from 'next/server'
 import { AuthService } from '@/server/application/auth/auth.service'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
+import { notifyAdminNewUser } from '@/lib/services/admin-notifications'
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
@@ -132,6 +133,15 @@ export async function GET(request: NextRequest) {
           console.error('[Auth Callback] Failed to create/sync profile:', result)
         } else {
           console.log('[Auth Callback] Profile created/synced for user:', data.user.id)
+
+          // Notify admin of new OAuth registration (non-blocking)
+          // Only notify for new users (result.value indicates if profile was created)
+          const provider = data.user.app_metadata?.provider || 'oauth'
+          notifyAdminNewUser({
+            fullName: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
+            provider: provider,
+            intent: registrationIntentCookie || undefined,
+          }).catch(() => {})
         }
       } catch (profileError) {
         console.error('[Auth Callback] Error creating/syncing profile:', profileError)
