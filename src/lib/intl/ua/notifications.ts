@@ -88,6 +88,7 @@ export const notifications = {
   'taskDetail.statusTypes.inProgress': 'У роботі',
   'taskDetail.statusTypes.done': 'Виконано',
   'taskDetail.statusTypes.archived': 'В архіві',
+  'taskDetail.statusTypes.cancelled': 'Скасовано',
   'taskDetail.appliedTooltip': 'Ви подали заявку на це завдання. Клієнт може прийняти або відхилити вашу заявку.',
   'taskDetail.inProgressBanner.title': 'Завдання більше недоступне',
   'taskDetail.inProgressBanner.message': 'Це завдання зараз виконується фахівцем і більше не приймає заявки.',

@@ -163,14 +163,15 @@ export async function DELETE(
       }
     }
 
-    // 5. Update task status to 'cancelled'
+    // 5. Update task status to 'cancelled' and clear images
     const now = new Date().toISOString()
     const { data: updatedTask, error: updateError } = await adminClient
       .from('tasks')
       .update({
         status: 'cancelled',
         cancelled_at: now,
-        updated_at: now
+        updated_at: now,
+        images: [] // Clear image URLs since files were deleted from storage
       })
       .eq('id', taskId)
       .select()

@@ -89,6 +89,7 @@ export const notifications = {
   'taskDetail.statusTypes.inProgress': 'В работе',
   'taskDetail.statusTypes.done': 'Выполнена',
   'taskDetail.statusTypes.archived': 'Архивирована',
+  'taskDetail.statusTypes.cancelled': 'Отменена',
   'taskDetail.appliedTooltip': 'Вы откликнулись на эту задачу. Клиент может принять или отклонить вашу заявку.',
   'taskDetail.inProgressBanner.title': 'Задача больше недоступна',
   'taskDetail.inProgressBanner.message': 'Эта задача в настоящее время выполняется специалистом и больше не принимает заявки.',

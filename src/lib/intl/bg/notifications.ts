@@ -89,6 +89,7 @@ export const notifications = {
   'taskDetail.statusTypes.inProgress': 'В изпълнение',
   'taskDetail.statusTypes.done': 'Завършена',
   'taskDetail.statusTypes.archived': 'Архивирана',
+  'taskDetail.statusTypes.cancelled': 'Отменена',
   'taskDetail.appliedTooltip': 'Вие сте кандидатствали за тази задача. Клиентът може да приеме или отхвърли вашата кандидатура.',
   'taskDetail.inProgressBanner.title': 'Задачата вече не е налична',
   'taskDetail.inProgressBanner.message': 'Тази задача в момента се управлява от специалист и повече не приема кандидатури.',

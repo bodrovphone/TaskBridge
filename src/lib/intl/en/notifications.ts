@@ -88,6 +88,7 @@ export const notifications = {
   'taskDetail.statusTypes.inProgress': 'In Progress',
   'taskDetail.statusTypes.done': 'Done',
   'taskDetail.statusTypes.archived': 'Archived',
+  'taskDetail.statusTypes.cancelled': 'Cancelled',
   'taskDetail.appliedTooltip': 'You have applied to this task. The client may accept or reject your application.',
   'taskDetail.inProgressBanner.title': 'Task No Longer Available',
   'taskDetail.inProgressBanner.message': 'This task is currently being managed by a professional and is no longer accepting applications.',
