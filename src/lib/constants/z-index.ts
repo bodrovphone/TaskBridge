@@ -64,11 +64,11 @@ export const Z_INDEX = {
   // Components that float above page content
   // ============================================
 
-  /** Main navigation bar */
-  NAVBAR: 50,
-
   /** Search card and search-related UI */
-  SEARCH_CARD: 50,
+  SEARCH_CARD: 40,
+
+  /** Main navigation bar - must be above search cards */
+  NAVBAR: 50,
 
   /** Tooltips and popovers */
   TOOLTIPS: 55,
