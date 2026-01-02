@@ -11,6 +11,7 @@ import type { CreateTaskInput } from '@/server/tasks/task.types'
 import { authenticateRequest } from '@/lib/auth/api-auth'
 import { batchCheckProfanity } from '@/lib/services/profanity-filter'
 import { notifyAdminNewTask } from '@/lib/services/admin-notifications'
+import { sendAutoInvitationsAsync } from '@/lib/services/auto-invite'
 
 /**
  * POST /api/tasks
@@ -159,9 +160,19 @@ export async function POST(request: NextRequest) {
         city: createdTask.city,
         customerName: authUser.user_metadata?.full_name,
       }).catch(() => {})
+
+      // 8. Auto-invite matching professionals (non-blocking, feature-flagged)
+      sendAutoInvitationsAsync({
+        taskId: createdTask.id,
+        taskTitle: createdTask.title,
+        category: createdTask.subcategory || createdTask.category,
+        city: createdTask.city,
+        customerId: authUser.id,
+        customerName: authUser.user_metadata?.full_name || 'A customer',
+      })
     }
 
-    // 8. Return success response
+    // 9. Return success response
     return NextResponse.json(
       result.data,
       { status: 201 }

@@ -954,6 +954,94 @@ tasks table:
 - ✅ Original content preserved for poster's language
 - ✅ Transparent to users - automatic background process
 
+### 3.9 Auto-Invite Matching Professionals
+
+**Status**: ✅ **IMPLEMENTED** - Feature-flagged, ready for production
+
+**Implementation Date:** January 1, 2026
+
+**Purpose:** Automatically invite matching professionals when a new task is created, increasing professional engagement and helping customers find help faster.
+
+#### How It Works
+
+**Trigger:** Immediately after a new task is created (fire-and-forget, non-blocking)
+
+**Matching Criteria:**
+1. **Is Professional:** Has `professional_title` (3+ chars) AND `service_categories` (not empty)
+2. **Category Match:** Task's `category` or `subcategory` is in professional's `service_categories` array
+3. **Location Match:** Task's `city` equals professional's `city` OR is in their `service_area_cities` array
+4. **Not Banned:** Professional's `is_banned` is false
+5. **Not Self:** Professional is not the task creator
+6. **Not Already Invited:** No existing `task_invitation` notification for this task
+
+**Notification Priority:**
+1. **In-app notification** - Always created for all matching professionals
+2. **Telegram** - If professional has `telegram_id` linked (with magic auto-login link)
+3. **Email** - If no Telegram but `is_email_verified` is true
+
+#### Feature Flag Configuration
+
+**Environment Variables:**
+```bash
+FEATURE_AUTO_INVITE_PROFESSIONALS=true   # Enable/disable feature
+FEATURE_AUTO_INVITE_MAX_PER_TASK=10      # Max professionals per task
+```
+
+**Behavior:**
+- Feature disabled by default (requires explicit opt-in)
+- Can be toggled instantly via environment variable
+- Max limit prevents notification spam (default: 10 per task)
+
+#### Technical Implementation
+
+**New Files:**
+- `/src/lib/config/feature-flags.ts` - Feature flag utilities
+- `/src/lib/services/professional-matching.ts` - Find matching professionals
+- `/src/lib/services/auto-invite.ts` - Send bulk invitations
+
+**Integration Point:**
+- `/src/app/api/tasks/route.ts` - Called after task creation (line 164-172)
+
+**Database:**
+- Uses existing `notifications` table with `type: 'task_invitation'`
+- Adds `metadata.autoInvite: true` to distinguish from manual invites
+- Duplicate prevention via existing notification uniqueness check
+
+**Performance:**
+- Fire-and-forget pattern (never blocks task creation response)
+- Parallel invitation sending for efficiency
+- Graceful error handling (individual failures don't affect others)
+- Uses GIN index on `service_categories` for efficient array matching
+
+#### Notification Content
+
+Uses the same `taskInvitation` template as manual customer invites:
+- **Telegram:** Localized message with task title, category, customer name, and magic link
+- **Email:** Full HTML template with task details and call-to-action button
+- **In-app:** Standard notification with action URL to task detail page
+
+#### Analytics Tracking
+
+Auto-invites are distinguishable from manual invites via metadata:
+```json
+{
+  "taskId": "uuid",
+  "customerId": "uuid",
+  "customerName": "John Doe",
+  "taskTitle": "Fix leaking faucet",
+  "taskCategory": "plumber",
+  "autoInvite": true  // ← Distinguishes from manual invites
+}
+```
+
+#### Future Enhancements (Post-MVP)
+
+- **Premium-Only:** Restrict auto-invite to premium customers
+- **Professional Opt-Out:** Add `receive_auto_invites` user preference
+- **Daily Rate Limit:** Limit auto-invites per professional per day
+- **Smart Ranking:** Prioritize by rating, response rate, availability
+- **Category Affinity:** Weight professionals by category specialization
+
 ## 4. Technical Requirements
 
 ### 4.1 Platform Architecture
@@ -1234,9 +1322,19 @@ General:
 
 -----
 
-**Document Version:** 2.8
-**Last Updated:** December 1, 2025
-**Next Review:** January 2026
+**Document Version:** 2.9
+**Last Updated:** January 1, 2026
+**Next Review:** February 2026
+
+**Major Changes in v2.9:**
+- ✅ **Auto-Invite Matching Professionals - FULLY IMPLEMENTED** (Section 3.9)
+  - **Automatic Matching:** Finds professionals by category + location when task created
+  - **Multi-Channel Notifications:** Telegram (priority) → Email (fallback) → In-app (always)
+  - **Feature Flagged:** `FEATURE_AUTO_INVITE_PROFESSIONALS` env var for easy toggle
+  - **Max Limit:** Configurable max invites per task (default: 10)
+  - **Non-Blocking:** Fire-and-forget pattern, never delays task creation
+  - **Analytics Ready:** `autoInvite: true` metadata distinguishes from manual invites
+  - **Files:** `feature-flags.ts`, `professional-matching.ts`, `auto-invite.ts`
 
 **Major Changes in v2.8:**
 - ✅ **Smart Category Search & Discovery System - FULLY IMPLEMENTED** (Section 3.7)
