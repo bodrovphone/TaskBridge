@@ -293,7 +293,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
       <div className="flex justify-center mb-6">
        <Logo size="xl" variant="gradient" className="hover:scale-110 transition-transform duration-300" />
       </div>
-      <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent tracking-tight">{t('landing.trustSection.title')}</h2>
+      <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent tracking-tight pb-2">{t('landing.trustSection.title')}</h2>
       <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-light">
        {t('landing.trustSection.subtitle')}
       </p>

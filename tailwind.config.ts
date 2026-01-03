@@ -19,7 +19,7 @@ export default {
       '2xl': '1536px',
     },
     fontFamily: {
-      sans: ['var(--font-montserrat)', 'system-ui', 'sans-serif'],
+      sans: ['"Plovdiv Display"', 'system-ui', 'sans-serif'],
     },
     extend: {
       borderRadius: {
