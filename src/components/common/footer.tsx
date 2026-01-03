@@ -198,7 +198,7 @@ function Footer() {
      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex items-center justify-center gap-2 text-slate-400 text-sm">
        <Heart className="h-4 w-4 text-red-400" />
-       <span>© 2025 Obod Soft LTD. All rights reserved.</span>
+       <span>© 2025 Trudify. All rights reserved.</span>
       </div>
      </div>
     </div>

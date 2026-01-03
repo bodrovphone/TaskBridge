@@ -10,12 +10,12 @@ export const legal = {
   'terms.effectiveDate': 'Effective from: December 20, 2025',
 
   // Company Info
-  'terms.company.name': '"Obod Soft" LTD',
-  'terms.company.nameEn': '"Obod Soft" LTD',
-  'terms.company.eik': 'Company ID (EIK): 207892162',
-  'terms.company.address': 'Burgas, Peyo Yavorov St. 1, 8000, Bulgaria',
+  'terms.company.name': 'Trudify',
+  'terms.company.nameEn': 'Trudify',
+  'terms.company.eik': '',
+  'terms.company.address': '',
   'terms.company.email': 'support@trudify.com',
-  'terms.company.vatNote': 'VAT ID: BG207892162',
+  'terms.company.vatNote': '',
 
   // Language notice for non-Bulgarian users
   'terms.languageNotice.title': 'Language Notice',
@@ -42,7 +42,7 @@ export const legal = {
   'terms.section1.content': `
     <p><strong>1.1.</strong> Trudify is an online platform connecting customers with professionals for various services. The platform allows users to post tasks and find qualified specialists to complete them.</p>
 
-    <p><strong>1.2.</strong> "Obod Soft" LTD, as the operator of Trudify, provides technical infrastructure for connecting customers and specialists. The operator is NOT a party to contracts concluded between users and is not responsible for disputes arising from such contracts.</p>
+    <p><strong>1.2.</strong> Trudify, as the operator of Trudify, provides technical infrastructure for connecting customers and specialists. The operator is NOT a party to contracts concluded between users and is not responsible for disputes arising from such contracts.</p>
 
     <p><strong>1.3.</strong> The platform is free to use. All transactions and payments are negotiated and made directly between customers and specialists, without Trudify's involvement.</p>
 
@@ -134,7 +134,7 @@ export const legal = {
   // Section 6: Intellectual Property
   'terms.section6.title': '6. Intellectual Property',
   'terms.section6.content': `
-    <p><strong>6.1.</strong> All intellectual property rights of the Trudify platform, including the logo, design, software, and content, belong to "Obod Soft" LTD.</p>
+    <p><strong>6.1.</strong> All intellectual property rights of the Trudify platform, including the logo, design, software, and content, belong to Trudify.</p>
 
     <p><strong>6.2.</strong> Transfer of intellectual property rights between customers and professionals is governed by their individual agreements. Trudify does not participate in these arrangements.</p>
 
@@ -169,7 +169,7 @@ export const legal = {
   // Section 8: Platform Liability
   'terms.section8.title': '8. Platform Liability',
   'terms.section8.content': `
-    <p><strong>8.1.</strong> "Obod Soft" LTD expressly disclaims all warranties - express or implied - regarding the quality of services provided through the platform.</p>
+    <p><strong>8.1.</strong> Trudify expressly disclaims all warranties - express or implied - regarding the quality of services provided through the platform.</p>
 
     <p><strong>8.2.</strong> Trudify is NOT responsible for:</p>
     <ul>
@@ -213,7 +213,7 @@ export const legal = {
   // Section 10: Indemnification
   'terms.section10.title': '10. Indemnification',
   'terms.section10.content': `
-    <p><strong>10.1.</strong> Users agree to defend and indemnify "Obod Soft" LTD, its employees, partners, and affiliates from all claims, damages, liabilities, and costs (including attorney fees) arising from:</p>
+    <p><strong>10.1.</strong> Users agree to defend and indemnify Trudify, its employees, partners, and affiliates from all claims, damages, liabilities, and costs (including attorney fees) arising from:</p>
     <ul>
       <li>User behavior on the platform</li>
       <li>Providing or receiving services</li>
@@ -252,7 +252,7 @@ export const legal = {
 
     <p><strong>12.2. Dispute Resolution:</strong> Disputes shall be resolved through negotiation. If no agreement is reached, the competent Bulgarian court in Burgas has jurisdiction.</p>
 
-    <p><strong>12.3. Changes to Terms:</strong> "Obod Soft" LTD reserves the right to modify these Terms of Service at any time. Changes take effect from the date of publication. Continued use of the platform after publication of changes constitutes acceptance of the new terms.</p>
+    <p><strong>12.3. Changes to Terms:</strong> Trudify reserves the right to modify these Terms of Service at any time. Changes take effect from the date of publication. Continued use of the platform after publication of changes constitutes acceptance of the new terms.</p>
 
     <p><strong>12.4. Notices:</strong> Official communications are sent via email to the user's registered address or through publication on the platform.</p>
 
@@ -271,7 +271,7 @@ export const legal = {
       <li><strong>Task:</strong> A service request posted by a customer</li>
       <li><strong>Application:</strong> A proposal from a professional to complete a task</li>
       <li><strong>Platform:</strong> The Trudify website and mobile applications</li>
-      <li><strong>Operator:</strong> "Obod Soft" LTD</li>
+      <li><strong>Operator:</strong> Trudify</li>
     </ul>
   `,
 
@@ -281,13 +281,12 @@ export const legal = {
     <p>For questions regarding these Terms of Service, please contact us:</p>
     <ul>
       <li><strong>Email:</strong> support@trudify.com</li>
-      <li><strong>Legal Entity:</strong> "Obod Soft" LTD</li>
-      <li><strong>Company ID:</strong> 207892162</li>
+      <li><strong>Platform:</strong> Trudify</li>
     </ul>
   `,
 
   // Footer
-  'terms.footer.copyright': '© 2025 "Obod Soft" LTD. All rights reserved.',
+  'terms.footer.copyright': '© 2025 Trudify. All rights reserved.',
   'terms.footer.acceptanceNote': 'By using Trudify, you accept these Terms of Service.',
 
   // ===========================================
@@ -321,7 +320,7 @@ export const legal = {
   // Section 1: Introduction
   'privacy.section1.title': '1. Introduction',
   'privacy.section1.content': `
-    <p><strong>1.1.</strong> Trudify is an online platform operated by "Obod Soft" LTD (Company ID: 207892162) that connects customers with professionals for various services in Bulgaria.</p>
+    <p><strong>1.1.</strong> Trudify is an online platform that connects customers with professionals for various services in Bulgaria.</p>
 
     <p><strong>1.2.</strong> This Privacy Policy explains how we collect, use, store, and protect your personal data in accordance with the General Data Protection Regulation (GDPR) and Bulgarian law.</p>
 
@@ -538,14 +537,13 @@ export const legal = {
     <p>For questions about this Privacy Policy or processing of your data:</p>
     <ul>
       <li><strong>Email:</strong> <a href="mailto:support@trudify.com">support@trudify.com</a></li>
-      <li><strong>Data Controller:</strong> "Obod Soft" LTD</li>
-      <li><strong>Company ID:</strong> 207892162</li>
+      <li><strong>Data Controller:</strong> Trudify</li>
     </ul>
 
     <p>We will respond to your inquiry within 30 days.</p>
   `,
 
   // Footer
-  'privacy.footer.copyright': '© 2025 "Obod Soft" LTD. All rights reserved.',
+  'privacy.footer.copyright': '© 2025 Trudify. All rights reserved.',
   'privacy.footer.termsLink': 'See also our <a href="/terms">Terms of Service</a>.',
 };

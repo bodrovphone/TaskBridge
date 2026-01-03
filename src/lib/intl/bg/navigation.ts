@@ -43,7 +43,7 @@ export const navigation = {
   'footer.contact.title': 'Контакти',
   'footer.contact.subtitle': 'Свържете се с нас',
   'footer.language.label': 'Език',
-  'footer.copyright': '© 2025 Obod Soft LTD. Всички права запазени.',
+  'footer.copyright': '© 2025 Trudify. Всички права запазени.',
 
   // Social
   'footer.social.followUs': 'Последвайте ни',
