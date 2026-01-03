@@ -10,7 +10,7 @@
  */
 export default function ProfessionalsSkeleton() {
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 min-h-[800px]">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 min-h-[600px]">
       {/* Search Section Skeleton - matches SearchFiltersSection */}
       <div className="mb-12 -mt-8 relative z-10">
         <div className="bg-white/95 shadow-2xl border-0 max-w-4xl mx-auto rounded-2xl overflow-visible">

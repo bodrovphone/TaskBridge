@@ -9,7 +9,6 @@
 'use client'
 
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useProfessionalFilters } from '../hooks/use-professional-filters';
 import SearchFiltersSection from './sections/search-filters-section';
@@ -25,7 +24,6 @@ interface ProfessionalsPageProps {
 }
 
 export default function ProfessionalsPage({ initialFeaturedProfessionals = [] }: ProfessionalsPageProps) {
-  const t = useTranslations();
   const params = useParams();
   const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
 
@@ -138,7 +136,9 @@ export default function ProfessionalsPage({ initialFeaturedProfessionals = [] }:
         }
       `}</style>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative">
+      {/* Hero is now server-rendered in page.tsx for instant LCP */}
+      {/* min-h-[600px] prevents CLS by reserving space even while professionals load */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative min-h-[600px]">
         {/* Cardboard background - positioned absolutely */}
         <div
           className="fixed inset-0 -z-10"
