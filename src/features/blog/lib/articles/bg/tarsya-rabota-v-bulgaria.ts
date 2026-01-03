@@ -19,7 +19,7 @@ export const tarsyaRabotaArticle: BlogArticle = {
   category: 'for-professionals',
   tags: ['търся работа', 'работа на час', 'допълнителна работа', 'работа без опит', 'работа студенти'],
   readingTime: 8,
-  coverImage: '/assets/bg-money.jpg',
+  coverImage: '/assets/bg-money.webp',
   relatedLinks: [
     { text: 'Разгледай задачи', href: '/bg/browse-tasks' },
     { text: 'Стани професионалист', href: '/bg/for-professionals' },
