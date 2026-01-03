@@ -11,7 +11,6 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { motion } from "framer-motion";
 import { useProfessionalFilters } from '../hooks/use-professional-filters';
 import SearchFiltersSection from './sections/search-filters-section';
 import ResultsSection from './sections/results-section';
@@ -138,95 +137,6 @@ export default function ProfessionalsPage({ initialFeaturedProfessionals = [] }:
           }
         }
       `}</style>
-
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6 sm:space-y-8"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-block"
-            >
-              <div className="bg-white/10 rounded-full px-4 sm:px-6 py-2 border border-white/20 mb-4 sm:mb-6">
-                <span className="text-sm sm:text-base text-blue-200 font-medium tracking-wide">✨ {t('professionals.hero.badge')}</span>
-              </div>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
-            >
-              {t('professionals.hero.title')}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-base sm:text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed font-light"
-            >
-              {t('professionals.hero.subtitle')}
-            </motion.p>
-
-            {/* Mobile: Compact inline trust indicators */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="sm:hidden flex flex-wrap justify-center gap-3 mt-6"
-            >
-              {[
-                { icon: '✅', valueKey: 'professionals.hero.stats.verified.value' },
-                { icon: '⭐', valueKey: 'professionals.hero.stats.ratings.value' },
-                { icon: '🚀', valueKey: 'professionals.hero.stats.jobs.value' }
-              ].map((item, index) => (
-                <span
-                  key={index}
-                  className="inline-flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1.5 text-sm text-white/90 border border-white/20"
-                >
-                  <span>{item.icon}</span>
-                  <span className="font-medium">{t(item.valueKey)}</span>
-                </span>
-              ))}
-            </motion.div>
-
-            {/* Desktop: Full trust indicator cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="hidden sm:grid sm:grid-cols-3 gap-4 mt-12 max-w-2xl mx-auto px-4"
-            >
-              {[
-                { icon: '✅', labelKey: 'professionals.hero.stats.verified.label', valueKey: 'professionals.hero.stats.verified.value' },
-                { icon: '⭐', labelKey: 'professionals.hero.stats.ratings.label', valueKey: 'professionals.hero.stats.ratings.value' },
-                { icon: '🚀', labelKey: 'professionals.hero.stats.jobs.label', valueKey: 'professionals.hero.stats.jobs.value' }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.9 + (index * 0.1) }}
-                  className="bg-white/10 rounded-xl px-4 py-4 border border-white/20 text-center"
-                >
-                  <div className="text-2xl mb-1">{item.icon}</div>
-                  <div className="text-lg font-bold text-white">{t(item.valueKey)}</div>
-                  <div className="text-sm text-blue-200">{t(item.labelKey)}</div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative">
         {/* Cardboard background - positioned absolutely */}

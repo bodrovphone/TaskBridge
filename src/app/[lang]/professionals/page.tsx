@@ -7,6 +7,8 @@ import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale } from '@/lib/constants/locales'
 import { professionalService } from '@/server/professionals/professional.service'
 import type { Professional } from '@/server/professionals/professional.types'
+import ProfessionalsSkeleton from './skeleton'
+import ProfessionalsHero from './hero'
 
 /**
  * ISR Configuration - Incremental Static Regeneration
@@ -106,14 +108,18 @@ export default async function ProfessionalsPageRoute({ params }: ProfessionalsPa
   const initialFeaturedProfessionals = await getFeaturedProfessionals(lang)
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* SEO content - crawlable by search engines */}
       <SEOProfessionalsContent professionals={initialFeaturedProfessionals} locale={lang} />
 
+      {/* Hero - SERVER RENDERED outside Suspense for instant LCP */}
+      <ProfessionalsHero locale={lang} />
+
       {/* Interactive client component - wrapped in Suspense for useSearchParams */}
-      <Suspense fallback={null}>
+      {/* IMPORTANT: Skeleton fallback prevents CLS (Cumulative Layout Shift) */}
+      <Suspense fallback={<ProfessionalsSkeleton />}>
         <ProfessionalsPage initialFeaturedProfessionals={initialFeaturedProfessionals} />
       </Suspense>
-    </>
+    </div>
   )
 }
