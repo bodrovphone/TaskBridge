@@ -4,7 +4,7 @@ import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { Button } from '@nextui-org/react'
-import { ArrowRight, Clock, Shield, MessageSquare, Star } from 'lucide-react'
+import { ArrowRight, Clock, Shield, MessageSquare, Star, FileText, Users, CheckCircle, Lock, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import {
   ContentPageHero,
@@ -153,14 +153,83 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
         </div>
       </ContentSection>
 
-      {/* How It Works */}
-      <ContentSection variant="gray">
+      {/* How It Works - 3 Steps */}
+      <ContentSection
+        title={t('forCustomers.howItWorks.title')}
+        subtitle={t('forCustomers.howItWorks.subtitle')}
+        variant="gray"
+      >
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
+              <FileText className="w-8 h-8 text-blue-600" />
+            </div>
+            <div className="text-sm font-medium text-blue-600 mb-2">1</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {t('forCustomers.howItWorks.step1.title')}
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {t('forCustomers.howItWorks.step1.description')}
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+              <Users className="w-8 h-8 text-green-600" />
+            </div>
+            <div className="text-sm font-medium text-green-600 mb-2">2</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {t('forCustomers.howItWorks.step2.title')}
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {t('forCustomers.howItWorks.step2.description')}
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 mb-4">
+              <CheckCircle className="w-8 h-8 text-amber-600" />
+            </div>
+            <div className="text-sm font-medium text-amber-600 mb-2">3</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {t('forCustomers.howItWorks.step3.title')}
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {t('forCustomers.howItWorks.step3.description')}
+            </p>
+          </div>
+        </div>
+      </ContentSection>
+
+      {/* Value Proposition */}
+      <ContentSection variant="default">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            {t('forCustomers.howItWorks.title')}
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            {t('forCustomers.valueProposition.title')}
           </h2>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            {t('forCustomers.howItWorks.description')}
+          <p className="text-lg text-gray-600 mb-8">
+            {t('forCustomers.valueProposition.description')}
+          </p>
+          <div className="inline-block bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6">
+            <p className="text-2xl font-bold text-green-700 mb-1">
+              {t('forCustomers.valueProposition.free')}
+            </p>
+            <p className="text-green-600">
+              {t('forCustomers.valueProposition.freeDesc')}
+            </p>
+          </div>
+        </div>
+      </ContentSection>
+
+      {/* Privacy */}
+      <ContentSection variant="gray">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-100 mb-4">
+            <Lock className="w-7 h-7 text-blue-600" />
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+            {t('forCustomers.privacy.title')}
+          </h2>
+          <p className="text-gray-600">
+            {t('forCustomers.privacy.description')}
           </p>
         </div>
       </ContentSection>
@@ -254,6 +323,28 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
       {/* Stats */}
       <ContentSection title={t('forCustomers.stats.title')} variant="default">
         <StatsSection stats={stats} />
+      </ContentSection>
+
+      {/* FAQ */}
+      <ContentSection title={t('forCustomers.faq.title')} variant="gray">
+        <div className="max-w-2xl mx-auto space-y-4">
+          {[1, 2, 3, 4].map((num) => (
+            <details
+              key={num}
+              className="group bg-white rounded-xl border border-gray-200 overflow-hidden"
+            >
+              <summary className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50">
+                <span className="font-medium text-gray-900">
+                  {t(`forCustomers.faq.q${num}`)}
+                </span>
+                <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" />
+              </summary>
+              <div className="px-4 pb-4 text-gray-600">
+                {t(`forCustomers.faq.a${num}`)}
+              </div>
+            </details>
+          ))}
+        </div>
       </ContentSection>
 
       {/* CTA */}

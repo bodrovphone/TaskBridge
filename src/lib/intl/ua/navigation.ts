@@ -32,6 +32,7 @@ export const navigation = {
   'footer.quickLinks.howItWorks': 'Як працює',
   'footer.quickLinks.categories': 'Категорії',
   'footer.quickLinks.forProfessionals': 'Для фахівців',
+  'footer.quickLinks.forCustomers': 'Для клієнтів',
   'footer.quickLinks.browseTasks': 'Переглянути завдання',
   'footer.quickLinks.createTask': 'Створити завдання',
   'footer.quickLinks.about': 'Про нас',

@@ -32,6 +32,7 @@ export const navigation = {
   'footer.quickLinks.howItWorks': 'How It Works',
   'footer.quickLinks.categories': 'Categories',
   'footer.quickLinks.forProfessionals': 'For Professionals',
+  'footer.quickLinks.forCustomers': 'For Customers',
   'footer.quickLinks.browseTasks': 'Browse Tasks',
   'footer.quickLinks.createTask': 'Create Task',
   'footer.quickLinks.about': 'About Us',

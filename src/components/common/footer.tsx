@@ -28,6 +28,7 @@ function Footer() {
   { name: t('footer.quickLinks.howItWorks'), href: "/#how-it-works" },
   { name: t('footer.quickLinks.categories'), href: categoriesHref },
   { name: t('footer.quickLinks.forProfessionals'), href: "/for-professionals" },
+  { name: t('footer.quickLinks.forCustomers'), href: "/for-customers" },
   { name: t('footer.quickLinks.browseTasks'), href: "/browse-tasks" },
   { name: t('footer.quickLinks.createTask'), href: "/create-task" },
   { name: t('footer.quickLinks.about'), href: "/about" },
