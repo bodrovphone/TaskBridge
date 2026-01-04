@@ -28,6 +28,7 @@ export type NotificationType =
   | 'task_completed'
   | 'task_cancelled'
   | 'task_status_changed'
+  | 'task_invitation'
   | 'message_received'
   | 'payment_received'
   | 'review_received'
@@ -74,6 +75,7 @@ const DEFAULT_ROUTING: Record<NotificationType, DeliveryChannel> = {
   // Important notifications (In-app only by default, user can enable Telegram)
   application_received: 'in_app',
   task_status_changed: 'in_app',
+  task_invitation: 'in_app', // Professional receives task invitation
   task_cancelled: 'in_app', // Not critical: professionals will see it when they check the app
   message_received: 'in_app',
   review_received: 'in_app',
@@ -163,7 +165,7 @@ export async function createNotification(
     }
 
     // Use localized content for supported types
-    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'task_cancelled', 'removed_by_customer']
+    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'task_cancelled', 'removed_by_customer', 'task_invitation']
     if (localizedTypes.includes(params.type) && (!title || !message)) {
       try {
         const typeMap = {
@@ -174,6 +176,7 @@ export async function createNotification(
           'task_completed': 'taskCompleted',
           'task_cancelled': 'taskCancelled',
           'removed_by_customer': 'removedByCustomer',
+          'task_invitation': 'taskInvitation',
         } as const
 
         const localizedType = typeMap[params.type as keyof typeof typeMap]

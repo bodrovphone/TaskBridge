@@ -45,6 +45,8 @@ export const notifications = {
   'notifications.content.removedByCustomer.message': 'Бяхте премахнат от задачата "{taskTitle}" от клиента.{customerFeedback}',
   'notifications.content.taskCancelled.title': 'Задачата е отменена',
   'notifications.content.taskCancelled.message': 'Задачата "{taskTitle}" беше отменена от клиента',
+  'notifications.content.taskInvitation.title': 'Ново покана за задача',
+  'notifications.content.taskInvitation.message': '{customerName} ви покани да кандидатствате за задачата "{taskTitle}"',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'Вижте тук',

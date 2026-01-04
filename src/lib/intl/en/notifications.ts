@@ -45,6 +45,8 @@ export const notifications = {
   'notifications.content.removedByCustomer.message': 'You were removed from task "{taskTitle}" by the customer.{customerFeedback}',
   'notifications.content.taskCancelled.title': 'Task Cancelled',
   'notifications.content.taskCancelled.message': 'The task "{taskTitle}" has been cancelled by the client',
+  'notifications.content.taskInvitation.title': 'New Task Invitation',
+  'notifications.content.taskInvitation.message': '{customerName} has invited you to apply for their task "{taskTitle}"',
 
   // Telegram notification templates
   'notifications.telegram.viewHere': 'View here',

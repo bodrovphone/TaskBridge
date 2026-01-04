@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import { sendTemplatedNotification } from '@/lib/services/telegram-notification'
 import { generateNotificationAutoLoginUrl } from '@/lib/auth/notification-auto-login'
+import { getNotificationContent } from '@/lib/utils/notification-i18n'
 import { NextRequest, NextResponse } from 'next/server'
 import { getCategoryLabelBySlug } from '@/features/categories'
 import { authenticateRequest } from '@/lib/auth/api-auth'
@@ -139,14 +140,21 @@ export async function POST(
     // For in-app notifications, use standard links (users are already authenticated)
     const finalActionUrl = `${baseUrl}${actionUrl}`
 
+    // Get localized notification content based on recipient's language preference
+    const locale = (userLocale === 'en' || userLocale === 'bg' || userLocale === 'ru' || userLocale === 'ua') ? userLocale : 'bg'
+    const { title, message } = getNotificationContent(locale, 'taskInvitation', {
+      customerName,
+      taskTitle: task.title,
+    })
+
     // Create in-app notification with standard link (use admin client)
     const { error: notificationError } = await adminClient
       .from('notifications')
       .insert({
         user_id: professionalId,
         type: 'task_invitation',
-        title: 'New Task Invitation',
-        message: `${customerName} has invited you to apply for their task`,
+        title,
+        message,
         metadata: {
           taskId: task.id,
           customerId: user.id,

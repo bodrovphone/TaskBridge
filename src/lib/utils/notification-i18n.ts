@@ -34,7 +34,7 @@ function interpolate(template: string, data: Record<string, any>): string {
  */
 export function getNotificationContent(
   locale: Locale,
-  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'applicationRejected' | 'taskCompleted' | 'taskCancelled' | 'professionalWithdrew' | 'removedByCustomer',
+  type: 'welcome' | 'applicationReceived' | 'applicationAccepted' | 'applicationRejected' | 'taskCompleted' | 'taskCancelled' | 'professionalWithdrew' | 'removedByCustomer' | 'taskInvitation',
   data?: Record<string, any>
 ): { title: string; message: string } {
   const lang = messages[locale] || messages.en;
