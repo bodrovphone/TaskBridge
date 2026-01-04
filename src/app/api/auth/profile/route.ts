@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     // 7. Return user profile or error
     try {
-      const user = result.unwrap()
+      const { user } = result.unwrap()
       return NextResponse.json(
         {
           user: user.toProfile(),

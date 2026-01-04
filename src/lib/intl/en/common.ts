@@ -35,6 +35,7 @@ export const common = {
   'common.success': 'Success',
   'common.gotIt': 'Got it',
   'common.days': 'days',
+  'common.minutes': 'minutes',
   'common.cancel': 'Cancel',
   'common.edit': 'Edit',
   'common.save': 'Save',

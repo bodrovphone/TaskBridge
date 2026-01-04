@@ -98,9 +98,9 @@ export const landing = {
   'landing.howItWorks.customers.step3.description':
     'Select the best professional and get your task done',
 
-  'landing.howItWorks.professionals.step1.title': 'Browse Tasks',
+  'landing.howItWorks.professionals.step1.title': 'Find Tasks',
   'landing.howItWorks.professionals.step1.description':
-    'Find tasks that match your skills and availability',
+    'Browse available tasks or get notified automatically when matching jobs appear in your city',
   'landing.howItWorks.professionals.step2.title': 'Submit Proposal',
   'landing.howItWorks.professionals.step2.description':
     'Send your best offer and showcase your expertise',

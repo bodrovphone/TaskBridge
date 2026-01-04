@@ -38,7 +38,7 @@ export class AuthService {
       locale?: 'en' | 'bg' | 'ru' | 'ua'
       isOAuthUser?: boolean // OAuth providers verify email, so auto-verify for these users
     }
-  ): Promise<Result<User, Error>> {
+  ): Promise<Result<{ user: User; isNewUser: boolean }, Error>> {
     try {
       // 1. Check if profile already exists
       const existingUser = await this.userRepository.findByAuthId(authUserId)
@@ -60,7 +60,7 @@ export class AuthService {
         // which URL locale they happened to be on when logging in.
 
         const updatedUser = await this.userRepository.update(existingUser)
-        return Result.ok(updatedUser)
+        return Result.ok({ user: updatedUser, isNewUser: false })
       }
 
       // 2. Profile doesn't exist - create it
@@ -72,11 +72,11 @@ export class AuthService {
         preferredLanguage: metadata?.locale || 'bg', // Use route locale or default to Bulgarian
       }
 
-      const createResult: Result<User, Error> = await this.createUserProfileUseCase.execute(dto)
+      const createResult = await this.createUserProfileUseCase.execute(dto)
 
       // Early return on error
       if (createResult.isError()) {
-        return createResult
+        return Result.error(createResult.error!)
       }
 
       // 3. Extract created user and update avatar if provided
@@ -99,13 +99,13 @@ export class AuthService {
         // Send welcome notification (in-app only for now)
         await this.sendWelcomeNotification(updatedUser.id, updatedUser.fullName || undefined)
 
-        return Result.ok(updatedUser)
+        return Result.ok({ user: updatedUser, isNewUser: true })
       }
 
       // Send welcome notification (in-app only for now)
       await this.sendWelcomeNotification(createdUser.id, createdUser.fullName || undefined)
 
-      return Result.ok(createdUser)
+      return Result.ok({ user: createdUser, isNewUser: true })
     } catch (error) {
       return Result.error(error as Error)
     }

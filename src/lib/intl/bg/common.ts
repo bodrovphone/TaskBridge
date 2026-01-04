@@ -35,6 +35,7 @@ export const common = {
   'common.success': 'Успех',
   'common.gotIt': 'Разбрах',
   'common.days': 'дни',
+  'common.minutes': 'минути',
   'common.cancel': 'Отказ',
   'common.edit': 'Редактирай',
   'common.save': 'Запази',

@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
-import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import { Logo } from "@/components/common/logo";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useTranslations } from 'next-intl';
@@ -54,8 +53,13 @@ import {
  Wallet,
  Plus,
  ArrowRight,
- Heart
+ Heart,
+ FileText,
+ Users,
+ CheckCircle,
+ Search
 } from "lucide-react";
+import { HowItWorksSection } from '@/components/content';
 
 // Popular categories to display on landing page (ordered by expected demand in Bulgaria)
 const POPULAR_CATEGORY_SLUGS = [
@@ -181,41 +185,6 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
   },
  ];
 
- const customerSteps = [
-  {
-   step: "1",
-   title: t('landing.howItWorks.customers.step1.title'),
-   description: t('landing.howItWorks.customers.step1.description')
-  },
-  {
-   step: "2", 
-   title: t('landing.howItWorks.customers.step2.title'),
-   description: t('landing.howItWorks.customers.step2.description')
-  },
-  {
-   step: "3",
-   title: t('landing.howItWorks.customers.step3.title'), 
-   description: t('landing.howItWorks.customers.step3.description')
-  },
- ];
-
- const professionalSteps = [
-  {
-   step: "1",
-   title: t('landing.howItWorks.professionals.step1.title'),
-   description: t('landing.howItWorks.professionals.step1.description')
-  },
-  {
-   step: "2",
-   title: t('landing.howItWorks.professionals.step2.title'), 
-   description: t('landing.howItWorks.professionals.step2.description')
-  },
-  {
-   step: "3",
-   title: t('landing.howItWorks.professionals.step3.title'),
-   description: t('landing.howItWorks.professionals.step3.description')
-  },
- ];
 
  const handleCategoryClick = (category: string) => {
   router.push(`/${currentLocale}/browse-tasks?category=${category}`);
@@ -401,71 +370,57 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
    </section>
 
    {/* How It Works */}
-   <section id="how-it-works" className="py-24 relative overflow-hidden">
-    {/* Cardboard background with subtle overlay */}
-    <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-slate-50/70 "></div>
-    {/* Background decoration */}
-    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full opacity-30 blur-3xl"></div>
-    
-    {/* Reusable animated elements in different section */}
-    <SpinningGeometric
-     className="absolute top-20 right-12"
-     size="sm"
-     opacity={0.15}
-     colors={{
-      primary: 'from-orange-400 to-red-500',
-      secondary: 'from-red-400 to-pink-400'
-     }}
-    />
-    <WobblingGeometric
-     className="absolute bottom-20 left-12"
-     size="sm"
-     opacity={0.15}
-     colors={{
-      primary: 'from-green-400 to-emerald-500',
-      accent: 'bg-yellow-300'
-     }}
-    />
-    
+   <section id="how-it-works" className="py-24 relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-     <div className="text-center space-y-6 mb-20">
-      <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full text-blue-700 text-sm font-semibold">
+     <div className="text-center space-y-6 mb-16">
+      <div className="inline-flex items-center px-4 py-2 bg-white/10 border border-white/20 rounded-full text-blue-300 text-sm font-semibold">
        <ArrowRight className="mr-2 h-4 w-4" />
        {t('landing.howItWorks.badge')}
       </div>
-      <h2 className="text-4xl lg:text-6xl font-bold text-slate-900 tracking-tight">{t('landing.howItWorks.title')}</h2>
-      <p className="text-xl lg:text-2xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
+      <h2 className="text-4xl lg:text-6xl font-bold text-white tracking-tight">{t('landing.howItWorks.title')}</h2>
+      <p className="text-xl lg:text-2xl text-slate-400 max-w-4xl mx-auto font-light leading-relaxed">
        {t('landing.howItWorks.subtitle')}
       </p>
      </div>
 
      {/* For Customers */}
-     <div className="mb-24">
-      <div className="text-center mb-16">
-       <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t('landing.howItWorks.forCustomers')}</h3>
-       <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full"></div>
+     <div className="mb-20">
+      <div className="text-center mb-10">
+       <h3 className="text-2xl lg:text-3xl font-bold text-white mb-3">{t('landing.howItWorks.forCustomers')}</h3>
+       <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-emerald-500 mx-auto rounded-full"></div>
       </div>
-      <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-       {customerSteps.map((step, index) => (
-        <div key={step.step} className="group text-center hover:transform hover:scale-105 transition-all duration-300">
-         <div className="relative mb-8">
-          {/* Connection line */}
-          {index < customerSteps.length - 1 && (
-           <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-blue-300 to-indigo-300 z-0"></div>
-          )}
-          <div className="relative w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto shadow-xl group-hover:shadow-2xl transition-shadow duration-300 transform rotate-3 group-hover:rotate-0">
-           <span className="text-2xl font-bold text-white">{step.step}</span>
-          </div>
-         </div>
-         <h4 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">{step.title}</h4>
-         <p className="text-slate-600 leading-relaxed text-lg">{step.description}</p>
-        </div>
-       ))}
-      </div>
-      <div className="mt-10 text-center">
+      <HowItWorksSection
+       compact
+       colorPreset="customers"
+       steps={[
+        {
+         number: '01',
+         title: t('landing.howItWorks.customers.step1.title'),
+         description: t('landing.howItWorks.customers.step1.description'),
+         badge: t('forCustomers.howItWorks.step1.badge'),
+         icon: FileText,
+        },
+        {
+         number: '02',
+         title: t('landing.howItWorks.customers.step2.title'),
+         description: t('landing.howItWorks.customers.step2.description'),
+         badge: t('forCustomers.howItWorks.step2.badge'),
+         icon: Users,
+        },
+        {
+         number: '03',
+         title: t('landing.howItWorks.customers.step3.title'),
+         description: t('landing.howItWorks.customers.step3.description'),
+         badge: t('forCustomers.howItWorks.step3.badge'),
+         icon: CheckCircle,
+        },
+       ]}
+      />
+      <div className="mt-8 text-center">
        <LocaleLink
         href="/for-customers#video-guides"
-        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
+        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl"
        >
         {t('landing.howItWorks.customersLearnMore')}
         <ArrowRight className="ml-2 h-5 w-5" />
@@ -475,31 +430,41 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
 
      {/* For Professionals */}
      <div>
-      <div className="text-center mb-16">
-       <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{t('landing.howItWorks.forProfessionals')}</h3>
-       <div className="w-24 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full"></div>
+      <div className="text-center mb-10">
+       <h3 className="text-2xl lg:text-3xl font-bold text-white mb-3">{t('landing.howItWorks.forProfessionals')}</h3>
+       <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-amber-500 mx-auto rounded-full"></div>
       </div>
-      <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-       {professionalSteps.map((step, index) => (
-        <div key={step.step} className="group text-center hover:transform hover:scale-105 transition-all duration-300">
-         <div className="relative mb-8">
-          {/* Connection line */}
-          {index < professionalSteps.length - 1 && (
-           <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-emerald-300 to-teal-300 z-0"></div>
-          )}
-          <div className="relative w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto shadow-xl group-hover:shadow-2xl transition-shadow duration-300 transform -rotate-3 group-hover:rotate-0">
-           <span className="text-2xl font-bold text-white">{step.step}</span>
-          </div>
-         </div>
-         <h4 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-emerald-600 transition-colors duration-300">{step.title}</h4>
-         <p className="text-slate-600 leading-relaxed text-lg">{step.description}</p>
-        </div>
-       ))}
-      </div>
-      <div className="mt-10 text-center">
+      <HowItWorksSection
+       compact
+       colorPreset="professionals"
+       steps={[
+        {
+         number: '01',
+         title: t('landing.howItWorks.professionals.step1.title'),
+         description: t('landing.howItWorks.professionals.step1.description'),
+         badge: `2 ${t('common.minutes')}`,
+         icon: FileText,
+        },
+        {
+         number: '02',
+         title: t('landing.howItWorks.professionals.step2.title'),
+         description: t('landing.howItWorks.professionals.step2.description'),
+         badge: t('forProfessionals.howItWorks.step2.badge'),
+         icon: Bell,
+        },
+        {
+         number: '03',
+         title: t('landing.howItWorks.professionals.step3.title'),
+         description: t('landing.howItWorks.professionals.step3.description'),
+         badge: t('forProfessionals.howItWorks.step3.badge'),
+         icon: Search,
+        },
+       ]}
+      />
+      <div className="mt-8 text-center">
        <LocaleLink
         href="/for-professionals#video-guides"
-        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl"
+        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-amber-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-amber-600 transition-all shadow-lg hover:shadow-xl"
        >
         {t('landing.howItWorks.professionalsLearnMore')}
         <ArrowRight className="ml-2 h-5 w-5" />

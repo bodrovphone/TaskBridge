@@ -11,6 +11,7 @@ import {
   ContentSection,
   StatsSection,
   CTASection,
+  HowItWorksSection,
 } from '@/components/content'
 import { BreadcrumbJsonLd, VideoListJsonLd } from '@/components/seo/json-ld'
 
@@ -60,8 +61,8 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
   ]
 
   const stats = [
-    { value: '500+', label: t('about.stats.professionals') },
-    { value: '1,000+', label: t('about.stats.tasks') },
+    { value: '10+', label: t('forProfessionals.stats.activeTasks') },
+    { value: '10+', label: t('forProfessionals.stats.completedTasks') },
     { value: '8', label: t('about.stats.cities') },
     { value: '98%', label: t('about.stats.satisfaction') },
   ]
@@ -154,50 +155,34 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
       </ContentSection>
 
       {/* How It Works - 3 Steps */}
-      <ContentSection
+      <HowItWorksSection
         title={t('forCustomers.howItWorks.title')}
         subtitle={t('forCustomers.howItWorks.subtitle')}
-        variant="gray"
-      >
-        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
-              <FileText className="w-8 h-8 text-blue-600" />
-            </div>
-            <div className="text-sm font-medium text-blue-600 mb-2">1</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {t('forCustomers.howItWorks.step1.title')}
-            </h3>
-            <p className="text-gray-600 text-sm">
-              {t('forCustomers.howItWorks.step1.description')}
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
-              <Users className="w-8 h-8 text-green-600" />
-            </div>
-            <div className="text-sm font-medium text-green-600 mb-2">2</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {t('forCustomers.howItWorks.step2.title')}
-            </h3>
-            <p className="text-gray-600 text-sm">
-              {t('forCustomers.howItWorks.step2.description')}
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 mb-4">
-              <CheckCircle className="w-8 h-8 text-amber-600" />
-            </div>
-            <div className="text-sm font-medium text-amber-600 mb-2">3</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {t('forCustomers.howItWorks.step3.title')}
-            </h3>
-            <p className="text-gray-600 text-sm">
-              {t('forCustomers.howItWorks.step3.description')}
-            </p>
-          </div>
-        </div>
-      </ContentSection>
+        colorPreset="customers"
+        steps={[
+          {
+            number: '01',
+            title: t('forCustomers.howItWorks.step1.title'),
+            description: t('forCustomers.howItWorks.step1.description'),
+            badge: t('forCustomers.howItWorks.step1.badge'),
+            icon: FileText,
+          },
+          {
+            number: '02',
+            title: t('forCustomers.howItWorks.step2.title'),
+            description: t('forCustomers.howItWorks.step2.description'),
+            badge: t('forCustomers.howItWorks.step2.badge'),
+            icon: Users,
+          },
+          {
+            number: '03',
+            title: t('forCustomers.howItWorks.step3.title'),
+            description: t('forCustomers.howItWorks.step3.description'),
+            badge: t('forCustomers.howItWorks.step3.badge'),
+            icon: CheckCircle,
+          },
+        ]}
+      />
 
       {/* Value Proposition */}
       <ContentSection variant="default">

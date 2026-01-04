@@ -99,9 +99,9 @@ export const landing = {
   'landing.howItWorks.customers.step3.description':
     'Выберите лучшего специалиста и выполните вашу задачу',
 
-  'landing.howItWorks.professionals.step1.title': 'Просматривайте задачи',
+  'landing.howItWorks.professionals.step1.title': 'Найдите задачи',
   'landing.howItWorks.professionals.step1.description':
-    'Найдите задачи, соответствующие вашим навыкам и доступности',
+    'Просматривайте задачи или получайте автоматические уведомления о новых заказах в вашем городе',
   'landing.howItWorks.professionals.step2.title': 'Отправьте предложение',
   'landing.howItWorks.professionals.step2.description':
     'Отправьте лучшее предложение и покажите свою экспертизу',

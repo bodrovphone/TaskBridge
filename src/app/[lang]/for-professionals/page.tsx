@@ -4,13 +4,14 @@ import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { Button } from '@nextui-org/react'
-import { ArrowRight, DollarSign, Users, Star, Smartphone } from 'lucide-react'
+import { ArrowRight, DollarSign, Users, Star, Smartphone, FileText, ChevronDown, Bell, Search, Wallet } from 'lucide-react'
 import Link from 'next/link'
 import {
   ContentPageHero,
   ContentSection,
   StatsSection,
   CTASection,
+  HowItWorksSection,
 } from '@/components/content'
 import { BreadcrumbJsonLd, VideoListJsonLd } from '@/components/seo/json-ld'
 
@@ -60,10 +61,9 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
   ]
 
   const stats = [
-    { value: '500+', label: t('about.stats.professionals') },
-    { value: '1,000+', label: t('about.stats.tasks') },
+    { value: '10+', label: t('forProfessionals.stats.activeTasks') },
+    { value: '10+', label: t('forProfessionals.stats.completedTasks') },
     { value: '8', label: t('about.stats.cities') },
-    { value: '98%', label: t('about.stats.satisfaction') },
   ]
 
   return (
@@ -135,15 +135,60 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
         </div>
       </ContentSection>
 
+      {/* How It Works - 4 Steps */}
+      <HowItWorksSection
+        title={t('forProfessionals.howItWorks.title')}
+        subtitle={t('forProfessionals.howItWorks.subtitle')}
+        colorPreset="professionals"
+        steps={[
+          {
+            number: '01',
+            title: t('forProfessionals.howItWorks.step1.title'),
+            description: t('forProfessionals.howItWorks.step1.description'),
+            badge: `2 ${t('common.minutes')}`,
+            icon: FileText,
+          },
+          {
+            number: '02',
+            title: t('forProfessionals.howItWorks.step2.title'),
+            description: t('forProfessionals.howItWorks.step2.description'),
+            badge: t('forProfessionals.howItWorks.step2.badge'),
+            icon: Bell,
+          },
+          {
+            number: '03',
+            title: t('forProfessionals.howItWorks.step3.title'),
+            description: t('forProfessionals.howItWorks.step3.description'),
+            badge: t('forProfessionals.howItWorks.step3.badge'),
+            icon: Search,
+          },
+          {
+            number: '04',
+            title: t('forProfessionals.howItWorks.step4.title'),
+            description: t('forProfessionals.howItWorks.step4.description'),
+            badge: t('forProfessionals.howItWorks.step4.badge'),
+            icon: Wallet,
+          },
+        ]}
+      />
+
       {/* How Earnings Work */}
-      <ContentSection variant="gray">
+      <ContentSection variant="default">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             {t('forProfessionals.howEarnings.title')}
           </h2>
-          <p className="text-lg text-gray-600 leading-relaxed">
+          <p className="text-lg text-gray-600 mb-8">
             {t('forProfessionals.howEarnings.description')}
           </p>
+          <div className="inline-block bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6">
+            <p className="text-2xl font-bold text-green-700 mb-1">
+              {t('forProfessionals.howEarnings.free')}
+            </p>
+            <p className="text-green-600">
+              {t('forProfessionals.howEarnings.freeDesc')}
+            </p>
+          </div>
         </div>
       </ContentSection>
 
@@ -192,6 +237,28 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
               {t('forProfessionals.videoGuides.video2.description')}
             </p>
           </div>
+        </div>
+      </ContentSection>
+
+      {/* FAQ */}
+      <ContentSection title={t('forProfessionals.faq.title')} variant="gray">
+        <div className="max-w-2xl mx-auto space-y-4">
+          {[1, 2, 3, 4].map((num) => (
+            <details
+              key={num}
+              className="group bg-white rounded-xl border border-gray-200 overflow-hidden"
+            >
+              <summary className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50">
+                <span className="font-medium text-gray-900">
+                  {t(`forProfessionals.faq.q${num}`)}
+                </span>
+                <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" />
+              </summary>
+              <div className="px-4 pb-4 text-gray-600">
+                {t(`forProfessionals.faq.a${num}`)}
+              </div>
+            </details>
+          ))}
         </div>
       </ContentSection>
 

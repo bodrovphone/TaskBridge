@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
                             providers?.includes('google') ||
                             providers?.includes('facebook')
 
-        // Create or sync profile
+        // Create or sync profile - returns whether user is new
         const result = await authService.createOrSyncUserProfile(
           data.user.id,
           data.user.email!,
@@ -129,19 +129,22 @@ export async function GET(request: NextRequest) {
           }
         )
 
-        if (result.isError()) {
-          console.error('[Auth Callback] Failed to create/sync profile:', result)
-        } else {
-          console.log('[Auth Callback] Profile created/synced for user:', data.user.id)
+        try {
+          const { isNewUser } = result.unwrap()
+          console.log('[Auth Callback] Profile created/synced for user:', data.user.id, '| New registration:', isNewUser)
 
           // Notify admin of new OAuth registration (non-blocking)
-          // Only notify for new users (result.value indicates if profile was created)
-          const provider = data.user.app_metadata?.provider || 'oauth'
-          notifyAdminNewUser({
-            fullName: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
-            provider: provider,
-            intent: registrationIntentCookie || undefined,
-          }).catch(() => {})
+          // Only notify for NEW users, not existing user logins
+          if (isNewUser) {
+            const authProvider = data.user.app_metadata?.provider || 'oauth'
+            notifyAdminNewUser({
+              fullName: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
+              provider: authProvider,
+              intent: registrationIntentCookie || undefined,
+            }).catch(() => {})
+          }
+        } catch (unwrapError) {
+          console.error('[Auth Callback] Failed to create/sync profile:', unwrapError)
         }
       } catch (profileError) {
         console.error('[Auth Callback] Error creating/syncing profile:', profileError)
