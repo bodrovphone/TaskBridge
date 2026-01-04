@@ -310,11 +310,12 @@ export class TaskRepository {
       // Use admin client for static generation (no cookies dependency)
       const supabase = createAdminClient()
 
-      // Fetch more tasks than we need for diversity selection
+      // @todo TEMPORARY: Remove 'cancelled' from status filter once we have more real tasks
+      // Fetch all recent tasks including cancelled for diversity selection
       const { data: tasks, error } = await supabase
         .from('tasks')
         .select('*')
-        .eq('status', 'open')
+        .in('status', ['open', 'in_progress', 'completed', 'cancelled'])
         .order('created_at', { ascending: false })
         .limit(50) // Fetch 50 to ensure category diversity
 

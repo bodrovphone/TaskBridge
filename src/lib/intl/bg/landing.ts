@@ -55,7 +55,7 @@ export const landing = {
   'landing.categories.education': 'Образование и обучение',
   'landing.categories.creative': 'Творчески услуги',
 
-  'landing.featured.title': 'Препоръчани задачи',
+  'landing.featured.title': 'Последни задачи',
   'landing.featured.subtitle': 'Последни задачи публикувани от общността',
   'landing.featured.badge': 'Последни възможности',
   'landing.featured.viewAll': 'Вижте всички задачи',

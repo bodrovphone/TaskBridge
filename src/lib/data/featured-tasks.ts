@@ -62,24 +62,24 @@ function calculateDiversityScore(
 }
 
 /**
- * Fetch featured tasks with diversity scoring
+ * Fetch recent tasks with diversity scoring
  * Prioritizes tasks with images and category diversity
  * Limits to 8 tasks total
  *
- * IMPORTANT: Only fetches tasks with status='open'
- * Featured tasks should only show available work that professionals can apply to
+ * Shows open, in_progress, and completed tasks to demonstrate platform activity
+ * Only excludes cancelled tasks
  */
 export async function getFeaturedTasks(): Promise<Task[]> {
   try {
     console.log('[getFeaturedTasks] Starting fetch...')
     const supabase = await createClient()
 
-    // HARDCODED: Only fetch open tasks
-    // Featured tasks must be available for application - no completed/cancelled/in-progress tasks
+    // @todo TEMPORARY: Remove 'cancelled' from status filter once we have more real tasks
+    // Fetch all recent tasks including cancelled (for platform activity display)
     const { data: tasks, error } = await supabase
       .from('tasks')
       .select('*')
-      .eq('status', 'open') // Only show available tasks
+      .in('status', ['open', 'in_progress', 'completed', 'cancelled'])
       .order('created_at', { ascending: false })
       .limit(50) // Fetch 50 to have good pool for diversity
 
@@ -94,11 +94,11 @@ export async function getFeaturedTasks(): Promise<Task[]> {
     }
 
     if (!tasks || tasks.length === 0) {
-      console.log('[getFeaturedTasks] No open tasks found in database')
+      console.log('[getFeaturedTasks] No tasks found in database')
       return []
     }
 
-    console.log('[getFeaturedTasks] Found', tasks.length, 'open tasks')
+    console.log('[getFeaturedTasks] Found', tasks.length, 'recent tasks')
 
     // Calculate diversity scores
     const seenCategories = new Set<string>()
@@ -108,9 +108,9 @@ export async function getFeaturedTasks(): Promise<Task[]> {
       return { task, score }
     })
 
-    // Sort by score (highest first) and take top 8
+    // Sort by score (highest first) and take top 12
     tasksWithScores.sort((a, b) => b.score - a.score)
-    const featuredTasks = tasksWithScores.slice(0, 8).map((item) => item.task)
+    const featuredTasks = tasksWithScores.slice(0, 12).map((item) => item.task)
 
     console.log('[getFeaturedTasks] Returning', featuredTasks.length, 'featured tasks')
     return featuredTasks

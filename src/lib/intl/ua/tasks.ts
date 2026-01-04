@@ -105,9 +105,9 @@ export const tasks = {
   'browseTasks.results.suggestedTasks': 'Популярні завдання, які можуть вас зацікавити',
   'browseTasks.results.suggestedDescription':
     'Ось популярні завдання від нашої спільноти',
-  'browseTasks.results.featuredTasks': 'Рекомендовані завдання',
+  'browseTasks.results.featuredTasks': 'Нещодавні завдання',
   'browseTasks.results.featuredDescription':
-    'Перегляньте популярні завдання від нашої спільноти',
+    'Перегляньте останні завдання від нашої спільноти',
   'browseTasks.results.error.title': 'Ой! Наші сервери взяли перерву на каву ☕',
   'browseTasks.results.error.description':
     'Здається, наші хом\'яки перестали бігати. Не хвилюйтесь, ми даємо їм еспресо!',

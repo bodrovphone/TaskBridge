@@ -55,10 +55,10 @@ export const landing = {
   'landing.categories.education': 'Образование и обучение',
   'landing.categories.creative': 'Творческие услуги',
 
-  'landing.featured.title': 'Рекомендуемые задачи',
+  'landing.featured.title': 'Недавние задачи',
   'landing.featured.subtitle':
     'Последние задачи, опубликованные нашим сообществом',
-  'landing.featured.badge': 'Избранные задачи',
+  'landing.featured.badge': 'Новые возможности',
   'landing.featured.viewAll': 'Посмотреть все задачи',
   'landing.featured.professionalDesc': 'Найдите свою следующую возможность',
   'landing.featured.customerDesc': 'Посмотрите, что публикуют другие',

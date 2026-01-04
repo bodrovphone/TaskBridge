@@ -54,8 +54,8 @@ export const landing = {
   'landing.categories.education': 'Education & Training',
   'landing.categories.creative': 'Creative Services',
 
-  'landing.featured.title': 'Featured Tasks',
-  'landing.featured.subtitle': 'Recent tasks posted by our community',
+  'landing.featured.title': 'Recent Tasks',
+  'landing.featured.subtitle': 'Latest tasks posted by our community',
   'landing.featured.badge': 'Latest Opportunities',
   'landing.featured.viewAll': 'View All Tasks',
   'landing.featured.professionalDesc': 'Find your next opportunity',

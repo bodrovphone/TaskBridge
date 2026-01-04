@@ -106,9 +106,9 @@ export const tasks = {
     'Популярные задачи, которые могут вам понравиться',
   'browseTasks.results.suggestedDescription':
     'Вот некоторые популярные задачи из нашего сообщества',
-  'browseTasks.results.featuredTasks': 'Рекомендуемые задачи',
+  'browseTasks.results.featuredTasks': 'Недавние задачи',
   'browseTasks.results.featuredDescription':
-    'Посмотрите эти популярные задачи из нашего сообщества',
+    'Посмотрите недавние задачи из нашего сообщества',
   'browseTasks.results.error.title': 'Упс! Наши серверы ушли на кофе-брейк ☕',
   'browseTasks.results.error.description':
     'Похоже, хомяки перестали бегать в колесе. Не волнуйтесь, мы угощаем их эспрессо!',

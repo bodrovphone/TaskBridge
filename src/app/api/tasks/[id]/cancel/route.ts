@@ -126,44 +126,47 @@ export async function DELETE(
       // Don't fail the request if notifications deletion fails
     }
 
+    // @todo UX: Keep task images for now to show in Recent Tasks section
+    // Uncomment this block when we want to clean up images on cancellation
     // 4. Delete task images from Supabase storage
-    if (task.images && Array.isArray(task.images) && task.images.length > 0) {
-      try {
-        // Extract file paths from image URLs
-        // Images are stored in Supabase storage with URLs like:
-        // https://[project].supabase.co/storage/v1/object/public/task-images/[path]
-        const imagePaths = task.images
-          .filter((url: string) => url && typeof url === 'string')
-          .map((url: string) => {
-            // Extract the path after '/task-images/'
-            const match = url.match(/\/task-images\/(.+)$/)
-            return match ? match[1] : null
-          })
-          .filter((path): path is string => path !== null)
+    // if (task.images && Array.isArray(task.images) && task.images.length > 0) {
+    //   try {
+    //     // Extract file paths from image URLs
+    //     // Images are stored in Supabase storage with URLs like:
+    //     // https://[project].supabase.co/storage/v1/object/public/task-images/[path]
+    //     const imagePaths = task.images
+    //       .filter((url: string) => url && typeof url === 'string')
+    //       .map((url: string) => {
+    //         // Extract the path after '/task-images/'
+    //         const match = url.match(/\/task-images\/(.+)$/)
+    //         return match ? match[1] : null
+    //       })
+    //       .filter((path): path is string => path !== null)
 
-        if (imagePaths.length > 0) {
-          const { error: storageError } = await adminClient
-            .storage
-            .from('task-images')
-            .remove(imagePaths)
+    //     if (imagePaths.length > 0) {
+    //       const { error: storageError } = await adminClient
+    //         .storage
+    //         .from('task-images')
+    //         .remove(imagePaths)
 
-          if (storageError) {
-            console.warn('[Tasks] Failed to delete images from storage:', storageError)
-            // Don't fail the request if image deletion fails
-          } else {
-            console.log('[Tasks] Deleted task images:', {
-              taskId: task.id,
-              imageCount: imagePaths.length
-            })
-          }
-        }
-      } catch (imageError) {
-        console.warn('[Tasks] Error deleting task images:', imageError)
-        // Don't fail the request if image deletion fails
-      }
-    }
+    //       if (storageError) {
+    //         console.warn('[Tasks] Failed to delete images from storage:', storageError)
+    //         // Don't fail the request if image deletion fails
+    //       } else {
+    //         console.log('[Tasks] Deleted task images:', {
+    //           taskId: task.id,
+    //           imageCount: imagePaths.length
+    //         })
+    //       }
+    //     }
+    //   } catch (imageError) {
+    //     console.warn('[Tasks] Error deleting task images:', imageError)
+    //     // Don't fail the request if image deletion fails
+    //   }
+    // }
 
-    // 5. Update task status to 'cancelled' and clear images
+    // 5. Update task status to 'cancelled'
+    // @todo UX: Keep images for display in Recent Tasks section
     const now = new Date().toISOString()
     const { data: updatedTask, error: updateError } = await adminClient
       .from('tasks')
@@ -171,7 +174,7 @@ export async function DELETE(
         status: 'cancelled',
         cancelled_at: now,
         updated_at: now,
-        images: [] // Clear image URLs since files were deleted from storage
+        // images: [] // Commented out - keeping images for UX
       })
       .eq('id', taskId)
       .select()
@@ -227,7 +230,7 @@ export async function DELETE(
       taskTitle: task.title,
       cancelledBy: user.id,
       applicationsDeleted: applications?.length || 0,
-      imagesDeleted: task.images?.length || 0,
+      imagesKept: task.images?.length || 0, // Images preserved for UX
       notificationsSent: professionalIds.length
     })
 

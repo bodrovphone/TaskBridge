@@ -54,8 +54,8 @@ export const landing = {
   'landing.categories.education': 'Освіта та навчання',
   'landing.categories.creative': 'Творчі послуги',
 
-  'landing.featured.title': 'Рекомендовані завдання',
-  'landing.featured.subtitle': 'Нещодавні завдання від нашої спільноти',
+  'landing.featured.title': 'Нещодавні завдання',
+  'landing.featured.subtitle': 'Останні завдання від нашої спільноти',
   'landing.featured.badge': 'Нові можливості',
   'landing.featured.viewAll': 'Усі завдання',
   'landing.featured.professionalDesc': 'Знайдіть свою наступну можливість',

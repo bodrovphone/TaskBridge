@@ -105,9 +105,9 @@ export const tasks = {
   'browseTasks.results.suggestedTasks': 'Popular Tasks You Might Like',
   'browseTasks.results.suggestedDescription':
     'Here are some popular tasks from our community',
-  'browseTasks.results.featuredTasks': 'Featured Tasks',
+  'browseTasks.results.featuredTasks': 'Recent Tasks',
   'browseTasks.results.featuredDescription':
-    'Check out these popular tasks from our community',
+    'Check out recent tasks from our community',
   'browseTasks.results.error.title': 'Oops! Our servers took a coffee break ☕',
   'browseTasks.results.error.description':
     'Looks like our hamsters stopped running on their wheels. Don\'t worry, we\'re giving them espresso shots!',
