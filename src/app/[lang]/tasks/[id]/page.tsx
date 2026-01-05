@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import TaskDetailContent from "./components/task-detail-content";
 import type { TaskDetailResponse } from "@/server/tasks/task.query-types";
-import type { PaginatedTasksResponse } from "@/server/tasks/task.query-types";
 
 /**
  * ISR Configuration - Incremental Static Regeneration
@@ -30,43 +29,58 @@ interface TaskDetailPageProps {
 }
 
 /**
- * Get the base URL for API calls (used for similar tasks fetch)
- */
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  if (process.env.NEXT_PUBLIC_BASE_URL) {
-    return process.env.NEXT_PUBLIC_BASE_URL;
-  }
-  return 'http://localhost:3000';
-}
-
-/**
  * Fetch similar tasks based on category
- * Uses the browse tasks API with category filter
+ * Uses direct Supabase query (more efficient than HTTP fetch, avoids auth issues)
  */
 async function fetchSimilarTasks(category: string, excludeId: string, limit: number = 3) {
  try {
-  const baseUrl = getBaseUrl();
-  const response = await fetch(
-   `${baseUrl}/api/tasks?category=${category}&limit=${limit + 1}&status=open`,
-   {
-    next: { revalidate: 3600 }, // Cache for 1 hour
-   }
-  );
+  const { createAdminClient } = await import('@/lib/supabase/server');
+  const supabase = createAdminClient();
 
-  if (!response.ok) {
-   console.warn('Failed to fetch similar tasks:', response.statusText);
+  const { data: tasks, error } = await supabase
+   .from('tasks')
+   .select(`
+    id,
+    title,
+    description,
+    category,
+    subcategory,
+    city,
+    budget_type,
+    budget_min,
+    budget_max,
+    urgency,
+    status,
+    photo_urls,
+    created_at
+   `)
+   .eq('status', 'open')
+   .eq('category', category)
+   .neq('id', excludeId)
+   .order('created_at', { ascending: false })
+   .limit(limit);
+
+  if (error) {
+   console.warn('Failed to fetch similar tasks:', error.message);
    return [];
   }
 
-  const data: PaginatedTasksResponse = await response.json();
-
-  // Filter out current task and limit results
-  return data.tasks
-   .filter((task: any) => task.id !== excludeId)
-   .slice(0, limit);
+  // Map to expected format
+  return (tasks || []).map(task => ({
+   id: task.id,
+   title: task.title,
+   description: task.description,
+   category: task.category,
+   subcategory: task.subcategory,
+   city: task.city,
+   budgetType: task.budget_type,
+   budgetMin: task.budget_min,
+   budgetMax: task.budget_max,
+   urgency: task.urgency,
+   status: task.status,
+   photoUrls: task.photo_urls,
+   createdAt: task.created_at,
+  }));
  } catch (error) {
   console.error('Error fetching similar tasks:', error);
   return [];

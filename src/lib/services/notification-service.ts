@@ -165,7 +165,7 @@ export async function createNotification(
     }
 
     // Use localized content for supported types
-    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'task_cancelled', 'removed_by_customer', 'task_invitation']
+    const localizedTypes = ['welcome_message', 'application_received', 'application_accepted', 'application_rejected', 'task_completed', 'task_cancelled', 'removed_by_customer', 'task_invitation', 'professional_withdrew']
     if (localizedTypes.includes(params.type) && (!title || !message)) {
       try {
         const typeMap = {
@@ -177,6 +177,7 @@ export async function createNotification(
           'task_cancelled': 'taskCancelled',
           'removed_by_customer': 'removedByCustomer',
           'task_invitation': 'taskInvitation',
+          'professional_withdrew': 'professionalWithdrew',
         } as const
 
         const localizedType = typeMap[params.type as keyof typeof typeMap]
