@@ -34,6 +34,7 @@ function Footer() {
   { name: t('footer.quickLinks.about'), href: "/about" },
   { name: t('footer.quickLinks.faq'), href: "/faq" },
   { name: t('footer.quickLinks.testimonials'), href: "/testimonials" },
+  { name: t('footer.quickLinks.blog'), href: "/blog" },
  ];
 
  const legalLinks = [

@@ -130,11 +130,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back link */}
           <Link
-            href={`/${locale}`}
+            href={`/${locale}/blog`}
             className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
-            {t('common.goBack')}
+            {t('blog.backToBlog')}
           </Link>
 
           {/* Meta */}

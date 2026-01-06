@@ -38,6 +38,7 @@ export const navigation = {
   'footer.quickLinks.about': 'About Us',
   'footer.quickLinks.faq': 'FAQ',
   'footer.quickLinks.testimonials': 'Testimonials',
+  'footer.quickLinks.blog': 'Blog',
   'footer.legal.title': 'Legal',
   'footer.legal.terms': 'Terms of Service',
   'footer.legal.privacy': 'Privacy',

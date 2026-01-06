@@ -38,6 +38,7 @@ export const navigation = {
   'footer.quickLinks.about': 'Про нас',
   'footer.quickLinks.faq': 'Часті питання',
   'footer.quickLinks.testimonials': 'Відгуки',
+  'footer.quickLinks.blog': 'Блог',
   'footer.legal.title': 'Правові',
   'footer.legal.terms': 'Умови користування',
   'footer.legal.privacy': 'Політика конфіденційності',

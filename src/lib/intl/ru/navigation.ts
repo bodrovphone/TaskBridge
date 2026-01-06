@@ -38,6 +38,7 @@ export const navigation = {
   'footer.quickLinks.about': 'О нас',
   'footer.quickLinks.faq': 'Частые вопросы',
   'footer.quickLinks.testimonials': 'Отзывы',
+  'footer.quickLinks.blog': 'Блог',
   'footer.legal.title': 'Правовые',
   'footer.legal.terms': 'Условия обслуживания',
   'footer.legal.privacy': 'Конфиденциальность',
