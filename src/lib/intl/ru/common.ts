@@ -252,4 +252,17 @@ export const common = {
   'common.unsavedChanges.description': 'У вас есть несохранённые изменения. Вы уверены, что хотите уйти? Ваши изменения будут потеряны.',
   'common.unsavedChanges.stay': 'Остаться',
   'common.unsavedChanges.leave': 'Уйти',
+
+  // Live Activity Feed
+  'common.locale': 'ru',
+  'activityFeed.lookingFor': 'ищет',
+  'activityFeed.completed': 'завершил',
+  'activityFeed.receivedOffers': 'получил {count} предложений',
+  'activityFeed.tasks.cleaning': 'Уборка',
+  'activityFeed.tasks.furniture': 'Сборка мебели',
+  'activityFeed.tasks.moving': 'Переезд',
+  'activityFeed.tasks.repair': 'Ремонт техники',
+  'activityFeed.tasks.dogWalking': 'Выгул собаки',
+  'activityFeed.tasks.delivery': 'Доставка',
+  'activityFeed.tasks.assembly': 'Сборка',
 };

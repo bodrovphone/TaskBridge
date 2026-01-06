@@ -251,4 +251,17 @@ export const common = {
   'common.unsavedChanges.description': 'У вас є незбережені зміни. Ви впевнені, що хочете піти? Ваші зміни будуть втрачені.',
   'common.unsavedChanges.stay': 'Залишитись',
   'common.unsavedChanges.leave': 'Піти',
+
+  // Live Activity Feed
+  'common.locale': 'ua',
+  'activityFeed.lookingFor': 'шукає',
+  'activityFeed.completed': 'завершив',
+  'activityFeed.receivedOffers': 'отримав {count} пропозицій',
+  'activityFeed.tasks.cleaning': 'Прибирання',
+  'activityFeed.tasks.furniture': 'Збірка меблів',
+  'activityFeed.tasks.moving': 'Переїзд',
+  'activityFeed.tasks.repair': 'Ремонт техніки',
+  'activityFeed.tasks.dogWalking': 'Вигул собаки',
+  'activityFeed.tasks.delivery': 'Доставка',
+  'activityFeed.tasks.assembly': 'Збірка',
 };

@@ -251,4 +251,17 @@ export const common = {
   'common.unsavedChanges.description': 'Имате незапазени промени. Сигурни ли сте, че искате да напуснете? Промените ви ще бъдат загубени.',
   'common.unsavedChanges.stay': 'Остани',
   'common.unsavedChanges.leave': 'Напусни',
+
+  // Live Activity Feed
+  'common.locale': 'bg',
+  'activityFeed.lookingFor': 'търси',
+  'activityFeed.completed': 'завърши',
+  'activityFeed.receivedOffers': 'получи {count} оферти',
+  'activityFeed.tasks.cleaning': 'Почистване',
+  'activityFeed.tasks.furniture': 'Монтаж мебели',
+  'activityFeed.tasks.moving': 'Преместване',
+  'activityFeed.tasks.repair': 'Ремонт уред',
+  'activityFeed.tasks.dogWalking': 'Разходка куче',
+  'activityFeed.tasks.delivery': 'Доставка',
+  'activityFeed.tasks.assembly': 'Сглобяване',
 };

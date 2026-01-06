@@ -5,6 +5,7 @@ import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
 import AuthSlideOver from "@/components/ui/auth-slide-over";
 import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
+import LiveActivityFeed from "@/components/ui/live-activity-feed";
 import { useTranslations } from 'next-intl';
 import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
@@ -16,7 +17,8 @@ import {
  CheckCircle,
  SquarePen,
  Search,
- Gift
+ Gift,
+ HelpCircle
 } from "lucide-react";
 
 export default function HeroSection() {
@@ -99,13 +101,22 @@ export default function HeroSection() {
    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-8 lg:gap-16 items-center">
      {/* Text Content - Order 1 on mobile, Order 1 on desktop */}
-     <div className="space-y-10 order-1">
-      <div className="space-y-6">
+     <div className="space-y-6 lg:space-y-10 order-1">
+      <div className="space-y-4 lg:space-y-6">
        <div className="flex flex-wrap gap-2">
         <div className="inline-flex items-center px-4 py-2 bg-white/70 border border-blue-200 rounded-full text-blue-700 text-sm font-medium shadow-lg">
          <Shield className="mr-2 h-4 w-4" />
          {t('landing.hero.badge')}
         </div>
+        <button
+         onClick={() => {
+          document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+         }}
+         className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 rounded-full text-emerald-700 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group cursor-pointer"
+        >
+         <HelpCircle className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
+         {t('landing.hero.howItWorksBadge')}
+        </button>
         <LocaleLink
          href="/giveaway"
          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-full text-amber-700 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
@@ -117,13 +128,17 @@ export default function HeroSection() {
        <h1 className="font-bold text-slate-900 leading-[1.1] tracking-tight text-[2.5rem]">
         {t('landing.hero.title')}
        </h1>
-       <p className="text-xl lg:text-2xl text-slate-600 leading-relaxed font-light">
+       {/* Subtitle - Hidden on mobile, shown on desktop */}
+       <p className="hidden lg:block text-xl lg:text-2xl text-slate-600 leading-relaxed font-light">
         {t('landing.hero.subtitle')}
        </p>
       </div>
 
-      {/* CTA Buttons - Hidden on mobile, shown on desktop */}
-      <div className="hidden lg:flex flex-col sm:flex-row gap-4">
+      {/* Live Activity Feed - Social proof */}
+      <LiveActivityFeed />
+
+      {/* CTA Buttons - Shown on both mobile and desktop */}
+      <div className="flex flex-col sm:flex-row gap-4">
        <Button
         size="lg"
         className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
@@ -221,33 +236,15 @@ export default function HeroSection() {
       </div>
      </div>
 
-     {/* Mobile Only: CTA Buttons + Trust Indicators after image - Order 3 */}
+     {/* Mobile Only: Subtitle + Trust Indicators after image - Order 3 */}
      <div className="lg:hidden space-y-6 order-3">
-      {/* CTA Buttons */}
-      <div className="flex flex-col gap-4">
-       <Button
-        size="lg"
-        className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
-        onClick={handleCreateTask}
-       >
-        <SquarePen className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
-        {t('landing.hero.getStarted')}
-       </Button>
-       <Button
-        variant="outline"
-        size="lg"
-        className="group border-2 border-slate-300 text-slate-700 bg-white/70 hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold w-full"
-        asChild
-       >
-        <LocaleLink href="/browse-tasks" onClick={setProfessionalIntent}>
-         <Search className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
-         {t('landing.hero.browseServices')}
-        </LocaleLink>
-       </Button>
-      </div>
+      {/* Subtitle - Mobile only */}
+      <p className="text-lg text-slate-600 leading-relaxed font-light">
+       {t('landing.hero.subtitle')}
+      </p>
 
       {/* Trust Indicators */}
-      <div className="grid grid-cols-1 gap-4 pt-4">
+      <div className="grid grid-cols-1 gap-4">
        <div className="flex items-start space-x-3 p-4 bg-white/60 rounded-xl border border-slate-200 hover:bg-white/80 hover:shadow-lg transition-all duration-300">
         <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
          <Shield className="text-white h-5 w-5" />

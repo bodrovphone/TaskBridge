@@ -7,6 +7,7 @@ export const landing = {
   'landing.hero.getStarted': 'create a task',
   'landing.hero.browseServices': 'Find Work',
   'landing.hero.giveawayBadge': 'Win Prizes!',
+  'landing.hero.howItWorksBadge': 'How it works?',
 
   'landing.trustIndicators.verified': 'Verified Profiles',
   'landing.trustIndicators.verifiedDescription':

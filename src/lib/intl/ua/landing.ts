@@ -7,6 +7,7 @@ export const landing = {
   'landing.hero.getStarted': 'Шукаю спеціаліста',
   'landing.hero.browseServices': 'Шукаю роботу',
   'landing.hero.giveawayBadge': 'Виграй призи!',
+  'landing.hero.howItWorksBadge': 'Як це працює?',
 
   'landing.trustIndicators.verified': 'Верифіковані профілі',
   'landing.trustIndicators.verifiedDescription':

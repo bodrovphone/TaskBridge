@@ -251,4 +251,17 @@ export const common = {
   'common.unsavedChanges.description': 'You have unsaved changes. Are you sure you want to leave? Your changes will be lost.',
   'common.unsavedChanges.stay': 'Stay',
   'common.unsavedChanges.leave': 'Leave',
+
+  // Live Activity Feed
+  'common.locale': 'en',
+  'activityFeed.lookingFor': 'looking for',
+  'activityFeed.completed': 'completed',
+  'activityFeed.receivedOffers': 'received {count} offers',
+  'activityFeed.tasks.cleaning': 'Cleaning',
+  'activityFeed.tasks.furniture': 'Furniture assembly',
+  'activityFeed.tasks.moving': 'Moving',
+  'activityFeed.tasks.repair': 'Appliance repair',
+  'activityFeed.tasks.dogWalking': 'Dog walking',
+  'activityFeed.tasks.delivery': 'Delivery',
+  'activityFeed.tasks.assembly': 'Assembly',
 };
