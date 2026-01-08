@@ -18,23 +18,21 @@ function PortfolioGalleryComponent({ gallery }: PortfolioGalleryProps) {
 
   // Memoize sorted gallery to prevent recalculation on every render
   const sortedGallery = useMemo(() =>
-    [...gallery].sort((a, b) => a.order - b.order),
+    gallery && gallery.length > 0 ? [...gallery].sort((a, b) => a.order - b.order) : [],
     [gallery]
   )
 
-  if (!gallery || gallery.length === 0) {
-    return null // Don't show section if no gallery items
-  }
-
-  const currentItem = sortedGallery[currentImageIndex]
-
-  // Memoize navigation callbacks
+  // Memoize navigation callbacks - must be called before any early returns
   const nextImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev + 1) % sortedGallery.length)
+    if (sortedGallery.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % sortedGallery.length)
+    }
   }, [sortedGallery.length])
 
   const previousImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev - 1 + sortedGallery.length) % sortedGallery.length)
+    if (sortedGallery.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + sortedGallery.length) % sortedGallery.length)
+    }
   }, [sortedGallery.length])
 
   const openModal = useCallback(() => {
@@ -44,6 +42,13 @@ function PortfolioGalleryComponent({ gallery }: PortfolioGalleryProps) {
   const closeModal = useCallback(() => {
     setIsModalOpen(false)
   }, [])
+
+  // Early return after all hooks are called
+  if (!gallery || gallery.length === 0) {
+    return null // Don't show section if no gallery items
+  }
+
+  const currentItem = sortedGallery[currentImageIndex]
 
   return (
     <>
