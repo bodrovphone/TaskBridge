@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create application
+    // Note: message column has NOT NULL constraint in DB, so we use empty string as default
     const { data: application, error: createError } = await supabase
       .from('applications')
       .insert({
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
         professional_id: user.id,
         proposed_price_bgn: proposedPrice,
         estimated_duration_hours: estimatedDurationHours || null,
-        message: message || null, // Optional field - normalize empty string to null
+        message: message || '', // Use empty string - DB has NOT NULL constraint
         availability_date: availabilityDate || null,
         status: 'pending'
       })

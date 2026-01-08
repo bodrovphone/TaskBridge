@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import ProfessionalHeader from '@/features/professionals/components/sections/professional-header';
 import ActionButtonsRow from '@/features/professionals/components/sections/action-buttons-row';
 import ServicesSection from '@/features/professionals/components/sections/services-section';
@@ -24,19 +23,35 @@ interface ProfessionalDetailPageContentProps {
   lang: string;
 }
 
+// Consolidated UI state to reduce re-renders
+interface UIState {
+  isShareCopied: boolean;
+  showAuthSlideOver: boolean;
+  showTaskSelectionModal: boolean;
+  isLoadingTasks: boolean;
+  isSendingInvitation: boolean;
+}
+
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
   const t = useTranslations();
-  const router = useRouter();
   // Use lang prop from server component (or fallback to params)
   const currentLocale = lang || 'bg';
   const { user, authenticatedFetch } = useAuth();
-  const [isShareCopied, setIsShareCopied] = useState(false);
-  const [showAuthSlideOver, setShowAuthSlideOver] = useState(false);
-  const [showTaskSelectionModal, setShowTaskSelectionModal] = useState(false);
+
+  // Consolidated UI state - single setState for related UI changes
+  const [uiState, setUIState] = useState<UIState>({
+    isShareCopied: false,
+    showAuthSlideOver: false,
+    showTaskSelectionModal: false,
+    isLoadingTasks: false,
+    isSendingInvitation: false,
+  });
+
   const [userTasks, setUserTasks] = useState<any[]>([]);
-  const [isLoadingTasks, setIsLoadingTasks] = useState(false);
-  const [isSendingInvitation, setIsSendingInvitation] = useState(false);
   const [hasInvitedThisSession, setHasInvitedThisSession] = useState(false);
+
+  // Ref for timeout cleanup
+  const shareTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     handleCreateTask,
@@ -51,15 +66,28 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
   useEffect(() => {
     const invitedProfessionals = sessionStorage.getItem('invitedProfessionals');
     if (invitedProfessionals) {
-      const invitedIds = JSON.parse(invitedProfessionals);
-      if (invitedIds.includes(professional.id)) {
-        setHasInvitedThisSession(true);
+      try {
+        const invitedIds = JSON.parse(invitedProfessionals);
+        if (invitedIds.includes(professional.id)) {
+          setHasInvitedThisSession(true);
+        }
+      } catch {
+        // Invalid JSON in sessionStorage, ignore
       }
     }
   }, [professional.id]);
 
-  // Transform API data to match component expectations
-  const transformedProfessional = {
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (shareTimeoutRef.current) {
+        clearTimeout(shareTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Memoize transformed professional to prevent child re-renders
+  const transformedProfessional = useMemo(() => ({
     id: professional.id,
     name: professional.fullName || professional.name,
     // Use professional_title as title, fallback to first service category or default
@@ -103,9 +131,34 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     topProfessionalTasksCount: professional.topProfessionalTasksCount || professional.top_professional_tasks_count || 0,
     isEarlyAdopter: professional.isEarlyAdopter || professional.is_early_adopter || false,
     earlyAdopterCategories: professional.earlyAdopterCategories || professional.early_adopter_categories || []
-  };
+  }), [professional, currentLocale, t]);
 
-  const handleShareClick = async () => {
+  // Memoized clipboard copy with proper timeout cleanup
+  const copyToClipboard = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setUIState(prev => ({ ...prev, isShareCopied: true }));
+      toast({ title: t('professionalDetail.linkCopied') });
+
+      // Clear existing timeout if any
+      if (shareTimeoutRef.current) {
+        clearTimeout(shareTimeoutRef.current);
+      }
+
+      // Reset icon after 2 seconds with cleanup ref
+      shareTimeoutRef.current = setTimeout(() => {
+        setUIState(prev => ({ ...prev, isShareCopied: false }));
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+      toast({
+        title: t('professionalDetail.copyError'),
+        variant: 'destructive',
+      });
+    }
+  }, [t]);
+
+  const handleShareClick = useCallback(async () => {
     const professionalUrl = `${window.location.origin}/${lang}/professionals/${professional.id}`;
     const shareData = {
       title: transformedProfessional.name,
@@ -118,9 +171,9 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       try {
         await navigator.share(shareData);
         toast({ title: t('professionalDetail.shareSuccess') });
-      } catch (error: any) {
+      } catch (error: unknown) {
         // User cancelled or error occurred
-        if (error.name !== 'AbortError') {
+        if (error instanceof Error && error.name !== 'AbortError') {
           console.error('Error sharing:', error);
           // Fallback to clipboard
           await copyToClipboard(professionalUrl);
@@ -130,32 +183,13 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       // Fallback: Copy to clipboard
       await copyToClipboard(professionalUrl);
     }
-  };
+  }, [lang, professional.id, transformedProfessional.name, t, copyToClipboard]);
 
-  const copyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setIsShareCopied(true);
-      toast({ title: t('professionalDetail.linkCopied') });
-
-      // Reset icon after 2 seconds
-      setTimeout(() => {
-        setIsShareCopied(false);
-      }, 2000);
-    } catch (error) {
-      console.error('Failed to copy:', error);
-      toast({
-        title: t('professionalDetail.copyError'),
-        variant: 'destructive',
-      });
-    }
-  };
-
-  // Fetch user's open tasks via API
-  const fetchUserTasks = async (): Promise<{ tasks: any[]; error: string | null }> => {
+  // Fetch user's open tasks via API - memoized
+  const fetchUserTasks = useCallback(async (): Promise<{ tasks: any[]; error: string | null }> => {
     if (!user) return { tasks: [], error: null };
 
-    setIsLoadingTasks(true);
+    setUIState(prev => ({ ...prev, isLoadingTasks: true }));
     try {
       const response = await authenticatedFetch('/api/tasks?mode=posted&status=open', {
         credentials: 'include'
@@ -172,12 +206,12 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       console.error('Error fetching tasks:', error);
       return { tasks: [], error: 'Network error. Please try again.' };
     } finally {
-      setIsLoadingTasks(false);
+      setUIState(prev => ({ ...prev, isLoadingTasks: false }));
     }
-  };
+  }, [user, authenticatedFetch]);
 
-  // Handle invite button click - Implements all three branches
-  const handleInviteClick = async () => {
+  // Handle invite button click - Implements all three branches - memoized
+  const handleInviteClick = useCallback(async () => {
     // Check if user is trying to invite themselves (viewing own profile)
     if (user && user.id === professional.id) {
       toast({
@@ -202,14 +236,12 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
 
     // Branch C: Unauthenticated - Show login
     if (!user) {
-      setShowAuthSlideOver(true);
+      setUIState(prev => ({ ...prev, showAuthSlideOver: true }));
       return;
     }
 
     // Fetch tasks first to determine which flow to use
-    setIsLoadingTasks(true);
     const result = await fetchUserTasks();
-    setIsLoadingTasks(false);
 
     // Show error if fetch failed
     if (result.error) {
@@ -234,12 +266,12 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     }
 
     // If user has existing tasks, show the selection modal
-    setShowTaskSelectionModal(true);
-  };
+    setUIState(prev => ({ ...prev, showTaskSelectionModal: true }));
+  }, [user, professional.id, hasInvitedThisSession, transformedProfessional.name, t, fetchUserTasks, handleCreateTask]);
 
-  // Handle task selection and send invitation
-  const handleTaskSelection = async (taskId: string) => {
-    setIsSendingInvitation(true);
+  // Handle task selection and send invitation - memoized
+  const handleTaskSelection = useCallback(async (taskId: string) => {
+    setUIState(prev => ({ ...prev, isSendingInvitation: true }));
     try {
       const response = await authenticatedFetch(`/api/professionals/${professional.id}/invite`, {
         method: 'POST',
@@ -262,7 +294,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
             }),
             variant: 'destructive',
           });
-          setShowTaskSelectionModal(false);
+          setUIState(prev => ({ ...prev, showTaskSelectionModal: false }));
           return;
         }
         throw new Error(data.error || 'Failed to send invitation');
@@ -277,35 +309,39 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       });
 
       // Track in sessionStorage to prevent spam
-      const invitedProfessionals = sessionStorage.getItem('invitedProfessionals');
-      const invitedIds = invitedProfessionals ? JSON.parse(invitedProfessionals) : [];
-      if (!invitedIds.includes(professional.id)) {
-        invitedIds.push(professional.id);
-        sessionStorage.setItem('invitedProfessionals', JSON.stringify(invitedIds));
+      try {
+        const invitedProfessionals = sessionStorage.getItem('invitedProfessionals');
+        const invitedIds = invitedProfessionals ? JSON.parse(invitedProfessionals) : [];
+        if (!invitedIds.includes(professional.id)) {
+          invitedIds.push(professional.id);
+          sessionStorage.setItem('invitedProfessionals', JSON.stringify(invitedIds));
+        }
+      } catch {
+        // sessionStorage not available or parse error, ignore
       }
       setHasInvitedThisSession(true);
 
-      setShowTaskSelectionModal(false);
-    } catch (error: any) {
+      setUIState(prev => ({ ...prev, showTaskSelectionModal: false }));
+    } catch (error: unknown) {
       console.error('Error sending invitation:', error);
       toast({
         title: t('inviteModal.error'),
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Unknown error',
         variant: 'destructive',
       });
     } finally {
-      setIsSendingInvitation(false);
+      setUIState(prev => ({ ...prev, isSendingInvitation: false }));
     }
-  };
+  }, [authenticatedFetch, professional.id, transformedProfessional.name, t]);
 
   // Handle successful authentication - Resume invite flow
   useEffect(() => {
-    if (user && showAuthSlideOver) {
-      setShowAuthSlideOver(false);
+    if (user && uiState.showAuthSlideOver) {
+      setUIState(prev => ({ ...prev, showAuthSlideOver: false }));
       // Re-trigger invite flow now that user is authenticated
       handleInviteClick();
     }
-  }, [user, showAuthSlideOver]);
+  }, [user, uiState.showAuthSlideOver, handleInviteClick]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
@@ -327,7 +363,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
                 professional={transformedProfessional}
                 onInviteToApply={handleInviteClick}
                 onShare={handleShareClick}
-                isShareCopied={isShareCopied}
+                isShareCopied={uiState.isShareCopied}
               />
               <ServicesSection services={transformedProfessional.services} />
             </div>
@@ -358,28 +394,28 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
 
       {/* Auth Slide-Over for unauthenticated users */}
       <AuthSlideOver
-        isOpen={showAuthSlideOver}
-        onClose={() => setShowAuthSlideOver(false)}
+        isOpen={uiState.showAuthSlideOver}
+        onClose={() => setUIState(prev => ({ ...prev, showAuthSlideOver: false }))}
         action={null}
       />
 
       {/* Task Selection Modal for users with existing tasks */}
       <TaskSelectionModal
-        isOpen={showTaskSelectionModal}
-        onClose={() => setShowTaskSelectionModal(false)}
+        isOpen={uiState.showTaskSelectionModal}
+        onClose={() => setUIState(prev => ({ ...prev, showTaskSelectionModal: false }))}
         tasks={userTasks}
         professionalName={transformedProfessional.name}
         onSelectTask={handleTaskSelection}
         onCreateNewTask={() => {
-          setShowTaskSelectionModal(false);
+          setUIState(prev => ({ ...prev, showTaskSelectionModal: false }));
           // Use handleCreateTask to respect review enforcement while preserving professional context
           handleCreateTask({
             inviteProfessionalId: professional.id,
             inviteProfessionalName: transformedProfessional.name,
           });
         }}
-        isLoading={isSendingInvitation}
-        isLoadingTasks={isLoadingTasks}
+        isLoading={uiState.isSendingInvitation}
+        isLoadingTasks={uiState.isLoadingTasks}
       />
 
       {/* Review Enforcement Dialog */}

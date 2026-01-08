@@ -1,14 +1,32 @@
 'use client'
 
+import { memo, useMemo } from 'react';
 import { Avatar, Badge, Chip } from "@nextui-org/react";
 import { useParams } from 'next/navigation';
-import { Star, MapPin, Clock, CheckCircle, Shield, Phone, Users } from "lucide-react";
+import { Star, MapPin } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
 import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
 import { formatYearsExperience } from '@/lib/utils/pluralization';
 import { getCategoryLabelBySlug } from '@/features/categories';
 import { BadgeDisplay } from '../badges';
+
+// Color palette for category chips - defined outside component to prevent recreation
+const CATEGORY_COLORS = [
+  'bg-blue-100 text-blue-700',
+  'bg-green-100 text-green-700',
+  'bg-purple-100 text-purple-700',
+  'bg-orange-100 text-orange-700',
+  'bg-pink-100 text-pink-700',
+  'bg-teal-100 text-teal-700',
+  'bg-indigo-100 text-indigo-700',
+  'bg-amber-100 text-amber-700',
+] as const;
+
+// Deterministic color picker based on string
+function getCategoryColorIndex(category: string): number {
+  return category.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % CATEGORY_COLORS.length;
+}
 
 interface Professional {
  id: string;
@@ -40,17 +58,17 @@ interface ProfessionalHeaderProps {
  professional: Professional;
 }
 
-export default function ProfessionalHeader({ professional }: ProfessionalHeaderProps) {
+function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) {
  const t = useTranslations();
  const params = useParams();
  const currentLocale = (params?.lang as string) || 'bg';
 
- // Determine which warning to show (prioritize multiple reports over negative reviews)
- const warningType: WarningType | null = professional.safetyStatus.multipleReports
-  ? 'multiple_reports'
-  : professional.safetyStatus.hasNegativeReviews
-  ? 'negative_reviews'
-  : null;
+ // Memoize warning type calculation
+ const warningType: WarningType | null = useMemo(() => {
+  if (professional.safetyStatus.multipleReports) return 'multiple_reports';
+  if (professional.safetyStatus.hasNegativeReviews) return 'negative_reviews';
+  return null;
+ }, [professional.safetyStatus.multipleReports, professional.safetyStatus.hasNegativeReviews]);
 
  return (
   <div className="space-y-4">
@@ -113,30 +131,16 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
        {/* Service Categories / Skills */}
        {professional.serviceCategories && professional.serviceCategories.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4 justify-center lg:justify-start">
-         {professional.serviceCategories.map((category, index) => {
-          const colors = [
-           'bg-blue-100 text-blue-700',
-           'bg-green-100 text-green-700',
-           'bg-purple-100 text-purple-700',
-           'bg-orange-100 text-orange-700',
-           'bg-pink-100 text-pink-700',
-           'bg-teal-100 text-teal-700',
-           'bg-indigo-100 text-indigo-700',
-           'bg-amber-100 text-amber-700',
-          ];
-          // Use category string to deterministically pick color (same category = same color)
-          const colorIndex = category.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-          return (
-           <Chip
-            key={category}
-            size="sm"
-            variant="flat"
-            className={colors[colorIndex]}
-           >
-            {getCategoryLabelBySlug(category, t)}
-           </Chip>
-          );
-         })}
+         {professional.serviceCategories.map((category) => (
+          <Chip
+           key={category}
+           size="sm"
+           variant="flat"
+           className={CATEGORY_COLORS[getCategoryColorIndex(category)]}
+          >
+           {getCategoryLabelBySlug(category, t)}
+          </Chip>
+         ))}
         </div>
        )}
 
@@ -216,3 +220,7 @@ export default function ProfessionalHeader({ professional }: ProfessionalHeaderP
   </div>
  );
 }
+
+// Export with React.memo for performance optimization
+const ProfessionalHeader = memo(ProfessionalHeaderComponent);
+export default ProfessionalHeader;

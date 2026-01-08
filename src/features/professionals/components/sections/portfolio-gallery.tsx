@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useCallback, memo } from 'react'
 import NextImage from 'next/image'
 import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from '@nextui-org/react'
 import { Camera, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react'
@@ -11,13 +11,16 @@ interface PortfolioGalleryProps {
   gallery: GalleryItem[]
 }
 
-export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
+function PortfolioGalleryComponent({ gallery }: PortfolioGalleryProps) {
   const t = useTranslations()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // Sort by order
-  const sortedGallery = [...gallery].sort((a, b) => a.order - b.order)
+  // Memoize sorted gallery to prevent recalculation on every render
+  const sortedGallery = useMemo(() =>
+    [...gallery].sort((a, b) => a.order - b.order),
+    [gallery]
+  )
 
   if (!gallery || gallery.length === 0) {
     return null // Don't show section if no gallery items
@@ -25,21 +28,22 @@ export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
 
   const currentItem = sortedGallery[currentImageIndex]
 
-  const nextImage = () => {
+  // Memoize navigation callbacks
+  const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev + 1) % sortedGallery.length)
-  }
+  }, [sortedGallery.length])
 
-  const previousImage = () => {
+  const previousImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev - 1 + sortedGallery.length) % sortedGallery.length)
-  }
+  }, [sortedGallery.length])
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setIsModalOpen(true)
-  }
+  }, [])
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false)
-  }
+  }, [])
 
   return (
     <>
@@ -66,6 +70,7 @@ export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
                 src={currentItem.imageUrl}
                 alt={currentItem.caption || `Gallery image ${currentImageIndex + 1}`}
                 fill
+                priority={currentImageIndex === 0}
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
               />
@@ -145,6 +150,7 @@ export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
                   src={item.imageUrl}
                   alt={item.caption || `Thumbnail ${index + 1}`}
                   fill
+                  loading="lazy"
                   className="object-cover"
                   sizes="80px"
                 />
@@ -231,3 +237,7 @@ export default function PortfolioGallery({ gallery }: PortfolioGalleryProps) {
     </>
   )
 }
+
+// Export with React.memo for performance optimization
+const PortfolioGallery = memo(PortfolioGalleryComponent);
+export default PortfolioGallery;

@@ -148,7 +148,7 @@ export async function GET(
         .eq('is_hidden', false)
         .lte('published_at', new Date().toISOString())  // Only published reviews
         .order('created_at', { ascending: false })
-        .limit(50)
+        .limit(15)
     ]);
 
     if (tasksError) {

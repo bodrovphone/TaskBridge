@@ -1,11 +1,12 @@
 'use client'
 
+import { memo, useMemo, useCallback } from 'react';
 import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@nextui-org/react";
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import ReviewsDialog from '@/components/common/reviews-dialog';
 import { HiddenReviewsNotice } from '@/components/reviews/hidden-reviews-notice';
-import { getVisibleReviews, getReviewVisibilityStats, type ReviewWithVisibility } from '@/lib/reviews';
+import { getVisibleReviews, getReviewVisibilityStats } from '@/lib/reviews';
 
 interface Review {
  id: string;
@@ -24,41 +25,52 @@ interface ReviewsSectionProps {
  reviews: Review[];
 }
 
-export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
+// Star rating component - memoized to prevent re-renders
+const StarRating = memo(function StarRating({ rating }: { rating: number }) {
+ return (
+  <div className="flex gap-1">
+   {[1, 2, 3, 4, 5].map((star) => (
+    <Star
+     key={star}
+     className={`w-4 h-4 ${
+      star <= rating
+       ? 'fill-yellow-400 text-yellow-400'
+       : 'text-gray-300'
+     }`}
+    />
+   ))}
+  </div>
+ );
+});
+
+function ReviewsSectionComponent({ reviews }: ReviewsSectionProps) {
  const t = useTranslations();
  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
- // Filter to only show visible reviews (pattern detection logic)
- const reviewsWithVisibility = reviews.map(r => ({
-  ...r,
-  isVisible: r.isVisible !== undefined ? r.isVisible : true,
-  visibilityReason: r.visibilityReason || ('visible_high_rating' as const)
- }));
+ // Memoize all review calculations to prevent recalculation on every render
+ const { reviewsWithVisibility, visibleReviews, stats, averageRating } = useMemo(() => {
+  const withVisibility = reviews.map(r => ({
+   ...r,
+   isVisible: r.isVisible !== undefined ? r.isVisible : true,
+   visibilityReason: r.visibilityReason || ('visible_high_rating' as const)
+  }));
 
- const visibleReviews = getVisibleReviews(reviewsWithVisibility);
- const stats = getReviewVisibilityStats(reviewsWithVisibility);
+  const visible = getVisibleReviews(withVisibility);
+  const reviewStats = getReviewVisibilityStats(withVisibility);
+  const average = visible.length > 0
+   ? (visible.reduce((sum, review) => sum + review.rating, 0) / visible.length).toFixed(1)
+   : "0";
 
- const renderStars = (rating: number) => {
-  return (
-   <div className="flex gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-     <Star
-      key={star}
-      className={`w-4 h-4 ${
-       star <= rating
-        ? 'fill-yellow-400 text-yellow-400'
-        : 'text-gray-300'
-      }`}
-     />
-    ))}
-   </div>
-  );
- };
+  return {
+   reviewsWithVisibility: withVisibility,
+   visibleReviews: visible,
+   stats: reviewStats,
+   averageRating: average
+  };
+ }, [reviews]);
 
- // Calculate average from visible reviews only
- const averageRating = visibleReviews.length > 0
-  ? (visibleReviews.reduce((sum, review) => sum + review.rating, 0) / visibleReviews.length).toFixed(1)
-  : "0";
+ // Memoized renderStars callback
+ const renderStars = useCallback((rating: number) => <StarRating rating={rating} />, []);
 
  return (
   <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
@@ -181,3 +193,7 @@ export default function ReviewsSection({ reviews }: ReviewsSectionProps) {
   </div>
  );
 }
+
+// Export with React.memo for performance optimization
+const ReviewsSection = memo(ReviewsSectionComponent);
+export default ReviewsSection;

@@ -1,5 +1,6 @@
 'use client'
 
+import { memo, useMemo, useCallback } from 'react';
 import { Card, CardBody, Chip, Button } from "@nextui-org/react";
 import FallbackAvatar from "@/components/ui/fallback-avatar";
 import { CheckCircle, MapPin, Star, TrendingUp, Award, Clock } from "lucide-react";
@@ -9,6 +10,24 @@ import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
 import { getCityLabelBySlug } from '@/features/cities';
 import { getCategoryLabelBySlug } from '@/features/categories';
 import { getCategoryColor } from '@/lib/utils/category';
+
+// Memoized star rating component
+const StarRating = memo(function StarRating({ rating }: { rating: number }) {
+ return (
+  <div className="flex gap-1">
+   {[1, 2, 3, 4, 5].map((star) => (
+    <Star
+     key={star}
+     className={`w-4 h-4 ${
+      star <= rating
+       ? 'fill-yellow-400 text-yellow-400'
+       : 'text-gray-300'
+     }`}
+    />
+   ))}
+  </div>
+ );
+});
 
 interface CompletedTask {
  id: string;
@@ -32,42 +51,37 @@ interface CompletedTasksSectionProps {
  completedTasks: CompletedTask[];
 }
 
-export default function CompletedTasksSection({ completedTasks }: CompletedTasksSectionProps) {
+function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectionProps) {
  const t = useTranslations();
  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
- const renderStars = (rating: number) => {
-  return (
-   <div className="flex gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-     <Star
-      key={star}
-      className={`w-4 h-4 ${
-       star <= rating
-        ? 'fill-yellow-400 text-yellow-400'
-        : 'text-gray-300'
-      }`}
-     />
-    ))}
-   </div>
-  );
- };
+ // Memoized renderStars callback
+ const renderStars = useCallback((rating: number) => <StarRating rating={rating} />, []);
 
- const getComplexityColor = (complexity?: string) => {
-  switch (complexity) {
-   case 'Simple': return 'success';
-   case 'Standard': return 'primary';
-   case 'Complex': return 'warning';
-   default: return 'default';
-  }
- };
-
- const formatDate = (dateString: string) => {
+ // Memoized date formatter
+ const formatDate = useCallback((dateString: string) => {
   return new Date(dateString).toLocaleDateString('bg-BG', {
    month: 'short',
    day: 'numeric'
   });
- };
+ }, []);
+
+ // Memoize statistics calculations
+ const { totalTasks, reviewedTasks, averageRating, fiveStarTasks } = useMemo(() => {
+  const total = completedTasks?.length || 0;
+  const reviewed = (completedTasks || []).filter(task => task.clientRating > 0);
+  const avgRating = reviewed.length > 0
+   ? reviewed.reduce((sum, task) => sum + task.clientRating, 0) / reviewed.length
+   : 0;
+  const fiveStar = (completedTasks || []).filter(task => task.clientRating === 5).length;
+
+  return {
+   totalTasks: total,
+   reviewedTasks: reviewed,
+   averageRating: avgRating,
+   fiveStarTasks: fiveStar
+  };
+ }, [completedTasks]);
 
  if (!completedTasks || completedTasks.length === 0) {
   return (
@@ -90,16 +104,6 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
    </div>
   );
  }
-
- // Statistics summary
- const totalTasks = completedTasks.length;
-
- // Only calculate average from tasks that have been reviewed (rating > 0)
- const reviewedTasks = completedTasks.filter(task => task.clientRating > 0);
- const averageRating = reviewedTasks.length > 0
-   ? reviewedTasks.reduce((sum, task) => sum + task.clientRating, 0) / reviewedTasks.length
-   : 0;
- const fiveStarTasks = completedTasks.filter(task => task.clientRating === 5).length;
 
  return (
   <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 shadow-lg border border-green-100">
@@ -351,3 +355,7 @@ export default function CompletedTasksSection({ completedTasks }: CompletedTasks
   </div>
  );
 }
+
+// Export with React.memo for performance optimization
+const CompletedTasksSection = memo(CompletedTasksSectionComponent);
+export default CompletedTasksSection;

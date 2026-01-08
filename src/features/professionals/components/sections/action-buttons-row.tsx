@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react';
 import { Button } from "@nextui-org/react";
 import { Share2, UserPlus, Check } from "lucide-react";
 import { useTranslations } from 'next-intl';
@@ -20,7 +21,7 @@ interface ActionButtonsRowProps {
  isShareCopied?: boolean;
 }
 
-export default function ActionButtonsRow({
+function ActionButtonsRowComponent({
  professional,
  onInviteToApply,
  onShare,
@@ -65,3 +66,7 @@ export default function ActionButtonsRow({
   </div>
  );
 }
+
+// Export with React.memo for performance optimization
+const ActionButtonsRow = memo(ActionButtonsRowComponent);
+export default ActionButtonsRow;

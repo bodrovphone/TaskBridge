@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react';
 import { Card, CardBody, Chip } from "@nextui-org/react";
 import { Banknote, Clock } from "lucide-react";
 import { useTranslations } from 'next-intl';
@@ -15,7 +16,7 @@ interface ServicesSectionProps {
  services: Service[];
 }
 
-export default function ServicesSection({ services }: ServicesSectionProps) {
+function ServicesSectionComponent({ services }: ServicesSectionProps) {
  const t = useTranslations();
 
  // Don't render section if no services
@@ -76,3 +77,7 @@ export default function ServicesSection({ services }: ServicesSectionProps) {
   </div>
  );
 }
+
+// Export with React.memo for performance optimization
+const ServicesSection = memo(ServicesSectionComponent);
+export default ServicesSection;
