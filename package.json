@@ -133,5 +133,9 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
-  }
+  },
+  "browserslist": [
+    "last 4 years",
+    "not dead"
+  ]
 }
