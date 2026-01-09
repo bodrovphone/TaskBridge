@@ -40,6 +40,7 @@ function Header() {
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false)
  const [authAction, setAuthAction] = useState<'apply' | 'question' | 'create-task' | 'join-professional' | null>(null)
  const [isNavVisible, setIsNavVisible] = useState(true)
+ const [showFloatingButtons, setShowFloatingButtons] = useState(false)
  const lastScrollY = useRef(0)
  const router = useRouter()
  const params = useParams()
@@ -48,6 +49,7 @@ function Header() {
  const { setOpen: setNotificationOpen } = useNotificationStore()
 
  // Smart sticky navbar - hide on scroll down, show on scroll up
+ // Also track when to show floating action buttons (after 600px scroll)
  useEffect(() => {
   const handleScroll = () => {
    const currentScrollY = window.scrollY
@@ -61,6 +63,9 @@ function Header() {
    } else {
     setIsNavVisible(true)
    }
+
+   // Show floating buttons only after scrolling 600px
+   setShowFloatingButtons(currentScrollY > 600)
 
    lastScrollY.current = currentScrollY
   }
@@ -553,10 +558,10 @@ function Header() {
    action={showCreateTaskAuthPrompt ? 'create-task' : authAction}
   />
 
-  {/* Floating Action Buttons - Mobile Only (hide when menu is open or on profile/form pages) */}
-  {!isMenuOpen && !pathname.includes('/profile') && !pathname.includes('/create-task') && !pathname.includes('/edit') && (
+  {/* Floating Action Buttons - Mobile Only (hide when menu is open, on profile/form pages, or before 600px scroll) */}
+  {!isMenuOpen && !pathname.includes('/profile') && !pathname.includes('/create-task') && !pathname.includes('/edit') && showFloatingButtons && (
   <div
-    className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] flex flex-col gap-4 [body:has([role=dialog]:not([hidden]))_&]:hidden"
+    className="lg:hidden fixed right-0 bottom-8 translate-x-[15%] flex flex-col gap-4 [body:has([role=dialog]:not([hidden]))_&]:hidden transition-opacity duration-300"
     style={{ zIndex: Z_INDEX.FLOATING_BUTTONS }}
   >
    {/* Browse Tasks Button - Hide on browse-tasks page */}

@@ -54,13 +54,12 @@ export const TIMELINE_OPTIONS = [
 export type TimelineOption = typeof TIMELINE_OPTIONS[number]
 
 /**
- * Application status types
+ * Application status types - imported from central types
  */
-export type ApplicationStatus =
-  | 'pending'
-  | 'accepted'
-  | 'rejected'
-  | 'withdrawn'
+import type { ApplicationStatus } from '@/types/applications'
+
+// Re-export for convenience
+export type { ApplicationStatus }
 
 /**
  * Application submission response

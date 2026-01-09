@@ -5,7 +5,11 @@
  * (applications they have submitted to tasks)
  */
 
-export type ApplicationStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn'
+// Import from central types to avoid duplication
+import type { ApplicationStatus } from '@/types/applications'
+
+// Re-export for convenience
+export type { ApplicationStatus }
 
 export interface MyApplication {
   id: string

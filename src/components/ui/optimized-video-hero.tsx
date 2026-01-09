@@ -11,6 +11,12 @@ interface OptimizedVideoHeroProps {
  width?: number
  height?: number
  maxHeight?: string
+ /**
+  * When true, disables priority/preload for the image.
+  * Use this when the component is hidden on mobile to prevent
+  * unnecessary image downloads on mobile devices.
+  */
+ desktopOnly?: boolean
 }
 
 /**
@@ -28,7 +34,8 @@ export default function OptimizedVideoHero({
  poster,
  alt,
  className = '',
- maxHeight = '420px'
+ maxHeight = '420px',
+ desktopOnly = false
 }: OptimizedVideoHeroProps) {
  const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -115,6 +122,7 @@ export default function OptimizedVideoHero({
     * PRIMARY LCP ELEMENT - Always rendered (SSR)
     * This image loads immediately without waiting for JS
     * Stays visible until video is ready (on desktop)
+    * When desktopOnly=true, we disable priority to prevent preloading on mobile
     */}
    <Image
     src={poster}
@@ -124,8 +132,9 @@ export default function OptimizedVideoHero({
     className={`${className} object-cover transition-opacity duration-500 ${
      videoReady && !hasError ? 'opacity-0' : 'opacity-100'
     }`}
-    priority
-    fetchPriority="high"
+    priority={!desktopOnly}
+    fetchPriority={desktopOnly ? 'auto' : 'high'}
+    loading={desktopOnly ? 'lazy' : undefined}
    />
 
    {/*

@@ -4,6 +4,7 @@ export const landing = {
   'landing.hero.title': 'Looking for Work or a Handyman?',
   'landing.hero.subtitle':
     "Movers, apartment cleaning, home repairs — find a task or specialist in Sofia, Burgas, Plovdiv, Varna. Free, no commissions.\n\nLooking for work? Browse tasks and apply. Need a handyman? Post a task and get offers.",
+  'landing.hero.subtitleMobile': 'find a specialist or work quickly and easily',
   'landing.hero.getStarted': 'create a task',
   'landing.hero.browseServices': 'Find Work',
   'landing.hero.giveawayBadge': 'Win Prizes!',

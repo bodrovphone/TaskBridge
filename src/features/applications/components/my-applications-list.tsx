@@ -55,9 +55,9 @@ export default function MyApplicationsList({
       case 'oldest':
         return sorted.sort((a, b) => a.appliedAt.getTime() - b.appliedAt.getTime())
       case 'status':
-        // Order: pending -> accepted -> rejected -> withdrawn
-        const statusOrder = { pending: 0, accepted: 1, rejected: 2, withdrawn: 3 }
-        return sorted.sort((a, b) => statusOrder[a.status] - statusOrder[b.status])
+        // Order: pending -> accepted -> rejected -> withdrawn -> removed_by_customer
+        const statusOrder: Record<string, number> = { pending: 0, accepted: 1, rejected: 2, withdrawn: 3, removed_by_customer: 4 }
+        return sorted.sort((a, b) => (statusOrder[a.status] ?? 5) - (statusOrder[b.status] ?? 5))
       case 'taskDate':
         return sorted.sort((a, b) => {
           const aDate = a.task.deadline || a.task.status === 'in_progress' ? new Date(0) : new Date()
