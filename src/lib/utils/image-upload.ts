@@ -76,7 +76,7 @@ export async function uploadTaskImage(
     const { data, error } = await supabase.storage
       .from('task-images')
       .upload(fileName, compressedBlob, {
-        cacheControl: '3600',
+        cacheControl: '31536000',
         upsert: true, // Replace if exists
       })
 

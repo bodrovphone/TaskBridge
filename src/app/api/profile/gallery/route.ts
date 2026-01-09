@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       .from('task-images') // Using existing task-images bucket
       .upload(fileName, buffer, {
         contentType: imageFile.type,
-        cacheControl: '3600',
+        cacheControl: '31536000',
         upsert: false,
       })
 
