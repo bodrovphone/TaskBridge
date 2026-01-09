@@ -8,8 +8,9 @@ import { useTranslations } from 'next-intl';
 interface Service {
  id: string;
  name: string;
- price: string;
- description: string;
+ order?: number;
+ price?: string;
+ description?: string;
 }
 
 interface ServicesSectionProps {
@@ -40,20 +41,24 @@ function ServicesSectionComponent({ services }: ServicesSectionProps) {
          <h4 className="text-lg font-semibold text-gray-900 mb-2">
           {service.name}
          </h4>
-         <p className="text-gray-600 text-sm leading-relaxed">
-          {service.description}
-         </p>
+         {service.description && (
+          <p className="text-gray-600 text-sm leading-relaxed">
+           {service.description}
+          </p>
+         )}
         </div>
-        
-        <div className="flex-shrink-0">
-         <Chip
-          size="lg"
-          className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 font-semibold px-4 py-2"
-          startContent={<Banknote size={16} />}
-         >
-          {service.price}
-         </Chip>
-        </div>
+
+        {service.price && (
+         <div className="flex-shrink-0">
+          <Chip
+           size="lg"
+           className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 font-semibold px-4 py-2"
+           startContent={<Banknote size={16} />}
+          >
+           {service.price}
+          </Chip>
+         </div>
+        )}
        </div>
       </CardBody>
      </Card>

@@ -4,20 +4,10 @@ import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Ch
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
-interface Review {
- id: string;
- clientName: string;
- rating: number;
- comment: string;
- date: string;
- verified: boolean;
- anonymous: boolean;
-}
-
 interface ReviewsDialogProps {
  isOpen: boolean;
  onOpenChange: (open: boolean) => void;
- reviews: Review[];
+ reviews: API['ReviewDisplay'][];
  averageRating: string;
 }
 

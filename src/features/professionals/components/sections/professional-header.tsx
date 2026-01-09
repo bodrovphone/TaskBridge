@@ -5,7 +5,7 @@ import { Avatar, Badge, Chip } from "@nextui-org/react";
 import { useParams } from 'next/navigation';
 import { Star, MapPin } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { SafetyIndicators, type SafetyStatus } from '../safety-indicators';
+import { SafetyIndicators } from '../safety-indicators';
 import { SafetyWarningBanner, type WarningType } from '../safety-warning-banner';
 import { formatYearsExperience } from '@/lib/utils/pluralization';
 import { getCategoryLabelBySlug } from '@/features/categories';
@@ -28,34 +28,8 @@ function getCategoryColorIndex(category: string): number {
   return category.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % CATEGORY_COLORS.length;
 }
 
-interface Professional {
- id: string;
- name: string;
- title: string;
- avatar: string;
- rating: number;
- reviewCount: number;
- completedTasks: number;
- yearsExperience: number;
- responseTime: string;
- location: string;
- isOnline: boolean;
- isVerified: {
-  phone: boolean;
-  id: boolean;
-  address: boolean;
- };
- safetyStatus: SafetyStatus;
- serviceCategories?: string[];
- // Badge fields
- isTopProfessional?: boolean;
- topProfessionalTasksCount?: number;
- isEarlyAdopter?: boolean;
- earlyAdopterCategories?: string[];
-}
-
 interface ProfessionalHeaderProps {
- professional: Professional;
+ professional: API['ProfessionalDisplay'];
 }
 
 function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) {

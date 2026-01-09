@@ -7,16 +7,10 @@ import { useTranslations } from 'next-intl';
 import ReviewsDialog from '@/components/common/reviews-dialog';
 import { HiddenReviewsNotice } from '@/components/reviews/hidden-reviews-notice';
 import { getVisibleReviews, getReviewVisibilityStats } from '@/lib/reviews';
+import type { ReviewDisplayItem } from '@/types/professionals-ui';
 
-interface Review {
- id: string;
- clientName: string;
- rating: number;
- comment: string;
- date: string;
- verified: boolean;
- anonymous: boolean;
- // Visibility fields for pattern detection
+/** Extends ReviewDisplayItem with optional visibility fields for pattern detection */
+interface Review extends ReviewDisplayItem {
  isVisible?: boolean;
  visibilityReason?: 'visible_high_rating' | 'visible_pattern_detected' | 'hidden_pending_pattern';
 }

@@ -15,37 +15,73 @@ import TaskCard from "@/components/ui/task-card";
 import { getCategoryName } from '@/lib/utils/category';
 import { getCityLabelBySlug } from '@/features/cities';
 import { getLocalizedTaskContent, getLanguageName, shouldShowTranslationIndicator } from '@/lib/utils/task-localization';
+import { type TaskStatus } from '@/lib/utils/task-permissions';
+import type { Task } from '@/server/tasks/task.types';
+
+/** Translation function type from next-intl */
+type TranslateFunction = ReturnType<typeof useTranslations>;
+
+/**
+ * Task with customer embed from API join
+ * Extends global Task type with customer data fetched via repository
+ */
+interface TaskWithCustomer extends Task {
+  customer?: {
+    id: string;
+    full_name: string;
+    avatar_url?: string | null;
+    tasks_completed?: number;
+    created_at?: string;
+    preferred_language?: string;
+  };
+}
+
+/**
+ * Simplified task type for similar tasks (subset of Task fields)
+ */
+interface SimilarTask {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  subcategory?: string | null;
+  city: string;
+  budget_type?: 'fixed' | 'hourly' | 'negotiable' | 'unclear';
+  budget_min_bgn?: number | null;
+  budget_max_bgn?: number | null;
+  urgency?: 'same_day' | 'within_week' | 'flexible';
+  status?: TaskStatus;
+  images?: string[];
+  created_at?: string;
+}
 
 interface TaskDetailContentProps {
- task: any;
- similarTasks: any[];
+ task: TaskWithCustomer;
+ similarTasks: SimilarTask[];
  applicationsCount?: number;
  lang: string;
 }
 
 // @note: getCategoryName moved to @/lib/utils/category for reusability - see line 15 for import
 
-function formatBudget(task: any, t: any) {
- // Support both camelCase (mock) and snake_case (database) field names
- const budgetType = task.budgetType || task.budget_type;
- const budgetMin = task.budgetMin || task.budget_min_bgn;
- const budgetMax = task.budgetMax || task.budget_max_bgn;
+function formatBudget(task: TaskWithCustomer, t: TranslateFunction) {
+ const { budget_type, budget_min_bgn, budget_max_bgn } = task;
 
- if (budgetType === "unclear") {
+ if (budget_type === "unclear") {
   return t('taskCard.budget.unclear');
- } else if (budgetType === "fixed" && budgetMax) {
-  return `${budgetMax} €`;
- } else if (budgetMin && budgetMax) {
-  return `${budgetMin}-${budgetMax} €`;
- } else if (budgetMin) {
-  return `${t('taskCard.budget.from')} ${budgetMin} €`;
- } else if (budgetMax) {
-  return `${t('taskCard.budget.to')} ${budgetMax} €`;
+ } else if (budget_type === "fixed" && budget_max_bgn) {
+  return `${budget_max_bgn} €`;
+ } else if (budget_min_bgn && budget_max_bgn) {
+  return `${budget_min_bgn}-${budget_max_bgn} €`;
+ } else if (budget_min_bgn) {
+  return `${t('taskCard.budget.from')} ${budget_min_bgn} €`;
+ } else if (budget_max_bgn) {
+  return `${t('taskCard.budget.to')} ${budget_max_bgn} €`;
  }
  return t('taskDetail.negotiable');
 }
 
-function formatDeadline(deadline: string | undefined, t: any) {
+function formatDeadline(deadline: string | null | undefined, t: TranslateFunction) {
  if (!deadline) return t('taskDetail.flexible');
  const deadlineDate = new Date(deadline);
  const now = new Date();
@@ -73,19 +109,9 @@ function getUrgencyColor(urgency: string) {
  * Calculate urgency text from deadline and is_urgent flag
  * Database doesn't store urgency directly, so we reverse-engineer it
  */
-function getUrgencyText(task: any, t: any) {
- // Check if task has urgency field (mock data)
- if (task.urgency) {
-  switch (task.urgency) {
-   case 'same_day': return t('taskDetail.urgency.same_day');
-   case 'within_week': return t('taskDetail.urgency.within_week');
-   case 'flexible': return t('taskDetail.urgency.flexible');
-   default: return t('taskDetail.urgency.default');
-  }
- }
-
- // Reverse-engineer urgency from deadline (real database data)
- if (task.is_urgent || task.isUrgent) {
+function getUrgencyText(task: TaskWithCustomer, t: TranslateFunction) {
+ // Reverse-engineer urgency from is_urgent flag and deadline
+ if (task.is_urgent) {
   return t('taskDetail.urgency.same_day');
  }
 
@@ -106,7 +132,7 @@ function getUrgencyText(task: any, t: any) {
  * Get simplified published time relative to now
  * Returns: "published today", "published this week", "published this month", or "published some time ago"
  */
-function getPublishedTime(createdAt: string | Date, t: any): string {
+function getPublishedTime(createdAt: string | Date, t: TranslateFunction): string {
  const created = new Date(createdAt);
  const now = new Date();
 
@@ -220,10 +246,9 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
  const isOwner = (profile?.id || user?.id) === task.customer_id;
 
  // Get simplified published time
- const publishedTime = getPublishedTime(task.created_at || task.createdAt, t);
+ const publishedTime = getPublishedTime(task.created_at, t);
 
  // Get localized content based on user's locale (BG viewers see translations, others see original)
- // Use `lang` prop (from URL) for SSR/SEO
  const viewerLocale = lang || 'bg';
  const localizedContent = getLocalizedTaskContent(task, viewerLocale);
  const showTranslationIndicator = shouldShowTranslationIndicator(task, viewerLocale);
@@ -296,7 +321,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
            <span className="truncate">{getCategoryName(t, task.category, task.subcategory)}</span>
           </Chip>
           <Chip
-           color={getUrgencyColor(task.urgency || (task.is_urgent ? 'same_day' : task.deadline ? 'within_week' : 'flexible')) as any}
+           color={getUrgencyColor(task.is_urgent ? 'same_day' : task.deadline ? 'within_week' : 'flexible') as any}
            variant="flat"
            size="sm"
            className="text-xs sm:text-sm"
@@ -311,7 +336,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
          </h1>
 
          {/* Translation indicator for BG viewers seeing translated content */}
-         {showTranslationIndicator && (
+         {showTranslationIndicator && task.source_language && (
           <p className="text-xs text-gray-500 italic">
            {t('taskDetail.originallyWrittenIn')}
            {' '}{getLanguageName(task.source_language, viewerLocale)}

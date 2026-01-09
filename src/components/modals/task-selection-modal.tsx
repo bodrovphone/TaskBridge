@@ -14,17 +14,10 @@ import {
 import { useTranslations } from 'next-intl'
 import { Briefcase } from 'lucide-react'
 
-interface Task {
-  id: string
-  title: string
-  category: string
-  budget?: number
-}
-
 interface TaskSelectionModalProps {
   isOpen: boolean
   onClose: () => void
-  tasks: Task[]
+  tasks: API['TaskSelection'][]
   professionalName: string
   onSelectTask: (taskId: string) => void
   onCreateNewTask: () => void

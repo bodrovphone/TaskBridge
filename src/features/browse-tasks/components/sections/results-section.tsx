@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 import { useTranslations } from 'next-intl';
 import { Card as NextUICard, Button as NextUIButton, Spinner } from "@nextui-org/react";
 import { Search, Filter, Sparkles, X, Coffee, RotateCw } from "lucide-react";
-import TaskCard from "@/components/ui/task-card";
+import TaskCard, { type TaskCardData } from "@/components/ui/task-card";
 import { useEffect, useRef } from "react";
 
 interface ResultsSectionProps {
- tasks: any[];
+ tasks: TaskCardData[];
  isLoading: boolean;
- error: any;
- recommendedTasks: any[];
+ error: Error | null;
+ recommendedTasks: TaskCardData[];
  onClearFilters: () => void;
  onApplyToTask: (taskId: string) => void;
  onRetry?: () => void;
@@ -144,7 +144,7 @@ export default function ResultsSection({
       </p>
       
       <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
-       {recommendedTasks.map((task: any, index: number) => (
+       {recommendedTasks.map((task, index) => (
         <motion.div
          key={task.id}
          initial={{ opacity: 0, y: 30 }}
@@ -175,7 +175,7 @@ export default function ResultsSection({
      </p>
 
      <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
-      {recommendedTasks.map((task: any, index: number) => (
+      {recommendedTasks.map((task, index) => (
        <motion.div
         key={task.id}
         id={index === 0 ? 'task-card-example' : undefined}
@@ -196,7 +196,7 @@ export default function ResultsSection({
     /* FILTERS ACTIVE: Show ONLY Filtered Results with Infinite Scroll */
     <div>
      <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
-      {tasks.map((task: any, index: number) => (
+      {tasks.map((task, index) => (
        <motion.div
         key={task.id}
         id={index === 0 ? 'task-card-example' : undefined}
@@ -353,7 +353,7 @@ export default function ResultsSection({
        </p>
 
        <div className="grid grid-cols-1 min-[590px]:grid-cols-2 lg:grid-cols-3 gap-6">
-        {recommendedTasks.map((task: any, index: number) => (
+        {recommendedTasks.map((task, index) => (
          <motion.div
           key={task.id}
           initial={{ opacity: 0, y: 30 }}

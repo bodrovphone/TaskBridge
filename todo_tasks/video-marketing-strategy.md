@@ -91,7 +91,7 @@ Meta ads CAN target specific professionals by:
    - **Recommended start**: "Traffic" or "Conversions"
 
 3. **Set Budget:**
-   - Start with 10-20 лв/day per ad set
+   - Start with 5-10 €/day per ad set
    - Test for 3-5 days before scaling
    - Use "Campaign Budget Optimization" (CBO)
 
@@ -115,7 +115,7 @@ Meta ads CAN target specific professionals by:
 
 1. **Monitor Daily (First Week):**
    - CTR (Click-through rate) - aim for >1%
-   - CPC (Cost per click) - aim for <0.50 лв
+   - CPC (Cost per click) - aim for <0.25 €
    - CPM (Cost per 1000 impressions)
    - Video watch time (aim for >50% at 3 sec)
 
@@ -126,7 +126,7 @@ Meta ads CAN target specific professionals by:
    - Run 2-3 variations per ad set
 
 3. **Scaling Rules:**
-   - If CTR >1.5% and CPC <0.30 лв → increase budget 20%
+   - If CTR >1.5% and CPC <0.15 € → increase budget 20%
    - If CTR <0.5% after 3 days → pause and revise creative
    - If CPA (cost per signup) is profitable → scale aggressively
 
@@ -288,11 +288,11 @@ Meta ads CAN target specific professionals by:
 
 | Phase | Daily Budget | Duration | Total |
 |-------|-------------|----------|-------|
-| Test (per video) | 15 лв | 5 days | 75 лв |
-| Validate winners | 30 лв | 7 days | 210 лв |
-| Scale | 50-100 лв | ongoing | - |
+| Test (per video) | 8 € | 5 days | 40 € |
+| Validate winners | 15 € | 7 days | 105 € |
+| Scale | 25-50 € | ongoing | - |
 
-**Minimum test budget**: 150-200 лв (test 2-3 videos)
+**Minimum test budget**: 80-100 € (test 2-3 videos)
 
 ---
 

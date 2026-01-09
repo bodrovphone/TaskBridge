@@ -3,6 +3,8 @@
  * Type definitions for professional data and responses
  */
 
+import type { ServiceItem } from '@/server/domain/user/user.types'
+
 /**
  * Professional data shape returned by API
  * Mirrors database schema but only includes public-safe fields
@@ -185,7 +187,7 @@ export interface ReviewItem {
  */
 export interface ProfessionalDetail extends Professional {
   // Extended profile data
-  services: string[]
+  services: ServiceItem[]
   portfolio: any[]
   responseTimeHours: number | null
 

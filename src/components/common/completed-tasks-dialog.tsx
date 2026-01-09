@@ -7,27 +7,10 @@ import { getCityLabelBySlug } from '@/features/cities';
 import { getCategoryLabelBySlug } from '@/features/categories';
 import { getCategoryColor } from '@/lib/utils/category';
 
-interface CompletedTask {
- id: string;
- title: string;
- categorySlug: string; // Raw slug from API
- citySlug: string; // Raw slug from API
- neighborhood?: string;
- completedDate: string;
- clientRating: number;
- budget: number; // Raw number from API
- durationHours: number; // Raw number from API
- clientName?: string;
- clientAvatar?: string;
- testimonial?: string;
- isVerified?: boolean;
- complexity?: 'Simple' | 'Standard' | 'Complex';
-}
-
 interface CompletedTasksDialogProps {
  isOpen: boolean;
  onOpenChange: (open: boolean) => void;
- completedTasks: CompletedTask[];
+ completedTasks: API['CompletedTaskDisplay'][];
 }
 
 export default function CompletedTasksDialog({
@@ -54,7 +37,8 @@ export default function CompletedTasksDialog({
   );
  };
 
- const formatDate = (dateString: string) => {
+ const formatDate = (dateString?: string | null) => {
+  if (!dateString) return '-';
   return new Date(dateString).toLocaleDateString('bg-BG', {
    month: 'short',
    day: 'numeric'
@@ -164,7 +148,7 @@ export default function CompletedTasksDialog({
          <div className="flex items-center text-sm text-gray-600 mb-3">
           <MapPin size={14} className="mr-1" />
           <span>
-           {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
+           {task.citySlug ? getCityLabelBySlug(task.citySlug, t) : t('common.locationNotSpecified')}{task.neighborhood ? `, ${task.neighborhood}` : ''}
           </span>
          </div>
 

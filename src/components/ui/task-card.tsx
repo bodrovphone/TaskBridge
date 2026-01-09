@@ -22,23 +22,25 @@ import { canApplyToTask, getDisabledReason, type TaskStatus } from '@/lib/utils/
 import { getCityLabelBySlug } from '@/features/cities';
 import { getLocalizedTaskContent } from '@/lib/utils/task-localization';
 
-// Task type definition (to be moved to global types later)
-interface Task {
+// Task type definition for TaskCard component
+// Supports both camelCase (frontend) and snake_case (database) field names
+// Uses `| null` for database fields that can be null
+export interface TaskCardData {
  id: string;
- slug?: string; // URL-friendly identifier
+ slug?: string | null; // URL-friendly identifier
  title: string;
  description: string;
  category: string;
  subcategory?: string | null;
  city: string;
- neighborhood?: string;
- budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear';
- budget_type?: 'fixed' | 'hourly' | 'negotiable' | 'unclear'; // Database field (snake_case)
- budgetMin?: number;
- budget_min_bgn?: number; // Database field (snake_case)
- budgetMax?: number;
- budget_max_bgn?: number; // Database field (snake_case)
- deadline?: Date | string;
+ neighborhood?: string | null;
+ budgetType?: 'fixed' | 'hourly' | 'negotiable' | 'unclear' | 'range';
+ budget_type?: 'fixed' | 'hourly' | 'negotiable' | 'unclear' | 'range'; // Database field (snake_case)
+ budgetMin?: number | null;
+ budget_min_bgn?: number | null; // Database field (snake_case)
+ budgetMax?: number | null;
+ budget_max_bgn?: number | null; // Database field (snake_case)
+ deadline?: Date | string | null;
  createdAt?: Date | string;
  created_at?: Date | string; // Database field (snake_case)
  images?: string[]; // Array of photo URLs (database field)
@@ -54,7 +56,7 @@ interface Task {
 }
 
 interface TaskCardProps {
- task: Task;
+ task: TaskCardData;
  onApply?: (taskId: string) => void;
  showApplyButton?: boolean;
 }

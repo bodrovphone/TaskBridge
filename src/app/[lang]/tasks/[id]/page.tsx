@@ -65,7 +65,7 @@ async function fetchSimilarTasks(category: string, excludeId: string, limit: num
    return [];
   }
 
-  // Map to expected format
+  // Return snake_case directly from DB - no transformation needed
   return (tasks || []).map(task => ({
    id: task.id,
    title: task.title,
@@ -73,13 +73,13 @@ async function fetchSimilarTasks(category: string, excludeId: string, limit: num
    category: task.category,
    subcategory: task.subcategory,
    city: task.city,
-   budgetType: task.budget_type,
-   budgetMin: task.budget_min,
-   budgetMax: task.budget_max,
+   budget_type: task.budget_type,
+   budget_min_bgn: task.budget_min,
+   budget_max_bgn: task.budget_max,
    urgency: task.urgency,
    status: task.status,
-   photoUrls: task.photo_urls,
-   createdAt: task.created_at,
+   images: task.photo_urls,
+   created_at: task.created_at,
   }));
  } catch (error) {
   console.error('Error fetching similar tasks:', error);

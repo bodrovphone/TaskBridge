@@ -29,26 +29,8 @@ const StarRating = memo(function StarRating({ rating }: { rating: number }) {
  );
 });
 
-interface CompletedTask {
- id: string;
- title: string;
- categorySlug: string; // Raw slug from API
- citySlug: string; // Raw slug from API
- neighborhood?: string;
- completedDate: string;
- clientRating: number;
- budget: number; // Raw number from API
- durationHours: number; // Raw number from API
- clientId?: string;
- clientName?: string;
- clientAvatar?: string;
- testimonial?: string;
- isVerified?: boolean;
- complexity?: 'Simple' | 'Standard' | 'Complex';
-}
-
 interface CompletedTasksSectionProps {
- completedTasks: CompletedTask[];
+ completedTasks: API['CompletedTaskDisplay'][];
 }
 
 function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectionProps) {
@@ -58,8 +40,9 @@ function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectio
  // Memoized renderStars callback
  const renderStars = useCallback((rating: number) => <StarRating rating={rating} />, []);
 
- // Memoized date formatter
- const formatDate = useCallback((dateString: string) => {
+ // Memoized date formatter - handles nullish values
+ const formatDate = useCallback((dateString?: string | null) => {
+  if (!dateString) return '-';
   return new Date(dateString).toLocaleDateString('bg-BG', {
    month: 'short',
    day: 'numeric'
@@ -199,7 +182,7 @@ function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectio
              <div className="flex items-center gap-1">
               <MapPin size={14} />
               <span>
-               {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
+               {task.citySlug ? getCityLabelBySlug(task.citySlug, t) : t('common.locationNotSpecified')}{task.neighborhood ? `, ${task.neighborhood}` : ''}
               </span>
              </div>
              <div className="flex flex-col items-end gap-1">
@@ -226,10 +209,10 @@ function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectio
               <p className="text-blue-800 text-sm italic mb-2">"{task.testimonial}"</p>
               <div className="flex items-center gap-2">
                <FallbackAvatar
-                src={task.clientAvatar}
+                src={task.clientAvatar ?? undefined}
                 name={task.clientName || 'Client'}
                 size="sm"
-                userId={task.clientId}
+                userId={task.clientId ?? undefined}
                />
                <span className="text-blue-700 font-semibold text-xs">
                 - {task.clientName}
@@ -296,7 +279,7 @@ function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectio
          <div className="flex items-center gap-1 flex-1 min-w-0">
           <MapPin size={12} className="flex-shrink-0" />
           <span className="truncate text-sm text-gray-600">
-           {getCityLabelBySlug(task.citySlug, t)}{task.neighborhood ? `, ${task.neighborhood}` : ''}
+           {task.citySlug ? getCityLabelBySlug(task.citySlug, t) : t('common.locationNotSpecified')}{task.neighborhood ? `, ${task.neighborhood}` : ''}
           </span>
          </div>
          <div className="flex flex-col items-end gap-0.5 ml-2">

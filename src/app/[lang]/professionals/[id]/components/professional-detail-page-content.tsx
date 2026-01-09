@@ -19,7 +19,7 @@ import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
 
 interface ProfessionalDetailPageContentProps {
-  professional: any; // @todo: Add proper type from API
+  professional: API['ProfessionalData'];
   lang: string;
 }
 
@@ -47,7 +47,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     isSendingInvitation: false,
   });
 
-  const [userTasks, setUserTasks] = useState<any[]>([]);
+  const [userTasks, setUserTasks] = useState<API['TaskSelection'][]>([]);
   const [hasInvitedThisSession, setHasInvitedThisSession] = useState(false);
 
   // Ref for timeout cleanup
@@ -87,12 +87,12 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
   }, []);
 
   // Memoize transformed professional to prevent child re-renders
-  const transformedProfessional = useMemo(() => ({
+  const transformedProfessional: API['ProfessionalDisplay'] = useMemo(() => ({
     id: professional.id,
-    name: professional.fullName || professional.name,
+    name: professional.fullName || professional.name || t('professionalDetail.anonymous'),
     // Use professional_title as title, fallback to first service category or default
     title: professional.specialization || t('professionals.card.lookingForFirstTask'),
-    avatar: professional.avatarUrl || professional.avatar,
+    avatar: professional.avatarUrl || professional.avatar || undefined,
     rating: professional.rating || 0,
     // Use reviewsCount from API (already filtered to published reviews only)
     reviewCount: professional.reviewsCount || professional.reviewCount || 0,
@@ -109,11 +109,15 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       id: professional.idVerified || professional.verified || false,
       address: professional.addressVerified || false
     },
-    safetyStatus: professional.safetyStatus || {
-      phoneVerified: professional.phoneVerified || false,
-      profileComplete: true,
-      policeCertificate: false,
-      backgroundCheckPassed: false
+    safetyStatus: {
+      phoneVerified: professional.safetyStatus?.phoneVerified ?? professional.phoneVerified ?? false,
+      emailVerified: professional.safetyStatus?.emailVerified ?? false,
+      profileComplete: professional.safetyStatus?.profileComplete ?? true,
+      policeCertificate: professional.safetyStatus?.policeCertificate ?? false,
+      backgroundCheckPassed: professional.safetyStatus?.backgroundCheckPassed ?? false,
+      cleanSafetyRecord: professional.safetyStatus?.cleanSafetyRecord ?? true,
+      hasNegativeReviews: professional.safetyStatus?.hasNegativeReviews ?? false,
+      multipleReports: professional.safetyStatus?.multipleReports ?? false,
     },
     bio: professional.bio || t('professionalDetail.defaultBio'),
     services: professional.services || [],
@@ -125,7 +129,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
       preferredHours: "9:00 - 18:00",
       contactMethods: ["message", "phone"]
     },
-    completedTasksList: professional.completedTasksList || professional.completedTasks || [],
+    completedTasksList: Array.isArray(professional.completedTasksList) ? professional.completedTasksList : [],
     // Badge fields
     isTopProfessional: professional.isTopProfessional || professional.is_top_professional || false,
     topProfessionalTasksCount: professional.topProfessionalTasksCount || professional.top_professional_tasks_count || 0,
@@ -186,7 +190,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
   }, [lang, professional.id, transformedProfessional.name, t, copyToClipboard]);
 
   // Fetch user's open tasks via API - memoized
-  const fetchUserTasks = useCallback(async (): Promise<{ tasks: any[]; error: string | null }> => {
+  const fetchUserTasks = useCallback(async (): Promise<{ tasks: API['TaskSelection'][]; error: string | null }> => {
     if (!user) return { tasks: [], error: null };
 
     setUIState(prev => ({ ...prev, isLoadingTasks: true }));

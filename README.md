@@ -10,6 +10,7 @@ TaskBridge is a full-stack TypeScript application built with Next.js 15, featuri
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
+- [Global API Type Registry](#global-api-type-registry)
 - [Routes Documentation](#routes-documentation)
 - [User Flows](#user-flows)
 - [Internationalization](#internationalization)
@@ -27,7 +28,7 @@ TaskBridge is a full-stack TypeScript application built with Next.js 15, featuri
 - **User Profiles**: Separate customer and professional profiles
 - **Modern UI**: NextUI + Radix UI components with Tailwind CSS
 - **Mobile Responsive**: Optimized for all device sizes
-- **Type-Safe**: Full TypeScript with Drizzle ORM
+- **Type-Safe**: Full TypeScript with Supabase
 - **SEO Optimized**: Server-side rendering with Next.js App Router
 
 ## Tech Stack
@@ -45,8 +46,9 @@ TaskBridge is a full-stack TypeScript application built with Next.js 15, featuri
 
 ### Backend
 - **API**: Next.js API Routes
-- **Database**: PostgreSQL with Drizzle ORM
-- **Validation**: Zod with drizzle-zod
+- **Database**: Supabase PostgreSQL
+- **Authentication**: Supabase Auth (Google, Facebook, Telegram)
+- **Validation**: Zod
 
 ### Internationalization
 - **Library**: i18next + react-i18next
@@ -56,14 +58,14 @@ TaskBridge is a full-stack TypeScript application built with Next.js 15, featuri
 
 ### DevOps
 - **Deployment**: Vercel
-- **Database Hosting**: Neon (PostgreSQL)
+- **Database & Auth**: Supabase
 - **Node Version**: >=18.0.0
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js >= 18.0.0
-- PostgreSQL database (or Neon account)
+- Supabase account (https://supabase.com)
 
 ### Installation
 
@@ -77,10 +79,9 @@ npm install
 
 # Set up environment variables
 cp .env.example .env.local
-# Edit .env.local with your DATABASE_URL
-
-# Push database schema
-npm run db:push
+# Edit .env.local with your Supabase credentials:
+# NEXT_PUBLIC_SUPABASE_URL=your-project-url
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 # Start development server
 npm run dev
@@ -97,7 +98,6 @@ npm run start        # Start production server
 npm run lint         # Run ESLint
 npm run type-check   # Run TypeScript type checking
 npm run check        # Run both type-check and lint
-npm run db:push      # Push database schema changes
 
 # Media Optimization
 npm run optimize:images  # Optimize images (JPEG, PNG → WebP, AVIF)
@@ -292,14 +292,62 @@ git diff --name-only HEAD~1 | grep -E '\.(jpg|png)$' | xargs -I {} npm run optim
 ├── components/           # Shared UI components
 │   ├── ui/              # Design system (shadcn/ui)
 │   └── common/          # Layout components
-├── database/            # Database schema & config
+├── server/              # Server-side code (domain logic, repositories)
 ├── lib/                 # Global utilities
+│   ├── supabase/       # Supabase client configurations
 │   ├── intl/           # Translation files (en, bg, ru)
 │   ├── constants/      # App constants
 │   └── utils/          # Utility functions
 ├── hooks/               # Global custom hooks
 └── types/               # Global type definitions
 ```
+
+## Global API Type Registry
+
+**Location**: `/src/types/api.d.ts`
+
+The codebase uses a global `API` interface for type-safe access to all DTOs and entity types. No imports needed - types are available globally.
+
+### Usage
+
+```typescript
+// Access any type via API['TypeName'] - no imports required
+interface Props {
+  professional: API['ProfessionalData']
+  tasks: API['TaskSelection'][]
+}
+
+const user: API['UserProfile'] = { ... }
+const task: API['TaskCreate'] = { title: 'Fix sink', ... }
+```
+
+### Available Type Domains
+
+| Domain | Types |
+|--------|-------|
+| User | `UserProfile`, `UserCreate`, `UserUpdate`, `GalleryItem`, `ServiceItem` |
+| Task | `Task`, `TaskCreate`, `TaskUpdate`, `TaskStatus`, `TasksResponse` |
+| Professional | `Professional`, `ProfessionalDetail`, `ProfessionalData`, `ProfessionalDisplay` |
+| Application | `Application`, `ApplicationStatus`, `ApplicationFilters` |
+| Review | `Review`, `ReviewSubmit`, `ReviewDisplay`, `PendingReviewTask` |
+| Question | `Question`, `Answer`, `QuestionFormData` |
+| UI Components | `CompletedTaskDisplay`, `TaskSelection`, `Service` |
+
+### Helper Types
+
+```typescript
+// Get a specific API type
+type User = APIType<'UserProfile'>
+
+// Get all available keys
+type Keys = APIKeys  // 'UserProfile' | 'UserCreate' | 'Task' | ...
+```
+
+### Adding New Types
+
+1. Define the type in its domain file (e.g., `/src/server/tasks/task.types.ts`)
+2. Import it in `/src/types/api.d.ts`
+3. Add entry to the `API` interface inside `declare global`
 
 ## Routes Documentation
 
@@ -923,125 +971,87 @@ ALTER TABLE tasks ADD CONSTRAINT tasks_category_check
 
 ## Authentication Status
 
-### Current State: Authentication Disabled
+### Current State: Fully Implemented with Supabase Auth
 
-The application is currently in **public beta mode** with authentication UI implemented but **not enforced**:
+Authentication is **fully implemented** using Supabase Auth with multiple providers:
 
-#### What Works
-- Authentication UI components (login slide-over)
-- Google/Facebook OAuth buttons (UI only)
-- Profile pages and forms
-- Mock authentication system for development
+#### Available Auth Providers
+- **Google OAuth** - Primary social login
+- **Facebook OAuth** - Secondary social login
+- **Telegram Login** - Cost-effective notifications integration
+- **Email/Password** - Traditional authentication
 
-#### What's Missing
-- Backend authentication enforcement
-- Session management
-- Protected API routes
-- User authorization checks
-- Email/password authentication
+#### Implementation Details
 
-#### Pages Requiring Auth (Future)
-When authentication is enabled, these pages will be protected:
+**Client Configuration**: `/src/lib/supabase/client.ts`
+```typescript
+import { createClient } from '@/lib/supabase/client'
+const supabase = createClient()
+
+// OAuth login
+await supabase.auth.signInWithOAuth({
+  provider: 'google',
+  options: { redirectTo: `${location.origin}/auth/callback` }
+})
+```
+
+**Server Configuration**: `/src/lib/supabase/server.ts`
+```typescript
+import { createClient } from '@/lib/supabase/server'
+const supabase = await createClient()
+const { data: { user } } = await supabase.auth.getUser()
+```
+
+#### Protected Routes
+These routes require authentication:
 - `/[lang]/create-task` - Task creation
 - `/[lang]/profile` - Profile management
-- Task actions (apply, question) - Buttons on task detail pages
+- `/[lang]/tasks/posted` - Customer's posted tasks
+- `/[lang]/tasks/applications` - Professional's applications
+- `/[lang]/tasks/work` - Professional's active work
 
-#### Mock Auth System
-For development purposes, a mock authentication system is available:
-- Location: `/src/hooks/use-auth.ts`
-- Features: Login state, user data, session persistence
-- Usage: Testing protected flows without backend
+#### Auth Components
+- **AuthSlideOver** (`/src/components/ui/auth-slide-over.tsx`) - Login modal with all providers
+- **OAuth Callback** (`/app/auth/callback/route.ts`) - Handles OAuth redirects
+- **useAuth Hook** (`/src/features/auth/`) - Client-side auth state management
 
-#### Migration Plan
-To enable authentication:
-1. Configure NextAuth providers (Google, Facebook, Email)
-2. Add authentication middleware
-3. Protect API routes
-4. Add session verification to protected pages
-5. Enable email/password authentication
-6. Add password reset flow
+#### Session Management
+- Sessions managed via Supabase Auth
+- Middleware refreshes tokens automatically (`/middleware.ts`)
+- Row Level Security (RLS) policies enforce data access
 
 ## Database Schema
 
-### Main Entities
+**Infrastructure**: Supabase PostgreSQL with Row Level Security (RLS)
 
-#### Users
-```typescript
-{
-  id: number
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-  phone: string
-  city: string
-  neighborhood: string
-  isProfessional: boolean
-  categories: string[]
-  hourlyRate: number
-  bio: string
-  portfolio: string[]
-  rating: number
-  completedTasks: number
-  isPhoneVerified: boolean
-  isVatVerified: boolean
-  createdAt: Date
-}
-```
+### Main Tables
 
-#### Tasks
-```typescript
-{
-  id: number
-  title: string
-  description: string
-  category: string
-  city: string
-  neighborhood: string
-  budget: number
-  images: string[]
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled'
-  creatorId: number
-  createdAt: Date
-  completedAt: Date
-}
-```
+| Table | Description |
+|-------|-------------|
+| `users` | Customer and professional profiles with verification fields |
+| `tasks` | Service requests with location, budget, and status tracking |
+| `applications` | Professional bids on tasks |
+| `reviews` | Bidirectional rating system |
+| `messages` | Task-specific communication between users |
+| `notifications` | User notification system |
+| `safety_reports` | User safety reporting and moderation |
 
-#### Applications
-```typescript
-{
-  id: number
-  taskId: number
-  professionalId: number
-  message: string
-  proposedPrice: number
-  status: 'pending' | 'accepted' | 'rejected'
-  createdAt: Date
-}
-```
+### Key Features
+- **Authentication**: Managed by Supabase Auth (Google, Facebook, Telegram, Email)
+- **Row Level Security**: RLS policies enforce data access at the database level
+- **Real-time**: Supabase Realtime for live updates
+- **Storage**: Supabase Storage for avatars, task images, documents
 
-#### Reviews
-```typescript
-{
-  id: number
-  taskId: number
-  reviewerId: number
-  reviewedId: number
-  rating: number
-  comment: string
-  createdAt: Date
-}
-```
+### Schema Management
 
-### Database Commands
+Database schema is managed via Supabase Dashboard or CLI:
 
 ```bash
-# Push schema changes
-npm run db:push
-
-# Generate migrations (manual setup required)
-drizzle-kit generate:pg
+# Generate TypeScript types from database
+npx supabase gen types typescript --linked > src/types/supabase.ts
 ```
+
+For complete schema documentation, see `/docs/infrastructure/supabase-vercel-setup.md`
 
 ## Development
 
@@ -1144,16 +1154,14 @@ vercel --prod
 Required environment variables:
 
 ```bash
-# Database
-DATABASE_URL=postgresql://user:password@host:5432/database
+# Supabase (get from https://supabase.com/dashboard/project/_/settings/api)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key  # Server-only!
 
-# NextAuth (when enabled)
-NEXTAUTH_URL=https://yourdomain.com
-NEXTAUTH_SECRET=your-secret-key
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-FACEBOOK_CLIENT_ID=your-facebook-client-id
-FACEBOOK_CLIENT_SECRET=your-facebook-client-secret
+# Telegram Bot (for notifications)
+TG_BOT_TOKEN=your-bot-token
+TG_BOT_USERNAME=your-bot-username
 ```
 
 ### Build Configuration
@@ -1172,7 +1180,7 @@ FACEBOOK_CLIENT_SECRET=your-facebook-client-secret
 - Static generation where possible
 - Image optimization with Next.js Image
 - Middleware caching for locale detection
-- Database connection pooling with Neon
+- Supabase connection pooling via Supavisor
 
 ## Contributing
 
@@ -1197,6 +1205,6 @@ MIT
 
 ---
 
-**Built with**: Next.js 15, TypeScript, PostgreSQL, Drizzle ORM, NextUI, Tailwind CSS
+**Built with**: Next.js 15, TypeScript, Supabase, NextUI, Tailwind CSS
 
-**Powered by**: Vercel, Neon Database
+**Powered by**: Vercel, Supabase

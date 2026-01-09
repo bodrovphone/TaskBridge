@@ -3,15 +3,13 @@
  *
  * Central export point for all type definitions.
  *
+ * Note: API, APIType, and APIKeys are available globally via api.d.ts
+ * No import needed - just use API['TypeName'] anywhere.
+ *
  * Usage:
- * import type { API, APIType } from '@/types'
+ * const user: API['UserProfile'] = { ... }
  * import type { Application, Notification } from '@/types'
  */
-
-// =============================================================================
-// API Type Registry (NEW - Recommended)
-// =============================================================================
-export type { API, APIType, APIKeys } from './api'
 
 // =============================================================================
 // Individual Types (Backwards Compatibility)

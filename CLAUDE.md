@@ -109,6 +109,49 @@ TaskBridge follows a modern `/src/` structure for better organization and scalab
 - **🔧 Separation of Concerns** - Global utilities separate from feature-specific logic
 - **⚡ Next.js Compatibility** - Full support for App Router with `/src/` directory
 
+### Global API Type Registry
+
+**Location**: `/src/types/api.d.ts`
+
+The codebase uses a global `API` interface for type-safe access to all DTOs and entity types. No imports needed - types are available globally.
+
+**Usage:**
+```typescript
+// Access any type via API['TypeName'] - no imports required
+interface Props {
+  professional: API['ProfessionalData']
+  tasks: API['TaskSelection'][]
+}
+
+const user: API['UserProfile'] = { ... }
+const task: API['TaskCreate'] = { title: 'Fix sink', ... }
+```
+
+**Available Type Domains:**
+| Domain | Types |
+|--------|-------|
+| User | `UserProfile`, `UserCreate`, `UserUpdate`, `GalleryItem`, `ServiceItem` |
+| Task | `Task`, `TaskCreate`, `TaskUpdate`, `TaskStatus`, `TasksResponse` |
+| Professional | `Professional`, `ProfessionalDetail`, `ProfessionalData`, `ProfessionalDisplay` |
+| Application | `Application`, `ApplicationStatus`, `ApplicationFilters` |
+| Review | `Review`, `ReviewSubmit`, `ReviewDisplay`, `PendingReviewTask` |
+| Question | `Question`, `Answer`, `QuestionFormData` |
+| UI Components | `CompletedTaskDisplay`, `TaskSelection`, `Service` |
+
+**Helper Types:**
+```typescript
+// Get a specific API type
+type User = APIType<'UserProfile'>
+
+// Get all available keys
+type Keys = APIKeys  // 'UserProfile' | 'UserCreate' | 'Task' | ...
+```
+
+**Adding New Types:**
+1. Define the type in its domain file (e.g., `/src/server/tasks/task.types.ts`)
+2. Import it in `/src/types/api.d.ts`
+3. Add entry to the `API` interface inside `declare global`
+
 ### Database Architecture (Supabase PostgreSQL)
 
 **Infrastructure**: Supabase-hosted PostgreSQL with Row Level Security (RLS)

@@ -6,19 +6,13 @@ import { useTranslations } from 'next-intl';
 import FallbackAvatar from "@/components/ui/fallback-avatar";
 
 interface CustomerInfo {
- // Mock data fields (camelCase)
- firstName?: string;
- lastName?: string;
- profileImageUrl?: string;
- completedTasks?: number;
- memberSince?: string;
-
  // Database fields (snake_case from API)
  id?: string;
  full_name?: string;
- avatar_url?: string;
+ avatar_url?: string | null;
  tasks_completed?: number;
  created_at?: string;
+ preferred_language?: string;
 }
 
 interface PrivacyToggleProps {
@@ -38,35 +32,12 @@ export default function PrivacyToggle({ customer, children, isOwner = false }: P
   return null;
  }
 
- // Handle both database (full_name) and mock (firstName/lastName) formats
- let displayName = '';
- let initials = '?';
+ // Get display name from full_name
+ const displayName = customer.full_name || 'Anonymous User';
 
- if (customer.full_name) {
-  // Database format - split full_name
-  displayName = customer.full_name;
-  const nameParts = customer.full_name.split(' ');
-  initials = nameParts.length >= 2
-    ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
-    : customer.full_name.substring(0, 2).toUpperCase();
- } else if (customer.firstName || customer.lastName) {
-  // Mock format - combine firstName and lastName
-  const firstName = customer.firstName || 'Anonymous';
-  const lastName = customer.lastName || 'User';
-  displayName = `${firstName} ${lastName}`;
-  initials = `${firstName[0]}${lastName[0]}`.toUpperCase();
- } else {
-  displayName = 'Anonymous User';
- }
-
- // Handle avatar URL (both formats)
- const avatarUrl = customer.avatar_url || customer.profileImageUrl;
-
- // Handle completed tasks (both formats)
- const completedTasksCount = customer.tasks_completed ?? customer.completedTasks;
-
- // Handle member since date (both formats)
- const memberSinceDate = customer.created_at || customer.memberSince;
+ const avatarUrl = customer.avatar_url ?? undefined;
+ const completedTasksCount = customer.tasks_completed;
+ const memberSinceDate = customer.created_at;
 
  return (
   <>
