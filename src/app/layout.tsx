@@ -72,6 +72,23 @@ function RootLayout({
 }) {
  return (
   <html lang="bg" className="overflow-x-hidden">
+   <head>
+    {/* Preload critical fonts to break CSS→Font dependency chain */}
+    <link
+     rel="preload"
+     href="/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Regular.woff2"
+     as="font"
+     type="font/woff2"
+     crossOrigin="anonymous"
+    />
+    <link
+     rel="preload"
+     href="/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Bold.woff2"
+     as="font"
+     type="font/woff2"
+     crossOrigin="anonymous"
+    />
+   </head>
    <body className="font-sans overflow-x-hidden w-full">
     {children}
     <Analytics />
