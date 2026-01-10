@@ -21,6 +21,7 @@ export const navigation = {
   'nav.findProfessional': 'find a professional',
   'nav.findAnotherTask': 'find another task',
   'nav.language': 'Language',
+  'nav.changeLanguage': 'Change language',
   'nav.general': 'General',
   'nav.discover': 'Discover',
   'nav.closeMenu': 'Close Menu',

@@ -130,14 +130,18 @@ export default function UserAvatarDropdown({
    }}
   >
     <DropdownTrigger>
-     <div className={className}>
+     <button
+      className={className}
+      aria-label={t('nav.profile')}
+      type="button"
+     >
       <UserAvatar
        user={profile}
        size={size}
        isClickable
        className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
       />
-     </div>
+     </button>
     </DropdownTrigger>
 
     <DropdownMenu

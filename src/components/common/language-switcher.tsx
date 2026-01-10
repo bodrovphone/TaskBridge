@@ -75,6 +75,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
       size="sm"
       className="h-8 px-2 min-w-[32px] flex-shrink-0"
       isIconOnly
+      aria-label={t('nav.changeLanguage')}
      >
       <FlagIcon locale={currentLocale} size={22} />
      </Button>
@@ -84,6 +85,7 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
       size="lg"
       className="w-full justify-between px-0 font-medium text-gray-900"
       endContent={<FlagIcon locale={currentLocale} size={22} />}
+      aria-label={t('nav.changeLanguage')}
      >
       {currentLanguage.name}
      </Button>

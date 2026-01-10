@@ -21,6 +21,7 @@ export const navigation = {
   'nav.findProfessional': 'найти профессионала',
   'nav.findAnotherTask': 'найти другую задачу',
   'nav.language': 'Язык',
+  'nav.changeLanguage': 'Сменить язык',
   'nav.general': 'Общее',
   'nav.discover': 'Открыть',
   'nav.closeMenu': 'Закрыть меню',
