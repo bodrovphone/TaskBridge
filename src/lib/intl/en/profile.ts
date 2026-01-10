@@ -107,9 +107,9 @@ export const profile = {
   // Customer Profile
   'profile.customer.personalInfo': 'Personal Information',
   'profile.customer.language': 'Language',
-  'profile.customer.preferredContact': 'Preferred Contact',
+  'profile.customer.preferredContact': 'Notifications',
   'profile.customer.preferredLanguage': 'Preferred Language',
-  'profile.customer.preferredContactMethod': 'Preferred Contact Method',
+  'profile.customer.preferredContactMethod': 'Where to receive notifications',
   'profile.customer.statistics': 'Statistics',
   'profile.customer.tasksPosted': 'Tasks Posted',
   'profile.customer.tasksCompleted': 'Tasks Completed',

@@ -12,34 +12,15 @@ import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
 import { HeroSection, FeaturedTasksSection, FeaturedProfessionalsSection } from "./sections";
 import type { Professional } from '@/server/professionals/professional.types';
+import type { FeaturedTask } from '@/lib/data/featured-tasks';
 import CategoryCard from '@/components/ui/category-card';
 import { MAIN_CATEGORIES } from '@/features/categories';
 import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
 import { useAuth } from '@/features/auth';
 
-interface Task {
-  id: string
-  title: string
-  description: string
-  category: string
-  subcategory: string
-  budget_min: number
-  budget_max: number
-  budget_type: string
-  city: string
-  neighborhood: string
-  deadline: string
-  urgency: string
-  requirements: string
-  images: string[] // Database field name
-  status: string
-  created_at: string
-  applications_count?: number
-}
-
 interface LandingPageProps {
-  featuredTasks: Task[]
+  featuredTasks: FeaturedTask[]
   featuredProfessionals: Professional[]
 }
 

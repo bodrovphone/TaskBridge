@@ -17,7 +17,7 @@ import { ApplicationsSection, TaskInProgressState } from "./sections";
 import ApplicationDetail from '@/components/tasks/application-detail';
 import AcceptApplicationDialog from '@/components/tasks/accept-application-dialog';
 import RejectApplicationDialog from '@/components/tasks/reject-application-dialog';
-import { Application } from '@/types/applications';
+import { Application, ApplicationStatus } from '@/types/applications';
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { getTaskQuestions, updateQuestionAnswer, getRelativeTime } from '@/components/tasks/mock-questions';
 // import type { Question } from '@/types/questions';
@@ -25,6 +25,33 @@ import { getRelativeTime } from '@/components/tasks/mock-questions';
 import { normalizeCategoryKeys } from '@/lib/utils/categories';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/features/auth';
+
+/**
+ * Raw application data from API (snake_case from DB)
+ */
+interface ApplicationFromAPI {
+  id: string;
+  status: ApplicationStatus;
+  proposed_price_bgn: number;
+  estimated_duration_hours: number | null;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  rejection_reason: string | null;
+  withdrawn_at: string | null;
+  withdrawal_reason: string | null;
+  professional?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+    average_rating: number;
+    tasks_completed: number;
+    service_categories: string[];
+    hourly_rate_bgn: number | null;
+    bio: string | null;
+    city: string | null;
+  };
+}
 
 interface TaskActivityProps {
   taskId: string;
@@ -103,9 +130,9 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
     const data = await response.json();
 
     // Map API response to Application type and filter out removed applications
-    const mappedApplications: Application[] = (data.applications || [])
-     .filter((app: any) => app.status !== 'removed_by_customer') // Don't show removed applications
-     .map((app: any) => ({
+    const mappedApplications: Application[] = (data.applications as ApplicationFromAPI[] || [])
+     .filter((app) => app.status !== 'removed_by_customer') // Don't show removed applications
+     .map((app) => ({
       id: app.id,
       taskId: taskId,
       professional: {
@@ -212,7 +239,13 @@ export default function TaskActivity({ taskId, initialApplicationId }: TaskActiv
  const handleAcceptConfirm = async (id: string, contactInfo: { method: 'phone' | 'email' | 'custom'; customContact?: string; message?: string }) => {
   try {
    // Build contact info payload
-   const contactPayload: any = { method: contactInfo.method };
+   const contactPayload: {
+    method: 'phone' | 'email' | 'custom';
+    phone?: string;
+    email?: string;
+    customContact?: string;
+    message?: string;
+   } = { method: contactInfo.method };
 
    if (contactInfo.method === 'phone' && userProfile?.phone) {
     contactPayload.phone = userProfile.phone;

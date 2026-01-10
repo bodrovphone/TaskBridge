@@ -13,7 +13,7 @@ import { useRouter, useParams } from "next/navigation";
 import type { Task } from '@/server/tasks/task.types';
 
 interface PaginatedTasksResponse {
- tasks: any[];
+ tasks: Task[];
  pagination: {
   page: number;
   limit: number;

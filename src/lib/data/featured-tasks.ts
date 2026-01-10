@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
+import type { TaskStatus } from '@/lib/utils/task-permissions'
 
-interface Task {
+export interface FeaturedTask {
   id: string
   title: string
   description: string
@@ -8,14 +9,14 @@ interface Task {
   subcategory: string
   budget_min: number
   budget_max: number
-  budget_type: string
+  budget_type: 'fixed' | 'hourly' | 'negotiable' | 'unclear'
   city: string
   neighborhood: string
   deadline: string
-  urgency: string
+  urgency: 'same_day' | 'within_week' | 'flexible'
   requirements: string
   images: string[] // Database field name
-  status: string
+  status: TaskStatus
   created_at: string
   applications_count?: number
 }
@@ -31,7 +32,7 @@ interface Task {
  * - Urgent tasks: +2 points
  */
 function calculateDiversityScore(
-  task: Task,
+  task: FeaturedTask,
   seenCategories: Set<string>
 ): number {
   let score = 0
@@ -54,7 +55,7 @@ function calculateDiversityScore(
   }
 
   // Urgency bonus
-  if (task.urgency === 'asap' || task.urgency === 'within_day') {
+  if (task.urgency === 'same_day') {
     score += 2
   }
 
@@ -69,7 +70,7 @@ function calculateDiversityScore(
  * Shows open, in_progress, and completed tasks to demonstrate platform activity
  * Only excludes cancelled tasks
  */
-export async function getFeaturedTasks(): Promise<Task[]> {
+export async function getFeaturedTasks(): Promise<FeaturedTask[]> {
   try {
     console.log('[getFeaturedTasks] Starting fetch...')
     const supabase = await createClient()

@@ -19,9 +19,36 @@ import { canEditTask, canApplyToTask, getDisabledReason, type TaskStatus } from 
 // @todo FEATURE: Questions feature - commented out for future implementation
 // import { canAskQuestions } from "@/lib/utils/task-permissions";
 import type { ApplicationStatus } from "@/components/tasks/types";
+import type { Task } from "@/server/tasks/task.types";
+
+/**
+ * Application entry from /api/applications endpoint
+ */
+interface UserApplicationResponse {
+  id: string;
+  status: ApplicationStatus;
+  task: {
+    id: string;
+    title: string;
+  };
+}
+
+/**
+ * Task with customer embed for actions component
+ */
+interface TaskWithCustomer extends Task {
+  customer?: {
+    id: string;
+    full_name: string;
+    avatar_url?: string | null;
+    tasks_completed?: number;
+    created_at?: string;
+    preferred_language?: string;
+  };
+}
 
 interface TaskActionsProps {
- task: any;
+ task: TaskWithCustomer;
  isOwner?: boolean;
 }
 
@@ -84,7 +111,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     if (response.ok) {
      const data = await response.json();
      // Find application for this specific task
-     const app = data.applications?.find((a: any) => a.task.id === task.id);
+     const app = (data.applications as UserApplicationResponse[] | undefined)?.find((a) => a.task.id === task.id);
      setUserApplication(app || null);
     }
    } catch (error) {
@@ -174,9 +201,9 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
    try {
     await navigator.share(shareData);
     toast({ title: t('taskDetail.shareSuccess') });
-   } catch (error: any) {
+   } catch (error) {
     // User cancelled or error occurred
-    if (error.name !== 'AbortError') {
+    if (error instanceof Error && error.name !== 'AbortError') {
      console.error('Error sharing:', error);
      // Fallback to clipboard
      await copyToClipboard(taskUrl);
@@ -232,11 +259,11 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
 
    // Redirect to My Work page
    router.push(`/${lang}/tasks/work`);
-  } catch (error: any) {
+  } catch (error) {
    console.error('Error withdrawing from task:', error);
    toast({
     title: t('professionalWithdraw.error'),
-    description: error.message,
+    description: error instanceof Error ? error.message : String(error),
     variant: 'destructive',
    });
   } finally {
@@ -266,11 +293,11 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
 
    // Refresh the page to show updated status
    router.refresh();
-  } catch (error: any) {
+  } catch (error) {
    console.error('Error marking task as completed:', error);
    toast({
     title: t('taskCompletion.errorMessage'),
-    description: error.message,
+    description: error instanceof Error ? error.message : String(error),
     variant: 'destructive',
    });
   } finally {
@@ -289,7 +316,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  // Note: API returns snake_case field names from database
  // Use profile.id for notification sessions (magic links), user.id for regular auth
  const currentUserId = profile?.id || user?.id;
- const isAssignedProfessional = currentUserId && (task.selected_professional_id === currentUserId || task.selectedProfessionalId === currentUserId);
+ const isAssignedProfessional = currentUserId && task.selected_professional_id === currentUserId;
 
  // If assigned professional viewing their own task, show Mark Complete and Withdraw buttons
  if (isAssignedProfessional && taskStatus === 'in_progress') {
@@ -339,8 +366,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      onClose={() => setIsMarkCompletedDialogOpen(false)}
      onConfirm={handleMarkCompletedConfirm}
      taskTitle={task.title}
-     customerName={task.customer?.name || task.customerName || 'Customer'}
-     payment={`${task.budgetMax || task.budget || 0} €`}
+     customerName={task.customer?.full_name || 'Customer'}
+     payment={`${task.budget_max_bgn || 0} €`}
      isLoading={isMarkingCompleted}
     />
 
@@ -350,11 +377,11 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      onClose={() => setIsWithdrawDialogOpen(false)}
      onConfirm={handleWithdrawConfirm}
      taskTitle={task.title}
-     customerName={task.customer?.name || task.customerName || 'Customer'}
+     customerName={task.customer?.full_name || 'Customer'}
      withdrawalsThisMonth={withdrawalsThisMonth}
      maxWithdrawalsPerMonth={maxWithdrawalsPerMonth}
-     taskBudget={task.budgetMax || task.budget || 0}
-     acceptedDate={task.acceptedAt ? new Date(task.acceptedAt) : new Date()}
+     taskBudget={task.budget_max_bgn || 0}
+     acceptedDate={new Date()}
     />
    </>
   );
@@ -419,8 +446,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      onClose={() => setIsMarkCompletedDialogOpen(false)}
      onConfirm={handleMarkCompletedConfirm}
      taskTitle={task.title}
-     customerName={task.customer?.name || task.customerName || 'Customer'}
-     payment={`${task.budgetMax || task.budget || 0} €`}
+     customerName={task.customer?.full_name || 'Customer'}
+     payment={`${task.budget_max_bgn || 0} €`}
      isLoading={isMarkingCompleted}
     />
    </>
@@ -506,7 +533,7 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
       authenticatedFetch(`/api/applications?status=all`)
        .then(r => r.json())
        .then(data => {
-        const app = data.applications?.find((a: any) => a.task.id === task.id);
+        const app = (data.applications as UserApplicationResponse[] | undefined)?.find((a) => a.task.id === task.id);
         setUserApplication(app || null);
        })
        .catch(console.error);
@@ -515,8 +542,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     taskId={task.id}
     taskTitle={task.title}
     taskBudget={{
-     min: task.budgetMin || task.budget_min_bgn || task.budget,
-     max: task.budgetMax || task.budget_max_bgn || task.budget,
+     min: task.budget_min_bgn ?? undefined,
+     max: task.budget_max_bgn ?? undefined,
     }}
    />
 

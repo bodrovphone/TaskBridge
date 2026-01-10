@@ -107,9 +107,9 @@ export const profile = {
   // Customer Profile
   'profile.customer.personalInfo': 'Особиста інформація',
   'profile.customer.language': 'Мова',
-  'profile.customer.preferredContact': 'Бажаний контакт',
+  'profile.customer.preferredContact': 'Сповіщення',
   'profile.customer.preferredLanguage': 'Бажана мова',
-  'profile.customer.preferredContactMethod': 'Бажаний спосіб зв\'язку',
+  'profile.customer.preferredContactMethod': 'Куди отримувати сповіщення',
   'profile.customer.statistics': 'Статистика',
   'profile.customer.tasksPosted': 'Опубліковано завдань',
   'profile.customer.tasksCompleted': 'Завершено завдань',

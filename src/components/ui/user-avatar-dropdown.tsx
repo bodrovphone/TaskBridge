@@ -151,10 +151,9 @@ export default function UserAvatarDropdown({
     {/* User Info Section */}
     <DropdownSection showDivider>
      <DropdownItem
-      key="user-info"
-      className="h-14 gap-2 opacity-100"
-      textValue="User info"
-      isReadOnly
+      key="profile-professional"
+      className="h-14 gap-2 cursor-pointer"
+      textValue="User profile"
      >
       <div className="flex gap-3 items-center">
        <UserAvatar user={profile} size="sm" />

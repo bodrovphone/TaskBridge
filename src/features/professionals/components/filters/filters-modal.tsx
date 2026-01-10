@@ -20,7 +20,7 @@ import { CityFilter } from '@/app/[lang]/browse-tasks/components/city-filter'
 import { RatingFilter } from './rating-filter'
 import { CompletedJobsFilter } from './completed-jobs-filter'
 import { ProfessionalsSortDropdown } from './professionals-sort-dropdown'
-import { useProfessionalFilters, type ProfessionalFilters } from '../../hooks/use-professional-filters'
+import { useProfessionalFilters, type ProfessionalFilters, type ProfessionalFilterValue } from '../../hooks/use-professional-filters'
 
 const filterSections = [
   { key: 'category', icon: Grid3X3, labelKey: 'professionals.filters.category', color: 'text-blue-500' },
@@ -46,7 +46,7 @@ export function FiltersModal() {
   }, [isOpen, filters])
 
   // Update local filter without triggering API call
-  const updateLocalFilter = (key: keyof ProfessionalFilters, value: any) => {
+  const updateLocalFilter = (key: keyof ProfessionalFilters, value: ProfessionalFilterValue) => {
     setLocalFilters(prev => ({ ...prev, [key]: value }))
   }
 

@@ -9,7 +9,7 @@ import { CityFilter } from '@/app/[lang]/browse-tasks/components/city-filter'
 import { SortDropdown } from '@/app/[lang]/browse-tasks/components/sort-dropdown'
 import { RatingFilter } from './rating-filter'
 import { CompletedJobsFilter } from './completed-jobs-filter'
-import { useProfessionalFilters } from '../../hooks/use-professional-filters'
+import { useProfessionalFilters, type ProfessionalFilters, type ProfessionalFilterValue } from '../../hooks/use-professional-filters'
 
 export function FilterBar() {
   const t = useTranslations()
@@ -33,8 +33,8 @@ export function FilterBar() {
   }, [])
 
   // Handle filter change with scroll
-  const handleFilterChange = useCallback((key: string, value: any) => {
-    updateFilter(key as any, value)
+  const handleFilterChange = useCallback((key: keyof ProfessionalFilters, value: ProfessionalFilterValue) => {
+    updateFilter(key, value)
     scrollToResults()
   }, [updateFilter, scrollToResults])
 

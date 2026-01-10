@@ -85,7 +85,7 @@ interface ResultsSectionProps {
   professionals: Professional[];
   featuredProfessionals: Professional[]; // Featured from API (ignores filters)
   isLoading: boolean;
-  error: any;
+  error: Error | null;
 
   // Actions
   onClearFilters: () => void;

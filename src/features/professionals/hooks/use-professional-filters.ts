@@ -22,6 +22,9 @@ export interface ProfessionalFilters {
   page?: number
 }
 
+/** Valid values for professional filter updates */
+export type ProfessionalFilterValue = ProfessionalFilters[keyof ProfessionalFilters]
+
 /**
  * Hook for managing professional filters with URL synchronization
  */
@@ -71,7 +74,7 @@ export function useProfessionalFilters() {
    * @param skipScrollRestore - Set to true when scrollToResults will be called after (avoids race condition)
    */
   const updateFilter = useCallback(
-    (key: keyof ProfessionalFilters, value: any, skipScrollRestore = false) => {
+    (key: keyof ProfessionalFilters, value: ProfessionalFilterValue, skipScrollRestore = false) => {
       const newFilters = { ...filters, [key]: value }
 
       // Reset to page 1 when filters change (except when changing page)

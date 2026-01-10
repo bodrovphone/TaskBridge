@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { LandingPage } from '@/features/home'
-import { getFeaturedTasks } from '@/lib/data/featured-tasks'
+import { getFeaturedTasks, type FeaturedTask } from '@/lib/data/featured-tasks'
 import { ProfessionalService } from '@/server/professionals/professional.service'
+import type { Professional } from '@/server/professionals/professional.types'
 import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, DEFAULT_LOCALE } from '@/lib/constants/locales'
@@ -33,18 +34,16 @@ async function SEOContent({
   featuredProfessionals
 }: {
   locale: string
-  featuredTasks: any[]
-  featuredProfessionals: any[]
+  featuredTasks: FeaturedTask[]
+  featuredProfessionals: Professional[]
 }) {
   const t = await getTranslations({ locale })
 
   // Helper to get localized task content
-  const getLocalizedTitle = (task: any) => {
-    if (locale === 'bg' && task.title_bg) return task.title_bg
+  const getLocalizedTitle = (task: FeaturedTask) => {
     return task.title
   }
-  const getLocalizedDescription = (task: any) => {
-    if (locale === 'bg' && task.description_bg) return task.description_bg
+  const getLocalizedDescription = (task: FeaturedTask) => {
     return task.description
   }
 
@@ -133,7 +132,7 @@ async function HomePage({ params }: HomePageProps) {
       <link
         rel="preload"
         as="image"
-        href="/images/hero_image_1.webp"
+        href="/images/hero-m-3-mobile.jpg"
         media="(max-width: 1024px)"
         fetchPriority="high"
       />

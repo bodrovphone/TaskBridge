@@ -8,34 +8,15 @@ import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { DEFAULT_LOCALE } from '@/lib/constants/locales';
+import type { FeaturedTask } from '@/lib/data/featured-tasks';
 import {
  FileText,
  Plus,
  ArrowRight
 } from "lucide-react";
 
-interface Task {
-  id: string
-  title: string
-  description: string
-  category: string
-  subcategory: string
-  budget_min: number
-  budget_max: number
-  budget_type: string
-  city: string
-  neighborhood: string
-  deadline: string
-  urgency: string
-  requirements: string
-  images: string[] // Database field name
-  status: string
-  created_at: string
-  applications_count?: number
-}
-
 interface FeaturedTasksSectionProps {
-  tasks: Task[]
+  tasks: FeaturedTask[]
 }
 
 export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProps) {
@@ -130,7 +111,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
   ...task,
   budgetMin: task.budget_min,
   budgetMax: task.budget_max,
-  budgetType: task.budget_type as 'fixed' | 'hourly' | 'negotiable' | 'unclear',
+  budgetType: task.budget_type,
   createdAt: task.created_at,
   // Ensure images is always an array (handle null/undefined from database)
   images: Array.isArray(task.images) ? task.images : [],
@@ -186,7 +167,7 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
      style={{ contain: 'layout style' }}
     >
      <div className="flex gap-8 px-4 sm:px-6 lg:px-8" style={{ width: 'max-content', paddingLeft: 'max(1rem, calc((100vw - 80rem) / 2 + 2rem))' }}>
-      {featuredTasks.map((task: any, index: number) => (
+      {featuredTasks.map((task, index) => (
        <div
         key={task.id}
         className="flex-shrink-0 w-80 h-[520px] hover:scale-105 transition-transform duration-300"

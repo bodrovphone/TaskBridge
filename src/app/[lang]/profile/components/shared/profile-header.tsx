@@ -31,6 +31,7 @@ export function ProfileHeader({
       }
 
       let completed = 0
+      // Total: 3+1+1+2+1+1+1 = 10 points max
       let total = 10
 
       // Essential fields
@@ -45,13 +46,12 @@ export function ProfileHeader({
 
       // Additional helpful fields
       if (profile.avatarUrl) completed++
-      if (profile.isPhoneVerified) completed++
 
       return Math.round((completed / total) * 100)
     } else {
       // Customer profile completion logic
       let completed = 0
-      let total = 10
+      let total = 9
 
       if (profile.fullName) completed++
       if (profile.phoneNumber) completed++
@@ -59,7 +59,6 @@ export function ProfileHeader({
       if (profile.bio) completed++
       if (profile.avatarUrl) completed++
       if (profile.isEmailVerified) completed++
-      if (profile.isPhoneVerified) completed++
       if (profile.preferredLanguage) completed++
       if (profile.preferredContact) completed++
       if (profile.serviceCategories?.length > 0) completed++
@@ -180,13 +179,25 @@ export function ProfileHeader({
                 <div className="w-full">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-700">{t('profile.completion')}</span>
-                    <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    <span className={`text-sm font-bold bg-gradient-to-r bg-clip-text text-transparent ${
+                      completionPercentage >= 60
+                        ? 'from-green-600 to-emerald-600'
+                        : completionPercentage >= 40
+                        ? 'from-amber-500 to-orange-500'
+                        : 'from-red-500 to-orange-500'
+                    }`}>
                       {completionPercentage}%
                     </span>
                   </div>
                   <div className="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden shadow-inner">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-full transition-all duration-500 shadow-sm"
+                      className={`h-full rounded-full transition-all duration-500 shadow-sm bg-gradient-to-r ${
+                        completionPercentage >= 60
+                          ? 'from-green-400 via-green-500 to-emerald-500'
+                          : completionPercentage >= 40
+                          ? 'from-amber-400 via-amber-500 to-orange-500'
+                          : 'from-red-400 via-red-500 to-orange-500'
+                      }`}
                       style={{ width: `${completionPercentage}%` }}
                     ></div>
                   </div>
