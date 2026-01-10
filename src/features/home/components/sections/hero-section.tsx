@@ -1,15 +1,25 @@
 'use client'
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
 import { SpinningGeometric, WobblingGeometric } from "@/components/ui/animated-elements";
-import AuthSlideOver from "@/components/ui/auth-slide-over";
 import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
 import LiveActivityFeed from "@/components/ui/live-activity-feed";
 import { useTranslations } from 'next-intl';
 import { useCreateTask } from '@/hooks/use-create-task';
-import { ReviewEnforcementDialog } from '@/features/reviews';
+
+// Lazy load dialog components (only loaded when user interacts)
+const AuthSlideOver = dynamic(() => import("@/components/ui/auth-slide-over"), {
+  ssr: false,
+  loading: () => null
+});
+
+const ReviewEnforcementDialog = dynamic(
+  () => import('@/features/reviews').then(mod => ({ default: mod.ReviewEnforcementDialog })),
+  { ssr: false, loading: () => null }
+);
 import {
  Shield,
  Star,

@@ -1,14 +1,13 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { Button } from "@/components/ui/button";
 import { LocaleLink } from "@/components/common/locale-link";
 import { Logo } from "@/components/common/logo";
-import AuthSlideOver from "@/components/ui/auth-slide-over";
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
-import { useIsDesktop } from '@/hooks/use-media-query';
 import Image from 'next/image';
 import { HeroSection, FeaturedTasksSection, FeaturedProfessionalsSection } from "./sections";
 import type { Professional } from '@/server/professionals/professional.types';
@@ -16,8 +15,20 @@ import type { FeaturedTask } from '@/lib/data/featured-tasks';
 import CategoryCard from '@/components/ui/category-card';
 import { MAIN_CATEGORIES } from '@/features/categories';
 import { useCreateTask } from '@/hooks/use-create-task';
-import { ReviewEnforcementDialog } from '@/features/reviews';
 import { useAuth } from '@/features/auth';
+
+// Lazy load heavy dialog components (only loaded when user interacts)
+// AuthSlideOver includes @telegram-auth/react (~15KB gzipped)
+// ReviewEnforcementDialog includes full review dialog system
+const AuthSlideOver = dynamic(() => import("@/components/ui/auth-slide-over"), {
+  ssr: false,
+  loading: () => null
+});
+
+const ReviewEnforcementDialog = dynamic(
+  () => import('@/features/reviews').then(mod => ({ default: mod.ReviewEnforcementDialog })),
+  { ssr: false, loading: () => null }
+);
 
 interface LandingPageProps {
   featuredTasks: FeaturedTask[]
@@ -59,7 +70,6 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
  const pathname = usePathname();
  const router = useRouter();
  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg';
- const isDesktop = useIsDesktop();
  const [isAuthSlideOverOpen, setIsAuthSlideOverOpen] = useState(false);
  const { user, profile } = useAuth();
  const isAuthenticated = !!user && !!profile;

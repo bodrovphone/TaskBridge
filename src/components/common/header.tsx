@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useCallback, useEffect, useRef } from "react"
+import dynamic from "next/dynamic"
 import { useRouter, useParams, usePathname } from "next/navigation"
 import { LocaleLink } from "./locale-link"
 import { LanguageSwitcher } from "./language-switcher"
-import AuthSlideOver from "@/components/ui/auth-slide-over"
 import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
-import NotificationCenter from "./notification-center"
 import { useTranslations } from 'next-intl'
 import { Plus, FileText, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Users, Hammer, SquarePen } from "lucide-react"
 import Image from "next/image"
@@ -15,9 +14,24 @@ import { useAuth } from "@/features/auth"
 import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
 import { useCreateTask } from "@/hooks/use-create-task"
-import { ReviewEnforcementDialog } from "@/features/reviews"
 import { useNotificationStore } from "@/stores/notification-store"
 import { LanguagePreferencePrompt } from "./language-preference-prompt"
+
+// Lazy load heavy components (only loaded when user interacts)
+const AuthSlideOver = dynamic(() => import("@/components/ui/auth-slide-over"), {
+  ssr: false,
+  loading: () => null
+})
+
+const NotificationCenter = dynamic(() => import("./notification-center"), {
+  ssr: false,
+  loading: () => null
+})
+
+const ReviewEnforcementDialog = dynamic(
+  () => import('@/features/reviews').then(mod => ({ default: mod.ReviewEnforcementDialog })),
+  { ssr: false, loading: () => null }
+)
 import {
  Navbar,
  NavbarBrand,
