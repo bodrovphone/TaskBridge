@@ -46,11 +46,13 @@ export default function FeaturedTasksSection({ tasks }: FeaturedTasksSectionProp
  useEffect(() => {
   if (scrollContainerRef.current && tasks.length > 2 && window.innerWidth >= 1024) {
    const container = scrollContainerRef.current;
-   // Small delay to ensure DOM is rendered
+   // Double rAF ensures layout is complete before measuring (avoids forced reflow)
    requestAnimationFrame(() => {
-    // Calculate center position: (total scrollable width - visible width) / 2
-    const centerPosition = (container.scrollWidth - container.clientWidth) / 2;
-    container.scrollLeft = centerPosition;
+    requestAnimationFrame(() => {
+     // Calculate center position: (total scrollable width - visible width) / 2
+     const centerPosition = (container.scrollWidth - container.clientWidth) / 2;
+     container.scrollLeft = centerPosition;
+    });
    });
   }
  }, [tasks.length]);

@@ -30,6 +30,7 @@ export const professionals = {
   'professionals.card.lookingForFirstTask': 'Newcomer',
   'professionals.card.waitingForReviews': 'Waiting for first reviews',
   'professionals.card.noBio': 'Verified professional. More details coming soon.',
+  'professionals.card.viewProfile': 'View {name}\'s profile',
   'professionals.startingFrom': 'Starting from',
   'professionals.noResults': 'No categories match your search',
   'professionals.categoryResults': 'categories found',

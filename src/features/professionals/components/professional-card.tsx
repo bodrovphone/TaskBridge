@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from "framer-motion"
 import { useTranslations } from 'next-intl'
 import {
  Card as NextUICard,
@@ -8,7 +7,7 @@ import {
  Button as NextUIButton,
  Chip
 } from "@nextui-org/react"
-import { Star, MapPin, Clock, Briefcase } from "lucide-react"
+import { Star, MapPin, Briefcase } from "lucide-react"
 import FallbackAvatar from "@/components/ui/fallback-avatar"
 import { getCategoryLabelBySlug } from '@/features/categories'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -88,7 +87,11 @@ export default function ProfessionalCard({ professional, featured = false, isMoc
     <CardBody className={`p-6 relative z-10 ${compact ? 'h-full flex flex-col' : ''}`}>
      {/* Enhanced Header */}
      <div className="flex items-start gap-4 mb-4">
-      <LocaleLink href={`/professionals/${profileIdentifier}`} className="relative group">
+      <LocaleLink
+       href={`/professionals/${profileIdentifier}`}
+       className="relative group"
+       aria-label={t('professionals.card.viewProfile', { name })}
+      >
        <div className="hover:scale-110 transition-transform duration-200">
         <FallbackAvatar
          src={avatar}
