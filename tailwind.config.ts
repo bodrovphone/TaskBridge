@@ -19,7 +19,8 @@ export default {
       '2xl': '1536px',
     },
     fontFamily: {
-      sans: ['"Plovdiv Display"', 'system-ui', 'sans-serif'],
+      // Use CSS variable from next/font for optimal loading
+      sans: ['var(--font-plovdiv)', 'system-ui', 'sans-serif'],
     },
     extend: {
       borderRadius: {

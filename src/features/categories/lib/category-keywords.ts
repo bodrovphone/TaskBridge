@@ -312,7 +312,7 @@ export const CATEGORY_KEYWORDS: CategoryKeywords = {
   'social-media-marketing': {
     en: ['smm', 'social media', 'facebook', 'instagram', 'tiktok', 'social marketing', 'influencer'],
     bg: ['SMM', 'социални мрежи', 'фейсбук', 'инстаграм', 'тикток', 'маркетинг'],
-    ru: ['SMM', 'соцсети', 'фейсбук', 'инстаграм', 'тикток', 'продвижение в соцсетях'],
+    ru: ['SMM', 'соцсети', 'фейсбук', 'инстаграм', 'тикток', 'продвижение в соцсетях', 'таргетолог', 'таргет', 'таргетинг', 'таргетированная реклама'],
   },
   'email-marketing': {
     en: ['email marketing', 'newsletter', 'email campaign', 'mailchimp', 'email automation'],

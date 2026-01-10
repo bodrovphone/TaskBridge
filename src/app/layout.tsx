@@ -1,10 +1,33 @@
 import type { Metadata, Viewport } from 'next'
+import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 
 // Primary font - Plovdiv Typeface (Bulgarian font with Cyrillic support)
-// Loaded via @font-face in globals.css
+// Using next/font/local for automatic preloading and optimal loading
+const plovdivDisplay = localFont({
+  src: [
+    {
+      path: '../../public/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Light.woff2',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-plovdiv',
+  preload: true,
+})
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trudify.com'
 
@@ -71,24 +94,7 @@ function RootLayout({
  children: React.ReactNode
 }) {
  return (
-  <html lang="bg" className="overflow-x-hidden">
-   <head>
-    {/* Preload critical fonts to break CSS→Font dependency chain */}
-    <link
-     rel="preload"
-     href="/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Regular.woff2"
-     as="font"
-     type="font/woff2"
-     crossOrigin="anonymous"
-    />
-    <link
-     rel="preload"
-     href="/fonts/PlovdivTypeface-Fonts/PlovdivDisplay-Bold.woff2"
-     as="font"
-     type="font/woff2"
-     crossOrigin="anonymous"
-    />
-   </head>
+  <html lang="bg" className={`overflow-x-hidden ${plovdivDisplay.variable}`}>
    <body className="font-sans overflow-x-hidden w-full">
     {children}
     <Analytics />
