@@ -3,9 +3,9 @@ import { getTranslations } from 'next-intl/server'
 import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
-import { Button } from '@nextui-org/react'
 import { Mail, PlayCircle, BookOpen, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { ButtonLink } from '@/components/ui/button-link'
 import { LocaleLink } from '@/components/common/locale-link'
 import {
   ContentPageHero,
@@ -174,15 +174,13 @@ export default async function FAQPage({ params }: FAQPageProps) {
           <p className="text-lg text-gray-600 mb-8">
             {t('faq.cta.subtitle')}
           </p>
-          <Button
-            as={Link}
+          <ButtonLink
             href="mailto:support@trudify.com"
             size="lg"
-            className="bg-blue-600 text-white font-semibold hover:bg-blue-700"
             startContent={<Mail className="w-5 h-5" />}
           >
             {t('faq.cta.contact')}
-          </Button>
+          </ButtonLink>
         </div>
       </ContentSection>
     </>

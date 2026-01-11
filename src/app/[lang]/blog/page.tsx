@@ -8,7 +8,6 @@ import { generateCanonicalUrl } from '@/lib/utils/seo'
 import { getArticlesByLocale, articles as allArticles } from '@/features/blog'
 import { ContentPageHero } from '@/components/content'
 import { BreadcrumbJsonLd } from '@/components/seo/json-ld'
-import { Card, CardBody, Chip } from '@nextui-org/react'
 import { Clock, Calendar, ArrowRight } from 'lucide-react'
 
 // Static generation for all locales
@@ -92,12 +91,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 )
 
                 return (
-                  <Card
+                  <Link
                     key={article.slug}
-                    as={Link}
                     href={`/${article.locale}/${article.slug}`}
-                    isPressable
-                    className="hover:shadow-xl transition-all duration-300 group"
+                    className="block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group"
                   >
                     {/* Cover Image */}
                     {article.coverImage && (
@@ -110,19 +107,19 @@ export default async function BlogPage({ params }: BlogPageProps) {
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                         <div className="absolute top-3 left-3">
-                          <Chip size="sm" variant="flat" className="bg-blue-600 text-white">
+                          <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded-lg">
                             {t(`blog.category.${article.category}`)}
-                          </Chip>
+                          </span>
                         </div>
                       </div>
                     )}
 
-                    <CardBody className="p-5">
+                    <div className="p-5">
                       {/* Category chip if no cover image */}
                       {!article.coverImage && (
-                        <Chip size="sm" variant="flat" className="bg-blue-600 text-white mb-3">
+                        <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded-lg mb-3">
                           {t(`blog.category.${article.category}`)}
-                        </Chip>
+                        </span>
                       )}
 
                       {/* Title */}
@@ -147,8 +144,8 @@ export default async function BlogPage({ params }: BlogPageProps) {
                         </div>
                         <ArrowRight className="w-4 h-4 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
-                    </CardBody>
-                  </Card>
+                    </div>
+                  </Link>
                 )
               })}
             </div>

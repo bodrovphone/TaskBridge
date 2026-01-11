@@ -9,7 +9,6 @@ import { generateCanonicalUrl } from '@/lib/utils/seo'
 import { getArticleBySlug, getAllArticleSlugs, getRelatedArticles, ArticleRelatedLinks } from '@/features/blog'
 import { CTASection } from '@/components/content'
 import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
-import { Chip, Card, CardBody } from '@nextui-org/react'
 import { Clock, Calendar, ArrowLeft, User } from 'lucide-react'
 
 // Static generation for all articles
@@ -139,9 +138,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <Chip size="sm" variant="flat" className="bg-blue-600 text-white">
+            <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded-lg">
               {t(`blog.category.${article.category}`)}
-            </Chip>
+            </span>
             <span className="flex items-center text-sm text-gray-500">
               <Clock className="w-4 h-4 mr-1" />
               {t('blog.readingTime', { minutes: article.readingTime })}
@@ -204,9 +203,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {article.tags.map((tag) => (
-                  <Chip key={tag} size="sm" variant="bordered">
+                  <span key={tag} className="inline-block px-2 py-1 text-xs font-medium border border-gray-300 text-gray-700 rounded-lg">
                     {tag}
-                  </Chip>
+                  </span>
                 ))}
               </div>
             </div>
@@ -221,12 +220,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Често задавани въпроси</h2>
               <div className="space-y-4">
                 {article.faqs.map((faq, index) => (
-                  <Card key={index} className="shadow-sm">
-                    <CardBody>
-                      <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                      <p className="text-gray-600">{faq.answer}</p>
-                    </CardBody>
-                  </Card>
+                  <div key={index} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                    <p className="text-gray-600">{faq.answer}</p>
+                  </div>
                 ))}
               </div>
             </div>
@@ -241,20 +238,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <h2 className="text-2xl font-bold text-gray-900 mb-8">{t('blog.relatedArticles')}</h2>
             <div className="grid gap-6 md:grid-cols-3">
               {relatedArticles.map((related) => (
-                <Card
+                <Link
                   key={related.slug}
-                  as={Link}
                   href={`/${locale}/${related.slug}`}
-                  isPressable
-                  className="hover:shadow-lg transition-shadow"
+                  className="block bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-shadow p-6"
                 >
-                  <CardBody className="p-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-                      {related.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm line-clamp-2">{related.excerpt}</p>
-                  </CardBody>
-                </Card>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                    {related.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm line-clamp-2">{related.excerpt}</p>
+                </Link>
               ))}
             </div>
           </div>

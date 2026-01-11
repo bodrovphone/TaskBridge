@@ -3,9 +3,9 @@ import { getTranslations } from 'next-intl/server'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/seo'
-import { Card, CardBody, Button, Link } from '@nextui-org/react'
 import { Shield, AlertCircle, Mail, Building2, Hash } from 'lucide-react'
 import { LocaleLink } from '@/components/common/locale-link'
+import NextLink from 'next/link'
 
 // Static generation for all locales
 export const dynamic = 'force-static'
@@ -109,8 +109,8 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Language Notice for non-BG users */}
         {lang !== 'bg' && (
-          <Card className="mb-8 border-amber-200 bg-amber-50">
-            <CardBody className="flex flex-row items-start gap-4 p-4">
+          <div className="mb-8 border border-amber-200 bg-amber-50 rounded-xl">
+            <div className="flex flex-row items-start gap-4 p-4">
               <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <h3 className="font-semibold text-amber-800 mb-1">
@@ -119,19 +119,21 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
                 <p className="text-amber-700 text-sm mb-3">
                   {t('privacy.languageNotice.content')}
                 </p>
-                <LocaleLink href="/privacy" locale="bg">
-                  <Button size="sm" color="warning" variant="flat">
-                    {t('privacy.languageNotice.switchToBg')}
-                  </Button>
+                <LocaleLink
+                  href="/privacy"
+                  locale="bg"
+                  className="inline-block px-3 py-1.5 text-sm font-medium bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200 transition-colors"
+                >
+                  {t('privacy.languageNotice.switchToBg')}
                 </LocaleLink>
               </div>
-            </CardBody>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Company Info Card */}
-        <Card className="mb-8 bg-slate-50">
-          <CardBody className="p-6">
+        <div className="mb-8 bg-slate-50 rounded-xl border border-slate-200">
+          <div className="p-6">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="flex items-start gap-3">
                 <Building2 className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
@@ -145,18 +147,18 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
                 <Mail className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm text-slate-500">{privacyContactLabel}</p>
-                  <Link href="mailto:support@trudify.com" className="font-medium text-emerald-600">
+                  <NextLink href="mailto:support@trudify.com" className="font-medium text-emerald-600 hover:underline">
                     {t('terms.company.email')}
-                  </Link>
+                  </NextLink>
                 </div>
               </div>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Table of Contents */}
-        <Card className="mb-8">
-          <CardBody className="p-6">
+        <div className="mb-8 bg-white rounded-xl border border-slate-200 shadow-sm">
+          <div className="p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Hash className="h-5 w-5 text-slate-400" />
               {t('privacy.toc.title')}
@@ -172,8 +174,8 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
                 </a>
               ))}
             </nav>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Legal Content Sections */}
         <div className="prose prose-slate max-w-none">
@@ -289,8 +291,8 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
 
           {/* Section 11 - Contact */}
           <section id="section11" className="mb-10 scroll-mt-24">
-            <Card className="bg-emerald-50 border-emerald-100">
-              <CardBody className="p-6">
+            <div className="bg-emerald-50 border border-emerald-100 rounded-xl">
+              <div className="p-6">
                 <h2 className="text-xl font-bold text-slate-900 mb-4">
                   {t('privacy.section11.title')}
                 </h2>
@@ -298,8 +300,8 @@ export default async function PrivacyPage({ params }: PrivacyPageProps) {
                   className="text-slate-700 [&>p]:mb-3 [&>ul]:pl-6 [&>ul]:list-none [&_li]:mb-1 [&_a]:text-emerald-600 [&_a]:underline"
                   dangerouslySetInnerHTML={{ __html: t('privacy.section11.content') }}
                 />
-              </CardBody>
-            </Card>
+              </div>
+            </div>
           </section>
         </div>
 

@@ -3,9 +3,8 @@ import { getTranslations } from 'next-intl/server'
 import { generatePageMetadata } from '@/lib/utils/metadata'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
-import { Button } from '@nextui-org/react'
 import { ArrowRight, Clock, Shield, MessageSquare, Star, FileText, Users, CheckCircle, Lock, ChevronDown } from 'lucide-react'
-import Link from 'next/link'
+import { ButtonLink } from '@/components/ui/button-link'
 import {
   ContentPageHero,
   ContentSection,
@@ -121,15 +120,13 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
         title={t('forCustomers.hero.title')}
         subtitle={t('forCustomers.hero.subtitle')}
       >
-        <Button
-          as={Link}
+        <ButtonLink
           href={`/${locale}/create-task`}
           size="lg"
-          className="bg-blue-600 text-white font-semibold hover:bg-blue-700"
           endContent={<ArrowRight className="w-5 h-5" />}
         >
           {t('forCustomers.hero.cta')}
-        </Button>
+        </ButtonLink>
       </ContentPageHero>
 
       {/* Benefits */}

@@ -3,9 +3,10 @@ import { getTranslations } from 'next-intl/server'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/seo'
-import { Card, CardBody, Button, Link } from '@nextui-org/react'
 import { FileText, AlertCircle, Mail, Building2, Hash } from 'lucide-react'
 import { LocaleLink } from '@/components/common/locale-link'
+import { ButtonLink } from '@/components/ui/button-link'
+import NextLink from 'next/link'
 
 // Static generation for all locales
 export const dynamic = 'force-static'
@@ -110,8 +111,8 @@ export default async function TermsPage({ params }: TermsPageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Language Notice for non-BG users */}
         {lang !== 'bg' && (
-          <Card className="mb-8 border-amber-200 bg-amber-50">
-            <CardBody className="flex flex-row items-start gap-4 p-4">
+          <div className="mb-8 border border-amber-200 bg-amber-50 rounded-xl">
+            <div className="flex flex-row items-start gap-4 p-4">
               <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <h3 className="font-semibold text-amber-800 mb-1">
@@ -120,19 +121,21 @@ export default async function TermsPage({ params }: TermsPageProps) {
                 <p className="text-amber-700 text-sm mb-3">
                   {t('terms.languageNotice.content')}
                 </p>
-                <LocaleLink href="/terms" locale="bg">
-                  <Button size="sm" color="warning" variant="flat">
-                    {t('terms.languageNotice.switchToBg')}
-                  </Button>
+                <LocaleLink
+                  href="/terms"
+                  locale="bg"
+                  className="inline-block px-3 py-1.5 text-sm font-medium bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200 transition-colors"
+                >
+                  {t('terms.languageNotice.switchToBg')}
                 </LocaleLink>
               </div>
-            </CardBody>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Company Info Card */}
-        <Card className="mb-8 bg-slate-50">
-          <CardBody className="p-6">
+        <div className="mb-8 bg-slate-50 rounded-xl border border-slate-200">
+          <div className="p-6">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="flex items-start gap-3">
                 <Building2 className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
@@ -146,18 +149,18 @@ export default async function TermsPage({ params }: TermsPageProps) {
                 <Mail className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm text-slate-500">{contactLabel}</p>
-                  <Link href="mailto:support@trudify.com" className="font-medium text-blue-600">
+                  <NextLink href="mailto:support@trudify.com" className="font-medium text-blue-600 hover:underline">
                     {t('terms.company.email')}
-                  </Link>
+                  </NextLink>
                 </div>
               </div>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Table of Contents */}
-        <Card className="mb-8">
-          <CardBody className="p-6">
+        <div className="mb-8 bg-white rounded-xl border border-slate-200 shadow-sm">
+          <div className="p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Hash className="h-5 w-5 text-slate-400" />
               {t('terms.toc.title')}
@@ -173,8 +176,8 @@ export default async function TermsPage({ params }: TermsPageProps) {
                 </a>
               ))}
             </nav>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Legal Content Sections */}
         <div className="prose prose-slate max-w-none">
@@ -323,8 +326,8 @@ export default async function TermsPage({ params }: TermsPageProps) {
 
           {/* Contact */}
           <section id="contact" className="mb-10 scroll-mt-24">
-            <Card className="bg-blue-50 border-blue-100">
-              <CardBody className="p-6">
+            <div className="bg-blue-50 border border-blue-100 rounded-xl">
+              <div className="p-6">
                 <h2 className="text-xl font-bold text-slate-900 mb-4">
                   {t('terms.contact.title')}
                 </h2>
@@ -332,8 +335,8 @@ export default async function TermsPage({ params }: TermsPageProps) {
                   className="text-slate-700 [&>p]:mb-3 [&>ul]:pl-6 [&>ul]:list-none [&_li]:mb-1"
                   dangerouslySetInnerHTML={{ __html: t('terms.contact.content') }}
                 />
-              </CardBody>
-            </Card>
+              </div>
+            </div>
           </section>
         </div>
 
