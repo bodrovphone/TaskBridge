@@ -112,12 +112,12 @@ function Footer() {
       {/* Quick Links */}
       <div>
        <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6 text-white">{t('footer.quickLinks.title')}</h3>
-       <ul className="space-y-2 sm:space-y-3">
+       <ul className="space-y-1">
         {quickLinks.map((link) => (
          <li key={link.name}>
           <LocaleLink
            href={link.href}
-           className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2"
+           className="text-sm text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2 py-2 -mx-2 px-2 rounded-md hover:bg-slate-800/50 min-h-[44px]"
           >
            <span className="group-hover:translate-x-1 transition-transform">
             {link.name}
@@ -131,12 +131,12 @@ function Footer() {
       {/* Legal */}
       <div>
        <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6 text-white">{t('footer.legal.title')}</h3>
-       <ul className="space-y-2 sm:space-y-3">
+       <ul className="space-y-1">
         {legalLinks.map((link) => (
          <li key={link.name}>
           <LocaleLink
            href={link.href}
-           className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2"
+           className="text-sm text-slate-400 hover:text-blue-400 transition-colors group flex items-center gap-2 py-2 -mx-2 px-2 rounded-md hover:bg-slate-800/50 min-h-[44px]"
           >
            <span className="group-hover:translate-x-1 transition-transform">
             {link.name}

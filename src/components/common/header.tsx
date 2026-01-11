@@ -311,23 +311,19 @@ function Header() {
     </NavbarItem>
    </NavbarContent>
 
-   {/* Mobile/Tablet Actions Section */}
-   <NavbarContent justify="end" className="lg:hidden gap-5">
-    <NavbarItem>
-     <LanguagePreferencePrompt>
-      <LanguageSwitcher />
-     </LanguagePreferencePrompt>
-    </NavbarItem>
-    <NavbarItem>
-     <NotificationBell
-      onAuthRequired={() => {
-       setAuthAction(null)
-       setIsAuthSlideOverOpen(true)
-      }}
-      onOpen={() => setIsMenuOpen(false)}
-     />
-    </NavbarItem>
-    <NavbarItem id="mobile-nav-user-menu">
+   {/* Mobile/Tablet Actions Section - Using as="div" to avoid ul>button ARIA issue */}
+   <NavbarContent as="div" justify="end" className="lg:hidden gap-5">
+    <LanguagePreferencePrompt>
+     <LanguageSwitcher />
+    </LanguagePreferencePrompt>
+    <NotificationBell
+     onAuthRequired={() => {
+      setAuthAction(null)
+      setIsAuthSlideOverOpen(true)
+     }}
+     onOpen={() => setIsMenuOpen(false)}
+    />
+    <div id="mobile-nav-user-menu">
      {isAuthenticated ? (
       <UserAvatarDropdown size="sm" onNavigate={() => setIsMenuOpen(false)} />
      ) : (
@@ -340,7 +336,7 @@ function Header() {
        onNavigate={() => setIsMenuOpen(false)}
       />
      )}
-    </NavbarItem>
+    </div>
     <NavbarMenuToggle id="mobile-menu-toggle" />
    </NavbarContent>
 
