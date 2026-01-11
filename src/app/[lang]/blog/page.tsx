@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
-import { generateCanonicalUrl } from '@/lib/utils/seo'
+import { generateCanonicalUrl, generateAlternateLanguages } from '@/lib/utils/seo'
 import { getArticlesByLocale, articles as allArticles } from '@/features/blog'
 import { ContentPageHero } from '@/components/content'
 import { BreadcrumbJsonLd } from '@/components/seo/json-ld'
@@ -31,11 +31,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     description: t('blog.metaDescription'),
     alternates: {
       canonical: generateCanonicalUrl(locale, '/blog'),
-      languages: {
-        en: generateCanonicalUrl('en', '/blog'),
-        bg: generateCanonicalUrl('bg', '/blog'),
-        ru: generateCanonicalUrl('ru', '/blog'),
-      },
+      languages: generateAlternateLanguages('/blog'),
     },
     openGraph: {
       title: t('blog.metaTitle'),
