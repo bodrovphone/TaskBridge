@@ -6,11 +6,11 @@ import Image from 'next/image'
 import { validateLocale } from '@/lib/utils/locale-detection'
 import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { generateCanonicalUrl } from '@/lib/utils/seo'
-import { getArticleBySlug, getAllArticleSlugs, getRelatedArticles } from '@/features/blog'
+import { getArticleBySlug, getAllArticleSlugs, getRelatedArticles, ArticleRelatedLinks } from '@/features/blog'
 import { CTASection } from '@/components/content'
 import { BreadcrumbJsonLd, ArticleJsonLd, FAQJsonLd } from '@/components/seo/json-ld'
-import { Button, Chip, Card, CardBody } from '@nextui-org/react'
-import { Clock, Calendar, ArrowLeft, ArrowRight, User } from 'lucide-react'
+import { Chip, Card, CardBody } from '@nextui-org/react'
+import { Clock, Calendar, ArrowLeft, User } from 'lucide-react'
 
 // Static generation for all articles
 export const dynamic = 'force-static'
@@ -212,26 +212,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           )}
 
-          {/* Related Links / CTAs */}
-          {article.relatedLinks.length > 0 && (
-            <div className="mt-8 p-6 bg-blue-50 rounded-2xl">
-              <h3 className="font-semibold text-gray-900 mb-4">Полезни връзки</h3>
-              <div className="flex flex-wrap gap-3">
-                {article.relatedLinks.map((link, index) => (
-                  <Button
-                    key={index}
-                    as={Link}
-                    href={link.href}
-                    variant="solid"
-                    className="bg-blue-600 text-white"
-                    endContent={<ArrowRight className="w-4 h-4" />}
-                  >
-                    {link.text}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Related Links / CTAs - Client component for auth support */}
+          <ArticleRelatedLinks links={article.relatedLinks} />
 
           {/* FAQ Section */}
           {article.faqs && article.faqs.length > 0 && (

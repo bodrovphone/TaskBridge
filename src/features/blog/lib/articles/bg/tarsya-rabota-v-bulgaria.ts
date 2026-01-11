@@ -22,7 +22,7 @@ export const tarsyaRabotaArticle: BlogArticle = {
   coverImage: '/assets/bg-money.webp',
   relatedLinks: [
     { text: 'Разгледай задачи', href: '/bg/browse-tasks' },
-    { text: 'Стани професионалист', href: '/bg/for-professionals' },
+    { text: 'Стани професионалист', href: '#register' },
   ],
   faqs: [
     {
