@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback } from 'react'
-import { Card, CardBody, CardHeader, Button, Divider, Input, Chip } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Input, Chip } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import { Settings, Banknote, Clock, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'

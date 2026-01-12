@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody } from '@nextui-org/react'
+import { Card, CardBody } from '@heroui/react'
 import { ShieldX } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

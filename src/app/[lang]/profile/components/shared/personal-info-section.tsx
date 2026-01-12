@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { MapPin, Phone, Mail, Calendar, Shield, Globe, User as UserIcon, Edit, X, AlertCircle, Send } from 'lucide-react'
@@ -589,10 +589,10 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
                     }}
                     startContent={<Globe className="w-4 h-4 text-gray-500" />}
                   >
-                    <SelectItem key="en" value="en">{t('language.en')}</SelectItem>
-                    <SelectItem key="bg" value="bg">{t('language.bg')}</SelectItem>
-                    <SelectItem key="ru" value="ru">{t('language.ru')}</SelectItem>
-                    <SelectItem key="ua" value="ua">{t('language.ua')}</SelectItem>
+                    <SelectItem key="en">{t('language.en')}</SelectItem>
+                    <SelectItem key="bg">{t('language.bg')}</SelectItem>
+                    <SelectItem key="ru">{t('language.ru')}</SelectItem>
+                    <SelectItem key="ua">{t('language.ua')}</SelectItem>
                   </Select>
                 )}
               </personalForm.Field>

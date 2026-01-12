@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, Button } from '@nextui-org/react'
+import { Card, CardBody, Button } from '@heroui/react'
 import { Mail, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

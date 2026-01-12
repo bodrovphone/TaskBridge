@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Button as NextUIButton, Input, Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Button as NextUIButton, Input, Card, CardBody, CardHeader } from '@heroui/react'
 import { ArrowLeft, Mail, CheckCircle } from 'lucide-react'
 
 interface ForgotPasswordContentProps {

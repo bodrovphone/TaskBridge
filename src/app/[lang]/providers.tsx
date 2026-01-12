@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Toaster } from '@/components/ui/toaster'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { type SupportedLocale } from '@/lib/constants/locales'
 import { AuthProvider } from '@/features/auth'
@@ -58,14 +58,14 @@ function LocaleProviders({ children, locale }: LocaleProvidersProps) {
 
   return (
     <ErrorBoundary>
-      <NextUIProvider>
+      <HeroUIProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             {children}
             <Toaster />
           </AuthProvider>
         </QueryClientProvider>
-      </NextUIProvider>
+      </HeroUIProvider>
     </ErrorBoundary>
   )
 }

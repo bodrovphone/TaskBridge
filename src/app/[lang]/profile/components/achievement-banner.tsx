@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardBody, Button } from '@nextui-org/react'
+import { Card, CardBody, Button } from '@heroui/react'
 import { Trophy, Star, X, PartyPopper } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

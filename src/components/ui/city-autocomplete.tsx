@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
-import { Input, Chip } from '@nextui-org/react'
+import { Input, Chip } from '@heroui/react'
 import { MapPin, Search, Clock, Home, X } from 'lucide-react'
 import { useSearchLocationPreference } from '@/hooks/use-search-location-preference'
 import { useAuth } from '@/features/auth'

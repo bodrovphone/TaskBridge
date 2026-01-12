@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Chip } from '@nextui-org/react'
+import { Button, Chip } from '@heroui/react'
 import { Check, Clock, X, Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { ApplicationStatus } from './types'

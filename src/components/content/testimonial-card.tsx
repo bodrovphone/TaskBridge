@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar } from '@nextui-org/react'
+import { Avatar } from '@heroui/react'
 import { Star } from 'lucide-react'
 
 interface TestimonialCardProps {

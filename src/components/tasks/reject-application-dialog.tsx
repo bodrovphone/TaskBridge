@@ -10,7 +10,7 @@ import {
   Button,
   RadioGroup,
   Radio
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { XCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'

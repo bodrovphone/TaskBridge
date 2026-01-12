@@ -10,7 +10,7 @@ import {
   Button,
   Card,
   CardBody,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { CheckCircle, User, Briefcase, Star, PartyPopper } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useParams, useRouter } from 'next/navigation'

@@ -1,14 +1,13 @@
 import type { Config } from "tailwindcss";
-const { nextui } = require("@nextui-org/react");
 
 export default {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    // HeroUI theme content is now handled via @source in globals.css
   ],
   theme: {
     screens: {
@@ -105,23 +104,8 @@ export default {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
+    // HeroUI plugin is now handled via @plugin in globals.css (CSS-first approach)
+    // tw-animate-css is imported via @import in globals.css
     require("@tailwindcss/typography"),
-    nextui({
-      themes: {
-        light: {
-          colors: {
-            primary: {
-              DEFAULT: "#0066CC",
-              foreground: "#FFFFFF",
-            },
-            secondary: {
-              DEFAULT: "#00A86B",
-              foreground: "#FFFFFF",
-            },
-          },
-        },
-      },
-    }),
   ],
 } satisfies Config;

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardBody, Button } from '@nextui-org/react'
+import { Card, CardBody, Button } from '@heroui/react'
 import { FileText, Send, ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { CustomerProfile } from '../../components/customer-profile'

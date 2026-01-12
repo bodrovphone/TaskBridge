@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { ArrowRight } from 'lucide-react'
 
 const AuthSlideOver = dynamic(() => import('@/components/ui/auth-slide-over'), {

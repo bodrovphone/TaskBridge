@@ -12,7 +12,7 @@ import {
   Card,
   CardBody,
   Divider
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { CheckCircle, User, Banknote } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { memo } from 'react';
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { Share2, UserPlus, Check } from "lucide-react";
 import { useTranslations } from 'next-intl';
 

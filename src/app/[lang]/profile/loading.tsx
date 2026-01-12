@@ -1,6 +1,6 @@
 'use client'
 
-import { Spinner, Card, Skeleton } from '@nextui-org/react'
+import { Spinner, Card, Skeleton } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 
 export default function ProfileLoading() {

@@ -11,7 +11,7 @@ import {
   Button,
   RadioGroup,
   Radio
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { FileX, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

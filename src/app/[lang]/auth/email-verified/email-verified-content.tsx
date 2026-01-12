@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Button as NextUIButton, Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Button as NextUIButton, Card, CardBody, CardHeader } from '@heroui/react'
 import { CheckCircle, Briefcase, Search, UserCircle } from 'lucide-react'
 
 interface EmailVerifiedContentProps {

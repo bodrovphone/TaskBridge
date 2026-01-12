@@ -1,6 +1,6 @@
 'use client'
 
-import { Tooltip, Chip } from '@nextui-org/react'
+import { Tooltip, Chip } from '@heroui/react'
 import { Trophy } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

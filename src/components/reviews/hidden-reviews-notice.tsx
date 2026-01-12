@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, Tooltip } from '@nextui-org/react'
+import { Card, CardBody, Tooltip } from '@heroui/react'
 import { Info, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

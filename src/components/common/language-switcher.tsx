@@ -8,7 +8,7 @@ import {
  DropdownMenu,
  DropdownItem,
  Button
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { LANGUAGE_CONFIG, type SupportedLocale } from '@/lib/constants/locales'
 import { FlagIcon } from '@/components/ui/flag-icon'
 import { extractLocaleFromPathname, replaceLocaleInPathname } from '@/lib/utils/url-locale'

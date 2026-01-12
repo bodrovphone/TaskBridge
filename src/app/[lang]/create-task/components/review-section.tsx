@@ -2,7 +2,7 @@
 
 import React, { useDeferredValue, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Card, CardBody, Chip, Divider } from '@nextui-org/react'
+import { Card, CardBody, Chip, Divider } from '@heroui/react'
 import { MapPin, Wallet, Clock, FileText, AlertCircle } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
 import Image from 'next/image'

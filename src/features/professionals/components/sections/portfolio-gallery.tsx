@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, memo } from 'react'
 import NextImage from 'next/image'
-import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from '@nextui-org/react'
+import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from '@heroui/react'
 import { Camera, ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { GalleryItem } from '@/server/domain/user/user.types'

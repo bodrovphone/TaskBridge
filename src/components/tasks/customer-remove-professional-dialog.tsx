@@ -12,7 +12,7 @@ import {
   Button,
   Textarea,
   Avatar,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { UserX, AlertTriangle, Info } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { enUS, bg as bgLocale, ru as ruLocale } from 'date-fns/locale'

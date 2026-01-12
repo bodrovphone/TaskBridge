@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Input, Card, CardBody } from '@nextui-org/react'
+import { Input, Card, CardBody } from '@heroui/react'
 import { MapPin } from 'lucide-react'
 import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
 

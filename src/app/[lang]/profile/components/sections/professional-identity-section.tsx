@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Input, Textarea, Select, SelectItem } from '@heroui/react'
 import { Briefcase, Award, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslations } from 'next-intl'
@@ -200,7 +200,7 @@ export function ProfessionalIdentitySection({
                     startContent={<Award className="w-4 h-4 text-gray-500" />}
                   >
                     {experienceOptions.map(opt => (
-                      <SelectItem key={opt.key} value={opt.key}>{opt.label}</SelectItem>
+                      <SelectItem key={opt.key}>{opt.label}</SelectItem>
                     ))}
                   </Select>
                 )}

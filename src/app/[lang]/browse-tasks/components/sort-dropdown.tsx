@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Select, SelectItem } from '@nextui-org/react'
+import { Select, SelectItem } from '@heroui/react'
 import { ArrowUpDown } from 'lucide-react'
 import type { TaskSortOption } from '@/server/tasks/task.query-types'
 
@@ -37,7 +37,7 @@ export function SortDropdown({ value, onChange }: SortDropdownProps) {
       }}
     >
       {SORT_OPTIONS.map((option) => (
-        <SelectItem key={option.value} value={option.value}>
+        <SelectItem key={option.value}>
           {t(option.labelKey)}
         </SelectItem>
       ))}

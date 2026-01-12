@@ -11,7 +11,7 @@ import {
   ModalFooter,
   Button,
   Textarea,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, MessageCircle, AlertCircle } from 'lucide-react'
 import type { QuestionFormData } from '@/types/questions'

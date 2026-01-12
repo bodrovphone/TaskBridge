@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Textarea, Select, SelectItem } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Textarea, Select, SelectItem } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
@@ -292,7 +292,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
             }}
            >
             {experienceOptions.map((option) => (
-             <SelectItem key={option.key} value={option.key}>
+             <SelectItem key={option.key}>
               {t(`profile.professional.form.experienceOptions.${option.key}`)}
              </SelectItem>
             ))}
@@ -311,7 +311,7 @@ export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
             }}
            >
             {availabilityOptions.map((option) => (
-             <SelectItem key={option.key} value={option.key}>
+             <SelectItem key={option.key}>
               {t(`profile.professional.form.availabilityOptions.${option.key}`)}
              </SelectItem>
             ))}

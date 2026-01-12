@@ -11,7 +11,7 @@ import {
   CardBody,
   Avatar,
   Chip
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { AlertTriangle, Star, User, FileText, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'

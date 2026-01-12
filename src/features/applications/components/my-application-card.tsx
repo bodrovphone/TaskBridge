@@ -1,7 +1,7 @@
 'use client'
 
 import { MyApplication } from '../lib/types'
-import { Card, CardBody, CardFooter, Chip, Button } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, Chip, Button } from '@heroui/react'
 import { useParams } from 'next/navigation'
 import FallbackAvatar from '@/components/ui/fallback-avatar'
 import {

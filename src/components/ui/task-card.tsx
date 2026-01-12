@@ -15,7 +15,7 @@ import {
  CardFooter,
  Button,
  Chip
-} from "@nextui-org/react";
+} from "@heroui/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category';
 import { canApplyToTask, getDisabledReason, type TaskStatus } from '@/lib/utils/task-permissions';

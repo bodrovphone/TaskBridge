@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Button, Card, CardBody, Progress } from '@nextui-org/react'
+import { Button, Card, CardBody, Progress } from '@heroui/react'
 import { Upload, X, Image as ImageIcon, Camera, CheckCircle2 } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'

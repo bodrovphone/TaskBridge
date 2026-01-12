@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Button as NextUIButton, Chip, Tooltip } from "@nextui-org/react";
+import { Avatar, Button as NextUIButton, Chip, Tooltip } from "@heroui/react";
 import { Star, CheckCircle, X, Eye, ExternalLink } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';

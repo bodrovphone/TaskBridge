@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Card, CardBody, CardHeader, Spinner } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Spinner } from '@heroui/react'
 import {
   BarChart3,
   Star,

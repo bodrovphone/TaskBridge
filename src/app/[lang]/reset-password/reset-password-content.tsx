@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Button as NextUIButton, Input, Card, CardBody, CardHeader } from '@nextui-org/react'
+import { Button as NextUIButton, Input, Card, CardBody, CardHeader } from '@heroui/react'
 import { Lock, CheckCircle, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 

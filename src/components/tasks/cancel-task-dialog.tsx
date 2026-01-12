@@ -12,7 +12,7 @@ import {
   Textarea,
   RadioGroup,
   Radio,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { XCircle, AlertTriangle, Info } from 'lucide-react'
 
 interface CancelTaskDialogProps {

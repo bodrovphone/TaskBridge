@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardBody, CardHeader, Button, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import { FileText, Edit, X, Save, Sparkles, Check } from 'lucide-react'
 import {

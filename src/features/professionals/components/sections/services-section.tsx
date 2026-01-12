@@ -1,7 +1,7 @@
 'use client'
 
 import { memo } from 'react';
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import { Card, CardBody, Chip } from "@heroui/react";
 import { Banknote, Clock } from "lucide-react";
 import { useTranslations } from 'next-intl';
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Button, Popover, PopoverTrigger, PopoverContent, Input, Chip } from '@nextui-org/react'
+import { Button, Popover, PopoverTrigger, PopoverContent, Input, Chip } from '@heroui/react'
 import { MapPin, ChevronDown, Search, Clock, Home } from 'lucide-react'
 import { useState, useMemo, useCallback } from 'react'
 import { getCitiesWithLabels, getCityLabelBySlug } from '@/features/cities'

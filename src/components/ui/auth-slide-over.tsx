@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { X, ExternalLink } from "lucide-react";
-import { Button as NextUIButton } from "@nextui-org/react";
+import { Button as NextUIButton } from "@heroui/react";
 import { useAuth } from "@/features/auth";
 import { useTranslations } from 'next-intl';
 import { LoginButton } from '@telegram-auth/react';

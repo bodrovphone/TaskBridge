@@ -10,7 +10,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { Briefcase } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 

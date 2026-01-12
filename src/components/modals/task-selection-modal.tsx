@@ -10,7 +10,7 @@ import {
   Button,
   Select,
   SelectItem,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import { Briefcase } from 'lucide-react'
 
@@ -118,7 +118,6 @@ export function TaskSelectionModal({
                     {[
                       <SelectItem
                         key="CREATE_NEW"
-                        value="CREATE_NEW"
                         textValue={t('inviteModal.createNewTask')}
                         className="text-blue-600 font-semibold"
                       >
@@ -130,7 +129,7 @@ export function TaskSelectionModal({
                         </div>
                       </SelectItem>,
                       ...tasks.map((task) => (
-                        <SelectItem key={task.id} value={task.id} textValue={task.title}>
+                        <SelectItem key={task.id} textValue={task.title}>
                           <div className="flex flex-col py-1">
                             <span className="font-medium">{task.title}</span>
                             {task.budget && (

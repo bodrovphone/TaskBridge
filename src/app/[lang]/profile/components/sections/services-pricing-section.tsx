@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Card, CardHeader, CardBody, Button, Input, Divider, Chip } from '@nextui-org/react'
+import { Card, CardHeader, CardBody, Button, Input, Divider, Chip } from '@heroui/react'
 import { Banknote, Plus, Trash2, Edit } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ServiceItem } from '@/server/domain/user/user.types'

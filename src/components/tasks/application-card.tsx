@@ -1,7 +1,7 @@
 'use client'
 
 import { Application } from '@/types/applications'
-import { Card, CardBody, Button, Avatar, Chip } from '@nextui-org/react'
+import { Card, CardBody, Button, Avatar, Chip } from '@heroui/react'
 import { Star, CheckCircle, XCircle, Eye } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

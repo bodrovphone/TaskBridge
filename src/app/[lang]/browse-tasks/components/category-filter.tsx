@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
+import { Button, Popover, PopoverTrigger, PopoverContent } from '@heroui/react'
 import { Grid3X3, ChevronDown } from 'lucide-react'
 import { useState, useMemo } from 'react'
 import { getAllSubcategoriesWithLabels, getMainCategoryById, getCategoryLabelBySlug } from '@/features/categories'

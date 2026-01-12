@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@nextui-org/react'
+import { Card, CardBody, Button, Avatar, Spinner, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Image } from '@heroui/react'
 import { Briefcase, Calendar, Mail, MapPin, User, Banknote, Send, AlertCircle, LogOut, CheckCircle, MessageCircle, ClipboardList, Search } from 'lucide-react'
 import { MarkCompletedDialog } from '@/components/tasks/mark-completed-dialog'
 import { PhoneContactActions } from '@/components/ui/phone-contact-actions'

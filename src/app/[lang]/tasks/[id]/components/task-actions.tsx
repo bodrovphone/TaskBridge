@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 import { Share2, Edit3, Check, LogOut, CheckCircle, Globe } from "lucide-react";
-import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Chip } from "@nextui-org/react";
+import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Chip } from "@heroui/react";
 import { useTranslations } from 'next-intl';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";

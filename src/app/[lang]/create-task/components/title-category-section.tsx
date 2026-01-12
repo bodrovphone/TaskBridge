@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useDeferredValue } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { Input, Button, Card, CardBody } from '@nextui-org/react'
+import { Input, Button, Card, CardBody } from '@heroui/react'
 import { Check, X, ChevronDown, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {

@@ -10,7 +10,7 @@ import {
   CardHeader,
   Input,
   Spinner,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import {
   Trash2,
   AlertTriangle,

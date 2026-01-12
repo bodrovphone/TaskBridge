@@ -9,7 +9,7 @@ import {
   ModalFooter,
   Button,
   Textarea
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { HelpCircle, Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { toast } from '@/hooks/use-toast'

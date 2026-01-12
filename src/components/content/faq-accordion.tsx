@@ -1,6 +1,6 @@
 'use client'
 
-import { Accordion, AccordionItem } from '@nextui-org/react'
+import { Accordion, AccordionItem } from '@heroui/react'
 import { FAQJsonLd } from '@/components/seo/json-ld'
 
 interface FAQItem {

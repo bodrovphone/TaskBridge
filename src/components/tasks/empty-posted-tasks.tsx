@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { Card as NextUICard, Button as NextUIButton } from "@nextui-org/react";
+import { Card as NextUICard, Button as NextUIButton } from "@heroui/react";
 import { Sparkles, Lightbulb, Plus } from "lucide-react";
 import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
 import { DEFAULT_LOCALE } from '@/lib/constants/locales';

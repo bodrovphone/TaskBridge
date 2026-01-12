@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 

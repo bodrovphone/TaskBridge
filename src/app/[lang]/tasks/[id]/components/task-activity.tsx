@@ -7,7 +7,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useParams } from 'next/navigation';
-import { Card as NextUICard, CardBody, Tabs, Tab } from "@nextui-org/react";
+import { Card as NextUICard, CardBody, Tabs, Tab } from "@heroui/react";
 import { User } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { ApplicationsSection, TaskInProgressState } from "./sections";

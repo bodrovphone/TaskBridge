@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Button, Card, CardBody, Chip, Divider, Input } from '@nextui-org/react';
+import { Button, Card, CardBody, Chip, Divider, Input } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { CheckCircle2, XCircle, ClipboardPaste } from 'lucide-react';
 import Image from 'next/image';

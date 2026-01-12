@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useRouter, useParams } from 'next/navigation'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { Lightbulb, X, Edit } from 'lucide-react'
 
 export interface TaskHint {

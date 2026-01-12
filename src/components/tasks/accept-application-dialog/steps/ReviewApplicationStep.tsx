@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Wallet, Calendar, MessageSquare, User } from 'lucide-react'
-import { Avatar } from '@nextui-org/react'
+import { Avatar } from '@heroui/react'
 import { getTimelineLabel } from '@/lib/utils/timeline'
 
 interface ReviewApplicationStepProps {

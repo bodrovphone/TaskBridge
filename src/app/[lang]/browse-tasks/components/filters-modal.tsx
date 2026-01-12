@@ -12,7 +12,7 @@ import {
   useDisclosure,
   Chip,
   Divider,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { SlidersHorizontal, Grid3X3, MapPin, Wallet, Clock, ArrowUpDown, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { CategoryFilter } from './category-filter'

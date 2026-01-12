@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Spinner, Tabs, Tab, Chip } from '@nextui-org/react'
+import { Card, CardBody, Button, Spinner, Tabs, Tab, Chip } from '@heroui/react'
 import { FileText, Plus, Filter, Star, ArrowRight } from 'lucide-react'
 import PostedTaskCard from '@/components/ui/posted-task-card'
 import EmptyPostedTasks from '@/components/tasks/empty-posted-tasks'

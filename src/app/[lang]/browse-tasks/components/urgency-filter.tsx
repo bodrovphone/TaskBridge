@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Button, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react'
+import { Button, Popover, PopoverTrigger, PopoverContent } from '@heroui/react'
 import { Clock, ChevronDown, Zap, Calendar, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Chip, Skeleton, Card, CardBody } from '@nextui-org/react'
+import { Chip, Skeleton, Card, CardBody } from '@heroui/react'
 import { useParams, useRouter } from 'next/navigation'
 import { Edit, CheckCircle, Clock, Shield, Users } from 'lucide-react'
 import { EditTaskForm } from './components/edit-task-form'

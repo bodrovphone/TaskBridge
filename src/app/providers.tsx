@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { I18nProvider } from '@react-aria/i18n'
 import { useState } from 'react'
 import { Toaster } from '@/components/ui/toaster'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import { AuthProvider } from '@/features/auth'
 
 function Providers({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,7 @@ function Providers({ children }: { children: React.ReactNode }) {
  )
 
  return (
-  <NextUIProvider>
+  <HeroUIProvider>
    <QueryClientProvider client={queryClient}>
     <I18nProvider locale="en-GB">
      <AuthProvider>
@@ -31,7 +31,7 @@ function Providers({ children }: { children: React.ReactNode }) {
      </AuthProvider>
     </I18nProvider>
    </QueryClientProvider>
-  </NextUIProvider>
+  </HeroUIProvider>
  )
 }
 

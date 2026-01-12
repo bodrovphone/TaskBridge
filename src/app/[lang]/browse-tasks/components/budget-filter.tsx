@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button, Input, Popover, PopoverTrigger, PopoverContent, Chip } from '@nextui-org/react'
+import { Button, Input, Popover, PopoverTrigger, PopoverContent, Chip } from '@heroui/react'
 import { Wallet, ChevronDown } from 'lucide-react'
 
 interface BudgetFilterProps {

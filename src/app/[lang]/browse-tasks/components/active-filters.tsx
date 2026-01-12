@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Chip } from '@nextui-org/react'
+import { Chip } from '@heroui/react'
 import { X } from 'lucide-react'
 import { getCategoryLabelBySlug } from '@/features/categories'
 import { getCityLabelBySlug } from '@/features/cities'

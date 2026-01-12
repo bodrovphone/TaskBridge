@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { Card, CardHeader, CardBody } from '@nextui-org/react'
+import { Card, CardHeader, CardBody } from '@heroui/react'
 import { Camera } from 'lucide-react'
 import { ProfessionalIdentitySection } from './sections/professional-identity-section'
 import { ServiceCategoriesSection } from './sections/service-categories-section'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Card, CardBody, CardHeader, Button } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button } from '@heroui/react'
 import { Settings, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { TelegramConnection } from '../telegram-connection'

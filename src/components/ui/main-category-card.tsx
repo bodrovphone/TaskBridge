@@ -1,7 +1,7 @@
 'use client'
 
 import { LucideIcon } from "lucide-react"
-import { Card, CardBody, CardFooter, Chip, Button } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, Chip, Button } from "@heroui/react"
 import { useRouter, useParams } from "next/navigation"
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from "react"

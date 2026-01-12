@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { AlertCircle } from 'lucide-react'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import {
   Dialog,
   DialogContent,

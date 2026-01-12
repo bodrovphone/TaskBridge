@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Card, CardBody, Button } from '@nextui-org/react'
+import { Card, CardBody, Button } from '@heroui/react'
 import { LogIn } from 'lucide-react'
 import AuthSlideOver from '@/components/ui/auth-slide-over'
 

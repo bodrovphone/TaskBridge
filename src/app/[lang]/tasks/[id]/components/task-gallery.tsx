@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
-import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from "@nextui-org/react";
+import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from "@heroui/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
 
 interface TaskGalleryProps {

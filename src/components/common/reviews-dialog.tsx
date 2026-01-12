@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Chip } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, Card, CardBody, Avatar, Chip } from "@heroui/react";
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
 import { useTranslations } from 'next-intl';
 

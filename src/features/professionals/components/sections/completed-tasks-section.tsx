@@ -1,11 +1,11 @@
 'use client'
 
 import { memo, useMemo, useCallback } from 'react';
-import { Card, CardBody, Chip, Button } from "@nextui-org/react";
+import { Card, CardBody, Chip, Button } from "@heroui/react";
 import FallbackAvatar from "@/components/ui/fallback-avatar";
 import { CheckCircle, MapPin, Star, TrendingUp, Award, Clock } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { useDisclosure } from "@nextui-org/react";
+import { useDisclosure } from "@heroui/react";
 import CompletedTasksDialog from '@/components/common/completed-tasks-dialog';
 import { getCityLabelBySlug } from '@/features/cities';
 import { getCategoryLabelBySlug } from '@/features/categories';

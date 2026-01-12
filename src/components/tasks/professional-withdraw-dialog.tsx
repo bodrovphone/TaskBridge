@@ -10,7 +10,7 @@ import {
   ModalFooter,
   Button,
   Textarea,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { LogOut, AlertTriangle, Info, AlertCircle } from 'lucide-react'
 
 interface ProfessionalWithdrawDialogProps {

@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, Button, Avatar, Skeleton, Chip } from '@nextui-org/react'
+import { Card, CardBody, Button, Avatar, Skeleton, Chip } from '@heroui/react'
 import { Star, Calendar, User, FileText, Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { PendingReviewTask } from '../lib/types'

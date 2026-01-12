@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, Chip } from '@nextui-org/react'
+import { Card, CardBody, Chip } from '@heroui/react'
 import { Shield, AlertCircle, Mail, Send, CheckCircle2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { AvatarUpload } from '../avatar-upload'

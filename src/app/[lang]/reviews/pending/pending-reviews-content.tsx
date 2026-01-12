@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import { useToast } from '@/hooks/use-toast'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import type { ReviewSubmitData } from '@/features/reviews/lib/types'
 import { useAuth } from '@/features/auth'
 

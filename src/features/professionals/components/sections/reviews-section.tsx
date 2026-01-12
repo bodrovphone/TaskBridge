@@ -1,7 +1,7 @@
 'use client'
 
 import { memo, useMemo, useCallback } from 'react';
-import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@nextui-org/react";
+import { Card, CardBody, Avatar, Chip, Button, useDisclosure } from "@heroui/react";
 import { Star, CheckCircle, MessageSquare, UserX } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import ReviewsDialog from '@/components/common/reviews-dialog';

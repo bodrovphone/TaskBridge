@@ -10,7 +10,7 @@ import {
  RadioGroup,
  Radio,
  Divider
-} from "@nextui-org/react"
+} from "@heroui/react"
 /**
  * Generic translation function type compatible with both react-i18next and next-intl
  */
@@ -93,7 +93,7 @@ export default function FilterControls({ filters, onFilterChange, categorySelect
      startContent={<MapPin className="text-green-500" size={18} />}
     >
      {locationOptions.map((location) => (
-      <SelectItem key={location.value} value={location.value}>
+      <SelectItem key={location.value}>
        {location.emoji} {location.label}
       </SelectItem>
      ))}

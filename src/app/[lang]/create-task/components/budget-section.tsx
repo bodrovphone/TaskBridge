@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Input, Card, CardBody } from '@nextui-org/react'
+import { Input, Card, CardBody } from '@heroui/react'
 import { Wallet, Info } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'

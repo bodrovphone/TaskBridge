@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { Chip, Input, Spinner } from '@nextui-org/react'
+import { Chip, Input, Spinner } from '@heroui/react'
 import { Search, X } from 'lucide-react'
 import {
   getAllSubcategoriesWithLabels,

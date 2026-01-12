@@ -8,7 +8,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslations } from 'next-intl';
-import { Card as NextUICard, Button as NextUIButton, Spinner } from "@nextui-org/react";
+import { Card as NextUICard, Button as NextUIButton, Spinner } from "@heroui/react";
 import { Search, Coffee, RotateCw, Sparkles } from "lucide-react";
 import ProfessionalCard from "../professional-card";
 import type { Professional } from '@/server/professionals/professional.types';

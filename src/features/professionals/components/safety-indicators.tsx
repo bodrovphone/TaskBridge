@@ -1,6 +1,6 @@
 'use client'
 
-import { Chip, Tooltip } from '@nextui-org/react'
+import { Chip, Tooltip } from '@heroui/react'
 import { Shield, Phone, Mail, CheckCircle, AlertTriangle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

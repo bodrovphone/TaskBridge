@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { Button, Card, CardBody, Chip } from '@nextui-org/react'
+import { Button, Card, CardBody, Chip } from '@heroui/react'
 import {
   Gift,
   Trophy,

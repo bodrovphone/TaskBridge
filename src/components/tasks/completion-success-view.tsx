@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Card, CardBody, Button, Divider } from '@nextui-org/react'
+import { Card, CardBody, Button, Divider } from '@heroui/react'
 import { CheckCircle, Star, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 

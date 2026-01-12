@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, Chip } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Button, Divider, Select, SelectItem, Chip } from '@heroui/react'
 import { Clock, MapPinned, Languages, Edit } from 'lucide-react'
 import { FormActionButtons } from '../shared/form-action-buttons'
 import { useTranslations } from 'next-intl'
@@ -191,7 +191,7 @@ export function AvailabilitySection({
                     startContent={<Clock className="w-4 h-4 text-gray-500" />}
                   >
                     {responseTimeKeys.map(key => (
-                      <SelectItem key={key} value={key}>
+                      <SelectItem key={key}>
                         {t(`profile.professional.responseTime.${key}`)}
                       </SelectItem>
                     ))}

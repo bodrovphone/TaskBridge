@@ -12,7 +12,7 @@ import {
   Textarea,
   Select,
   SelectItem,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { AlertTriangle, Upload } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAuth } from '@/features/auth'
@@ -145,7 +145,7 @@ export function ReportScamDialog({
                   isRequired
                 >
                   {REPORT_TYPES.map((type) => (
-                    <SelectItem key={type} value={type}>
+                    <SelectItem key={type}>
                       {t(`report.type.${type}`)}
                     </SelectItem>
                   ))}

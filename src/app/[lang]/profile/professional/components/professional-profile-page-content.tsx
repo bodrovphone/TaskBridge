@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardBody, Button } from '@nextui-org/react'
+import { Card, CardBody, Button } from '@heroui/react'
 import { Search, ClipboardList, Briefcase, ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { ProfessionalProfile } from '../../components/professional-profile'

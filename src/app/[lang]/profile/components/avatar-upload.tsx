@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Progress } from '@nextui-org/react'
+import { Avatar, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Progress } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import { Camera, Upload, X, Check, CircleUser } from 'lucide-react'
 import { uploadAvatar, deleteAvatar } from '@/lib/utils/avatar-upload'

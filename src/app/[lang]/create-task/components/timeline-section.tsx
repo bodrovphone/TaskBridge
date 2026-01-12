@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { Card, CardBody } from '@nextui-org/react'
+import { Card, CardBody } from '@heroui/react'
 import { Clock, Calendar } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import { enGB, bg, ru } from 'date-fns/locale'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react';
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { AlertCircle, RotateCw, Home } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from 'next-intl';

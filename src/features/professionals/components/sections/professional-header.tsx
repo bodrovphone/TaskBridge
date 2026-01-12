@@ -1,7 +1,7 @@
 'use client'
 
 import { memo, useMemo } from 'react';
-import { Avatar, Badge, Chip } from "@nextui-org/react";
+import { Avatar, Badge, Chip } from "@heroui/react";
 import { useParams } from 'next/navigation';
 import { Star, MapPin } from "lucide-react";
 import { useTranslations } from 'next-intl';

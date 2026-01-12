@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Chip } from '@nextui-org/react'
+import { Chip } from '@heroui/react'
 import { Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Tip } from '@/components/ui/tip'

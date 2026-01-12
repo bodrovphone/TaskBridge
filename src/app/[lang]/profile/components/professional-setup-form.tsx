@@ -14,7 +14,7 @@ import {
  ModalHeader,
  ModalBody,
  ModalFooter
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { Briefcase } from 'lucide-react'
 import { SkillsSelector } from './skills-selector'
 
@@ -203,7 +203,7 @@ export function ProfessionalSetupForm({ isOpen, onClose, onSuccess }: Profession
             }}
            >
             {experienceOptions.map((option) => (
-             <SelectItem key={option.key} value={option.key}>
+             <SelectItem key={option.key}>
               {t(`profile.professional.form.experienceOptions.${option.key}`)}
              </SelectItem>
             ))}
@@ -226,7 +226,7 @@ export function ProfessionalSetupForm({ isOpen, onClose, onSuccess }: Profession
            }}
           >
            {availabilityOptions.map((option) => (
-            <SelectItem key={option.key} value={option.key}>
+            <SelectItem key={option.key}>
              {t(`profile.professional.form.availabilityOptions.${option.key}`)}
             </SelectItem>
            ))}

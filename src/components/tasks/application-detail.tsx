@@ -11,7 +11,7 @@ import {
   Avatar,
   Chip,
   Divider
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { Star, CheckCircle, XCircle, Calendar, Wallet, Award, BadgeCheck, Clock, ExternalLink } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'

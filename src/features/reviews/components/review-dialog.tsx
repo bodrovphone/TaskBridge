@@ -15,7 +15,7 @@ import {
   Checkbox,
   Card,
   CardBody
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { Star, User, Calendar, AlertCircle, Info, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { StarRating } from '@/components/common/star-rating'

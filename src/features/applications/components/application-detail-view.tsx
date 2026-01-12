@@ -11,7 +11,7 @@ import {
   Chip,
   Divider,
   Avatar
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { useParams } from 'next/navigation'
 import {
   MapPin,

@@ -8,7 +8,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { Input, Card as NextUICard, Chip, Button } from "@nextui-org/react";
+import { Input, Card as NextUICard, Chip, Button } from "@heroui/react";
 import { Search, MapPin } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue } from "react";
 import { searchCategoriesAsync, preloadCategoryKeywords, getAllSubcategoriesWithLabels, getMainCategoryById } from '@/features/categories';

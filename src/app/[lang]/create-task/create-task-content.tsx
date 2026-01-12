@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Chip } from '@nextui-org/react'
+import { Chip } from '@heroui/react'
 import { CheckCircle, Users } from 'lucide-react'
 import { CreateTaskForm } from './components/create-task-form'
 import { ReopenBanner } from './components/reopen-banner'

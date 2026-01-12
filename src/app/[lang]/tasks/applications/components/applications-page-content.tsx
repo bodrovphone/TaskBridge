@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem } from '@nextui-org/react'
+import { Card, CardBody, Button, Chip, Tabs, Tab, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem } from '@heroui/react'
 import { Send, Calendar, Banknote, MapPin, User, X, AlertCircle, Briefcase, Search } from 'lucide-react'
 import { useApplications, type MyApplication } from '@/hooks/use-applications'
 import ApplicationDetailView from '@/features/applications/components/application-detail-view'
@@ -448,19 +448,19 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
                     trigger: "bg-white border-gray-300"
                   }}
                 >
-                  <SelectItem key="unavailable" value="unavailable">
+                  <SelectItem key="unavailable">
                     {t('myApplications.withdrawDialog.reasonUnavailable')}
                   </SelectItem>
-                  <SelectItem key="found-work" value="found-work">
+                  <SelectItem key="found-work">
                     {t('myApplications.withdrawDialog.reasonFoundWork')}
                   </SelectItem>
-                  <SelectItem key="changed" value="changed">
+                  <SelectItem key="changed">
                     {t('myApplications.withdrawDialog.reasonChanged')}
                   </SelectItem>
-                  <SelectItem key="price" value="price">
+                  <SelectItem key="price">
                     {t('myApplications.withdrawDialog.reasonPrice')}
                   </SelectItem>
-                  <SelectItem key="other" value="other">
+                  <SelectItem key="other">
                     {t('myApplications.withdrawDialog.reasonOther')}
                   </SelectItem>
                 </Select>
