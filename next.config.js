@@ -7,6 +7,8 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig = {
   experimental: {
     optimizeCss: true,
+    // Enable barrel file optimization for better tree-shaking
+    optimizePackageImports: ['@heroui/react', 'lucide-react', 'framer-motion'],
   },
   images: {
     remotePatterns: [
