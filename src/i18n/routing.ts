@@ -24,6 +24,11 @@ export const routing = defineRouting({
     name: 'preferred-language',
     maxAge: 365 * 24 * 60 * 60, // 1 year
   },
+
+  // Disable automatic alternate links generation
+  // We handle hreflang via Next.js metadata in generateAlternateLanguages()
+  // which correctly maps 'ua' URL locale to 'uk' hreflang code
+  alternateLinks: false,
 });
 
 export type Locale = (typeof routing.locales)[number];
