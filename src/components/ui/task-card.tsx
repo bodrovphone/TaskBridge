@@ -13,8 +13,7 @@ import {
  Card,
  CardBody,
  CardFooter,
- Button,
- Chip
+ Button
 } from "@heroui/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
 import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category';

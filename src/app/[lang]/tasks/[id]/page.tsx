@@ -127,7 +127,6 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
     <TaskDetailContent
      task={data.task}
      similarTasks={similarTasks}
-     applicationsCount={data.relatedData.applicationsCount}
      lang={lang}
     />
    </Suspense>

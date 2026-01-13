@@ -1,4 +1,4 @@
-import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { calculatePublishedAt } from '@/lib/utils/review-delay'
 import { authenticateRequest } from '@/lib/auth/api-auth'

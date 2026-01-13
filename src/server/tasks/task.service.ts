@@ -253,8 +253,8 @@ export class TaskService {
    */
   async cancelTask(
     id: string,
-    userId: string,
-    reason?: string
+    _userId: string,
+    _reason?: string
   ): Promise<Result<void, DatabaseError | ValidationError>> {
     // TODO: Add authorization check
     // TODO: Add business rules (can only cancel if no accepted applications, etc.)

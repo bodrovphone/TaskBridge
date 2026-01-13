@@ -17,7 +17,7 @@ import { NextRequest, NextResponse } from 'next/server'
  *   they are automatically suspended
  * - This prevents abuse from random users/bots
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   // @todo INTEGRATION: Implement when database is set up
   return NextResponse.json(
     { error: 'API not yet implemented' },

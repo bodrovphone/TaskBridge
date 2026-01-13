@@ -170,11 +170,6 @@ export function TelegramConnection({
     }
   };
 
-  // Handle manual connect button click
-  const handleConnect = async () => {
-    await connectWithId(telegramId);
-  };
-
   // Handle paste from clipboard button
   const handlePasteFromClipboard = async () => {
     try {

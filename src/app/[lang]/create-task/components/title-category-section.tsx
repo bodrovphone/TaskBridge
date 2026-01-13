@@ -18,7 +18,6 @@ interface TitleCategorySectionProps {
   form: any
   onCategoryConfirmed: (category: string, subcategory: string) => void
   initialTitle?: string
-  initialCategory?: string
   initialSubcategory?: string
 }
 
@@ -32,7 +31,6 @@ export function TitleCategorySection({
   form,
   onCategoryConfirmed,
   initialTitle = '',
-  initialCategory = '',
   initialSubcategory = '',
 }: TitleCategorySectionProps) {
   const t = useTranslations()

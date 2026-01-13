@@ -21,7 +21,6 @@ interface ProfessionalWithdrawDialogProps {
   customerName: string
   withdrawalsThisMonth: number
   maxWithdrawalsPerMonth: number
-  taskBudget: number
   acceptedDate: Date
 }
 
@@ -33,7 +32,6 @@ export function ProfessionalWithdrawDialog({
   customerName,
   withdrawalsThisMonth,
   maxWithdrawalsPerMonth,
-  taskBudget,
   acceptedDate,
 }: ProfessionalWithdrawDialogProps) {
   const t = useTranslations()

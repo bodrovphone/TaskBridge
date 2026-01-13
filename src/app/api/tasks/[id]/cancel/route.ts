@@ -168,7 +168,7 @@ export async function DELETE(
     // 5. Update task status to 'cancelled'
     // @todo UX: Keep images for display in Recent Tasks section
     const now = new Date().toISOString()
-    const { data: updatedTask, error: updateError } = await adminClient
+    const { error: updateError } = await adminClient
       .from('tasks')
       .update({
         status: 'cancelled',

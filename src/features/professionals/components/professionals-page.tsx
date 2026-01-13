@@ -25,7 +25,7 @@ interface ProfessionalsPageProps {
 
 export default function ProfessionalsPage({ initialFeaturedProfessionals = [] }: ProfessionalsPageProps) {
   const params = useParams();
-  const { filters, resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
+  const { resetFilters, buildApiQuery, activeFilterCount } = useProfessionalFilters();
 
   // Get current locale for API requests (for translations)
   const currentLang = (params?.lang as string) || 'bg';

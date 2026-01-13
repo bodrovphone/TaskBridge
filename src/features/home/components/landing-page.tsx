@@ -98,8 +98,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
   showEnforcementDialog,
   setShowEnforcementDialog,
   blockType,
-  blockingTasks,
-  handleReviewTask
+  blockingTasks
  } = useCreateTask();
 
  // Handle smooth scrolling to hash anchor on page load
@@ -523,7 +522,7 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
    </section>
 
    {/* Trust Features Section */}
-   <section className="py-20 relative overflow-hidden z-10">
+   <section className="py-20 relative overflow-x-hidden z-10">
     {/* Section overlay for trust section */}
     <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/50 "></div>
     {/* Background decoration */}
@@ -665,7 +664,6 @@ function Landing({ featuredTasks, featuredProfessionals }: LandingPageProps) {
     onClose={() => setShowEnforcementDialog(false)}
     blockType={blockType}
     pendingTasks={blockingTasks}
-    onReviewTask={handleReviewTask}
    />
   </div>
  );

@@ -8,7 +8,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Input,
   Textarea,
   Select,
   SelectItem,
@@ -21,7 +20,6 @@ export interface ReportScamDialogProps {
   isOpen: boolean
   onClose: () => void
   reportedUserId: string
-  reportedUserName: string
   relatedTaskId?: string
 }
 
@@ -41,7 +39,6 @@ export function ReportScamDialog({
   isOpen,
   onClose,
   reportedUserId,
-  reportedUserName,
   relatedTaskId,
 }: ReportScamDialogProps) {
   const t = useTranslations()
@@ -121,7 +118,7 @@ export function ReportScamDialog({
       scrollBehavior="inside"
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex items-center gap-2 pb-2">
               <AlertTriangle className="w-5 h-5 text-danger" />

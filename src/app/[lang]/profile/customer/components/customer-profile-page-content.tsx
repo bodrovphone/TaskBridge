@@ -31,8 +31,7 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
     showEnforcementDialog,
     setShowEnforcementDialog,
     blockType,
-    blockingTasks,
-    handleReviewTask
+    blockingTasks
   } = useCreateTask()
 
   // Redirect to home if not authenticated
@@ -138,7 +137,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           isTopProfessional={profile.isTopProfessional || false}
           topProfessionalTasksCount={profile.topProfessionalTasksCount || 0}
           isEarlyAdopter={profile.isEarlyAdopter || false}
-          earlyAdopterCategories={profile.earlyAdopterCategories || []}
         />
 
         {/* Customer Quick Actions */}
@@ -205,7 +203,6 @@ export function CustomerProfilePageContent({ lang }: CustomerProfilePageContentP
           onClose={() => setShowEnforcementDialog(false)}
           blockType={blockType}
           pendingTasks={blockingTasks}
-          onReviewTask={handleReviewTask}
         />
       </div>
     </div>

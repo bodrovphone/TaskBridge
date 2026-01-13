@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Modal,
   ModalContent,
@@ -29,7 +29,6 @@ interface ReviewDialogProps {
   onClose: () => void
   onSubmit: (data: ReviewSubmitData) => Promise<void>
   task: PendingReviewTask
-  isLoading?: boolean
   currentIndex?: number
   totalCount?: number
 }
@@ -39,7 +38,6 @@ export function ReviewDialog({
   onClose,
   onSubmit,
   task,
-  isLoading = false,
   currentIndex,
   totalCount
 }: ReviewDialogProps) {
@@ -160,7 +158,7 @@ export function ReviewDialog({
         }}
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex flex-col gap-0.5 sm:gap-1">
                 <div className="flex items-center justify-between">

@@ -16,7 +16,6 @@ import {
   GalleryItem,
   ServiceItem
 } from './user.types'
-import { BusinessRuleError } from '@/server/shared/errors/base.error'
 
 export class User {
   constructor(

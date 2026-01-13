@@ -53,7 +53,7 @@ export default function ReviewsDialog({
    }}
   >
    <ModalContent className="max-h-[70vh]">
-    {(onClose) => (
+    {() => (
      <>
       <ModalHeader className="flex flex-col gap-1">
        <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">

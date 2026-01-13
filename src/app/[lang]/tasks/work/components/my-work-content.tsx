@@ -36,11 +36,6 @@ const getTelegramUsername = (text: string): string => {
   return text.trim().replace(/^@/, '')
 }
 
-// Clean phone number for tel: href
-const cleanPhoneForHref = (phone: string): string => {
-  return phone.replace(/[\s\-\(\)\.]/g, '')
-}
-
 type WorkFilter = 'in_progress' | 'completed'
 
 export function MyWorkContent({ lang }: MyWorkContentProps) {
@@ -53,7 +48,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const [isMarkingComplete, setIsMarkingComplete] = useState(false)
   const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false)
   const [selectedTaskForWithdrawal, setSelectedTaskForWithdrawal] = useState<WorkTask | null>(null)
-  const [isWithdrawing, setIsWithdrawing] = useState(false)
+  const [, setIsWithdrawing] = useState(false)
   const [withdrawalSuccessModalOpen, setWithdrawalSuccessModalOpen] = useState(false)
   const [withdrawalErrorModalOpen, setWithdrawalErrorModalOpen] = useState(false)
   const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState('')
@@ -63,7 +58,7 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
   const maxWithdrawalsPerMonth = 2 // As per PRD
 
   // Fetch accepted applications from API (only if authenticated)
-  const { tasks: workTasks, isLoading, error, refetch, markComplete, withdraw, isMarkingComplete: isMutatingComplete, isWithdrawing: isMutatingWithdraw } = useWorkTasks()
+  const { tasks: workTasks, isLoading, error, markComplete, withdraw } = useWorkTasks()
 
   // Show auth banner for non-authenticated users
   if (!authLoading && !user) {
@@ -589,7 +584,6 @@ export function MyWorkContent({ lang }: MyWorkContentProps) {
           customerName={selectedTaskForWithdrawal.customer.name}
           withdrawalsThisMonth={withdrawalsThisMonth}
           maxWithdrawalsPerMonth={maxWithdrawalsPerMonth}
-          taskBudget={selectedTaskForWithdrawal.agreedPrice}
           acceptedDate={selectedTaskForWithdrawal.acceptedAt || new Date()}
         />
       )}

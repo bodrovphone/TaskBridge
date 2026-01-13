@@ -8,10 +8,9 @@ import { LanguageSwitcher } from "./language-switcher"
 import UserAvatarDropdown from "@/components/ui/user-avatar-dropdown"
 import NotificationBell from "./notification-bell"
 import { useTranslations } from 'next-intl'
-import { Plus, FileText, Briefcase, Search, User, HelpCircle, LogOut, Lightbulb, Users, Hammer, SquarePen } from "lucide-react"
+import { Plus, FileText, Briefcase, Search, LogOut, Lightbulb, Users, Hammer, SquarePen } from "lucide-react"
 import Image from "next/image"
 import { useAuth } from "@/features/auth"
-import { useToast } from "@/hooks/use-toast"
 import { Z_INDEX } from "@/lib/constants/z-index"
 import { useCreateTask } from "@/hooks/use-create-task"
 import { useNotificationStore } from "@/stores/notification-store"
@@ -59,7 +58,6 @@ function Header() {
  const router = useRouter()
  const params = useParams()
  const lang = params?.lang as string || 'bg'
- const { toast } = useToast()
  const { setOpen: setNotificationOpen } = useNotificationStore()
 
  // Smart sticky navbar - hide on scroll down, show on scroll up
@@ -95,9 +93,6 @@ function Header() {
  // const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false)
  // const [isSubmittingReview, setIsSubmittingReview] = useState(false)
 
- // Check if we're on the index/landing page
- const isIndexPage = pathname === `/${lang}` || pathname === `/${lang}/`
-
  // Explicit handler for menu state - close notification center when menu opens
  const handleMenuOpenChange = useCallback((open: boolean) => {
   if (open) {
@@ -120,8 +115,7 @@ function Header() {
   showEnforcementDialog,
   setShowEnforcementDialog,
   blockType,
-  blockingTasks,
-  handleReviewTask
+  blockingTasks
  } = useCreateTask()
 
  const handleCreateTask = useCallback(() => {
@@ -612,7 +606,6 @@ function Header() {
     onClose={() => setShowEnforcementDialog(false)}
     blockType={blockType}
     pendingTasks={blockingTasks}
-    onReviewTask={handleReviewTask}
   />
  </>
  )

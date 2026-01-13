@@ -30,7 +30,7 @@ interface BrowseTasksPageProps {
 }
 
 export default function BrowseTasksPage({ initialFeaturedTasks = [] }: BrowseTasksPageProps) {
- const { filters, updateFilter, resetFilters, buildApiQuery, activeFilterCount } = useTaskFilters();
+ const { resetFilters, buildApiQuery, activeFilterCount } = useTaskFilters();
  const { user } = useAuth();
  const router = useRouter();
  const params = useParams();

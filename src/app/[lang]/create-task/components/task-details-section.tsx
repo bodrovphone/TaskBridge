@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { Input, Textarea, Card, CardBody, Tooltip } from '@heroui/react'
+import { Input, Textarea, Card, CardBody } from '@heroui/react'
 import { FileText } from 'lucide-react'
 import { useRef, useState, useImperativeHandle, forwardRef } from 'react'
 import { validateProfanity } from '@/lib/services/profanity-filter'

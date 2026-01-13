@@ -55,7 +55,7 @@ interface PreflightResponse {
 
 export function DeleteAccountContent({ lang }: DeleteAccountContentProps) {
   const t = useTranslations()
-  const { user, profile, loading: authLoading, signInWithGoogle, signInWithFacebook } = useAuth()
+  const { user, loading: authLoading, signInWithGoogle, signInWithFacebook } = useAuth()
 
   const [preflight, setPreflight] = useState<PreflightResponse | null>(null)
   const [preflightLoading, setPreflightLoading] = useState(false)
@@ -64,9 +64,6 @@ export function DeleteAccountContent({ lang }: DeleteAccountContentProps) {
   const [password, setPassword] = useState('')
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
-
-  // Determine if user is OAuth (no password needed)
-  const isOAuthUser = profile?.email && !profile?.email.includes('@') === false // Simple heuristic, will be overridden by actual check
 
   // Fetch preflight data when user is authenticated
   useEffect(() => {

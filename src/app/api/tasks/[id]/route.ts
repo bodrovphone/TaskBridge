@@ -18,7 +18,7 @@ import { authenticateRequest } from '@/lib/auth/api-auth'
  * Returns task with related metadata
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

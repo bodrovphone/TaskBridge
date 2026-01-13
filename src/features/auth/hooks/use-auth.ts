@@ -44,33 +44,6 @@ export function useAuth(): UseAuthReturn {
   // All auth operations go through our API routes
 
   /**
-   * Fetch user profile from our API
-   */
-  const fetchProfile = useCallback(async (userId: string) => {
-    try {
-      const response = await fetch('/api/auth/profile')
-
-      if (response.ok) {
-        const data = await response.json()
-        setProfile(data.user)
-      } else if (response.status === 404) {
-        // Profile doesn't exist yet - create it
-        const createResponse = await fetch('/api/auth/profile', {
-          method: 'POST',
-        })
-
-        if (createResponse.ok) {
-          const data = await createResponse.json()
-          setProfile(data.user)
-        }
-      }
-    } catch (err) {
-      console.error('Error fetching profile:', err)
-      setError('Failed to load profile')
-    }
-  }, [])
-
-  /**
    * Handle notification session auto-login
    */
   const handleNotificationSession = useCallback(async (token: string) => {
@@ -225,7 +198,7 @@ export function useAuth(): UseAuthReturn {
     // Set up Supabase auth state change listener for token refresh
     const supabase = createClient()
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (event) => {
         console.log('[useAuth] Auth state changed:', event)
 
         if (event === 'TOKEN_REFRESHED') {

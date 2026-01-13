@@ -126,7 +126,7 @@ export default function UserAvatarDropdown({
    placement="bottom-end"
    className="min-w-[200px]"
    classNames={{
-    content: "py-1 px-1 border border-gray-200"
+    content: "py-1 px-1 border border-gray-200 bg-white shadow-lg"
    }}
   >
     <DropdownTrigger>
@@ -149,7 +149,11 @@ export default function UserAvatarDropdown({
      onAction={(key) => handleMenuAction(key as string)}
      variant="flat"
      classNames={{
-      list: "gap-1"
+      list: "gap-1",
+      base: "bg-white"
+     }}
+     itemClasses={{
+      base: "data-[hover=true]:bg-gray-100 data-[selectable=true]:focus:bg-gray-100 rounded-lg"
      }}
     >
     {/* User Info Section */}

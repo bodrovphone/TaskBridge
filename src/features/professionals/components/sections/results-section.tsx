@@ -251,8 +251,7 @@ export default function ResultsSection({
               >
                 <ProfessionalCard
                   professional={professional}
-                  featured={true}
-                />
+                                  />
               </motion.div>
             ))}
           </div>
@@ -271,8 +270,7 @@ export default function ResultsSection({
               >
                 <ProfessionalCard
                   professional={professional}
-                  featured={professional.featured}
-                />
+                                  />
               </motion.div>
             ))}
           </div>
@@ -331,8 +329,7 @@ export default function ResultsSection({
                   >
                     <ProfessionalCard
                       professional={professional}
-                      featured={true}
-                    />
+                                          />
                   </motion.div>
                 ))}
               </div>

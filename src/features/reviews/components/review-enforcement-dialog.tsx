@@ -6,13 +6,9 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
-  Card,
-  CardBody,
-  Avatar,
-  Chip
+  Button
 } from '@heroui/react'
-import { AlertTriangle, Star, User, FileText, CheckCircle } from 'lucide-react'
+import { AlertTriangle, Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import type { PendingReviewTask, BlockType } from '../lib/types'
@@ -22,17 +18,13 @@ interface ReviewEnforcementDialogProps {
   onClose: () => void
   blockType: BlockType
   pendingTasks: PendingReviewTask[]
-  onReviewTask: (taskId: string) => void
-  onProceedToTaskCreation?: () => void // Called after all reviews done
 }
 
 export function ReviewEnforcementDialog({
   isOpen,
   onClose,
   blockType,
-  pendingTasks,
-  onReviewTask,
-  onProceedToTaskCreation
+  pendingTasks
 }: ReviewEnforcementDialogProps) {
   const t = useTranslations()
   const params = useParams()

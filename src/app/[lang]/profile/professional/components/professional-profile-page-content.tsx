@@ -128,7 +128,6 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
           isTopProfessional={profile.isTopProfessional || false}
           topProfessionalTasksCount={profile.topProfessionalTasksCount || 0}
           isEarlyAdopter={profile.isEarlyAdopter || false}
-          earlyAdopterCategories={profile.earlyAdopterCategories || []}
         />
 
         {/* Professional Quick Actions */}

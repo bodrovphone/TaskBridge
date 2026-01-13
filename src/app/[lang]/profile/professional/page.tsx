@@ -10,7 +10,7 @@ interface ProfessionalProfilePageProps {
   }>
 }
 
-export async function generateMetadata({ params }: ProfessionalProfilePageProps): Promise<Metadata> {
+export async function generateMetadata({ params: _params }: ProfessionalProfilePageProps): Promise<Metadata> {
   return {
     title: 'Professional Profile | Trudify',
     description: 'Manage your professional profile and services on Trudify',

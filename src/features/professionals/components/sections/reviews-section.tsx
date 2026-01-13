@@ -42,7 +42,7 @@ function ReviewsSectionComponent({ reviews }: ReviewsSectionProps) {
  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
  // Memoize all review calculations to prevent recalculation on every render
- const { reviewsWithVisibility, visibleReviews, stats, averageRating } = useMemo(() => {
+ const { visibleReviews, stats, averageRating } = useMemo(() => {
   const withVisibility = reviews.map(r => ({
    ...r,
    isVisible: r.isVisible !== undefined ? r.isVisible : true,
@@ -56,7 +56,6 @@ function ReviewsSectionComponent({ reviews }: ReviewsSectionProps) {
    : "0";
 
   return {
-   reviewsWithVisibility: withVisibility,
    visibleReviews: visible,
    stats: reviewStats,
    averageRating: average

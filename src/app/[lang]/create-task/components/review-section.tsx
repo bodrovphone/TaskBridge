@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useDeferredValue, useState, useEffect } from 'react'
+import { useDeferredValue, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Card, CardBody, Chip, Divider } from '@heroui/react'
 import { MapPin, Wallet, Clock, FileText, AlertCircle } from 'lucide-react'

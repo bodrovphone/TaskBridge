@@ -67,7 +67,12 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
  }
 
  return (
-  <Dropdown shouldBlockScroll={false}>
+  <Dropdown
+   shouldBlockScroll={false}
+   classNames={{
+    content: "bg-white border border-gray-200 shadow-lg"
+   }}
+  >
    <DropdownTrigger>
     {mode === 'icon' ? (
      <Button
@@ -91,11 +96,18 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
      </Button>
     )}
    </DropdownTrigger>
-   <DropdownMenu 
+   <DropdownMenu
     aria-label="Language selection"
     onAction={handleLanguageChange}
     selectedKeys={new Set([currentLocale])}
     selectionMode="single"
+    classNames={{
+     base: "bg-white",
+     list: "bg-white"
+    }}
+    itemClasses={{
+     base: "data-[hover=true]:bg-gray-100 data-[selectable=true]:focus:bg-gray-100 rounded-lg"
+    }}
    >
     {Object.values(LANGUAGE_CONFIG).map((language) => (
      <DropdownItem

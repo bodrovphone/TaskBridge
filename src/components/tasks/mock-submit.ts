@@ -1,15 +1,12 @@
-import type { ApplicationFormData, ApplicationSubmissionResponse } from './types'
+import type { ApplicationSubmissionResponse, ApplicationFormData } from './types'
 
 /**
  * Mock function to simulate application submission
  * In production, this would call an API endpoint
  *
- * @param data - Application form data
  * @returns Promise with submission response
  */
-export async function submitApplication(
-  data: ApplicationFormData
-): Promise<ApplicationSubmissionResponse> {
+export async function submitApplication(): Promise<ApplicationSubmissionResponse> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1500))
 

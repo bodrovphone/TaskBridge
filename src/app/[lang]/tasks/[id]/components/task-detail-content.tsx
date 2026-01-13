@@ -58,7 +58,6 @@ interface SimilarTask {
 interface TaskDetailContentProps {
  task: TaskWithCustomer;
  similarTasks: SimilarTask[];
- applicationsCount?: number;
  lang: string;
 }
 

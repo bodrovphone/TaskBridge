@@ -145,7 +145,6 @@ export function PendingReviewsContent() {
             }}
             task={currentTask}
             onSubmit={handleSubmitReview}
-            isLoading={submitReviewMutation.isPending}
           />
         )}
       </div>

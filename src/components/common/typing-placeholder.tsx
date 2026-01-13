@@ -3,11 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-interface TypingPlaceholderProps {
- onComplete?: (text: string) => void;
-}
-
-const TypingPlaceholder: React.FC<TypingPlaceholderProps> = ({ onComplete }) => {
+const TypingPlaceholder: React.FC = () => {
  const t = useTranslations();
  const [currentText, setCurrentText] = useState('');
  const [currentIndex, setCurrentIndex] = useState(0);

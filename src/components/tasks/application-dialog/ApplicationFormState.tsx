@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 
 import { WizardDialog, type WizardStep } from '@/components/ui/wizard-dialog'
 import { NotificationSetupChip } from '@/components/ui/notification-setup-chip'
-import { cn } from '@/lib/utils'
 
 import {
   Wallet,
@@ -67,7 +66,7 @@ export function ApplicationFormState({
   alreadyApplied,
 }: ApplicationFormStateProps) {
   const t = useTranslations()
-  const [currentStep, setCurrentStep] = useState(0)
+  const [, setCurrentStep] = useState(0)
 
   // Form state
   const [proposedPrice, setProposedPrice] = useState<number | undefined>(undefined)

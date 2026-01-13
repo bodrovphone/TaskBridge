@@ -29,7 +29,7 @@ export async function GET() {
   // 2. Check database connection
   try {
     const supabase = await createClient()
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('telegram_connection_tokens')
       .select('count')
       .limit(1)

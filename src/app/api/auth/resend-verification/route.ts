@@ -1,4 +1,4 @@
-import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { generateEmailVerificationToken } from '@/lib/auth/email-verification'
 import { getEmailVerificationContent, type SupportedLocale } from '@/lib/email/verification-templates'

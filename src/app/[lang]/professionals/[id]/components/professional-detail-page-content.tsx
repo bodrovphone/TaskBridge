@@ -58,8 +58,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
     showEnforcementDialog,
     setShowEnforcementDialog,
     blockType,
-    blockingTasks,
-    handleReviewTask
+    blockingTasks
   } = useCreateTask();
 
   // Check sessionStorage on mount to see if user already invited this professional
@@ -428,7 +427,6 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
         onClose={() => setShowEnforcementDialog(false)}
         blockType={blockType}
         pendingTasks={blockingTasks}
-        onReviewTask={handleReviewTask}
       />
     </div>
   );

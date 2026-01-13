@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
  *
  * Returns true only if they have worked together through an accepted application
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   // @todo INTEGRATION: Implement when database is set up
   return NextResponse.json(
     { error: 'API not yet implemented' },

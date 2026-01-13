@@ -145,7 +145,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
         {/* Full-size image - tap to close on mobile */}
         <div
          className="relative w-full h-full max-w-7xl max-h-screen p-4 md:cursor-default cursor-pointer"
-         onClick={(e) => {
+         onClick={() => {
           // Only close on tap for mobile (no navigation buttons clicked)
           if (window.innerWidth < 768) {
            closeModal();

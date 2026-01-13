@@ -32,7 +32,6 @@ import {
   Palette,
   Monitor,
   Megaphone,
-  Globe,
   Languages,
   HandHeart,
   Calendar

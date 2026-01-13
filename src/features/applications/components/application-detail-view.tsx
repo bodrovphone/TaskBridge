@@ -8,7 +8,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Chip,
   Divider,
   Avatar
 } from '@heroui/react'
@@ -41,9 +40,7 @@ interface ApplicationDetailViewProps {
   onWithdraw?: (application: MyApplication) => void
   onMessageCustomer?: (application: MyApplication) => void
   onViewTask?: (application: MyApplication) => void
-  onMarkStarted?: (application: MyApplication) => void
   onMarkCompleted?: (application: MyApplication) => void
-  onReportIssue?: (application: MyApplication) => void
   onFindSimilar?: (application: MyApplication) => void
   onDelete?: (application: MyApplication) => void
 }
@@ -55,9 +52,7 @@ export default function ApplicationDetailView({
   onWithdraw,
   onMessageCustomer,
   onViewTask,
-  onMarkStarted,
   onMarkCompleted,
-  onReportIssue,
   onFindSimilar,
   onDelete
 }: ApplicationDetailViewProps) {
@@ -68,19 +63,6 @@ export default function ApplicationDetailView({
   if (!application) return null
 
   const { task, customer, myProposal, status } = application
-
-  const getStatusColor = () => {
-    switch (status) {
-      case 'pending':
-        return 'warning'
-      case 'accepted':
-        return 'success'
-      case 'rejected':
-        return 'danger'
-      case 'withdrawn':
-        return 'default'
-    }
-  }
 
   const getStatusIcon = () => {
     switch (status) {

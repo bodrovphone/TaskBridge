@@ -9,7 +9,6 @@ import type {
   Professional,
   ProfessionalDetail,
 } from './professional.types'
-import type { ProfessionalQueryParams } from './professional.query-types'
 import { getProfessionals as getProfessionalsFromRepo } from './professional.repository'
 import { filterSensitiveFieldsBatch, warnIfSensitiveFields } from './professional.privacy'
 import { parseQueryParams, validateQueryParams } from './professional.query-parser'

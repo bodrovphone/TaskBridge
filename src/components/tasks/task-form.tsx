@@ -364,7 +364,7 @@ export function TaskForm({
         onFixClick={handleScrollToFirstError}
       />
       <form.Subscribe selector={(state) => [state.canSubmit]}>
-        {([canSubmit]) => (
+        {() => (
           <form onSubmit={handleFormSubmit} className="space-y-8">
             <div ref={categoryRef}>
               {(mode === 'edit' || isReopening) ? (
@@ -385,7 +385,6 @@ export function TaskForm({
                     form.setFieldValue('subcategory', subcat)
                   }}
                   initialTitle={initialData?.title}
-                  initialCategory={initialData?.category}
                   initialSubcategory={initialData?.subcategory}
                 />
               )}

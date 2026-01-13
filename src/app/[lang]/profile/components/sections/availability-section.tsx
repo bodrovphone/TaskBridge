@@ -13,7 +13,6 @@ import { toast } from '@/hooks/use-toast'
 interface AvailabilitySectionProps {
   responseTime: string
   city: string | null
-  country: string
   languages: string[]
   onSave: (data: { responseTime: string }) => Promise<void>
   onLanguageChange: (data: string[]) => void
@@ -26,7 +25,6 @@ const languageCodes = ['bg', 'ru', 'en', 'ua']
 export function AvailabilitySection({
   responseTime,
   city,
-  country,
   languages,
   onSave,
   onLanguageChange

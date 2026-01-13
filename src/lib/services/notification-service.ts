@@ -14,7 +14,7 @@
  * - Fallback to in-app if external delivery fails
  */
 
-import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { sendTelegramNotification } from '@/lib/services/telegram-notification'
 import { sendEmailNotification } from '@/lib/services/email-notification'
 import { getUserNotificationChannel } from '@/lib/services/email-notification'

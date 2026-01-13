@@ -57,7 +57,7 @@ export function SuggestCategoryModal({
         })
       })
 
-      const data = await response.json()
+      await response.json()
 
       if (!response.ok) {
         if (response.status === 401) {

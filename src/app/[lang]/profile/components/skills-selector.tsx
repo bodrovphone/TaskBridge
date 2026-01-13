@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Input, Chip, Button, Card, CardBody } from '@heroui/react'
-import { Plus, X, Search } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 
 interface SkillsSelectorProps {
  selectedSkills: string[]

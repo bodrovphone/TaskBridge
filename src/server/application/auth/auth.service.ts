@@ -5,7 +5,7 @@
  */
 
 import { Result } from '@/server/shared/types/result'
-import { UnauthorizedError, NotFoundError } from '@/server/shared/errors/base.error'
+import { NotFoundError } from '@/server/shared/errors/base.error'
 import { User } from '@/server/domain/user/user.entity'
 import { CreateUserProfileDto } from '@/server/domain/user/user.types'
 import { CreateUserProfileUseCase } from './create-user-profile.usecase'

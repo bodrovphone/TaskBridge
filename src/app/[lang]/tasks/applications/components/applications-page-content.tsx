@@ -22,7 +22,7 @@ export function ApplicationsPageContent({ lang }: ApplicationsPageContentProps) 
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>('pending')
 
   // Use TanStack Query hook for applications - fetch ALL applications
-  const { applications, isLoading, error, withdraw, isWithdrawing } = useApplications('all', t)
+  const { applications, withdraw, isWithdrawing } = useApplications('all', t)
   const [withdrawDialog, setWithdrawDialog] = useState<{
     isOpen: boolean
     applicationId: string | null

@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Wallet, Clock, MessageSquare, Check, Edit2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 // Timeline display translation keys
 const TIMELINE_DISPLAY = {

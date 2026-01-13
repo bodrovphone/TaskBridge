@@ -8,8 +8,6 @@ import { X, ExternalLink } from "lucide-react";
 import { Button as NextUIButton } from "@heroui/react";
 import { useAuth } from "@/features/auth";
 import { useTranslations } from 'next-intl';
-import { LoginButton } from '@telegram-auth/react';
-import type { TelegramUserData } from '@telegram-auth/server';
 import { detectWebView, openInSystemBrowser, type WebViewInfo } from '@/lib/utils/webview-detection';
 
 interface AuthSlideOverProps {
@@ -256,37 +254,6 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
     // Handle popup blockers or other errors
     setError(t('auth.popupBlocked'));
     setIsLoading(false);
-  }
- };
-
- const handleTelegramAuth = async (data: TelegramUserData) => {
-  setIsLoading(true);
-  setError(null);
-
-  try {
-   const response = await fetch('/api/auth/telegram', {
-    method: 'POST',
-    headers: {
-     'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-   });
-
-   const result = await response.json();
-
-   if (!response.ok) {
-    setError(result.error || 'Failed to authenticate with Telegram');
-    setIsLoading(false);
-    return;
-   }
-
-   // Success! User is now in database
-   console.log('Telegram auth successful:', result.user);
-   handleAuthSuccess();
-  } catch (err) {
-   console.error('Telegram auth error:', err);
-   setError('Failed to authenticate with Telegram');
-   setIsLoading(false);
   }
  };
 

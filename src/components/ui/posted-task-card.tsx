@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { Card, CardBody, Button, Chip, Avatar } from '@heroui/react'
-import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, AlertCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit, UserX } from 'lucide-react'
+import { Banknote, MapPin, Calendar, Users, Eye, FileText, CheckCircle, ShieldAlert, XCircle, RotateCcw, Star, Edit, UserX } from 'lucide-react'
 import { ConfirmCompletionDialog } from '@/components/tasks/confirm-completion-dialog'
 import { ReportScamDialog } from '@/components/safety/report-scam-dialog'
 import { CancelTaskConfirmDialog } from '@/components/tasks/cancel-task-confirm-dialog'
@@ -17,7 +17,7 @@ import { TaskHintBanner } from '@/components/ui/task-hint-banner'
 import { useTaskHints } from '@/hooks/use-task-hints'
 import { POSTED_TASKS_QUERY_KEY } from '@/hooks/use-posted-tasks'
 import DefaultTaskImage from '@/components/ui/default-task-image'
-import { getCategoryColor, getCategoryName, getCategoryImage } from '@/lib/utils/category'
+import { getCategoryColor, getCategoryName } from '@/lib/utils/category'
 import { getCityLabelBySlug } from '@/features/cities'
 import { useAuth } from '@/features/auth'
 
@@ -75,16 +75,12 @@ function PostedTaskCard({
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [showReviewDialog, setShowReviewDialog] = useState(false)
   const [showRemoveDialog, setShowRemoveDialog] = useState(false)
-  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+  const [, setIsSubmittingReview] = useState(false)
   const [isConfirmingCompletion, setIsConfirmingCompletion] = useState(false)
   const [isRemovingProfessional, setIsRemovingProfessional] = useState(false)
   const [isCancellingTask, setIsCancellingTask] = useState(false)
   const [taskHasReview, setTaskHasReview] = useState(hasReview)
   const [imageError, setImageError] = useState(false)
-
-  // @todo INTEGRATION: Fetch from user's profile/stats
-  const cancellationsThisMonth = 0 // Mock data
-  const maxCancellationsPerMonth = 1 // As per PRD
 
   // @todo INTEGRATION: Fetch from user's profile/stats
   const removalsThisMonth = 0 // Mock data
@@ -620,7 +616,6 @@ function PostedTaskCard({
           isOpen={showReportDialog}
           onClose={() => setShowReportDialog(false)}
           reportedUserId={acceptedApplication.professionalId}
-          reportedUserName={acceptedApplication.professionalName}
           relatedTaskId={id}
         />
       )}
@@ -652,7 +647,6 @@ function PostedTaskCard({
               ? Math.floor((Date.now() - completedAt.getTime()) / (24 * 60 * 60 * 1000))
               : 0
           }}
-          isLoading={isSubmittingReview}
         />
       )}
 

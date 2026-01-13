@@ -61,11 +61,7 @@ export function storeQuestionLocally(
 /**
  * Mock function to simulate answer submission
  */
-export async function submitAnswer(
-  questionId: string,
-  authorId: string,
-  answerText: string
-): Promise<{ success: boolean; answerId: string; message: string }> {
+export async function submitAnswer(): Promise<{ success: boolean; answerId: string; message: string }> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1000))
 

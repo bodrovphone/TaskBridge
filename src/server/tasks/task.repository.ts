@@ -366,7 +366,7 @@ export class TaskRepository {
       const usedCategories = new Set<string>()
 
       // First pass: add high-scoring tasks from unique categories
-      for (const { task, score } of scoredTasks) {
+      for (const { task } of scoredTasks) {
         if (selectedTasks.length >= 20) break
 
         const categoryKey = task.subcategory || task.category

@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
  * Fetches basic professional information (name only) for UI display
  */
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

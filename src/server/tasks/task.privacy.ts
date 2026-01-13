@@ -20,7 +20,7 @@ export const isTaskOwner = (task: Task, viewerId?: string): boolean => {
  */
 export const applyPrivacyFilter = (
   task: Task,
-  viewerId?: string
+  _viewerId?: string
 ): Task => {
   // All task fields are now public (no sensitive address field)
   // location_notes (requirements) is visible to everyone

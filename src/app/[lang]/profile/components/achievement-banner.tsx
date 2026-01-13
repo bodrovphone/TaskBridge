@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardBody, Button } from '@heroui/react'
+import { Card, CardBody } from '@heroui/react'
 import { Trophy, Star, X, PartyPopper } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -9,7 +9,6 @@ interface AchievementBannerProps {
   isTopProfessional: boolean
   topProfessionalTasksCount: number
   isEarlyAdopter: boolean
-  earlyAdopterCategories: string[]
 }
 
 const STORAGE_KEY = 'achievement_banner_dismissed'
@@ -18,7 +17,6 @@ export function AchievementBanner({
   isTopProfessional,
   topProfessionalTasksCount,
   isEarlyAdopter,
-  earlyAdopterCategories,
 }: AchievementBannerProps) {
   const t = useTranslations()
   const [isDismissed, setIsDismissed] = useState(true) // Start true to prevent flash

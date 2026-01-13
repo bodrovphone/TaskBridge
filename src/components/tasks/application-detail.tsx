@@ -12,7 +12,7 @@ import {
   Chip,
   Divider
 } from '@heroui/react'
-import { Star, CheckCircle, XCircle, Calendar, Wallet, Award, BadgeCheck, Clock, ExternalLink } from 'lucide-react'
+import { Star, CheckCircle, XCircle, Wallet, Award, BadgeCheck, Clock, ExternalLink } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'

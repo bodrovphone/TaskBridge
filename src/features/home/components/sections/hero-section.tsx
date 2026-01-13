@@ -42,8 +42,7 @@ export default function HeroSection() {
   showEnforcementDialog,
   setShowEnforcementDialog,
   blockType,
-  blockingTasks,
-  handleReviewTask
+  blockingTasks
  } = useCreateTask();
 
  // Set professional intent before navigating to browse-tasks
@@ -327,7 +326,6 @@ export default function HeroSection() {
     onClose={() => setShowEnforcementDialog(false)}
     blockType={blockType}
     pendingTasks={blockingTasks}
-    onReviewTask={handleReviewTask}
    />
   </section>
  );

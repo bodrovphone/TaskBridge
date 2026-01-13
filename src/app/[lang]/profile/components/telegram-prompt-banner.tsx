@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Card, CardBody, Button } from '@heroui/react'
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'

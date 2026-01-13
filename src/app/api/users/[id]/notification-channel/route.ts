@@ -8,7 +8,7 @@ import { getUserNotificationChannel } from '@/lib/services/email-notification'
  * Used by client components to show warning banner
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {

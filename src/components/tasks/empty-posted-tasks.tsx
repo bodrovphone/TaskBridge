@@ -2,11 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
 import { Card as NextUICard, Button as NextUIButton } from "@heroui/react";
 import { Sparkles, Lightbulb, Plus } from "lucide-react";
-import { extractLocaleFromPathname } from '@/lib/utils/url-locale';
-import { DEFAULT_LOCALE } from '@/lib/constants/locales';
 import { useCreateTask } from '@/hooks/use-create-task';
 import { ReviewEnforcementDialog } from '@/features/reviews';
 
@@ -16,17 +13,13 @@ import { ReviewEnforcementDialog } from '@/features/reviews';
  */
 export default function EmptyPostedTasks() {
   const t = useTranslations();
-  const router = useRouter();
-  const pathname = usePathname();
-  const currentLocale = extractLocaleFromPathname(pathname) || DEFAULT_LOCALE;
 
   const {
     handleCreateTask,
     showEnforcementDialog,
     setShowEnforcementDialog,
     blockType,
-    blockingTasks,
-    handleReviewTask
+    blockingTasks
   } = useCreateTask();
 
   return (
@@ -148,7 +141,6 @@ export default function EmptyPostedTasks() {
         onClose={() => setShowEnforcementDialog(false)}
         blockType={blockType}
         pendingTasks={blockingTasks}
-        onReviewTask={handleReviewTask}
       />
     </NextUICard>
   );

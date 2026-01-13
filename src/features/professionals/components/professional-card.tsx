@@ -32,13 +32,12 @@ function obfuscateName(fullName: string): string {
 
 interface ProfessionalCardProps {
  professional: Professional
- featured?: boolean
  isMock?: boolean  // Flag to indicate this is mock data for reference
  compact?: boolean // Compact mode: truncated bio, fixed height (for landing page)
  actionText?: string // Custom button text (e.g., "Suggest a task")
 }
 
-export default function ProfessionalCard({ professional, featured = false, isMock = false, compact = false, actionText }: ProfessionalCardProps) {
+export default function ProfessionalCard({ professional, isMock = false, compact = false, actionText }: ProfessionalCardProps) {
  const t = useTranslations()
 
  // Direct access to API Professional properties

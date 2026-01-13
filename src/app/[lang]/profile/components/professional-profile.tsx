@@ -16,7 +16,6 @@ import { PortfolioGalleryManager } from './portfolio-gallery-manager'
 import { UserProfile, PreferredContact, PreferredLanguage, GalleryItem, ServiceItem } from '@/server/domain/user/user.types'
 import { useProfessionalListingStatus } from '@/hooks/use-professional-listing-status'
 import { searchKeywords } from '@/features/categories/lib/category-keywords'
-import { toast } from '@/hooks/use-toast'
 
 interface ProfessionalProfileProps {
   profile: UserProfile

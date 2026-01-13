@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Star, TrendingUp, Briefcase, SlidersHorizontal, Crown, Trophy, Target } from 'lucide-react'
+import { Star, SlidersHorizontal, Crown, Trophy, Target } from 'lucide-react'
 
 interface SortingPickerProps {
  value: string

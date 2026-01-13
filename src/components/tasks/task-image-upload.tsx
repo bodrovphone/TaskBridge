@@ -1,19 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { Upload, X, Image as ImageIcon } from 'lucide-react'
+import { X, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@heroui/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 interface TaskImageUploadProps {
-  value: File | null // File object for preview
   onChange: (file: File | null) => void
   disabled?: boolean
 }
 
 export default function TaskImageUpload({
-  value,
   onChange,
   disabled = false
 }: TaskImageUploadProps) {

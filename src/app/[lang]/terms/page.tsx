@@ -5,7 +5,6 @@ import { SupportedLocale, SUPPORTED_LOCALES } from '@/lib/constants/locales'
 import { generateAlternateLanguages, generateCanonicalUrl } from '@/lib/utils/seo'
 import { FileText, AlertCircle, Mail, Building2, Hash } from 'lucide-react'
 import { LocaleLink } from '@/components/common/locale-link'
-import { ButtonLink } from '@/components/ui/button-link'
 import NextLink from 'next/link'
 
 // Static generation for all locales

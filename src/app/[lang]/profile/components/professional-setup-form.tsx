@@ -51,7 +51,7 @@ export function ProfessionalSetupForm({ isOpen, onClose, onSuccess }: Profession
    experience: 'intermediate',
    portfolio: ''
   },
-  onSubmit: async ({ value }) => {
+  onSubmit: async () => {
    setIsSubmitting(true)
 
    // Simulate API call

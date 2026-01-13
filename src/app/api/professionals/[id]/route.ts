@@ -16,8 +16,6 @@ const supabaseAdmin = createClient<Database>(
   }
 );
 
-type UserProfile = Database['public']['Tables']['users']['Row'];
-
 // Helper function to get date-fns locale
 function getDateLocale(lang?: string) {
   switch(lang) {

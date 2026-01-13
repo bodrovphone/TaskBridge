@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode } from "react";
-import { useAuth } from "@/features/auth";
 import { useTranslations } from 'next-intl';
 import FallbackAvatar from "@/components/ui/fallback-avatar";
 
@@ -22,9 +21,6 @@ interface PrivacyToggleProps {
 }
 
 export default function PrivacyToggle({ customer, children, isOwner = false }: PrivacyToggleProps) {
- const { user, profile } = useAuth();
- const isAuthenticated = !!user && !!profile;
-
  const t = useTranslations();
 
  // Handle missing customer data

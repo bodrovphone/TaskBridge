@@ -62,7 +62,7 @@ export default function WithdrawDialog({
       }}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
               <div className="flex items-center gap-2">

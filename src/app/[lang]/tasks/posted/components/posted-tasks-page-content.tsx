@@ -39,8 +39,7 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
     showEnforcementDialog,
     setShowEnforcementDialog,
     blockType,
-    blockingTasks,
-    handleReviewTask
+    blockingTasks
   } = useCreateTask()
 
   const filteredTasks = tasks.filter(task => {
@@ -284,7 +283,6 @@ export function PostedTasksPageContent({ lang }: PostedTasksPageContentProps) {
         onClose={() => setShowEnforcementDialog(false)}
         blockType={blockType}
         pendingTasks={blockingTasks}
-        onReviewTask={handleReviewTask}
       />
     </div>
   )

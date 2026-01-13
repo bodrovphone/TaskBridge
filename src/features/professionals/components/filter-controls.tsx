@@ -1,10 +1,9 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { 
+import {
  Select,
  SelectItem,
- Input,
  Slider,
  Checkbox,
  RadioGroup,
@@ -15,7 +14,7 @@ import {
  * Generic translation function type compatible with both react-i18next and next-intl
  */
 type TranslateFunction = (key: string) => string;
-import { Star, MapPin, Briefcase, SlidersHorizontal } from "lucide-react"
+import { Star, MapPin, Briefcase } from "lucide-react"
 import SortingPicker from "@/components/ui/sorting-picker"
 import { getLocationOptions } from '@/lib/constants/locations'
 

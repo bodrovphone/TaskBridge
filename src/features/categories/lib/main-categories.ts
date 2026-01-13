@@ -7,7 +7,6 @@ import {
   Heart,
   Car,
   ShoppingBag,
-  PenTool,
   GraduationCap,
   Code,
   Mouse,

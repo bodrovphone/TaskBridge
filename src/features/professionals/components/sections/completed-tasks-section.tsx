@@ -124,7 +124,7 @@ function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectio
      {/* Timeline Line with Gaps - positioned relative to content */}
      <div className="absolute left-8 top-10 w-0.5 bg-gradient-to-b from-green-400 to-emerald-300" style={{ height: 'calc(100% - 2.5rem)' }}></div>
 
-     {completedTasks.slice(0, 4).map((task, index) => (
+     {completedTasks.slice(0, 4).map((task) => (
       <div key={task.id} className="relative flex gap-6">
        {/* Timeline Node */}
        <div className="relative z-10 flex-shrink-0">
@@ -248,7 +248,7 @@ function CompletedTasksSectionComponent({ completedTasks }: CompletedTasksSectio
    {/* Mobile: Simple Grid View */}
    <div className="md:hidden">
     <div className="grid grid-cols-1 gap-4">
-     {completedTasks.slice(0, 4).map((task, index) => (
+     {completedTasks.slice(0, 4).map((task) => (
       <Card key={task.id} className="bg-white/95 border-0">
        <CardBody className="p-4">
         <div className="flex items-start justify-between mb-3">

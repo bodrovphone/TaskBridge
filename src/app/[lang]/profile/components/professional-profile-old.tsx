@@ -52,7 +52,7 @@ const experienceOptions = [
  { key: 'expert', label: '10+ years' }
 ]
 
-export function ProfessionalProfile({ user }: ProfessionalProfileProps) {
+export function ProfessionalProfile({}: ProfessionalProfileProps) {
  const t = useTranslations()
  const [isEditingInfo, setIsEditingInfo] = useState(false)
  const [isEditingBusiness, setIsEditingBusiness] = useState(false)

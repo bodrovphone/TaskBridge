@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button, Input, Progress, Card, CardBody, Spinner } from '@heroui/react'
 import { Plus, Trash2, Upload, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'

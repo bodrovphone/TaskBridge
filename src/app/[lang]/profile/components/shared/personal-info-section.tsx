@@ -4,10 +4,8 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { Card, CardBody, CardHeader, Button, Divider, Chip, Input, Select, SelectItem, RadioGroup, Radio, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react'
 import { useTranslations } from 'next-intl'
-import { usePathname } from 'next/navigation'
 import { MapPin, Phone, Mail, Calendar, Shield, Globe, User as UserIcon, Edit, X, AlertCircle, Send } from 'lucide-react'
 import { FormActionButtons } from './form-action-buttons'
-import { extractLocaleFromPathname } from '@/lib/utils/url-locale'
 import { UserProfile, PreferredContact, PreferredLanguage } from '@/server/domain/user/user.types'
 import { getCityLabelBySlug } from '@/features/cities'
 import { useAuth } from '@/features/auth'
@@ -36,8 +34,6 @@ export function PersonalInfoSection({ profile, onSave }: PersonalInfoSectionProp
   const [pendingContactChange, setPendingContactChange] = useState<PreferredContact | null>(null)
   const [isResendingVerification, setIsResendingVerification] = useState(false)
   const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  const pathname = usePathname()
-  const currentLocale = extractLocaleFromPathname(pathname) ?? 'bg'
 
   // Local state for auto-save tracking
   const [localName, setLocalName] = useState(profile.fullName || '')

@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
 import { Share2, Edit3, Check, LogOut, CheckCircle, Globe } from "lucide-react";
-import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip, Chip } from "@heroui/react";
+import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@heroui/react";
 import { useTranslations } from 'next-intl';
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/features/auth";
@@ -70,10 +70,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  // @todo FEATURE: Questions feature - commented out for future implementation
  // const [authAction, setAuthAction] = useState<'apply' | 'question' | null>(null);
  const [userApplication, setUserApplication] = useState<{ status: ApplicationStatus } | null>(null);
- const [isLoadingApplication, setIsLoadingApplication] = useState(false);
  const [isShareCopied, setIsShareCopied] = useState(false);
  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
- const [isWithdrawing, setIsWithdrawing] = useState(false);
  const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false);
  const [isMarkingCompleted, setIsMarkingCompleted] = useState(false);
 
@@ -105,7 +103,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
   if (!user || !profile) return;
 
   const fetchUserApplication = async () => {
-   setIsLoadingApplication(true);
    try {
     const response = await authenticatedFetch(`/api/applications?status=all`);
     if (response.ok) {
@@ -116,8 +113,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     }
    } catch (error) {
     console.error('[TaskActions] Error fetching application:', error);
-   } finally {
-    setIsLoadingApplication(false);
    }
   };
 
@@ -239,7 +234,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  };
 
  const handleWithdrawConfirm = async (reason?: string) => {
-  setIsWithdrawing(true);
   try {
    const response = await authenticatedFetch(`/api/tasks/${task.id}/withdraw`, {
     method: 'POST',
@@ -266,8 +260,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
     description: error instanceof Error ? error.message : String(error),
     variant: 'destructive',
    });
-  } finally {
-   setIsWithdrawing(false);
   }
  };
 
@@ -380,7 +372,6 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
      customerName={task.customer?.full_name || 'Customer'}
      withdrawalsThisMonth={withdrawalsThisMonth}
      maxWithdrawalsPerMonth={maxWithdrawalsPerMonth}
-     taskBudget={task.budget_max_bgn || 0}
      acceptedDate={new Date()}
     />
    </>

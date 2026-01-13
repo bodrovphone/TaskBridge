@@ -33,7 +33,7 @@ const filterSections = [
 export function FiltersModal() {
   const t = useTranslations()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { filters, updateFilters, resetFilters, activeFilterCount } = useProfessionalFilters()
+  const { filters, updateFilters, activeFilterCount } = useProfessionalFilters()
 
   // Local state for filters - only applied when user clicks "Show Results"
   const [localFilters, setLocalFilters] = useState<ProfessionalFilters>(filters)
