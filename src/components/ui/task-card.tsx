@@ -235,7 +235,7 @@ function TaskCard({ task, onApply, showApplyButton = true }: TaskCardProps) {
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border ${categoryColor} truncate`}>
        {categoryName}
       </span>
-      <span className="text-xs text-gray-500 flex-shrink-0">{timeAgo}</span>
+      <span className="text-xs text-gray-500 flex-shrink-0" suppressHydrationWarning>{timeAgo}</span>
      </div>
 
      {/* Title - max 1 line with ellipsis */}

@@ -104,7 +104,8 @@ function MainCategoryCard({
  const config = colorConfig[color as keyof typeof colorConfig]
  const [isSuggestionModalOpen, setIsSuggestionModalOpen] = useState(false)
 
- // Generate random chip colors, avoiding the parent card's color(s)
+ // Generate deterministic chip colors based on index, avoiding the parent card's color(s)
+ // Using index instead of Math.random() to prevent hydration mismatch
  const chipColors = useMemo(() => {
   const allColors: Array<"primary" | "secondary" | "success" | "warning" | "danger"> = [
    "primary",
@@ -118,10 +119,9 @@ function MainCategoryCard({
   const excludedColors = colorExclusions[color] || []
   const availableColors = allColors.filter(c => !excludedColors.includes(c))
 
-  // Assign random colors to each subcategory
-  return subcategories.map(() => {
-   const randomIndex = Math.floor(Math.random() * availableColors.length)
-   return availableColors[randomIndex]
+  // Assign colors based on index (deterministic, no hydration mismatch)
+  return subcategories.map((_, index) => {
+   return availableColors[index % availableColors.length]
   })
  }, [subcategories, color])
 
