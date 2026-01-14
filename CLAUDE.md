@@ -45,22 +45,6 @@ npm run type-check      # Run TypeScript type checking
 # Database migrations managed via Supabase Dashboard or CLI
 ```
 
-## Development Workflow
-
-**IMPORTANT: Do NOT run `npm run build` after making changes**
-
-- ❌ **NEVER** run `npm run build` automatically after code changes
-- ❌ Running builds breaks the local development server
-- ✅ The user has `npm run dev` running - changes are hot-reloaded automatically
-- ✅ TypeScript errors will show in the terminal and browser during development
-- ✅ Only run builds if explicitly requested by the user
-
-**Rationale:**
-- Next.js dev server provides instant feedback with hot reload
-- Production builds are slow and interrupt the development flow
-- Running builds kills the local server and disrupts the user's workflow
-- TypeScript type checking happens automatically in the IDE and dev server
-
 ## Architecture
 
 ### Clean `/src/` Directory Structure
@@ -971,6 +955,50 @@ const myCallback: ApiCallback = (_error, data) => {
 - [ ] Verify smooth open/close animations without flicker
 - [ ] Check background elements don't flash white
 - [ ] Ensure mobile Chrome performance is acceptable
+
+#### Critical CSS for Web Vitals (LCP/FCP)
+
+**Location**: `/src/app/layout.tsx` - `criticalCSS` constant
+
+**Purpose**: Inline critical CSS eliminates render-blocking for above-the-fold content, improving LCP (Largest Contentful Paint) and FCP (First Contentful Paint).
+
+**How It Works**:
+- ~1.5KB of essential CSS is inlined directly in `<head>` via `<style>` tag
+- Browser can render above-the-fold content **before** downloading the full CSS bundle (~59KB)
+- Contains: layout primitives, typography, colors, spacing, header styles
+
+**When to Update Critical CSS**:
+| Scenario | Action Required |
+|----------|-----------------|
+| Change text/images/data | No update needed |
+| Rearrange existing components | No update needed |
+| Use classes already in critical CSS | No update needed |
+| Add **new Tailwind classes** to above-the-fold | May need to add classes to `criticalCSS` |
+
+**Classes Currently in Critical CSS**:
+- Layout: `min-h-screen`, `flex`, `flex-col`, `flex-1`, `grid`, `relative`, `absolute`, `fixed`
+- Spacing: `px-4`, `py-6`, `mx-auto`, `gap-8`, `space-y-6`
+- Typography: `font-bold`, `text-slate-900`, `leading-*`
+- Visibility: `hidden`, `lg:block`, `lg:hidden`, `sr-only`
+- Sizing: `w-full`, `max-w-full`, `max-w-7xl`, `h-20`
+- Decorative: `rounded-xl`, `shadow-xl`, `bg-white`
+
+**Adding New Critical Classes**:
+```typescript
+// In /src/app/layout.tsx, add to the criticalCSS string:
+const criticalCSS = `
+  // ... existing styles ...
+  .your-new-class{your:styles}  // Add minified CSS here
+`;
+```
+
+**Testing After Changes**:
+1. Deploy to Vercel or run `npm run build && npm run start`
+2. Run PageSpeed Insights on the affected page
+3. Check "Render blocking resources" - should show minimal/no blocking
+4. Verify LCP metric is green (<2.5s)
+
+**Script for Analysis**: `npm run critical-css` - Analyzes build output for critical CSS extraction (uses critters)
 
 #### Large Component Refactoring Progress
 - **✅ browse-tasks-page.tsx** (423 → 103 lines) - 75% reduction via HeroSection, SearchFiltersSection, ResultsSection

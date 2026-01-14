@@ -8,10 +8,11 @@ import { BlogArticle } from '../types'
 // Bulgarian articles
 import { tarsyaRabotaArticle } from './bg/tarsya-rabota-v-bulgaria'
 import { nameriMajstorArticle } from './bg/nameri-majstor-lesno'
+import { hamaliBurgasArticle } from './bg/hamali-burgas-ceni'
 
 // All articles organized by locale
 export const articles: Record<string, BlogArticle[]> = {
-  bg: [tarsyaRabotaArticle, nameriMajstorArticle],
+  bg: [tarsyaRabotaArticle, nameriMajstorArticle, hamaliBurgasArticle],
   en: [],
   ru: [],
   ua: [],

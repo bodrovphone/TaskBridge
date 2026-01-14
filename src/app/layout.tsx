@@ -88,6 +88,49 @@ export const viewport: Viewport = {
  userScalable: true,
 }
 
+/**
+ * Critical CSS for above-the-fold content
+ * This inline CSS ensures fast initial render (improved LCP/FCP)
+ * Contains only essential styles for: layout, header, hero section, fonts
+ */
+const criticalCSS = `
+  :root{--background:0 0% 100%;--foreground:222.2 84% 4.9%;--primary:221.2 83.2% 53.3%;--primary-foreground:210 40% 98%}
+  *,::after,::before{box-sizing:border-box;border-width:0;border-style:solid}
+  html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,sans-serif}
+  body{margin:0;line-height:inherit;-webkit-font-smoothing:antialiased}
+  .min-h-screen{min-height:100vh}
+  .flex{display:flex}
+  .flex-col{flex-direction:column}
+  .flex-1{flex:1 1 0%}
+  .overflow-x-hidden{overflow-x:hidden}
+  .w-full{width:100%}
+  .max-w-full{max-width:100%}
+  .relative{position:relative}
+  .absolute{position:absolute}
+  .fixed{position:fixed}
+  .inset-0{inset:0}
+  .z-10{z-index:10}
+  .h-20{height:5rem}
+  .hidden{display:none}
+  @media(min-width:1024px){.lg\\:block{display:block}.lg\\:hidden{display:none}}
+  .bg-white{background-color:#fff}
+  .text-slate-900{color:rgb(15 23 42)}
+  .font-bold{font-weight:700}
+  .text-\\[2\\.5rem\\]{font-size:2.5rem}
+  .leading-\\[1\\.1\\]{line-height:1.1}
+  .px-4{padding-left:1rem;padding-right:1rem}
+  .py-6{padding-top:1.5rem;padding-bottom:1.5rem}
+  .mx-auto{margin-left:auto;margin-right:auto}
+  .max-w-7xl{max-width:80rem}
+  .grid{display:grid}
+  .gap-8{gap:2rem}
+  .items-center{align-items:center}
+  .space-y-6>:not([hidden])~:not([hidden]){margin-top:1.5rem}
+  .rounded-xl{border-radius:0.75rem}
+  .shadow-xl{box-shadow:0 20px 25px -5px rgb(0 0 0/0.1)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+`;
+
 function RootLayout({
  children,
 }: {
@@ -95,6 +138,10 @@ function RootLayout({
 }) {
  return (
   <html lang="bg" className={`overflow-x-hidden ${plovdivDisplay.variable}`}>
+   <head>
+    {/* Inline critical CSS for fast initial render */}
+    <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
+   </head>
    <body className="font-sans overflow-x-hidden w-full">
     {children}
     <Analytics />
