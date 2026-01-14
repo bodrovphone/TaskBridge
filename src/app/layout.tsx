@@ -150,10 +150,7 @@ function RootLayout({
 }) {
  return (
   <html lang="bg" className={`overflow-x-hidden ${plovdivDisplay.variable}`}>
-   <head>
-    {/* Inline critical CSS for fast initial render */}
-    <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
-   </head>
+   
    <body className="font-sans overflow-x-hidden w-full">
     {children}
     <Analytics />
