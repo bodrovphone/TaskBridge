@@ -28,8 +28,8 @@ if (!webhookSecret) {
 }
 
 async function setupWebhook() {
-  if (!botToken) {
-    console.error('❌ Bot token is not available');
+  if (!botToken || !webhookSecret) {
+    console.error('❌ Bot token or webhook secret is not available');
     return;
   }
 
