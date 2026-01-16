@@ -6,7 +6,7 @@ export const landing = {
     'Грузчики, уборка квартир, домашний ремонт — найди задачу или специалиста в Софии, Бургасе, Пловдиве, Варне. Бесплатно, без комиссий.\n\nИщете работу? Просмотрите задачи и подайте заявку. Нужен мастер? Опубликуйте задачу и получите предложения.',
   'landing.hero.subtitleMobile': 'найди специалиста или работу быстро и легко',
   'landing.hero.getStarted': 'создать задачу',
-  'landing.hero.browseServices': 'Ищу работу',
+  'landing.hero.browseServices': 'Найти клиентов',
   'landing.hero.giveawayBadge': 'Выиграй призы!',
   'landing.hero.howItWorksBadge': 'Как это работает?',
 

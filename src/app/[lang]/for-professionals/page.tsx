@@ -81,7 +81,7 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
             thumbnailUrl: 'https://i.ytimg.com/vi/CxX2YdOva60/maxresdefault.jpg',
             contentUrl: 'https://www.youtube.com/shorts/CxX2YdOva60',
             embedUrl: 'https://www.youtube-nocookie.com/embed/CxX2YdOva60',
-            uploadDate: '2024-12-01',
+            uploadDate: '2025-12-01T00:00:00+02:00',
             duration: 'PT1M',
           },
           {
@@ -90,7 +90,7 @@ export default async function ForProfessionalsPage({ params }: ForProfessionalsP
             thumbnailUrl: 'https://i.ytimg.com/vi/u5PXMrdE9OQ/maxresdefault.jpg',
             contentUrl: 'https://www.youtube.com/shorts/u5PXMrdE9OQ',
             embedUrl: 'https://www.youtube-nocookie.com/embed/u5PXMrdE9OQ',
-            uploadDate: '2024-12-01',
+            uploadDate: '2025-12-01T00:00:00+02:00',
             duration: 'PT1M',
           },
         ]}

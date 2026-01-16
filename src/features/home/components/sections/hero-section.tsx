@@ -27,7 +27,7 @@ import {
  Bell,
  CheckCircle,
  SquarePen,
- Search,
+ Briefcase,
  Gift,
  HelpCircle
 } from "lucide-react";
@@ -190,8 +190,8 @@ export default function HeroSection() {
         className="group border-2 border-slate-300 text-slate-700 bg-white/70 hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
         asChild
        >
-        <LocaleLink href="/browse-tasks" onClick={setProfessionalIntent}>
-         <Search className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
+        <LocaleLink href="/register?intent=professional" onClick={setProfessionalIntent}>
+         <Briefcase className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.hero.browseServices')}
         </LocaleLink>
        </Button>

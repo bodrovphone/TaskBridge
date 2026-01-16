@@ -7,8 +7,8 @@
 ## ✅ **COMPLETED**: Local Development
 
 ### Configuration
-- **Project ID**: `nyleceedixybtogrwilv`
-- **Project URL**: `https://nyleceedixybtogrwilv.supabase.co`
+- **Project ID**: `your-project-id`
+- **Project URL**: `https://your-project-id.supabase.co`
 - **Environment File**: `.env.local` ✅ Created and configured
 - **Git Protection**: `.env.local` added to `.gitignore` ✅
 
@@ -55,11 +55,11 @@ cd /Users/alexbodrov/pet_projects/TaskBridge
 
 | Secret Name | Value | Copy From |
 |------------|-------|-----------|
-| `NEXT_PUBLIC_SUPABASE_URL` | `https://nyleceedixybtogrwilv.supabase.co` | Project URL |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://your-project-id.supabase.co` | Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI...` | Full anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | `eyJhbGciOiJIUzI...` | Full service role key |
-| `DATABASE_PASSWORD` | `ppIus5x4M6w0yMNs` | Database password |
-| `DATABASE_URL` | `postgresql://postgres:ppI...` | Full connection string |
+| `DATABASE_PASSWORD` | `your-database-password` | Database password |
+| `DATABASE_URL` | `postgresql://postgres:...` | Full connection string |
 
 ### Verify GitHub Secrets
 
@@ -195,7 +195,7 @@ gh secret list
                     ↓
 ┌─────────────────────────────────────────────┐
 │         Supabase Backend (✅)               │
-│  Project: nyleceedixybtogrwilv             │
+│  Project: your-project-id             │
 │  PostgreSQL + Auth + Storage + Realtime    │
 │  Ready for: Schema + Auth configuration    │
 └─────────────────────────────────────────────┘
@@ -208,8 +208,8 @@ gh secret list
 1. **Use Vercel-Supabase Integration** - Automatically syncs env vars
 2. **Run GitHub script** - Faster than manual secret entry
 3. **Test locally first** - Verify everything works before deploying
-4. **Keep passwords secure** - Never commit to git, share in chat
-5. **Consider rotating** - Database password was shared in chat
+4. **Keep passwords secure** - Never commit to git or share in chat
+5. **Rotate regularly** - Update database password periodically
 
 ---
 

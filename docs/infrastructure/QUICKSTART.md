@@ -1,9 +1,8 @@
 # 🚀 Supabase Quickstart - Get Your Credentials
 
-## You Have: Database Password ✅
-```
-ppIus5x4M6w0yMNs
-```
+## You Need: Your Database Password
+
+Get this from Supabase Dashboard → Settings → Database → Connection string
 
 ## You Need: 3 More Values from Supabase Dashboard
 
@@ -86,9 +85,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key-here
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-secret-key
 # ↑ Paste your service_role key here
 
-# Update PROJECT_ID in DATABASE_URL:
-DATABASE_URL=postgresql://postgres:ppIus5x4M6w0yMNs@db.YOUR_PROJECT_ID.supabase.co:5432/postgres
-# ↑ Replace YOUR_PROJECT_ID with your actual project ID
+# Update PROJECT_ID and PASSWORD in DATABASE_URL:
+DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@db.YOUR_PROJECT_ID.supabase.co:5432/postgres
+# ↑ Replace YOUR_PROJECT_ID and YOUR_PASSWORD with your actual values
 ```
 
 ---

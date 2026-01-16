@@ -6,7 +6,7 @@ export const landing = {
     'Хамали, почистване на апартаменти, домашни ремонти — намери задача или специалист в София, Бургас, Пловдив, Варна. Безплатно, без комисионни.\n\nТърсиш работа? Разгледай задачи и кандидатствай. Търсиш майстор? Публикувай задача и получи оферти.',
   'landing.hero.subtitleMobile': 'намери специалист или работа бързо и лесно',
   'landing.hero.getStarted': 'създай задача',
-  'landing.hero.browseServices': 'Търся работа',
+  'landing.hero.browseServices': 'Намери клиенти',
   'landing.hero.giveawayBadge': 'Спечели награди!',
   'landing.hero.howItWorksBadge': 'Как работи?',
 

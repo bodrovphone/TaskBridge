@@ -82,7 +82,7 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
             thumbnailUrl: 'https://i.ytimg.com/vi/njXl_ARz610/maxresdefault.jpg',
             contentUrl: 'https://www.youtube.com/shorts/njXl_ARz610',
             embedUrl: 'https://www.youtube-nocookie.com/embed/njXl_ARz610',
-            uploadDate: '2024-12-01',
+            uploadDate: '2025-12-01T00:00:00+02:00',
             duration: 'PT1M',
           },
           {
@@ -91,7 +91,7 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
             thumbnailUrl: 'https://i.ytimg.com/vi/KKSOJl-17hE/maxresdefault.jpg',
             contentUrl: 'https://www.youtube.com/shorts/KKSOJl-17hE',
             embedUrl: 'https://www.youtube-nocookie.com/embed/KKSOJl-17hE',
-            uploadDate: '2024-12-01',
+            uploadDate: '2025-12-01T00:00:00+02:00',
             duration: 'PT1M',
           },
           {
@@ -100,7 +100,7 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
             thumbnailUrl: 'https://i.ytimg.com/vi/TEt-4mU2Rds/maxresdefault.jpg',
             contentUrl: 'https://www.youtube.com/shorts/TEt-4mU2Rds',
             embedUrl: 'https://www.youtube-nocookie.com/embed/TEt-4mU2Rds',
-            uploadDate: '2024-12-01',
+            uploadDate: '2025-12-01T00:00:00+02:00',
             duration: 'PT1M',
           },
           {
@@ -109,7 +109,7 @@ export default async function ForCustomersPage({ params }: ForCustomersPageProps
             thumbnailUrl: 'https://i.ytimg.com/vi/E_IdaJ1Ehv8/maxresdefault.jpg',
             contentUrl: 'https://www.youtube.com/shorts/E_IdaJ1Ehv8',
             embedUrl: 'https://www.youtube-nocookie.com/embed/E_IdaJ1Ehv8',
-            uploadDate: '2024-12-01',
+            uploadDate: '2025-12-01T00:00:00+02:00',
             duration: 'PT1M',
           },
         ]}

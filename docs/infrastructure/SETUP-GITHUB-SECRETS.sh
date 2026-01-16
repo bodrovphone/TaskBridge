@@ -39,6 +39,9 @@ echo "  - SUPABASE_SERVICE_ROLE_KEY"
 echo "  - DATABASE_PASSWORD"
 echo "  - DATABASE_URL"
 echo ""
+echo "You will be prompted to enter each value."
+echo "Get these from: https://supabase.com/dashboard/project/_/settings/api"
+echo ""
 read -p "Continue? (y/n) " -n 1 -r
 echo ""
 
@@ -53,23 +56,31 @@ echo ""
 
 # Add NEXT_PUBLIC_SUPABASE_URL
 echo "📝 Adding NEXT_PUBLIC_SUPABASE_URL..."
-gh secret set NEXT_PUBLIC_SUPABASE_URL --body "https://nyleceedixybtogrwilv.supabase.co"
+read -p "Enter your Supabase URL (e.g., https://your-project-id.supabase.co): " SUPABASE_URL
+gh secret set NEXT_PUBLIC_SUPABASE_URL --body "$SUPABASE_URL"
 
 # Add NEXT_PUBLIC_SUPABASE_ANON_KEY
 echo "📝 Adding NEXT_PUBLIC_SUPABASE_ANON_KEY..."
-gh secret set NEXT_PUBLIC_SUPABASE_ANON_KEY --body "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55bGVjZWVkaXh5YnRvZ3J3aWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzMTE2NzQsImV4cCI6MjA3Njg4NzY3NH0.GMlMadxGMs9-basljRgj50SbZZz4-mR--JphEiuqd9Q"
+read -p "Enter your Supabase anon key: " ANON_KEY
+gh secret set NEXT_PUBLIC_SUPABASE_ANON_KEY --body "$ANON_KEY"
 
 # Add SUPABASE_SERVICE_ROLE_KEY
 echo "📝 Adding SUPABASE_SERVICE_ROLE_KEY..."
-gh secret set SUPABASE_SERVICE_ROLE_KEY --body "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55bGVjZWVkaXh5YnRvZ3J3aWx2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTMxMTY3NCwiZXhwIjoyMDc2ODg3Njc0fQ.SpZsbad0luDBPLHY1pbtRoKUayqocTcuCHwLOYARzk0"
+read -p "Enter your Supabase service role key: " SERVICE_ROLE_KEY
+gh secret set SUPABASE_SERVICE_ROLE_KEY --body "$SERVICE_ROLE_KEY"
 
 # Add DATABASE_PASSWORD
 echo "📝 Adding DATABASE_PASSWORD..."
-gh secret set DATABASE_PASSWORD --body "ppIus5x4M6w0yMNs"
+read -p "Enter your database password: " DB_PASSWORD
+gh secret set DATABASE_PASSWORD --body "$DB_PASSWORD"
 
 # Add DATABASE_URL
 echo "📝 Adding DATABASE_URL..."
-gh secret set DATABASE_URL --body "postgresql://postgres:ppIus5x4M6w0yMNs@db.nyleceedixybtogrwilv.supabase.co:5432/postgres"
+# Extract project ID from Supabase URL
+PROJECT_ID=$(echo "$SUPABASE_URL" | sed 's/https:\/\///' | sed 's/\.supabase\.co//')
+DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@db.${PROJECT_ID}.supabase.co:5432/postgres"
+echo "Using DATABASE_URL: postgresql://postgres:****@db.${PROJECT_ID}.supabase.co:5432/postgres"
+gh secret set DATABASE_URL --body "$DATABASE_URL"
 
 echo ""
 echo "✅ All secrets added successfully!"

@@ -164,10 +164,7 @@ export async function GET(request: NextRequest) {
       console.warn('[Auth Callback] Blocked redirect to external URL:', decodedNext)
     }
 
-    // Determine if we should show the professional onboarding dialog
-    const shouldShowOnboardingDialog = registrationIntentCookie === 'professional'
-
-    // Handle returnTo URL if provided
+    // Handle returnTo URL if provided (takes priority over intent-based redirects)
     if (returnToCookie) {
       const decodedReturnTo = decodeURIComponent(returnToCookie)
       console.log('[Auth Callback] Redirecting to returnTo URL:', decodedReturnTo)
@@ -176,15 +173,19 @@ export async function GET(request: NextRequest) {
         const finalUrl = decodedReturnTo.startsWith('/')
           ? `${origin}/${redirectLocale}${decodedReturnTo.replace(/^\/(en|bg|ru|ua)/, '')}`
           : decodedReturnTo
-        return createRedirectWithLocale(finalUrl, shouldShowOnboardingDialog)
+        return createRedirectWithLocale(finalUrl)
       }
     }
 
-    // Redirect to home, with onboarding dialog if professional intent
-    if (shouldShowOnboardingDialog) {
-      console.log('[Auth Callback] Professional intent - will show onboarding dialog')
+    // Handle professional intent - redirect to professional profile page
+    // This is used by the /register page for ad campaigns
+    if (registrationIntentCookie === 'professional') {
+      console.log('[Auth Callback] Professional intent - redirecting to professional profile')
+      return createRedirectWithLocale(`${origin}/${redirectLocale}/profile/professional`)
     }
-    return createRedirectWithLocale(`${origin}/${redirectLocale}`, shouldShowOnboardingDialog)
+
+    // Default: redirect to home
+    return createRedirectWithLocale(`${origin}/${redirectLocale}`)
   }
 
   // Redirect to home page with detected locale

@@ -235,7 +235,7 @@ SENDGRID_TEMPLATE_ID=d-your-template-id-from-step-2
 
 ```bash
 # Use Gmail alias for testing
-bodrovphone+test12@gmail.com
+yourname+test@gmail.com
 ```
 
 **Expected Logs:**
@@ -244,7 +244,7 @@ bodrovphone+test12@gmail.com
 [Auth] Detected user locale: bg
 [Auth] Saved preferred language: bg
 [Auth] Generated verification URL: http://localhost:3000/api/auth/verify-email?token=...
-[Auth] Verification email sent successfully via SendGrid to: bodrovphone+test12@gmail.com in bg
+[Auth] Verification email sent successfully via SendGrid to: yourname+test@gmail.com in bg
 ```
 
 ### 2. Check Email Delivery
@@ -266,7 +266,7 @@ bodrovphone+test12@gmail.com
 After clicking verification link, check that `is_email_verified` is set to `true`:
 
 ```sql
-SELECT id, email, is_email_verified FROM users WHERE email = 'bodrovphone+test12@gmail.com';
+SELECT id, email, is_email_verified FROM users WHERE email = 'yourname+test@gmail.com';
 ```
 
 ## Multilingual Support (Already Implemented!)

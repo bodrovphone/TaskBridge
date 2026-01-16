@@ -65,7 +65,7 @@ SENDGRID_TEMPLATE_ID=d-your-template-id-here
 
 Sign up with a new email (use Gmail alias):
 ```
-bodrovphone+test12@gmail.com
+yourname+test@gmail.com
 ```
 
 **Expected behavior:**

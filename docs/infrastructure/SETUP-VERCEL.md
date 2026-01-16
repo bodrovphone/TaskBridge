@@ -34,7 +34,7 @@ Click **Integrations** in the top navigation
 
 #### 5. Connect Your Projects
 - **Vercel Project**: Select **TaskBridge** (or your project name)
-- **Supabase Project**: Select **nyleceedixybtogrwilv**
+- **Supabase Project**: Select **your-project-id**
 - Click **Connect**
 
 #### 6. Verify Variables Were Added
@@ -66,7 +66,7 @@ If you do need them, add manually:
 **Variable 1: DATABASE_PASSWORD**
 ```
 Key: DATABASE_PASSWORD
-Value: ppIus5x4M6w0yMNs
+Value: your-database-password
 Environments: ✅ Production  ⬜ Preview  ⬜ Development
 Mark as Sensitive: ✅
 ```
@@ -74,7 +74,7 @@ Mark as Sensitive: ✅
 **Variable 2: DATABASE_URL**
 ```
 Key: DATABASE_URL
-Value: postgresql://postgres:ppIus5x4M6w0yMNs@db.nyleceedixybtogrwilv.supabase.co:5432/postgres
+Value: postgresql://postgres:your-database-password@db.your-project-id.supabase.co:5432/postgres
 Environments: ✅ Production  ⬜ Preview  ⬜ Development
 Mark as Sensitive: ✅
 ```
@@ -103,7 +103,7 @@ Click **Add New** button and add these **5 variables**:
 
 ```
 Key: NEXT_PUBLIC_SUPABASE_URL
-Value: https://nyleceedixybtogrwilv.supabase.co
+Value: https://your-project-id.supabase.co
 
 Environments: ✅ Production  ✅ Preview  ✅ Development
 ```
@@ -116,7 +116,7 @@ Environments: ✅ Production  ✅ Preview  ✅ Development
 
 ```
 Key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55bGVjZWVkaXh5YnRvZ3J3aWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzMTE2NzQsImV4cCI6MjA3Njg4NzY3NH0.GMlMadxGMs9-basljRgj50SbZZz4-mR--JphEiuqd9Q
+Value: your-supabase-anon-key
 
 Environments: ✅ Production  ✅ Preview  ✅ Development
 ```
@@ -129,7 +129,7 @@ Environments: ✅ Production  ✅ Preview  ✅ Development
 
 ```
 Key: SUPABASE_SERVICE_ROLE_KEY
-Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55bGVjZWVkaXh5YnRvZ3J3aWx2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTMxMTY3NCwiZXhwIjoyMDc2ODg3Njc0fQ.SpZsbad0luDBPLHY1pbtRoKUayqocTcuCHwLOYARzk0
+Value: your-supabase-service-role-key
 
 ⚠️ IMPORTANT: Mark as SENSITIVE (check the "Sensitive" box if available)
 
@@ -145,7 +145,7 @@ Environments: ✅ Production  ⬜ Preview  ⬜ Development
 
 ```
 Key: DATABASE_PASSWORD
-Value: ppIus5x4M6w0yMNs
+Value: your-database-password
 
 ⚠️ IMPORTANT: Mark as SENSITIVE
 
@@ -160,7 +160,7 @@ Environments: ✅ Production  ✅ Preview  ⬜ Development
 
 ```
 Key: DATABASE_URL
-Value: postgresql://postgres:ppIus5x4M6w0yMNs@db.nyleceedixybtogrwilv.supabase.co:5432/postgres
+Value: postgresql://postgres:your-database-password@db.your-project-id.supabase.co:5432/postgres
 
 ⚠️ IMPORTANT: Mark as SENSITIVE
 
@@ -209,20 +209,20 @@ Run these commands:
 ```bash
 # Public variables (all environments)
 vercel env add NEXT_PUBLIC_SUPABASE_URL production preview development
-# When prompted, paste: https://nyleceedixybtogrwilv.supabase.co
+# When prompted, paste your Supabase project URL
 
 vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production preview development
-# When prompted, paste: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55bGVjZWVkaXh5YnRvZ3J3aWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzMTE2NzQsImV4cCI6MjA3Njg4NzY3NH0.GMlMadxGMs9-basljRgj50SbZZz4-mR--JphEiuqd9Q
+# When prompted, paste your Supabase anon key
 
 # Secret variables (production only)
 vercel env add SUPABASE_SERVICE_ROLE_KEY production
-# When prompted, paste: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55bGVjZWVkaXh5YnRvZ3J3aWx2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTMxMTY3NCwiZXhwIjoyMDc2ODg3Njc0fQ.SpZsbad0luDBPLHY1pbtRoKUayqocTcuCHwLOYARzk0
+# When prompted, paste your Supabase service role key
 
 vercel env add DATABASE_PASSWORD production preview
-# When prompted, paste: ppIus5x4M6w0yMNs
+# When prompted, paste your database password
 
 vercel env add DATABASE_URL production preview
-# When prompted, paste: postgresql://postgres:ppIus5x4M6w0yMNs@db.nyleceedixybtogrwilv.supabase.co:5432/postgres
+# When prompted, paste: postgresql://postgres:YOUR_PASSWORD@db.YOUR_PROJECT_ID.supabase.co:5432/postgres
 ```
 
 ### Deploy

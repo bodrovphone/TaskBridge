@@ -2,7 +2,7 @@
 
 ## 🔐 Security First
 
-**⚠️ CRITICAL**: Your database password `ppIus5x4M6w0yMNs` has been shared in this chat. Consider rotating it after setup is complete.
+**⚠️ IMPORTANT**: Never commit real credentials to version control. Use placeholders in documentation and store actual values in secure environment variables.
 
 ---
 
@@ -46,8 +46,8 @@ Your `.env.local` file needs **3 values** from Supabase Dashboard:
    SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
    # These are already set:
-   DATABASE_PASSWORD=ppIus5x4M6w0yMNs
-   DATABASE_URL=postgresql://postgres:ppIus5x4M6w0yMNs@db.YOUR_PROJECT_ID.supabase.co:5432/postgres
+   DATABASE_PASSWORD=your-database-password
+   DATABASE_URL=postgresql://postgres:your-database-password@db.YOUR_PROJECT_ID.supabase.co:5432/postgres
    ```
 
 4. **Update the PROJECT_ID** in `DATABASE_URL`:
@@ -77,7 +77,7 @@ Your `.env.local` file needs **3 values** from Supabase Dashboard:
    | `NEXT_PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT_ID.supabase.co` | Public - safe to expose |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your anon key | Public - safe to expose |
    | `SUPABASE_SERVICE_ROLE_KEY` | Your service role key | **SECRET** - never expose |
-   | `DATABASE_PASSWORD` | `ppIus5x4M6w0yMNs` | **SECRET** - never expose |
+   | `DATABASE_PASSWORD` | `your-database-password` | **SECRET** - never expose |
    | `DATABASE_URL` | Full PostgreSQL connection string | **SECRET** - never expose |
 
 4. **Click "Add secret"** after each one
@@ -96,8 +96,8 @@ gh auth login
 gh secret set NEXT_PUBLIC_SUPABASE_URL --body "https://YOUR_PROJECT_ID.supabase.co"
 gh secret set NEXT_PUBLIC_SUPABASE_ANON_KEY --body "your-anon-key"
 gh secret set SUPABASE_SERVICE_ROLE_KEY --body "your-service-role-key"
-gh secret set DATABASE_PASSWORD --body "ppIus5x4M6w0yMNs"
-gh secret set DATABASE_URL --body "postgresql://postgres:ppIus5x4M6w0yMNs@db.YOUR_PROJECT_ID.supabase.co:5432/postgres"
+gh secret set DATABASE_PASSWORD --body "your-database-password"
+gh secret set DATABASE_URL --body "postgresql://postgres:your-database-password@db.YOUR_PROJECT_ID.supabase.co:5432/postgres"
 ```
 
 ### Using Secrets in GitHub Actions
@@ -166,7 +166,7 @@ jobs:
    | `NEXT_PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT_ID.supabase.co` | Production, Preview, Development |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your anon key | Production, Preview, Development |
    | `SUPABASE_SERVICE_ROLE_KEY` | Your service role key | **Production only** |
-   | `DATABASE_PASSWORD` | `ppIus5x4M6w0yMNs` | Production, Preview |
+   | `DATABASE_PASSWORD` | `your-database-password` | Production, Preview |
    | `DATABASE_URL` | Full connection string | Production, Preview |
 
 5. **Click "Save"**
