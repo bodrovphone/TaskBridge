@@ -15,6 +15,15 @@ const intlMiddleware = createIntlMiddleware(routing);
  * @returns Next.js response with updated session and locale handling
  */
 export async function middleware(request: NextRequest) {
+  const hostname = request.headers.get('host') || '';
+
+  // 301 redirect www to non-www for SEO (canonical URL enforcement)
+  if (hostname.startsWith('www.')) {
+    const newUrl = new URL(request.url);
+    newUrl.host = hostname.replace('www.', '');
+    return NextResponse.redirect(newUrl, 301);
+  }
+
   const pathname = request.nextUrl.pathname;
 
   // Skip middleware for static assets and internal paths
