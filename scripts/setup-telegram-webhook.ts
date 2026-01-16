@@ -22,6 +22,11 @@ if (!botToken) {
   process.exit(1);
 }
 
+if (!webhookSecret) {
+  console.error('❌ TG_WEBHOOK_SECRET not found in environment variables');
+  process.exit(1);
+}
+
 async function setupWebhook() {
   if (!botToken) {
     console.error('❌ Bot token is not available');
