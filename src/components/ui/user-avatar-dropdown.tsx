@@ -125,6 +125,8 @@ export default function UserAvatarDropdown({
   <Dropdown
    placement="bottom-end"
    className="min-w-[200px]"
+   // Disable Framer Motion animations for better INP performance on mobile
+   disableAnimation
    classNames={{
     content: "py-1 px-1 border border-gray-200 bg-white shadow-lg"
    }}

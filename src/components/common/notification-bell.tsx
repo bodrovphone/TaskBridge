@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { useNotificationStore } from '@/stores/notification-store';
 import { useNotificationsQuery } from '@/hooks/use-notifications-query';
 import { useAuth } from '@/features/auth';
-import { motion, AnimatePresence } from 'framer-motion';
 import { filterUnreadNotifications } from '@/lib/utils/notification-read-state';
 
 interface NotificationBellProps {
@@ -53,19 +52,15 @@ export default function NotificationBell({ onAuthRequired, onOpen }: Notificatio
   >
    <Bell className="h-5 w-5" />
 
-   {/* Notification Badge - only show for authenticated users */}
-   <AnimatePresence>
-    {isAuthenticated && notificationCount > 0 && (
-     <motion.span
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0 }}
-      className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white"
-     >
-      {notificationCount}
-     </motion.span>
-    )}
-   </AnimatePresence>
+   {/* Notification Badge - CSS animation for better INP performance */}
+   <span
+    className={`absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white transition-transform duration-200 ${
+     isAuthenticated && notificationCount > 0 ? 'scale-100' : 'scale-0'
+    }`}
+    aria-hidden={!(isAuthenticated && notificationCount > 0)}
+   >
+    {notificationCount || 0}
+   </span>
   </Button>
  );
 }

@@ -143,6 +143,7 @@ export const professionals = {
   'professionals.pagination.pageOf': 'Сторінка {current} з {total}',
 
   'professionalDetail.about': 'Про фахівця',
+  'professionalDetail.anonymous': 'Анонімний фахівець',
   'professionalDetail.reviews': 'відгуків',
   'professionalDetail.online': 'Онлайн',
   'professionalDetail.offline': 'Був нещодавно',

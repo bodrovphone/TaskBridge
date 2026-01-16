@@ -1,6 +1,6 @@
 # TaskBridge (Trudify)
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
@@ -8,13 +8,13 @@
 
 > A modern Bulgarian freelance platform connecting customers with verified professionals for various services.
 
-TaskBridge is a full-stack TypeScript application built with Next.js 15, featuring multilingual support (EN/BG/RU), a comprehensive service marketplace with 26 categories and 135 subcategories, and real-time notifications via Telegram.
+TaskBridge is a full-stack TypeScript application built with Next.js 16, featuring multilingual support (EN/BG/RU/UA), a comprehensive service marketplace with 26 categories and 135 subcategories, and real-time notifications via Telegram.
 
 ---
 
 ## Features
 
-- **Multilingual Support** — English, Bulgarian, and Russian with smart locale detection
+- **Multilingual Support** — English, Bulgarian, Russian, and Ukrainian with smart locale detection
 - **Task Marketplace** — Create, browse, and apply for service requests with budget and location filters
 - **Professional Directory** — Browse verified professionals with ratings, reviews, and portfolios
 - **Dual User Roles** — Seamless customer and professional experiences in one account
@@ -31,12 +31,12 @@ TaskBridge is a full-stack TypeScript application built with Next.js 15, featuri
 
 | Layer | Technologies |
 |-------|-------------|
-| **Frontend** | Next.js 15 (App Router), HeroUI, Radix UI (shadcn/ui), Tailwind CSS, Framer Motion |
+| **Frontend** | Next.js 16 (App Router), HeroUI, Radix UI (shadcn/ui), Tailwind CSS, Framer Motion |
 | **Backend** | Next.js API Routes, Supabase PostgreSQL with RLS |
 | **Auth** | Supabase Auth (Google, Facebook, Email, Telegram) |
 | **Database** | Supabase PostgreSQL with Row Level Security |
 | **State** | TanStack Query (React Query) |
-| **i18n** | i18next with URL-based locales (`/en/`, `/bg/`, `/ru/`) |
+| **i18n** | i18next with URL-based locales (`/en/`, `/bg/`, `/ru/`, `/ua/`) |
 | **Notifications** | Telegram Bot API, SendGrid Email |
 | **Deployment** | Vercel, Supabase |
 
@@ -104,7 +104,7 @@ npm run db:migrate       # Run migrations
 ```
 /src/
 ├── app/                     # Next.js App Router
-│   ├── [lang]/              # Locale-specific routes (en, bg, ru)
+│   ├── [lang]/              # Locale-specific routes (en, bg, ru, ua)
 │   │   ├── browse-tasks/    # Task browsing and search
 │   │   ├── create-task/     # Task creation flow
 │   │   ├── professionals/   # Professional directory
@@ -145,7 +145,7 @@ npm run db:migrate       # Run migrations
 │
 ├── lib/                     # Global utilities and configurations
 │   ├── supabase/            # Supabase client (client, server, middleware)
-│   ├── intl/                # Translation files (en, bg, ru)
+│   ├── intl/                # Translation files (en, bg, ru, ua)
 │   ├── services/            # External service integrations
 │   ├── constants/           # App constants (locales, categories)
 │   └── utils/               # Utility functions
@@ -176,7 +176,7 @@ interface Props {
 
 ### Category System
 
-26 main categories with 135 subcategories, fully translated (EN/BG/RU):
+26 main categories with 135 subcategories, fully translated (EN/BG/RU/UA):
 
 ```typescript
 import { getCategoryLabelBySlug } from '@/features/categories'
@@ -320,6 +320,6 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
-**Built with** Next.js 15 • TypeScript • Supabase • HeroUI • Tailwind CSS
+**Built with** Next.js 16 • TypeScript • Supabase • HeroUI • Tailwind CSS
 
 **Deployed on** Vercel • Supabase

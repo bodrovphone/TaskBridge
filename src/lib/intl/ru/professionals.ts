@@ -141,6 +141,7 @@ export const professionals = {
   'professionals.pagination.pageOf': 'Страница {current} из {total}',
 
   'professionalDetail.about': 'О специалисте',
+  'professionalDetail.anonymous': 'Анонимный специалист',
   'professionalDetail.reviews': 'отзывов',
   'professionalDetail.online': 'Онлайн',
   'professionalDetail.offline': 'Недавно был в сети',

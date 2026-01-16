@@ -69,6 +69,8 @@ function LanguageSwitcher({ mode = 'icon' }: LanguageSwitcherProps) {
  return (
   <Dropdown
    shouldBlockScroll={false}
+   // Disable Framer Motion animations for better INP performance on mobile
+   disableAnimation
    classNames={{
     content: "bg-white border border-gray-200 shadow-lg"
    }}

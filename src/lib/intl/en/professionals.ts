@@ -141,6 +141,7 @@ export const professionals = {
   'professionals.pagination.pageOf': 'Page {current} of {total}',
 
   'professionalDetail.about': 'About the Professional',
+  'professionalDetail.anonymous': 'Anonymous Professional',
   'professionalDetail.reviews': 'reviews',
   'professionalDetail.online': 'Online',
   'professionalDetail.offline': 'Last seen recently',

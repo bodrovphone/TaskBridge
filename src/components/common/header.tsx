@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect, useRef, startTransition } from "react"
 import dynamic from "next/dynamic"
 import { useRouter, useParams, usePathname } from "next/navigation"
 import { LocaleLink } from "./locale-link"
@@ -62,28 +62,44 @@ function Header() {
 
  // Smart sticky navbar - hide on scroll down, show on scroll up
  // Also track when to show floating action buttons (after 600px scroll)
+ // Optimized with RAF throttling for better INP performance
  useEffect(() => {
+  let rafId: number | null = null
+  let ticking = false
+
   const handleScroll = () => {
-   const currentScrollY = window.scrollY
-   const scrollingDown = currentScrollY > lastScrollY.current
-   const scrolledPastThreshold = currentScrollY > 80
+   if (ticking) return
+   ticking = true
 
-   // Show navbar when: scrolling up OR at the top of page
-   // Hide navbar when: scrolling down AND past threshold
-   if (scrollingDown && scrolledPastThreshold) {
-    setIsNavVisible(false)
-   } else {
-    setIsNavVisible(true)
-   }
+   rafId = requestAnimationFrame(() => {
+    const currentScrollY = window.scrollY
+    const scrollingDown = currentScrollY > lastScrollY.current
+    const scrolledPastThreshold = currentScrollY > 80
 
-   // Show floating buttons only after scrolling 600px
-   setShowFloatingButtons(currentScrollY > 600)
+    // Use startTransition for non-urgent UI updates (improves INP)
+    startTransition(() => {
+     // Show navbar when: scrolling up OR at the top of page
+     // Hide navbar when: scrolling down AND past threshold
+     if (scrollingDown && scrolledPastThreshold) {
+      setIsNavVisible(false)
+     } else {
+      setIsNavVisible(true)
+     }
 
-   lastScrollY.current = currentScrollY
+     // Show floating buttons only after scrolling 600px
+     setShowFloatingButtons(currentScrollY > 600)
+    })
+
+    lastScrollY.current = currentScrollY
+    ticking = false
+   })
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true })
-  return () => window.removeEventListener('scroll', handleScroll)
+  return () => {
+   window.removeEventListener('scroll', handleScroll)
+   if (rafId) cancelAnimationFrame(rafId)
+  }
  }, [])
 
  // @todo FEATURE: Review enforcement (commented out until reviews feature is built)
@@ -164,29 +180,11 @@ function Header() {
     isBordered
     isMenuOpen={isMenuOpen}
     onMenuOpenChange={handleMenuOpenChange}
+    // Disable Framer Motion animations on mobile for better INP performance
+    disableAnimation
     classNames={{
      menuItem: 'relative',
      wrapper: 'pt-safe', // Add safe area padding for notched devices
-    }}
-    motionProps={{
-     variants: {
-      enter: {
-       opacity: 1,
-       y: 0,
-       transition: {
-        duration: 0.2,
-        ease: [0.4, 0, 0.2, 1]
-       }
-      },
-      exit: {
-       opacity: 0,
-       y: 0,
-       transition: {
-        duration: 0.15,
-        ease: [0.4, 0, 0.2, 1]
-       }
-      }
-     }
     }}
    >
    {/* Logo/Brand */}
