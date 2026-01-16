@@ -38,9 +38,9 @@ git push
 
 Add to Vercel environment variables:
 ```
-TG_BOT_TOKEN=8082781682:AAFl4Wa3r78flv55UBmGEMKrwnMuxXHrm4g
+TG_BOT_TOKEN=your-telegram-bot-token
 TG_BOT_USERNAME=Trudify_bot
-TG_WEBHOOK_SECRET=trudify_webhook_secret_2025
+TG_WEBHOOK_SECRET=your-webhook-secret
 ```
 
 ### 3. Setup Webhook (2 minutes)

@@ -92,9 +92,9 @@ https://t.me/Trudify_bot?start=connect_{64_char_token}
 - `scripts/setup-telegram-webhook.ts` - Automated webhook setup
 
 **Environment Variables Added:**
-- `TG_BOT_TOKEN=8082781682:AAFl4Wa3r78flv55UBmGEMKrwnMuxXHrm4g`
+- `TG_BOT_TOKEN=your-telegram-bot-token`
 - `TG_BOT_USERNAME=Trudify_bot`
-- `TG_WEBHOOK_SECRET=trudify_webhook_secret_2025`
+- `TG_WEBHOOK_SECRET=your-webhook-secret`
 
 **Status:** ✅ Code complete, needs deployment to test (webhook requires public HTTPS)
 
@@ -172,10 +172,10 @@ https://t.me/Trudify_bot?start=connect_{64_char_token}
 
 3. **Configure Environment Variables in Vercel**
    ```bash
-   TG_BOT_TOKEN=8082781682:AAFl4Wa3r78flv55UBmGEMKrwnMuxXHrm4g
+   TG_BOT_TOKEN=your-telegram-bot-token
    TG_BOT_USERNAME=Trudify_bot
-   TG_WEBHOOK_SECRET=trudify_webhook_secret_2025
-   NEXT_PUBLIC_APP_URL=https://task-bridge-chi.vercel.app
+   TG_WEBHOOK_SECRET=your-webhook-secret
+   NEXT_PUBLIC_APP_URL=https://trudify.com
    ```
 
 4. **Setup Telegram Webhook** (After deployment)

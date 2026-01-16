@@ -12,10 +12,10 @@ import { resolve } from 'path';
 config({ path: resolve(process.cwd(), '.env.local') });
 
 const botToken = process.env.TG_BOT_TOKEN;
-const webhookSecret = process.env.TG_WEBHOOK_SECRET || 'trudify_webhook_secret_2025';
+const webhookSecret = process.env.TG_WEBHOOK_SECRET;
 const webhookUrl = process.env.NEXT_PUBLIC_BASE_URL
   ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/telegram/webhook`
-  : 'https://task-bridge-chi.vercel.app/api/telegram/webhook';
+  : 'https://trudify.com/api/telegram/webhook';
 
 if (!botToken) {
   console.error('❌ TG_BOT_TOKEN not found in environment variables');
