@@ -141,7 +141,7 @@ export const professionals = {
   'professionals.pagination.pageOf': 'Page {current} of {total}',
 
   'professionalDetail.about': 'About the Professional',
-  'professionalDetail.anonymous': 'Anonymous Professional',
+  'professionalDetail.anonymous': 'Anonymous',
   'professionalDetail.reviews': 'reviews',
   'professionalDetail.online': 'Online',
   'professionalDetail.offline': 'Last seen recently',
@@ -154,6 +154,7 @@ export const professionals = {
   'professionalDetail.stats.responseTime': 'Response',
   'professionalDetail.defaultBio': 'Professional specialist with experience in the field.',
   'professionalDetail.actions.suggestMyTask': 'Suggest My Task',
+  'professionalDetail.actions.invite': 'Invite',
   'professionalDetail.actions.inviteToApply': 'Invite to Apply',
   'professionalDetail.actions.contact': 'Contact',
   'professionalDetail.actions.share': 'Share',

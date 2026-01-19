@@ -32,15 +32,15 @@ function ActionButtonsRowComponent({
  return (
   <div className="bg-white/80 rounded-2xl p-6 shadow-lg border border-gray-100">
    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {/* Suggest My Task - Primary Action */}
+    {/* Invite - Primary Action */}
     <Button
      size="md"
      color="primary"
-     className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:scale-102 transition-all duration-300 font-semibold w-full"
+     className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:scale-102 transition-all duration-300 font-medium w-full"
      startContent={<UserPlus size={18} />}
      onClick={onInviteToApply}
     >
-     {t('professionalDetail.actions.suggestMyTask')}
+     {t('professionalDetail.actions.invite')}
     </Button>
 
     {/* Share */}

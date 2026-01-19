@@ -92,25 +92,15 @@ function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) 
         {professional.title}
        </p>
 
-       {/* Professional Badges */}
-       <BadgeDisplay
-        isTopProfessional={professional.isTopProfessional}
-        topProfessionalTasksCount={professional.topProfessionalTasksCount}
-        isEarlyAdopter={professional.isEarlyAdopter}
-        earlyAdopterCategories={professional.earlyAdopterCategories}
-        size="md"
-        className="mb-4 justify-center lg:justify-start"
-       />
-
-       {/* Service Categories / Skills */}
+       {/* Service Categories - Primary info, what they DO */}
        {professional.serviceCategories && professional.serviceCategories.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4 justify-center lg:justify-start">
+        <div className="flex flex-wrap gap-2 mb-3 justify-center lg:justify-start">
          {professional.serviceCategories.map((category) => (
           <Chip
            key={category}
-           size="sm"
+           size="md"
            variant="flat"
-           className={CATEGORY_COLORS[getCategoryColorIndex(category)]}
+           className={`${CATEGORY_COLORS[getCategoryColorIndex(category)]} font-medium`}
           >
            {getCategoryLabelBySlug(category, t)}
           </Chip>
@@ -118,15 +108,22 @@ function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) 
         </div>
        )}
 
-       {/* Safety & Verification Indicators */}
-       <SafetyIndicators
-        safetyStatus={professional.safetyStatus}
-        mode="badges"
-        className="mb-4 justify-center lg:justify-start"
-       />
+       {/* Meta: Rating • Location • Status + Badges */}
+       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-2 text-sm text-gray-600 mb-3">
+        {/* Badges - secondary, inline with meta */}
+        <BadgeDisplay
+         isTopProfessional={professional.isTopProfessional}
+         topProfessionalTasksCount={professional.topProfessionalTasksCount}
+         isEarlyAdopter={professional.isEarlyAdopter}
+         earlyAdopterCategories={professional.earlyAdopterCategories}
+         size="sm"
+        />
 
-       {/* Rating and Location */}
-       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-gray-600 mb-4">
+        {/* Safety - compact icons */}
+        <SafetyIndicators
+         safetyStatus={professional.safetyStatus}
+         mode="compact"
+        />
         {professional.reviewCount > 0 ? (
           <button
            onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
@@ -134,31 +131,31 @@ function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) 
           >
            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
            <span className="font-semibold text-gray-900">{professional.rating.toFixed(1)}</span>
-           <span>({professional.reviewCount} {t('professionalDetail.reviews.count')})</span>
+           <span>({professional.reviewCount})</span>
           </button>
         ) : (
           <div className="flex items-center gap-1 text-gray-500">
            <Star className="w-4 h-4 text-gray-400" />
-           <span className="font-medium">{t('professionals.card.waitingForReviews')}</span>
+           <span className="text-xs sm:text-sm">{t('professionals.card.waitingForReviews')}</span>
           </div>
         )}
-        
+
         <div className="flex items-center gap-1">
-         <MapPin className="w-4 h-4 text-gray-400" />
+         <MapPin className="w-3.5 h-3.5 text-gray-400" />
          <span>{professional.location}</span>
         </div>
 
         <div className="flex items-center gap-1">
          <div className={`w-2 h-2 rounded-full ${professional.isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
-         <span>{professional.isOnline ? t('professionalDetail.online') : t('professionalDetail.offline')}</span>
+         <span className="text-xs sm:text-sm">{professional.isOnline ? t('professionalDetail.online') : t('professionalDetail.offline')}</span>
         </div>
        </div>
       </div>
 
-      {/* Stats - Full width on mobile/tablet, inline on desktop */}
+      {/* Stats - Stack on mobile, 3 columns on sm+ */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6">
-       <div className="grid grid-cols-3 gap-3 sm:gap-6 text-center">
-        <div>
+       <div className="flex flex-col sm:flex-row sm:justify-around gap-4 sm:gap-6 text-center">
+        <div className="flex-1">
          {professional.completedTasks > 0 ? (
            <>
              <div className="text-xl sm:text-2xl font-bold text-blue-600">{professional.completedTasks}</div>
@@ -171,7 +168,7 @@ function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) 
            </>
          )}
         </div>
-        <div>
+        <div className="flex-1">
          <div className="text-xl sm:text-2xl font-bold text-green-600">
           {formatYearsExperience(
             professional.yearsExperience,
@@ -181,7 +178,7 @@ function ProfessionalHeaderComponent({ professional }: ProfessionalHeaderProps) 
          </div>
          <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.experience')}</div>
         </div>
-        <div>
+        <div className="flex-1">
          <div className="text-xl sm:text-2xl font-bold text-purple-600">{t('profile.professional.responseTime.24h')}</div>
          <div className="text-xs sm:text-sm text-gray-600 leading-tight mt-1">{t('professionalDetail.stats.responseTime')}</div>
         </div>

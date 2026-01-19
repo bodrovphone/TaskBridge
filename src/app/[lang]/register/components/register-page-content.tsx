@@ -6,10 +6,13 @@ import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardBody, Input, Button, Divider } from '@heroui/react'
 import { Shield, Heart, Zap, Eye, EyeOff, PartyPopper, Briefcase, Home, Search, User, ArrowRight, ArrowLeft, ArrowUp } from 'lucide-react'
+import Script from 'next/script'
 import { useAuth } from '@/features/auth'
 import { LocaleLink } from '@/components/common/locale-link'
 import { IntentSelector } from './intent-selector'
 import { SocialAuthButtons } from './social-auth-buttons'
+
+const META_PIXEL_ID = '4351312728438333'
 
 interface RegisterPageContentProps {
   lang: string
@@ -46,6 +49,7 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
       sessionStorage.setItem('trudify_campaign_source', source)
     }
   }, [source])
+
 
   // Only redirect if user just registered on this page
   useEffect(() => {
@@ -146,6 +150,15 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
 
       // Success - mark as just registered and refresh profile (redirect will happen via useEffect)
       justRegisteredRef.current = true
+
+      // Track Meta Pixel registration event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'CompleteRegistration', {
+          content_name: intent,
+          status: true,
+        })
+      }
+
       await refreshProfile()
       handlePostAuthRedirect()
     } catch {
@@ -262,6 +275,29 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
 
   return (
     <div className="min-h-screen relative">
+      {/* Meta Pixel Script */}
+      <Script
+        id="meta-pixel"
+        strategy="afterInteractive"
+        onLoad={() => {
+          if (typeof window !== 'undefined' && (window as any).fbq) {
+            (window as any).fbq('track', 'PageView')
+          }
+        }}
+      >
+        {`
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '${META_PIXEL_ID}');
+        `}
+      </Script>
+
       {/* Background image with overlay - fixed to prevent scaling on step change */}
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"

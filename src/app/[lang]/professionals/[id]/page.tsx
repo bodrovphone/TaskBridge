@@ -43,7 +43,7 @@ function transformForClient(professional: ProfessionalDetail) {
     name: professional.full_name,
     avatarUrl: professional.avatar_url,
     avatar: professional.avatar_url,
-    bio: professional.bio || 'Professional service provider',
+    bio: professional.bio || '',
     specialization: professional.professional_title,
     rating: professional.average_rating || 0,
     reviewsCount: professional.total_reviews || 0,

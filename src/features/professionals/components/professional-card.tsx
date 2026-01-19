@@ -41,7 +41,7 @@ export default function ProfessionalCard({ professional, isMock = false, compact
  const t = useTranslations()
 
  // Direct access to API Professional properties
- const fullName = professional.full_name || 'Unknown'
+ const fullName = professional.full_name || t('common.unknown')
  const name = obfuscateName(fullName)
  const avatar = professional.avatar_url || undefined
  const rating = professional.average_rating || 0

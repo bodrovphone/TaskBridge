@@ -141,7 +141,7 @@ export const professionals = {
   'professionals.pagination.pageOf': 'Страница {current} из {total}',
 
   'professionalDetail.about': 'О специалисте',
-  'professionalDetail.anonymous': 'Анонимный специалист',
+  'professionalDetail.anonymous': 'Аноним',
   'professionalDetail.reviews': 'отзывов',
   'professionalDetail.online': 'Онлайн',
   'professionalDetail.offline': 'Недавно был в сети',
@@ -154,6 +154,7 @@ export const professionals = {
   'professionalDetail.stats.responseTime': 'Ответ',
   'professionalDetail.defaultBio': 'Профессиональный специалист с опытом работы в сфере.',
   'professionalDetail.actions.suggestMyTask': 'Предложить мою задачу',
+  'professionalDetail.actions.invite': 'Пригласить',
   'professionalDetail.actions.inviteToApply': 'Предложить задачу',
   'professionalDetail.actions.contact': 'Связаться',
   'professionalDetail.actions.share': 'Поделиться',

@@ -90,18 +90,6 @@ export function SafetyIndicators({
         </Chip>
       )}
 
-      {/* Clean Safety Record - Only show if true */}
-      {safetyStatus.cleanSafetyRecord && (
-        <Chip
-          startContent={<CheckCircle className="w-3 h-3" />}
-          size="sm"
-          color="success"
-          variant="flat"
-          className="text-xs font-medium"
-        >
-          {t('safety.cleanRecord')}
-        </Chip>
-      )}
 
       {/* Negative Reviews Warning */}
       {safetyStatus.hasNegativeReviews && (

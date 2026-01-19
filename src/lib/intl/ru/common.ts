@@ -41,6 +41,7 @@ export const common = {
   'common.save': 'Сохранить',
   'common.saving': 'Сохранение...',
   'common.anonymous': 'Анонимный пользователь',
+  'common.unknown': 'Неизвестно',
   'common.goBack': 'Назад',
   'common.today': 'Сегодня',
   'common.yesterday': 'Вчера',

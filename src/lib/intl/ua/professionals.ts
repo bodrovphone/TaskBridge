@@ -143,7 +143,7 @@ export const professionals = {
   'professionals.pagination.pageOf': 'Сторінка {current} з {total}',
 
   'professionalDetail.about': 'Про фахівця',
-  'professionalDetail.anonymous': 'Анонімний фахівець',
+  'professionalDetail.anonymous': 'Анонім',
   'professionalDetail.reviews': 'відгуків',
   'professionalDetail.online': 'Онлайн',
   'professionalDetail.offline': 'Був нещодавно',
@@ -157,6 +157,7 @@ export const professionals = {
   'professionalDetail.defaultBio':
     'Професійний спеціаліст з досвідом у галузі.',
   'professionalDetail.actions.suggestMyTask': 'Запропонувати завдання',
+  'professionalDetail.actions.invite': 'Запросити',
   'professionalDetail.actions.inviteToApply': 'Запросити подати заявку',
   'professionalDetail.actions.contact': 'Контакт',
   'professionalDetail.actions.share': 'Поділитись',

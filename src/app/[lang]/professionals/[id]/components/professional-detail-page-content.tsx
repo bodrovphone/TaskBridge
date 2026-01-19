@@ -358,8 +358,8 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
           {/* Professional Header */}
           <ProfessionalHeader professional={transformedProfessional} />
 
-          {/* Two Column Layout - Equal Height */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-stretch">
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column - Action Buttons + Services */}
             <div className="flex flex-col gap-8">
               <ActionButtonsRow
@@ -371,23 +371,26 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
               <ServicesSection services={transformedProfessional.services} />
             </div>
 
-            {/* Right Column - About (Full Height) */}
-            <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                {t('professionalDetail.about')}
-              </h3>
-              <p className="text-gray-700 leading-relaxed flex-1">
-                {transformedProfessional.bio}
-              </p>
+            {/* Right Column - About + Reviews (stacked) */}
+            <div className="flex flex-col gap-8">
+              {/* About Section */}
+              <div className="bg-white/80 rounded-2xl p-8 shadow-lg border border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  {t('professionalDetail.about')}
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {transformedProfessional.bio}
+                </p>
+              </div>
+
+              {/* Reviews & Ratings */}
+              <div id="reviews-section">
+                <ReviewsSection reviews={transformedProfessional.reviews} />
+              </div>
             </div>
           </div>
 
-          {/* Reviews & Ratings - Always show */}
-          <div id="reviews-section">
-            <ReviewsSection reviews={transformedProfessional.reviews} />
-          </div>
-
-          {/* Work Gallery (Premium Feature) */}
+          {/* Work Gallery (Premium Feature) - Moved up */}
           <PortfolioGallery gallery={transformedProfessional.gallery} />
 
           {/* Completed Tasks - Always show */}

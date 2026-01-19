@@ -42,6 +42,7 @@ export const common = {
   'common.saving': 'Збереження...',
   'common.goBack': 'Повернутися',
   'common.anonymous': 'Анонімний користувач',
+  'common.unknown': 'Невідомо',
   'common.today': 'Сьогодні',
   'common.yesterday': 'Вчора',
   'common.reviews': 'відгуків',
