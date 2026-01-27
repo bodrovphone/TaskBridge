@@ -9,6 +9,7 @@ import OptimizedVideoHero from "@/components/ui/optimized-video-hero";
 import LiveActivityFeed from "@/components/ui/live-activity-feed";
 import { useTranslations } from 'next-intl';
 import { useCreateTask } from '@/hooks/use-create-task';
+import { useAuth } from '@/features/auth';
 
 // Lazy load dialog components (only loaded when user interacts)
 const AuthSlideOver = dynamic(() => import("@/components/ui/auth-slide-over"), {
@@ -34,6 +35,8 @@ import {
 
 export default function HeroSection() {
  const t = useTranslations();
+ const { user } = useAuth();
+ const isAuthenticated = !!user;
 
  const {
   handleCreateTask,
@@ -190,7 +193,7 @@ export default function HeroSection() {
         className="group border-2 border-slate-300 text-slate-700 bg-white/70 hover:bg-white hover:border-slate-400 hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg px-8 py-6 h-auto rounded-xl font-semibold"
         asChild
        >
-        <LocaleLink href="/register?intent=professional" onClick={setProfessionalIntent}>
+        <LocaleLink href={isAuthenticated ? "/browse-tasks" : "/register?intent=professional"} onClick={!isAuthenticated ? setProfessionalIntent : undefined}>
          <Briefcase className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
          {t('landing.hero.browseServices')}
         </LocaleLink>

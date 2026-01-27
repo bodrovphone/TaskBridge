@@ -39,6 +39,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Skip intl middleware for auth callback - it has its own locale handling
+  // and must not be prefixed with a locale (causes redirect loops)
+  if (pathname.startsWith('/auth/callback')) {
+    return await updateSession(request);
+  }
+
   // First, update Supabase session (required for auth to work)
   const supabaseResponse = await updateSession(request);
 
