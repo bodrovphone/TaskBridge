@@ -10,7 +10,7 @@ import { tarsyaRabotaArticle } from './bg/tarsya-rabota-v-bulgaria'
 import { nameriMajstorArticle } from './bg/nameri-majstor-lesno'
 import { hamaliBurgasArticle } from './bg/hamali-burgas-ceni'
 import { pochistvaneApartamentArticle } from './bg/pochistvane-apartament-ceni'
-import { premestvaneCeniArticle } from './bg/premествane-ceni-bulgaria'
+import { premestvaneCeniArticle } from './bg/premestvane-ceni-bulgaria'
 
 // All articles organized by locale
 export const articles: Record<string, BlogArticle[]> = {

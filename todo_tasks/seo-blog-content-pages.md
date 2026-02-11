@@ -28,7 +28,7 @@ Create blog/content pages targeting high-intent Bulgarian keywords that link to 
 2. ✅ "Колко струва преместване в България - пълен гайд 2026"
    - Target: преместване цена, хамали цени
    - Links to: /bg/browse-tasks?category=logistics
-   - Status: **PUBLISHED** - `/bg/premествane-ceni-bulgaria`
+   - Status: **PUBLISHED** - `/bg/premestvane-ceni-bulgaria`
 
 3. "Топ 5 съвета при избор на електротехник"
    - Target: електротехник, електричар

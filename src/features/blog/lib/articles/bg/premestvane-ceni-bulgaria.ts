@@ -7,7 +7,7 @@ import { BlogArticle } from '../../types'
  * Note: Prices in EUR (Bulgaria joined Eurozone)
  */
 export const premestvaneCeniArticle: BlogArticle = {
-  slug: 'premествane-ceni-bulgaria',
+  slug: 'premestvane-ceni-bulgaria',
   locale: 'bg',
   title: 'Колко струва преместване в България - пълен гайд за цени 2026',
   metaTitle: 'Преместване цена 2026 | Хамали цени по градове | Trudify',
