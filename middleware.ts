@@ -39,6 +39,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 301 redirect root "/" to detected locale for SEO
+  // next-intl uses 307 (temporary) by default, which causes Google to
+  // treat "/" and "/bg" as duplicates and pick "/" as canonical.
+  // We detect the locale ourselves (cookie → browser language → bg default)
+  // and issue a permanent 301 so Google indexes the localized URL.
+  if (pathname === '/') {
+    const cookieLocale = request.cookies.get('preferred-language')?.value;
+    const acceptLanguage = request.headers.get('accept-language');
+    const { detectUserLocale } = await import('@/lib/utils/locale-detection');
+    const { locale } = detectUserLocale(cookieLocale, acceptLanguage);
+    const url = new URL(request.url);
+    url.pathname = `/${locale}`;
+    return NextResponse.redirect(url, 301);
+  }
+
   // Skip intl middleware for auth callback - it has its own locale handling
   // and must not be prefixed with a locale (causes redirect loops)
   if (pathname.startsWith('/auth/callback')) {
