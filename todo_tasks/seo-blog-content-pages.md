@@ -20,13 +20,15 @@ Create blog/content pages targeting high-intent Bulgarian keywords that link to 
    - Status: **PUBLISHED** - `/bg/tarsya-rabota-v-bulgaria` (no /blog/ prefix)
 
 ### Tier 1 - National (All Bulgaria)
-1. "Цени за почистване на апартамент в България 2026"
+1. ✅ "Цени за почистване на апартамент в България 2026"
    - Target: почистване на апартамент цена
    - Links to: /bg/browse-tasks?category=cleaning-services
+   - Status: **PUBLISHED** - `/bg/pochistvane-apartament-ceni`
 
-2. "Колко струва преместване в България - пълен гайд 2026"
+2. ✅ "Колко струва преместване в България - пълен гайд 2026"
    - Target: преместване цена, хамали цени
    - Links to: /bg/browse-tasks?category=logistics
+   - Status: **PUBLISHED** - `/bg/premествane-ceni-bulgaria`
 
 3. "Топ 5 съвета при избор на електротехник"
    - Target: електротехник, електричар
@@ -113,7 +115,7 @@ Create blog/content pages targeting high-intent Bulgarian keywords that link to 
 - [x] Blog route infrastructure created ✅
 - [x] Blog listing page with card grid ✅
 - [x] Individual blog post page with proper layout ✅
-- [ ] At least 3 Tier 1 articles published (1 of 3 done)
+- [x] At least 3 Tier 1 articles published (3 of 3 done) ✅
 - [x] All articles have proper meta tags and schema ✅
 - [x] Articles link to correct filtered browse pages ✅
 - [x] Blog pages added to sitemap ✅
