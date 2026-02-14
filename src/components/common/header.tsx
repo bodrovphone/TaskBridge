@@ -126,8 +126,6 @@ function Header() {
 
  const {
   handleCreateTask: handleCreateTaskWithEnforcement,
-  showAuthPrompt: showCreateTaskAuthPrompt,
-  setShowAuthPrompt: setShowCreateTaskAuthPrompt,
   showEnforcementDialog,
   setShowEnforcementDialog,
   blockType,
@@ -552,12 +550,11 @@ function Header() {
 
   {/* Auth Slide Over */}
   <AuthSlideOver
-   isOpen={isAuthSlideOverOpen || showCreateTaskAuthPrompt}
+   isOpen={isAuthSlideOverOpen}
    onClose={() => {
     setIsAuthSlideOverOpen(false)
-    setShowCreateTaskAuthPrompt(false)
    }}
-   action={showCreateTaskAuthPrompt ? 'create-task' : authAction}
+   action={authAction}
   />
 
   {/* Floating Action Buttons - Mobile Only (hide when menu is open, on profile/form pages, or before 600px scroll) */}

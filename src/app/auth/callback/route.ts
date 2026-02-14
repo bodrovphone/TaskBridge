@@ -152,19 +152,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Redirect to 'next' URL if provided (OAuth flow or password reset)
-    if (next && data?.user) {
-      console.log('[Auth Callback] Redirecting to next URL:', next)
-      // Decode the URL if it was encoded
-      const decodedNext = decodeURIComponent(next)
-      // Ensure it's a same-origin URL for security
-      if (decodedNext.startsWith(origin) || decodedNext.startsWith('/')) {
-        return createRedirectWithLocale(decodedNext)
-      }
-      console.warn('[Auth Callback] Blocked redirect to external URL:', decodedNext)
-    }
-
-    // Handle returnTo URL if provided (takes priority over intent-based redirects)
+    // Handle returnTo cookie FIRST - it's explicitly set by AuthSlideOver
+    // (e.g., create-task guest flow sets returnTo to /create-task?restore=true)
+    // This must take priority over the generic 'next' param from signInWithOAuth
     if (returnToCookie) {
       const decodedReturnTo = decodeURIComponent(returnToCookie)
       console.log('[Auth Callback] Redirecting to returnTo URL:', decodedReturnTo)
@@ -175,6 +165,18 @@ export async function GET(request: NextRequest) {
           : decodedReturnTo
         return createRedirectWithLocale(finalUrl)
       }
+    }
+
+    // Redirect to 'next' URL if provided (OAuth flow or password reset)
+    if (next && data?.user) {
+      console.log('[Auth Callback] Redirecting to next URL:', next)
+      // Decode the URL if it was encoded
+      const decodedNext = decodeURIComponent(next)
+      // Ensure it's a same-origin URL for security
+      if (decodedNext.startsWith(origin) || decodedNext.startsWith('/')) {
+        return createRedirectWithLocale(decodedNext)
+      }
+      console.warn('[Auth Callback] Blocked redirect to external URL:', decodedNext)
     }
 
     // Handle professional intent - redirect to professional profile page

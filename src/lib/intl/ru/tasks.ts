@@ -330,6 +330,9 @@ export const tasks = {
     'Ваша задача опубликована без изображения. Вы можете добавить или изменить изображение, отредактировав задачу.',
   'createTask.error': 'Ошибка при создании задачи',
   'createTask.errorMessage': 'Пожалуйста, попробуйте позже.',
+  'createTask.photosAfterPosting': 'Вы можете добавить фотографии после публикации задачи',
+  'createTask.submittingTask': 'Публикация задачи...',
+  'createTask.showBudgetTimeline': 'У меня есть конкретный бюджет или сроки',
 
   // Reopen task flow
   'createTask.reopeningBanner.title': 'Повторное открытие задачи',

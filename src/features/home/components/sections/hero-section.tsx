@@ -12,11 +12,6 @@ import { useCreateTask } from '@/hooks/use-create-task';
 import { useAuth } from '@/features/auth';
 
 // Lazy load dialog components (only loaded when user interacts)
-const AuthSlideOver = dynamic(() => import("@/components/ui/auth-slide-over"), {
-  ssr: false,
-  loading: () => null
-});
-
 const ReviewEnforcementDialog = dynamic(
   () => import('@/features/reviews').then(mod => ({ default: mod.ReviewEnforcementDialog })),
   { ssr: false, loading: () => null }
@@ -40,8 +35,6 @@ export default function HeroSection() {
 
  const {
   handleCreateTask,
-  showAuthPrompt,
-  setShowAuthPrompt,
   showEnforcementDialog,
   setShowEnforcementDialog,
   blockType,
@@ -315,13 +308,6 @@ export default function HeroSection() {
      </div>
     </div>
    </div>
-
-   {/* Auth Slide-over */}
-   <AuthSlideOver
-    isOpen={showAuthPrompt}
-    onClose={() => setShowAuthPrompt(false)}
-    action="create-task"
-   />
 
    {/* Review Enforcement Dialog */}
    <ReviewEnforcementDialog

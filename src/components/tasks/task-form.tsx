@@ -3,8 +3,9 @@
 import { useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
-import { useState, useRef, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { useRouter, useParams, useSearchParams } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { Button } from '@heroui/react'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/features/auth'
@@ -22,6 +23,12 @@ import { ReviewSection } from '@/app/[lang]/create-task/components/review-sectio
 import { CategoryDisplay } from '@/app/[lang]/tasks/[id]/edit/components/category-display'
 import { ValidationErrorDialog } from '@/components/tasks/validation-error-dialog'
 import { NotificationWarningBanner } from '@/components/ui/notification-warning-banner'
+import { savePendingTask, loadPendingTask, clearPendingTask } from '@/app/[lang]/create-task/lib/task-draft'
+
+const AuthSlideOver = dynamic(() => import('@/components/ui/auth-slide-over'), {
+  ssr: false,
+  loading: () => null,
+})
 
 interface TaskFormData {
   id?: string
@@ -48,6 +55,7 @@ interface TaskFormProps {
   taskId?: string
   isReopening?: boolean
   inviteProfessionalId?: string
+  restoreAndSubmit?: boolean
 }
 
 /**
@@ -78,13 +86,15 @@ export function TaskForm({
   initialData,
   taskId,
   isReopening,
-  inviteProfessionalId
+  inviteProfessionalId,
+  restoreAndSubmit
 }: TaskFormProps) {
   const t = useTranslations()
   const router = useRouter()
   const params = useParams()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
-  const { user, authenticatedFetch } = useAuth()
+  const { user, authenticatedFetch, refreshProfile } = useAuth()
   const queryClient = useQueryClient()
   const locale = (params?.lang as string) || 'bg'
 
@@ -94,6 +104,14 @@ export function TaskForm({
   const [validationErrors, setValidationErrors] = useState<Array<{ field: string; message: string }>>([])
   const [showNotificationWarning, setShowNotificationWarning] = useState(false)
   const [bannerDismissed, setBannerDismissed] = useState(false)
+  const [showGuestAuth, setShowGuestAuth] = useState(false)
+  const [isRestoringTask, setIsRestoringTask] = useState(!!restoreAndSubmit)
+  const wasAuthenticatedOnMount = useRef(!!user)
+  const [showBudgetTimeline, setShowBudgetTimeline] = useState(
+    !!(initialData?.budgetType && initialData.budgetType !== 'unclear') ||
+    !!(initialData?.urgency && initialData.urgency !== 'flexible')
+  )
+  const hasTriedRestore = useRef(false)
 
   const categoryRef = useRef<HTMLDivElement>(null)
   const detailsRef = useRef<HTMLDivElement>(null)
@@ -120,8 +138,10 @@ export function TaskForm({
     }
   }, [initialData])
 
+  // Only show notification warning for users who were already logged in when they opened the form.
+  // Skip for users who just registered mid-flow — too noisy right after signup.
   useEffect(() => {
-    if (user?.id && mode === 'create') {
+    if (user?.id && mode === 'create' && wasAuthenticatedOnMount.current) {
       fetch(`/api/users/${user.id}/notification-channel`)
         .then(res => res.json())
         .then(data => {
@@ -268,6 +288,111 @@ export function TaskForm({
     },
   })
 
+  /**
+   * Submit task data to the API. Used by both normal submit and OAuth restore flow.
+   */
+  const submitTaskToApi = useCallback(async (taskData: Record<string, unknown>) => {
+    setIsSubmitting(true)
+    try {
+      const response = await authenticatedFetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(taskData),
+        credentials: 'include',
+      })
+
+      const result = await response.json()
+      console.log('[TaskForm] API response:', response.status, result)
+
+      if (!response.ok) {
+        if (result.details?.errors) {
+          const serverErrors = Object.entries(result.details.errors).map(([field, message]) => ({
+            field,
+            message: mapServerErrorToTranslationKey(message as string)
+          }))
+          setValidationErrors(serverErrors)
+          setShowValidationDialog(true)
+          setIsSubmitting(false)
+          return
+        }
+        throw new Error(result.error || 'Failed to create task')
+      }
+
+      clearPendingTask()
+      toast({ title: t('createTask.success'), variant: 'success' })
+      await queryClient.invalidateQueries({ queryKey: POSTED_TASKS_QUERY_KEY })
+      router.push(`/${locale}/tasks/posted`)
+    } catch (error: any) {
+      toast({
+        title: t('createTask.error'),
+        description: error.message,
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSubmitting(false)
+      setIsRestoringTask(false)
+    }
+  }, [authenticatedFetch, locale, queryClient, router, t, toast])
+
+  /**
+   * OAuth restore flow: when user returns from OAuth with ?restore=true,
+   * load saved draft from localStorage and auto-submit.
+   */
+  useEffect(() => {
+    if (!restoreAndSubmit || hasTriedRestore.current || !user) return
+    hasTriedRestore.current = true
+
+    const savedData = loadPendingTask()
+    if (!savedData) {
+      setIsRestoringTask(false)
+      // Clean up restore param from URL
+      const url = new URL(window.location.href)
+      url.searchParams.delete('restore')
+      window.history.replaceState({}, '', url.toString())
+      return
+    }
+
+    // Auto-submit the saved task
+    const taskData = {
+      ...savedData,
+      sourceLocale: locale,
+      photoUrls: [],
+      photoFiles: undefined,
+      imageOversized: undefined,
+    }
+
+    // Clean up restore param from URL
+    const url = new URL(window.location.href)
+    url.searchParams.delete('restore')
+    window.history.replaceState({}, '', url.toString())
+
+    submitTaskToApi(taskData)
+  }, [restoreAndSubmit, user, locale, submitTaskToApi])
+
+  /**
+   * Called after successful email/password auth in the guest flow.
+   * Refreshes auth state then submits the saved draft.
+   */
+  const handleGuestAuthSuccess = useCallback(async () => {
+    setShowGuestAuth(false)
+    setIsRestoringTask(true) // Show loading state instead of the form
+
+    // Wait for auth profile to be available
+    await refreshProfile()
+
+    const savedData = loadPendingTask()
+    if (!savedData) return
+
+    const taskData = {
+      ...savedData,
+      sourceLocale: locale,
+      photoUrls: [],
+      photoFiles: undefined,
+      imageOversized: undefined,
+    }
+    submitTaskToApi(taskData)
+  }, [locale, refreshProfile, submitTaskToApi])
+
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
     if (newCategory && mode === 'edit') setShowCategoryPicker(false)
@@ -351,8 +476,26 @@ export function TaskForm({
         }
         return
       }
+
+      // Guest flow: if not authenticated, save form data and prompt for auth
+      if (!user && mode === 'create') {
+        savePendingTask(form.state.values as Record<string, unknown>)
+        setShowGuestAuth(true)
+        return
+      }
+
       form.handleSubmit()
     }, 100)
+  }
+
+  // Show loading state during OAuth restore auto-submit
+  if (isRestoringTask) {
+    return (
+      <div className="text-center py-16">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+        <p className="text-gray-600 font-medium">{t('createTask.submittingTask')}</p>
+      </div>
+    )
   }
 
   return (
@@ -362,6 +505,13 @@ export function TaskForm({
         onClose={() => setShowValidationDialog(false)}
         errors={validationErrors}
         onFixClick={handleScrollToFirstError}
+      />
+      {/* Guest auth slide-over - shown when unauthenticated user tries to submit */}
+      <AuthSlideOver
+        isOpen={showGuestAuth}
+        onClose={() => setShowGuestAuth(false)}
+        action="create-task"
+        onAuthSuccess={handleGuestAuthSuccess}
       />
       <form.Subscribe selector={(state) => [state.canSubmit]}>
         {() => (
@@ -393,6 +543,9 @@ export function TaskForm({
             {/* Create mode: gate on subcategory (from title-first flow), Edit mode: gate on category */}
             {(mode === 'create' ? subcategory : category) && (
               <>
+                <div ref={locationRef}>
+                  <LocationSection form={form} />
+                </div>
                 {mode === 'create' && showNotificationWarning && !bannerDismissed && (
                   <div className="mb-8">
                     <NotificationWarningBanner
@@ -409,16 +562,49 @@ export function TaskForm({
                     hideTitle={mode === 'create'}
                   />
                 </div>
-                <div ref={locationRef}>
-                  <LocationSection form={form} />
-                </div>
-                <div ref={budgetRef}>
-                  <BudgetSection form={form} budgetType={budgetType} onBudgetTypeChange={setBudgetType} />
-                </div>
-                <div ref={timelineRef}>
-                  <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
-                </div>
-                <PhotosSection form={form} initialImages={(mode === 'edit' || isReopening) ? initialData?.images : undefined} />
+                {/* Budget & Timeline toggle - hidden by default in create mode */}
+                {mode === 'create' ? (
+                  <>
+                    <label className="flex items-center gap-3 cursor-pointer select-none group">
+                      <input
+                        type="checkbox"
+                        checked={showBudgetTimeline}
+                        onChange={(e) => setShowBudgetTimeline(e.target.checked)}
+                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm font-medium text-gray-600 group-hover:text-gray-900 transition-colors">
+                        {t('createTask.showBudgetTimeline')}
+                      </span>
+                    </label>
+                    {showBudgetTimeline && (
+                      <>
+                        <div ref={budgetRef}>
+                          <BudgetSection form={form} budgetType={budgetType} onBudgetTypeChange={setBudgetType} />
+                        </div>
+                        <div ref={timelineRef}>
+                          <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
+                        </div>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div ref={budgetRef}>
+                      <BudgetSection form={form} budgetType={budgetType} onBudgetTypeChange={setBudgetType} />
+                    </div>
+                    <div ref={timelineRef}>
+                      <TimelineSection form={form} urgency={urgency} onUrgencyChange={setUrgency} />
+                    </div>
+                  </>
+                )}
+                {/* Hide photos for guests - they can add photos after creating the task */}
+                {user ? (
+                  <PhotosSection form={form} initialImages={(mode === 'edit' || isReopening) ? initialData?.images : undefined} />
+                ) : mode === 'create' && (
+                  <div className="bg-gray-50 rounded-xl p-4 text-center text-sm text-gray-500 border border-dashed border-gray-300">
+                    {t('createTask.photosAfterPosting')}
+                  </div>
+                )}
                 <ReviewSection form={form} onScrollToField={handleScrollToField} />
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8 pb-4">
                   {mode === 'edit' && (

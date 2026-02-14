@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Input, Card, CardBody } from '@heroui/react'
+import { Card, CardBody } from '@heroui/react'
 import { MapPin } from 'lucide-react'
 import { CityAutocomplete, CityOption } from '@/components/ui/city-autocomplete'
 
@@ -70,27 +70,6 @@ export function LocationSection({ form }: LocationSectionProps) {
     )}
    </form.Field>
 
-   {/* Neighborhood */}
-   <form.Field name="neighborhood">
-    {(field: any) => (
-     <div className="space-y-2">
-      <label htmlFor="task-neighborhood" className="text-sm font-medium text-gray-700">
-       {t('createTask.location.neighborhoodLabel')}
-      </label>
-      <Input
-       id="task-neighborhood"
-       placeholder={t('createTask.location.neighborhoodPlaceholder')}
-       description={t('createTask.location.neighborhoodHelp')}
-       value={field.state.value || ''}
-       onValueChange={field.handleChange}
-       startContent={<MapPin className="w-4 h-4 text-gray-400" />}
-       classNames={{
-        input: 'text-base',
-       }}
-      />
-     </div>
-    )}
-   </form.Field>
 
    </CardBody>
   </Card>

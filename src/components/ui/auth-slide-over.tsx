@@ -14,6 +14,7 @@ interface AuthSlideOverProps {
  isOpen: boolean;
  onClose: () => void;
  action: 'apply' | 'question' | 'create-task' | 'join-professional' | 'view-posted-tasks' | null;
+ onAuthSuccess?: () => void;
 }
 
 /**
@@ -42,7 +43,7 @@ interface AuthSlideOverProps {
  * API ENDPOINT: /api/auth/unified
  * See that file for detailed flow documentation.
  */
-export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOverProps) {
+export default function AuthSlideOver({ isOpen, onClose, action, onAuthSuccess: onAuthSuccessProp }: AuthSlideOverProps) {
  const { signInWithGoogle, signInWithFacebook, refreshProfile } = useAuth();
  const t = useTranslations();
  const router = useRouter();
@@ -94,6 +95,12 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
   // Small delay to allow auth state to update
   setTimeout(() => {
    onClose();
+
+   // If parent provided a callback (e.g., task form auto-submit), use it
+   if (onAuthSuccessProp) {
+    onAuthSuccessProp();
+    return;
+   }
 
    // Redirect based on action
    if (action === 'create-task') {
@@ -211,6 +218,12 @@ export default function AuthSlideOver({ isOpen, onClose, action }: AuthSlideOver
      }
      if (returnTo) {
        document.cookie = `trudify_return_to=${encodeURIComponent(returnTo)}; path=/; max-age=3600; SameSite=Lax`;
+     }
+
+     // For create-task action, set returnTo so OAuth redirects back to the form with restore flag
+     if (action === 'create-task' && !returnTo) {
+       const createTaskReturn = `/${currentLocale}/create-task?restore=true`;
+       document.cookie = `trudify_return_to=${encodeURIComponent(createTaskReturn)}; path=/; max-age=3600; SameSite=Lax`;
      }
    }
  };

@@ -296,6 +296,9 @@ export const tasks = {
   'createTask.successWithoutImage': 'Your task has been posted without an image. You can add or change the image by editing the task.',
   'createTask.error': 'Error creating task',
   'createTask.errorMessage': 'Please try again later.',
+  'createTask.photosAfterPosting': 'You can add photos after posting your task',
+  'createTask.submittingTask': 'Submitting your task...',
+  'createTask.showBudgetTimeline': 'I have specific budget or deadline requirements',
 
   // Reopen task flow
   'createTask.reopeningBanner.title': 'Reopening Task',

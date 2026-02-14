@@ -297,6 +297,9 @@ export const tasks = {
   'createTask.successWithoutImage': 'Вашата задача е публикувана без изображение. Можете да добавите или промените изображението чрез редактиране на задачата.',
   'createTask.error': 'Грешка при създаване на задача',
   'createTask.errorMessage': 'Моля, опитайте отново по-късно.',
+  'createTask.photosAfterPosting': 'Можете да добавите снимки след публикуването',
+  'createTask.submittingTask': 'Публикуване на задачата...',
+  'createTask.showBudgetTimeline': 'Имам конкретен бюджет или краен срок',
 
   // Reopen task flow
   'createTask.reopeningBanner.title': 'Повторно отваряне на задача',

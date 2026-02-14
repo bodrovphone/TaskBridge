@@ -202,7 +202,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
     )}
    </form.Field>
 
-   {/* Requirements (Optional) */}
+   {/* Requirements (Optional) - Commented out to simplify form
    <form.Field name="requirements">
     {(field: any) => (
      <div className="space-y-2">
@@ -215,7 +215,6 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
        description={t('createTask.details.requirementsHelp')}
        value={field.state.value || ''}
        onValueChange={(val) => {
-        // Ensure value starts with bullet point if not empty
         if (val && !val.startsWith('• ')) {
          field.handleChange('• ' + val)
         } else {
@@ -226,7 +225,6 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
         if (e.key === 'Enter') {
          e.preventDefault()
          const currentValue = field.state.value || ''
-         // Add new line with bullet point
          field.handleChange(currentValue + '\n• ')
         }
        }}
@@ -240,6 +238,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
      </div>
     )}
    </form.Field>
+   */}
    </CardBody>
   </Card>
  )

@@ -1,8 +1,6 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Chip } from '@heroui/react'
-import { CheckCircle, Users } from 'lucide-react'
 import { CreateTaskForm } from './components/create-task-form'
 import { ReopenBanner } from './components/reopen-banner'
 import { useAuth } from '@/features/auth'
@@ -94,15 +92,11 @@ export default function CreateTaskContent() {
   }
  }, [reopenParam, originalTaskId, user])
 
- // Redirect to home if not authenticated
- useEffect(() => {
-  if (!loading && !user) {
-    router.push(`/${lang}`)
-  }
- }, [user, loading, router, lang])
+ // Check for OAuth restore flow (?restore=true)
+ const restoreParam = searchParams.get('restore')
 
- // Show loading while checking auth
- if (loading) {
+ // Show loading only during restore flow (waiting for auth to resolve)
+ if (restoreParam === 'true' && loading) {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -113,22 +107,6 @@ export default function CreateTaskContent() {
   )
  }
 
- // Don't render form if not authenticated
- if (!user) {
-  return null
- }
-
- const trustIndicators = [
-  {
-   icon: <CheckCircle className="w-5 h-5" />,
-   text: t('createTask.hero.freeToPost'),
-  },
-  {
-   icon: <Users className="w-5 h-5" />,
-   text: t('createTask.hero.verifiedPros'),
-  },
- ]
-
  return (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-6 sm:py-10 overflow-x-hidden">
    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
@@ -137,26 +115,6 @@ export default function CreateTaskContent() {
      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-4 pb-1">
       {t('createTask.pageTitle')}
      </h1>
-
-     {/* Trust Indicators */}
-     <div className="flex flex-wrap justify-center gap-2 max-w-full overflow-x-hidden px-2">
-      {trustIndicators.map((indicator, index) => (
-       <Chip
-        key={index}
-        startContent={indicator.icon}
-        variant="flat"
-        color="success"
-        size="md"
-        className="shadow-sm flex-shrink-0 max-w-full text-sm"
-        classNames={{
-         base: "max-w-full",
-         content: "truncate"
-        }}
-       >
-        {indicator.text}
-       </Chip>
-      ))}
-     </div>
     </div>
 
     {/* Reopen Banner */}
@@ -176,7 +134,8 @@ export default function CreateTaskContent() {
         initialData={isReopening ? originalTask : undefined}
         isReopening={isReopening}
         inviteProfessionalId={isInviting ? invitedProfessional?.id : undefined}
-        key={isReopening && originalTask ? 'reopen' : isInviting ? 'invite' : 'create'}
+        restoreAndSubmit={restoreParam === 'true'}
+        key={isReopening && originalTask ? 'reopen' : isInviting ? 'invite' : restoreParam === 'true' ? 'restore' : 'create'}
       />
      )}
     </div>

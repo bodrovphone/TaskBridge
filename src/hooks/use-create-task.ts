@@ -218,9 +218,13 @@ export function useCreateTask() {
       setPendingInviteProfessionalName(options.inviteProfessionalName || null)
     }
 
-    // Check authentication first
+    // Skip auth check - guests can fill the form, auth happens at submit time.
+    // For authenticated users, check review enforcement before navigating.
     if (!isAuthenticated) {
-      setShowAuthPrompt(true)
+      // Navigate directly to create-task - auth will be handled at submit
+      const professionalId = options?.inviteProfessionalId || pendingInviteProfessionalId
+      const professionalName = options?.inviteProfessionalName || pendingInviteProfessionalName
+      router.push(buildCreateTaskUrl(professionalId, professionalName))
       return
     }
 

@@ -6,12 +6,14 @@ interface CreateTaskFormProps {
   initialData?: any
   isReopening?: boolean
   inviteProfessionalId?: string
+  restoreAndSubmit?: boolean
 }
 
 export function CreateTaskForm({
   initialData,
   isReopening,
-  inviteProfessionalId
+  inviteProfessionalId,
+  restoreAndSubmit
 }: CreateTaskFormProps) {
   return (
     <TaskForm
@@ -19,6 +21,7 @@ export function CreateTaskForm({
       initialData={initialData}
       isReopening={isReopening}
       inviteProfessionalId={inviteProfessionalId}
+      restoreAndSubmit={restoreAndSubmit}
     />
   )
 }

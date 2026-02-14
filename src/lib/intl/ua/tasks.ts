@@ -294,6 +294,9 @@ export const tasks = {
   'createTask.successWithoutImage': 'Завдання опубліковано без зображення. Можете додати або змінити зображення, редагуючи завдання.',
   'createTask.error': 'Помилка створення завдання',
   'createTask.errorMessage': 'Спробуйте пізніше.',
+  'createTask.photosAfterPosting': 'Ви можете додати фотографії після публікації завдання',
+  'createTask.submittingTask': 'Публікація завдання...',
+  'createTask.showBudgetTimeline': 'У мене є конкретний бюджет або терміни',
 
   // Reopen task flow
   'createTask.reopeningBanner.title': 'Повторне відкриття завдання',
