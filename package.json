@@ -24,7 +24,11 @@
     "db:migrate:apply": "./scripts/apply-migration.sh",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
-    "supabase:link": "supabase link"
+    "supabase:link": "supabase link",
+    "test:e2e": "playwright test",
+    "test:e2e:smoke": "playwright test --grep @smoke",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@heroui/react": "^2.8.7",
@@ -108,6 +112,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "20.16.11",
     "@types/nprogress": "^0.2.3",

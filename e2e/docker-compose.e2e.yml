@@ -1,0 +1,9 @@
+services:
+  e2e:
+    build:
+      context: ..
+      dockerfile: e2e/Dockerfile
+    environment:
+      - BASE_URL=https://trudify.com
+    volumes:
+      - ../playwright-report:/app/playwright-report

@@ -7,6 +7,12 @@ vite.config.ts.*
 .next/*
 public/optimized/
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # Environment variables (NEVER commit these!)
 .env.local
 .env*.local
