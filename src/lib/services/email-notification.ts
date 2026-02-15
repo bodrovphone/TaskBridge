@@ -1,11 +1,11 @@
 /**
  * Email Notification Service
  *
- * Sends notifications to users via SendGrid when:
+ * Sends notifications to users via Resend when:
  * - User has NO Telegram connected (telegram_id IS NULL)
  * - User has verified email (is_email_verified = true)
  *
- * Priority: Telegram → Email → None
+ * Priority: Telegram -> Email -> None
  * - If telegram_id exists: Send Telegram only
  * - Else if is_email_verified: Send Email only
  * - Else: No external notification (show warning banner)
@@ -18,6 +18,7 @@ import { bg } from '@/lib/intl/bg';
 import { ru } from '@/lib/intl/ru';
 import { uk } from '@/lib/intl/ua';
 import { generateNotificationAutoLoginUrl } from '@/lib/auth/notification-auto-login';
+import { sendNotificationEmail } from '@/lib/services/resend-email';
 
 // Initialize i18next for server-side translations
 // Using single braces {variable} to match next-intl syntax
@@ -32,7 +33,7 @@ i18nInstance.init({
     ua: { translation: uk },
   },
   interpolation: {
-    escapeValue: false, // Don't escape - SendGrid templates handle HTML encoding
+    escapeValue: false,
     prefix: '{',
     suffix: '}',
   },
@@ -61,26 +62,18 @@ export interface SendEmailResult {
   messageId?: string;
   error?: string;
   skipped?: boolean;
-  skipReason?: 'has_telegram' | 'email_not_verified' | 'no_sendgrid_key';
+  skipReason?: 'has_telegram' | 'email_not_verified' | 'no_resend_key';
 }
 
 /**
- * Sends an email notification using SendGrid dynamic templates
+ * Sends an email notification using Resend with React Email templates
  */
 export async function sendEmailNotification(
   notification: EmailNotification
 ): Promise<SendEmailResult> {
-  const sendgridApiKey = process.env.SENDGRID_API_KEY;
-  const sendgridTemplateId = process.env.SENDGRID_TEMPLATE_ID_NOTIFICATION;
-
-  if (!sendgridApiKey) {
-    console.error('SendGrid API key not configured');
-    return { success: false, error: 'SendGrid not configured', skipped: true, skipReason: 'no_sendgrid_key' };
-  }
-
-  if (!sendgridTemplateId) {
-    console.error('SendGrid notification template ID not configured');
-    return { success: false, error: 'Template ID not configured', skipped: true, skipReason: 'no_sendgrid_key' };
+  if (!process.env.RESEND_API_KEY) {
+    console.error('Resend API key not configured');
+    return { success: false, error: 'Resend not configured', skipped: true, skipReason: 'no_resend_key' };
   }
 
   try {
@@ -98,7 +91,7 @@ export async function sendEmailNotification(
       return { success: false, error: 'User not found' };
     }
 
-    // Check priority: Telegram → Email → None
+    // Check priority: Telegram -> Email -> None
     if (user.telegram_id) {
       console.log(`[Email] Skipping email for user ${notification.userId}: has Telegram`);
       return { success: false, skipped: true, skipReason: 'has_telegram' };
@@ -121,35 +114,30 @@ export async function sendEmailNotification(
       user.full_name || user.email.split('@')[0]
     );
 
-    // Send email via SendGrid
-    const sendgridUrl = 'https://api.sendgrid.com/v3/mail/send';
+    // Send email via Resend
+    const { data: resendData, error: resendError } = await sendNotificationEmail(
+      user.email,
+      translatedData.subject,
+      {
+        heading: translatedData.heading,
+        greeting: translatedData.greeting,
+        userName: translatedData.user_name,
+        message: translatedData.message,
+        primaryLink: translatedData.primary_link,
+        primaryButtonText: translatedData.primary_button_text,
+        secondaryLink: translatedData.secondary_link,
+        secondaryButtonText: translatedData.secondary_button_text,
+        secondaryMessage: translatedData.secondary_message,
+        infoTitle: translatedData.info_title,
+        infoItems: translatedData.info_items,
+        footerText: translatedData.footer_text,
+        footerRights: translatedData.footer_rights,
+        currentYear: translatedData.current_year,
+      }
+    );
 
-    const emailPayload = {
-      personalizations: [
-        {
-          to: [{ email: user.email }],
-          dynamic_template_data: translatedData,
-        },
-      ],
-      from: {
-        email: 'noreply@trudify.com',
-        name: 'Trudify',
-      },
-      template_id: sendgridTemplateId,
-    };
-
-    const response = await fetch(sendgridUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${sendgridApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailPayload),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('SendGrid API error:', errorText);
+    if (resendError) {
+      console.error('Resend API error:', resendError);
 
       // Log failed notification
       await supabase.from('notification_logs').insert({
@@ -158,15 +146,14 @@ export async function sendEmailNotification(
         notification_type: notification.notificationType,
         status: 'failed',
         cost_euros: 0,
-        error_message: `SendGrid error: ${response.status}`,
-        metadata: { sendgrid_response: errorText },
+        error_message: `Resend error: ${resendError.message}`,
+        metadata: { resend_error: resendError },
       });
 
-      return { success: false, error: `SendGrid error: ${response.status}` };
+      return { success: false, error: `Resend error: ${resendError.message}` };
     }
 
-    // SendGrid returns 202 Accepted with X-Message-Id header
-    const messageId = response.headers.get('x-message-id') || undefined;
+    const messageId = resendData?.id;
 
     // Log successful notification
     await supabase.from('notification_logs').insert({
@@ -174,11 +161,11 @@ export async function sendEmailNotification(
       channel: 'email',
       notification_type: notification.notificationType,
       status: 'delivered',
-      cost_euros: 0, // SendGrid free tier
+      cost_euros: 0, // Resend free tier
       delivered_at: new Date().toISOString(),
       metadata: {
         message_id: messageId,
-        template_id: sendgridTemplateId,
+        provider: 'resend',
         locale,
       },
     });
@@ -247,7 +234,7 @@ async function translateEmailVariables(
         secondary_link: data.professionalProfileLink || `${baseUrl}/${locale}/professionals/${data.professionalId}`,
         secondary_button_text: t('notifications.email.applicationReceived.secondaryButtonText'),
         info_title: t('notifications.email.applicationReceived.infoTitle'),
-        info_items: data.infoItems || [], // e.g., ["Offered Price: 50 €", "Rating: 4.8 ⭐"]
+        info_items: data.infoItems || [], // e.g., ["Offered Price: 50 EUR", "Rating: 4.8"]
         footer_text: t('notifications.email.applicationReceived.footerText'),
       };
     }
@@ -256,7 +243,7 @@ async function translateEmailVariables(
       // Build info items: contact info first, then customer message if provided
       const infoItems: string[] = [];
 
-      // Add customer contact info (passed as string like "📞 +359..." or "📧 email@...")
+      // Add customer contact info (passed as string like "+359..." or "email@...")
       if (data.customerContact) {
         infoItems.push(`${t('notifications.email.applicationAccepted.contactLabel', { defaultValue: 'Contact' })}: ${data.customerContact}`);
       }
@@ -366,7 +353,7 @@ async function translateEmailVariables(
         primary_button_text: t('notifications.email.paymentReceived.buttonText'),
         info_title: t('notifications.email.paymentReceived.infoTitle'),
         info_items: data.paymentDetails || [
-          `Amount: ${data.amount} €`,
+          `Amount: ${data.amount} EUR`,
           `Task: ${data.taskTitle}`,
           `Date: ${new Date().toLocaleDateString(locale)}`,
         ],
@@ -386,10 +373,10 @@ async function translateEmailVariables(
         primary_button_text: t('notifications.email.welcome.buttonText'),
         info_title: t('notifications.email.welcome.infoTitle'),
         info_items: [
-          '📝 Post tasks and find trusted professionals',
-          '💼 Apply for work and earn money',
-          '⚡ Instant notifications for all updates',
-          '💰 Secure payments and reviews',
+          'Post tasks and find trusted professionals',
+          'Apply for work and earn money',
+          'Instant notifications for all updates',
+          'Secure payments and reviews',
         ],
         secondary_message: t('notifications.email.welcome.secondaryMessage'),
         footer_text: t('notifications.email.welcome.footerText'),
@@ -467,7 +454,7 @@ export async function getUserNotificationChannel(userId: string): Promise<{
       return { channel: 'none', canReceiveNotifications: false };
     }
 
-    // Priority: Telegram → Email → None
+    // Priority: Telegram -> Email -> None
     if (user.telegram_id) {
       return { channel: 'telegram', canReceiveNotifications: true };
     }

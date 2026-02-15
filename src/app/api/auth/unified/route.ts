@@ -5,6 +5,7 @@ import { getEmailVerificationContent, getLocaleFromRequest, type SupportedLocale
 import { AuthService } from '@/server/application/auth/auth.service'
 import { UserRepository } from '@/server/infrastructure/supabase/user.repository'
 import { notifyAdminNewUser } from '@/lib/services/admin-notifications'
+import { sendVerificationEmail } from '@/lib/services/resend-email'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // =============================================================================
@@ -89,7 +90,7 @@ async function handleSuccessfulRegistration(
   }
 
   // =========================================================================
-  // STEP 2: Send verification email
+  // STEP 2: Send verification email via Resend
   // =========================================================================
   console.log('[Auth/Unified] Sending verification email...')
   try {
@@ -97,57 +98,24 @@ async function handleSuccessfulRegistration(
     const verificationToken = await generateEmailVerificationToken(email, signUpData.user.id)
     const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
 
-    const sendGridPayload: any = {
-      personalizations: [{
-        to: [{ email }],
-        dynamic_template_data: {
-          user_name: fullName || email.split('@')[0],
-          verification_link: verificationUrl,
-          ...emailContent,
-        },
-      }],
-      from: { email: 'noreply@trudify.com', name: 'Trudify' },
-    }
-
-    if (process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION) {
-      sendGridPayload.template_id = process.env.SENDGRID_TEMPLATE_ID_EMAIL_VERIFICATION
-    } else {
-      sendGridPayload.subject = `${emailContent.button_text} - Trudify`
-      sendGridPayload.content = [{
-        type: 'text/html',
-        value: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background-color: #0066CC; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-              <div style="color: white; font-size: 28px; font-weight: bold;">Trudify</div>
-            </div>
-            <div style="padding: 40px 30px; background-color: white;">
-              <h2 style="color: #333; margin-top: 0;">${emailContent.heading}</h2>
-              <p>${emailContent.greeting} ${fullName || email.split('@')[0]},</p>
-              <p>${emailContent.message}</p>
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="${verificationUrl}" style="background-color: #0066CC; color: white; padding: 14px 40px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;">
-                  ${emailContent.button_text}
-                </a>
-              </div>
-            </div>
-          </div>
-        `,
-      }]
-    }
-
-    const sendGridResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(sendGridPayload),
+    const { error: resendError } = await sendVerificationEmail(email, {
+      heading: emailContent.heading,
+      greeting: emailContent.greeting,
+      userName: fullName || email.split('@')[0],
+      message: emailContent.message,
+      buttonText: emailContent.button_text,
+      verificationLink: verificationUrl,
+      linkInstruction: emailContent.link_instruction,
+      expiryText: emailContent.expires_in,
+      footerText: emailContent.footer_text,
+      footerRights: emailContent.footer_rights,
+      currentYear: emailContent.current_year,
     })
 
-    if (sendGridResponse.ok) {
-      console.log('[Auth/Unified] ✅ Verification email sent')
+    if (resendError) {
+      console.error('[Auth/Unified] Resend error:', resendError)
     } else {
-      console.error('[Auth/Unified] SendGrid error:', await sendGridResponse.text())
+      console.log('[Auth/Unified] ✅ Verification email sent')
     }
   } catch (emailError) {
     console.error('[Auth/Unified] Email sending failed (non-fatal):', emailError)

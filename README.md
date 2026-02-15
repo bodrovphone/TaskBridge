@@ -254,8 +254,8 @@ TG_BOT_TOKEN=your-bot-token
 TG_BOT_USERNAME=YourBot_bot
 ADMIN_TELEGRAM_ID=your-telegram-user-id  # For admin notifications
 
-# SendGrid Email (optional)
-SENDGRID_API_KEY=your-sendgrid-key
+# Resend Email (transactional emails)
+RESEND_API_KEY=re_your-resend-api-key
 ```
 
 ---
