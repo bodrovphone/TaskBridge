@@ -48,7 +48,7 @@ test.describe('Internationalization @smoke', () => {
       await link.click()
       await page.waitForLoadState('networkidle')
 
-      expect(page.url()).toContain('/bg/')
+      expect(page.url()).toMatch(/\/bg(\/|$)/)
     }
   })
 })

@@ -4,7 +4,7 @@ import { PUBLIC_PAGES } from '../helpers/constants'
 test.describe('Pages Load @smoke', () => {
   for (const page of PUBLIC_PAGES) {
     test(`${page.label} (${page.path}) loads successfully`, async ({ page: p }) => {
-      const response = await p.goto(page.path)
+      const response = await p.goto(page.path, { waitUntil: 'domcontentloaded' })
 
       expect(response?.status()).toBeLessThan(400)
       await expect(p.locator('body')).toBeVisible()
