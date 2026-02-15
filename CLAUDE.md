@@ -718,6 +718,79 @@ const { data: { user } } = await supabase.auth.getUser()
 
 **Documentation**: See `/docs/infrastructure/supabase-client-setup.md` for auth implementation examples
 
+### Deep Registration Links (Campaign Link Generator)
+
+**What**: Pre-filled registration URLs for advertising campaigns (Facebook, Instagram, social media). When the user asks to "generate a deep registration link" or "generate a deep link", generate a Trudify registration URL with pre-filled fields.
+
+**Production Domain**: `https://trudify.com`
+
+**URL Format**:
+```
+https://trudify.com/{lang}/register?intent=professional&title={title}&categories={categories}&city={city}
+```
+
+**Parameters**:
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `lang` (path) | Yes | `en`, `bg`, `ru` - match the post/audience language |
+| `intent` | Yes | `professional` for service providers, `customer` for clients |
+| `title` | No | Professional title in the audience's language (free text, URL-encoded) |
+| `categories` | No | Comma-separated category slugs (always English slugs) |
+| `city` | No | City slug (always English slug) |
+
+**How to generate from a Facebook/social media post**:
+
+1. **Detect language** from the post text → set `lang` (`bg` for Bulgarian, `ru` for Russian, `en` for English)
+2. **Determine intent**:
+   - Post is someone **looking for a professional** (e.g., "Looking for a plumber") → `intent=customer` (no title/categories needed, just lang and city if mentioned)
+   - Post is someone **offering services** (e.g., "I'm an electrician in Sofia") → `intent=professional` with `title`, `categories`, `city`
+3. **Extract professional title** from the post in the original language (e.g., "Електротехник", "Сантехник")
+4. **Map to category slugs** by matching the profession to the closest subcategory slugs from the list below
+5. **Extract city** if mentioned and map to city slug
+
+**Available City Slugs**: `sofia`, `plovdiv`, `varna`, `burgas`, `ruse`, `stara-zagora`, `pleven`, `sliven`
+
+**Common Category Slugs** (full list in `/src/lib/intl/en/categories.ts`):
+- Home repair: `plumber`, `electrician`, `locksmith`, `carpenter`, `painter`, `tiler`, `welder`, `roofer`, `general-handyman`
+- Appliances: `phone-repair`, `computer-help`, `ac-repair`, `washing-machine-repair`, `tv-repair`
+- Cleaning: `house-cleaning`, `office-cleaning`, `window-cleaning`, `post-construction-cleaning`
+- Pets: `dog-walking`, `pet-sitting`, `pet-grooming`, `veterinary-care`
+- Personal: `babysitter`, `elderly-care`, `personal-assistant`
+- Transport: `courier`, `moving`, `furniture-delivery`
+- Digital: `web-developer`, `copywriting`, `seo-specialist`, `smm-specialist`
+- Creative: `photo`, `video`, `graphic-designer`, `interior-designer`
+- Education: `math-tutor`, `language-tutor`, `music-teacher`
+- Fitness: `fitness-trainer`, `yoga-instructor`
+- Construction: `demolition`, `foundation-work`, `masonry`, `insulation`
+- Finishing: `plastering`, `flooring`, `drywall`, `facade-work`
+
+**Examples**:
+
+Post in Bulgarian: "Търся електротехник в София за ремонт на апартамент"
+→ Customer looking for an electrician in Sofia
+```
+https://trudify.com/bg/register?intent=customer&city=sofia
+```
+
+Post in Russian: "Я сантехник в Бургасе, ищу заказы"
+→ Professional offering plumbing in Burgas
+```
+https://trudify.com/ru/register?intent=professional&title=Сантехник&categories=plumber&city=burgas
+```
+
+Post in Bulgarian: "Предлагам услуги по почистване на домове и офиси в Пловдив"
+→ Professional offering cleaning in Plovdiv
+```
+https://trudify.com/bg/register?intent=professional&title=Почистване&categories=house-cleaning,office-cleaning&city=plovdiv
+```
+
+**Guidelines**:
+- Use 1-3 most relevant category slugs (don't overload)
+- Title should be in the post's language, short and professional
+- Always match `lang` to the post language
+- If city is not mentioned, omit the `city` parameter
+- For customer intent, title and categories are usually not needed
+
 ### Telegram Authentication & Notifications
 
 **Status**: ✅ Fully implemented and ready for production

@@ -191,6 +191,25 @@ export const auth = {
   'auth.register.useQuickSignup': 'Използвайте бутоните горе за бърза регистрация',
   'auth.register.freeForever': '100% Безплатно — Без скрити такси',
 
+  // Professional info step (registration)
+  'auth.register.professionalInfoTitle': 'Разкажете ни за себе си',
+  'auth.register.professionalInfoSubtitle': 'Само няколко детайла, за да ви намерят клиентите',
+  'auth.register.professionalTitleLabel': 'Вашата професионална длъжност',
+  'auth.register.professionalTitlePlaceholder': 'напр. Водопроводчик, Електротехник, Чистач',
+  'auth.register.professionalTitleError': 'Заглавието трябва да е поне 3 символа',
+  'auth.register.serviceCategories': 'Какви услуги предлагате?',
+  'auth.register.categoriesRequired': 'Изберете поне една категория',
+  'auth.register.selectCity': 'Вашият град',
+  'auth.register.cityRequired': 'Моля, изберете вашия град',
+  'auth.register.continueToAuth': 'Продължи',
+  'auth.register.backToProfessionalInfo': 'Назад',
+  'auth.register.matchingCategories': 'Търсим подходящи категории...',
+  'auth.register.suggestedCategories': 'Предложени за вас',
+  'auth.register.browseAllCategories': 'Разгледай всички категории',
+  'auth.register.searchOrBrowse': 'Не виждате категорията си? Търсете или разгледайте',
+  'auth.register.applyingProfile': 'Настройваме профила ви...',
+  'auth.register.profileCreated': 'Профилът е създаден!',
+
   // Already logged in state
   'auth.register.alreadyLoggedInTitle': 'Хей, вече си вътре!',
   'auth.register.alreadyLoggedInHello': 'Добре дошъл отново,',

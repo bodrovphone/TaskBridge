@@ -189,6 +189,25 @@ export const auth = {
   'auth.register.useQuickSignup': 'Використовуйте кнопки вище для швидкої реєстрації',
   'auth.register.freeForever': '100% Безкоштовно — Без прихованих комісій',
 
+  // Professional info step (registration)
+  'auth.register.professionalInfoTitle': 'Розкажіть про себе',
+  'auth.register.professionalInfoSubtitle': 'Лише кілька деталей, щоб клієнти могли вас знайти',
+  'auth.register.professionalTitleLabel': 'Ваша професійна посада',
+  'auth.register.professionalTitlePlaceholder': 'напр. Сантехнік, Електрик, Прибиральник',
+  'auth.register.professionalTitleError': 'Назва має бути щонайменше 3 символи',
+  'auth.register.serviceCategories': 'Які послуги ви пропонуєте?',
+  'auth.register.categoriesRequired': 'Оберіть принаймні одну категорію',
+  'auth.register.selectCity': 'Ваше місто',
+  'auth.register.cityRequired': 'Будь ласка, оберіть ваше місто',
+  'auth.register.continueToAuth': 'Продовжити',
+  'auth.register.backToProfessionalInfo': 'Назад',
+  'auth.register.matchingCategories': 'Підбираємо відповідні категорії...',
+  'auth.register.suggestedCategories': 'Підібрано для вас',
+  'auth.register.browseAllCategories': 'Усі категорії',
+  'auth.register.searchOrBrowse': 'Не знайшли свою категорію? Пошук або перегляд',
+  'auth.register.applyingProfile': 'Налаштовуємо ваш профіль...',
+  'auth.register.profileCreated': 'Профіль створено!',
+
   // Already logged in state
   'auth.register.alreadyLoggedInTitle': 'Гей, ви вже всередині!',
   'auth.register.alreadyLoggedInHello': 'З поверненням,',

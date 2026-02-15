@@ -5,7 +5,13 @@ export const dynamic = 'force-dynamic'
 
 interface RegisterPageProps {
   params: Promise<{ lang: string }>
-  searchParams: Promise<{ intent?: 'professional' | 'customer'; source?: string }>
+  searchParams: Promise<{
+    intent?: 'professional' | 'customer'
+    source?: string
+    title?: string
+    categories?: string
+    city?: string
+  }>
 }
 
 export async function generateMetadata({ params }: RegisterPageProps): Promise<Metadata> {
@@ -37,7 +43,21 @@ export async function generateMetadata({ params }: RegisterPageProps): Promise<M
 
 export default async function RegisterPage({ params, searchParams }: RegisterPageProps) {
   const { lang } = await params
-  const { intent, source } = await searchParams
+  const { intent, source, title, categories, city } = await searchParams
 
-  return <RegisterPageContent lang={lang} initialIntent={intent} source={source} />
+  // Build initial professional data from URL params (read once on server)
+  const initialProfessionalData = (title || categories || city) ? {
+    professionalTitle: title || '',
+    serviceCategories: categories ? categories.split(',').filter(Boolean) : [],
+    city: city || '',
+  } : undefined
+
+  return (
+    <RegisterPageContent
+      lang={lang}
+      initialIntent={intent}
+      source={source}
+      initialProfessionalData={initialProfessionalData}
+    />
+  )
 }

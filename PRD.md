@@ -118,6 +118,62 @@ A comprehensive regional task platform connecting people in the Balkans with ver
   - Hourly rate or service pricing
   - Availability calendar
 
+#### Pre-Filled Registration Links (for Advertising Campaigns)
+
+**Status**: ✅ Implemented
+**Use Case**: Generate shareable registration links for Facebook ads, social media campaigns, and targeted outreach. Professionals click the link and see the registration form with fields already filled in.
+
+**URL Format:**
+```
+https://trudify.com/{lang}/register?intent=professional&title={title}&categories={categories}&city={city}
+```
+
+**Parameters:**
+
+| Parameter | Required | Description | Example |
+|-----------|----------|-------------|---------|
+| `lang` | Yes (URL path) | Language: `en`, `bg`, `ru` | `ru` |
+| `intent` | Yes | Must be `professional` to show step 2 | `professional` |
+| `title` | No | Professional title (free text, any language) | `Сантехник`, `Plumber` |
+| `categories` | No | Comma-separated category slugs | `plumber,electrician` |
+| `city` | No | City slug | `sofia`, `burgas`, `plovdiv` |
+
+**Available City Slugs:** `sofia`, `plovdiv`, `varna`, `burgas`, `ruse`, `stara-zagora`, `pleven`, `sliven`
+
+**Available Category Slugs (common):** `plumber`, `electrician`, `locksmith`, `carpenter`, `painter`, `tiler`, `welder`, `roofer`, `phone-repair`, `computer-help`, `ac-repair`, `washing-machine-repair`, `house-cleaning`, `office-cleaning`, `window-cleaning`, `dog-walking`, `pet-sitting`, `babysitter`, `elderly-care`, `courier`, `moving`, `web-developer`, `copywriting`, `seo-specialist`, `photo`, `video`, `math-tutor`, `language-tutor`, `fitness-trainer`, `yoga-instructor`
+
+(Full list: see `/src/lib/intl/en/categories.ts` for all 135 subcategory slugs)
+
+**Example Links:**
+
+Russian - Plumber in Burgas:
+```
+https://trudify.com/ru/register?intent=professional&title=Сантехник&categories=plumber&city=burgas
+```
+
+Bulgarian - Electrician in Sofia:
+```
+https://trudify.com/bg/register?intent=professional&title=Електротехник&categories=electrician&city=sofia
+```
+
+English - Handyman (multiple categories) in Varna:
+```
+https://trudify.com/en/register?intent=professional&title=Handyman&categories=plumber,electrician,locksmith&city=varna
+```
+
+**Behavior:**
+- Fields are pre-filled **only on first load** (read from URL on server, passed as props)
+- User can freely change any pre-filled value
+- Changes are NOT synced back to the URL
+- If the user navigates back and forward within the wizard, their edits are preserved (not reset to URL values)
+- Parameters are optional: any combination works (e.g., only `title` and `city`, no `categories`)
+
+**Facebook Ads Tips:**
+- Use the target audience's language in `title` for higher conversion
+- Pre-select 1-2 most relevant categories (don't overload)
+- Always set `city` to match the ad's geo-targeting
+- URL-encode Cyrillic characters for reliable sharing (browsers do this automatically in the address bar)
+
 #### Notification System (Telegram Bot)
 
 **Implementation Status:** ✅ **Core Infrastructure Complete** - Bot handler, webhook, token system implemented

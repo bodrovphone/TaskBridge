@@ -11,6 +11,9 @@ import { useAuth } from '@/features/auth'
 import { LocaleLink } from '@/components/common/locale-link'
 import { IntentSelector } from './intent-selector'
 import { SocialAuthButtons } from './social-auth-buttons'
+import { ProfessionalInfoStep } from './professional-info-step'
+import type { ProfessionalInfoData } from './professional-info-step'
+import { savePendingProfessional } from '../lib/professional-draft'
 
 const META_PIXEL_ID = '4351312728438333'
 
@@ -18,21 +21,26 @@ interface RegisterPageContentProps {
   lang: string
   initialIntent?: 'professional' | 'customer'
   source?: string
+  initialProfessionalData?: ProfessionalInfoData
 }
 
-export function RegisterPageContent({ lang, initialIntent, source }: RegisterPageContentProps) {
+export function RegisterPageContent({ lang, initialIntent, source, initialProfessionalData }: RegisterPageContentProps) {
   const t = useTranslations()
   const router = useRouter()
   const { signInWithGoogle, signInWithFacebook, refreshProfile, user, profile, loading: authLoading } = useAuth()
 
   // Track if user just registered on THIS page (to trigger redirect)
   const justRegisteredRef = useRef(false)
-
-  // Wizard step state
-  const [step, setStep] = useState<1 | 2>(initialIntent ? 2 : 1)
+  // Wizard step state - professionals get 3 steps, customers get 2
+  const [step, setStep] = useState<1 | 2 | 3>(() => {
+    if (initialIntent === 'customer') return 2
+    if (initialIntent === 'professional') return 2
+    return 1
+  })
 
   // Form state
   const [intent, setIntent] = useState<'professional' | 'customer'>(initialIntent || 'professional')
+  const [professionalData, setProfessionalData] = useState<ProfessionalInfoData | null>(initialProfessionalData || null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [fullName, setFullName] = useState('')
@@ -43,6 +51,9 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
   const [error, setError] = useState<string | null>(null)
   const [nameRequired, setNameRequired] = useState(false)
 
+  // Determine total steps based on intent
+  const totalSteps = intent === 'professional' ? 3 : 2
+
   // Store source for analytics if provided
   useEffect(() => {
     if (source && typeof window !== 'undefined') {
@@ -50,8 +61,7 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
     }
   }, [source])
 
-
-  // Only redirect if user just registered on this page
+  // Only redirect if user just registered on this page (email/password flow)
   useEffect(() => {
     if (user && justRegisteredRef.current) {
       handlePostAuthRedirect()
@@ -63,25 +73,60 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
   const setIntentCookie = () => {
     if (typeof window !== 'undefined') {
       document.cookie = `trudify_registration_intent=${intent}; path=/; max-age=3600; SameSite=Lax`
-      // Also set in localStorage for the callback
       localStorage.setItem('trudify_registration_intent', intent)
     }
   }
 
   // Handle post-auth redirect based on intent
   const handlePostAuthRedirect = () => {
-    if (intent === 'professional') {
+    if (intent === 'professional' && professionalData) {
+      // Save to localStorage - profile page will pick it up and apply via API
+      savePendingProfessional(professionalData)
+      router.push(`/${lang}/profile/professional`)
+    } else if (intent === 'professional') {
       router.push(`/${lang}/profile/professional`)
     } else {
       router.push(`/${lang}`)
     }
   }
 
-  // Handle OAuth
+  // Handle step 1 continue
+  const handleIntentContinue = () => {
+    // Update URL with intent
+    router.replace(`/${lang}/register?intent=${intent}`, { scroll: false })
+
+    if (intent === 'professional') {
+      setStep(2) // Go to professional info step
+    } else {
+      setStep(2) // Go directly to auth for customers
+    }
+  }
+
+  // Handle professional info continue
+  const handleProfessionalInfoContinue = (data: ProfessionalInfoData) => {
+    setProfessionalData(data)
+    setStep(3) // Go to auth step
+  }
+
+  // Handle back from auth step
+  const handleBackFromAuth = () => {
+    if (intent === 'professional') {
+      setStep(2) // Back to professional info
+    } else {
+      setStep(1) // Back to intent selection
+    }
+  }
+
+  // Handle OAuth - save professional draft before redirect
   const handleGoogleAuth = async () => {
     setIsLoading(true)
     setError(null)
     setIntentCookie()
+
+    // Save professional data before OAuth redirect
+    if (intent === 'professional' && professionalData) {
+      savePendingProfessional(professionalData)
+    }
 
     try {
       const result = await signInWithGoogle()
@@ -89,7 +134,6 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
         setError(result.error)
         setIsLoading(false)
       }
-      // Redirect happens automatically via OAuth
     } catch {
       setError(t('auth.popupBlocked'))
       setIsLoading(false)
@@ -101,13 +145,17 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
     setError(null)
     setIntentCookie()
 
+    // Save professional data before OAuth redirect
+    if (intent === 'professional' && professionalData) {
+      savePendingProfessional(professionalData)
+    }
+
     try {
       const result = await signInWithFacebook()
       if (result.error) {
         setError(result.error)
         setIsLoading(false)
       }
-      // Redirect happens automatically via OAuth
     } catch {
       setError(t('auth.popupBlocked'))
       setIsLoading(false)
@@ -273,6 +321,205 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
     )
   }
 
+  const isStepComplete = (stepNum: number) => stepNum < step
+  const isStepActive = (stepNum: number) => stepNum === step
+
+  // Render step indicator circles
+  const renderStepIndicator = () => {
+    const steps = Array.from({ length: totalSteps }, (_, i) => i + 1)
+
+    return (
+      <div className="flex items-center justify-center gap-3 mt-4">
+        {steps.map((stepNum, index) => (
+          <div key={stepNum} className="flex items-center gap-3">
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-colors ${
+              isStepActive(stepNum)
+                ? 'bg-blue-600 text-white'
+                : isStepComplete(stepNum)
+                  ? 'bg-blue-100 text-blue-600'
+                  : 'bg-slate-200 text-slate-400'
+            }`}>
+              {stepNum}
+            </div>
+            {index < steps.length - 1 && (
+              <div className="w-12 h-1 bg-slate-200 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-blue-600"
+                  initial={{ width: '0%' }}
+                  animate={{ width: isStepComplete(stepNum) ? '100%' : '0%' }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Render the auth form (shared between customer step 2 and professional step 3)
+  const renderAuthForm = () => (
+    <motion.div
+      key="auth-step"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-md mx-auto"
+    >
+      {/* Back button */}
+      <button
+        onClick={handleBackFromAuth}
+        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm font-medium">
+          {intent === 'professional'
+            ? t('auth.register.backToProfessionalInfo')
+            : t('auth.register.backToIntent')}
+        </span>
+      </button>
+
+      {/* Selected intent badge */}
+      <div className="flex justify-center mb-6">
+        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
+          intent === 'professional'
+            ? 'bg-emerald-100 text-emerald-700'
+            : 'bg-blue-100 text-blue-700'
+        }`}>
+          {intent === 'professional' ? (
+            <Briefcase className="w-4 h-4" />
+          ) : (
+            <Home className="w-4 h-4" />
+          )}
+          {intent === 'professional'
+            ? t('auth.register.intentProfessional')
+            : t('auth.register.intentCustomer')}
+        </div>
+      </div>
+
+      <Card className="shadow-xl border border-slate-200">
+        <CardBody className="p-6 lg:p-8">
+          <div className="space-y-6">
+            {/* Social Auth Buttons - prominently displayed */}
+            <div className="pt-2 pb-8">
+              <p className="text-center text-sm font-medium text-slate-700 mb-4">
+                {t('auth.register.oneClickSignup')}
+              </p>
+              <SocialAuthButtons
+                onGoogleClick={handleGoogleAuth}
+                onFacebookClick={handleFacebookAuth}
+                isLoading={isLoading}
+              />
+            </div>
+
+            {/* Divider */}
+            <div className="relative">
+              <Divider />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-sm text-slate-500">
+                {t('auth.or')}
+              </span>
+            </div>
+
+            {/* Arrow hint to use social auth */}
+            <div className="flex items-center justify-center gap-2 text-slate-400 text-sm">
+              <ArrowUp className="w-4 h-4" />
+              <span>{t('auth.register.useQuickSignup')}</span>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg border border-red-200">
+                {error}
+              </div>
+            )}
+
+            {/* Unified Form - works for both login and registration */}
+            <div className="space-y-4">
+              <Input
+                type="email"
+                label={t('auth.emailLabel')}
+                placeholder="your@email.com"
+                value={email}
+                onValueChange={setEmail}
+                isDisabled={isLoading}
+                variant="bordered"
+                classNames={{
+                  inputWrapper: 'border-slate-300',
+                }}
+              />
+
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                label={t('auth.password')}
+                placeholder="••••••••"
+                value={password}
+                onValueChange={setPassword}
+                isDisabled={isLoading}
+                variant="bordered"
+                classNames={{
+                  inputWrapper: 'border-slate-300',
+                }}
+                endContent={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="focus:outline-none"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5 text-slate-400" />
+                    ) : (
+                      <Eye className="w-5 h-5 text-slate-400" />
+                    )}
+                  </button>
+                }
+              />
+
+              {/* Name field - always visible but muted (unified auth UX)
+                  Shows as required (red) when API returns name_required */}
+              <div className={`transition-all duration-200 ${nameRequired ? '' : 'opacity-60'}`}>
+                <Input
+                  type="text"
+                  label={t('auth.fullName')}
+                  placeholder="Ivan Petrov"
+                  value={fullName}
+                  onValueChange={(val) => {
+                    setFullName(val)
+                    if (nameRequired) setNameRequired(false)
+                  }}
+                  isDisabled={isLoading}
+                  variant="bordered"
+                  classNames={{
+                    inputWrapper: nameRequired
+                      ? 'border-red-500 bg-red-50'
+                      : 'border-slate-300 bg-slate-50/50',
+                  }}
+                  description={
+                    nameRequired
+                      ? t('auth.nameRequiredHint')
+                      : t('auth.nameHint')
+                  }
+                />
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                color="primary"
+                size="lg"
+                className="w-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg"
+                onPress={handleSubmit}
+                isLoading={isLoading}
+                isDisabled={!email || !password}
+              >
+                {t('auth.continue')}
+              </Button>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+    </motion.div>
+  )
+
   return (
     <div className="min-h-screen relative">
       {/* Meta Pixel Script */}
@@ -330,27 +577,8 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
               </span>
             </div>
 
-            {/* Step indicator */}
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-colors ${
-                step === 1 ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'
-              }`}>
-                1
-              </div>
-              <div className="w-12 h-1 bg-slate-200 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-blue-600"
-                  initial={{ width: '0%' }}
-                  animate={{ width: step === 2 ? '100%' : '0%' }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-              <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-colors ${
-                step === 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-400'
-              }`}>
-                2
-              </div>
-            </div>
+            {/* Dynamic step indicator */}
+            {renderStepIndicator()}
           </motion.div>
 
           {/* Wizard Content */}
@@ -381,7 +609,7 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
                       <Button
                         size="lg"
                         className="w-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                        onPress={() => setStep(2)}
+                        onPress={handleIntentContinue}
                         endContent={<ArrowRight className="w-5 h-5" />}
                       >
                         {t('auth.register.continueToSignup')}
@@ -408,163 +636,24 @@ export function RegisterPageContent({ lang, initialIntent, source }: RegisterPag
                   </div>
                 </div>
               </motion.div>
-            ) : (
-              /* Step 2: Auth Form */
+            ) : step === 2 && intent === 'professional' ? (
+              /* Step 2 (Professional only): Professional Info */
               <motion.div
-                key="step2"
+                key="step2-professional"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
-                className="max-w-md mx-auto"
               >
-                {/* Back button */}
-                <button
-                  onClick={() => setStep(1)}
-                  className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">{t('auth.register.backToIntent')}</span>
-                </button>
-
-                {/* Selected intent badge */}
-                <div className="flex justify-center mb-6">
-                  <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
-                    intent === 'professional'
-                      ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-blue-100 text-blue-700'
-                  }`}>
-                    {intent === 'professional' ? (
-                      <Briefcase className="w-4 h-4" />
-                    ) : (
-                      <Home className="w-4 h-4" />
-                    )}
-                    {intent === 'professional'
-                      ? t('auth.register.intentProfessional')
-                      : t('auth.register.intentCustomer')}
-                  </div>
-                </div>
-
-                <Card className="shadow-xl border border-slate-200">
-                  <CardBody className="p-6 lg:p-8">
-                    <div className="space-y-6">
-                      {/* Social Auth Buttons - prominently displayed */}
-                      <div className="pt-2 pb-8">
-                        <p className="text-center text-sm font-medium text-slate-700 mb-4">
-                          {t('auth.register.oneClickSignup')}
-                        </p>
-                        <SocialAuthButtons
-                          onGoogleClick={handleGoogleAuth}
-                          onFacebookClick={handleFacebookAuth}
-                          isLoading={isLoading}
-                        />
-                      </div>
-
-                      {/* Divider */}
-                      <div className="relative">
-                        <Divider />
-                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-sm text-slate-500">
-                          {t('auth.or')}
-                        </span>
-                      </div>
-
-                      {/* Arrow hint to use social auth */}
-                      <div className="flex items-center justify-center gap-2 text-slate-400 text-sm">
-                        <ArrowUp className="w-4 h-4" />
-                        <span>{t('auth.register.useQuickSignup')}</span>
-                      </div>
-
-                      {/* Error Message */}
-                      {error && (
-                        <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg border border-red-200">
-                          {error}
-                        </div>
-                      )}
-
-                      {/* Unified Form - works for both login and registration */}
-                      <div className="space-y-4">
-                        <Input
-                          type="email"
-                          label={t('auth.emailLabel')}
-                          placeholder="your@email.com"
-                          value={email}
-                          onValueChange={setEmail}
-                          isDisabled={isLoading}
-                          variant="bordered"
-                          classNames={{
-                            inputWrapper: 'border-slate-300',
-                          }}
-                        />
-
-                        <Input
-                          type={showPassword ? 'text' : 'password'}
-                          label={t('auth.password')}
-                          placeholder="••••••••"
-                          value={password}
-                          onValueChange={setPassword}
-                          isDisabled={isLoading}
-                          variant="bordered"
-                          classNames={{
-                            inputWrapper: 'border-slate-300',
-                          }}
-                          endContent={
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="focus:outline-none"
-                            >
-                              {showPassword ? (
-                                <EyeOff className="w-5 h-5 text-slate-400" />
-                              ) : (
-                                <Eye className="w-5 h-5 text-slate-400" />
-                              )}
-                            </button>
-                          }
-                        />
-
-                        {/* Name field - always visible but muted (unified auth UX)
-                            Shows as required (red) when API returns name_required */}
-                        <div className={`transition-all duration-200 ${nameRequired ? '' : 'opacity-60'}`}>
-                          <Input
-                            type="text"
-                            label={t('auth.fullName')}
-                            placeholder="Ivan Petrov"
-                            value={fullName}
-                            onValueChange={(val) => {
-                              setFullName(val)
-                              if (nameRequired) setNameRequired(false)
-                            }}
-                            isDisabled={isLoading}
-                            variant="bordered"
-                            classNames={{
-                              inputWrapper: nameRequired
-                                ? 'border-red-500 bg-red-50'
-                                : 'border-slate-300 bg-slate-50/50',
-                            }}
-                            description={
-                              nameRequired
-                                ? t('auth.nameRequiredHint')
-                                : t('auth.nameHint')
-                            }
-                          />
-                        </div>
-
-                        {/* Submit Button */}
-                        <Button
-                          color="primary"
-                          size="lg"
-                          className="w-full font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg"
-                          onPress={handleSubmit}
-                          isLoading={isLoading}
-                          isDisabled={!email || !password}
-                        >
-                          {t('auth.continue')}
-                        </Button>
-                      </div>
-                    </div>
-                  </CardBody>
-                </Card>
+                <ProfessionalInfoStep
+                  initialData={professionalData || initialProfessionalData || undefined}
+                  onBack={() => setStep(1)}
+                  onContinue={handleProfessionalInfoContinue}
+                />
               </motion.div>
+            ) : (
+              /* Auth step (Step 2 for customers, Step 3 for professionals) */
+              renderAuthForm()
             )}
           </AnimatePresence>
         </div>

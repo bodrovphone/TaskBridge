@@ -191,6 +191,25 @@ export const auth = {
   'auth.register.useQuickSignup': 'Use buttons above for quick sign up',
   'auth.register.freeForever': '100% Free — No hidden fees, ever',
 
+  // Professional info step (registration)
+  'auth.register.professionalInfoTitle': 'Tell us about yourself',
+  'auth.register.professionalInfoSubtitle': 'Just a few quick details so customers can find you',
+  'auth.register.professionalTitleLabel': 'Your professional title',
+  'auth.register.professionalTitlePlaceholder': 'e.g., Plumber, Electrician, Cleaner',
+  'auth.register.professionalTitleError': 'Title must be at least 3 characters',
+  'auth.register.serviceCategories': 'What services do you offer?',
+  'auth.register.categoriesRequired': 'Select at least one category',
+  'auth.register.selectCity': 'Your city',
+  'auth.register.cityRequired': 'Please select your city',
+  'auth.register.continueToAuth': 'Continue',
+  'auth.register.backToProfessionalInfo': 'Back',
+  'auth.register.matchingCategories': 'Finding matching categories...',
+  'auth.register.suggestedCategories': 'Suggested for you',
+  'auth.register.browseAllCategories': 'Browse all categories',
+  'auth.register.searchOrBrowse': "Don't see your category? Search or browse",
+  'auth.register.applyingProfile': 'Setting up your profile...',
+  'auth.register.profileCreated': 'Profile created!',
+
   // Already logged in state
   'auth.register.alreadyLoggedInTitle': 'Hey, you\'re already in!',
   'auth.register.alreadyLoggedInHello': 'Welcome back,',

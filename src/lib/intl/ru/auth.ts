@@ -191,6 +191,25 @@ export const auth = {
   'auth.register.useQuickSignup': 'Используйте кнопки выше для быстрой регистрации',
   'auth.register.freeForever': '100% Бесплатно — Без скрытых комиссий',
 
+  // Professional info step (registration)
+  'auth.register.professionalInfoTitle': 'Расскажите о себе',
+  'auth.register.professionalInfoSubtitle': 'Всего пара деталей, чтобы клиенты могли вас найти',
+  'auth.register.professionalTitleLabel': 'Ваша профессиональная должность',
+  'auth.register.professionalTitlePlaceholder': 'напр. Сантехник, Электрик, Уборщик',
+  'auth.register.professionalTitleError': 'Название должно быть не менее 3 символов',
+  'auth.register.serviceCategories': 'Какие услуги вы предлагаете?',
+  'auth.register.categoriesRequired': 'Выберите хотя бы одну категорию',
+  'auth.register.selectCity': 'Ваш город',
+  'auth.register.cityRequired': 'Пожалуйста, выберите ваш город',
+  'auth.register.continueToAuth': 'Продолжить',
+  'auth.register.backToProfessionalInfo': 'Назад',
+  'auth.register.matchingCategories': 'Подбираем подходящие категории...',
+  'auth.register.suggestedCategories': 'Подобрано для вас',
+  'auth.register.browseAllCategories': 'Все категории',
+  'auth.register.searchOrBrowse': 'Не нашли свою категорию? Поиск или обзор',
+  'auth.register.applyingProfile': 'Настраиваем ваш профиль...',
+  'auth.register.profileCreated': 'Профиль создан!',
+
   // Already logged in state
   'auth.register.alreadyLoggedInTitle': 'Эй, вы уже внутри!',
   'auth.register.alreadyLoggedInHello': 'С возвращением,',

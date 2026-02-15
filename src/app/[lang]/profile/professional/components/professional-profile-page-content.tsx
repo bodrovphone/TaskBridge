@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardBody, Button } from '@heroui/react'
 import { Search, ClipboardList, Briefcase, ArrowRightLeft } from 'lucide-react'
 import { useAuth } from '@/features/auth'
+import { loadPendingProfessional, clearPendingProfessional } from '@/app/[lang]/register/lib/professional-draft'
 import { ProfessionalProfile } from '../../components/professional-profile'
 import { ProfileDataProvider } from '../../components/profile-data-provider'
 import { NotificationBannerManager } from '../../components/notification-banner-manager'
@@ -25,12 +26,47 @@ export function ProfessionalProfilePageContent({ lang }: ProfessionalProfilePage
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  const pendingProfileAppliedRef = useRef(false)
+
   // Redirect to home if not authenticated
   useEffect(() => {
     if (!loading && !user) {
       router.push(`/${lang}`)
     }
   }, [user, loading, router, lang])
+
+  // Apply pending professional data from registration flow
+  // (saved to localStorage before OAuth redirect or email/password auth)
+  useEffect(() => {
+    if (!user || pendingProfileAppliedRef.current) return
+
+    const draft = loadPendingProfessional()
+    if (!draft) return
+
+    pendingProfileAppliedRef.current = true
+
+    fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        professionalTitle: draft.professionalTitle,
+        serviceCategories: draft.serviceCategories,
+        city: draft.city,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          clearPendingProfessional()
+          refreshProfile()
+          console.log('[ProfessionalProfile] Applied pending registration data')
+        } else {
+          console.error('[ProfessionalProfile] Failed to apply pending data:', res.status)
+        }
+      })
+      .catch((err) => {
+        console.error('[ProfessionalProfile] Error applying pending data:', err)
+      })
+  }, [user, refreshProfile])
 
   // Check for openSettings query parameter from toast - scroll to settings section
   useEffect(() => {
