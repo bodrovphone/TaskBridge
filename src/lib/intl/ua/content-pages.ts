@@ -308,7 +308,7 @@ export const contentPages = {
   'giveaway.benefits.customers.winPrizes.description': 'Розміщуйте завдання та вигравайте призи! Клієнти теж беруть участь у розіграші.',
 
   'giveaway.nextDraw.label': 'Наступний розіграш',
-  'giveaway.nextDraw.date': 'Лютий 2026',
+  'giveaway.nextDraw.date': 'Травень 2026',
   'giveaway.nextDraw.frequency': 'Частота розіграшів',
   'giveaway.nextDraw.frequencyValue': 'Кожні 2 місяці',
 
