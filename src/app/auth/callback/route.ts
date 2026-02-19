@@ -133,6 +133,15 @@ export async function GET(request: NextRequest) {
           const { isNewUser } = result.unwrap()
           console.log('[Auth Callback] Profile created/synced for user:', data.user.id, '| New registration:', isNewUser)
 
+          // Save registration intent to DB for new users
+          if (isNewUser && registrationIntentCookie) {
+            await supabase
+              .from('users')
+              .update({ registration_intent: registrationIntentCookie })
+              .eq('id', data.user.id)
+            console.log('[Auth Callback] Saved registration_intent:', registrationIntentCookie)
+          }
+
           // Notify admin of new OAuth registration (non-blocking)
           // Only notify for NEW users, not existing user logins
           if (isNewUser) {
@@ -183,7 +192,7 @@ export async function GET(request: NextRequest) {
     // This is used by the /register page for ad campaigns
     if (registrationIntentCookie === 'professional') {
       console.log('[Auth Callback] Professional intent - redirecting to professional profile')
-      return createRedirectWithLocale(`${origin}/${redirectLocale}/profile/professional`)
+      return createRedirectWithLocale(`${origin}/${redirectLocale}/profile/professional?onboarding=true`)
     }
 
     // Default: redirect to home

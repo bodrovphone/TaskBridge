@@ -84,6 +84,17 @@ async function handleSuccessfulRegistration(
       console.error('[Auth/Unified] Failed to create profile:', result)
     } else {
       console.log('[Auth/Unified] ✅ Profile created with name:', fullName)
+
+      // Save registration intent to DB
+      if (registrationIntent) {
+        const { createAdminClient } = await import('@/lib/supabase/server')
+        const adminSupabase = createAdminClient()
+        await adminSupabase
+          .from('users')
+          .update({ registration_intent: registrationIntent })
+          .eq('id', signUpData.user.id)
+        console.log('[Auth/Unified] Saved registration_intent:', registrationIntent)
+      }
     }
   } catch (profileError) {
     console.error('[Auth/Unified] Profile creation error (non-fatal):', profileError)

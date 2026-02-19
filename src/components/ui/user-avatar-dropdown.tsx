@@ -41,6 +41,9 @@ export default function UserAvatarDropdown({
  const params = useParams()
  const lang = params?.lang as string || 'bg'
  const isMobile = useIsMobile('lg')
+ const isIncompleteProfile = profile?.registrationIntent === 'professional'
+  && (!profile.professionalTitle || profile.professionalTitle.length < 3
+      || !profile.serviceCategories || profile.serviceCategories.length === 0)
  const [isResending, setIsResending] = useState(false)
  const [verificationMessage, setVerificationMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -133,7 +136,7 @@ export default function UserAvatarDropdown({
   >
     <DropdownTrigger>
      <button
-      className={className}
+      className={`${className || ''} relative`}
       aria-label={t('nav.profile')}
       type="button"
      >
@@ -143,6 +146,9 @@ export default function UserAvatarDropdown({
        isClickable
        className="ring-2 ring-transparent hover:ring-blue-500/20 transition-all duration-200"
       />
+      {isIncompleteProfile && (
+       <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
+      )}
      </button>
     </DropdownTrigger>
 
