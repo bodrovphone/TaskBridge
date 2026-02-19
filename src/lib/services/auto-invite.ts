@@ -71,12 +71,7 @@ export async function sendAutoInvitations(
     errors: [],
   }
 
-  // Check feature flag
   const flags = getFeatureFlags()
-  if (!flags.autoInviteProfessionals) {
-    console.log('[AutoInvite] Feature disabled')
-    return result
-  }
 
   try {
     // Find matching professionals
