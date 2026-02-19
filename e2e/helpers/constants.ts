@@ -27,3 +27,31 @@ export const SELECTORS = {
   languageSwitcher: '[data-testid="language-switcher"]',
   mobileMenuButton: 'header button[aria-label]',
 } as const
+
+/** Selectors for flow tests */
+export const FLOW_SELECTORS = {
+  // Browse tasks
+  taskFilters: '#task-filters',
+  searchInput: 'input[type="search"]',
+  browseResults: '#browse-tasks-results',
+  firstTaskCard: '#task-card-example',
+
+  // Task detail
+  taskTitle: 'h1',
+  backToBrowse: 'a[href*="/browse-tasks"]',
+
+  // Auth pages
+  emailInput: 'input[type="email"]',
+  passwordInput: 'input[type="password"]',
+  submitButton: 'button[type="submit"]',
+
+  // Professionals
+  professionalsResults: '#professionals-results',
+} as const
+
+/** Test data for flow tests */
+export const FLOW_DATA = {
+  popularCategories: ['house-cleaning', 'plumber', 'electrician'],
+  popularCities: ['sofia', 'plovdiv'],
+  testEmail: 'e2e-test-noreply@trudify.com',
+} as const

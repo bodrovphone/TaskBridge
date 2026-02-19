@@ -24,10 +24,22 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testDir: './e2e/smoke',
     },
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      testDir: './e2e/smoke',
+    },
+    {
+      name: 'flows-chromium',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: './e2e/flows',
+    },
+    {
+      name: 'flows-firefox',
+      use: { ...devices['Desktop Firefox'] },
+      testDir: './e2e/flows',
     },
   ],
 })
