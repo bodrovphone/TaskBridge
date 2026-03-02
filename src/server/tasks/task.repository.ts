@@ -729,6 +729,36 @@ export class TaskRepository {
   }
 
   /**
+   * Count open tasks for a customer (efficient count-only query)
+   */
+  async countOpenTasksByCustomer(customerId: string): Promise<Result<number, DatabaseError>> {
+    try {
+      const supabase = createAdminClient()
+
+      const { count, error } = await supabase
+        .from('tasks')
+        .select('id', { count: 'exact', head: true })
+        .eq('customer_id', customerId)
+        .eq('status', 'open')
+
+      if (error) {
+        console.error('Database error counting open tasks:', error)
+        return err(
+          new DatabaseError('Failed to count open tasks', {
+            code: error.code,
+            message: error.message
+          })
+        )
+      }
+
+      return ok(count ?? 0)
+    } catch (error) {
+      console.error('Unexpected error counting open tasks:', error)
+      return err(new DatabaseError('Unexpected error counting open tasks'))
+    }
+  }
+
+  /**
    * Full-text search for tasks using PostgreSQL tsvector
    * Searches title, title_bg, description, description_bg, and location_notes
    * Results are ranked by relevance

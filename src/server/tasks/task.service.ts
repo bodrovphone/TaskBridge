@@ -12,7 +12,7 @@ import {
 } from './task.validation'
 import { mapCreateInputToDbInsert, mapUpdateInputToDbUpdate } from './task.types'
 import { Result, ok, err } from '../shared/result'
-import { ValidationError, DatabaseError, ForbiddenError, NotFoundError } from '../shared/errors'
+import { ValidationError, DatabaseError, BusinessRuleError, ForbiddenError, NotFoundError } from '../shared/errors'
 import type { CreateTaskInput, UpdateTaskInput, Task, CreateTaskResult } from './task.types'
 import { translateTaskToBulgarian } from '@/lib/services/translation'
 
@@ -37,7 +37,7 @@ export class TaskService {
   async createTask(
     input: CreateTaskInput,
     userId: string
-  ): Promise<Result<CreateTaskResult, ValidationError | DatabaseError>> {
+  ): Promise<Result<CreateTaskResult, ValidationError | BusinessRuleError | DatabaseError>> {
     // 1. Validate input
     const validationResult = validateCreateTaskInput(input)
     if (!validationResult.success) {

@@ -1,6 +1,9 @@
 /**
  * Category Visual Mapping
  * Maps task categories to gradient colors and icons for default task images
+ *
+ * Each subcategory should have a UNIQUE icon to avoid visual repetition
+ * on pages that list multiple tasks without photos.
  */
 
 import {
@@ -23,7 +26,6 @@ import {
   Sofa,
   ShoppingBag,
   UtensilsCrossed,
-  FileText as DocumentIcon,
   PawPrint,
   Heart,
   Scissors,
@@ -34,7 +36,26 @@ import {
   Megaphone,
   Languages,
   HandHeart,
-  Calendar
+  Calendar,
+  Droplets,
+  Cog,
+  Smartphone,
+  Cpu,
+  Globe,
+  Laptop,
+  GraduationCap,
+  Calculator,
+  PackageOpen,
+  Bike,
+  Gem,
+  Music,
+  SprayCan,
+  Building2,
+  Wind,
+  Waves,
+  Armchair,
+  Bot,
+  Hand,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -54,7 +75,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'plumber': {
     gradient: 'from-blue-500 to-blue-700',
-    icon: Wrench,
+    icon: Droplets,
   },
   'electrician': {
     gradient: 'from-blue-500 to-blue-700',
@@ -75,7 +96,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'small-appliance-repair': {
     gradient: 'from-blue-400 to-blue-600',
-    icon: Settings,
+    icon: Cog,
   },
 
   'finishing-work': {
@@ -105,7 +126,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'courier-delivery': {
     gradient: 'from-green-500 to-green-700',
-    icon: Package,
+    icon: Bike,
   },
   'grocery-delivery': {
     gradient: 'from-green-400 to-green-600',
@@ -117,7 +138,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'document-delivery': {
     gradient: 'from-green-500 to-green-700',
-    icon: DocumentIcon,
+    icon: FileText,
   },
 
   'logistics': {
@@ -126,7 +147,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'moving': {
     gradient: 'from-green-600 to-green-800',
-    icon: Truck,
+    icon: PackageOpen,
   },
   'cargo-transport': {
     gradient: 'from-green-600 to-green-800',
@@ -134,7 +155,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'furniture-assembly': {
     gradient: 'from-green-500 to-green-700',
-    icon: Sofa,
+    icon: Hammer,
   },
 
   // ============================================
@@ -147,15 +168,15 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'dog-walking': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Dog,
+    icon: PawPrint,
   },
   'pet-sitting': {
     gradient: 'from-purple-400 to-purple-600',
-    icon: PawPrint,
+    icon: Dog,
   },
   'pet-grooming': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Scissors,
+    icon: SprayCan,
   },
 
   'beauty-health': {
@@ -164,7 +185,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'massage': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Heart,
+    icon: Hand,
   },
   'hairdresser': {
     gradient: 'from-purple-600 to-purple-800',
@@ -172,11 +193,11 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'manicure': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Sparkles,
+    icon: Gem,
   },
   'makeup': {
     gradient: 'from-purple-600 to-purple-800',
-    icon: Sparkles,
+    icon: Palette,
   },
 
   'cleaning-services': {
@@ -185,24 +206,24 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'house-cleaning': {
     gradient: 'from-purple-400 to-purple-600',
-    icon: Sparkles,
+    icon: SprayCan,
   },
   'office-cleaning': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Sparkles,
+    icon: Building2,
   },
   'window-cleaning': {
     gradient: 'from-purple-400 to-purple-600',
-    icon: Sparkles,
+    icon: Wind,
   },
   'carpet-cleaning': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Sparkles,
+    icon: Waves,
   },
 
   'household-services': {
     gradient: 'from-purple-500 to-purple-700',
-    icon: Home,
+    icon: Armchair,
   },
 
   // ============================================
@@ -232,15 +253,15 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'language-tutoring': {
     gradient: 'from-pink-500 to-pink-700',
-    icon: BookOpen,
+    icon: GraduationCap,
   },
   'math-tutoring': {
     gradient: 'from-pink-600 to-pink-800',
-    icon: BookOpen,
+    icon: Calculator,
   },
   'music-lessons': {
     gradient: 'from-pink-500 to-pink-700',
-    icon: Heart,
+    icon: Music,
   },
 
   'trainer-services': {
@@ -270,7 +291,7 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'online-advertising': {
     gradient: 'from-indigo-500 to-indigo-700',
-    icon: Monitor,
+    icon: Globe,
   },
   'online-work': {
     gradient: 'from-indigo-600 to-indigo-800',
@@ -278,19 +299,19 @@ export const categoryVisuals: Record<string, CategoryVisual> = {
   },
   'ai-services': {
     gradient: 'from-indigo-700 to-indigo-900',
-    icon: Sparkles,
+    icon: Bot,
   },
   'computer-help': {
     gradient: 'from-indigo-500 to-indigo-700',
-    icon: Monitor,
+    icon: Laptop,
   },
   'digital-tech-repair': {
     gradient: 'from-indigo-600 to-indigo-800',
-    icon: Settings,
+    icon: Cpu,
   },
   'phone-repair': {
     gradient: 'from-indigo-500 to-indigo-700',
-    icon: Settings,
+    icon: Smartphone,
   },
 
   // ============================================

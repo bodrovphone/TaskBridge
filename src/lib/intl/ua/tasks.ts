@@ -264,11 +264,12 @@ export const tasks = {
   'createTask.errors.titleTooShort': 'Назва має містити мінімум 10 символів',
   'createTask.errors.titleTooLong': 'Назва має бути менше 200 символів',
   'createTask.errors.descriptionTooShort': 'Опис має містити мінімум 15 символів',
-  'createTask.errors.descriptionTooLong': 'Опис має бути менше 2000 символів',
+  'createTask.errors.descriptionTooLong': 'Опис має бути менше 600 символів',
   'createTask.errors.cityRequired': 'Місто є обов\'язковим',
   'createTask.errors.budgetInvalid': 'Максимум має бути більшим за мінімум',
   'createTask.errors.deadlineInPast': 'Дедлайн має бути сьогодні або в майбутньому',
   'createTask.errors.maxPhotos': 'Максимум 5 фотографій',
+  'createTask.errors.maxOpenTasksReached': 'Ви досягли ліміту у 5 відкритих завдань. Будь ласка, завершіть або скасуйте існуючі завдання перед створенням нових.',
 
   // Validation Dialog
   'createTask.validationDialog.title': 'Виправте наступні проблеми',

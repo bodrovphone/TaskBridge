@@ -4,9 +4,10 @@
  */
 
 import { z } from 'zod'
-import { ValidationError } from '../shared/errors'
+import { ValidationError, BusinessRuleError } from '../shared/errors'
 import { Result, ok, err } from '../shared/result'
 import type { CreateTaskInput, UpdateTaskInput } from './task.types'
+import { TaskRepository } from './task.repository'
 
 /**
  * Validation schema for task creation
@@ -21,7 +22,7 @@ export const createTaskSchema = z.object({
   description: z
     .string()
     .min(15, 'Description must be at least 15 characters')
-    .max(2000, 'Description must be less than 2000 characters'),
+    .max(600, 'Description must be less than 600 characters'),
   city: z.string().min(1, 'City is required'),
 
   // Optional fields (nullable to handle null from database/API)
@@ -73,7 +74,7 @@ export const updateTaskSchema = z.object({
   description: z
     .string()
     .min(15, 'Description must be at least 15 characters')
-    .max(2000, 'Description must be less than 2000 characters')
+    .max(600, 'Description must be less than 600 characters')
     .optional(),
   requirements: z.string().optional(),
 
@@ -166,18 +167,50 @@ export const validateUpdateTaskInput = (
   return ok(result.data)
 }
 
+const MAX_OPEN_TASKS_PER_USER = 5
+
+/** Users blocked from creating tasks (abused the platform with ad-spam) */
+const BLOCKED_TASK_CREATORS = new Set([
+  '401e2a3c-4143-49e4-86d4-164589507b13', // Галина Николова
+])
+
 /**
  * Business rule: Check if user can create a task
- * Can be extended later with more complex rules
+ * - User must be authenticated
+ * - User must not be blocked
+ * - User must not exceed the open tasks limit
  */
 export const canUserCreateTask = async (
   userId: string
-): Promise<Result<void, ValidationError>> => {
-  // For now, any authenticated user can create a task
-  // Future: Check for pending confirmations, missing reviews, etc.
-
+): Promise<Result<void, ValidationError | BusinessRuleError>> => {
   if (!userId) {
     return err(new ValidationError('User ID is required'))
+  }
+
+  if (BLOCKED_TASK_CREATORS.has(userId)) {
+    return err(
+      new BusinessRuleError(
+        `You have reached the maximum of ${MAX_OPEN_TASKS_PER_USER} open tasks. Please complete or cancel existing tasks before creating new ones.`,
+        { currentCount: MAX_OPEN_TASKS_PER_USER, limit: MAX_OPEN_TASKS_PER_USER }
+      )
+    )
+  }
+
+  const repository = new TaskRepository()
+  const countResult = await repository.countOpenTasksByCustomer(userId)
+
+  if (!countResult.success) {
+    return err(new ValidationError('Unable to verify task limit'))
+  }
+
+  const currentCount = countResult.data
+  if (currentCount >= MAX_OPEN_TASKS_PER_USER) {
+    return err(
+      new BusinessRuleError(
+        `You have reached the maximum of ${MAX_OPEN_TASKS_PER_USER} open tasks. Please complete or cancel existing tasks before creating new ones.`,
+        { currentCount, limit: MAX_OPEN_TASKS_PER_USER }
+      )
+    )
   }
 
   return ok(undefined)

@@ -69,7 +69,7 @@ const mapServerErrorToTranslationKey = (message: string): string => {
     'Title must be less than 200 characters': 'createTask.errors.titleTooLong',
     // Description validation
     'Description must be at least 15 characters': 'createTask.errors.descriptionTooShort',
-    'Description must be less than 2000 characters': 'createTask.errors.descriptionTooLong',
+    'Description must be less than 600 characters': 'createTask.errors.descriptionTooLong',
     // Required fields
     'Category is required': 'createTask.errors.categoryRequired',
     'City is required': 'createTask.errors.cityRequired',
@@ -212,6 +212,16 @@ export function TaskForm({
           console.log('[TaskForm] API response:', response.status, result)
 
           if (!response.ok) {
+            // Handle max open tasks business rule
+            if (result.code === 'BUSINESS_RULE_VIOLATION') {
+              toast({
+                title: t('createTask.error'),
+                description: t('createTask.errors.maxOpenTasksReached'),
+                variant: 'destructive',
+              })
+              setIsSubmitting(false)
+              return
+            }
             // Handle server-side validation errors with details
             if (result.details?.errors) {
               const serverErrors = Object.entries(result.details.errors).map(([field, message]) => ({
@@ -305,6 +315,15 @@ export function TaskForm({
       console.log('[TaskForm] API response:', response.status, result)
 
       if (!response.ok) {
+        if (result.code === 'BUSINESS_RULE_VIOLATION') {
+          toast({
+            title: t('createTask.error'),
+            description: t('createTask.errors.maxOpenTasksReached'),
+            variant: 'destructive',
+          })
+          setIsSubmitting(false)
+          return
+        }
         if (result.details?.errors) {
           const serverErrors = Object.entries(result.details.errors).map(([field, message]) => ({
             field,

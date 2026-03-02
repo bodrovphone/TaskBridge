@@ -75,7 +75,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
    if (!value || value.length < 15) {
     return 'createTask.errors.descriptionTooShort'
    }
-   if (value.length > 2000) {
+   if (value.length > 600) {
     return 'createTask.errors.descriptionTooLong'
    }
    const profanityCheck = validateProfanity(value, currentLocale, true)
@@ -179,7 +179,7 @@ export const TaskDetailsSection = forwardRef<{ focusTitleInput: () => void; focu
         {t('createTask.details.descriptionLabel')} <span className="text-red-500">*</span>
        </label>
        <span className="text-xs text-gray-400">
-        {(field.state.value || '').length}/2000
+        {(field.state.value || '').length}/600
        </span>
       </div>
       <Textarea

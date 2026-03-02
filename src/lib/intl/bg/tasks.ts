@@ -267,11 +267,12 @@ export const tasks = {
   'createTask.errors.titleTooShort': 'Заглавието трябва да бъде поне 10 символа',
   'createTask.errors.titleTooLong': 'Заглавието не може да бъде повече от 200 символа',
   'createTask.errors.descriptionTooShort': 'Описанието трябва да бъде поне 15 символа',
-  'createTask.errors.descriptionTooLong': 'Описанието не може да бъде повече от 2000 символа',
+  'createTask.errors.descriptionTooLong': 'Описанието не може да бъде повече от 600 символа',
   'createTask.errors.cityRequired': 'Градът е задължителен',
   'createTask.errors.budgetInvalid': 'Максимумът трябва да бъде по-голям от минимума',
   'createTask.errors.deadlineInPast': 'Крайният срок трябва да бъде днес или в бъдеще',
   'createTask.errors.maxPhotos': 'Максимум 5 снимки',
+  'createTask.errors.maxOpenTasksReached': 'Достигнахте лимита от 5 отворени задачи. Моля, завършете или отменете съществуващи задачи, преди да създадете нови.',
 
   // Validation Dialog
   'createTask.validationDialog.title': 'Моля, поправете следните проблеми',

@@ -266,11 +266,12 @@ export const tasks = {
   'createTask.errors.titleTooShort': 'Title must be at least 10 characters',
   'createTask.errors.titleTooLong': 'Title must be less than 200 characters',
   'createTask.errors.descriptionTooShort': 'Description must be at least 15 characters',
-  'createTask.errors.descriptionTooLong': 'Description must be less than 2000 characters',
+  'createTask.errors.descriptionTooLong': 'Description must be less than 600 characters',
   'createTask.errors.cityRequired': 'City is required',
   'createTask.errors.budgetInvalid': 'Maximum must be greater than minimum',
   'createTask.errors.deadlineInPast': 'Deadline must be today or in the future',
   'createTask.errors.maxPhotos': 'Maximum 5 photos allowed',
+  'createTask.errors.maxOpenTasksReached': 'You have reached the limit of 5 open tasks. Please complete or cancel existing tasks before creating new ones.',
 
   // Validation Dialog
   'createTask.validationDialog.title': 'Please fix the following issues',

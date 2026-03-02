@@ -295,12 +295,13 @@ export const tasks = {
   'createTask.errors.descriptionTooShort':
     'Описание должно быть не менее 15 символов',
   'createTask.errors.descriptionTooLong':
-    'Описание не может быть более 2000 символов',
+    'Описание не может быть более 600 символов',
   'createTask.errors.cityRequired': 'Пожалуйста, выберите город',
   'createTask.errors.budgetInvalid':
     'Максимальный бюджет должен быть больше минимального',
   'createTask.errors.deadlineInPast': 'Срок должен быть сегодня или в будущем',
   'createTask.errors.maxPhotos': 'Максимум 5 фотографий',
+  'createTask.errors.maxOpenTasksReached': 'Вы достигли лимита в 5 открытых задач. Пожалуйста, завершите или отмените существующие задачи, прежде чем создавать новые.',
 
   // Validation Dialog
   'createTask.validationDialog.title':
