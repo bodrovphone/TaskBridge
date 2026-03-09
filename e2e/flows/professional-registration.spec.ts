@@ -67,7 +67,7 @@ test.describe('Professional Registration Flow @flow', () => {
     await nameInput.fill(testName)
 
     // Submit registration
-    const submitButton = page.getByRole('button', { name: /continue|sign up|register|create/i })
+    const submitButton = page.getByRole('button', { name: 'Continue', exact: true })
     await expect(submitButton).toBeEnabled()
     await submitButton.click()
 
@@ -99,7 +99,7 @@ test.describe('Professional Registration Flow @flow', () => {
     await expect(page.locator('body')).not.toContainText('Internal Server Error')
 
     // Find the Professional Identity section and click Edit
-    const identitySection = page.locator('#professional-identity')
+    const identitySection = page.locator('#professional-identity-section')
     await expect(identitySection).toBeVisible({ timeout: 10000 })
 
     const editButton = identitySection.getByRole('button', { name: /edit/i })
