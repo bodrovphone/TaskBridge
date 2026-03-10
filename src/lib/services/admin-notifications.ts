@@ -9,11 +9,14 @@
  * but sends directly to admin's Telegram ID.
  */
 
+import { isE2ETestEmail } from '@/lib/utils/e2e-detection'
+
 const ADMIN_TELEGRAM_ID = process.env.ADMIN_TELEGRAM_ID
 const BOT_TOKEN = process.env.TG_BOT_TOKEN
 
 interface NewUserData {
   fullName?: string
+  email?: string
   provider?: string // 'email' | 'google' | 'facebook' | 'telegram'
   intent?: 'professional' | 'customer' // registration intent
 }
@@ -23,6 +26,7 @@ interface NewTaskData {
   category: string
   city: string
   customerName?: string
+  customerEmail?: string
 }
 
 /**
@@ -63,6 +67,7 @@ async function sendToAdmin(message: string): Promise<void> {
  * Fully wrapped in try/catch - never throws
  */
 export async function notifyAdminNewUser(user: NewUserData): Promise<void> {
+  if (isE2ETestEmail(user.email)) return
   try {
     const providerLabel = {
       email: 'Email/Password',
@@ -100,6 +105,7 @@ export async function notifyAdminNewUser(user: NewUserData): Promise<void> {
  * Fully wrapped in try/catch - never throws
  */
 export async function notifyAdminNewTask(task: NewTaskData): Promise<void> {
+  if (isE2ETestEmail(task.customerEmail)) return
   try {
     const time = new Date().toLocaleString('en-GB', {
       timeZone: 'Europe/Sofia',

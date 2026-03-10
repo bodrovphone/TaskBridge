@@ -32,6 +32,8 @@ jobs:
         run: npx playwright test --grep @smoke
         env:
           BASE_URL: https://trudify.com
+          E2E_CLIENT_EMAIL: ${{ vars.E2E_CLIENT_EMAIL }}
+          E2E_CLIENT_PASSWORD: ${{ secrets.E2E_CLIENT_PASSWORD }}
 
       - name: Upload test report
         if: always()

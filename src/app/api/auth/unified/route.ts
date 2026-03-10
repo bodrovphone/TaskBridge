@@ -153,6 +153,7 @@ async function handleSuccessfulRegistration(
   // Notify admin of new registration (non-blocking)
   notifyAdminNewUser({
     fullName: fullName || undefined,
+    email,
     provider: 'email',
     intent: registrationIntent || undefined,
   }).catch(() => {})

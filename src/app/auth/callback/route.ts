@@ -148,6 +148,7 @@ export async function GET(request: NextRequest) {
             const authProvider = data.user.app_metadata?.provider || 'oauth'
             notifyAdminNewUser({
               fullName: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
+              email: data.user.email,
               provider: authProvider,
               intent: registrationIntentCookie || undefined,
             }).catch(() => {})

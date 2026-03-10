@@ -12,6 +12,7 @@ import { authenticateRequest } from '@/lib/auth/api-auth'
 import { batchCheckProfanity } from '@/lib/services/profanity-filter'
 import { notifyAdminNewTask } from '@/lib/services/admin-notifications'
 import { sendAutoInvitationsAsync } from '@/lib/services/auto-invite'
+import { isE2ETestEmail } from '@/lib/utils/e2e-detection'
 
 /**
  * POST /api/tasks
@@ -151,14 +152,15 @@ export async function POST(request: NextRequest) {
       console.warn('Failed to increment grace period counter:', error)
     }
 
-    // 7. Notify admin of new task (non-blocking)
+    // 7. Notify admin + auto-invite (non-blocking, suppressed for E2E test users)
     const createdTask = result.data?.task
-    if (createdTask) {
+    if (createdTask && !isE2ETestEmail(authUser.email)) {
       notifyAdminNewTask({
         title: createdTask.title,
         category: createdTask.category || createdTask.subcategory || 'Unknown',
         city: createdTask.city,
         customerName: authUser.user_metadata?.full_name,
+        customerEmail: authUser.email,
       }).catch(() => {})
 
       // 8. Auto-invite matching professionals (non-blocking, feature-flagged)

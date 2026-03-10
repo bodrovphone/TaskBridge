@@ -28,6 +28,11 @@ jobs:
         run: npx playwright test --grep @flow
         env:
           BASE_URL: https://trudify.com
+          E2E_PRO_EMAIL: ${{ vars.E2E_PRO_EMAIL }}
+          E2E_PRO_PASSWORD: ${{ secrets.E2E_PRO_PASSWORD }}
+          E2E_CLIENT_EMAIL: ${{ vars.E2E_CLIENT_EMAIL }}
+          E2E_CLIENT_PASSWORD: ${{ secrets.E2E_CLIENT_PASSWORD }}
+          E2E_CLEANUP_SECRET: ${{ secrets.E2E_CLEANUP_SECRET }}
 
       - name: Upload test report
         if: always()

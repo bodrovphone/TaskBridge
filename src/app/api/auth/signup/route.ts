@@ -152,6 +152,7 @@ export async function POST(request: Request) {
     // Notify admin of new registration (non-blocking)
     notifyAdminNewUser({
       fullName: fullName || undefined,
+      email,
       provider: 'email',
     }).catch(() => {})
 

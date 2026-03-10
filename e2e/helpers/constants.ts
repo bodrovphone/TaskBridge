@@ -49,6 +49,21 @@ export const FLOW_SELECTORS = {
   professionalsResults: '#professionals-results',
 } as const
 
+/** E2E test user accounts (from env vars) */
+export const E2E_USERS = {
+  professional: {
+    email: process.env.E2E_PRO_EMAIL!,
+    password: process.env.E2E_PRO_PASSWORD!,
+    name: 'E2E Professional',
+    title: 'Plumber',
+  },
+  client: {
+    email: process.env.E2E_CLIENT_EMAIL!,
+    password: process.env.E2E_CLIENT_PASSWORD!,
+    name: 'E2E Client',
+  },
+} as const
+
 /** Test data for flow tests */
 export const FLOW_DATA = {
   popularCategories: ['house-cleaning', 'plumber', 'electrician'],
