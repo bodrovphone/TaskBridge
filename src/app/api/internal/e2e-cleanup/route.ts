@@ -16,7 +16,7 @@ import { isE2ETestEmail } from '@/lib/utils/e2e-detection'
 import { revalidatePath } from 'next/cache'
 
 const LOCALES = ['en', 'bg', 'ru', 'ua']
-const PATHS_TO_REVALIDATE = ['/professionals', '/browse-tasks']
+const PATHS_TO_REVALIDATE = ['/', '/professionals', '/browse-tasks']
 
 interface CleanupResult {
   email: string
