@@ -27,14 +27,14 @@ test.describe('Customer Registration + Task Creation @flow', () => {
     // Customer intent goes directly to auth form (step 2)
     const regEmailInput = page.locator(FLOW_SELECTORS.emailInput)
     await expect(regEmailInput).toBeVisible({ timeout: 10000 })
-    await regEmailInput.fill(email)
+    await regEmailInput.pressSequentially(email)
 
     const regPasswordInput = page.locator(FLOW_SELECTORS.passwordInput)
-    await regPasswordInput.fill(password)
+    await regPasswordInput.pressSequentially(password)
 
     // Fill name field
     const nameInput = page.locator('input[type="text"]').last()
-    await nameInput.fill(name)
+    await nameInput.pressSequentially(name)
 
     // Submit registration
     const submitButton = page.getByRole('button', { name: 'Continue', exact: true })

@@ -52,13 +52,13 @@ test.describe('Professional Registration Flow @flow', () => {
     // Step 3: Auth form (email, password, name)
     const emailInput = page.locator(FLOW_SELECTORS.emailInput)
     await expect(emailInput).toBeVisible({ timeout: 10000 })
-    await emailInput.fill(email)
+    await emailInput.pressSequentially(email)
 
     const passwordInput = page.locator(FLOW_SELECTORS.passwordInput)
-    await passwordInput.fill(password)
+    await passwordInput.pressSequentially(password)
 
     const nameInput = page.locator('input[type="text"]').last()
-    await nameInput.fill(name)
+    await nameInput.pressSequentially(name)
 
     // Submit registration
     const submitButton = page.getByRole('button', { name: 'Continue', exact: true })
