@@ -102,18 +102,39 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
    2
   );
 
+  // Preload the first task image from the server component so the browser
+  // gets fetchpriority=high immediately — before JS hydrates the client gallery.
+  const firstImage = Array.isArray(data.task.images) ? data.task.images[0] : null;
+  const encodedFirstImage = firstImage ? encodeURIComponent(firstImage) : null;
+
   return (
-   <Suspense fallback={
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-    </div>
-   }>
-    <TaskDetailContent
-     task={data.task}
-     similarTasks={similarTasks}
-     lang={lang}
-    />
-   </Suspense>
+   <>
+    {encodedFirstImage && (
+     <link
+      rel="preload"
+      as="image"
+      imageSrcSet={[
+       `/_next/image?url=${encodedFirstImage}&w=640&q=60 640w`,
+       `/_next/image?url=${encodedFirstImage}&w=828&q=60 828w`,
+       `/_next/image?url=${encodedFirstImage}&w=1080&q=60 1080w`,
+       `/_next/image?url=${encodedFirstImage}&w=1200&q=60 1200w`,
+      ].join(', ')}
+      imageSizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
+      fetchPriority="high"
+     />
+    )}
+    <Suspense fallback={
+     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+     </div>
+    }>
+     <TaskDetailContent
+      task={data.task}
+      similarTasks={similarTasks}
+      lang={lang}
+     />
+    </Suspense>
+   </>
   );
  } catch (error) {
   console.error('Error in TaskDetailPage:', error);
