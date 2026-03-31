@@ -63,6 +63,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
          fill
          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
          quality={60}
+         fetchPriority="high"
          className="object-cover transition-transform duration-300 group-hover:scale-105"
          priority
         />
