@@ -1,15 +1,22 @@
 'use client'
 
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ChevronLeft, MapPin, Clock, Wallet, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronDown, ChevronUp, MapPin, Clock, Wallet, CheckCircle, AlertCircle, Archive, Sparkles } from "lucide-react";
 import { Card as NextUICard, CardBody, Chip, Tooltip } from "@heroui/react";
 import { useTranslations } from 'next-intl';
 import { useAuth } from "@/features/auth";
+import dynamic from "next/dynamic";
 import TaskGallery from "./task-gallery";
-import TaskActions from "./task-actions";
 import PrivacyToggle from "./privacy-toggle";
-import TaskActivity from "./task-activity";
+
+const TaskActions = dynamic(() => import("./task-actions"), {
+ ssr: false,
+});
+const TaskActivity = dynamic(() => import("./task-activity"), {
+ ssr: false,
+});
 import { getUserApplication } from "@/components/tasks/mock-submit";
 import TaskCard from "@/components/ui/task-card";
 import { getCategoryName } from '@/lib/utils/category';
@@ -231,6 +238,48 @@ function getTaskStatus(taskId: string, taskStatus?: string) {
  };
 }
 
+/** Max visible characters before "Read more" kicks in */
+const DESC_CLAMP_LIMIT = 400;
+
+/**
+ * Description with CSS line-clamp + "Read more" toggle.
+ * Full text stays in the DOM for SEO — only the painted area is reduced.
+ */
+function DescriptionBlock({ text, t }: { text: string; t: TranslateFunction }) {
+ const [expanded, setExpanded] = useState(false);
+ const needsClamp = text.length > DESC_CLAMP_LIMIT;
+
+ return (
+  <>
+   <p
+    className={`text-gray-700 text-base sm:text-lg leading-relaxed break-words ${
+     needsClamp && !expanded ? 'line-clamp-6' : ''
+    }`}
+   >
+    {text}
+   </p>
+   {needsClamp && (
+    <button
+     onClick={() => setExpanded(!expanded)}
+     className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 mt-1"
+    >
+     {expanded ? (
+      <>
+       {t('taskDetail.showLess')}
+       <ChevronUp size={16} />
+      </>
+     ) : (
+      <>
+       {t('taskDetail.readMore')}
+       <ChevronDown size={16} />
+      </>
+     )}
+    </button>
+   )}
+  </>
+ );
+}
+
 export default function TaskDetailContent({ task, similarTasks, lang }: TaskDetailContentProps) {
  const t = useTranslations();
  const searchParams = useSearchParams();
@@ -342,9 +391,7 @@ export default function TaskDetailContent({ task, similarTasks, lang }: TaskDeta
           </p>
          )}
 
-         <p className="text-gray-700 text-base sm:text-lg leading-relaxed break-words">
-          {localizedContent.description}
-         </p>
+         <DescriptionBlock text={localizedContent.description} t={t} />
 
          {/* Requirements - supports both requirements (frontend) and location_notes (database) */}
          {localizedContent.requirements && (

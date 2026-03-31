@@ -181,6 +181,8 @@ export const notifications = {
   'taskDetail.error.description': "We couldn't load this task. This might be a temporary issue.",
   'taskDetail.error.retry': 'Try Again',
   'taskDetail.error.goHome': 'Go to Home',
+  'taskDetail.readMore': 'Read more',
+  'taskDetail.showLess': 'Show less',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'My Posted Tasks',

@@ -181,6 +181,8 @@ export const notifications = {
   'taskDetail.error.description': 'Не вдалося завантажити це завдання. Це може бути тимчасова проблема.',
   'taskDetail.error.retry': 'Спробувати знову',
   'taskDetail.error.goHome': 'На головну',
+  'taskDetail.readMore': 'Читати далі',
+  'taskDetail.showLess': 'Згорнути',
 
   // Posted Tasks Page
   'postedTasks.title': 'Мої опубліковані завдання',

@@ -182,6 +182,8 @@ export const notifications = {
   'taskDetail.error.description': 'Не успяхме да заредим тази задача. Това може да е временен проблем.',
   'taskDetail.error.retry': 'Опитай отново',
   'taskDetail.error.goHome': 'Към началото',
+  'taskDetail.readMore': 'Прочетете още',
+  'taskDetail.showLess': 'Покажи по-малко',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Моите публикувани задачи',

@@ -61,6 +61,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
          src={imageArray[currentImageIndex]}
          alt={`${title} - image ${currentImageIndex + 1}`}
          fill
+         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 800px"
          className="object-cover transition-transform duration-300 group-hover:scale-105"
          priority
         />
@@ -156,8 +157,8 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
           src={imageArray[currentImageIndex]}
           alt={`${title} - image ${currentImageIndex + 1}`}
           fill
+          sizes="100vw"
           className="object-contain pointer-events-none"
-          priority
          />
         </div>
 

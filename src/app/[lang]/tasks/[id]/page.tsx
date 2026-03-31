@@ -1,25 +1,18 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import TaskDetailContent from "./components/task-detail-content";
-import type { TaskDetailResponse } from "@/server/tasks/task.query-types";
+import { TaskService } from "@/server/tasks/task.service";
 
 /**
  * ISR Configuration - Incremental Static Regeneration
  *
- * Production: Pages cached and revalidated every 1 hour
- * Development: No caching (force-dynamic) for easier testing
- *
- * Benefits in production:
- * - 99% of users get instant page loads from cache
- * - Database queries reduced by ~99%
- * - Pages still update within 1 hour of changes
- * - Significantly reduced infrastructure costs
+ * Pages cached and revalidated every 1 hour.
+ * 99% of users get instant page loads from cache.
+ * Database queries reduced by ~99%.
  *
  * @todo Implement on-demand revalidation when tasks are edited for instant updates
  */
-// Force dynamic in development, auto in production
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 3600
 
 interface TaskDetailPageProps {
  params: Promise<{
@@ -30,7 +23,7 @@ interface TaskDetailPageProps {
 
 /**
  * Fetch similar tasks based on category
- * Uses direct Supabase query (more efficient than HTTP fetch, avoids auth issues)
+ * Uses direct Supabase query (more efficient than HTTP fetch)
  */
 async function fetchSimilarTasks(category: string, excludeId: string, limit: number = 3) {
  try {
@@ -65,7 +58,6 @@ async function fetchSimilarTasks(category: string, excludeId: string, limit: num
    return [];
   }
 
-  // Return snake_case directly from DB - no transformation needed
   return (tasks || []).map(task => ({
    id: task.id,
    title: task.title,
@@ -91,31 +83,23 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
  const { id, lang } = await params;
 
  try {
-  // Fetch task detail from API
-  // Using environment variable for base URL (set in Vercel)
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  // Note: Using no-store to avoid caching issues with images
-  // ISR caching can cause stale data when images are updated
-  const response = await fetch(`${baseUrl}/api/tasks/${id}`, {
-   cache: 'no-store', // Disable caching to always get fresh data
-  });
+  // Fetch task directly via service (no HTTP round-trip)
+  // Pass no viewerId for ISR — public view cached, client handles ownership
+  const taskService = new TaskService();
+  const result = await taskService.getTaskDetail(id);
 
-  // Handle any error as not found (404, 500, etc.)
-  // This provides better UX than showing error pages
-  if (!response.ok) {
-   const errorText = await response.text();
-   console.error('Failed to fetch task:', response.status, errorText);
+  if (!result.success) {
+   console.error('Failed to fetch task:', result.error);
    notFound();
   }
 
-  const data: TaskDetailResponse = await response.json();
+  const data = result.data;
 
-
-  // Fetch similar tasks in parallel (don't block on this)
+  // Fetch similar tasks (sequential — needs category from task)
   const similarTasks = await fetchSimilarTasks(
    data.task.category || 'other',
    id,
-   2 // Show only 2 similar tasks
+   2
   );
 
   return (
@@ -132,7 +116,6 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
    </Suspense>
   );
  } catch (error) {
-  // Let Next.js error boundary handle this
   console.error('Error in TaskDetailPage:', error);
   throw error;
  }

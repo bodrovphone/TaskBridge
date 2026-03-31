@@ -182,6 +182,8 @@ export const notifications = {
   'taskDetail.error.description': 'Не удалось загрузить эту задачу. Возможно, это временная проблема.',
   'taskDetail.error.retry': 'Попробовать снова',
   'taskDetail.error.goHome': 'На главную',
+  'taskDetail.readMore': 'Читать далее',
+  'taskDetail.showLess': 'Свернуть',
 
   // Posted Tasks Page (Customer View)
   'postedTasks.title': 'Мои опубликованные задачи',

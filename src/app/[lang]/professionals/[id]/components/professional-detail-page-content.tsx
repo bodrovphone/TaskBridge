@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import ProfessionalHeader from '@/features/professionals/components/sections/professional-header';
 import ActionButtonsRow from '@/features/professionals/components/sections/action-buttons-row';
 import ServicesSection from '@/features/professionals/components/sections/services-section';
@@ -12,11 +14,18 @@ import { SuspensionBanner } from '@/components/safety/suspension-banner';
 import { getCityLabelBySlug } from '@/features/cities';
 import { formatResponseTime } from '@/lib/utils/pluralization';
 import { toast } from '@/hooks/use-toast';
-import { TaskSelectionModal } from '@/components/modals/task-selection-modal';
-import AuthSlideOver from '@/components/ui/auth-slide-over';
 import { useAuth } from '@/features/auth';
 import { useCreateTask } from '@/hooks/use-create-task';
-import { ReviewEnforcementDialog } from '@/features/reviews';
+
+const TaskSelectionModal = dynamic(
+  () => import('@/components/modals/task-selection-modal').then(m => ({ default: m.TaskSelectionModal })),
+  { ssr: false }
+);
+const AuthSlideOver = dynamic(() => import('@/components/ui/auth-slide-over'), { ssr: false });
+const ReviewEnforcementDialog = dynamic(
+  () => import('@/features/reviews').then(m => ({ default: m.ReviewEnforcementDialog })),
+  { ssr: false }
+);
 
 interface ProfessionalDetailPageContentProps {
   professional: API['ProfessionalData'];
@@ -30,6 +39,34 @@ interface UIState {
   showTaskSelectionModal: boolean;
   isLoadingTasks: boolean;
   isSendingInvitation: boolean;
+}
+
+const BIO_CLAMP_LIMIT = 400;
+
+function BioBlock({ text }: { text: string }) {
+  const t = useTranslations();
+  const [expanded, setExpanded] = useState(false);
+  const needsClamp = text.length > BIO_CLAMP_LIMIT;
+
+  return (
+    <>
+      <p className={`text-gray-700 leading-relaxed${needsClamp && !expanded ? ' line-clamp-5' : ''}`}>
+        {text}
+      </p>
+      {needsClamp && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 mt-1"
+        >
+          {expanded ? (
+            <>{t('taskDetail.showLess')}<ChevronUp size={16} /></>
+          ) : (
+            <>{t('taskDetail.readMore')}<ChevronDown size={16} /></>
+          )}
+        </button>
+      )}
+    </>
+  );
 }
 
 export function ProfessionalDetailPageContent({ professional, lang }: ProfessionalDetailPageContentProps) {
@@ -378,9 +415,7 @@ export function ProfessionalDetailPageContent({ professional, lang }: Profession
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   {t('professionalDetail.about')}
                 </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {transformedProfessional.bio}
-                </p>
+                <BioBlock text={transformedProfessional.bio} />
               </div>
 
               {/* Reviews & Ratings */}
