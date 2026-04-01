@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
-import { Card as NextUICard, CardBody, Modal, ModalContent, ModalBody } from "@heroui/react";
+import { Modal, ModalContent, ModalBody } from "@heroui/react";
 import DefaultTaskImage from "@/components/ui/default-task-image";
 
 interface TaskGalleryProps {
@@ -39,21 +39,18 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
  // Show default image if no images
  if (imageArray.length === 0) {
   return (
-   <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-    <CardBody className="p-0 overflow-hidden">
-     <DefaultTaskImage
-      category={subcategory || category || 'other'}
-      className="h-64 md:h-80 rounded-lg"
-     />
-    </CardBody>
-   </NextUICard>
+   <div className="bg-white/95 shadow-lg rounded-xl w-full overflow-hidden">
+    <DefaultTaskImage
+     category={subcategory || category || 'other'}
+     className="h-64 md:h-80 rounded-lg"
+    />
+   </div>
   );
  }
 
  return (
   <>
-   <NextUICard className="bg-white/95 shadow-lg w-full max-w-full">
-    <CardBody className="p-0 overflow-hidden">
+   <div className="bg-white/95 shadow-lg rounded-xl w-full overflow-hidden">
      <div className="relative h-64 md:h-80 overflow-hidden rounded-lg group cursor-pointer" onClick={openModal}>
       {imageArray.length > 0 && (
        <>
@@ -116,8 +113,7 @@ export default function TaskGallery({ images, title, category, subcategory }: Ta
       </>
      )}
     </div>
-   </CardBody>
-  </NextUICard>
+   </div>
 
   {/* Full-size Image Modal */}
   <Modal

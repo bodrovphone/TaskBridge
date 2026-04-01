@@ -115,6 +115,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       as="image"
       imageSrcSet={[
        `/_next/image?url=${encodedFirstImage}&w=640&q=60 640w`,
+       `/_next/image?url=${encodedFirstImage}&w=750&q=60 750w`,
        `/_next/image?url=${encodedFirstImage}&w=828&q=60 828w`,
        `/_next/image?url=${encodedFirstImage}&w=1080&q=60 1080w`,
        `/_next/image?url=${encodedFirstImage}&w=1200&q=60 1200w`,
