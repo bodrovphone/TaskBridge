@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import TaskDetailContent from "./components/task-detail-content";
 import { TaskService } from "@/server/tasks/task.service";
 
@@ -124,17 +123,11 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       fetchPriority="high"
      />
     )}
-    <Suspense fallback={
-     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-     </div>
-    }>
-     <TaskDetailContent
-      task={data.task}
-      similarTasks={similarTasks}
-      lang={lang}
-     />
-    </Suspense>
+    <TaskDetailContent
+     task={data.task}
+     similarTasks={similarTasks}
+     lang={lang}
+    />
    </>
   );
  } catch (error) {
