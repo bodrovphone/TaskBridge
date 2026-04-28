@@ -19,3 +19,6 @@ public/optimized/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Outreach lead CSVs contain PII — keep markdown logs, drop CSVs
+docs/data/outreach/runs/*.csv

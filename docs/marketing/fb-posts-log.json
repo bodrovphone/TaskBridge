@@ -1,5 +1,34 @@
 {
-  "last_language": null,
-  "last_audience": null,
-  "posts": []
+  "last_language": "RU",
+  "last_audience": "professional",
+  "posts": [
+    {
+      "id": "post_20260409_120000",
+      "date": "2026-04-09",
+      "language": "RU",
+      "audience": "professional",
+      "pain_angle": "p1",
+      "post_text": "📱 Хороший мастер — но клиенты всё равно как-то находят других.\n\nСарафанное радио работает, но нестабильно. Бывает, телефон просто молчит неделями.\n\nНа Trudify люди каждый день публикуют задачи: электрика, сантехника, ремонт, переезд. Ты видишь все открытые задания и сам выбираешь — к каким откликнуться. Никакого посредника, никакой рекламы.\n\nРегистрация бесплатная: https://trudify.com/ru/register?intent=professional",
+      "image_source": null,
+      "image_note": "Pexels blocked by network egress proxy — posted text-only",
+      "groups": ["Строителство и ремонти в Бургас и областта"],
+      "status": "posted"
+    },
+    {
+    {
+      "id": "post_20260403_120000",
+      "date": "2026-04-03",
+      "language": "BG",
+      "audience": "customer",
+      "pain_angle": "c1",
+      "post_text": "🔍 Как намираш майстор, на когото можеш да се довериш?\n\nПиташ познати, ровиш из обяви, обаждаш се... а в края на деня пак не си сигурен.\n\nВ Trudify е обратното — публикуваш задачата си и майсторите сами ти предлагат. Виждаш профила им, рейтинга и реални отзиви от клиенти, преди да изберат.\n\nПубликувай задача безплатно: https://trudify.com/bg",
+      "image_source": "https://www.pexels.com/photo/anonymous-male-worker-mounting-window-in-new-house-5691548/",
+      "groups": [
+        "БУРГАСКИ РЕГИОН ОБЯВИ (9983 members)",
+        "МАЙСТОРИ БУРГАС (7193 members)",
+        "Строителство и ремонти в Бургас и областта (5919 members)"
+      ],
+      "status": "posted"
+    }
+  ]
 }
