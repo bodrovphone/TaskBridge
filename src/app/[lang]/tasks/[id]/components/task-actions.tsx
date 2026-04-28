@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams, usePathname, useParams } from "next/navigation";
-import { Share2, Edit3, Check, LogOut, CheckCircle, Globe } from "lucide-react";
+import { Share2, Edit3, Check, LogOut, CheckCircle, Globe, Phone } from "lucide-react";
 import { Button as NextUIButton, Card as NextUICard, CardBody, Tooltip } from "@heroui/react";
 import { useTranslations } from 'next-intl';
 import { toast } from "@/hooks/use-toast";
@@ -74,6 +74,8 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
  const [isMarkCompletedDialogOpen, setIsMarkCompletedDialogOpen] = useState(false);
  const [isMarkingCompleted, setIsMarkingCompleted] = useState(false);
+ const [revealedContact, setRevealedContact] = useState<{ fullName: string; phone: string | null } | null>(null);
+ const [isRevealingContact, setIsRevealingContact] = useState(false);
 
  // Helper to get localized language name (translated to current UI locale)
  const getLanguageName = (langCode: string): string => {
@@ -265,6 +267,38 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
 
  const handleMarkCompletedClick = () => {
   setIsMarkCompletedDialogOpen(true);
+ };
+
+ const handleShowContactClick = async () => {
+  if (!isAuthenticated) {
+   if (typeof window !== 'undefined') {
+    localStorage.setItem('trudify_return_to', pathname);
+   }
+   setAuthAction('apply');
+   setIsAuthSlideOverOpen(true);
+   return;
+  }
+
+  setIsRevealingContact(true);
+  try {
+   const response = await authenticatedFetch(`/api/tasks/${task.id}/reveal-contact`, {
+    method: 'POST',
+   });
+   if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to reveal contact');
+   }
+   const data = await response.json();
+   setRevealedContact({ fullName: data.fullName, phone: data.phone });
+  } catch (error) {
+   toast({
+    title: t('taskDetail.contactReveal.error'),
+    description: error instanceof Error ? error.message : String(error),
+    variant: 'destructive',
+   });
+  } finally {
+   setIsRevealingContact(false);
+  }
  };
 
  const handleMarkCompletedConfirm = async () => {
@@ -459,6 +493,51 @@ export default function TaskActions({ task, isOwner = false }: TaskActionsProps)
          language: getLanguageName(task.customer?.preferred_language || 'en')
         })}
        </span>
+      </div>
+     )}
+
+     {/* Show contact (cold-start, April 2026). Only available on tasks
+         posted under the new disclosure (contact_sharing_consent_at set)
+         and only when application would otherwise be open. */}
+     {canApply && task.contact_sharing_consent_at && !revealedContact && (
+      <NextUIButton
+       color="primary"
+       variant="solid"
+       size="lg"
+       className="w-full text-sm sm:text-base"
+       startContent={<Phone size={18} />}
+       onPress={handleShowContactClick}
+       isLoading={isRevealingContact}
+      >
+       {isAuthenticated
+        ? t('taskDetail.contactReveal.showContact')
+        : t('taskDetail.contactReveal.signInToSee')}
+      </NextUIButton>
+     )}
+
+     {revealedContact && (
+      <div className="rounded-xl border border-green-200 bg-green-50 p-3 sm:p-4">
+       <div className="flex items-center gap-2 mb-2">
+        <Phone className="w-4 h-4 text-green-700" />
+        <span className="text-sm font-semibold text-green-900">
+         {t('taskDetail.contactReveal.revealedTitle')}
+        </span>
+       </div>
+       <div className="space-y-1 text-sm text-gray-900">
+        <div>{revealedContact.fullName}</div>
+        {revealedContact.phone ? (
+         <a
+          href={`tel:${revealedContact.phone}`}
+          className="block text-base font-bold text-blue-700 hover:underline"
+         >
+          {revealedContact.phone}
+         </a>
+        ) : (
+         <div className="text-gray-500 italic">
+          {t('taskDetail.contactReveal.noPhone')}
+         </div>
+        )}
+       </div>
       </div>
      )}
 

@@ -270,6 +270,8 @@ export const tasks = {
   'createTask.review.subtitle':
     'Убедитесь, что всё выглядит правильно перед публикацией',
   'createTask.review.submit': 'Опубликовать задачу',
+  'createTask.contactConsent.title': 'Ваш контакт будет показан заинтересованным специалистам',
+  'createTask.contactConsent.body': 'Когда вы опубликуете задачу, специалисты, желающие её выполнить, смогут увидеть ваше имя и номер телефона, чтобы связаться с вами напрямую. Нажимая "Опубликовать задачу", вы соглашаетесь с этим.',
   'createTask.review.location': 'Местоположение',
   'createTask.review.budget': 'Бюджет',
   'createTask.review.timeline': 'График',

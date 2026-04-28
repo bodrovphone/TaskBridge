@@ -131,6 +131,11 @@ export interface Task {
   title_bg: string | null // Bulgarian translation of title
   description_bg: string | null // Bulgarian translation of description
   requirements_bg: string | null // Bulgarian translation of requirements
+
+  // Cold-start (April 2026): set when customer posted under the new disclosure
+  // copy that they consent to sharing contact with interested pros.
+  // Null on legacy tasks — those keep the old apply→accept-only flow.
+  contact_sharing_consent_at: string | null
 }
 
 /**
@@ -171,6 +176,9 @@ export interface TaskDbInsert {
   title_bg?: string | null
   description_bg?: string | null
   requirements_bg?: string | null
+  // Set at creation time after the consent copy went live (April 2026 cold-start).
+  // Reveal-contact endpoint requires this to be non-null.
+  contact_sharing_consent_at?: string | null
 }
 
 /**
@@ -258,6 +266,7 @@ export const mapCreateInputToDbInsert = (
     customer_id: customerId,
     images: input.photoUrls || [],
     source_language: input.sourceLocale || 'bg', // Default to BG if not specified
+    contact_sharing_consent_at: new Date().toISOString(),
   }
 }
 

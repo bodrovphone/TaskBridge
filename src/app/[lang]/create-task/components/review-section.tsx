@@ -3,7 +3,7 @@
 import { useDeferredValue, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Card, CardBody, Chip, Divider } from '@heroui/react'
-import { MapPin, Wallet, Clock, FileText, AlertCircle } from 'lucide-react'
+import { MapPin, Wallet, Clock, FileText, AlertCircle, Phone } from 'lucide-react'
 import { TASK_CATEGORIES } from '../lib/validation'
 import Image from 'next/image'
 import { getCityLabelBySlug } from '@/features/cities'
@@ -304,6 +304,25 @@ export function ReviewSection({ form, onScrollToField }: ReviewSectionProps) {
        </div>
       </>
      )}
+    </CardBody>
+   </Card>
+
+   {/* Contact-sharing disclosure (cold-start mode, April 2026).
+       Posting the task is itself the consent — no checkbox so we don't
+       re-introduce the friction we're trying to remove. */}
+   <Card className="border border-blue-200 bg-blue-50/50">
+    <CardBody className="p-4">
+     <div className="flex items-start gap-3">
+      <Phone className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+      <div className="text-sm text-gray-700">
+       <p className="font-semibold text-gray-900 mb-1">
+        {t('createTask.contactConsent.title')}
+       </p>
+       <p>
+        {t('createTask.contactConsent.body')}
+       </p>
+      </div>
+     </div>
     </CardBody>
    </Card>
   </div>

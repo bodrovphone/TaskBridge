@@ -245,6 +245,8 @@ export const tasks = {
   'createTask.review.title': 'Review your task',
   'createTask.review.subtitle': 'Make sure everything looks good before posting',
   'createTask.review.submit': 'Post Task',
+  'createTask.contactConsent.title': 'Your contact will be shared with interested professionals',
+  'createTask.contactConsent.body': 'When you post this task, professionals who want the job can see your name and phone number to reach you directly. By clicking "Post Task" you agree to this.',
   'createTask.review.location': 'Location',
   'createTask.review.budget': 'Budget',
   'createTask.review.timeline': 'Timeline',

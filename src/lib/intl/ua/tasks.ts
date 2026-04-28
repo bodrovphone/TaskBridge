@@ -243,6 +243,8 @@ export const tasks = {
   'createTask.review.title': 'Перегляньте завдання',
   'createTask.review.subtitle': 'Переконайтеся, що все виглядає добре перед публікацією',
   'createTask.review.submit': 'Опублікувати',
+  'createTask.contactConsent.title': 'Ваш контакт буде показаний зацікавленим спеціалістам',
+  'createTask.contactConsent.body': 'Коли ви опублікуєте завдання, спеціалісти, які хочуть його виконати, побачать ваше ім’я і номер телефону, щоб зв’язатися з вами напряму. Натискаючи "Опублікувати", ви погоджуєтесь із цим.',
   'createTask.review.location': 'Місце',
   'createTask.review.budget': 'Бюджет',
   'createTask.review.timeline': 'Терміни',
