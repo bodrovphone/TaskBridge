@@ -36,9 +36,12 @@ const RU_CITIES: Record<string, string> = {
 const BG_SUBCATEGORIES: Record<string, string> = {
   // Cleaning
   'house-cleaning': 'почистване на апартаменти',
+  'apartment-cleaning': 'почистване на апартаменти',
   'office-cleaning': 'професионално почистване офиси',
   'window-cleaning': 'миене на прозорци',
   'post-construction-cleaning': 'почистване след ремонт',
+  'post-renovation-cleaning': 'почистване след ремонт',
+  'deep-cleaning': 'основно почистване на дома',
 
   // Handyman / trades
   plumber: 'ВиК услуги',
@@ -50,6 +53,11 @@ const BG_SUBCATEGORIES: Record<string, string> = {
   welder: 'заварчик',
   roofer: 'покривни ремонти',
   'general-handyman': 'майстор за дома',
+  'handyman-service': 'майстор за дома',
+  'apartment-renovation': 'ремонт на апартаменти',
+  'furniture-manufacturing': 'производство на мебели',
+  'large-appliance-repair': 'ремонт на едрогабаритна техника',
+  'small-appliance-repair': 'ремонт на дребна битова техника',
 
   // Appliances
   'phone-repair': 'ремонт на телефони',
@@ -106,18 +114,24 @@ export function buildGmapsQuery(
   subCategory: string,
   language: 'bg' | 'ru' | 'ua',
 ): string {
-  if (language === 'ru') {
-    const c = RU_CITIES[city] ?? city
-    const s = RU_SUBCATEGORIES[subCategory] ?? subCategory
-    return `${s} ${c}`
+  // Throw on missing sub-category translation: a literal slug like
+  // "apartment-renovation София" produces zero useful Apify results and burns
+  // ~$0.10–$0.50 per attempt. Better to fail fast and add the entry above.
+  const subMap =
+    language === 'ru' ? RU_SUBCATEGORIES :
+    language === 'ua' ? UA_SUBCATEGORIES :
+    BG_SUBCATEGORIES
+  const s = subMap[subCategory]
+  if (!s) {
+    throw new Error(
+      `No ${language.toUpperCase()} gmaps query for sub-category "${subCategory}". ` +
+      `Add it to scripts/outreach/queries.ts before running outreach:fetch.`
+    )
   }
-  if (language === 'ua') {
-    const c = BG_CITIES[city] ?? city  // UA diaspora targets in Bulgaria
-    const s = UA_SUBCATEGORIES[subCategory] ?? subCategory
-    return `${s} ${c}`
-  }
-  const c = BG_CITIES[city] ?? city
-  const s = BG_SUBCATEGORIES[subCategory] ?? subCategory
+  // Cities are stable across BG/RU and we target diaspora-in-Bulgaria for UA,
+  // so all three locales fall back to the BG city map.
+  const cityMap = language === 'ru' ? RU_CITIES : BG_CITIES
+  const c = cityMap[city] ?? city
   return `${s} ${c}`
 }
 
