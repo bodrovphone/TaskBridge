@@ -51,7 +51,11 @@ export async function runGmapsActor(
   maxItems: number,
 ): Promise<ApifyRunResult> {
   const token = process.env.APIFY_TOKEN
-  const actor = process.env.APIFY_ACTOR_ID || 'compass~google-maps-extractor'
+  // lukaskrivka/crawler-google-places actively crawls each business's website
+  // for contact emails — compass/google-maps-extractor only reads what's
+  // already in the Gmaps profile, which BG SMBs don't fill in. We learned this
+  // after 5 zero-email runs across locksmith/renovation/plastering/cleaning.
+  const actor = process.env.APIFY_ACTOR_ID || 'lukaskrivka~crawler-google-places'
   if (!token) throw new Error('APIFY_TOKEN missing in environment')
 
   // Apify identifies actors as "user~actor"; URL-safe form uses "/" → "~"
