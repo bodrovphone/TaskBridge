@@ -15,6 +15,7 @@
     "critical-css": "node scripts/critical-css.js",
     "outreach:fetch": "tsx scripts/outreach/fetch.ts",
     "outreach:send": "tsx scripts/outreach/send.ts",
+    "outreach:tasks": "tsx scripts/outreach/tasks.ts",
     "optimize:images": "node scripts/optimize/cli.js images",
     "optimize:videos": "node scripts/optimize/cli.js videos",
     "optimize:media": "node scripts/optimize/cli.js all",
