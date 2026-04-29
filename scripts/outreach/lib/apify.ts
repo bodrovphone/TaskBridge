@@ -58,11 +58,12 @@ export async function runGmapsActor(
   const actorPath = actor.replace(/\//g, '~')
 
   // Input shape varies by actor. compass/google-maps-extractor accepts:
-  //   { searchStringsArray, locationQuery, language, maxCrawledPlacesPerSearch }
-  // We pass a generic country hint (Bulgaria) and let the query do the work.
+  //   { searchStringsArray, language, maxCrawledPlacesPerSearch, ... }
+  // The city is already in the query (e.g. "ключар Варна"), so we deliberately
+  // do NOT set `locationQuery: 'Bulgaria'` — country-wide scoping previously
+  // caused a 15+ min run with zero results before we aborted at $0.59.
   const input = {
     searchStringsArray: [query],
-    locationQuery: 'Bulgaria',
     language,
     maxCrawledPlacesPerSearch: maxItems,
     skipClosedPlaces: true,
