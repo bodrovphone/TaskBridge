@@ -54,7 +54,9 @@ const BG_SUBCATEGORIES: Record<string, string> = {
   roofer: 'покривни ремонти',
   'general-handyman': 'майстор за дома',
   'handyman-service': 'майстор за дома',
-  'apartment-renovation': 'ремонт на апартаменти',
+  // "ремонт на апартаменти" returned 1 result — too narrow on Gmaps.
+  // Bulgarian renovation companies index under broader phrasing.
+  'apartment-renovation': 'строителна фирма',
   'furniture-manufacturing': 'производство на мебели',
   'large-appliance-repair': 'ремонт на едрогабаритна техника',
   'small-appliance-repair': 'ремонт на дребна битова техника',
