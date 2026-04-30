@@ -16,6 +16,7 @@
     "outreach:fetch": "tsx scripts/outreach/fetch.ts",
     "outreach:send": "tsx scripts/outreach/send.ts",
     "outreach:tasks": "tsx scripts/outreach/tasks.ts",
+    "outreach:heatmap": "tsx scripts/outreach/heatmap.ts",
     "optimize:images": "node scripts/optimize/cli.js images",
     "optimize:videos": "node scripts/optimize/cli.js videos",
     "optimize:media": "node scripts/optimize/cli.js all",
