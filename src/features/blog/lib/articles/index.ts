@@ -11,10 +11,18 @@ import { nameriMajstorArticle } from './bg/nameri-majstor-lesno'
 import { hamaliBurgasArticle } from './bg/hamali-burgas-ceni'
 import { pochistvaneApartamentArticle } from './bg/pochistvane-apartament-ceni'
 import { premestvaneCeniArticle } from './bg/premestvane-ceni-bulgaria'
+import { klimatikMontazhArticle } from './bg/klimatik-montazh-ceni-bulgaria'
 
 // All articles organized by locale
 export const articles: Record<string, BlogArticle[]> = {
-  bg: [tarsyaRabotaArticle, nameriMajstorArticle, hamaliBurgasArticle, pochistvaneApartamentArticle, premestvaneCeniArticle],
+  bg: [
+    tarsyaRabotaArticle,
+    nameriMajstorArticle,
+    hamaliBurgasArticle,
+    pochistvaneApartamentArticle,
+    premestvaneCeniArticle,
+    klimatikMontazhArticle,
+  ],
   en: [],
   ru: [],
   ua: [],
